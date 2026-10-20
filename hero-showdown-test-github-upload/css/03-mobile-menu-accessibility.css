@@ -1,0 +1,24 @@
+
+/* The game canvas stays locked; menu contents must remain scrollable. */
+.overlay{touch-action:pan-y;overscroll-behavior:contain}
+.overlay .panel{overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain;scrollbar-width:thin}
+.overlay .panel button,.overlay .panel img{touch-action:manipulation}
+@media(pointer:coarse) and (orientation:portrait){
+ .overlay{padding:6px;align-items:flex-start}
+ .overlay .panel{height:100%;max-height:100%;padding:6px 5px 12px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start}
+ .overlay .panel>.eyebrow{font-size:9px;letter-spacing:2px}
+ .overlay .panel>h2{font-size:clamp(18px,5vw,25px);margin:5px 0 8px;line-height:1.13}
+ .overlay .panel>.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:4px 0 8px;flex:0 0 auto}
+ .overlay .panel>.cards.opponents{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .overlay .card{min-width:0;padding:5px;display:flex;flex-direction:column;justify-content:flex-start;gap:2px;overflow:hidden}
+ .overlay .card .portrait{height:clamp(56px,11dvh,92px);width:100%;object-fit:contain;flex-shrink:0}
+ .overlay .card .tag{font-size:8px;letter-spacing:0;line-height:1.1}
+ .overlay .card h3{font-size:clamp(10px,2.8vw,14px);line-height:1.15;margin:2px 0}
+ .overlay .card p{font-size:9px;line-height:1.2;margin:1px 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+ .overlay .panel>#fight,.overlay .panel>.row{position:sticky;bottom:0;z-index:10;background:#061e25;padding:7px 3px 4px;box-shadow:0 -10px 14px #061e25e8;flex-shrink:0}
+ .overlay .panel>#fight{align-self:stretch;font-size:13px;min-height:44px}
+ .overlay .panel>.row button{font-size:11px;padding:9px 7px;min-height:43px}
+ .overlay .panel .row{gap:5px}
+ .brand{gap:4px}.brand>div:last-child{gap:3px}.brand button{font-size:9px;padding:6px 5px}
+}
+.cards.venues{grid-template-columns:repeat(3,minmax(0,1fr));max-width:920px;margin:20px auto}.venue-photo{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px;margin-bottom:12px}.venues .card{min-width:0;padding:12px}.venues .card.selected{outline:3px solid #dfff8c}@media(max-width:600px) and (orientation:portrait){.cards.venues{grid-template-columns:1fr}.venue-photo{max-height:190px}}
