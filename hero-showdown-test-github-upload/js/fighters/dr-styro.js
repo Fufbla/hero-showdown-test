@@ -15,7 +15,7 @@ function styroHit(dir,heavy){
  boss.styroRecoil=heavy?1:.65;boss.styroHitDir=dir;
  styroFoam(boss.x-dir*70,GROUND-160,heavy?16:9);
 }
-function updateDrStyro(dt){
+function updateDrStyroLogic(dt){
  const v=boss.styroVisual||(boss.styroVisual={lastX:boss.x,stride:0,speed:0,clock:0,foam:[]});
  const dx=boss.x-v.lastX;v.lastX=boss.x;
  v.speed+=(Math.abs(dx)/Math.max(dt,.001)-v.speed)*(1-Math.exp(-12*dt));
@@ -40,50 +40,80 @@ function updateDrStyro(dt){
 
 function styroWarning(){if(boss.state!=='warn')return;const split=boss.type==='double';text(split?'DOUBLE TROUBLE — TWO FISTS, DOUBLE DAMAGE!':boss.type==='spikes'?'STYRO SPIKES — JUMP OR BLOCK':'FOAM CRUSH — DODGE OR BLOCK',640,164,18,'#fff1ce','center');if(boss.type!=='spikes'){ctx.save();ctx.strokeStyle='#ffbd6c';ctx.lineWidth=3;ctx.setLineDash([9,6]);ctx.strokeRect(boss.target-(split?120:95),GROUND-195,split?240:190,190);ctx.restore();}else{ctx.save();ctx.strokeStyle='#ffe8b6';ctx.setLineDash([10,9]);ctx.beginPath();ctx.moveTo(boss.x+boss.dir*105,GROUND-185);ctx.lineTo(boss.dir<0?30:1250,GROUND-185);ctx.stroke();ctx.restore();}}
 
-// Cross-fade atlas poses and deform around planted feet for weight and follow-through.
-function styroBody(pose,mix,x,feet,dir,lean=0,squash=0,alpha=1){
- const recoil=boss.styroRecoil||0;
- lean+=(boss.styroHitDir||0)*recoil*.12;
- const sx=1+squash+recoil*.05,sy=1-squash*.65-recoil*.04;
- if(pose&&mix<1)styroArt(0,x,feet,320,dir,alpha*(1-mix),lean,sx,sy);
- styroArt(pose,x,feet,320,dir,alpha*(pose?mix:1),lean,sx,sy);
+
+// Dr. Styro: authored poses, with travel-driven footfalls and a held final fall.
+const styroMotionSheet=new Image();styroMotionSheet.src='assets/images/styro-motion-sheet.webp';
+const styroMotionFrames=[
+ [8,12,300,307,157,295],[345,12,264,307,135,295],
+ [636,12,294,307,148,295],[974,12,270,307,139,295],
+ [8,321,310,306,156,299],[341,321,284,306,142,299],
+ [649,372,275,255,140,248],[970,337,276,290,143,283],
+ [12,630,305,289,155,277],[327,676,300,243,153,231],
+ [627,744,306,175,153,163],[934,784,320,135,160,123],
+ [12,928,291,292,148,285]
+];
+function styroMotionSprite(pose,x,feet,dir,lean=0){
+ if(!styroMotionSheet.complete||!styroMotionSheet.naturalWidth){styroArt(0,x,feet,320,dir);return;}
+ const f=styroMotionFrames[pose],scale=320/285;
+ ctx.save();ctx.translate(x,feet);ctx.scale(-dir*scale,scale);ctx.rotate(lean);
+ ctx.drawImage(styroMotionSheet,f[0],f[1],f[2],f[3],-f[4],-f[5],f[2],f[3]);ctx.restore();
 }
-function drawDrStyro(){
- const dir=boss.dir||(hero.x>boss.x?1:-1),dead=mode==='victory';
- if(dead){styroArt(3,boss.x,GROUND+20,280,dir,Math.max(.25,1-ending*.22),dir*.35);return;}
- const v=boss.styroVisual||{stride:0,speed:0,foam:[]};
- const moving=clamp(v.speed/80,0,1),step=Math.sin(v.stride);
- const breath=Math.sin(t*2.8),feet=GROUND-Math.abs(step)*5*moving;
- const split=boss.type==='double'&&['warn','attack','recover'].includes(boss.state);
- if(split){
-  const attack=boss.state==='attack',recover=boss.state==='recover';
-  const out=styroEase((1.45-boss.timer)/1.45),back=recover?styroEase(1-boss.timer/1.65):0;
-  const travel=attack?1:recover?1-back:out;
-  const center=boss.x+(boss.target-boss.x)*travel;
-  const spread=attack?175-65*styroEase((1.1-boss.timer)/.68):recover?110*(1-back):175*out;
-  const punch=attack?styroEase((1.1-boss.timer)/.68):recover?1-styroEase(back*2):0;
-  // Both copies converge exactly on the real pushbox before returning to idle.
-  const alpha=1;
-  for(const side of [-1,1])styroBody(1,punch,clamp(center+side*spread,160,1120),GROUND,-side,-side*.1*punch,.025*Math.sin(travel*Math.PI),alpha);
- }else{
-  let pose=0,mix=1,lean=dir*step*.018*moving,squash=breath*.008+Math.abs(step)*.012*moving;
-  if(boss.state==='warn'){
-   const q=styroEase(1-boss.timer/(boss.type==='spikes'?1:.85));
-   lean=-dir*.09*q;squash=.055*q;
-   if(boss.type==='spikes'){pose=2;mix=q*.7;}
-  }else if(boss.state==='attack'){
-   pose=boss.type==='spikes'?2:1;
-   const elapsed=(pose===2?1.4:.7)-boss.timer;
-   mix=styroEase(elapsed/.15);
-   const force=pose===2?Math.sin(elapsed/.34*Math.PI)**2:Math.sin(Math.PI*clamp(elapsed/.5,0,1));
-   lean=dir*.12*force;squash=-.035*force;
-  }else if(boss.state==='recover'){
-   const q=styroEase(1-boss.timer/1.15);pose=boss.type==='spikes'?2:1;mix=1-styroEase(q*2.5);
-   lean=dir*.035*(1-q);squash=.035*Math.sin(q*Math.PI)*Math.exp(-q*2);
-  }
-  styroBody(pose,mix,boss.x,feet,dir,lean,squash);
+function updateDrStyro(dt){
+ const oldX=boss.x,walking=boss.state==='idle'&&boss.hitstun<=0;
+ boss.styroReact=Math.max(0,(boss.styroReact||0)-dt);
+ updateDrStyroLogic(dt);
+ const distance=Math.abs(boss.x-oldX);
+ boss.styroMoving=walking&&boss.state==='idle'&&distance>1e-6;
+ if(boss.styroMoving){
+  const step=Math.floor((boss.styroStride||0)*2);
+  boss.styroStride=((boss.styroStride||0)+distance/96)%1000;
+  if(Math.floor(boss.styroStride*2)!==step){combatSound('ground',.12,'foam');burst(boss.x,GROUND-2,3,'#f4eddf');}
  }
- for(const p of styroSpikes)styroArt(4,p.x,p.y+23,46,p.dir,1,Math.sin(t*20)*.045);
+}
+function styroBody(x,dir){
+ if(boss.styroReact>0&&!boss.styroMoving){
+  const q=1-boss.styroReact/(boss.styroReactDuration||.38);
+  const pose=q<.48?(boss.styroHeavy?6:5):7;
+  styroMotionSprite(pose,x,GROUND,dir,Math.sin(q*Math.PI)*(boss.styroHeavy?.045:-.035));return;
+ }
+ if(boss.state==='idle'){
+  const stride=(boss.styroStride||0)*Math.PI*2;
+  const pose=boss.styroMoving?Math.floor((boss.styroStride||0)*4)%4:4;
+  styroMotionSprite(pose,x,GROUND,dir,boss.styroMoving?Math.sin(stride)*.012:Math.sin(t*3)*.004);return;
+ }
+ if(boss.state==='warn'){styroMotionSprite(12,x,GROUND,dir,-.015);return;}
+ if(boss.state==='recover'){
+  const duration=boss.type==='double'?1.65:1.15;
+  styroMotionSprite(boss.timer>duration-.24?7:4,x,GROUND,dir);return;
+ }
+ // Retain the original special-attack artwork and contact timings.
+ if(boss.type==='spikes'){styroArt(2,x,GROUND,320,dir);return;}
+ const duration=boss.type==='double'?1.1:.7;
+ const age=duration-boss.timer;
+ if(age<.12)styroMotionSprite(12,x,GROUND,dir);
+ else if(boss.timer<.16)styroMotionSprite(7,x,GROUND,dir);
+ else styroArt(1,x,GROUND,320,dir);
+}
+
+function drawDrStyro(){
+ const dir=mode==='victory'?(boss.styroDeathFacing||-1):boss.styroReact>0?(boss.styroHitFacing||-1):(boss.dir||(hero.x>boss.x?1:-1));
+ if(mode==='victory'){
+  const pose=ending<.16?8:ending<.38?9:ending<.62?10:11;
+  const drift=-dir*20*Math.min(1,ending/.62);
+  styroMotionSprite(pose,boss.x+drift,GROUND,dir);
+  if(ending>.36&&ending<1.05){const q=(ending-.36)/.69;for(let i=0;i<10;i++)foamChunk(boss.x+drift+Math.sin(i*7.1)*(30+q*110),GROUND-3-Math.sin(q*Math.PI)*(12+i%4*7),3+i%3,i+q*4);}
+  return;
+ }
+ const split=boss.type==='double'&&(boss.state==='warn'||boss.state==='attack'||boss.state==='recover');
+ if(split){
+  const q=boss.state==='warn'?clamp((1.45-boss.timer)/.7,0,1):1;
+  let center=boss.startX+(boss.target-boss.startX)*q;
+  let spread=boss.state==='attack'?175-65*clamp((1.1-boss.timer)/.6,0,1):175*q;
+  if(boss.state==='recover'){const merge=clamp((1.65-boss.timer)/.65,0,1);center+=(boss.x-center)*merge;spread=110*(1-merge);}
+  if(spread<2)styroBody(center,dir);
+  else{styroBody(clamp(center-spread,160,1120),1);styroBody(clamp(center+spread,160,1120),-1);}
+ }else styroBody(boss.x,dir);
+ for(const p of styroSpikes)styroArt(4,p.x,p.y+23,46,p.dir);
  for(const e of styroBursts){const size=70+(1-e.life/.32)*75;styroArt(5,e.x,e.y+size/2,size,-1,Math.min(1,e.life/.12));}
- for(const f of v.foam){ctx.save();ctx.globalAlpha=Math.min(1,f.life*3);ctx.translate(f.x,f.y);ctx.rotate(f.spin);rect(-f.size/2,-f.size/2,f.size,f.size,'#fff6e8');ctx.restore();}
+ for(const f of boss.styroVisual?.foam||[]){ctx.save();ctx.globalAlpha=Math.min(1,f.life*3);ctx.translate(f.x,f.y);ctx.rotate(f.spin);rect(-f.size/2,-f.size/2,f.size,f.size,'#fff6e8');ctx.restore();}
 }
