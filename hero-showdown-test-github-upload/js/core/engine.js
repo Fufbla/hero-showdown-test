@@ -17,6 +17,7 @@ function hitBoss(d,dir,gain=5,kind='special',contact){
  if(mode!=='fight'||boss.hp<=0||spreeInvisible())return;
  if(opponent===6){if(atomTryDodge())return false;atom.recoil=.18;}
  boss.hp=Math.max(0,boss.hp-d);boss.vx=dir*(kind==='kick'?260:selected===1?230:150);boss.pulse=.16;boss.hitFlash=.14;boss.hitstun=kind==='kick'?.22:.14;if(opponent===3){boss.venomHeavy=kind==='kick'||d>=20;boss.venomHitDuration=boss.hitstun;boss.venomHitFacing=boss.dir||(hero.x>boss.x?1:-1);boss.bearMoving=false;}if(opponent===2){boss.sonicHeavy=kind==='kick'||d>=20;boss.sonicHitDuration=boss.hitstun;boss.sonicHitFacing=boss.state==='idle'?(hero.x>boss.x?1:-1):(boss.dir||-1);boss.sonicMoving=false;}if(opponent===1){boss.dogHeavy=kind==='kick'||d>=20;boss.dogHitDuration=boss.hitstun;boss.dogHitFacing=boss.dogFacing||(hero.x>boss.x?1:-1);boss.dogMoving=false;}
+ if(opponent===4)styroHit(dir,kind==='kick'||d>=20);
  // Pause the existing attack state instead of erasing its warning and target.
  hero.power=clamp(hero.power+gain,0,100);combo=comboTime>0?combo+1:1;best=Math.max(best,combo);comboTime=1.7;
  shake=Math.max(shake,kind==='kick'?9:6);hitStop=Math.max(hitStop,kind==='kick'?.065:.04);

@@ -5,3 +5,8 @@ html,body{height:100%;height:100dvh;touch-action:none}.shell{height:100dvh;paddi
 @media(max-width:600px) and (orientation:portrait){.opponents{grid-template-columns:repeat(2,minmax(0,1fr))}.opponents .portrait{height:85px}.opponents p{font-size:10px}.brand small{display:none}.brand{letter-spacing:0;font-size:10px}.brand button{padding:7px;font-size:9px}.touch{gap:4px}.touch button{min-width:40px;min-height:54px}.panel h2{font-size:24px}.overlay{padding:8px}}
 @media(max-height:520px) and (orientation:landscape){.shell{padding-top:3px}.touch button{min-width:58px;min-height:44px}.touch{padding:3px 0}.opponents .portrait{height:76px}.opponents h3{font-size:12px}.opponents p{font-size:10px}.panel h2{margin:4px 0}.cards{gap:8px}.card{padding:6px}.brand{margin-bottom:3px}.overlay{padding:5px}.panel .eyebrow{font-size:9px}.panel>h2{font-size:23px}}
 .cards.venues{grid-template-columns:repeat(3,minmax(0,1fr));max-width:920px;margin:20px auto}.venue-photo{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px;margin-bottom:12px}.venues .card{min-width:0;padding:12px}.venues .card.selected{outline:3px solid #dfff8c}@media(max-width:600px) and (orientation:portrait){.cards.venues{grid-template-columns:1fr}.venue-photo{max-height:190px}}
+
+/* Persistent controller focus, including after mouse/touch input. */
+button.pad-focused{outline:3px solid #fff49b;outline-offset:3px;box-shadow:0 0 0 6px #122b36,0 0 24px #d9f56c99;background:#246452}
+button.primary.pad-focused{background:#efffa2;color:#132c29}
+.card.pad-focused{border-color:#fff49b}

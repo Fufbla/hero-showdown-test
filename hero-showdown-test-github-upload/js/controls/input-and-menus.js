@@ -4,7 +4,7 @@
 function padMenuButtons(){
  return [...document.querySelectorAll('.overlay button:not([disabled]),.brand button:not([disabled])')].filter(el=>{
   const r=el.getBoundingClientRect(),st=getComputedStyle(el);
-  return r.width>0&&r.height>0&&st.visibility!=='hidden'&&st.display!=='none';
+  return (el.id!=='pause'||mode==='fight')&&r.width>0&&r.height>0&&st.visibility!=='hidden'&&st.display!=='none';
  });
 }
 
@@ -49,7 +49,8 @@ function syncMenuFocus(preferred){
  if(menuFocusElement&&buttons.includes(menuFocusElement))return;
  const selected=buttons.find(b=>b.classList.contains('selected'));
  const inOverlay=buttons.find(b=>overlay.contains(b));
- menuHighlight(selected||inOverlay||buttons[0]);
+ // While assets load, do not silently focus a header setting instead of Start.
+ menuHighlight(selected||inOverlay||null);
 }
 
 function padAudioUnlock(){
@@ -63,12 +64,17 @@ function padAudioUnlock(){
 
 // Gamepad buttons: A confirm/jump, B back/special, X punch, Y kick,
 // LB block, RB special, Start pause, Select back, L3 sound, R3 fullscreen.
+let menuRepeatDirection='',menuRepeatAt=0,activePadIndex=null;
 function pollPad(){
  if(!navigator.getGamepads)return;
- const gp=Array.from(navigator.getGamepads()).find(Boolean),status=document.getElementById('padstatus');
- if(!gp){padHeld={};gamepadPrev={};padAxisDirection=0;delete directionTaps.pad;if(status)status.textContent='CONTROLLER READY';return}
+ let pads;
+ try{pads=Array.from(navigator.getGamepads()).filter(p=>p&&p.connected!==false);}catch(_){return;}
+ const active=pads.find(p=>p.buttons.some(b=>b.pressed||b.value>.5)||p.axes.some(a=>Math.abs(a)>.4));
+ const gp=active||pads.find(p=>p.index===activePadIndex)||pads[0],status=document.getElementById('padstatus');
+ if(gp&&activePadIndex!==gp.index){activePadIndex=gp.index;gamepadPrev={};menuRepeatDirection='';}
+ if(!gp){activePadIndex=null;menuRepeatDirection='';padHeld={};gamepadPrev={};padAxisDirection=0;delete directionTaps.pad;if(status)status.textContent='CONTROLLER READY';return}
  if(status&&!padAudioNotice)status.textContent='CONTROLLER CONNECTED';
- const b=i=>!!gp.buttons[i]?.pressed,axes=gp.axes||[];
+ const b=i=>!!gp.buttons[i]?.pressed||gp.buttons[i]?.value>.5,axes=gp.axes||[];
  const horizontal=padHorizontal(axes[0]||0);
  const now={left:b(14)||horizontal<0,right:b(15)||horizontal>0,up:b(12)||(axes[1]||0)<-.35,down:b(13)||(axes[1]||0)>.35,
  jump:b(0),punch:b(2),kick:b(3),block:b(4)||b(6),special:b(5)||b(1),pause:b(9),back:b(8),sound:b(10),fullscreen:b(11)};
@@ -81,6 +87,7 @@ function pollPad(){
  if(edge('fullscreen'))document.getElementById('fullscreen').click();
  if(edge('pause')){menuFocus=0;pauseGame();}
  const helpOpen=!!document.getElementById('closehelp');
+ if(helpOpen&&(edge('back')||edge('special'))){document.getElementById('closehelp').click();gamepadPrev=now;return;}
  if(edge('back')&&!helpOpen){
   if(paused){const choose=document.getElementById('choose');if(choose)choose.click();else pauseGame();}
   else if(mode==='venue')showOpponent();
@@ -89,12 +96,17 @@ function pollPad(){
   else if(mode==='victory'||mode==='defeat')showSelect();
  }
  if(mode==='fight'&&!paused&&!helpOpen){
+  menuRepeatDirection='';
   if(now.left&&now.right)delete directionTaps.pad;
   else{if(edge('left'))directionPress(-1,'pad');if(edge('right'))directionPress(1,'pad');}
   for(const k of ['jump','punch','kick','special'])if(edge(k))action(k);
  }else{
   syncMenuFocus();
-  for(const dir of ['left','right','up','down'])if(edge(dir))menuNavigate(dir);
+  // One direction per sample prevents diagonal input from skipping cards.
+  const dir=['left','right','up','down'].find(d=>now[d])||'';
+  const stamp=performance.now();
+  if(dir!==menuRepeatDirection){menuRepeatDirection=dir;menuRepeatAt=stamp+360;if(dir)menuNavigate(dir);}
+  else if(dir&&stamp>=menuRepeatAt){menuNavigate(dir);menuRepeatAt=stamp+145;}
   if(edge('jump')){
    padAudioUnlock();
    const buttons=padMenuButtons();
