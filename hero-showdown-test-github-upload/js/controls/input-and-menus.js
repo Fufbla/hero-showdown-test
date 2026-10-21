@@ -92,7 +92,8 @@ function pollPad(){
   if(paused){const choose=document.getElementById('choose');if(choose)choose.click();else pauseGame();}
   else if(mode==='venue')showOpponent();
   else if(mode==='opponent')showSelect();
-  else if(mode==='select')showTitle();
+  else if(mode==='select')showDifficulty();
+  else if(mode==='difficulty')showModeSelect();
   else if(mode==='victory'||mode==='defeat')showSelect();
  }
  if(mode==='fight'&&!paused&&!helpOpen){
