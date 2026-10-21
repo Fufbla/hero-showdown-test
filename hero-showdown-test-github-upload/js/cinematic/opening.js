@@ -196,7 +196,7 @@
   audioButton.onclick=enableAudio;skipButton.onclick=leave;skipButton.focus({preventScroll:true});
   function tick(stamp){
     if(done)return;
-    const dt=lastStamp&&!document.hidden?Math.min(.05,Math.max(0,(stamp-lastStamp)/1000)):0;lastStamp=stamp;
+    const dt=lastStamp&&!document.hidden?Math.max(0,(stamp-lastStamp)/1000):0;lastStamp=stamp;
     try{const pads=navigator.getGamepads?.()||[];let down=false;for(const p of pads)if(p)down=down||[0,8,9].some(i=>p.buttons[i]?.pressed);if(down&&!padWasDown)leave();padWasDown=down;}catch(_){}
     if(started&&exitAge<0){elapsed+=dt;score();if(elapsed>=DURATION)leave();}
     render(elapsed);
