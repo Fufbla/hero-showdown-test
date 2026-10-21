@@ -16,7 +16,7 @@
   if(shell)shell.inert=true;
   let started=false,done=false,elapsed=0,lastStamp=0,exitAge=-1,padWasDown=false;
   let sound=null,beat=-1,lastCue=-1;
-  const intro={active:true,start(){if(started||done)return;started=true;elapsed=0;lastStamp=0;},skip(){leave();},dismiss(){finish();}};
+  const intro={active:true,start(){if(started||done)return;started=true;elapsed=0;lastStamp=0;enableAudio(true);},skip(){leave();},dismiss(){finish();}};
   window.HealthiaIntro=intro;
   function label(s,x,y,size=20,color='#f0f5df',align='left'){
     g.font=`900 ${size}px Arial, sans-serif`;g.textAlign=align;g.fillStyle=color;g.fillText(s,x,y);
@@ -151,12 +151,27 @@
     }
     return {ac,tone,rush,stop(){mix.gain.setTargetAtTime(0,ac.currentTime,.04);for(const s of sources){try{s.stop(ac.currentTime+.2);}catch(_){}}setTimeout(()=>ac.close().catch(()=>{}),250);}};
   }
-  async function enableAudio(){
-    if(done)return;
-    try{if(!sound)sound=makeSound();if(!sound){audioButton.textContent='SOUND UNAVAILABLE';return;}
-      await sound.ac.resume();audioButton.textContent=sound.ac.state==='running'?'SOUND ON':'ENABLE SOUND';
-      if(sound.ac.state==='running'){sound.rush(1.7,.15,260);sound.tone(43.65,1.8,.22);}
-    }catch(_){audioButton.textContent='ENABLE SOUND';}
+  let openingSoundPlayed=false;
+  async function enableAudio(automatic=false){
+    if(done||exitAge>=0||(automatic&&typeof muted!=='undefined'&&muted))return;
+    try{
+      if(!sound)sound=makeSound();
+      if(!sound){audioButton.textContent='SOUND UNAVAILABLE';return;}
+      const current=sound;
+      const reflect=()=>{
+        if(done||sound!==current||exitAge>=0)return;
+        const running=current.ac.state==='running';
+        audioButton.textContent=running?'SOUND ON':'TAP OR PRESS A KEY FOR SOUND';
+        if(running&&started&&!openingSoundPlayed){
+          openingSoundPlayed=true;current.rush(1.7,.15,260);current.tone(43.65,1.8,.22);
+        }
+      };
+      current.ac.onstatechange=reflect;
+      reflect();
+      // Autoplay is attempted normally; blocked contexts resume on a user gesture.
+      await current.ac.resume();
+      reflect();
+    }catch(_){if(!done)audioButton.textContent='TAP OR PRESS A KEY FOR SOUND';}
   }
   function score(){
     if(!sound||sound.ac.state!=='running')return;
@@ -183,6 +198,7 @@
   function stopKey(e){if(intro.active){e.preventDefault();e.stopImmediatePropagation();}}
   function key(e){
     if(!intro.active)return;
+    if(!e.repeat&&!['Escape','Space','Enter'].includes(e.code))enableAudio();
     if(e.code==='Tab'){e.preventDefault();(document.activeElement===skipButton?audioButton:skipButton).focus();e.stopImmediatePropagation();return;}
     e.preventDefault();e.stopImmediatePropagation();
     if(e.repeat)return;
@@ -192,8 +208,8 @@
   }
   function visibility(){lastStamp=0;if(sound){if(document.hidden)sound.ac.suspend().catch(()=>{});else sound.ac.resume().catch(()=>{});}}
   document.addEventListener('keydown',key,true);document.addEventListener('keyup',stopKey,true);document.addEventListener('visibilitychange',visibility);
-  root.addEventListener('pointerdown',e=>e.stopPropagation());root.addEventListener('click',e=>e.stopPropagation());
-  audioButton.onclick=enableAudio;skipButton.onclick=leave;skipButton.focus({preventScroll:true});
+  root.addEventListener('pointerdown',e=>{e.stopPropagation();if(!skipButton.contains(e.target))enableAudio();});root.addEventListener('click',e=>e.stopPropagation());
+  audioButton.onclick=()=>enableAudio();skipButton.onclick=leave;skipButton.focus({preventScroll:true});
   function tick(stamp){
     if(done)return;
     const dt=lastStamp&&!document.hidden?Math.max(0,(stamp-lastStamp)/1000):0;lastStamp=stamp;
