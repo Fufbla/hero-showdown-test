@@ -191,7 +191,7 @@ hud=function(...args){
       ctx.save();ctx.shadowColor='#dcff75';ctx.shadowBlur=10+8*Math.sin(t*7);battleText('SPECIAL',x+width,68,15,'#efffa6','right');ctx.restore();
     }else{rect(x,76,width,4,'#0a2029a8');rect(x,76,width*clamp(p.power/100,0,1),4,color);}
   });
-  battleText(villainNames[opponent],1250,21,18,'#ffe3c7','right');
+  battleText(villainNames[opponent]+' · '+storyOpponentRound()+' / 3',1250,21,18,'#ffe3c7','right');
   rect(830,28,420,21,'#0a2029a8');rect(1250-420*clamp(boss.hp/boss.max,0,1),28,420*clamp(boss.hp/boss.max,0,1),21,'#f5a466');
   if(comboTime>0&&combo>0)battleText(combo+' HITS',36,120,32,'#efffae');
   ctx.restore();

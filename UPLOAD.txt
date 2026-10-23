@@ -1,19 +1,9 @@
-HERO SHOWDOWN - SMALL GITHUB UPLOAD FILES
+HERO SHOWDOWN - STORY MODE EPISODE 1
 
-Download and extract BOTH hero-showdown-game-files.zip and hero-showdown-video-files.zip.
-Combine their hero-showdown-autoplay folders. The finished folder must contain:
-  hero-showdown.html
-  assets/images/ (30 artwork files)
-  assets/audio/menu-music.mp3
-  videos/ (4 video files)
+Extract this ZIP first. Upload the contents into the existing hero-showdown-autoplay folder in your hero-showdown-test repository, preserving assets/ and videos/. Do not nest another hero-showdown-autoplay folder inside it.
 
-In the root of Fufbla/healthia-heroes, choose Add file > Upload files.
-Drag the combined hero-showdown-autoplay folder into the upload area and commit the changes, replacing matching files.
-Upload the extracted folder contents. ZIP archives and the standalone test HTML are not the game upload.
-Delete the old hero-showdown-autoplay/videos/heroshowdowncutscene.mp4 if it is still in the repository.
+The game entry is hero-showdown.html. Include the new videos/smog-battle.mp4 and assets/images/story-smog-rooftop.webp, videos/reborn.mp4, videos/is-this-the-end.mp4, and the updated assets/js/story-mode.js and assets/js/story-team.js. Story Mode requires development code 1992. Choose a starting hero, watch Episode 1, then face Wastelander in THREE battles. Winning battle 1 automatically plays battle23.mp4 and starts battle 2. Winning battle 2 plays the same clip once more and starts battle 3. Winning battle 3 automatically plays smog-battle.mp4, then starts battle 4 against the original Air Pollution Monster on the supplied rooftop venue. The Air Pollution Monster also has THREE battles, all on the rooftop. Winning its first battle (overall battle 4) plays reborn.mp4 and starts its second battle (overall battle 5). Winning its second battle plays reborn.mp4 again and starts its third battle (overall battle 6). Winning its third battle automatically plays is-this-the-end.mp4 (the supplied isthisdEND?.mp4), then shows To be continued. The ending clip plays once per completed run; finishing or skipping it does not start another battle. Reborn.mp4 does not play after this final win. Defeat retries the current battle; replaying the episode restarts at battle 1 and resets the ending clip for the next completed run. All heroes and the opponent start each battle with fresh health. Retrying any rooftop fight keeps that round, the rooftop venue, and the Air Pollution Monster, without replaying the intermission video.
 
-Existing game URL:
-https://fufbla.github.io/healthia-heroes/hero-showdown-autoplay/hero-showdown.html
+Tag heroes with Q, the on-screen TAG button, or RT / R2. Each hero keeps her health and special charge when tagged. Downed heroes are skipped; all three must be knocked out to lose. The numeric gate is a local development lock, not server authentication.
 
-The new opening, quiet menu music at 15%, original fight music, special-move clips, and artwork are included.
-Open the game through GitHub Pages after upload. Keep the standalone test HTML for offline testing.
+For local testing, keep all folders together and open hero-showdown.html. The separate hero-showdown-story-mode.html download embeds the media for single-file testing.
