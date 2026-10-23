@@ -1,0 +1,27 @@
+#story-opening{position:fixed;inset:0;z-index:10001;background:#000;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+#story-opening video{display:block;width:100%;height:100%;object-fit:contain}
+.story-movie-controls{position:absolute;left:max(16px,env(safe-area-inset-left));right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom))}
+.story-movie-controls>div{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.story-movie-controls button{border:1px solid #ffffff55;background:#06151bc9;color:#fff;border-radius:5px;padding:11px 14px;font:800 12px Arial;letter-spacing:1px;cursor:pointer;min-height:44px}
+.story-movie-controls button:focus-visible{outline:3px solid #d6ff89;outline-offset:3px}
+.story-movie-controls button[hidden],#story-reload[hidden]{display:none}
+.story-movie-status{display:inline-block;margin:0 0 10px;padding:6px 10px;background:#06151bc9;color:#fff;font:700 12px Arial;border-radius:4px}
+#story-movie-skip{margin-left:auto}
+#story-movie-skip span{font-size:10px;color:#c5d4d9;margin-left:8px}
+@media(max-width:600px){.story-movie-controls button{font-size:10px;padding:9px}.story-movie-controls>div{gap:6px}#story-movie-skip span{display:none}}
+
+/* Story development keypad and tag control. */
+.story-code-panel{max-width:420px!important;text-align:center}
+#story-code-display{display:block;color:#e2ffad;font:bold 32px monospace;letter-spacing:9px;padding:8px}
+#story-code-status{min-height:1.4em;font-size:13px}
+.story-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:300px;margin:12px auto}
+.story-keypad button{min-height:44px;padding:10px;font-size:20px}
+.story-keypad #story-code-enter{font-size:12px}
+#story-code-back{margin-top:8px}
+.mode-symbol svg{width:42px;height:42px}
+#story-tag{position:absolute;z-index:6;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:92px;min-height:48px;padding:6px;border:1px solid #d8f6aec9;border-radius:14px;background:#102f3ca8;color:#e8ffbb;opacity:.76;touch-action:manipulation;cursor:pointer;pointer-events:auto;box-shadow:none}
+#story-tag b{font-size:13px;letter-spacing:1px}#story-tag small{font-size:9px}
+#story-tag[hidden]{display:none}#story-tag:disabled{opacity:.4;cursor:default}#story-tag:active{opacity:1;background:#668d40c9}
+#story-tag:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(max-width:600px){#story-tag{width:60px;min-height:44px;padding:4px}#story-tag b{font-size:10px}#story-tag small{font-size:7px}}
+@media(max-height:450px){.story-code-panel h2{font-size:22px;margin:4px}.story-code-panel p{margin:4px}#story-code-display{font-size:24px;padding:3px}.story-keypad{gap:4px;margin:5px auto;max-width:270px}.story-keypad button{min-height:33px;padding:5px;font-size:16px}#story-code-back{padding:5px;min-height:32px}}
