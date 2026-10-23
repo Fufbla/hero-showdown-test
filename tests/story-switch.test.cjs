@@ -1,0 +1,30 @@
+const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
+const root=fs.existsSync(__dirname+'/../assets/js/story-team.js')?'..':'../dist';
+const src=fs.readFileSync(__dirname+'/'+root+'/assets/js/story-team.js','utf8');
+function fixture(opponent=5){
+ const el={hidden:false,style:{},setAttribute(){},querySelector(){return{textContent:''}},classList:{contains(){return true}},append(){}};
+ const c={story:{active:true,playing:false,releasePad:false},heroes:[{speed:300},{speed:280},{speed:360}],selected:0,opponent,mode:'fight',paused:false,GROUND:600,W:1280,keys:{},touchHeld:{},padHeld:{},directionTaps:{},shots:[],t:0,elapsed:0,hitStop:0,comboTime:0,
+  document:{createElement:()=>({...el}),getElementById:()=>el},window:{addEventListener(){}},cleanStage:el,
+  showStorySelect(){},showModeSelect(){},playStoryIntro(){},startStoryFight(){},specialSceneLocked:()=>false,clearInput(){c.clears++;c.keys={};c.touchHeld={};c.padHeld={};c.analogPointer=null;},clears:0,
+  heroStageBounds:()=>({min:100,max:1180}),clamp:(n,a,b)=>Math.max(a,Math.min(b,n)),combatSound(){},dashDust(){},syncAnimation(){},updateParticles(){},fighter(){},draw(){},hud(){},pollPad(){},storyPads:()=>[],
+  finish(win){c.finished=win},directionPress(dir){c.directions.push(dir);return true},directions:[],actions:[],
+  action(k){c.actions.push({key:k,selected:c.selected});},
+  updateStep(dt){c.boss.timer-=dt;c.boss.x+=dt*12;for(const p of c.story.team)for(const key of['anim','special','stun','knockdown','guardStun'])p[key]=Math.max(0,p[key]-dt);if(c.hero.inv>0)c.hero.inv=Math.max(0,c.hero.inv-dt);const move=(c.held('right')?1:0)-(c.held('left')?1:0);c.hero.x+=move*300*dt;c.hero.block=c.held('block');},
+  hitHero(d){if(c.hero.inv>0)return false;c.hero.hp-=d;return true}
+ };
+ c.held=k=>!!(c.keys[k]||c.touchHeld[k]||c.padHeld[k]);vm.createContext(c);vm.runInContext(src,c);
+ c.story.team=c.heroes.map((_,i)=>({hp:100-i*15,power:35+i*10,x:260,y:600,jumps:0,dash:null,anim:0,special:0,stun:0,knockdown:0,guardStun:0,inv:0}));c.hero=c.story.team[0];c.boss={x:950,timer:.01,hp:650};return c;
+}
+const step=(c,t)=>{for(let i=0;i<Math.ceil(t*120);i++)c.updateStep(1/120);};
+const finishTag=c=>{let elapsed=0;while(c.story.tag&&elapsed<2){c.updateStep(1/120);elapsed+=1/120;}assert.equal(c.story.tag,null);return elapsed;};
+for(const opponent of[5,0]){
+ test('Queued tag keeps attacks, movement and defense available against opponent '+opponent,()=>{const c=fixture(opponent);c.shots=[{life:2.8}];assert.equal(c.requestStoryTag(),true);assert.equal(c.story.tagQueued,true);c.action('punch');assert.equal(c.actions.at(-1).key,'punch');assert.equal(c.directionPress(1,'keyboard'),true);c.keys.right=c.keys.block=true;const x=c.hero.x;step(c,.1);assert.ok(c.hero.x>x);assert.equal(c.hero.block,true);assert.equal(c.story.tag,null);c.shots=[];c.updateStep(1/120);assert.ok(c.story.tag);});
+ test('Both hero protection and opponent / hazard time remain frozen during opponent '+opponent+' tag',()=>{const c=fixture(opponent);const old=c.boss.x,timer=c.boss.timer,hp=c.hero.hp;c.requestStoryTag();for(let i=0;i<25;i++){assert.equal(c.hitHero(50),false);c.updateStep(1/120);}assert.equal(c.boss.x,old);assert.equal(c.boss.timer,timer);assert.equal(c.story.team[0].hp,hp);finishTag(c);assert.equal(c.hitHero(50),false);step(c,.4);assert.equal(c.hitHero(5),true);});
+ for(const device of['keys','touchHeld','padHeld'])test(device+' movement and block hold survive opponent '+opponent+' switch',()=>{const c=fixture(opponent);c[device].right=c[device].block=true;c.analogPointer=17;const state=c[device];c.requestStoryTag();finishTag(c);assert.equal(c[device],state);assert.equal(c.analogPointer,17);assert.equal(c.clears,0);assert.equal(c.story.releasePad,false);assert.equal(c.hero.block,true);const x=c.hero.x;c.updateStep(1/120);assert.ok(c.hero.x>x);c[device].right=false;c[device].block=false;const released=c.hero.x;c.updateStep(1/120);assert.equal(c.hero.x,released);});
+}
+test('All stage positions have a manual swap below 0.72 seconds',()=>{for(const x of[100,260,640,1050,1180])for(const bossX of[150,1120]){const c=fixture();c.hero.x=x;c.boss.x=bossX;c.requestStoryTag();const duration=finishTag(c);assert.ok(duration<.72,`${x}/${bossX}: ${duration}`);assert.equal(c.hero.x,x);assert.equal(c.selected,1);}});
+test('Incoming hero can attack on arrival and a late entrance press is buffered once',()=>{const c=fixture();c.requestStoryTag();while(c.story.tag.phase==='out')c.updateStep(1/120);while(c.story.tag.age<c.story.tag.duration-.08)c.updateStep(1/120);c.action('punch');assert.equal(c.actions.length,0);finishTag(c);assert.equal(c.actions.length,1);assert.equal(c.actions[0].selected,1);step(c,.5);assert.equal(c.actions.length,1);c.action('kick');assert.equal(c.actions.at(-1).key,'kick');});
+test('Stale entrance actions are discarded and held attacks are not repeated',()=>{const c=fixture();c.requestStoryTag();c.action('special');finishTag(c);assert.equal(c.actions.length,0);});
+test('Health and special charge remain separate through repeated tags and defeated teammates are skipped',()=>{const c=fixture(),hp=c.story.team.map(p=>p.hp),power=c.story.team.map(p=>p.power);for(let i=0;i<6;i++){c.requestStoryTag();finishTag(c);step(c,.36);}assert.deepEqual(c.story.team.map(p=>p.hp),hp);assert.deepEqual(c.story.team.map(p=>p.power),power);c.story.team[1].hp=0;c.requestStoryTag();finishTag(c);assert.equal(c.selected,2);});
+test('Automatic replacement preserves the defeat pose and restores input within one second',()=>{const c=fixture();c.hero.hp=0;c.finish(false);assert.equal(c.story.tag.phase,'down');assert.ok(finishTag(c)<1);assert.equal(c.selected,1);c.action('jump');assert.equal(c.actions.at(-1).key,'jump');});
+test('Pause freezes a swap; non-story combat still calls its original input handlers',()=>{const c=fixture();c.requestStoryTag();c.paused=true;step(c,.5);assert.equal(c.story.tag.age,0);c.paused=false;finishTag(c);c.story.active=false;c.story.tagQueued=true;c.action('kick');assert.equal(c.actions.at(-1).key,'kick');assert.equal(c.directionPress(-1,'keyboard'),true);});

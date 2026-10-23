@@ -58,6 +58,8 @@ function storyNextHero() {
   return -1;
 }
 function storyTagReady() {
+  // Wait for the current move / projectile to finish so its damage and special
+  // movie keep the correct owner. A queued tag must not disable combat inputs.
   return story.active&&mode==='fight'&&!paused&&!story.playing&&!specialSceneLocked()&&hero&&hero.hp>0&&
     !story.tag&&story.tagCooldown<=0&&hero.y>=GROUND-.5&&hero.jumps===0&&
     !hero.dash&&hero.anim<=0&&hero.special<=0&&hero.stun<=0&&hero.knockdown<=0&&hero.guardStun<=0&&shots.length===0;
@@ -76,8 +78,10 @@ function beginStoryTag(automatic=false) {
   const next=storyNextHero();if(next<0||story.tag)return false;
   const side=hero.x<=boss.x?-1:1,edge=side<0?-280:W+280;
   story.tag={from:selected,to:next,side,edge,spot:hero.x,phase:automatic?'down':'out',age:0,
-    origin:hero.x,startY:hero.y,duration:automatic?.6:Math.max(.27,Math.abs(edge-hero.x)/1550),distance:0,steps:0,automatic};
-  story.tagQueued=false;clearInput();hitStop=0;comboTime=0;
+    origin:hero.x,startY:hero.y,duration:automatic?.6:clamp(Math.abs(edge-hero.x)/2000,.20,.34),distance:0,steps:0,automatic,input:null};
+  // Keep live keyboard, controller and touch holds through the handoff. Clearing
+  // them here loses a held analog pointer / key until the player releases it.
+  story.tagQueued=false;directionTaps={};hitStop=0;comboTime=0;
   if(!automatic)storyResetMotion(hero);
   else{hero.pendingAttack=null;hero.anim=0;hero.special=0;hero.buffer=null;hero.dash=null;hero.block=false;hero.vx=0;hero.vy=0;}
   hero.face=side;hero.inv=10;
@@ -91,7 +95,7 @@ function storyTagEnter() {
   const limits=heroStageBounds(hero.face);
   tag.spot=clamp(tag.spot,limits.min,limits.max);
   tag.phase='in';tag.age=0;tag.origin=tag.edge;tag.distance=0;tag.steps=0;
-  tag.duration=Math.max(.32,Math.abs(tag.spot-tag.edge)/1550);
+  tag.duration=clamp(Math.abs(tag.spot-tag.edge)/2000,.22,.36);
 }
 // Ramp the velocity at the ends, with a constant-speed sprint through the middle.
 function storyRunProgress(p) {
@@ -102,6 +106,7 @@ function storyRunProgress(p) {
 }
 function stepStoryTag(dt) {
   const tag=story.tag;tag.age=Math.min(tag.duration,tag.age+dt);
+  if(tag.input){tag.input.ttl-=dt;if(tag.input.ttl<=0)tag.input=null;}
   if(tag.phase==='down'){
     hero.y=tag.startY+(GROUND-tag.startY)*Math.min(1,tag.age/.3);
     if(tag.age>=tag.duration)storyTagEnter();
@@ -117,8 +122,11 @@ function stepStoryTag(dt) {
   if(tag.age+1e-8>=tag.duration){
     if(tag.phase==='out')storyTagEnter();
     else{
-      hero.x=tag.spot;hero.face=boss.x>=hero.x?1:-1;hero.vx=0;hero.inv=.35;hero.state='idle';
-      story.tag=null;story.tagCooldown=.35;clearInput();story.releasePad=true;syncAnimation();
+      hero.x=tag.spot;hero.face=boss.x>=hero.x?1:-1;hero.vx=0;hero.inv=.35;hero.state='idle';hero.block=held('block');
+      story.tag=null;story.tagCooldown=.35;directionTaps={};syncAnimation();
+      // Resume on the arrival frame, without requiring a controller-neutral
+      // cycle. A recent attack or jump during the entrance is accepted once.
+      if(tag.input)action(tag.input.key);
     }
   }
 }
@@ -140,9 +148,15 @@ finish=function(win){
   story.tag=null;story.tagQueued=false;return teamFinish(win);
 };
 const teamAction=action;
-action=function(...args){if(story.active&&(story.tag||story.tagQueued))return;return teamAction(...args);};
+action=function(key,fromBuffer=false){
+  if(story.active&&story.tag){
+    if(!paused&&!fromBuffer&&['jump','punch','kick','special'].includes(key))story.tag.input={key,ttl:.16};
+    return;
+  }
+  return teamAction(key,fromBuffer);
+};
 const teamDirection=directionPress;
-directionPress=function(...args){if(story.active&&(story.tag||story.tagQueued))return false;return teamDirection(...args);};
+directionPress=function(...args){if(story.active&&story.tag)return false;return teamDirection(...args);};
 const teamFighter=fighter;
 fighter=function(x,y,...args){
   const tag=story.active&&story.tag;
