@@ -102,7 +102,7 @@ html,body{overscroll-behavior:none}
 .mode-panel{width:min(1040px,100%)}.mode-panel h1{font-size:clamp(28px,5vw,62px);margin:8px 0}.mode-subtitle{margin:8px}.mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:24px 0}.mode-tile{position:relative;min-width:0;min-height:285px;padding:22px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;overflow:hidden;background:linear-gradient(150deg,#203e46,#0a1925);border:1px solid #4a666c;border-radius:12px}.mode-number{font-size:10px;letter-spacing:2px;color:#a4bec3}.mode-symbol{font-size:65px;line-height:1;font-style:italic;font-weight:900;margin:26px 0 18px;color:#dfff95;text-shadow:4px 4px #32664c}.mode-tile h3{font-size:clamp(17px,2vw,23px);margin:4px 0 8px;letter-spacing:1px}.mode-tile p{font-size:12px;line-height:1.5;margin:4px 0 20px}.mode-status{margin-top:auto;font-size:10px;font-weight:900;letter-spacing:1.3px;padding-top:15px;border-top:1px solid #668d8155;width:100%}.versus-tile{border:2px solid #cbed80;background:radial-gradient(ellipse at top,#315b48,#102c2d 65%);box-shadow:0 0 35px #a5d96719}.versus-tile .mode-status{color:#e5ffb7}.locked-mode:disabled{opacity:.72;cursor:not-allowed;filter:saturate(.4)}.mode-lock{margin:28px 0 19px;color:#9daeb4}.mode-lock svg{width:49px;height:49px}.difficulty-bars{display:flex;gap:7px;align-items:flex-end;height:65px;margin:27px 0}.difficulty-bars i{width:20px;height:25px;background:#354c50;transform:skew(-12deg)}.difficulty-bars i:nth-child(2){height:42px}.difficulty-bars i:nth-child(3){height:60px}.difficulty-bars .lit{background:#d6f780}.difficulty-tile.selected{border-color:#d6f780}.mode-tile:focus-visible,.mode-tile.pad-focused{outline:3px solid #e6ffaf;outline-offset:3px}.difficulty-tile:hover{background:linear-gradient(150deg,#315648,#102c32)}@media(max-width:600px){.mode-grid{gap:8px;margin:14px 0}.mode-tile{padding:14px 8px;min-height:230px}.mode-number{font-size:8px;letter-spacing:.5px}.mode-tile h3{font-size:14px}.mode-tile p{font-size:11px}.mode-status{font-size:9px;letter-spacing:.4px}.mode-symbol{font-size:45px}.mode-lock svg{width:38px;height:38px}}@media(max-height:520px){.mode-grid{margin:10px 0;gap:10px}.mode-tile{min-height:190px;padding:12px}.mode-symbol{font-size:36px;margin:12px}.mode-lock{margin:10px}.mode-lock svg{width:30px;height:30px}.difficulty-bars{height:36px;margin:8px}.difficulty-bars i:nth-child(3){height:36px}.difficulty-bars i:nth-child(2){height:28px}.difficulty-bars i{height:18px}.mode-tile p{margin-bottom:10px}.mode-tile h3{font-size:15px}.mode-status{padding-top:8px}}
 
 </style><link rel="stylesheet" href="assets/story-mode.css">
-</head><body><main class="shell"><header class="brand"><div><strong>HERO SHOWDOWN</strong> <small> / JAMES CLAN COMICS</small></div><div><span id="padstatus">CONTROLLER READY</span><button id="fullscreen" aria-label="Toggle fullscreen">FULLSCREEN</button><button id="sound" aria-label="Toggle sound">SOUND ON</button> <button id="pause">PAUSE</button> <button id="help">HOW TO PLAY</button></div></header><div id="rotate">Turn your phone sideways for the best view.</div><div class="stage"><canvas id="game" width="1280" height="720" aria-label="Healthia Heroes fighting arena"></canvas><div id="overlay" class="overlay"></div></div><nav class="touch" aria-label="Game controls"><div class="cluster move-cluster"><div id="analog" class="analog" role="group" aria-label="Movement joystick"><div class="analog-ring"><div id="analog-knob" class="analog-knob"></div></div></div></div><div class="cluster"><button data-key="jump">JUMP</button><button data-key="punch">PUNCH</button><button data-key="kick">KICK</button><button data-key="block">BLOCK</button><button data-key="special" class="special">SPECIAL</button></div></nav><footer class="footer"><span><kbd>A D / ← →</kbd> Move / double-tap dash　 <kbd>W / ↑</kbd> Double jump　 <kbd>J</kbd> Punch　 <kbd>K</kbd> Kick　 <kbd>L</kbd> Block　 <kbd>SPACE</kbd> Special</span><span>JAMES CLAN COMICS · ORIGINAL HEROES</span></footer></main>
+<link rel="stylesheet" href="assets/cave/cave.css"></head><body><main class="shell"><header class="brand"><div><strong>HERO SHOWDOWN</strong> <small> / JAMES CLAN COMICS</small></div><div><span id="padstatus">CONTROLLER READY</span><button id="fullscreen" aria-label="Toggle fullscreen">FULLSCREEN</button><button id="sound" aria-label="Toggle sound">SOUND ON</button> <button id="pause">PAUSE</button> <button id="help">HOW TO PLAY</button></div></header><div id="rotate">Turn your phone sideways for the best view.</div><div class="stage"><canvas id="game" width="1280" height="720" aria-label="Healthia Heroes fighting arena"></canvas><div id="overlay" class="overlay"></div></div><nav class="touch" aria-label="Game controls"><div class="cluster move-cluster"><div id="analog" class="analog" role="group" aria-label="Movement joystick"><div class="analog-ring"><div id="analog-knob" class="analog-knob"></div></div></div></div><div class="cluster"><button data-key="jump">JUMP</button><button data-key="punch">PUNCH</button><button data-key="kick">KICK</button><button data-key="block">BLOCK</button><button data-key="special" class="special">SPECIAL</button></div></nav><footer class="footer"><span><kbd>A D / ← →</kbd> Move / double-tap dash　 <kbd>W / ↑</kbd> Double jump　 <kbd>J</kbd> Punch　 <kbd>K</kbd> Kick　 <kbd>L</kbd> Block　 <kbd>SPACE</kbd> Special</span><span>JAMES CLAN COMICS · ORIGINAL HEROES</span></footer></main>
 <button id="audio-prompt" class="hidden" type="button">TAP HERE ONCE TO ENABLE MUSIC</button><script>
 'use strict';
 // Classic-script module: shares the original game bindings.
@@ -243,6 +243,7 @@ function hitHero(d,source,cloud=false){
  if(blocking){hero.guardStun=.16;hero.vx=(hero.x>source?1:-1)*75;effects.push({type:'guard',x:hero.x+hero.face*35,y:hero.y-150,life:.18,max:.18});combatSound('block',.9);hitStop=Math.max(hitStop,.025);}
  else{
   hero.pendingAttack=null;hero.anim=0;hero.buffer=null;hero.block=false;hero.special=0;hero.dash=null;directionTaps={};
+  resetHeroCombo();
   const push=hero.x>source?1:-1;hero.vx=push*(cloud?45:d>=20?420:260);hero.stun=cloud?.1:d>=20?.36:.24;hero.hitReact=hero.stun;
   if(d>=22&&!cloud&&hero.hp>0){hero.knockdown=.90;hero.vy=-210;hero.inv=Math.max(hero.inv,1.0);hero.fallLanded=false;}
   shake=Math.max(shake,cloud?2:d>=20?12:6);hitStop=Math.max(hitStop,cloud?.018:d>=20?.075:.045);
@@ -265,6 +266,7 @@ function start(){audio();clearInput();hitStop=0;mode='fight';paused=false;simula
 
 function clearInput(){
  keys={};padHeld={};touchHeld={};directionTaps={};padAxisDirection=0;
+ if(typeof resetAllCombos==='function')resetAllCombos();
  analogPointer=null;analogDirection=0;
  if(analogKnob)analogKnob.style.transform='translate(-50%,-50%)';
  document.querySelectorAll('.down').forEach(e=>e.classList.remove('down'));
@@ -312,7 +314,7 @@ if(boss&&boss.hitFlash>0){ctx.save();ctx.globalCompositeOperation='screen';ctx.g
 let lean=hero&&hero.anim>0?(hero.attack==='kick'?-.13:.10)*hero.face:hero&&hero.stun>0?-.08:Math.sin(t*2)*.012;let celebration=mode==='victory'?Math.abs(Math.sin(ending*5))*20:0;let defeated=mode==='defeat';if(hero&&hero.special>0&&selected===2)for(let i=1;i<=3;i++)heroArt(selected,heroPose(),hx-i*hero.face*28,hy,hero.face,.10);
 drawDashTrails();fighter(hx,hy,lean,celebration,defeated);drawHeroPower();
 if(hero&&hero.block){ctx.strokeStyle='#9cf9e1';ctx.lineWidth=7;ctx.beginPath();ctx.ellipse(hx+hero.face*45,hy-140,70,110,0,-1.5,1.5);ctx.stroke()}
-coDrawSecond();for(const e of effects){ctx.save();if(e.type==='rockSmash'||e.type==='superPunch'){drawPowerEffect(e);ctx.restore();continue;}ctx.globalAlpha=e.life/e.max;if(e.type==='slash'){ctx.strokeStyle=e.kick?'#ffe17c':'#e1ffcf';ctx.lineWidth=e.kick?18:11;ctx.beginPath();ctx.ellipse(e.x,e.y,e.kick?100:65,50,e.dir*.25,-1.5,1.5);ctx.stroke();text(e.kick?'WHAM!':'POW!',e.x,e.y-35,24,'#fff1ac','center')}if(e.type==='wave'){let r=(1-e.life/e.max)*470;ctx.strokeStyle='#e6ff9b';ctx.lineWidth=12;ctx.beginPath();ctx.ellipse(e.x,e.y,r,38,0,0,Math.PI*2);ctx.stroke()}if(e.type==='fist'){ctx.strokeStyle='#d99b6277';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(e.x,e.y+75,30+(1-e.life/e.max)*65,8+(1-e.life/e.max)*16,0,0,Math.PI*2);ctx.stroke()}if(e.type==='impact'){const q=1-e.life/e.max;ctx.strokeStyle=e.heavy?'#fff3a1':'#ffffff';ctx.lineWidth=e.heavy?15:9;ctx.beginPath();ctx.arc(e.x,e.y,18+q*62,0,Math.PI*2);ctx.stroke();for(let j=0;j<6;j++){ctx.beginPath();ctx.moveTo(e.x+Math.cos(j)*25,e.y+Math.sin(j)*25);ctx.lineTo(e.x+Math.cos(j)*(45+q*55),e.y+Math.sin(j)*(45+q*55));ctx.stroke();}}if(e.type==='ghost')heroArt(selected,9,e.x,e.y,e.face||hero.face,.3);if(e.type==='guard'){ellipse(e.x,e.y,75,100,'#8ffce433')}ctx.restore()}
+coDrawSecond();for(const e of effects){ctx.save();if(e.type==='comboStrike'){drawComboImpact(e);ctx.restore();continue;}if(e.type==='rockSmash'||e.type==='superPunch'){drawPowerEffect(e);ctx.restore();continue;}ctx.globalAlpha=e.life/e.max;if(e.type==='slash'){ctx.strokeStyle=e.kick?'#ffe17c':'#e1ffcf';ctx.lineWidth=e.kick?18:11;ctx.beginPath();ctx.ellipse(e.x,e.y,e.kick?100:65,50,e.dir*.25,-1.5,1.5);ctx.stroke();text(e.kick?'WHAM!':'POW!',e.x,e.y-35,24,'#fff1ac','center')}if(e.type==='wave'){let r=(1-e.life/e.max)*470;ctx.strokeStyle='#e6ff9b';ctx.lineWidth=12;ctx.beginPath();ctx.ellipse(e.x,e.y,r,38,0,0,Math.PI*2);ctx.stroke()}if(e.type==='fist'){ctx.strokeStyle='#d99b6277';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(e.x,e.y+75,30+(1-e.life/e.max)*65,8+(1-e.life/e.max)*16,0,0,Math.PI*2);ctx.stroke()}if(e.type==='impact'){const q=1-e.life/e.max;ctx.strokeStyle=e.heavy?'#fff3a1':'#ffffff';ctx.lineWidth=e.heavy?15:9;ctx.beginPath();ctx.arc(e.x,e.y,18+q*62,0,Math.PI*2);ctx.stroke();for(let j=0;j<6;j++){ctx.beginPath();ctx.moveTo(e.x+Math.cos(j)*25,e.y+Math.sin(j)*25);ctx.lineTo(e.x+Math.cos(j)*(45+q*55),e.y+Math.sin(j)*(45+q*55));ctx.stroke();}}if(e.type==='ghost')heroArt(selected,9,e.x,e.y,e.face||hero.face,.3);if(e.type==='guard'){ellipse(e.x,e.y,75,100,'#8ffce433')}ctx.restore()}
 for(const p of particles)ellipse(p.x,p.y,p.r,p.r,p.color);if(mode==='victory'&&ending<2.5){for(let i=0;i<12;i++)line([[((t*600+i*150)%1500)-200,160+i*36],[((t*600+i*150)%1500),145+i*36]],'#d6ffee99',5)}
 if(opponent===7)drawSpreeEffects();if(opponent===6)drawAtomEffects();drawEnvironmentForeground();hud();atomHud();ctx.restore()}
 
@@ -343,6 +345,7 @@ function dashDust(x,dir,count=7){
 function startDash(dir){
  if(!dashReady()||(dir!==1&&dir!==-1))return false;
  hero.face=boss.x>=hero.x?1:-1;
+ resetHeroCombo();
  const back=dir!==hero.face,duration=back?.25:.24;
  hero.dash={dir,face:hero.face,back,duration,elapsed:0,trailClock:0,distance:(back?[140,128,165]:[180,164,212])[selected]};
  hero.dashCooldown=duration+.14;hero.vx=0;hero.block=false;hero.buffer=null;hero.landing=0;
@@ -434,6 +437,7 @@ function heroPose(){
   const cycle=hero.specialTick%.17;return cycle<.045?7:cycle<.08?8:9;
  }
  if(state==='dash-forward'||state==='dash-back')return dashPose();
+ if((state==='sweep'||state==='uppercut')&&hero.pendingAttack)return comboPose(hero.pendingAttack);
  if(state==='punch'||state==='kick')return attackPose();
  if(state==='jump')return 10;if(state==='fall')return 6;
  if(state==='block')return 0;
@@ -448,10 +452,12 @@ function heroStageBounds(face=hero.face){
  for(const f of m.frames){left=Math.max(left,f.anchor[0]*s);right=Math.max(right,(f.rect[2]-f.anchor[0])*s);}
  const ds=heroes[selected].height/dashDefinitions[selected].referenceHeight;
  for(const f of dashDefinitions[selected].frames){left=Math.max(left,f.anchor[0]*ds);right=Math.max(right,(f.rect[2]-f.anchor[0])*ds);}
+ if(typeof comboStageBounds==='function')({left,right}=comboStageBounds(left,right));
  return face>0?{min:left+16,max:W-right-16}:{min:right+16,max:W-left-16};
 }
 
 function heroArt(index,pose,x,feet,face=1,alpha=1,breath=0){
+ if(pose>=20)return drawComboSprite(index,pose,x,feet,face,alpha);
  const dashing=pose>=16,definition=dashing?dashDefinitions[index]:atlasDefinitions[index];
  const im=dashing?dashSheet:animationSheets[index],f=definition.frames[dashing?pose-16:pose];
  if(!im.complete||!im.width){sprite(index,x,feet,heroes[index].height,face,0,alpha);return;}
@@ -477,10 +483,12 @@ function fighter(x,y,lean,celebration,defeated){
  if(state==='defeat')feet=GROUND-Math.max(0,GROUND-(hero.defeatY||GROUND))*Math.max(0,1-ending/.38);
  if(hero.landing>0&&state==='idle')breath-=.014*(hero.landing/.09);
  // Never blink or cross-fade body parts during invulnerability.
+ drawComboTrail();
  heroArt(selected,pose,x+ox,feet,hero.face,1,breath);
 }
 
 function attackHitbox(a){
+ if(a.key==='sweep'||a.key==='uppercut')return comboHitbox(a);
  const pose=a.kick?12:9,f=atlasDefinitions[selected].frames[pose],s=heroScale(selected);
  const tip=(f.rect[2]-f.anchor[0]-5)*s;
  const above=(a.kick?[188,170,187]:[193,185,202])[selected]*s;
@@ -496,8 +504,14 @@ function resolveHeroAttack(dt){
   const box=attackHitbox(a),bw=[190,210,170,230,170,210,160,135][opponent];
   if(!spreeInvisible()&&rectHit(box.x,box.y,box.w,box.h,boss.x-bw/2,GROUND-320-(opponent===6?(boss.jump||0):0),bw,310)){
    a.hit=true;const contactX=clamp(box.cx,boss.x-bw/2,boss.x+bw/2);
-   effects.push({type:'slash',x:contactX,y:box.cy,life:.16,max:.16,dir:a.face,kick:a.kick});
-   hitBoss(a.damage,a.face,5,a.kick?'kick':'punch',{x:contactX,y:box.cy});
+   const before=boss.hp;
+   const result=hitBoss(comboDamage(a),a.face,5,a.kick?'kick':'punch',{x:contactX,y:box.cy});
+   const landed=result!==false&&boss.hp<before;
+   recordComboHit(a,landed);
+   if(landed){
+    if(a.key==='sweep'||a.key==='uppercut')effects.push({type:'comboStrike',move:a.key,color:heroes[selected].color,x:contactX,y:box.cy,life:.2,max:.2,dir:a.face});
+    else effects.push({type:'slash',x:contactX,y:box.cy,life:.16,max:.16,dir:a.face,kick:a.kick});
+   }
   }
  }
  if(!a.hit&&!a.missSound&&a.elapsed>=a.startup+a.active){a.missSound=true;combatSound('whoosh',a.kick?1:.7);}
@@ -506,7 +520,8 @@ function resolveHeroAttack(dt){
 
 function action(k,fromBuffer=false){
  audio();if(mode!=='fight'||paused||!hero)return;
- if(hero.stun>0||hero.knockdown>0||hero.guardStun>0||hero.special>0)return;
+ if(hero.stun>0||hero.knockdown>0||hero.guardStun>0||hero.special>0){resetHeroCombo();return;}
+ if(readComboInput(k,fromBuffer))return;
  if(hero.dash){
   if(!fromBuffer&&['jump','punch','kick','special'].includes(k))hero.buffer={key:k,ttl:.13};
   return;
@@ -526,6 +541,7 @@ function action(k,fromBuffer=false){
 
 function stepHero(dt){
  for(const k of ['hitReact','stun','guardStun','knockdown','landing','cd','inv','dashCooldown'])hero[k]=Math.max(0,(hero[k]||0)-dt);
+ stepHeroCombo(dt);
  if(hero.buffer){hero.buffer.ttl-=dt;if(hero.buffer.ttl<=0)hero.buffer=null;else if(!hero.dash&&hero.anim<=0&&hero.cd<=1e-7){const key=hero.buffer.key;hero.buffer=null;action(key,true);}}
  const locked=hero.stun>0||hero.knockdown>0||hero.guardStun>0;
  if(!locked&&!hero.dash&&hero.anim<=0&&hero.special<=0)hero.face=boss.x>=hero.x?1:-1;
@@ -548,7 +564,7 @@ function stepHero(dt){
   hero.x=clamp(hero.x+sign*gap/2,limits.min,limits.max);boss.x=clamp(boss.x-sign*(gap-Math.abs(hero.x-before)),150,1120);
   if(Math.abs(hero.x-boss.x)<105)hero.x=clamp(boss.x+sign*105,limits.min,limits.max);
  }
- resolveHeroAttack(dt);syncAnimation(dt);
+ stepComboMotion(dt,limits);resolveHeroAttack(dt);syncAnimation(dt);
 }
 
 function kneel(x,face){const p=clamp(ending/.78,0,1),ease=1-Math.pow(1-p,3),h=heroes[selected].height;const r=[[0,62,658,553],[678,70,634,545],[0,626,643,563]][selected];const height=h*.72;const air=Math.max(0,GROUND-(hero.defeatY||GROUND))*(1-ease);const feet=GROUND-air-16*(1-ease);if(p<.25){sprite(selected,x-face*p*25,feet,h*(1-p*.3),face,-face*.10*p,1-p/.25)}artPart(r,x-face*9,feet-height/2,height*r[2]/r[3],height,clamp(p/.25,0,1),-face*.02*(1-ease),face);if(p>.7&&p<1){ctx.strokeStyle='#e5d6a880';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(x,GROUND,60*p,7,0,0,Math.PI*2);ctx.stroke()}}
@@ -1294,16 +1310,15 @@ let menuRepeatDirection='',menuRepeatAt=0,activePadIndex=null;
 function pollPad(){
  if(!navigator.getGamepads)return;
  let pads;
- try{pads=Array.from(navigator.getGamepads()).filter(p=>p&&p.connected!==false);}catch(_){return;}
+ pads=battleGamepads();
  const active=pads.find(p=>p.buttons.some(b=>b.pressed||b.value>.5)||p.axes.some(a=>Math.abs(a)>.4));
- const gp=active||pads.find(p=>p.index===activePadIndex)||pads[0],status=document.getElementById('padstatus');
+ const current=pads.find(p=>p.index===activePadIndex);
+ const currentBusy=current&&(current.buttons.some(b=>b.pressed||b.value>.5)||current.axes.some(a=>Math.abs(a)>.4));
+ const gp=(mode==='fight'&&currentBusy?current:null)||active||current||pads[0],status=document.getElementById('padstatus');
  if(gp&&activePadIndex!==gp.index){activePadIndex=gp.index;gamepadPrev={};menuRepeatDirection='';}
  if(!gp){activePadIndex=null;menuRepeatDirection='';padHeld={};gamepadPrev={};padAxisDirection=0;delete directionTaps.pad;if(status)status.textContent='CONTROLLER READY';return}
  if(status&&!padAudioNotice)status.textContent='CONTROLLER CONNECTED';
- const b=i=>!!gp.buttons[i]?.pressed||gp.buttons[i]?.value>.5,axes=gp.axes||[];
- const horizontal=padHorizontal(axes[0]||0);
- const now={left:b(14)||horizontal<0,right:b(15)||horizontal>0,up:b(12)||(axes[1]||0)<-.35,down:b(13)||(axes[1]||0)>.35,
- jump:b(0),punch:b(2),kick:b(3),block:b(4)||b(6),special:b(5)||b(1),pause:b(9),back:b(8),sound:b(10),fullscreen:b(11)};
+ const now=readBattleGamepad(gp);
  const edge=k=>now[k]&&!gamepadPrev[k];
  const anyPress=Object.keys(now).some(k=>edge(k));
  if(anyPress&&(!ac||ac.state!=='running'))padAudioUnlock();
@@ -1350,7 +1365,7 @@ function analogSetDirection(dir){
  analogDirection=dir;
  touchHeld.left=dir<0;
  touchHeld.right=dir>0;
- if(dir)directionPress(dir,'touch');
+ if(dir&&!coActive())directionPress(dir,'touch');
 }
 
 function analogMove(e){
@@ -1869,16 +1884,13 @@ window.addEventListener('blur',()=>{clearInput();if(mode==='fight'&&!paused)paus
 
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();if(mode==='fight'&&!paused)pauseGame();}});
 
-document.querySelectorAll('[data-key]').forEach(b=>{
- b.onpointerdown=e=>{e.preventDefault();b.setPointerCapture(e.pointerId);const k=b.dataset.key;touchHeld[k]=true;b.classList.add('down');action(k);};
- const release=e=>{e.preventDefault();touchHeld[b.dataset.key]=false;b.classList.remove('down');};
- b.onpointerup=release;b.onpointercancel=release;b.onlostpointercapture=release;
-});
+// Touch controls are bound once by assets/js/battle-input.js.
+
 
 document.getElementById('sound').onclick=()=>{audio();muted=!muted;if(master)master.gain.value=muted?0:.16;if(!muted)audio();document.getElementById('sound').textContent=muted?'SOUND OFF':'SOUND ON'};
 document.getElementById('pause').onclick=pauseGame;
 
-document.getElementById('help').onclick=()=>{let returnMode=mode;if(mode==='fight'&&!paused)pauseGame();overlay.classList.remove('hidden');overlay.innerHTML=`<section class="panel"><div class="eyebrow">FIELD GUIDE</div><h2>Make every hit count.</h2><div class="help"><b>Move:</b> A / D or arrows. <b>Dash:</b> tap the same direction twice quickly to dash forward or retreat while facing your opponent. On a controller, double-tap the D-pad or flick the stick twice, returning to center. On touch, tap the same side of the movement pad twice or flick twice through center. Dashes work on the ground and do not grant invincibility.<br><b>Jump twice:</b> W or ↑. <b>Controller:</b> left stick/D-pad move, A jump/confirm, X punch, Y kick, LB block, RB special, Start pause, Select back, L3 sound, R3 fullscreen. On some browsers tap once to unlock audio.<br><b>Punch:</b> J. <b>Kick:</b> K. <b>Hold block:</b> L. <b>Special:</b> Space at 100% power.<br>Land hits or block attacks to build power. Orange zones show where the boss will strike. Jump or move clear, then attack during its recovery. Blocking reduces punches, but cannot stop toxic clouds. Against Styrodog, jump his ground shockwaves and block or dodge flying foam. His extended claw and landing fists show exactly when he strikes. Against Venomis, watch her command and dodge Thornbear’s marked vines; block flytrap shots. Against Sonic Tusk, jump low bass waves; double jump or block horn blasts and counter while he catches his breath.<br><b>Connect a controller:</b> Pair it in your phone/computer Bluetooth settings or plug it in by USB, then press a controller button here. Xbox and PlayStation standard gamepads are supported. <b>Controller:</b> D-pad / left stick to move; A / Cross to jump; X / Square to punch; Y / Triangle to kick; left bumper to block; right bumper or B / Circle for special; Start to pause. Menus support D-pad / left stick navigation (hold to repeat) and A / Cross to confirm; Start pauses and resumes. Left trigger also blocks. A controller must be paired with your device first.<br><b>Touch:</b> Use the bottom buttons. Double-tap Jump for a double jump.</div><button class="primary" id="closehelp">GOT IT</button></section>`;document.getElementById('closehelp').onclick=()=>{if(returnMode==='fight'){paused=false;overlay.classList.add('hidden');document.getElementById('pause').textContent='PAUSE'}else if(returnMode==='select')showSelect();else if(returnMode==='opponent')showOpponent();else if(returnMode==='venue')showVenue();else if(returnMode==='title')showTitle();else result()}};
+document.getElementById('help').onclick=()=>{let returnMode=mode;if(mode==='fight'&&!paused)pauseGame();overlay.classList.remove('hidden');overlay.innerHTML=`<section class="panel"><div class="eyebrow">FIELD GUIDE</div><h2>Make every hit count.</h2><div class="help"><b>Move:</b> A / D or arrows. <b>Dash:</b> tap the same direction twice quickly to dash forward or retreat while facing your opponent. On a controller, double-tap the D-pad or flick the stick twice, returning to center. On touch, tap the same side of the movement pad twice or flick twice through center. Dashes work on the ground and do not grant invincibility.<br><b>Jump twice:</b> W or ↑. <b>Controller:</b> left stick/D-pad move, A jump/confirm, X punch, Y kick, LB block, RB special, Start pause, Select back, L3 sound, R3 fullscreen. On some browsers tap once to unlock audio.<br><b>Punch:</b> J. <b>Kick:</b> K. <b>Hold block:</b> L. <b>Special:</b> Space at 100% power.<br><b>Low sweep:</b> tap Kick twice. <b>Uppercut combo:</b> Kick → Kick → Punch → Punch. On keyboard: K K J J. Controller: Y Y X X / Triangle Triangle Square Square. Use the same on-screen buttons on mobile. Tap each button separately; quick inputs are queued. A connected combo deals 8% more damage than the equivalent regular hits. Combos work on the ground and reset when interrupted.<br>Land hits or block attacks to build power. Orange zones show where the boss will strike. Jump or move clear, then attack during its recovery. Blocking reduces punches, but cannot stop toxic clouds. Against Styrodog, jump his ground shockwaves and block or dodge flying foam. His extended claw and landing fists show exactly when he strikes. Against Venomis, watch her command and dodge Thornbear’s marked vines; block flytrap shots. Against Sonic Tusk, jump low bass waves; double jump or block horn blasts and counter while he catches his breath.<br><b>Connect a controller:</b> Pair it in your phone/computer Bluetooth settings or plug it in by USB, then press a controller button here. Xbox and PlayStation standard gamepads are supported. <b>Controller:</b> D-pad / left stick to move; A / Cross to jump; X / Square to punch; Y / Triangle to kick; left bumper to block; right bumper or B / Circle for special; Start to pause. Menus support D-pad / left stick navigation (hold to repeat) and A / Cross to confirm; Start pauses and resumes. Left trigger also blocks. A controller must be paired with your device first.<br><b>Touch:</b> Use the bottom buttons. Double-tap Jump for a double jump.</div><button class="primary" id="closehelp">GOT IT</button></section>`;document.getElementById('closehelp').onclick=()=>{if(returnMode==='fight'){paused=false;overlay.classList.add('hidden');document.getElementById('pause').textContent='PAUSE'}else if(returnMode==='select')showSelect();else if(returnMode==='opponent')showOpponent();else if(returnMode==='venue')showVenue();else if(returnMode==='title')showTitle();else result()}};
 
 
 let menuFocus=0,menuFocusElement=null;
@@ -1903,7 +1915,7 @@ document.addEventListener('pointerdown',()=>{
  document.getElementById('audio-prompt')?.classList.add('hidden');
  padAudioNotice=false;
  const status=document.getElementById('padstatus');
- if(status)status.textContent='CONTROLLER CONNECTED';
+ if(status)status.textContent=battleGamepads().length?'CONTROLLER CONNECTED':'TOUCH / KEYBOARD READY';
 },{passive:true});
 
 document.addEventListener('keydown',()=>{if(ac&&ac.state!=='running')audio();padAudioNotice=false;});
@@ -2087,7 +2099,7 @@ function modeScreen(html){
 }
 function showModeSelect(){
  mode='modes';modeScreen(`<section class="panel mode-panel"><div class="eyebrow">HEALTHIA</div><h1>HERO <span>SHOWDOWN</span></h1><p class="mode-subtitle">Choose your showdown.</p><div class="mode-grid">
- <button class="mode-tile" id="story-mode" ${loaded?'':'disabled'}><span class="mode-number">01 / THE JOURNEY</span><span class="mode-symbol" aria-hidden="true">${modeLock}</span><h3>STORY MODE</h3><p>Episode 1<br>Face Wastelander at the toxic harbor.</p><span class="mode-status">${loaded?'DEVELOPMENT · CODE REQUIRED':'LOADING HEROES…'}</span></button>
+ <button class="mode-tile" id="story-mode" ${loaded?'':'disabled'}><span class="mode-number">01 / THE JOURNEY</span><span class="mode-symbol" aria-hidden="true">${modeLock}</span><h3>STORY MODE</h3><p>Chapters 1–3<br>Battle the villains. Escape the cave. Save Shore Front.</p><span class="mode-status">${loaded?'DEVELOPMENT · CODE REQUIRED':'LOADING HEROES…'}</span></button>
  <button class="mode-tile versus-tile" id="versus-mode" ${loaded?'':'disabled'}><span class="mode-number">02 / THE ARENA</span><span class="mode-symbol" aria-hidden="true">VS</span><h3>VERSUS</h3><p>Three heroes. Eight villains.<br>Your fight. Your challenge.</p><span class="mode-status">${loaded?'ENTER THE ARENA →':'LOADING HEROES…'}</span></button>
  <button class="mode-tile locked-mode" disabled aria-label="Showdown Royal — locked, coming soon"><span class="mode-number">03 / THE ULTIMATE CLASH</span><span class="mode-lock">${modeLock}</span><h3>SHOWDOWN ROYAL</h3><p>The ultimate showdown is coming.</p><span class="mode-status">LOCKED · COMING SOON</span></button>
  </div></section>`);
@@ -2375,9 +2387,9 @@ const coStart=start;start=function(){if(coGuest())return;if(coop.kind==='online'
 function coDrawSecond(){if(!coActive())return;coWith(1,()=>{ellipse(hero.x,GROUND+3,80,12,'#675c424a');fighter(hero.x,hero.y,0,0,hero.hp<=0);drawHeroPower();if(hero.block){ctx.strokeStyle='#72d8ff';ctx.lineWidth=5;ctx.beginPath();ctx.ellipse(hero.x+hero.face*45,hero.y-140,70,110,0,-1.5,1.5);ctx.stroke();}});for(let i=0;i<2;i++){const p=coop.players[i];text('P'+(i+1)+(p.hp<=0?' · DOWN':''),p.x,p.y-heroes[coop.choices[i]].height-15,18,i?'#87e6ff':'#eaff9a','center');}}
 const coHud=hud;hud=function(){coHud();if(!coActive())return;rect(26,23,495,94,'#081e2e');for(let i=0;i<2;i++){const p=coop.players[i],x=43+i*242,c=i?'#7cdcff':'#b8ed88';text('P'+(i+1)+' '+heroes[coop.choices[i]].name,x,45,15,c);rect(x,56,218,17,'#304548');rect(x,56,218*p.hp/100,17,c);text(p.hp>0?Math.ceil(p.hp)+' HP':'DOWN — TEAMMATE CAN STILL WIN',x,91,10,c);rect(x,99,218,5,'#304548');rect(x,99,218*p.power/100,5,p.power>=100?'#fff59c':c);}text(coop.kind==='online'?'ONLINE CO-OP':'LOCAL CO-OP',640,125,12,'#d9f6dc','center');};
 function coApply(i,input){const before=coop.previous[i],safe={};for(const k of ['left','right','jump','punch','kick','block','special'])safe[k]=input[k]===true;coop.inputs[i]=safe;if(coActive()&&mode==='fight'&&!paused&&!coGuest())coWith(i,()=>{for(const k of ['left','right'])if(safe[k]&&!before[k])directionPress(k==='left'?-1:1,'coop');for(const k of ['jump','punch','kick','special'])if(safe[k]&&!before[k])action(k);});coop.previous[i]=safe;}
-function coPad(gp){if(!gp)return {};const b=i=>!!gp.buttons[i]?.pressed||gp.buttons[i]?.value>.5;return {left:b(14)||gp.axes[0]<-.35,right:b(15)||gp.axes[0]>.35,jump:b(0),punch:b(2),kick:b(3),block:b(4)||b(6),special:b(5)||b(1),pause:b(9)};}
+function coPad(gp){return readBattleGamepad(gp);}
 function coMerged(a,b,c={}){const out={};for(const k of ['left','right','jump','punch','kick','block','special'])out[k]=!!(a[k]||b[k]||c[k]);return out;}
-const coPoll=pollPad;pollPad=function(){if(coop.kind==='online'&&['victory','defeat'].includes(mode)){if(ending<2.5)return;if(coop.resultNeedsRelease){let neutral=true;try{neutral=Array.from(navigator.getGamepads?.()||[]).filter(Boolean).every(p=>p.buttons.every(b=>!b.pressed&&!(b.value>.5))&&p.axes.every(a=>Math.abs(a)<.35));}catch(_){}if(neutral){coop.resultNeedsRelease=false;gamepadPrev={};menuRepeatDirection='';}return;}}if(!coActive()||mode!=='fight'||paused){coPoll();return;}let pads=[];try{pads=Array.from(navigator.getGamepads?.()||[]).filter(Boolean).sort((a,b)=>a.index-b.index);}catch(_){}coop.padSlots=coop.padSlots||[null,null];for(const gp of pads)if(!coop.padSlots.includes(gp.index)){const slot=coop.padSlots.indexOf(null);if(slot>=0)coop.padSlots[slot]=gp.index;}const p0=coPad(pads.find(g=>g.index===coop.padSlots[0])),p1=coPad(pads.find(g=>g.index===coop.padSlots[1]));if((p0.pause&&!coop.padPause)||(p1.pause&&!coop.padPause2))pauseGame();coop.padPause=!!p0.pause;coop.padPause2=!!p1.pause;if(coGuest()){coop.localInput=coMerged(coop.keyboard[0],p0,touchHeld);coSendInput();}else{coApply(0,coMerged(coop.keyboard[0],p0,touchHeld));if(coop.kind==='local')coApply(1,coMerged(coop.keyboard[1],p1));else if(performance.now()-coop.lastSeen>600)coApply(1,{});}};
+const coPoll=pollPad;pollPad=function(){if(coop.kind==='online'&&['victory','defeat'].includes(mode)){if(ending<2.5)return;if(coop.resultNeedsRelease){let neutral=true;try{neutral=Array.from(navigator.getGamepads?.()||[]).filter(Boolean).every(p=>p.buttons.every(b=>!b.pressed&&!(b.value>.5))&&p.axes.every(a=>Math.abs(a)<.35));}catch(_){}if(neutral){coop.resultNeedsRelease=false;gamepadPrev={};menuRepeatDirection='';}return;}}if(!coActive()||mode!=='fight'||paused){coPoll();return;}const pads=battleGamepads().sort((a,b)=>a.index-b.index);coop.padSlots=(coop.padSlots||[null,null]).map(index=>pads.some(p=>p.index===index)?index:null);for(const gp of pads)if(!coop.padSlots.includes(gp.index)){const slot=coop.padSlots.indexOf(null);if(slot>=0)coop.padSlots[slot]=gp.index;}const p0=coPad(pads.find(g=>g.index===coop.padSlots[0])),p1=coPad(pads.find(g=>g.index===coop.padSlots[1]));if((p0.pause&&!coop.padPause)||(p1.pause&&!coop.padPause2))pauseGame();coop.padPause=!!p0.pause;coop.padPause2=!!p1.pause;if(coGuest()){coop.localInput=coMerged(coop.keyboard[0],p0,touchHeld);coSendInput();}else{coApply(0,coMerged(coop.keyboard[0],p0,touchHeld));if(coop.kind==='local')coApply(1,coMerged(coop.keyboard[1],p1));else if(performance.now()-coop.lastSeen>600)coApply(1,{});}};
 const coKey1={KeyA:'left',KeyD:'right',KeyW:'jump',KeyF:'punch',KeyG:'kick',KeyH:'block',KeyR:'special'};
 const coKey2={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'jump',KeyJ:'punch',KeyK:'kick',KeyL:'block',Enter:'special',Numpad1:'punch',Numpad2:'kick',Numpad3:'block',Numpad0:'special'};
 for(const event of ['keydown','keyup'])window.addEventListener(event,e=>{if(e.target.closest?.('input,textarea,select')){e.stopImmediatePropagation();return;}if(coop.kind==='solo'||mode!=='fight')return;const down=event==='keydown';let i=0,k;if(coop.kind==='local'){k=coKey1[e.code];if(!k){k=coKey2[e.code];i=1;}}else k=keyMap[e.key]||coKey1[e.code];if(k){e.preventDefault();e.stopImmediatePropagation();coop.keyboard[i][k]=down;}},true);
@@ -2407,7 +2419,7 @@ const coPause=pauseGame;pauseGame=function(remote=false){if(coGuest()){coSend({t
 // Input polling remains active for online heartbeats when the host pauses or opens menus.
 setInterval(()=>{if(coop.kind!=='online'||!coop.conn?.open)return;if(coGuest())coSendInput();else{if(coActive()&&['fight','victory','defeat'].includes(mode))coSendState(true);else coSend({type:'waiting'});}if(performance.now()-coop.lastSeen>12000)coDisconnect('Connection stopped responding. Please reconnect.');},500);
 
-const coHelp=document.getElementById('help').onclick;document.getElementById('help').onclick=()=>{if(!coActive())return coHelp();if(coop.kind==='local'){if(!paused)pauseGame();coDisplay('<section class="panel"><h2>CO-OP CONTROLS</h2><p>P1: A/D move · W jump · F punch · G kick · H block · R special</p><p>P2: ←/→ move · ↑ jump · J punch · K kick · L block · Enter special</p><p>Controllers: D-pad/stick move · A/Cross jump · X/Square punch · Y/Triangle kick · LB block · RB special · Start pause.</p><p>Both heroes have separate health and power. A downed hero stays down until the next round. Defeat the villain together!</p><button id="co-close-help">RESUME</button></section>');document.getElementById('co-close-help').onclick=pauseGame;}else{if(mode==='fight')pauseGame();}};
+const coHelp=document.getElementById('help').onclick;document.getElementById('help').onclick=()=>{if(!coActive())return coHelp();if(coop.kind==='local'){if(!paused)pauseGame();coDisplay('<section class="panel"><h2>CO-OP CONTROLS</h2><p>P1: A/D move · W jump · F punch · G kick · H block · R special</p><p>P2: ←/→ move · ↑ jump · J punch · K kick · L block · Enter special</p><p>Controllers: D-pad/stick move · A/Cross jump · X/Square punch · Y/Triangle kick · LB block · RB special · Start pause.</p><p>Combo: tap Kick twice for a low sweep, then Punch twice for an uppercut. P1: G G F F. P2: K K J J. Controllers: Y Y X X / Triangle Triangle Square Square. Connected combos deal 8% more damage.</p><p>Both heroes have separate health and power. A downed hero stays down until the next round. Defeat the villain together!</p><button id="co-close-help">RESUME</button></section>');document.getElementById('co-close-help').onclick=pauseGame;}else{if(mode==='fight')pauseGame();}};
 
 // Keep the room alive through the result screen. Confirmation defaults to continuing play.
 const coOriginalResult=result;
@@ -2586,7 +2598,11 @@ const cleanTouch=document.querySelector('.touch'),cleanStage=document.querySelec
 cleanStage.appendChild(cleanTouch);
 function layoutBattleControls(){
  const w=cleanStage.clientWidth,h=cleanStage.clientHeight,scale=Math.min(w/W,h/H),width=W*scale,height=H*scale;
- Object.assign(cleanTouch.style,{left:((w-width)/2)+'px',top:((h-height)/2)+'px',width:width+'px',height:height+'px'});
+ const portrait=document.querySelector('.shell').classList.contains('touch-input')&&w<h&&h-height>=160;
+ cleanTouch.dataset.layout=portrait?'portrait':'overlay';
+ canvas.style.height=portrait?height+'px':'100%';
+ canvas.style.alignSelf=portrait?'flex-start':'';
+ Object.assign(cleanTouch.style,{left:(portrait?0:(w-width)/2)+'px',top:(portrait?height+8:(h-height)/2)+'px',width:(portrait?w:width)+'px',height:(portrait?Math.min(196,h-height-8):height)+'px'});
 }
 new ResizeObserver(layoutBattleControls).observe(cleanStage);
 window.addEventListener('resize',layoutBattleControls);layoutBattleControls();
@@ -2698,9 +2714,7 @@ const specialReceive=coReceive;coReceive=function(data){
 
 let last=0;
 
-Promise.all([atlas,dogAtlas,windFX,rockFX,dashSheet,pedestrianSheet,...animationSheets,finishAtlas,backdrop,sonicAtlas,sonicFX,venomAtlas,venomHD,styroAtlas,styroMotionSheet,wasteAtlas,wasteMotionSheet,...venueImages,atomImage,atomDebris,atomSmoke,spreeSheet,dogMotionSheet,sonicMotionSheet,bearMotionSheet,trainerMotionSheet].map(im=>im.complete&&im.width?Promise.resolve():new Promise((resolve,reject)=>{im.onload=resolve;im.onerror=reject}))).then(()=>{loaded=true;showTitle();window.HealthiaIntro?.start()}).catch(()=>{window.HealthiaIntro?.dismiss();overlay.innerHTML='<div class="panel"><h2>Artwork could not load.</h2><p>Please reload.</p></div>'});
-showTitle();
-requestAnimationFrame(frame);
+
 
 </script><script>
 // Quiet menu soundtrack; the original battle and ending scores keep their own bus.
@@ -2769,4 +2783,8 @@ requestAnimationFrame(frame);
   sync();
 })();
 
-</script><script src="assets/js/story-mode.js"></script><script src="assets/js/story-team.js"></script></body></html>
+</script><script src="assets/js/combat-combos.js?v=mobile2"></script><script src="assets/js/story-mode.js?v=2"></script><script src="assets/js/story-team.js?v=mobile2"></script><script src="assets/cave/cave-core.js"></script><script src="assets/cave/cave-audio.js"></script><script src="assets/cave/cave-tunnel.js"></script><script src="assets/cave/cave-renderer.js"></script><script src="assets/cave/cave-intro.js"></script><script src="assets/cave/cave-scene.js"></script><script src="assets/js/story-cave.js?v=4"></script><link rel="stylesheet" href="assets/battle-input.css?v=2"><script src="assets/js/battle-input.js?v=3"></script><link rel="stylesheet" href="assets/shore/shore.css?v=4"><script src="assets/shore/shore-core.js?v=3"></script><script src="assets/shore/boss-core.js?v=2"></script><script src="assets/shore/story-shore.js?v=7"></script><script src="assets/shore/boss-renderer.js?v=3"></script><script src="assets/shore/shore-renderer.js?v=4"></script><script>
+Promise.all([atlas,dogAtlas,windFX,rockFX,dashSheet,pedestrianSheet,...animationSheets,...comboSheets,finishAtlas,backdrop,sonicAtlas,sonicFX,venomAtlas,venomHD,styroAtlas,styroMotionSheet,wasteAtlas,wasteMotionSheet,...venueImages,atomImage,atomDebris,atomSmoke,spreeSheet,dogMotionSheet,sonicMotionSheet,bearMotionSheet,trainerMotionSheet].map(im=>im.complete&&im.width?Promise.resolve():new Promise((resolve,reject)=>{im.onload=resolve;im.onerror=reject}))).then(()=>{loaded=true;showTitle();window.HealthiaIntro?.start()}).catch(()=>{window.HealthiaIntro?.dismiss();overlay.innerHTML='<div class="panel"><h2>Artwork could not load.</h2><p>Please reload.</p></div>'});
+showTitle();
+requestAnimationFrame(frame);
+</script></body></html>
