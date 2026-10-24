@@ -1,0 +1,61 @@
+Hero Showdown combo sprite sheets
+Created with built-in image generation using each hero's existing in-game atlas as the visual reference.
+Files: summy-combos.png, sadie-combos.png, vee-combos.png.
+Each sheet contains four low-sweep poses and four uppercut poses with transparent backgrounds.
+All capes remain green, without logos, and cover the characters' behinds.
+The game's combat-combos.js contains frame bounds, anchors and playback timing.
+
++SUMMY
+Use case: illustration-story. Asset type: production 2D fighting-game sprite atlas for Hero Showdown.
+Create ONE transparent PNG sprite sheet, wide 1536 by 1024, exactly FOUR equal columns and TWO equal rows, eight complete full-body drawings. Each cell is 384 by 512. Reference image is the EXISTING IN-GAME CHARACTER ATLAS; preserve this exact comic-game linework, saturated colors, gold armor, face, proportions and costume. Draw ONLY SUPER SUMMY: oldest and tallest sister, warm brown skin, long dark brown locs, GREEN-RIMMED GLASSES with visible lenses (not a mask), white-and-green Earth-emblem suit, gold boots, bracers and belt, green gloves. Her cape has no emblem.
+All eight poses face RIGHT at the same side-view three-quarter camera. Locked body scale across cells, same head size, standing height about 300 pixels, feet at y=460 within each cell; leave ample empty margins around every pose, including raised fists and long extended kicking leg. Plain GREEN cape attached to the BACK at shoulders, long enough to cover her buttocks/behind in every pose. No logos on cape. No extra characters, no frame borders, no text, no shadows on background, no effects, no impact stars or glows, no floating body parts. True alpha transparency.
+
+TOP ROW left-to-right: FOUR sequential LOW SWEEP KICK poses.
+1: Deep crouching windup, weight over bent rear support leg, front leg bent preparing to sweep.
+2: Body low, support knee sharply bent, front kicking leg starting to extend horizontally only a few inches above the ground, guarded hands.
+3: LOW SWEEP CONTACT: body crouched down at knee height, one support leg folded under, other leg fully extended nearly parallel with the ground, boot aimed RIGHT at opponent's ANKLES, kicking heel only 15 px above floor. Distinct low sweep silhouette, NOT standing high kick.
+4: Leg retracts from sweep, rising into low fighting guard, cape and hair follow through.
+
+BOTTOM ROW left-to-right: FOUR sequential UPPERCUT poses.
+1: Knees deeply bent, torso coils forward, punching fist pulled beside lower ribs/hip, other fist guards face.
+2: Legs driving upward, punching fist traveling from waist to chin height, elbow bent, torso rotating.
+3: UPPERCUT CONTACT: explosive extension upward, punching forearm nearly VERTICAL and gloved fist above forehead, front shoulder drives up, rear heel lifted, other hand guards torso. Clear uppercut, NOT a straight punch or salute.
+4: Punching arm recoils down into familiar ready guard, knees soften. Maintain exact outfit and two arms, two legs throughout.
+Make polished distinct hand-drawn keyframes with coherent anatomy, grounded support feet and consistent size.
+
+SADIE
+Use case: illustration-story. Asset type: production 2D fighting-game sprite atlas for Hero Showdown.
+Create ONE transparent PNG sprite sheet, wide 1536 by 1024, exactly FOUR equal columns and TWO equal rows, eight complete full-body drawings. Each cell is 384 by 512. Reference image is the EXISTING IN-GAME CHARACTER ATLAS; preserve this exact comic-game linework, saturated colors, gold armor, face, proportions and costume. Draw ONLY SUPER SADIE: golden-blonde long locs and a gold bow, brown skin, green eye mask, GREEN suit with WHITE recycling emblem, gold boots, bracers and belt, green gloves.
+All eight poses face RIGHT at the same side-view three-quarter camera. Locked body scale across cells, same head size, standing height about 300 pixels, feet at y=460 within each cell; leave ample empty margins around every pose, including raised fists and long extended kicking leg. Plain GREEN cape attached to the BACK at shoulders, long enough to cover her buttocks/behind in every pose. No logos on cape. No extra characters, no frame borders, no text, no shadows on background, no effects, no impact stars or glows, no floating body parts. True alpha transparency.
+
+TOP ROW left-to-right: FOUR sequential LOW SWEEP KICK poses.
+1: Deep crouching windup, weight over bent rear support leg, front leg bent preparing to sweep.
+2: Body low, support knee sharply bent, front kicking leg starting to extend horizontally only a few inches above the ground, guarded hands.
+3: LOW SWEEP CONTACT: body crouched down at knee height, one support leg folded under, other leg fully extended nearly parallel with the ground, boot aimed RIGHT at opponent's ANKLES, kicking heel only 15 px above floor. Distinct low sweep silhouette, NOT standing high kick.
+4: Leg retracts from sweep, rising into low fighting guard, cape and hair follow through.
+
+BOTTOM ROW left-to-right: FOUR sequential UPPERCUT poses.
+1: Knees deeply bent, torso coils forward, punching fist pulled beside lower ribs/hip, other fist guards face.
+2: Legs driving upward, punching fist traveling from waist to chin height, elbow bent, torso rotating.
+3: UPPERCUT CONTACT: explosive extension upward, punching forearm nearly VERTICAL and gloved fist above forehead, front shoulder drives up, rear heel lifted, other hand guards torso. Clear uppercut, NOT a straight punch or salute.
+4: Punching arm recoils down into familiar ready guard, knees soften. Maintain exact outfit and two arms, two legs throughout.
+Make polished distinct hand-drawn keyframes with coherent anatomy, grounded support feet and consistent size.
+
+VEE
+Use case: illustration-story. Asset type: production 2D fighting-game sprite atlas for Hero Showdown.
+Create ONE transparent PNG sprite sheet, wide 1536 by 1024, exactly FOUR equal columns and TWO equal rows, eight complete full-body drawings. Each cell is 384 by 512. Reference image is the EXISTING IN-GAME CHARACTER ATLAS; preserve this exact comic-game linework, saturated colors, gold armor, face, proportions and costume. Draw ONLY SUPER VEE: youngest, brown skin, dark locs gathered high with a WHITE bow, green eye mask, WHITE-and-green suit with GREEN recycling emblem, gold boots, bracers and belt, green gloves.
+All eight poses face RIGHT at the same side-view three-quarter camera. Locked body scale across cells, same head size, standing height about 300 pixels, feet at y=460 within each cell; leave ample empty margins around every pose, including raised fists and long extended kicking leg. Plain GREEN cape attached to the BACK at shoulders, long enough to cover her buttocks/behind in every pose. No logos on cape. No extra characters, no frame borders, no text, no shadows on background, no effects, no impact stars or glows, no floating body parts. True alpha transparency.
+
+TOP ROW left-to-right: FOUR sequential LOW SWEEP KICK poses.
+1: Deep crouching windup, weight over bent rear support leg, front leg bent preparing to sweep.
+2: Body low, support knee sharply bent, front kicking leg starting to extend horizontally only a few inches above the ground, guarded hands.
+3: LOW SWEEP CONTACT: body crouched down at knee height, one support leg folded under, other leg fully extended nearly parallel with the ground, boot aimed RIGHT at opponent's ANKLES, kicking heel only 15 px above floor. Distinct low sweep silhouette, NOT standing high kick.
+4: Leg retracts from sweep, rising into low fighting guard, cape and hair follow through.
+
+BOTTOM ROW left-to-right: FOUR sequential UPPERCUT poses.
+1: Knees deeply bent, torso coils forward, punching fist pulled beside lower ribs/hip, other fist guards face.
+2: Legs driving upward, punching fist traveling from waist to chin height, elbow bent, torso rotating.
+3: UPPERCUT CONTACT: explosive extension upward, punching forearm nearly VERTICAL and gloved fist above forehead, front shoulder drives up, rear heel lifted, other hand guards torso. Clear uppercut, NOT a straight punch or salute.
+4: Punching arm recoils down into familiar ready guard, knees soften. Maintain exact outfit and two arms, two legs throughout.
+Make polished distinct hand-drawn keyframes with coherent anatomy, grounded support feet and consistent size.
+
