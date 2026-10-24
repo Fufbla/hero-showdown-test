@@ -70,7 +70,7 @@ function requestStoryTag() {
   story.tagQueued=true;return true;
 }
 function storyResetMotion(p) {
-  Object.assign(p,{vx:0,vy:0,y:GROUND,jumps:0,walkCycle:0,idleTime:0,state:'idle',previousState:'idle',stateTime:0,
+  Object.assign(p,{comboChain:null,vx:0,vy:0,y:GROUND,jumps:0,walkCycle:0,idleTime:0,state:'idle',previousState:'idle',stateTime:0,
     dash:null,dashCooldown:0,hitReact:0,knockdown:0,stun:0,guardStun:0,landing:0,cd:0,inv:0,anim:0,attack:'',
     special:0,specialTick:0,pendingAttack:null,buffer:null,block:false,cinematicSpecial:null,rockFx:null});
 }
@@ -186,8 +186,9 @@ draw=function(...args){
   storyTagButton.querySelector('b').textContent=story.tag?'SWAPPING':story.tagQueued?'QUEUED':'TAG';
   if(!storyTagButton.hidden){
     const w=parseFloat(cleanTouch.style.width),h=parseFloat(cleanTouch.style.height);
-    storyTagButton.style.left=(parseFloat(cleanTouch.style.left)+w*.4)+'px';
-    storyTagButton.style.top=(parseFloat(cleanTouch.style.top)+h-8)+'px';
+    const portrait=cleanTouch.dataset.layout==='portrait';
+    storyTagButton.style.left=(parseFloat(cleanTouch.style.left)+w*(portrait?.5:.4))+'px';
+    storyTagButton.style.top=(parseFloat(cleanTouch.style.top)+(portrait?48:h-8))+'px';
   }
   return value;
 };

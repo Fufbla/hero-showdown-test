@@ -34,7 +34,7 @@ function updateStoryReady() {
   if (!button) return;
   const failed=Object.values(storyStages).some(stage=>stage.failed);
   button.disabled = !loaded || !Object.values(storyStages).every(storyStageReady);
-  button.textContent = failed ? 'ARENA COULD NOT LOAD' : button.disabled ? 'LOADING ARENAS…' : 'BEGIN EPISODE 1 →';
+  button.textContent = failed ? 'ARENA COULD NOT LOAD' : button.disabled ? 'LOADING ARENAS…' : 'BEGIN STORY →';
   const retry = document.getElementById('story-reload');
   if (retry) retry.hidden = !failed;
 }
@@ -56,7 +56,7 @@ const storyOriginalSelect = showSelect;
 showSelect = function(...args) {
   storyOriginalSelect(...args);
   if (!story.active) return;
-  overlay.querySelector('.eyebrow').textContent = 'STORY MODE / EPISODE 1';
+  overlay.querySelector('.eyebrow').textContent = 'STORY MODE';
   overlay.querySelector('h2').textContent = 'Choose your starting hero.';
   const begin = document.getElementById('fight');
   begin.id = 'story-begin';
@@ -65,7 +65,7 @@ showSelect = function(...args) {
   back.textContent = '← GAME MODES';
   back.onclick = showModeSelect;
   const note = document.createElement('p');
-  note.textContent = 'Defeat Wastelander in three battles, then face the Air Pollution Monster in three rooftop battles. All three heroes fight as a team. Tag with Q, the TAG button, or RT / R2. Each hero keeps her own health and special charge.';
+  note.textContent = 'Face Wastelander and the Air Pollution Monster, escape the collapsing cave, then clear Shore Front and defeat the toxin scorpion. Your starting hero determines the cave mission and rescue cutscene. Tag with Q, the TAG button, or RT / R2. Each hero keeps her own health and special charge.';
   begin.closest('.row').before(note);
   const retry = document.createElement('button');
   retry.id = 'story-reload'; retry.textContent = 'RELOAD ARENA'; retry.hidden = true;
@@ -148,8 +148,8 @@ result = function(...args) {
     <h2>${win ? 'TO BE CONTINUED…' : 'THE FIGHT ISN’T OVER!'}</h2>
     <p>${win ? 'All six battles complete.' : storyIsRooftop() ? 'Watch the orange warnings. Jump clear of clouds and counter after a punch.' : 'Keep clear of acid pools. Block flying trash and jump before the mallet lands.'}</p>
     <p>${heroes[selected].name} · Best combo: ${best} hits · ${Math.floor(elapsed)} seconds</p>
-    <div class="row"><button class="primary" id="story-retry">${win ? 'REPLAY EPISODE' : 'RETRY FIGHT'}</button>
-    ${win ? '' : '<button id="story-replay">RESTART EPISODE</button>'}<button id="story-hero">CHOOSE HERO</button>
+    <div class="row"><button class="primary" id="story-retry">${win ? 'REPLAY STORY' : 'RETRY FIGHT'}</button>
+    ${win ? '' : '<button id="story-replay">RESTART STORY</button>'}<button id="story-hero">CHOOSE HERO</button>
     <button id="story-exit">GAME MODES</button></div></section>`;
   document.getElementById('story-retry').onclick = win ? playStoryIntro : startStoryFight;
   const replay = document.getElementById('story-replay');

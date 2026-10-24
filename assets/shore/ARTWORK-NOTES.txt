@@ -1,0 +1,14 @@
+SHORE FRONT ARTWORK
+
+shore-front.jpg is an unchanged copy of the supplied 93802DBD-FB87-4C02-BA8F-4D164EC7FC20.jpeg (1536 x 864). It retains the beach, ocean, Neptune statue, damaged/burning city, sunset and original pollution pools. The renderer shows the full image at the game's existing 16:9 arena ratio.
+
+scorpion-atlas.png is a generated transparent 1536 x 1024 sprite atlas based on the supplied "Super Vee Battles Oil Scorpions" reference. Production brief: preserve the black oily comic-book armor, glowing orange eyes, large pincers, curled stinger and dripping sludge; create 24 readable side-view frames on transparency, arranged as six columns by four rows, all facing left, suitable for the existing Supergirls fighting game.
+
+256 x 256 source cells:
+0–5: crawling poses.
+6–11: crouch, anticipation, takeoff, airborne tuck/reach, landing.
+12–17: pincer/stinger attacks and recovery.
+18–23: recoil, crumple, fragmentation, dissolving sludge and splash.
+The renderer flips these for the opposite direction, animates their travel continuously, and clips the emergence at the surface of each bubbling puddle.
+
+Original Supergirl designs and all existing hero/low-sweep/uppercut sprite assets are unchanged. The supplied concept reference itself is not a runtime dependency.
