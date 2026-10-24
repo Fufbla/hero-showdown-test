@@ -1,0 +1,34 @@
+/* Larger thumb targets, including touch laptops with a mouse/controller paired. */
+.touch-input .stage>.touch.battle-controls-active{display:flex}
+.touch-input .stage>.touch{--button-size:clamp(48px,8vw,64px);padding:10px max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));touch-action:none}
+.touch-input .stage>.touch .cluster{pointer-events:none;opacity:.78}
+.touch-input .stage>.touch .cluster:last-child{display:grid;grid-template-columns:repeat(3,var(--button-size));gap:8px;align-items:end;margin-left:auto}
+.touch-input .stage>.touch button{pointer-events:auto;width:var(--button-size);height:var(--button-size);min-width:48px;min-height:48px;padding:3px;border:1px solid #c8f3e6c9;border-radius:16px;background:#102f3ca8;color:#fff;font-size:10px;text-shadow:0 1px 3px #000;box-shadow:0 2px 5px #0005;outline:none;-webkit-tap-highlight-color:transparent;touch-action:none}
+.touch-input .stage>.touch button[data-key=punch]{grid-column:1;grid-row:1}
+.touch-input .stage>.touch button[data-key=kick]{grid-column:2;grid-row:1;border-color:#d9f56c}
+.touch-input .stage>.touch button[data-key=block]{grid-column:3;grid-row:1}
+.touch-input .stage>.touch button[data-key=jump]{grid-column:1;grid-row:2}
+.touch-input .stage>.touch button[data-key=special]{grid-column:2 / 4;grid-row:2;width:100%;border-color:#dbf48f;color:#efffc4}
+.touch-input .stage>.touch button.down{background:#d9f56ce8;border-color:#fff;color:#12302e;text-shadow:none;box-shadow:0 0 12px #d9f56c66;transform:scale(.96)}
+.touch-input .stage>.touch .analog{pointer-events:auto;width:96px;height:96px;touch-action:none}
+.touch-input .stage>.touch .analog-ring{width:84px;height:84px;background:#12344499;border:2px solid #b6e6dcb3;box-shadow:none}
+.touch-input .stage>.touch .analog-knob{width:40px;height:40px;background:#94d4c5bb;border:1px solid #e5fff1;box-shadow:none}
+.touch-input.battle-view .footer,.touch-input.battle-view #rotate{display:none}
+@media(orientation:landscape) and (max-height:500px){
+ .touch-input .stage>.touch{--button-size:52px;padding-top:6px;padding-bottom:max(6px,env(safe-area-inset-bottom))}
+ .touch-input .brand small,.touch-input #padstatus{display:none}
+ .touch-input .brand{font-size:10px;letter-spacing:0}
+ .touch-input .brand button{min-height:32px;padding:5px 9px}
+ .touch-input.battle-view{padding-top:3px;padding-bottom:0}
+}
+@media(orientation:portrait){
+ .touch-input .brand{flex-wrap:wrap;gap:4px;letter-spacing:0}
+ .touch-input .brand>div:last-child{width:100%;justify-content:space-between}
+ .touch-input #padstatus,.touch-input .brand small{display:none}
+ .touch-input .brand button{min-height:40px;padding:7px;font-size:10px}
+ .touch-input .stage>.touch{--button-size:clamp(48px,14vw,60px);padding:8px;align-items:flex-end}
+ .touch-input .stage>.touch .cluster:last-child{gap:7px}
+ .touch-input .stage>.touch .analog{width:88px;height:100px}
+ .touch-input .stage>.touch .analog-ring{width:78px;height:78px}
+ .touch-input.battle-view .stage{align-items:flex-start}
+}

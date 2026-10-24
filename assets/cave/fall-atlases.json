@@ -1,0 +1,998 @@
+{
+  "version": 1,
+  "columns": 3,
+  "rows": 2,
+  "cellWidth": 640,
+  "cellHeight": 512,
+  "pivot": [
+    320,
+    480
+  ],
+  "groundBaseline": 480,
+  "standingReferenceHeight": 420,
+  "frames": [
+    "stumble",
+    "knees-buckle",
+    "hands-catch-ground",
+    "chest-lowers",
+    "prone",
+    "settled-prone"
+  ],
+  "heroes": {
+    "summy": {
+      "file": "summy-fall.webp",
+      "source": "art-source/falls/summy-fall-cape-corrected.png",
+      "columns": 3,
+      "rows": 2,
+      "cellWidth": 640,
+      "cellHeight": 512,
+      "width": 1920,
+      "height": 1024,
+      "pivot": [
+        320,
+        480
+      ],
+      "groundBaseline": 480,
+      "standingReferenceHeight": 420,
+      "uniformSourceScale": 0.8267716535433071,
+      "frames": [
+        {
+          "index": 0,
+          "name": "stumble",
+          "source": [
+            14,
+            7,
+            459,
+            518
+          ],
+          "sourceArtworkBounds": [
+            19,
+            12,
+            449,
+            508
+          ],
+          "sourceGroundPivot": [
+            292.2473743968209,
+            520
+          ],
+          "rect": [
+            0,
+            0,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            94,
+            59,
+            371,
+            421
+          ],
+          "atlasAlphaBounds": [
+            94,
+            59,
+            371,
+            421
+          ],
+          "artworkHeight": 420,
+          "renderOffset": [
+            90,
+            56
+          ],
+          "renderSize": [
+            379,
+            428
+          ]
+        },
+        {
+          "index": 1,
+          "name": "knees-buckle",
+          "source": [
+            550,
+            99,
+            456,
+            422
+          ],
+          "sourceArtworkBounds": [
+            555,
+            104,
+            446,
+            412
+          ],
+          "sourceGroundPivot": [
+            795.8004848229342,
+            516
+          ],
+          "rect": [
+            640,
+            0,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            121,
+            139,
+            370,
+            341
+          ],
+          "atlasAlphaBounds": [
+            761,
+            139,
+            370,
+            341
+          ],
+          "artworkHeight": 341,
+          "renderOffset": [
+            117,
+            135
+          ],
+          "renderSize": [
+            377,
+            349
+          ]
+        },
+        {
+          "index": 2,
+          "name": "hands-catch-ground",
+          "source": [
+            1075,
+            197,
+            450,
+            339
+          ],
+          "sourceArtworkBounds": [
+            1080,
+            202,
+            440,
+            329
+          ],
+          "sourceGroundPivot": [
+            1272.0243213897936,
+            531
+          ],
+          "rect": [
+            1280,
+            0,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            160,
+            207,
+            365,
+            274
+          ],
+          "atlasAlphaBounds": [
+            1440,
+            207,
+            365,
+            274
+          ],
+          "artworkHeight": 272,
+          "renderOffset": [
+            157,
+            204
+          ],
+          "renderSize": [
+            372,
+            280
+          ]
+        },
+        {
+          "index": 3,
+          "name": "chest-lowers",
+          "source": [
+            16,
+            621,
+            485,
+            358
+          ],
+          "sourceArtworkBounds": [
+            21,
+            626,
+            475,
+            348
+          ],
+          "sourceGroundPivot": [
+            198.8871318895382,
+            974
+          ],
+          "rect": [
+            0,
+            512,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            172,
+            191,
+            394,
+            290
+          ],
+          "atlasAlphaBounds": [
+            172,
+            703,
+            394,
+            290
+          ],
+          "artworkHeight": 288,
+          "renderOffset": [
+            169,
+            188
+          ],
+          "renderSize": [
+            401,
+            296
+          ]
+        },
+        {
+          "index": 4,
+          "name": "prone",
+          "source": [
+            535,
+            674,
+            473,
+            317
+          ],
+          "sourceArtworkBounds": [
+            540,
+            679,
+            463,
+            307
+          ],
+          "sourceGroundPivot": [
+            669.8001316655694,
+            986
+          ],
+          "rect": [
+            640,
+            512,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            213,
+            226,
+            383,
+            255
+          ],
+          "atlasAlphaBounds": [
+            853,
+            738,
+            383,
+            255
+          ],
+          "artworkHeight": 254,
+          "renderOffset": [
+            209,
+            222
+          ],
+          "renderSize": [
+            391,
+            262
+          ]
+        },
+        {
+          "index": 5,
+          "name": "settled-prone",
+          "source": [
+            1068,
+            681,
+            459,
+            311
+          ],
+          "sourceArtworkBounds": [
+            1073,
+            686,
+            449,
+            301
+          ],
+          "sourceGroundPivot": [
+            1214.0008405715887,
+            987
+          ],
+          "rect": [
+            1280,
+            512,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            203,
+            231,
+            371,
+            249
+          ],
+          "atlasAlphaBounds": [
+            1483,
+            743,
+            371,
+            249
+          ],
+          "artworkHeight": 249,
+          "renderOffset": [
+            199,
+            227
+          ],
+          "renderSize": [
+            379,
+            257
+          ]
+        }
+      ]
+    },
+    "sadie": {
+      "file": "sadie-fall.webp",
+      "source": "art-source/falls/sadie-fall-cape-corrected.png",
+      "columns": 3,
+      "rows": 2,
+      "cellWidth": 640,
+      "cellHeight": 512,
+      "width": 1920,
+      "height": 1024,
+      "pivot": [
+        320,
+        480
+      ],
+      "groundBaseline": 480,
+      "standingReferenceHeight": 420,
+      "uniformSourceScale": 0.8171206225680934,
+      "frames": [
+        {
+          "index": 0,
+          "name": "stumble",
+          "source": [
+            20,
+            21,
+            499,
+            524
+          ],
+          "sourceArtworkBounds": [
+            25,
+            26,
+            489,
+            514
+          ],
+          "sourceGroundPivot": [
+            287.0865823445038,
+            540
+          ],
+          "rect": [
+            0,
+            0,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            105,
+            59,
+            401,
+            422
+          ],
+          "atlasAlphaBounds": [
+            105,
+            59,
+            401,
+            422
+          ],
+          "artworkHeight": 420,
+          "renderOffset": [
+            102,
+            56
+          ],
+          "renderSize": [
+            408,
+            428
+          ]
+        },
+        {
+          "index": 1,
+          "name": "knees-buckle",
+          "source": [
+            539,
+            118,
+            469,
+            433
+          ],
+          "sourceArtworkBounds": [
+            544,
+            123,
+            459,
+            423
+          ],
+          "sourceGroundPivot": [
+            801.6255303219366,
+            546
+          ],
+          "rect": [
+            640,
+            0,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            108,
+            133,
+            376,
+            348
+          ],
+          "atlasAlphaBounds": [
+            748,
+            133,
+            376,
+            348
+          ],
+          "artworkHeight": 346,
+          "renderOffset": [
+            105,
+            130
+          ],
+          "renderSize": [
+            383,
+            354
+          ]
+        },
+        {
+          "index": 2,
+          "name": "hands-catch-ground",
+          "source": [
+            1093,
+            193,
+            426,
+            356
+          ],
+          "sourceArtworkBounds": [
+            1098,
+            198,
+            416,
+            346
+          ],
+          "sourceGroundPivot": [
+            1254.5306189640035,
+            544
+          ],
+          "rect": [
+            1280,
+            0,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            192,
+            196,
+            340,
+            284
+          ],
+          "atlasAlphaBounds": [
+            1472,
+            196,
+            340,
+            284
+          ],
+          "artworkHeight": 283,
+          "renderOffset": [
+            188,
+            193
+          ],
+          "renderSize": [
+            348,
+            291
+          ]
+        },
+        {
+          "index": 3,
+          "name": "chest-lowers",
+          "source": [
+            19,
+            661,
+            460,
+            346
+          ],
+          "sourceArtworkBounds": [
+            24,
+            666,
+            450,
+            336
+          ],
+          "sourceGroundPivot": [
+            181.72958969332026,
+            1002
+          ],
+          "rect": [
+            0,
+            512,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            190,
+            204,
+            370,
+            277
+          ],
+          "atlasAlphaBounds": [
+            190,
+            716,
+            370,
+            277
+          ],
+          "artworkHeight": 275,
+          "renderOffset": [
+            187,
+            201
+          ],
+          "renderSize": [
+            376,
+            283
+          ]
+        },
+        {
+          "index": 4,
+          "name": "prone",
+          "source": [
+            533,
+            701,
+            479,
+            294
+          ],
+          "sourceArtworkBounds": [
+            538,
+            706,
+            469,
+            284
+          ],
+          "sourceGroundPivot": [
+            696.9564775859568,
+            990
+          ],
+          "rect": [
+            640,
+            512,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            190,
+            248,
+            383,
+            233
+          ],
+          "atlasAlphaBounds": [
+            830,
+            760,
+            383,
+            233
+          ],
+          "artworkHeight": 232,
+          "renderOffset": [
+            186,
+            244
+          ],
+          "renderSize": [
+            391,
+            240
+          ]
+        },
+        {
+          "index": 5,
+          "name": "settled-prone",
+          "source": [
+            1053,
+            709,
+            472,
+            292
+          ],
+          "sourceArtworkBounds": [
+            1058,
+            714,
+            462,
+            282
+          ],
+          "sourceGroundPivot": [
+            1229.2406002360478,
+            996
+          ],
+          "rect": [
+            1280,
+            512,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            180,
+            248,
+            378,
+            233
+          ],
+          "atlasAlphaBounds": [
+            1460,
+            760,
+            378,
+            233
+          ],
+          "artworkHeight": 230,
+          "renderOffset": [
+            176,
+            245
+          ],
+          "renderSize": [
+            386,
+            239
+          ]
+        }
+      ]
+    },
+    "vee": {
+      "file": "vee-fall.webp",
+      "source": "art-source/falls/vee-fall-cape-corrected.png",
+      "columns": 3,
+      "rows": 2,
+      "cellWidth": 640,
+      "cellHeight": 512,
+      "width": 1920,
+      "height": 1024,
+      "pivot": [
+        320,
+        480
+      ],
+      "groundBaseline": 480,
+      "standingReferenceHeight": 420,
+      "uniformSourceScale": 0.7865168539325843,
+      "frames": [
+        {
+          "index": 0,
+          "name": "stumble",
+          "source": [
+            35,
+            45,
+            483,
+            544
+          ],
+          "sourceArtworkBounds": [
+            40,
+            50,
+            473,
+            534
+          ],
+          "sourceGroundPivot": [
+            261.11620426216325,
+            584
+          ],
+          "rect": [
+            0,
+            0,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            145,
+            59,
+            374,
+            422
+          ],
+          "atlasAlphaBounds": [
+            145,
+            59,
+            374,
+            422
+          ],
+          "artworkHeight": 420,
+          "renderOffset": [
+            142,
+            56
+          ],
+          "renderSize": [
+            380,
+            428
+          ]
+        },
+        {
+          "index": 1,
+          "name": "knees-buckle",
+          "source": [
+            562,
+            156,
+            445,
+            425
+          ],
+          "sourceArtworkBounds": [
+            567,
+            161,
+            435,
+            415
+          ],
+          "sourceGroundPivot": [
+            752.3056686846451,
+            576
+          ],
+          "rect": [
+            640,
+            0,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            174,
+            153,
+            343,
+            328
+          ],
+          "atlasAlphaBounds": [
+            814,
+            153,
+            343,
+            328
+          ],
+          "artworkHeight": 326,
+          "renderOffset": [
+            170,
+            150
+          ],
+          "renderSize": [
+            350,
+            334
+          ]
+        },
+        {
+          "index": 2,
+          "name": "hands-catch-ground",
+          "source": [
+            1106,
+            223,
+            398,
+            361
+          ],
+          "sourceArtworkBounds": [
+            1111,
+            228,
+            388,
+            351
+          ],
+          "sourceGroundPivot": [
+            1247.8983365775969,
+            579
+          ],
+          "rect": [
+            1280,
+            0,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            211,
+            203,
+            307,
+            278
+          ],
+          "atlasAlphaBounds": [
+            1491,
+            203,
+            307,
+            278
+          ],
+          "artworkHeight": 276,
+          "renderOffset": [
+            208,
+            200
+          ],
+          "renderSize": [
+            313,
+            284
+          ]
+        },
+        {
+          "index": 3,
+          "name": "chest-lowers",
+          "source": [
+            54,
+            661,
+            441,
+            315
+          ],
+          "sourceArtworkBounds": [
+            59,
+            666,
+            431,
+            305
+          ],
+          "sourceGroundPivot": [
+            204.75637305699482,
+            971
+          ],
+          "rect": [
+            0,
+            512,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            205,
+            239,
+            340,
+            241
+          ],
+          "atlasAlphaBounds": [
+            205,
+            751,
+            340,
+            241
+          ],
+          "artworkHeight": 240,
+          "renderOffset": [
+            201,
+            236
+          ],
+          "renderSize": [
+            347,
+            248
+          ]
+        },
+        {
+          "index": 4,
+          "name": "prone",
+          "source": [
+            546,
+            692,
+            457,
+            292
+          ],
+          "sourceArtworkBounds": [
+            551,
+            697,
+            447,
+            282
+          ],
+          "sourceGroundPivot": [
+            725.9789322166972,
+            979
+          ],
+          "rect": [
+            640,
+            512,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            181,
+            257,
+            353,
+            224
+          ],
+          "atlasAlphaBounds": [
+            821,
+            769,
+            353,
+            224
+          ],
+          "artworkHeight": 222,
+          "renderOffset": [
+            178,
+            254
+          ],
+          "renderSize": [
+            359,
+            230
+          ]
+        },
+        {
+          "index": 5,
+          "name": "settled-prone",
+          "source": [
+            1093,
+            715,
+            416,
+            265
+          ],
+          "sourceArtworkBounds": [
+            1098,
+            720,
+            406,
+            255
+          ],
+          "sourceGroundPivot": [
+            1268.6181282240236,
+            975
+          ],
+          "rect": [
+            1280,
+            512,
+            640,
+            512
+          ],
+          "pivot": [
+            320,
+            480
+          ],
+          "alphaBounds": [
+            185,
+            280,
+            321,
+            201
+          ],
+          "atlasAlphaBounds": [
+            1465,
+            792,
+            321,
+            201
+          ],
+          "artworkHeight": 201,
+          "renderOffset": [
+            182,
+            276
+          ],
+          "renderSize": [
+            327,
+            208
+          ]
+        }
+      ]
+    }
+  }
+}

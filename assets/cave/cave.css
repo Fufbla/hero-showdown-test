@@ -1,0 +1,70 @@
+#healthia-cave{--lime:#8dffaf;--green:#39dc7a;position:fixed;inset:0;z-index:2147482000;background:#05080c;color:#edfff2;font-family:Arial,Helvetica,sans-serif;overflow:hidden;touch-action:none;user-select:none;isolation:isolate}
+#healthia-cave *{box-sizing:border-box}#healthia-cave canvas.cave-scene{width:100%;height:100%;display:block}#healthia-cave button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;color:inherit;touch-action:none}
+#healthia-cave button:focus-visible,#healthia-cave input:focus-visible{outline:3px solid #e3ffd8;outline-offset:4px}
+.cave-hud{position:absolute;left:max(18px,env(safe-area-inset-left));top:max(18px,env(safe-area-inset-top));display:flex;align-items:center;gap:12px;pointer-events:none;filter:drop-shadow(0 3px 12px #0009)}
+.cave-portrait{width:68px;height:68px;border:2px solid var(--green);border-radius:50%;background:#0e241b;object-fit:cover}
+.cave-health{width:clamp(130px,19vw,246px)}.cave-name{font-size:10px;font-weight:900;letter-spacing:2px;color:#caffdb;margin-bottom:6px}
+.cave-health-track{height:13px;border:1px solid #76c68f;padding:2px;background:#070c13d9;transform:skew(-15deg)}.cave-health-fill{height:100%;background:linear-gradient(90deg,#20b96a,#96ffae);transition:width .18s;width:100%}
+.cave-hearts{display:flex;gap:8px;margin-top:5px;height:20px}.cave-hearts svg{width:20px;height:20px;fill:#6bff9b;filter:drop-shadow(0 0 5px #2eaf5566)}.cave-hearts svg.empty{fill:#1d332a;filter:none;stroke:#48755d}
+.cave-map{position:absolute;right:max(20px,env(safe-area-inset-right));top:max(18px,env(safe-area-inset-top));width:112px;height:132px;border:1px solid #59cf83;border-radius:7px;background:#040b13bd;box-shadow:0 6px 28px #0007;pointer-events:none}
+.cave-map canvas{width:100%;height:100%}.cave-toolbar{position:absolute;top:max(20px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;gap:8px}
+#healthia-cave .cave-small{width:38px;height:34px;background:#07130fc2;border:1px solid #54786277;border-radius:6px;padding:0;font-size:15px;color:#c3e6cd}
+.cave-progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:#04170e}.cave-progress i{display:block;height:100%;width:0;background:#55e58a;box-shadow:0 0 10px #55e58a}
+.cave-controls{position:absolute;inset:0;pointer-events:none}.cave-controls button{pointer-events:auto;position:absolute;bottom:max(17px,env(safe-area-inset-bottom));width:clamp(66px,11vh,90px);height:clamp(66px,11vh,90px);border-radius:50%;border:2px solid #75f3a18c;background:radial-gradient(circle,#18352c99,#091818bb 70%);box-shadow:inset 0 0 0 4px #061a1388,0 4px 20px #0007;display:grid;place-items:center;padding:17px!important;transition:background .08s,transform .08s;color:#b2ffcc!important}
+.cave-controls button:nth-child(1){left:12%;transform:translateX(-50%)}.cave-controls button:nth-child(2){left:50%;transform:translateX(-50%)}.cave-controls button:nth-child(3){left:88%;transform:translateX(-50%)}
+.cave-controls button.pressed{background:#32815bc9;box-shadow:0 0 24px #59fc9588,inset 0 0 10px #81ffb944}.cave-controls svg{width:100%;height:100%;fill:currentColor;filter:drop-shadow(0 0 8px #7fffaa77)}
+.cave-controls span{position:absolute;bottom:-12px;font-size:9px;letter-spacing:2px;color:#cce7d4;opacity:.7}
+.cave-tip{position:absolute;left:50%;top:38%;transform:translateX(-50%);font-size:12px;letter-spacing:.3px;color:#d4e9da;background:#07120eb8;border:1px solid #64d79033;padding:10px 17px;border-radius:24px;max-width:90vw;white-space:nowrap;transition:opacity .7s;pointer-events:none}
+.cave-live{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.cave-modal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(90deg,#030b0fe8,#030a0d44);backdrop-filter:blur(3px)}
+.cave-modal[hidden]{display:none}.cave-panel{width:min(510px,90vw);padding:36px;border-left:2px solid #83ffac;background:linear-gradient(145deg,#0c211ee6,#061015e6);box-shadow:0 15px 90px #0009;border-radius:0 14px 14px 0}
+.cave-eyebrow{font-size:10px;letter-spacing:3px;color:#92e4ac;font-weight:800;margin-bottom:15px}.cave-panel h1,.cave-panel h2{font-weight:900;line-height:1.02;letter-spacing:-1.5px;font-size:clamp(30px,5vw,54px);margin:0 0 18px}.cave-panel p{color:#b1c8be;font-size:14px;line-height:1.65;margin:12px 0}.cave-panel .cave-subtle{font-size:11px;color:#86a298;line-height:1.5}
+.cave-instructions{display:flex;gap:10px;margin:22px 0}.cave-instructions div{flex:1;padding:12px 8px;text-align:center;background:#0b1c1a;border:1px solid #305544;border-radius:7px;color:#b9d4c4;font-size:10px;letter-spacing:.5px}.cave-instructions b{display:block;color:#a5ffbd;font-size:24px;margin-bottom:5px}
+#healthia-cave .cave-primary{display:block;width:100%;padding:14px;border:1px solid #a2ffb7;background:#8cf5ab;color:#072016;border-radius:6px;font-size:12px;letter-spacing:1.5px;font-weight:900;margin-top:17px}#healthia-cave .cave-secondary{background:transparent;border:1px solid #49695b;color:#b2c9bc;border-radius:6px;width:100%;margin-top:10px;padding:11px;font-size:11px;letter-spacing:1px}
+.cave-panel input{background:#07120f;color:#c6ffda;border:1px solid #587a67;border-radius:5px;width:100%;font-size:23px;letter-spacing:10px;padding:12px;text-align:center;font-family:inherit;user-select:text}.cave-panel label{display:block;font-size:10px;letter-spacing:1.5px;margin:18px 0 8px;color:#8aa997}
+.cave-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:10px}#healthia-cave .cave-keypad button{font-size:14px;background:#10281e;border:1px solid #486b54;border-radius:4px;padding:7px}.cave-error{color:#ffc389!important;font-size:12px!important;min-height:18px}
+.cave-stats{display:flex;gap:18px;border-block:1px solid #36533e;padding:15px 0;margin:20px 0}.cave-stats strong{font-size:27px;color:#9af6b7;display:block}.cave-stats span{font-size:10px;letter-spacing:1px;color:#b2c8bb}
+@media(max-height:520px){.cave-hud{top:10px;left:max(12px,env(safe-area-inset-left));gap:8px}.cave-portrait{width:45px;height:45px}.cave-name{font-size:8px;letter-spacing:1px;margin-bottom:4px}.cave-health-track{height:10px}.cave-hearts{height:15px;margin-top:3px;gap:5px}.cave-hearts svg{width:15px;height:15px}.cave-map{width:77px;height:89px;top:10px;right:max(12px,env(safe-area-inset-right))}.cave-toolbar{top:11px}.cave-controls button{width:58px;height:58px;bottom:max(12px,env(safe-area-inset-bottom));padding:13px!important}.cave-panel{padding:20px;width:min(490px,92vw)}.cave-panel h1,.cave-panel h2{font-size:32px;margin-bottom:10px}.cave-panel p{font-size:12px;margin:7px 0}.cave-eyebrow{margin-bottom:9px}.cave-instructions{margin:12px 0}.cave-instructions div{padding:6px}.cave-instructions b{font-size:18px}.cave-keypad{grid-template-columns:repeat(6,1fr)}.cave-panel label{margin-top:10px}.cave-panel input{padding:7px;font-size:18px}}
+@media(max-width:520px) and (min-height:521px){.cave-hud{left:12px;top:14px;gap:7px}.cave-portrait{width:49px;height:49px}.cave-health{width:125px}.cave-map{width:72px;height:90px;right:12px;top:14px}.cave-toolbar{top:115px;left:auto;right:10px;transform:none}.cave-controls button:nth-child(1){left:16%}.cave-controls button:nth-child(3){left:84%}.cave-panel{padding:25px}.cave-tip{font-size:10px;white-space:normal;text-align:center;width:80vw;top:35%}}
+
+#healthia-cave .cave-tunnel{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}#healthia-cave canvas.cave-scene{position:relative}
+
+/* Keep the center ceiling lane free of toolbar controls. */
+#healthia-cave .cave-toolbar{left:auto;right:max(20px,env(safe-area-inset-right));top:162px;transform:none}
+@media(max-height:520px){#healthia-cave .cave-toolbar{top:109px;right:max(12px,env(safe-area-inset-right));gap:4px}#healthia-cave .cave-small{width:29px;height:29px}}
+@media(max-width:520px) and (min-height:521px){#healthia-cave .cave-toolbar{top:115px;right:10px}}
+
+.cave-hero-choices{display:grid;gap:10px;margin:20px 0 12px}.cave-hero-choice{display:flex;align-items:center;gap:14px;width:100%;padding:12px;background:#0b221bd9;border:1px solid #457c5b;border-radius:8px;text-align:left}.cave-hero-choice:hover,.cave-hero-choice:focus-visible{background:#17432c;border-color:#a0ffc0}.cave-hero-choice img{width:57px;height:57px;object-fit:cover;border:1px solid #83d99c;border-radius:50%;flex:none}.cave-hero-choice span{flex:1}.cave-hero-choice strong{display:block;letter-spacing:1.3px;font-size:13px}.cave-hero-choice small{display:block;margin-top:6px;color:#a8c9b6;font-size:11px;line-height:1.4}.cave-hero-choice b{font-size:20px;color:#a0ffc0}#healthia-cave[data-character=sadie] .cave-controls button{left:50%;width:clamp(70px,12vh,96px);height:clamp(70px,12vh,96px);border-color:#ffe99d99;color:#ffe99d!important}#healthia-cave[data-character=vee] .cave-controls button:nth-child(1){left:20%}#healthia-cave[data-character=vee] .cave-controls button:nth-child(3){left:80%}.cave-controls .is-lane{border-color:#b3ffcd;box-shadow:0 0 18px #5def8d50,inset 0 0 0 3px #46e67f44}.cave-panel{max-height:calc(100dvh - 32px);overflow:auto}#healthia-cave[data-character=sadie] .cave-tip{color:#ffedac}
+@media(max-height:520px){.cave-hero-choices{gap:6px;margin:12px 0 8px}.cave-hero-choice{padding:7px 10px;gap:11px}.cave-hero-choice img{width:36px;height:36px}.cave-hero-choice small{margin-top:3px;font-size:10px}.cave-hero-choice strong{font-size:11px}#healthia-cave[data-character=sadie] .cave-controls button{width:64px;height:64px}.cave-panel h2 br{display:none}}
+
+#healthia-cave[data-character=sadie] .cave-tip{top:24%}
+
+/* Fade the interface first; the moving cavern and hero then disappear into black. */
+#healthia-cave[data-ending] :is(.cave-hud,.cave-map,.cave-controls,.cave-toolbar,.cave-progress,.cave-tip){opacity:calc(1 - var(--cave-end-fade,0));pointer-events:none}
+#healthia-cave[data-ending] .cave-controls button{pointer-events:none}
+#healthia-cave[data-ending] .cave-modal{background:#000;backdrop-filter:none}
+#healthia-cave[data-ending] .cave-panel{background:transparent;border:0;box-shadow:none;text-align:center;max-width:390px}
+#healthia-cave[data-ending] .cave-panel h2{font-size:23px;letter-spacing:-.4px;line-height:1.2}
+#healthia-cave[data-ending] .cave-eyebrow{font-size:9px;color:#86a293}
+
+/* Keep utility buttons off all three ceiling hazards on narrow screens. */
+#healthia-cave .cave-toolbar{top:46%;right:max(12px,env(safe-area-inset-right));flex-direction:column;gap:8px}
+@media(max-width:520px) and (min-height:521px){#healthia-cave .cave-map{width:60px;height:72px}}
+
+/* Vee steers continuously with one captured analog pointer. */
+#healthia-cave .cave-stick{pointer-events:auto;position:absolute;left:max(18px,env(safe-area-inset-left));bottom:max(22px,env(safe-area-inset-bottom));width:clamp(76px,13vh,108px);height:clamp(76px,13vh,108px);border:2px solid #88ffb288;border-radius:50%;background:radial-gradient(circle,#1c52334d,#071b16a3);box-shadow:inset 0 0 0 5px #0b33235e,0 3px 18px #0008;touch-action:none;cursor:grab}
+#healthia-cave .cave-stick:focus-visible{outline:3px solid #d6ffe2;outline-offset:4px}
+.cave-stick-track{position:absolute;left:12%;right:12%;top:50%;height:1px;background:#9bffc15c;pointer-events:none}
+.cave-stick-track:before,.cave-stick-track:after{position:absolute;top:-10px;color:#a0ffc58c;font-style:normal;font-size:18px;line-height:20px}.cave-stick-track:before{content:'‹';left:0}.cave-stick-track:after{content:'›';right:0}
+.cave-stick-thumb{position:absolute;left:30%;top:30%;width:40%;height:40%;border:1.5px solid #bcffd3bd;border-radius:50%;background:radial-gradient(circle at 35% 30%,#91eeaeaa,#22573ccc);box-shadow:0 3px 12px #0007;pointer-events:none;will-change:transform}
+#healthia-cave .cave-stick span{position:absolute;left:0;right:0;text-align:center;bottom:-16px;font-size:9px;letter-spacing:2px;color:#d1f5dc;pointer-events:none}
+#healthia-cave[data-ending] .cave-stick{pointer-events:none}
+
+.cave-intro{position:absolute;inset:0;z-index:100;background:#000;display:flex;align-items:center;justify-content:center;color:#e9fff0}
+.cave-intro video{width:100%;height:100%;object-fit:contain;background:#000}
+.cave-intro-controls{position:absolute;inset:auto 0 0;padding:24px max(16px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(0,0,0,.85));font:600 12px Arial,sans-serif}
+.cave-intro-controls p{margin:0 0 8px;text-align:center}
+.cave-intro-controls>div{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.cave-intro-controls button{min-height:44px;padding:10px 15px;border:1px solid #76d496;border-radius:8px;background:#0b231de0;color:#effff4;cursor:pointer;font:700 12px Arial,sans-serif}
+.cave-intro-controls button:focus-visible{outline:3px solid #efff83;outline-offset:2px}
+.cave-intro-controls [hidden]{display:none}

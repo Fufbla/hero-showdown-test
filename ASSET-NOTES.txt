@@ -1,0 +1,66 @@
+NEW SPLIT SPRITE
+Project path: assets/shore/scorpion-split.png
+Absolute working path: /workspace/sites/hero-showdown-combo-playtest/dist/assets/shore/scorpion-split.png
+Method: built-in image generation, transparent background, using assets/shore/scorpion-atlas.png as the visual reference. Original artwork was not overwritten. Alpha is preserved. The renderer reads three columns by two rows and blends the final separated pair into the existing movement sprites.
+
+FINAL GENERATION PROMPT
+Use case: stylized-concept. Asset type: production sprite sheet for the Hero Showdown 2D game. Use the attached scorpion sheet ONLY as a creature/style reference. Create a NEW six-frame animation sheet of this same black oily armored scorpion splitting into exactly two identical scorpions, with curled stinger tails, large pincers and orange glowing eyes. Keep the comic-game rendering and amber edge highlights of the reference. Transparent background, actual alpha, no scenery, no grid, no text, no numbers. Layout MUST be exactly three equal columns and two equal rows, six evenly sized square cells, 1536x1024 total. Read left to right then next row. Same camera, scale and ground baseline in every cell, plenty of transparent padding, each sequence centered in its own cell. Frame 1: one centered scorpion crouches, oily body begins to bulge. Frame 2: body stretches sideways as an oily seam opens; two silhouettes becoming visible. Frame 3: two complete scorpion forms are still joined by a thick elastic black sludge bridge. Frame 4: bridge stretches thin as both scorpions pull apart. Frame 5: bridge snaps into oily droplets; exactly two fully formed scorpions. Frame 6: two distinct, intact scorpions crouch facing outward, clearly separated. The ending pair should occupy about the same overall wide area as the middle frames. Each creature remains anatomically consistent, no extra heads or tails. No gore or flesh: they are entirely pollution sludge and armor. Keep feet at roughly 85 percent down each square cell. Do not add labels or any words.
+
+SUPPLIED CUTSCENE
+Source: openart-YQdMOMky3gQwDqqwkLlGd_minimax-h3_1792867161997_7e0ccc43.mp4
+Project path: videos/shore-split.mp4
+The original upload is unchanged, including its audio.
+
+
+BOSS SCORPION ART — OCTOBER 24, 2026
+Generated using the built-in image-generation tool (transparent-background mode).
+Reference: assets/shore/scorpion-atlas.png, then the new boss-parts.png.
+Runtime assets: assets/shore/boss-parts.png and assets/shore/boss-defeat.png.
+Both PNGs retain true alpha. Existing character art and minion sheets are unchanged.
+Parts are rendered as a front-facing articulated body, pincers and tail. The same simulated claw and stinger positions drive the sprite animation and collision volumes. The defeat sheet shows the boss collapsing into a persistent toxin puddle.
+
+BOSS PARTS PROMPT
+Use case: stylized-concept. Asset type: production 2D game boss sprite parts atlas, genuine transparent background, 1536 x 1024, exactly 3 columns and 2 rows, six equal 512 x 512 cells, no borders or labels. Reference image is STYLE ONLY: keep its glossy black oil armor, orange glowing eyes, amber rim lights and crisp illustrated fighting-game finish. Create a larger imposing pollution scorpion boss viewed STRAIGHT FROM THE FRONT, symmetrical face, not side profile or overhead. Sprite parts are separate for skeletal animation.
+TOP LEFT cell: front-facing broad armored scorpion central body, glowing orange angry eyes, layered black carapace, 8 bent walking legs spread to sides. No tail and no large front pincers in this cell, just shoulder sockets. Centered body feet near bottom.
+TOP MIDDLE cell: one huge LEFT pincer and short segmented arm as a separate cutout, open claw tips pointing down-left, pivot at upper right. Fully contained with margin.
+TOP RIGHT cell: matching huge RIGHT pincer and short segmented arm, mirrored direction, open claw tips pointing down-right, pivot at upper left.
+BOTTOM LEFT cell: single thick rounded armored tail link, glossy black and amber ridges, oriented vertically, standalone cutout centered. No long tail.
+BOTTOM MIDDLE cell: separate curved hook STINGER tip with 2 short armored rings, oriented downward, sharp tip, sickly luminous lime-green poison droplet at point, black/amber shell. Centered with padding.
+BOTTOM RIGHT cell: a wide low black toxin puddle with luminous green veins, oily reflections and a few small bubbles, viewed at ground level in side-view arena.
+Use bold readable silhouettes, subtle black sludge drips, matching detail and light on all six parts. Each part centered in its own cell with at least 25px of transparent margin. No background, scene, ground plane, shadow outside cutouts, text, gridlines, watermark or additional creatures.
+
+BOSS DEFEAT PROMPT
+Use case: stylized-concept. Production transparent 2D game sprite sheet for the DEFEAT of this front-facing pollution scorpion boss. Reference is the boss's identity/style and its assembled component parts. Make a 1536x1024 atlas: exactly 2 columns and 2 rows, four 768x512 cells. Each sprite is centered horizontally with the SAME floor baseline 470 pixels down in each cell, maximum width 680px and maximum height 420px, 40px clear margin. Absolutely transparent background, no labels or grid.
+Frame 1 top-left: complete FRONT-FACING scorpion boss assembled, black oily armored body, eight legs, enormous symmetrical pincers, curled tail behind its head, orange eyes, green poison on stinger. Reeling from its OWN stinger piercing the center of its carapace, head low, armor starting to melt.
+Frame 2 top-right: same front-facing boss collapsing down, claws sagging into spreading black sludge, armored plates softening and dripping, orange eyes dimmer.
+Frame 3 bottom-left: mostly dissolved, short remnants of face, pincers and tail sticking out of a broad black oily pool with bright sickly lime-green toxin veins, small droplets.
+Frame 4 bottom-right: just the broad low TOXIN PUDDLE, no eyes, limbs or creature, oily black liquid with vivid lime-green veins, a few bubbles and sludge flecks.
+Match the glossy hand-painted comic game look, copper-orange edge light and black armor from the reference. Consistent scale and perspective across all cells. Nothing cropped, no backdrop, no text, no borders, no additional creatures.
+
+
+CLAW ATTACHMENT CORRECTION
+The painted sprite PNGs are unchanged. Each claw/forearm now rotates around its fixed shoulder. The arm endpoint is calculated from the sprite's actual socket position and rotates with it. The inward sweep is limited to the body's centre, with smooth recovery from both completed swings and counter-hits.
+
+
+SUPPLIED BOSS INTRODUCTION — OCTOBER 24, 2026
+Source: openart-tDXZCRu0nBJSIrO4GEK1X_minimax-h3_1792873021923_6b3425ee.mp4
+Project path: videos/shore-boss-intro.mp4
+An unchanged, byte-for-byte copy of the user's upload: 768x512 H.264 video with AAC audio, 30 FPS, duration 9.433333 seconds. No transcoding or audio replacement.
+Plays after the splitting round and immediately before the boss battle. The direct boss-test route also uses this clip. The existing inline movie player supplies playback, sound, retry, skip and exit controls.
+No new sprite artwork was generated for this revision. The boss is drawn in its full standing position from the first battle frame; its existing attack and toxin-puddle defeat sprites are preserved.
+
+
+SUPPLIED CHAPTER 3 OPENING — OCTOBER 24, 2026
+Source: Yes.mp4
+Project path: videos/shore-chapter-intro.mp4
+An unchanged, byte-for-byte copy of the user's upload: 768x512 H.264 video with AAC audio, 30 FPS, duration 8.033333 seconds, 4,433,396 bytes. No transcoding or audio replacement.
+Plays after the cave escape and before the first Shore Front briefing. The direct Chapter 3 test and Replay Chapter include this opening. Losing and retrying a battle does not replay it. The shared inline player retains its sound, retry, skip and exit controls.
+Both previously supplied scorpion cutscenes remain in their original positions before round two and the boss fight.
+
+
+SUPPLIED CAVE RESCUES — OCTOBER 24, 2026
+All three videos are unchanged, byte-for-byte copies of the user's uploads, with their original AAC audio. No transcoding, cropping or audio replacement.
+Super Summy: rescueSummy.mp4 -> videos/rescue-summy.mp4. H.264, 1280x720, 24000/1001 FPS, 10.051708 seconds, 15,725,393 bytes.
+Super Sadie: rescuesadie.mp4 -> videos/rescue-sadie.mp4. H.264, 1280x720, 24000/1001 FPS, 5.046708 seconds, 8,079,833 bytes.
+Super Vee: rescueVee.mp4 -> videos/rescue-vee.mp4. H.264, 1176x784, 24 FPS, 10.041667 seconds, 15,769,946 bytes.
+The Story Mode starting hero, retained through teammate switches, selects the rescue after a successful cave exit. It then leads into videos/shore-chapter-intro.mp4 and the first Shore Front briefing. Existing cave-entry movies and the later scorpion cutscenes remain unchanged.

@@ -1,9 +1,81 @@
-HERO SHOWDOWN - STORY MODE EPISODE 1
+HERO SHOWDOWN — COMPLETE STORY MODE
+Complete game update — October 24, 2026
+Three-round Shore Front chapter with front-facing boss scorpion
+Latest update: a continuous Story Mode playthrough with test and chapter shortcuts removed.
 
-Extract this ZIP first. Upload the contents into the existing hero-showdown-autoplay folder in your hero-showdown-test repository, preserving assets/ and videos/. Do not nest another hero-showdown-autoplay folder inside it.
+INSTALL INTO YOUR EXISTING GAME
+1. Extract Hero-Showdown-Chapter-3-Complete.zip.
+2. Copy the extracted contents into the SAME game directory in your existing repository. Replace matching files. Do not put another game folder inside it, and do not upload the ZIP as the game.
+3. Keep index.html, hero-showdown.html, assets/ and videos/ together. Keep your existing hosting settings and game path. This keeps your current game URL.
+4. Refresh the game after the updated files are served. If an old screen persists, refresh without the browser cache.
 
-The game entry is hero-showdown.html. Include the new videos/smog-battle.mp4 and assets/images/story-smog-rooftop.webp, videos/reborn.mp4, videos/is-this-the-end.mp4, and the updated assets/js/story-mode.js and assets/js/story-team.js. Story Mode requires development code 1992. Choose a starting hero, watch Episode 1, then face Wastelander in THREE battles. Winning battle 1 automatically plays battle23.mp4 and starts battle 2. Winning battle 2 plays the same clip once more and starts battle 3. Winning battle 3 automatically plays smog-battle.mp4, then starts battle 4 against the original Air Pollution Monster on the supplied rooftop venue. The Air Pollution Monster also has THREE battles, all on the rooftop. Winning its first battle (overall battle 4) plays reborn.mp4 and starts its second battle (overall battle 5). Winning its second battle plays reborn.mp4 again and starts its third battle (overall battle 6). Winning its third battle automatically plays is-this-the-end.mp4 (the supplied isthisdEND?.mp4), then shows To be continued. The ending clip plays once per completed run; finishing or skipping it does not start another battle. Reborn.mp4 does not play after this final win. Defeat retries the current battle; replaying the episode restarts at battle 1 and resets the ending clip for the next completed run. All heroes and the opponent start each battle with fresh health. Retrying any rooftop fight keeps that round, the rooftop venue, and the Air Pollution Monster, without replaying the intermission video.
+No GitHub deployment was performed. This package contains the complete game, including all existing artwork, the 12 original videos, Chapter 1, Chapter 2, Versus, local/online co-op code, existing special abilities, combo sprites and the mobile/controller input fixes.
 
-Tag heroes with Q, the on-screen TAG button, or RT / R2. Each hero keeps her health and special charge when tagged. Downed heroes are skipped; all three must be knocked out to lose. The numeric gate is a local development lock, not server authentication.
+PLAY THE COMPLETE GAME
+Open index.html or hero-showdown.html through your existing static hosting, or serve the extracted folder with a local static web server. Both pages open the same complete game. Use STORY MODE, enter 1992, choose your starting hero, and select BEGIN STORY.
 
-For local testing, keep all folders together and open hero-showdown.html. The separate hero-showdown-story-mode.html download embeds the media for single-file testing.
+Story Mode continues in order: Wastelander's three battles and cutscenes; the Air Pollution Monster's three battles and cutscenes; the cave arrival movie and playable cave mission; the starting hero's rescue; the Chapter 3 opening; the first scorpion battle; the splitting-round cutscene and battle; the boss cutscene and final scorpion fight. Winning advances automatically. Movies retain their sound, skip, retry and exit controls.
+
+There are no test buttons or chapter-selection shortcuts. Existing cave-test.html and shore-front-test.html bookmarks now redirect to the complete game's main entry. A failed fight still allows retrying the current fight. The final victory screen offers REPLAY STORY, which returns to starting hero selection, or GAME MODES. The story does not automatically restart.
+
+CAVE RESCUE CUTSCENES
+- The hero chosen at the beginning of Story Mode determines both the cave character and the rescue video. Switching teammates during earlier battles does not change that choice.
+- Super Summy: rescueSummy.mp4, packaged as videos/rescue-summy.mp4.
+- Super Sadie: rescuesadie.mp4, packaged as videos/rescue-sadie.mp4.
+- Super Vee: rescueVee.mp4, packaged as videos/rescue-vee.mp4.
+- After the successful cave exit: matching rescue video, then Yes.mp4 (the Chapter 3 opening), then the first playable Shore Front battle automatically. Both videos use the existing playback, sound, retry, skip and exit controls. Skipping one advances to the next scene.
+- Losing or leaving the cave does not play a rescue. Each cave completion advances only once. Starting a new cave run permits its rescue again.
+
+SHORE FRONT RULES
+- Chapter 3 starts with the supplied Yes.mp4, packaged as videos/shore-chapter-intro.mp4, after the cave rescue video. Its natural ending or skip starts the first Shore Front fight directly. The existing sound, retry and exit controls work on this video. Retrying a lost fight does not force it to replay.
+- Enemy totals are hidden: no kill counter, totals in the briefing, or totals on the results screen.
+- Round one retains its original roster. Its victory celebration leads directly into the supplied video, videos/shore-split.mp4. When the clip ends (or is skipped using the existing controls), round two begins. No extra continue tap is required when playback is permitted by the browser. The existing Play / Sound / Retry / Skip controls handle browser playback restrictions.
+- In round two, every second ORIGINAL defeated scorpion splits into exactly two offspring. The sequence counts original defeats, not spawn order or offspring defeats. Offspring use the same movement and attack rules, and never split again.
+- The six-frame split sprite shows one body stretching into two. The pair settles onto the ground and becomes active after separating.
+- Original scorpions still emerge from visible bubbling puddles across the playable ground. New originals wait while the arena is occupied by offspring. A split can briefly produce three enemies; ordinary arrivals do not add further crowding.
+- Kick any grounded scorpion. Punch any airborne scorpion. This applies to originals and offspring, including jumping types while grounded. No words appear above enemies.
+- A charged special clears every scorpion currently in the arena, including airborne enemies, emerging enemies, unfinished splits, and offspring created by the same blast. Replacement puddles wait until the special finishes. This overrides ordinary punch/kick restrictions, and each cast clears only the current enemies.
+- Summy, Sadie and Vee keep their existing animations, controls, individual health and powers during each round. A fresh round/retry starts with the established Story battle health and power. Tags remain responsive.
+- Finishing round two plays the supplied boss cutscene, videos/shore-boss-intro.mp4, then starts the final fight automatically. Skip also starts the fight. Back cancels the transition. Losing any round retries that same round; a boss retry does not force the cutscene to replay. Beating the boss opens the chapter completion screen without restarting. Replay Story returns to starting hero selection and begins the entire story again.
+- Previous Story chapters, cutscenes, Versus and combo features remain intact. The development access code remains 1992.
+
+BOSS SCORPION — ROUND THREE
+- A large front-facing scorpion with an articulated body, sweeping pincers and poison tail. It is fully visible on the first gameplay frame: no ground-emergence animation. A brief ready interval remains before its first attack.
+- Each claw stays attached to a fixed shoulder, sweeps inward only as far as the middle of the body, and returns to its own starting position. Its arm does not stretch or travel across the arena. Punching or kicking a claw sends it smoothly back from the point of contact. The collision area follows the rotated claw and stays on its side of the body.
+- Dodge a claw with movement / jump / dash, or punch or kick it away. Four claw swings (including countered swings) are followed by one stinger attack, then the pattern repeats.
+- The green ring follows the player briefly, then locks before the stinger plunges. Move, jump or dash clear of the strike. Blocking or being hit does not unlock the counter.
+- After a successful dodge, the exposed stinger glows. Punch or uppercut it within the generous counter window to send it back into the boss for 150 damage, the biggest hit. Kicks cannot reflect it.
+- Claw counters deal 18 damage. The body takes regular hits during recovery (10 punch / 12 kick, with the retained 8% combo bonus). A charged special deals 70 damage to the boss; specials still clear every current minion in rounds one and two.
+- The boss health bar and four small claw-pattern lights show its condition. No enemy kill count or words above scorpion sprites are added.
+- On defeat, the painted collapse animation dissolves the scorpion into a toxin puddle that remains on the beach. Victory waits for this animation before the completion screen.
+- All three girls use their existing art, moves, individual health, tagging and controls.
+
+CONTROLS — UNCHANGED
+Move: A/D or left/right arrows; controller left stick or D-pad; touchscreen joystick.
+Jump / double jump: W/up arrow; A/Cross; JUMP.
+Punch: J; X/Square; PUNCH.
+Kick: K; Y/Triangle; KICK.
+Block: L; LB/L1 or LT/L2; hold BLOCK.
+Special: Space; RB/R1 or B/Circle; SPECIAL when charged.
+Tag: Q; RT/R2; TAG.
+Pause: Escape/P; Start/Options; PAUSE.
+Use the usual controller directional navigation and A/Cross to confirm menu choices.
+
+Mobile combat buttons remain at least 48 CSS pixels. Portrait keeps the controls below the arena. Wide landscape screens use the side margins to keep more of the arena clear. Movement and attacks work with separate fingers. Releasing outside a control, cancelled gestures, lost pointer capture, and the final finger leaving now release held touch inputs. A new touch gesture recovers any stale ownership. Additional fingers do not reposition the controls. Keyboard and controller inputs are preserved during touch-only recovery.
+
+EXISTING COMBOS — INCLUDED
+Kick, Kick produces the low sweeping kick. Continue Punch, Punch for the uppercut.
+Keyboard: K K J J. Xbox: Y Y X X. PlayStation: Triangle Triangle Square Square.
+Local co-op Player 1: G G F F; Player 2: K K J J.
+Tap and release each input. Fast inputs queue through the active frames. The existing 0.9-second tap window is retained.
+Connected combos in the original battles deal exactly 8% more than equivalent regular hits. Regular punch/kick damage is unchanged. Ground/air matchup rules take priority in the one-hit scorpion encounter.
+
+CHANGED FILES IN THIS REVISION
+index.html and hero-showdown.html: complete-story menu description and refreshed script versions.
+assets/js/story-mode.js: BEGIN STORY labels and a description of the full journey.
+assets/js/story-cave.js: removes the cave shortcut and resets completion state for a fresh story.
+assets/shore/story-shore.js: removes chapter/round/boss shortcuts, begins round one directly after its opening movie, and makes final replay restart the whole story.
+cave-test.html and shore-front-test.html: compatibility redirects to index.html.
+UPLOAD.txt and VALIDATION.txt: current play instructions and verification results.
+All 18 movies, all character/scorpion artwork, combat, controls, cave mechanics, special abilities and other game modules remain unchanged in this revision.
+No GitHub repository or deployment was modified.

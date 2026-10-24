@@ -1,0 +1,112 @@
+LATEST UPDATE — COMPLETE STORY MODE
+October 24, 2026
+
+150 automated checks passed: 5 full-story checks, 16 chapter-opening checks, 21 cave-rescue checks, 63 first-round/earlier-game checks, 32 splitting-round checks and 13 boss-introduction checks.
+
+The continuous route was verified for Super Summy, Super Sadie and Super Vee. The six original fights start with their correct opponents and inter-round movies. Chapter 1 routing checks invoke the production victory handler; they are not claims of complete combat playthroughs of those six fights. A real teammate tag preserves the starting hero used for the cave and rescue.
+All three production cave models completed their full 105-second runs using ordinary attacks/steering with three hearts remaining. The cave callback leads through the matching rescue and Chapter 3 opening straight into the first playable scorpion battle. The transition harness supplies native-equivalent movie-ended events and tests cancellation and duplicate events separately.
+All three heroes completed both minion rounds and the boss through production movement, attacks, tagging and special logic without changing health or defeat counts. Both minion rounds were also completed at 30, 60 and 120 FPS. The final boss had reflected-stinger damage, zero health and a stable ending; no automatic restart occurred.
+REPLAY STORY clears Shore state, returns to the original starting hero selection and begins at battle one. Fresh Story runs reset old completion flags. A wrong code is rejected and 1992 still unlocks Story Mode. Existing retry paths, keyboard/touch/controller event paths, hero switching, specials and all eight Versus opponent starts remain functional.
+
+Removed all visible cave/chapter/round/boss test shortcuts. The legacy cave-test.html and shore-front-test.html now redirect to index.html. Both full-game entries remain identical. All 18 movies and the existing artwork are preserved byte-for-byte. No QA fixture is included in the deliverable.
+
+Chrome browser: verified the actual 1992 keypad, starting hero choices and BEGIN STORY menu with no chapter or test buttons. Both legacy test URLs redirected to index.html. In a 390x844 portrait viewport, Super Vee's rescue (10.042 seconds) and the Chapter 3 opening (8.033 seconds) reached their natural ends with no seeking or synthetic ended events, then entered the first fight with two enemies and the correct hero. No game-script or media errors occurred. The browser transition fixture shortened only its temporary cave run and paused the resulting fight for inspection; production cave duration is unchanged.
+Package integrity: ZIP entries match every source file, all CRCs pass, all 18 movies and artwork match the preceding release byte-for-byte, entry pages match, and required local asset references resolve. Browser QA fixtures are excluded.
+Physical phones and game controllers were not available; automated input-path checks and browser viewport checks do not replace physical-device testing. Online co-op networking was not re-tested; its code is unchanged.
+
+HISTORICAL VALIDATION BELOW
+The remaining entries describe earlier builds, including earlier test menus and briefings that have now been removed. They are retained as historical evidence, not current play instructions.
+
+LATEST UPDATE — CHARACTER-SPECIFIC CAVE RESCUES
+October 24, 2026
+
+113 automated checks passed: 21 new cave-rescue checks, 16 Chapter 3 opening checks, 63 first-round and earlier-game regressions, and 13 boss-introduction checks.
+All three rescue videos match their supplied uploads byte-for-byte. Each Story Mode starting hero was captured through the actual Story intro, switched to a teammate through the actual tag code, and then correctly selected for the cave and its rescue. Each rescue leads into Yes.mp4, the Shore Front briefing and the playable first battle with the correct hero.
+Verified screen and keyboard skip, separate controller release/press for consecutive movies, error retry/skip, code 1992 protection, input release, cancellation, fresh cave sessions, and duplicate/late completion and movie events. Leaving or losing an unfinished cave does not play a rescue. A late callback from a closed cave cannot restart a movie or overwrite completion details.
+The test harness now gives each movie its own video element and snapshots event listeners during dispatch, matching browser behavior for consecutive cutscenes.
+
+Chrome browser: all three supplied rescue videos and the following Chapter 3 opening reached their natural ends without seeking or synthetic ended events. Summy ran at 844x390; Sadie and Vee ran at 390x844. Each reached the first Shore Front briefing with its original Story hero selected and no game-script or media errors.
+The browser fixture shortened the cave duration only for this transition test and exercised the production cave success/close callbacks. The full 105-second cave runs were not repeated in this revision; the deployed cave duration, obstacle logic, controls and original cave-entry movies are unchanged. Keyboard/controller paths were simulated in automated checks; physical phones and controllers were not available.
+
+PACKAGE
+All 18 movies and all required game assets are included. Existing media remain unchanged. index.html and hero-showdown.html remain identical. All three full-game entry pages load the updated cave integration. Browser QA fixtures are excluded from the ZIP and deployment. The isolated cave-test.html remains a standalone cave test; the linked rescue sequence is in the complete game's Story Mode.
+
+PRECEDING CHAPTER 3 OPENING VALIDATION
+
+LATEST UPDATE — CHAPTER 3 OPENING
+October 24, 2026
+
+124 automated checks passed: 16 new chapter-opening checks, 63 first-round and earlier-game regressions, 32 splitting-round checks, and 13 boss-introduction checks.
+Verified Yes.mp4 is included byte-for-byte. Successful cave completion leads into the opening with each of the three starting heroes preserved. The first encounter does not run behind the video. Natural completion and skip open the first Shore Front briefing, and BEGIN SHORE FRONT starts the original playable first round.
+Verified keyboard and screen skip, release-before-controller skip, error retry/skip, exit cancellation, duplicate callback protection, stale-ended cancellation, code 1992 protection, direct-test entry, chapter replay, and lost-round retry without replaying the opening. Hero selection and help do not accidentally replay the cutscene.
+The previous splitting-round and boss-introduction videos keep their existing positions and behavior. The boss remains fully visible on its first frame. First-round and splitting-round production combat checks pass for all three heroes at 30/60/120 FPS. All earlier assets and unrelated combat modules are unchanged.
+
+Chrome browser: the actual supplied 8.033-second opening played to its natural end at 844x390 and 390x844, following the production code-1992 gate. Both returned to the first Shore Front briefing without seeking, synthetic ended events or game-script errors. The first battle started and paused correctly after playback. The portrait movie and its controls were visually inspected.
+Touch/controller event paths were simulated; physical phone and controller hardware was not available. Earlier validation below is retained as historical evidence unless explicitly rerun above.
+
+PACKAGE
+The complete game includes all 15 movies and all required assets. The two full-game entry pages remain identical; the direct test uses the same production modules. QA fixtures are excluded from the ZIP and deployment.
+
+PRECEDING BOSS INTRODUCTION VALIDATION
+
+LATEST UPDATE — BOSS INTRODUCTION AND VISIBLE START
+October 24, 2026
+
+105 automated checks passed: 13 new cutscene/first-frame checks, 60 boss regressions and 32 splitting-round regressions.
+Verified the new clip is byte-identical to the supplied upload. Every hero can complete round two, play the boss movie and enter round three without changing the selected hero. Combat is frozen during playback. Duplicate completion/ended callbacks cannot start a second battle.
+Verified screen and keyboard skip, controller release-before-skip, error retry/skip, exit cancellation, stale-ended cancellation, code 1992 protection, and boss retries without mandatory movie replay. The previous round-one-to-round-two cutscene path is retained.
+A pixel comparison confirms the entire boss is equally visible at intro age zero and at the end of its ready interval. The short ready interval remains; ground-rise translation and the entrance puddle are removed from both rendering layers.
+The 60 boss and 32 splitting-round checks include all three heroes, nine complete production boss fights and nine complete production splitting-round fights at 30/60/120 FPS, plus 72 splitting-round model encounters. Existing claw attachment, attack patterns, stinger reflection, special attacks, hidden minion totals and toxin-puddle victory remain functional.
+
+Chrome browser: watched the supplied 9.433-second clip reach its natural end through the direct boss entry at 844x390 and through a completed production splitting-round fight at 390x844. No seeking or synthetic ended event was used. Both reached round three automatically with a full-health boss at age zero and no game-script errors. Visually confirmed the whole boss was already on screen in both layouts.
+Touch and controller inputs were simulated; physical phones and controllers were not available. Earlier full-game checks below are historical evidence, not newly repeated for this small revision. The older movies and unrelated modules were retained unchanged.
+
+PACKAGE
+The full-game ZIP includes all 14 movies and all required assets. index.html and hero-showdown.html are identical; shore-front-test.html uses the same production modules and development code 1992. Browser QA fixtures are excluded.
+
+PRECEDING CLAW CORRECTION VALIDATION
+
+LATEST CORRECTION — ATTACHED CLAW SWINGS
+October 24, 2026
+
+73 focused automated checks passed: the 60 boss checks plus 13 new motion regressions. The rest of the full-game validation below was retained from the preceding release; unrelated game code and assets were not changed by this correction.
+
+Verified both claws at 30/60/120 Hz: fixed shoulder attachment, constant arm length, inward limit at the body's centre, continuous movement between anticipation/swing/return states, return to the original position, and smooth return from early/middle/late counter-hits. The return stroke is harmless. An attack on one side cannot hit a player on the opposite side of the arena.
+The artwork's opaque pixels were sampled at 181 angles for each claw. Both pincer tips remain on their own side of the centre line, and stay within the ground clipping boundary. Joint positions use the actual socket coordinates of the painted sprites. Body breathing and hit recoil apply to the whole assembly together.
+Nine complete boss fights (three starting heroes at 30/60/120 FPS) passed. The four-claw / stinger cycle, punch reflection, special damage, individual health, tagging, retries and toxin-puddle finish are retained.
+Chrome: 144 browser control checks passed across 1280x800, 844x390, 390x844 and 320x568. Visual inspection covered each claw at its inward limit and after returning home. A complete browser fight using touch attack events finished with two stinger reflections, then opened the completion screen. No game-script errors.
+Touch/controller inputs were simulated; no physical hardware was available.
+
+PRECEDING FULL-GAME VALIDATION
+
+HERO SHOWDOWN — SHORE FRONT BOSS VALIDATION
+October 24, 2026
+
+AUTOMATED CHECKS: 251 passed
+49 existing combo/gameplay checks.
+47 touch/controller checks, including capture loss, final-finger recovery and independent multitouch.
+63 first-round Shore Front and previous-game regressions.
+32 splitting-round checks, updated for the boss transition.
+60 boss checks.
+
+BOSS MECHANICS
+Verified repeated four-claw / one-stinger cycles at 30, 60 and 120 Hz. Punch, kick, low sweep and uppercut counter the physical claw and advance its swing sequence exactly once. Out-of-range and backwards attacks miss.
+Verified the stinger target locks before impact. Moving, jumping and dashing clear allow reflection; blocking, being hit or ordinary invulnerability do not. Only an in-range punch/uppercut in the exposed window reflects the stinger. Early, late, distant and kick attempts cannot reflect. Regular recovery hits, specials and reflected-stinger damage remain distinct.
+Boss death emits completion once, animates into a persistent toxin puddle, and never spawns minions or restarts. Pause freezes the encounter, retry stays in round three, and each hero keeps separate health through responsive tags.
+All three heroes pass punch, kick, reflection and special checks through keyboard, touchscreen and standard-controller event paths. Nine full boss fights through production movement/combat code (each starting hero at 30/60/120 FPS) completed, using two or three reflected stingers and normal attacks. No invincibility or direct boss-health modification was used in these full-fight runs.
+
+EXISTING GAME REGRESSIONS
+72 deterministic splitting-round encounters verify 30 originals, 15 splits after original defeats 2,4,...30, and 30 offspring that never split. Completion waits for all offspring. Normal arrivals keep two occupied slots; a split can briefly produce three.
+96 first-round model encounters and nine complete production playthroughs in each minion round pass. Ground kick / airborne punch rules, continuous puddle spawning, hidden totals and arena-clearing minion specials are retained.
+Existing combo damage and animations, touch recovery, controller/co-op input behavior, all prior Story battle startups, cave handoff, independent team health and Versus startup checks pass.
+
+BROWSER VALIDATION
+Chrome browser: 36 boss-control cases at each game viewport 1280x800, 390x844, 844x390 and 320x568 (144 passed), covering all three heroes and touch/keyboard/standard-controller inputs. No game-script errors. The minion-control browser suite also passed 45 cases at each of the three phone viewports (135 passed).
+A complete browser run played the first round, the actual supplied video to its natural end, the splitting round, the boss briefing and the boss battle through production combat with touch attack events. Boss victory reached the chapter completion screen. No video seeking or synthetic ended event was used for this run.
+Inspected front-facing boss, exposed stinger, warnings, final toxin puddle, responsive HUD and touch layout. Attack buttons remain at least 48 CSS pixels on the small-phone viewport. The compact boss bar sits below the fighting area and clear of the tag control.
+
+ASSETS / PACKAGE
+Both new PNGs retain true alpha; the articulated attack parts use the same world positions as their collision boxes. The defeat art supplies collapse and toxin-puddle frames. All earlier art and 13 existing movies remain unchanged. Full-game entry pages match; the direct test uses the same modules and code 1992. QA fixtures are excluded from the ZIP and deployed game.
+
+LIMITS
+Touch and Xbox/PlayStation standard-controller inputs were simulated in Chrome and automated checks. Physical phone hardware and Bluetooth/USB controllers were not available. Online input regression checks are not a live remote multiplayer session. Earlier movies were retained and audited, not all watched end-to-end during this revision.
