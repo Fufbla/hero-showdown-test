@@ -1,0 +1,50 @@
+HERO SHOWDOWN — STORM ROOFTOP UPDATE
+
+This is a changed-files update for the current Hero Showdown game.
+Built from Fufbla/hero-showdown-test commit b4014e8f99620d0fcc9bbf074e9767cb2a364a89 (October 25, 2026).
+
+INSTALL
+1. Unzip this package first.
+2. Open the MAIN page of your hero-showdown-test repository, where index.html, hero-showdown.html and the assets folder already live.
+3. Upload the enclosed index.html and hero-showdown.html there, replacing those two existing files.
+4. Open the repository's existing assets folder. Upload the enclosed tempest folder into it. The final location must be assets/tempest/, with the six game asset files directly inside that folder.
+5. Commit the uploads. Wait for GitHub Pages to finish publishing, then refresh the game. If an older menu remains, reload the page or reopen it in a fresh tab.
+
+Do not upload the ZIP itself as the game. Do not delete your existing assets, harbor, cave, shore, images, or videos folders. You do not need to upload any unchanged files.
+The two TXT notes are optional reference files and are not required for gameplay.
+
+PLAY
+Versus > Solo / Same Device / Online Co-op > difficulty > hero > villain > STORM ROOFTOP.
+The Air Pollution Monster stays in the background as an arena hazard.
+It winds up and throws a tornado from either side across the entire rooftop.
+Hold BLOCK when it reaches your fighter. A successful block prevents ALL tornado damage, regardless of facing direction.
+Jumping, dashing, normal invulnerability, and specials cannot evade the wind. Special movie playback pauses the hazard with the rest of combat.
+An unblocked pass removes 18 HP from a hero or 18% of the villain's maximum HP. Each fighter is checked only once per tornado.
+Villains can also brace and block; their reaction chance increases with difficulty.
+Keyboard: L to block in solo; H for P1 / L for P2 in same-device co-op.
+Phone: hold the existing BLOCK button.
+Controller: LB / L1 or LT / L2.
+First windup begins after 6–9 seconds. Later attacks have a random 9–15 second rest after the previous animation finishes.
+The windup lasts 1.9 seconds, the throw 0.48 seconds, and the sweep 3.35 seconds.
+
+CONTENTS
+index.html                         Updated game entry point
+hero-showdown.html                 Matching alternate entry point
+assets/tempest/tempest-core.js     Timing, full-arena collision and shared state
+assets/tempest/tempest-stage.js    Combat, menu, animation and network integration
+assets/tempest/rooftop.webp         New clean rooftop background
+assets/tempest/monster.webp        Four animated monster poses with transparency
+assets/tempest/tornado.webp        Six animated tornado frames with transparency
+assets/tempest/preview.webp        Venue selection thumbnail
+assets/tempest/ARTWORK-NOTES.txt   Artwork provenance and image prompts
+
+The existing Toxic Harbor venue, Story mode, Chapter 3 ending, and all existing characters and controls are preserved.
+Story remains public with no 1992 code requirement.
+This package has not been uploaded or published by this task. It takes effect when you upload it.
+
+VALIDATION
+29 Node tests passed: tornado logic and existing Story switching tests.
+24 browser integration checks passed with zero JavaScript runtime errors.
+Verified keyboard / touch / controller block mapping, all eight villains taking damage, villain blocking, independent co-op protection, host-to-guest state handling, no guest duplicate damage, pause and cinematic freeze, Story/other-stage isolation, simultaneous knockout, rematch reset, and public Story entry.
+Visually reviewed idle, windup, throw, sweep, recovery, venue selection, and a mobile landscape layout.
+Online state handling was tested locally; a live two-device Internet session and physical gamepad hardware were not exercised.
