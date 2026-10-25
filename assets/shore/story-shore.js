@@ -1,7 +1,7 @@
 'use strict';
 // Chapter 3 follows the cave and rescue in Story Mode. All wrappers delegate unchanged
 // whenever the Shore Front encounter is not active.
-const shore={active:false,phase:'',model:null,round:1,endTime:0,completed:false,assetError:false,specialPending:false,specialOwner:null};
+const shore={active:false,phase:'',model:null,round:1,endTime:0,completed:false,endingPlayed:false,assetError:false,specialPending:false,specialOwner:null};
 const shoreBackground=new Image(),shoreAtlas=new Image(),shoreSplitAtlas=new Image(),shoreBossParts=new Image(),shoreBossDeath=new Image();
 shoreBossParts.src='assets/shore/boss-parts.png';shoreBossDeath.src='assets/shore/boss-defeat.png';
 shoreBackground.src='assets/shore/shore-front.jpg';shoreAtlas.src='assets/shore/scorpion-atlas.png';shoreSplitAtlas.src='assets/shore/scorpion-split.png';
@@ -32,7 +32,7 @@ function startShoreBattle(round=shore.round){
  round=round===3?3:round===2?2:1;shore.round=round;
  if(!story.unlocked)return showStoryCode();if(!shoreAssetsReady())return showShoreFront(round);
  coLeave();story.active=true;story.playing=false;story.battle=7;story.tag=null;story.tagQueued=false;story.tagCooldown=0;story.tagPadDown=true;story.releasePad=false;
- shore.active=true;shore.phase='fight';shore.round=round;shore.completed=false;shore.endTime=0;shore.specialPending=false;shore.specialOwner=null;opponent=0;
+ shore.active=true;shore.phase='fight';shore.round=round;shore.completed=false;shore.endingPlayed=false;shore.endTime=0;shore.specialPending=false;shore.specialOwner=null;opponent=0;
  start(); // Same fresh battle health and power as the earlier Story Mode fights.
  const template=JSON.parse(JSON.stringify(hero));
  story.team=heroes.map(()=>JSON.parse(JSON.stringify(template)));hero=story.team[selected];hero.x=640;
@@ -164,18 +164,29 @@ updateStep=function(dt){
  shots=shots.filter(s=>s.life>0&&s.x>-100&&s.x<W+100);
  shore.model.step(dt,hero);shoreEvents();
 };
+function playShoreEnding(){
+ if(!story.active||!shore.active||shore.round!==3||shore.phase!=='victory'||shore.model?.kind!=='boss'||shore.model.hp!==0||shore.endingPlayed||story.playing)return;
+ clearInput();shore.phase='ending-cutscene';shore.specialPending=false;shore.specialOwner=null;
+ story.tag=null;story.tagQueued=false;
+ return playStoryMovie('videos/shore-chapter-ending.mp4','CHAPTER 3 · ENDING',null,true,()=>{
+  if(!shore.active||shore.phase!=='ending-cutscene')return;
+  shore.endingPlayed=true;shore.phase='victory';
+  showShoreResult(true);scoreTick();
+ });
+}
 function replayStoryFromBeginning(){
  const firstHero=story.mainHeroIndex??selected;
  showModeSelect();story.unlocked=true;selected=firstHero;showStorySelect();
 }
 function showShoreResult(win,refresh=false){
- if(['chapter-cutscene','boss-cutscene'].includes(shore.phase))return;
+ if(['chapter-cutscene','boss-cutscene','ending-cutscene'].includes(shore.phase))return;
  if(win&&shore.round===1){if(shore.phase!=='cutscene')playShoreInterlude();return;}
  if(win&&shore.round===2){playShoreBossIntro();return;}
+ if(win&&shore.round===3&&shore.phase==='victory'&&shore.model?.hp===0&&!shore.endingPlayed&&!refresh){playShoreEnding();return;}
  if(!refresh&&(shore.phase==='complete'||shore.phase==='retry'))return;
  clearInput();shore.phase=win?'complete':'retry';mode=win?'shore-complete':'shore-defeat';paused=false;
  if(win&&!shore.completed){shore.completed=true;story.chapter3Complete=true;story.chapter3Result={chapter:3,scene:'shore-front',rounds:3,bossDefeated:shore.model.hp===0,reflections:shore.model.reflections,elapsed,health:story.team.map(p=>p.hp)};window.dispatchEvent(new CustomEvent('healthia:shore-complete',{detail:story.chapter3Result}));}
- overlay.classList.remove('hidden');overlay.innerHTML='<section class="panel shore-panel"><div class="eyebrow">STORY MODE / CHAPTER 03</div><h2>'+(win?'SHORE FRONT CLEARED':'THE FIGHT ISN’T OVER')+'</h2><p>'+(win?'The scorpion dissolves into a pool of toxin.<br>The shore is clear. To be continued…':shore.round===3?'Dodge or counter the claws. After the fourth swing,<br>dodge the stinger, then punch it back. Tag when health is low.':'Watch the jump windup. Kick on the ground, punch in the air,<br>and tag to another hero when health is low.')+'</p><div class="row"><button class="primary" id="shore-retry">'+(win?'REPLAY STORY':'RETRY SHORE FRONT')+'</button>'+(win?'':'<button id="shore-heroes">CHOOSE HERO</button>')+'<button id="shore-exit">GAME MODES</button></div></section>';
+ overlay.classList.remove('hidden');overlay.innerHTML='<section class="panel shore-panel"><div class="eyebrow">STORY MODE / CHAPTER 03</div><h2>'+(win?'CHAPTER 3 COMPLETE':'THE FIGHT ISN’T OVER')+'</h2><p>'+(win?'To be continued…':shore.round===3?'Dodge or counter the claws. After the fourth swing,<br>dodge the stinger, then punch it back. Tag when health is low.':'Watch the jump windup. Kick on the ground, punch in the air,<br>and tag to another hero when health is low.')+'</p><div class="row"><button class="primary" id="shore-retry">'+(win?'REPLAY STORY':'RETRY SHORE FRONT')+'</button>'+(win?'':'<button id="shore-heroes">CHOOSE HERO</button>')+'<button id="shore-exit">GAME MODES</button></div></section>';
  document.getElementById('shore-retry').onclick=()=>win?replayStoryFromBeginning():startShoreBattle(shore.round);if(!win)document.getElementById('shore-heroes').onclick=showShoreHeroes;document.getElementById('shore-exit').onclick=showModeSelect;
  story.releasePad=true;syncMenuFocus(document.getElementById(win?'shore-exit':'shore-retry'));
 }
