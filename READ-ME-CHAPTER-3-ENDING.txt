@@ -1,0 +1,48 @@
+HERO SHOWDOWN - CHAPTER 3 ENDING UPDATE
+
+Your Ending.MOV is now Chapter 3's ending cutscene.
+After you defeat the giant scorpion, its defeat animation finishes,
+then the full 20-second movie plays with its original sound.
+The Chapter 3 Complete screen follows. Skip, retry, and replay are supported.
+The ending works with Summy, Sadie, or Vee and plays once per victory.
+
+This ZIP contains only four new/changed game files.
+Keep all your other existing game files, assets, and videos.
+
+WHERE TO UPLOAD
+Unzip this file first. Upload the extracted files, not the ZIP itself.
+
+1. On the main page of your hero-showdown-test repository, replace:
+   index.html
+   hero-showdown.html
+
+2. Open assets, then shore. Replace:
+   story-shore.js
+
+3. Open the videos folder. Add:
+   shore-chapter-ending.mp4
+
+Keep the exact names and folder locations above.
+The instruction file does not need to be uploaded.
+After GitHub Pages finishes updating, refresh your game.
+If an old version remains, use a hard refresh or reopen the game tab.
+Your game URL and Hostinger link stay the same.
+
+VIDEO
+1920 x 1080 MP4, H.264 video, original unchanged AAC audio.
+Duration: 20.367 seconds. File size: approximately 19.3 MB.
+Every individual file is below GitHub's 25 MB browser-upload limit.
+The source Ending.MOV was not modified.
+
+VALIDATION
+35 full-game browser checks passed: all three heroes, victory-only trigger,
+original boss defeat timing, actual MP4 playback with sound, normal video end,
+mouse/keyboard/touch skip, retry after a missing video, single completion event,
+replay, exit cleanup, and the existing earlier cutscenes and Toxic Harbor venue.
+16 existing Story Mode character-switch regression tests passed.
+The entire MP4 decodes successfully, and its AAC payload matches the source.
+
+Built from repository commit:
+9315512df92bab019cbccdf803e7e25940abbb4e
+This update includes the already-uploaded Toxic Harbor menu integration.
+It does not repackage any unchanged Harbor art or other game assets.
