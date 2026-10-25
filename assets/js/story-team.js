@@ -1,49 +1,15 @@
 'use strict';
 
-// Story-only development gate. This is a local gameplay gate, not server authentication.
-Object.assign(story, {unlocked:false, team:[], tag:null, tagQueued:false, tagCooldown:0, tagPadDown:false});
-let storyCode = '';
-function showStoryCode() {
-  storyCode = ''; mode = 'story-code';
-  modeScreen(`<section class="panel story-code-panel"><div class="eyebrow">STORY MODE / DEVELOPMENT</div>
-    <h2>Enter access code.</h2><p>Story Mode is currently in development.</p>
-    <output id="story-code-display" aria-label="Access code" aria-live="polite">○ ○ ○ ○</output>
-    <p id="story-code-status" role="status">Type four numbers or use the keypad.</p>
-    <div class="story-keypad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button type="button" data-story-digit="${n}">${n}</button>`).join('')}
-    <button id="story-code-delete" aria-label="Delete last digit">⌫</button><button data-story-digit="0">0</button><button class="primary" id="story-code-enter">ENTER</button></div>
-    <button id="story-code-back">← GAME MODES</button></section>`);
-  overlay.querySelectorAll('[data-story-digit]').forEach(b=>b.onclick=()=>storyCodeDigit(b.dataset.storyDigit));
-  document.getElementById('story-code-delete').onclick=storyCodeDelete;
-  document.getElementById('story-code-enter').onclick=storyCodeSubmit;
-  document.getElementById('story-code-back').onclick=showModeSelect;
-  syncMenuFocus(overlay.querySelector('[data-story-digit="1"]'));
-}
-function storyCodeReflect(message='Type four numbers or use the keypad.') {
-  document.getElementById('story-code-display').textContent=Array.from({length:4},(_,i)=>i<storyCode.length?'●':'○').join(' ');
-  document.getElementById('story-code-status').textContent=message;
-}
-function storyCodeDigit(digit) {if(mode==='story-code'&&storyCode.length<4){storyCode+=digit;storyCodeReflect();}}
-function storyCodeDelete() {if(mode==='story-code'){storyCode=storyCode.slice(0,-1);storyCodeReflect();}}
-function storyCodeSubmit() {
-  if(mode!=='story-code')return;
-  if(storyCode==='1992'){story.unlocked=true;storyCode='';showStorySelect();}
-  else{storyCode='';storyCodeReflect('Incorrect code. Try again.');}
-}
-const teamSelect=showStorySelect;
-showStorySelect=function(...args){if(!story.unlocked)return showStoryCode();return teamSelect(...args);};
+// Story team state is reset whenever players return to the game modes.
+Object.assign(story, {team:[], tag:null, tagQueued:false, tagCooldown:0, tagPadDown:false});
 const teamModes=showModeSelect;
 showModeSelect=function(...args){
-  story.unlocked=false;story.team=[];story.tag=null;story.tagQueued=false;story.tagCooldown=0;
+  story.team=[];story.tag=null;story.tagQueued=false;story.tagCooldown=0;
   storyTagButton.hidden=true;
-  const value=teamModes(...args),tile=document.getElementById('story-mode');
-  if(tile){tile.querySelector('.mode-symbol').innerHTML=modeLock;tile.querySelector('.mode-status').textContent=loaded?'DEVELOPMENT · CODE REQUIRED':'LOADING HEROES…';}
-  return value;
+  return teamModes(...args);
 };
-const teamIntro=playStoryIntro;
-playStoryIntro=function(...args){if(!story.unlocked)return showStoryCode();return teamIntro(...args);};
 const teamFight=startStoryFight;
 startStoryFight=function(...args){
-  if(!story.unlocked)return showStoryCode();
   const value=teamFight(...args);
   if(mode==='fight'&&story.active){
     story.team=heroes.map((_,i)=>i===selected?hero:JSON.parse(JSON.stringify(hero)));
@@ -215,22 +181,12 @@ hud=function(...args){
 const teamPoll=pollPad;
 pollPad=function(...args){
   const pads=storyPads(),down=i=>pads.some(p=>p.buttons[i]?.pressed||p.buttons[i]?.value>.5);
-  if(mode==='story-code'&&(down(1)||down(8))&&!gamepadPrev.back&&!gamepadPrev.special){showModeSelect();gamepadPrev={back:true,special:true};return;}
   const tagDown=down(7),pressed=tagDown&&!story.tagPadDown;story.tagPadDown=tagDown;
   if(pressed&&story.active&&mode==='fight'&&!paused)requestStoryTag();
   return teamPoll(...args);
 };
 window.addEventListener('keydown',e=>{
   if(window.HealthiaIntro?.active||story.playing)return;
-  if(mode==='story-code'){
-    if(/^\d$/.test(e.key)){e.preventDefault();e.stopImmediatePropagation();if(!e.repeat)storyCodeDigit(e.key);}
-    else if(['Backspace','Delete','Enter','Escape','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){
-      e.preventDefault();e.stopImmediatePropagation();
-      if(e.key==='Enter')storyCodeSubmit();else if(e.key==='Escape')showModeSelect();
-      else if(e.key==='Backspace'||e.key==='Delete')storyCodeDelete();else menuNavigate(e.key.slice(5).toLowerCase());
-    }
-    return;
-  }
   if(story.active&&mode==='fight'&&(e.code==='KeyQ'||e.key.toLowerCase()==='q')){
     e.preventDefault();e.stopImmediatePropagation();if(!e.repeat)requestStoryTag();
   }

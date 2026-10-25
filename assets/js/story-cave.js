@@ -2,7 +2,7 @@
 // Keep the story's starting/main hero, even after switching fighters during battles.
 const caveMainHeroIntro=playStoryIntro;
 playStoryIntro=function(...args){
- if(story.active&&!story.playing&&story.unlocked){
+ if(story.active&&!story.playing){
   story.mainHeroIndex=selected;story.chapter2Complete=false;story.chapter2Result=null;
   story.chapter3Complete=false;story.chapter3Result=null;
  }
@@ -13,7 +13,6 @@ showModeSelect=function(...args){story.mainHeroIndex=null;return caveMainHeroMod
 
 // Chapter 2 is isolated from fighters, tagging, versus/royal and all existing media.
 function startCaveChapter(){
- if(!story.unlocked)return showStoryCode();
  const caveHero=story.mainHeroIndex??selected;let exited=false;
  story.cleanup?.();clearInput();mode='story-cave';paused=false;story.playing=true;
  window.HealthiaMenuMusic?.stop();stopScoreVoices();scoreTick();
@@ -26,11 +25,11 @@ function startCaveChapter(){
 }
 const caveRescueMovies=['videos/rescue-summy.mp4','videos/rescue-sadie.mp4','videos/rescue-vee.mp4'];
 function playCaveRescue(index=story.mainHeroIndex??selected){
- if(!story.unlocked)return showStoryCode();if(story.playing)return;
+ if(story.playing)return;
  selected=caveRescueMovies[index]?index:0;
  clearInput();story.active=true;story.waiting=false;story.tag=null;story.tagQueued=false;
  playStoryMovie(caveRescueMovies[selected],'CHAPTER 2 · '+heroes[selected].name+' RESCUE',null,true,()=>{
-  if(story.active&&story.unlocked)playShoreChapterIntro();
+  if(story.active)playShoreChapterIntro();
  });
  const movie=story.movie;
  movie?.addEventListener('error',()=>{

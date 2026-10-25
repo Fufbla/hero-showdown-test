@@ -10,7 +10,6 @@ function refreshShoreReady(){const b=document.getElementById('shore-begin');if(!
 for(const im of [shoreBackground,shoreAtlas,shoreSplitAtlas,shoreBossParts,shoreBossDeath]){im.addEventListener('load',refreshShoreReady);im.addEventListener('error',()=>{shore.assetError=true;refreshShoreReady();});}
 function showShoreFront(round=1){
  shore.round=round===3?3:round===2?2:1;
- if(!story.unlocked)return showStoryCode();
  story.cleanup?.();story.active=true;story.playing=false;story.waiting=false;story.tag=null;
  clearInput();shore.active=true;shore.phase='ready';shore.model=null;shore.completed=false;
  mode='shore-ready';paused=false;scoreTick();
@@ -30,7 +29,7 @@ function showShoreHeroes(){
 }
 function startShoreBattle(round=shore.round){
  round=round===3?3:round===2?2:1;shore.round=round;
- if(!story.unlocked)return showStoryCode();if(!shoreAssetsReady())return showShoreFront(round);
+ if(!shoreAssetsReady())return showShoreFront(round);
  coLeave();story.active=true;story.playing=false;story.battle=7;story.tag=null;story.tagQueued=false;story.tagCooldown=0;story.tagPadDown=true;story.releasePad=false;
  shore.active=true;shore.phase='fight';shore.round=round;shore.completed=false;shore.endingPlayed=false;shore.endTime=0;shore.specialPending=false;shore.specialOwner=null;opponent=0;
  start(); // Same fresh battle health and power as the earlier Story Mode fights.
@@ -41,7 +40,7 @@ function startShoreBattle(round=shore.round){
  banner='';bannerTime=0;layoutBattleControls();scoreTick();
 }
 function playShoreChapterIntro(){
- if(!story.unlocked)return showStoryCode();if(story.playing)return;
+ if(story.playing)return;
  clearInput();shore.active=true;shore.round=1;shore.phase='chapter-cutscene';shore.model=null;shore.completed=false;
  shore.specialPending=false;shore.specialOwner=null;story.active=true;story.tag=null;story.tagQueued=false;
  playStoryMovie('videos/shore-chapter-intro.mp4','CHAPTER 3 · SHORE FRONT',null,true,()=>{
@@ -53,14 +52,14 @@ function playShoreChapterIntro(){
  });
 }
 function playShoreInterlude(){
- if(!story.unlocked)return showStoryCode();if(story.playing)return;
+ if(story.playing)return;
  clearInput();shore.active=true;shore.phase='cutscene';shore.specialPending=false;story.active=true;
  return playStoryMovie('videos/shore-split.mp4','SHORE FRONT · THE SWARM RETURNS',null,true,()=>{
   if(shore.active&&shore.phase==='cutscene'){startShoreBattle(2);story.releasePad=true;}
  });
 }
 function playShoreBossIntro(){
- if(!story.unlocked)return showStoryCode();if(story.playing)return;
+ if(story.playing)return;
  clearInput();shore.active=true;shore.round=3;shore.phase='boss-cutscene';shore.specialPending=false;shore.specialOwner=null;
  story.active=true;story.tag=null;story.tagQueued=false;
  playStoryMovie('videos/shore-boss-intro.mp4','SHORE FRONT · THE TOXIN SCORPION',null,true,()=>{
@@ -176,7 +175,7 @@ function playShoreEnding(){
 }
 function replayStoryFromBeginning(){
  const firstHero=story.mainHeroIndex??selected;
- showModeSelect();story.unlocked=true;selected=firstHero;showStorySelect();
+ showModeSelect();selected=firstHero;showStorySelect();
 }
 function showShoreResult(win,refresh=false){
  if(['chapter-cutscene','boss-cutscene','ending-cutscene'].includes(shore.phase))return;

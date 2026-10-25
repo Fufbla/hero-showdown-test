@@ -41,7 +41,7 @@ class Scene{
   this.root.querySelector('[data-action="sound"]').onclick=()=>{this.audio.setEnabled(!this.audio.enabled);this.audio.unlock().then(()=>{if(this.model.state==='running')this.audio.ambience();});this.reflectSound();};
   this.root.querySelector('[data-action="fullscreen"]').onclick=()=>{try{if(document.fullscreenElement)document.exitFullscreen()?.catch(()=>{});else this.root.requestFullscreen?.().catch(()=>{});}catch(_){}};
  }
- consumeKey(e){return /^(Arrow|Key[ADRMPX]|Enter|Space|Escape|Digit|Numpad|Backspace|Tab)/.test(e.code);}
+ consumeKey(e){return /^(Arrow|Key[ADRMPX]|Enter|Space|Escape|Tab)/.test(e.code);}
  drawStick(x,y=0){const stick=this.root.querySelector('[data-stick]');if(!stick)return;const thumb=stick.querySelector('.cave-stick-thumb'),radius=stick.clientWidth*.31;thumb.style.transform='translate('+x*radius+'px,'+y*radius+'px)';stick.setAttribute('aria-valuenow',String(Math.round(x*100)));}
  moveStick(e){
   const pointer=this.stickPointer;if(!pointer||this.model.state!=='running')return;
@@ -59,11 +59,6 @@ class Scene{
   if(this.closed||this.ui==='intro')return;
   if(this.consumeKey(e)){e.preventDefault();e.stopImmediatePropagation();}
   if(e.repeat||this.held.has(e.code))return;this.held.add(e.code);
-  if(this.ui==='code'){
-   if(/^\d$/.test(e.key)){this.code=(this.code+e.key).slice(0,4);this.reflectCode();}
-   else if(e.code==='Backspace'){this.code=this.code.slice(0,-1);this.reflectCode();}
-   else if(e.code==='Enter')this.submitCode();else if(e.code.startsWith('Arrow'))this.navigate(e.code==='ArrowLeft'||e.code==='ArrowUp'?-1:1);else if(e.code==='Space')this.activate();else if(e.code==='Escape')this.close('exit');else if(e.code==='Tab')this.navigate(e.shiftKey?-1:1);return;
-  }
   if(this.model.state==='outro'||(['complete','defeat'].includes(this.model.state)&&!this.shownEnd))return;
   if(this.model.state==='running'){
    if(this.model.character==='vee'&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','KeyA','KeyD'].includes(e.code)){this.updateSteering();return;}
@@ -82,20 +77,15 @@ class Scene{
   await Promise.all(Object.entries(entries).map(([key,file])=>new Promise(resolve=>{const im=new Image();im.onload=()=>{this.images[key]=im;resolve();};im.onerror=()=>{this.assetErrors.push(file);resolve();};im.src=asset(file+'.webp');})));
   if(this.closed)return;
   if(this.assetErrors.length){this.ui='error';this.panel('<h2>The cave couldn’t load.</h2><p>Keep the HTML beside its assets folder, then retry.</p><button class="cave-primary" data-choice="reload">RETRY LOADING</button><button class="cave-secondary" data-choice="exit">BACK</button>');this.wire({reload:()=>this.load(),exit:()=>this.close('exit')});return;}
-  this.ready=true;this.makePortraits();this.syncCharacter();if(this.options.requireCode)this.showCode();else this.afterAccess();
+  this.ready=true;this.makePortraits();this.syncCharacter();this.showEntry();
  }
  panel(content){this.modal.hidden=false;this.modal.innerHTML='<div class="cave-panel">'+content+'</div>';this.menuIndex=0;requestAnimationFrame(()=>{if(!this.closed)this.buttons()[0]?.focus({preventScroll:true});});}
  wire(actions){for(const [key,fn]of Object.entries(actions)){const b=this.modal.querySelector('[data-choice="'+key+'"]');if(b)b.onclick=fn;}this.buttons().forEach((b,i)=>b.addEventListener('pointerenter',()=>this.menuIndex=i));}
  buttons(){return [...this.modal.querySelectorAll('button')].filter(b=>!b.disabled);}
  navigate(dir){const b=this.buttons();if(!b.length)return;const focused=b.indexOf(document.activeElement);this.menuIndex=((focused<0?this.menuIndex:focused)+dir+b.length)%b.length;b[this.menuIndex].focus();}
  activate(){const buttons=this.buttons();(buttons.includes(document.activeElement)?document.activeElement:buttons[this.menuIndex]||buttons[0])?.click();}
- showCode(){this.ui='code';this.code='';this.panel(`<div class="cave-eyebrow">STORY MODE / DEVELOPMENT</div><h2>Chapter 2 access</h2><p>Enter the Story Mode development code.</p><label for="cave-code">FOUR-DIGIT CODE</label><input id="cave-code" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Four-digit access code" readonly><div class="cave-keypad">${[1,2,3,4,5,6,7,8,9,0].map(n=>'<button data-digit="'+n+'">'+n+'</button>').join('')}<button data-choice="delete" aria-label="Delete digit">⌫</button><button data-choice="submit">ENTER</button></div><p class="cave-error" role="status"></p><button class="cave-secondary" data-choice="exit">BACK</button>`);
-  this.modal.querySelectorAll('[data-digit]').forEach(b=>b.onclick=()=>{this.code=(this.code+b.dataset.digit).slice(0,4);this.reflectCode();});this.wire({delete:()=>{this.code=this.code.slice(0,-1);this.reflectCode();},submit:()=>this.submitCode(),exit:()=>this.close('exit')});
- }
- reflectCode(){this.modal.querySelector('#cave-code').value=this.code;this.modal.querySelector('.cave-error').textContent='';}
- submitCode(){if(this.code==='1992'){this.afterAccess();this.audio.unlock();}else{this.code='';this.reflectCode();this.modal.querySelector('.cave-error').textContent='Incorrect code. Try again.';}}
  makePortraits(){this.portraits.summy=asset('summy-portrait.webp');for(const[id,crop]of Object.entries({sadie:[838,35,250,250],vee:[245,630,225,225]})){const canvas=document.createElement('canvas');canvas.width=canvas.height=180;const g=canvas.getContext('2d');g.fillStyle='#102b1d';g.fillRect(0,0,180,180);g.drawImage(this.images.portraits,...crop,0,0,180,180);this.portraits[id]=canvas.toDataURL('image/webp');}}
- afterAccess(){if(this.options.standalone&&this.options.character===undefined)this.showChoice();else if(this.options.autoEnter)this.start();else this.showReady();}
+ showEntry(){if(this.options.standalone&&this.options.character===undefined)this.showChoice();else if(this.options.autoEnter)this.start();else this.showReady();}
  showChoice(){this.release();this.audio.stopAmbience();if(this.model.state==='running')this.model.pause();this.ui='choose';this.panel('<div class="cave-eyebrow">HERO SHOWDOWN / CHAPTER 02</div><h2>Choose your <br>main hero.</h2><div class="cave-hero-choices">'+Object.keys(CHARACTERS).map(id=>'<button class="cave-hero-choice" data-hero="'+id+'"><img alt="" src="'+this.portraits[id]+'"><span><strong>'+CHARACTERS[id].name+'</strong><small>'+({summy:'Send whirlwinds in three directions.',sadie:'Punch the rocks ahead. No dodging.',vee:'Steer freely. Find the clear path.'}[id])+'</small></span><b aria-hidden="true">→</b></button>').join('')+'</div><button class="cave-secondary" data-choice="exit">BACK</button>');for(const b of this.modal.querySelectorAll('[data-hero]'))b.onclick=()=>this.selectCharacter(b.dataset.hero);this.wire({exit:()=>this.close('exit')});}
  selectCharacter(id){this.introPlayed=false;delete this.root.dataset.ending;this.root.style.removeProperty('--cave-end-fade');this.audio.setSceneLevel(1);this.model=new Model({...this.options.settings,character:characterId(id)});this.renderer.reset();this.shownEnd=false;this.completedSent=false;this.stepClock=0;this.release();this.syncCharacter();this.showReady();this.hud();}
  syncCharacter(){const id=this.model.character,name=CHARACTERS[id].name;this.root.dataset.character=id;this.root.querySelector('.cave-name').textContent=name;const portrait=this.root.querySelector('.cave-portrait');portrait.src=this.portraits[id]||asset('summy-portrait.webp');portrait.alt=name;this.canvas.setAttribute('aria-label',name+' running through a dark cave');const nav=this.root.querySelector('.cave-controls');nav.setAttribute('aria-label',id==='sadie'?'Super Punch':id==='vee'?'Analog steering':'Earth Whirlwind directions');
