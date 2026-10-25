@@ -1,0 +1,15 @@
+TOXIC HARBOR - VERSUS ARENA
+
+The user's IMG_3404.webp is preserved as harbor-preview.webp.
+The built-in image-generation tool prepared two animation layers:
+- harbor-background.png: clean harbor plate, with the monster removed.
+- monster-parts.png: transparent torso and two complete arms in a sprite atlas.
+The game bends the textured arms continuously from their shoulder sockets,
+keeps the hand upright, and layers the hand in front of fighters during a slam.
+All animation and collision timing is driven by the game's simulation.
+
+BACKGROUND PROMPT
+Use case: precise-object-edit. Asset type: clean background plate for a 2D fighting game's layered animated arena. Input image is the edit target. Keep this EXACT toxic harbor arena layout, canvas aspect ratio 16:9, sunset city, bridge, side docks, lanterns, all foreground dock paving and debris, camera and vibrant detailed comic illustration style. Remove ONLY the giant pollution monster from the background, including its face, body, two arms/hands and the pile of junk that forms its body. Naturally reconstruct the sunset sky and polluted harbor water behind that monster. Keep the floating debris in the water and colorful toxic purple/green reflections. The wide flat stone fighting platform in the lower foreground must remain empty and identical, with perspective and floor boundary unchanged. No characters, no monster parts, no text or UI. This is a background layer so do not crop or move the camera; preserve the side docks and skyline as closely as possible.
+
+MONSTER ATLAS PROMPT
+Use case: background-extraction and game animation parts. Make a PNG sprite parts atlas on a genuinely TRANSPARENT background. Use the attached venue's exact giant garbage/pollution monster as visual reference. Preserve its glowing purple eyes and huge roaring purple mouth, trash/barrels/tires piled on its shoulders, brown dripping sludge, bright green toxic waterfalls and vivid comic painted detail. NO scenery. Exactly THREE separate isolated parts, no contact between them: in the LEFT HALF (0-50% width) place the monster's front-facing central torso/head, from top of trash pile to waterline with small purple/green drips at bottom, WITH BOTH ARMS REMOVED at shoulder sockets. In the TOP RIGHT quadrant (55-100% width, 0-48% height) place one complete upper arm + forearm + large sludge hand with five downward-curled fingers, shoulder end at left and huge hand at right, three-quarter view ready to slam, matching monster. In the BOTTOM RIGHT quadrant (55-100% width, 52-100% height) place the opposite complete arm and sludge hand, shoulder end at right and large hand at left, mirrored matching partner. Arms should be bent and thick, anatomically continuous shoulder to hand, mostly horizontal with fingers curling downward. Leave transparent padding between parts and around canvas edges. Torso silhouette looks like same giant original monster; exclude original arms from torso. Each part entirely visible, no cropped fingers, no rectangle backdrops, no UI, no labels, no text. This will be cut into separate moving pieces in a 2D game. Landscape 3:2 atlas.
