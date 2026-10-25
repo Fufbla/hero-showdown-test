@@ -29,17 +29,17 @@ function playCaveRescue(index=story.mainHeroIndex??selected){
  selected=caveRescueMovies[index]?index:0;
  clearInput();story.active=true;story.waiting=false;story.tag=null;story.tagQueued=false;
  playStoryMovie(caveRescueMovies[selected],'CHAPTER 2 · '+heroes[selected].name+' RESCUE',null,true,()=>{
-  if(story.active)playShoreChapterIntro();
+  if(story.active)showStoryChapterComplete(2,playShoreChapterIntro);
  });
  const movie=story.movie;
  movie?.addEventListener('error',()=>{
   if(story.movie===movie)document.querySelector('.story-movie-status').textContent='Rescue video could not load. Retry or skip to Chapter 3.';
  });
 }
-// Preserve the original ending movie, then hand off directly to the separate cave scene.
+// Preserve the ending movie, then reveal the Chapter 2 resume code.
 playStoryEnding=function(){
  if(!story.active||story.playing||mode!=='victory'||story.battle!==story.totalBattles||story.endingPlayed)return;
  return playStoryMovie('videos/is-this-the-end.mp4','CHAPTER 2 · THE COLLAPSING CAVE',null,true,()=>{
-  story.endingPlayed=true;startCaveChapter();
+  story.endingPlayed=true;showStoryChapterComplete(1,startCaveChapter);
  });
 };

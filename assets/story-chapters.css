@@ -1,0 +1,18 @@
+/* Chapter passwords use the same accessible menu controls as the rest of the game. */
+.overlay.story-chapter-overlay{background:#06151d}
+.overlay .panel.chapter-code-panel,.overlay .panel.chapter-complete-panel{max-width:620px;width:100%;text-align:center;padding:24px}
+.chapter-code-panel h2,.chapter-complete-panel h2{font-size:clamp(22px,4vw,34px);margin:8px 0 12px}
+.chapter-code-label{display:block;color:#b5d5c6;font-size:11px;font-weight:800;letter-spacing:2px;margin:18px 0 8px}
+.chapter-code-input{box-sizing:border-box;display:block;width:250px;max-width:100%;margin:0 auto;padding:10px 12px;border:2px solid #598c76;border-radius:12px;background:#071d26;color:#ecffba;text-align:center;font:800 36px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.26em;text-indent:.26em;touch-action:manipulation}
+.chapter-code-input::placeholder{color:#52736b}.chapter-code-input:focus{outline:3px solid #dfff81;outline-offset:3px}.chapter-code-input[aria-invalid="true"]{border-color:#ffb295}
+.chapter-code-panel .chapter-code-error{min-height:36px;margin:9px 0;color:#ffc1a6;font-size:12px}
+.chapter-code-keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:310px;margin:0 auto 20px}
+.chapter-code-keypad button{min-width:0;min-height:48px;padding:9px;font-size:19px;touch-action:manipulation}
+.chapter-code-keypad [data-code-key="CLEAR"],.chapter-code-keypad [data-code-key="DELETE"]{font-size:10px;letter-spacing:.5px}
+.chapter-code-panel .row,.chapter-complete-panel .row{position:static;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:16px}
+.chapter-code-panel .chapter-code-note{font-size:11px;color:#a8c5bf;margin:14px 0 0}
+.chapter-code-reward{max-width:300px;margin:22px auto;padding:20px;border:1px solid #b1d77a;border-radius:16px;background:#173d35;box-shadow:0 0 32px #d4ff6d13}
+.chapter-code-reward span{display:block;color:#c7e4ad;font:800 12px Arial,sans-serif;letter-spacing:2px}
+.chapter-code-reward strong{display:block;margin-top:8px;color:#e8ff9c;font:800 clamp(42px,10vw,64px)/1.15 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.14em;text-indent:.14em}
+@media(max-height:600px) and (orientation:landscape){.overlay .panel.chapter-code-panel{max-width:740px;padding:12px 20px;display:grid;grid-template-columns:1fr 270px;gap:4px 22px;align-items:center}.chapter-code-panel .eyebrow,.chapter-code-panel h2,.chapter-code-panel #story-code-hint,.chapter-code-panel .chapter-code-label,.chapter-code-panel .chapter-code-input,.chapter-code-panel .chapter-code-error{grid-column:1;margin-top:0;margin-bottom:3px}.chapter-code-panel h2{font-size:24px}.chapter-code-panel #story-code-hint{font-size:12px}.chapter-code-keypad{grid-column:2;grid-row:1/8;margin:0;width:100%;gap:6px}.chapter-code-keypad button{min-height:44px;padding:6px}.chapter-code-panel .row,.chapter-code-panel .chapter-code-note{grid-column:1/-1;margin-top:6px}.chapter-code-panel .chapter-code-label{margin-top:5px}.chapter-code-panel .chapter-code-error{min-height:28px}.overlay .panel.chapter-complete-panel{padding:15px}.chapter-code-reward{margin:12px auto;padding:12px}}
+@media(max-width:600px) and (orientation:portrait){.overlay .panel.chapter-code-panel,.overlay .panel.chapter-complete-panel{padding:16px 12px}.chapter-code-panel .row button,.chapter-complete-panel .row button{flex:1 1 130px}.chapter-code-keypad{gap:7px;margin-bottom:12px}.chapter-code-input{font-size:30px}.chapter-code-label{margin-top:12px}.chapter-code-panel .chapter-code-error{min-height:32px}}
