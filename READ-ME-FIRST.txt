@@ -1,57 +1,34 @@
-HERO SHOWDOWN - TOXIC HARBOR VERSUS UPDATE
+HERO SHOWDOWN — PUBLIC STORY MODE UPDATE
 
-This is an UPDATE, not the full game. Keep your existing game assets and videos.
-Built from Fufbla/hero-showdown-test main commit:
-b8843f3a8989cfc5e9d51ed3f4a4cffc03d7cb68
+Story Mode now opens directly to hero selection. No access code is required.
 
-UPLOAD
-1. Unzip Hero-Showdown-Toxic-Harbor-Update.zip.
-2. Open the same GitHub folder containing your current index.html,
-   hero-showdown.html, and assets folder.
-3. Replace index.html and hero-showdown.html with the included versions.
-4. Merge the included assets folder into the existing assets folder.
-   The new files belong inside assets/harbor/.
-5. Keep every other existing asset, video, and folder. There are no deletions.
-6. After GitHub Pages updates, refresh the game. Your URL stays the same.
-   If the old menu is still cached, close the game tab and reopen it.
+UPLOAD INSTRUCTIONS
+Extract this ZIP and replace the matching files in your game repository.
+Keep each file in the folder shown below. Upload the ZIP contents, not the ZIP itself.
 
-The ZIP itself does not run the game. Upload its extracted game files.
-This instruction file does not need to be uploaded.
-Every individual file is below GitHub's 25 MB browser upload limit.
+Repository root:
+  index.html
+  hero-showdown.html
 
-PLAY
-Versus -> Solo, Same Device or Online Co-op -> difficulty -> hero/opponent
--> choose TOXIC HARBOR -> FIGHT.
+assets/:
+  story-mode.css
 
-The background monster is an arena hazard with no health bar.
-It breathes, sways, drips slime, and moves its connected arms.
-After an initial 5-7 seconds, a floor marker warns for 1.35 seconds.
-The hand then reaches onto the floor, slams, and retracts into the background.
-The next attack waits another random 7-12 seconds after the retreat.
-Targets are randomly selected across the floor and stay locked during warning.
-Move away or jump high to avoid the overhead impact; frontal block does not stop it.
-A hit deals 18% of maximum health to a hero or villain, with knockback.
-Existing temporary invulnerability still applies.
-Each impact can hit both sides, including both co-op heroes, only once.
-The hazard gives no player combo or special-move attack credit.
-Simultaneous knockouts show DOUBLE K.O. and allow a rematch.
-Pauses, hit stop and special-move videos freeze the hazard.
-No new attacks start after the round ends.
+assets/js/:
+  story-team.js
+  story-cave.js
 
-Story Mode and the three existing venues keep their existing behavior.
-Both online players need this update. The host controls hazard timing and damage;
-the guest receives the same attack state. Live two-device network conditions
-were not tested; host/guest state transfer and authority were checked in-browser.
+assets/cave/:
+  cave-scene.js
+  cave.css
 
-PACKAGE CONTENTS
-index.html
-hero-showdown.html
-assets/harbor/harbor-core.js
-assets/harbor/harbor-stage.js
-assets/harbor/harbor-preview.webp
-assets/harbor/harbor-background.png
-assets/harbor/monster-parts.png
-assets/harbor/ARTWORK-NOTES.txt
+assets/shore/:
+  story-shore.js
 
-The separate Toxic-Harbor-Preview.mp4 shows a six-second in-game demonstration.
-Only this arena's new files and the two changed entry pages are included.
+This update is based on your latest game version and preserves the Chapter 3
+ending after the scorpion boss, along with the Toxic Harbor versus venue.
+Existing videos and artwork do not need to be uploaded again.
+
+After publishing, refresh the game. Choose STORY MODE, select a hero, then
+BEGIN STORY. The 1992 code screen and development label are removed.
+
+Validation: 36 browser checks and 16 existing hero-switching tests passed.
