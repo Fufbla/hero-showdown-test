@@ -1,0 +1,176 @@
+{
+  "environment": "Headless Chromium; Linux; 1280\u00d7800; GPU disabled. Timing is not a physical-device FPS certification.",
+  "results": [
+    {
+      "scenario": {
+        "ids": [
+          "summy",
+          "wastelander"
+        ],
+        "venue": 0
+      },
+      "drawMs": {
+        "mean": 4.551239669230605,
+        "median": 4.600000001490116,
+        "p95": 12.699999999254942,
+        "samples": 121
+      },
+      "frameMs": {
+        "mean": 18.470833333333335,
+        "median": 16.699999999999818,
+        "p95": 16.800000000000182,
+        "samples": 120
+      },
+      "fighters": [
+        {
+          "id": "summy",
+          "hp": 93,
+          "x": 494.39860954013636
+        },
+        {
+          "id": "wastelander",
+          "hp": 76,
+          "x": 662.0961185910894
+        }
+      ],
+      "status": "fight"
+    },
+    {
+      "scenario": {
+        "ids": [
+          "venomis",
+          "venomis"
+        ],
+        "venue": 1
+      },
+      "drawMs": {
+        "mean": 4.184297520451802,
+        "median": 5,
+        "p95": 11.299999997019768,
+        "samples": 121
+      },
+      "frameMs": {
+        "mean": 16.66583333333333,
+        "median": 16.699999999999818,
+        "p95": 16.700000000000728,
+        "samples": 120
+      },
+      "fighters": [
+        {
+          "id": "venomis",
+          "hp": 93,
+          "x": 511.5504812146446
+        },
+        {
+          "id": "venomis",
+          "hp": 93,
+          "x": 731.5504812146446
+        }
+      ],
+      "status": "fight"
+    },
+    {
+      "scenario": {
+        "ids": [
+          "atomdust",
+          "spree"
+        ],
+        "venue": 2
+      },
+      "drawMs": {
+        "mean": 5.616528925724512,
+        "median": 5.700000002980232,
+        "p95": 13.199999999254942,
+        "samples": 121
+      },
+      "frameMs": {
+        "mean": 16.944166666666668,
+        "median": 16.69999999999891,
+        "p95": 16.80000000000109,
+        "samples": 120
+      },
+      "fighters": [
+        {
+          "id": "atomdust",
+          "hp": 92,
+          "x": 516.4813745704859
+        },
+        {
+          "id": "spree",
+          "hp": 100,
+          "x": 665.416666666668
+        }
+      ],
+      "status": "fight"
+    },
+    {
+      "scenario": {
+        "ids": [
+          "air",
+          "styrodog"
+        ],
+        "venue": 3
+      },
+      "drawMs": {
+        "mean": 1.3702479337365174,
+        "median": 1.1000000014901161,
+        "p95": 2.599999997764826,
+        "samples": 121
+      },
+      "frameMs": {
+        "mean": 20.138333333333335,
+        "median": 16.69999999999891,
+        "p95": 33.399999999999636,
+        "samples": 120
+      },
+      "fighters": [
+        {
+          "id": "air",
+          "hp": 86,
+          "x": 468.19963661113866
+        },
+        {
+          "id": "styrodog",
+          "hp": 100,
+          "x": 634.1996366111387
+        }
+      ],
+      "status": "fight"
+    },
+    {
+      "scenario": {
+        "ids": [
+          "bushman",
+          "sonic"
+        ],
+        "venue": 4
+      },
+      "drawMs": {
+        "mean": 3.551239669600055,
+        "median": 0.5,
+        "p95": 14,
+        "samples": 121
+      },
+      "frameMs": {
+        "mean": 18.74916666666665,
+        "median": 16.69999999999891,
+        "p95": 33.29999999999927,
+        "samples": 120
+      },
+      "fighters": [
+        {
+          "id": "bushman",
+          "hp": 92,
+          "x": 507.4297894039262
+        },
+        {
+          "id": "sonic",
+          "hp": 96.5,
+          "x": 621.6150815001066
+        }
+      ],
+      "status": "fight"
+    }
+  ],
+  "errors": []
+}
