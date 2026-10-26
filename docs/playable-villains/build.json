@@ -1,0 +1,7 @@
+{
+  "source": "hero-showdown.html",
+  "source_sha256": "61b4f39df861cda542473acbeb3b9b05336fb19698748b02163420996848cdf7",
+  "base_commit": "41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28",
+  "entry": "playable-villains-test.html",
+  "production_modified": false
+}

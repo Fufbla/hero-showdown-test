@@ -1,0 +1,18 @@
+.competitive-panel .competitive-roster{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin:12px 0}
+.competitive-panel .competitive-roster .card{padding:8px;min-width:0}
+.competitive-panel .competitive-roster .portrait{height:95px;width:100%;object-fit:contain}
+.competitive-panel .competitive-roster h3{font-size:13px;line-height:1.15;min-height:30px;margin:5px 0}
+.competitive-panel .competitive-roster .tag{font-size:9px;letter-spacing:0}
+.competitive-panel .competitive-roster .selected{outline:3px solid #d8ff9d;background:#274c42}
+.competitive-panel .competitive-roster button:focus-visible{outline:3px solid white}
+.competitive .touch .cluster:last-child{grid-template-columns:repeat(4,var(--button-size))!important}
+.competitive .touch button[data-key=jump]{grid-column:1!important;grid-row:2!important}
+.competitive .touch button[data-key=shoot]{grid-column:4!important;grid-row:1!important}
+.competitive .touch button[data-key=skill]{grid-column:4!important;grid-row:2!important}
+.competitive .touch button[data-key=special]{grid-column:2 / 4!important;grid-row:2!important}
+.competitive .touch button[data-key=heavy]{grid-column:4!important;grid-row:3!important;height:32px;min-height:32px}
+.competitive .touch button[data-key=heavy][aria-pressed=true]{background:#d9f56ce8;color:#12302e}
+.touch button[hidden]{display:none!important}
+@media(max-width:760px){.competitive-panel .competitive-roster{grid-template-columns:repeat(4,minmax(0,1fr))!important}.competitive-panel .competitive-roster .portrait{height:72px}.competitive-panel .competitive-roster h3{font-size:11px}}
+@media(max-width:480px){.competitive-panel .competitive-roster{grid-template-columns:repeat(3,minmax(0,1fr))!important}.competitive-panel .competitive-roster .portrait{height:66px}.competitive .touch{--button-size:43px!important}.competitive .touch button{min-width:43px;min-height:43px}.competitive .touch .cluster:last-child{gap:5px!important}}
+@media(max-height:500px) and (orientation:landscape){.competitive-panel .competitive-roster{grid-template-columns:repeat(6,minmax(0,1fr))!important}.competitive-panel .competitive-roster .portrait{height:54px}.competitive-panel .competitive-roster h3{font-size:10px;min-height:24px}.competitive-panel .competitive-roster .tag{display:none}.competitive .touch{--button-size:43px!important}}

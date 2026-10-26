@@ -1,0 +1,134 @@
+{
+  "checks": [
+    {
+      "name": "Chapter 1 is public and begins at the original hero selection",
+      "pass": true
+    },
+    {
+      "name": "codes map only to their requested chapters",
+      "pass": true
+    },
+    {
+      "name": "empty and short codes cannot start a chapter",
+      "pass": true
+    },
+    {
+      "name": "wrong code gives feedback and can be retried",
+      "pass": true
+    },
+    {
+      "name": "1992 opens Chapter 2 hero selection and survives changing heroes",
+      "pass": true
+    },
+    {
+      "name": "2014 opens Chapter 3 from its beginning, not the boss",
+      "pass": true
+    },
+    {
+      "name": "1992 starts summy cave movie and correct playable mission",
+      "pass": true
+    },
+    {
+      "name": "1992 starts sadie cave movie and correct playable mission",
+      "pass": true
+    },
+    {
+      "name": "1992 starts vee cave movie and correct playable mission",
+      "pass": true
+    },
+    {
+      "name": "typed digits and Enter work without requiring input focus",
+      "pass": true
+    },
+    {
+      "name": "Backspace and Delete edit code without invoking game actions",
+      "pass": true
+    },
+    {
+      "name": "invalid input characters are removed and length is limited",
+      "pass": true
+    },
+    {
+      "name": "controller D-pad and A enter 1992 through the visible keypad",
+      "pass": true
+    },
+    {
+      "name": "controller B returns once to Story and does not open another menu",
+      "pass": true
+    },
+    {
+      "name": "Escape returns from code entry without changing the chosen chapter",
+      "pass": true
+    },
+    {
+      "name": "Start from Chapter 1 clears the resume choice and preserves the original intro",
+      "pass": true
+    },
+    {
+      "name": "game modes clears the selected resume chapter and restores Versus settings",
+      "pass": true
+    },
+    {
+      "name": "help returns to the partially entered code",
+      "pass": true
+    },
+    {
+      "name": "finishing Chapter 1 reveals 1992 after the existing ending movie",
+      "pass": true
+    },
+    {
+      "name": "completion screen waits for input and freezes prior fight",
+      "pass": true
+    },
+    {
+      "name": "Continue after Chapter 1 keeps original main hero despite tagging",
+      "pass": true
+    },
+    {
+      "name": "finishing Chapter 2 keeps rescue movie before revealing 2014",
+      "pass": true
+    },
+    {
+      "name": "completion help and controller return preserve Continue action",
+      "pass": true
+    },
+    {
+      "name": "Space on Continue starts the original Chapter 3 movie",
+      "pass": true
+    },
+    {
+      "name": "Chapter 3 still advances through both scorpion rounds to boss intro",
+      "pass": true
+    },
+    {
+      "name": "Chapter 3 final movie and completion are preserved",
+      "pass": true
+    },
+    {
+      "name": "no chapter code is awarded for losing an earlier fight",
+      "pass": true
+    },
+    {
+      "name": "defeated cave remains retryable without Chapter 3 code",
+      "pass": true
+    },
+    {
+      "name": "mobile keypad enters 2014 and unlocks without a physical keyboard",
+      "pass": true
+    },
+    {
+      "name": "landscape phone keypad and submit stay reachable",
+      "pass": true
+    },
+    {
+      "name": "Bushman and all five Versus venues remain available",
+      "pass": true
+    },
+    {
+      "name": "both HTML entry points include working chapter access",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "requests": []
+}

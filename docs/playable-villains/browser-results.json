@@ -1,0 +1,110 @@
+{
+  "checks": [
+    {
+      "name": "Versus menu provides competitive CPU, local PvP and original co-op",
+      "pass": true
+    },
+    {
+      "name": "all 12 portraits load and each side can select all 12 fighters",
+      "pass": true
+    },
+    {
+      "name": "all existing venues appear and selection starts a 100 HP mirror match",
+      "pass": true
+    },
+    {
+      "name": "Super Summy renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "Super Sadie renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "Super Vee renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "Air Pollution Monster renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "Styrodog renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "Sonic Tusk renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "Venomis & Thornbear renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "Dr. Styro renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "Wastelander renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "AtomDust renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "Lightening Spree renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "Bushman renders independent mirror states, every attack and both facing directions",
+      "pass": true
+    },
+    {
+      "name": "keyboard movement, both players, double jump, heavy attacks and tap edges",
+      "pass": true
+    },
+    {
+      "name": "double-tap dash is directional and has recovery cooldown",
+      "pass": true
+    },
+    {
+      "name": "two controllers have separate fighters, action edges and pause",
+      "pass": true
+    },
+    {
+      "name": "CPU Easy, Medium and Hard all start at 100 HP and attack through competitive rules",
+      "pass": true
+    },
+    {
+      "name": "Harbor and Tempest render and damage both fighters symmetrically",
+      "pass": true
+    },
+    {
+      "name": "victory, defeat, rematch and fighter reselection are stable",
+      "pass": true
+    },
+    {
+      "name": "touch buttons and analog operate in a phone viewport, including short taps",
+      "pass": true
+    },
+    {
+      "name": "portrait roster remains scrollable with reachable navigation",
+      "pass": true
+    },
+    {
+      "name": "returning to original Story retains 650 HP bosses and all chapter modules",
+      "pass": true
+    },
+    {
+      "name": "co-op boss mode still initializes original two heroes and boss health",
+      "pass": true
+    },
+    {
+      "name": "base production entries never load the competitive feature",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "requests": []
+}
