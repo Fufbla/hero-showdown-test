@@ -1,251 +1,1624 @@
-✔ blast deals exactly twice a regular hit (1.781999ms)
-✔ blast is locked at 0 landed hits (0.234043ms)
-✔ blast is locked at 1 landed hits (0.205903ms)
-✔ blast is locked at 2 landed hits (0.345901ms)
-✔ blast is locked at 3 landed hits (0.115881ms)
-✔ four distinct direct hits unlock blast and release consumes all four (2.522458ms)
-✔ misses, blocks, invulnerability, burns and the blast do not charge (0.198236ms)
-✔ one swing hitting two teammates earns one credit (0.815686ms)
-✔ blocked first target does not discard a real hit on second target (0.284531ms)
-✔ charge is capped at four and credit history is bounded (1.651473ms)
-✔ interrupted windup retains charge; no delayed release occurs (0.788903ms)
-✔ punch hits only once at contact and finishes recovery (0.220048ms)
-✔ kick hits only once at contact and finishes recovery (0.078364ms)
-✔ fireball hits only once at contact and finishes recovery (0.137818ms)
-✔ scorch hits only once at contact and finishes recovery (0.401282ms)
-✔ blast hits only once at contact and finishes recovery (0.264235ms)
-✔ projectile sweep does not tunnel and rejects jumping targets (0.301364ms)
-✔ melee and blast respect facing, distance and height (0.193434ms)
-✔ ground fire covers one fixed spot and is avoidable by jumping (0.121156ms)
-✔ fresh round resets action, charge and hazardous effects (0.070174ms)
-✔ network snapshots are detached and malformed attacks are rejected (1.723476ms)
-✔ roster is complete, immutable, and contains unique character identities (4.443002ms)
-✔ summy vs summy: independent 100 HP, controls, and normal damage (3.016852ms)
-✔ summy vs sadie: independent 100 HP, controls, and normal damage (0.534062ms)
-✔ summy vs vee: independent 100 HP, controls, and normal damage (0.968862ms)
-✔ summy vs air: independent 100 HP, controls, and normal damage (0.544112ms)
-✔ summy vs styrodog: independent 100 HP, controls, and normal damage (0.473972ms)
-✔ summy vs sonic: independent 100 HP, controls, and normal damage (0.652048ms)
-✔ summy vs venomis: independent 100 HP, controls, and normal damage (0.534299ms)
-✔ summy vs styro: independent 100 HP, controls, and normal damage (0.660214ms)
-✔ summy vs wastelander: independent 100 HP, controls, and normal damage (0.598238ms)
-✔ summy vs atomdust: independent 100 HP, controls, and normal damage (1.465717ms)
-✔ summy vs spree: independent 100 HP, controls, and normal damage (0.594157ms)
-✔ summy vs bushman: independent 100 HP, controls, and normal damage (0.478088ms)
-✔ sadie vs summy: independent 100 HP, controls, and normal damage (0.3956ms)
-✔ sadie vs sadie: independent 100 HP, controls, and normal damage (1.650077ms)
-✔ sadie vs vee: independent 100 HP, controls, and normal damage (0.250568ms)
-✔ sadie vs air: independent 100 HP, controls, and normal damage (0.172701ms)
-✔ sadie vs styrodog: independent 100 HP, controls, and normal damage (0.196092ms)
-✔ sadie vs sonic: independent 100 HP, controls, and normal damage (0.212222ms)
-✔ sadie vs venomis: independent 100 HP, controls, and normal damage (0.302563ms)
-✔ sadie vs styro: independent 100 HP, controls, and normal damage (0.547064ms)
-✔ sadie vs wastelander: independent 100 HP, controls, and normal damage (0.21262ms)
-✔ sadie vs atomdust: independent 100 HP, controls, and normal damage (0.260547ms)
-✔ sadie vs spree: independent 100 HP, controls, and normal damage (0.193853ms)
-✔ sadie vs bushman: independent 100 HP, controls, and normal damage (0.248578ms)
-✔ vee vs summy: independent 100 HP, controls, and normal damage (0.228892ms)
-✔ vee vs sadie: independent 100 HP, controls, and normal damage (0.311357ms)
-✔ vee vs vee: independent 100 HP, controls, and normal damage (0.22877ms)
-✔ vee vs air: independent 100 HP, controls, and normal damage (0.287485ms)
-✔ vee vs styrodog: independent 100 HP, controls, and normal damage (0.1981ms)
-✔ vee vs sonic: independent 100 HP, controls, and normal damage (0.19159ms)
-✔ vee vs venomis: independent 100 HP, controls, and normal damage (0.191648ms)
-✔ vee vs styro: independent 100 HP, controls, and normal damage (0.220929ms)
-✔ vee vs wastelander: independent 100 HP, controls, and normal damage (0.399447ms)
-✔ vee vs atomdust: independent 100 HP, controls, and normal damage (0.20077ms)
-✔ vee vs spree: independent 100 HP, controls, and normal damage (1.52399ms)
-✔ vee vs bushman: independent 100 HP, controls, and normal damage (0.145895ms)
-✔ air vs summy: independent 100 HP, controls, and normal damage (0.181817ms)
-✔ air vs sadie: independent 100 HP, controls, and normal damage (0.156701ms)
-✔ air vs vee: independent 100 HP, controls, and normal damage (0.208022ms)
-✔ air vs air: independent 100 HP, controls, and normal damage (0.15001ms)
-✔ air vs styrodog: independent 100 HP, controls, and normal damage (0.151145ms)
-✔ air vs sonic: independent 100 HP, controls, and normal damage (0.144494ms)
-✔ air vs venomis: independent 100 HP, controls, and normal damage (0.145499ms)
-✔ air vs styro: independent 100 HP, controls, and normal damage (0.14694ms)
-✔ air vs wastelander: independent 100 HP, controls, and normal damage (0.196357ms)
-✔ air vs atomdust: independent 100 HP, controls, and normal damage (0.263766ms)
-✔ air vs spree: independent 100 HP, controls, and normal damage (0.159051ms)
-✔ air vs bushman: independent 100 HP, controls, and normal damage (0.160529ms)
-✔ styrodog vs summy: independent 100 HP, controls, and normal damage (0.157286ms)
-✔ styrodog vs sadie: independent 100 HP, controls, and normal damage (0.183737ms)
-✔ styrodog vs vee: independent 100 HP, controls, and normal damage (0.155183ms)
-✔ styrodog vs air: independent 100 HP, controls, and normal damage (0.154719ms)
-✔ styrodog vs styrodog: independent 100 HP, controls, and normal damage (0.150175ms)
-✔ styrodog vs sonic: independent 100 HP, controls, and normal damage (0.152696ms)
-✔ styrodog vs venomis: independent 100 HP, controls, and normal damage (1.046943ms)
-✔ styrodog vs styro: independent 100 HP, controls, and normal damage (0.214914ms)
-✔ styrodog vs wastelander: independent 100 HP, controls, and normal damage (0.154255ms)
-✔ styrodog vs atomdust: independent 100 HP, controls, and normal damage (0.145082ms)
-✔ styrodog vs spree: independent 100 HP, controls, and normal damage (0.309197ms)
-✔ styrodog vs bushman: independent 100 HP, controls, and normal damage (0.16422ms)
-✔ sonic vs summy: independent 100 HP, controls, and normal damage (0.48493ms)
-✔ sonic vs sadie: independent 100 HP, controls, and normal damage (0.166514ms)
-✔ sonic vs vee: independent 100 HP, controls, and normal damage (0.335221ms)
-✔ sonic vs air: independent 100 HP, controls, and normal damage (0.341269ms)
-✔ sonic vs styrodog: independent 100 HP, controls, and normal damage (0.309152ms)
-✔ sonic vs sonic: independent 100 HP, controls, and normal damage (0.299559ms)
-✔ sonic vs venomis: independent 100 HP, controls, and normal damage (0.283566ms)
-✔ sonic vs styro: independent 100 HP, controls, and normal damage (0.418277ms)
-✔ sonic vs wastelander: independent 100 HP, controls, and normal damage (0.231195ms)
-✔ sonic vs atomdust: independent 100 HP, controls, and normal damage (0.149611ms)
-✔ sonic vs spree: independent 100 HP, controls, and normal damage (0.134671ms)
-✔ sonic vs bushman: independent 100 HP, controls, and normal damage (0.131294ms)
-✔ venomis vs summy: independent 100 HP, controls, and normal damage (0.171727ms)
-✔ venomis vs sadie: independent 100 HP, controls, and normal damage (0.133833ms)
-✔ venomis vs vee: independent 100 HP, controls, and normal damage (0.200413ms)
-✔ venomis vs air: independent 100 HP, controls, and normal damage (0.9348ms)
-✔ venomis vs styrodog: independent 100 HP, controls, and normal damage (0.231102ms)
-✔ venomis vs sonic: independent 100 HP, controls, and normal damage (0.247313ms)
-✔ venomis vs venomis: independent 100 HP, controls, and normal damage (0.314179ms)
-✔ venomis vs styro: independent 100 HP, controls, and normal damage (0.303296ms)
-✔ venomis vs wastelander: independent 100 HP, controls, and normal damage (0.291418ms)
-✔ venomis vs atomdust: independent 100 HP, controls, and normal damage (0.44161ms)
-✔ venomis vs spree: independent 100 HP, controls, and normal damage (0.163396ms)
-✔ venomis vs bushman: independent 100 HP, controls, and normal damage (0.185495ms)
-✔ styro vs summy: independent 100 HP, controls, and normal damage (0.698721ms)
-✔ styro vs sadie: independent 100 HP, controls, and normal damage (0.252771ms)
-✔ styro vs vee: independent 100 HP, controls, and normal damage (0.251908ms)
-✔ styro vs air: independent 100 HP, controls, and normal damage (0.308111ms)
-✔ styro vs styrodog: independent 100 HP, controls, and normal damage (0.333579ms)
-✔ styro vs sonic: independent 100 HP, controls, and normal damage (0.254031ms)
-✔ styro vs venomis: independent 100 HP, controls, and normal damage (0.409206ms)
-✔ styro vs styro: independent 100 HP, controls, and normal damage (0.295006ms)
-✔ styro vs wastelander: independent 100 HP, controls, and normal damage (0.260055ms)
-✔ styro vs atomdust: independent 100 HP, controls, and normal damage (0.294839ms)
-✔ styro vs spree: independent 100 HP, controls, and normal damage (0.219289ms)
-✔ styro vs bushman: independent 100 HP, controls, and normal damage (0.170244ms)
-✔ wastelander vs summy: independent 100 HP, controls, and normal damage (0.225027ms)
-✔ wastelander vs sadie: independent 100 HP, controls, and normal damage (0.301257ms)
-✔ wastelander vs vee: independent 100 HP, controls, and normal damage (0.175203ms)
-✔ wastelander vs air: independent 100 HP, controls, and normal damage (0.131397ms)
-✔ wastelander vs styrodog: independent 100 HP, controls, and normal damage (0.173975ms)
-✔ wastelander vs sonic: independent 100 HP, controls, and normal damage (0.768515ms)
-✔ wastelander vs venomis: independent 100 HP, controls, and normal damage (0.541497ms)
-✔ wastelander vs styro: independent 100 HP, controls, and normal damage (0.161853ms)
-✔ wastelander vs wastelander: independent 100 HP, controls, and normal damage (0.1245ms)
-✔ wastelander vs atomdust: independent 100 HP, controls, and normal damage (0.192844ms)
-✔ wastelander vs spree: independent 100 HP, controls, and normal damage (0.285387ms)
-✔ wastelander vs bushman: independent 100 HP, controls, and normal damage (0.164126ms)
-✔ atomdust vs summy: independent 100 HP, controls, and normal damage (0.119005ms)
-✔ atomdust vs sadie: independent 100 HP, controls, and normal damage (0.11365ms)
-✔ atomdust vs vee: independent 100 HP, controls, and normal damage (0.272922ms)
-✔ atomdust vs air: independent 100 HP, controls, and normal damage (0.180352ms)
-✔ atomdust vs styrodog: independent 100 HP, controls, and normal damage (0.386823ms)
-✔ atomdust vs sonic: independent 100 HP, controls, and normal damage (0.116064ms)
-✔ atomdust vs venomis: independent 100 HP, controls, and normal damage (0.111539ms)
-✔ atomdust vs styro: independent 100 HP, controls, and normal damage (0.11079ms)
-✔ atomdust vs wastelander: independent 100 HP, controls, and normal damage (0.112298ms)
-✔ atomdust vs atomdust: independent 100 HP, controls, and normal damage (0.11026ms)
-✔ atomdust vs spree: independent 100 HP, controls, and normal damage (0.24105ms)
-✔ atomdust vs bushman: independent 100 HP, controls, and normal damage (0.239921ms)
-✔ spree vs summy: independent 100 HP, controls, and normal damage (0.127768ms)
-✔ spree vs sadie: independent 100 HP, controls, and normal damage (0.115402ms)
-✔ spree vs vee: independent 100 HP, controls, and normal damage (0.115198ms)
-✔ spree vs air: independent 100 HP, controls, and normal damage (0.168895ms)
-✔ spree vs styrodog: independent 100 HP, controls, and normal damage (0.33087ms)
-✔ spree vs sonic: independent 100 HP, controls, and normal damage (0.168283ms)
-✔ spree vs venomis: independent 100 HP, controls, and normal damage (0.157464ms)
-✔ spree vs styro: independent 100 HP, controls, and normal damage (0.260752ms)
-✔ spree vs wastelander: independent 100 HP, controls, and normal damage (0.251903ms)
-✔ spree vs atomdust: independent 100 HP, controls, and normal damage (0.257732ms)
-✔ spree vs spree: independent 100 HP, controls, and normal damage (0.130613ms)
-✔ spree vs bushman: independent 100 HP, controls, and normal damage (0.663187ms)
-✔ bushman vs summy: independent 100 HP, controls, and normal damage (0.537386ms)
-✔ bushman vs sadie: independent 100 HP, controls, and normal damage (0.410492ms)
-✔ bushman vs vee: independent 100 HP, controls, and normal damage (0.51432ms)
-✔ bushman vs air: independent 100 HP, controls, and normal damage (0.298202ms)
-✔ bushman vs styrodog: independent 100 HP, controls, and normal damage (0.479706ms)
-✔ bushman vs sonic: independent 100 HP, controls, and normal damage (0.79588ms)
-✔ bushman vs venomis: independent 100 HP, controls, and normal damage (0.69132ms)
-✔ bushman vs styro: independent 100 HP, controls, and normal damage (0.411386ms)
-✔ bushman vs wastelander: independent 100 HP, controls, and normal damage (0.687697ms)
-✔ bushman vs atomdust: independent 100 HP, controls, and normal damage (0.493276ms)
-✔ bushman vs spree: independent 100 HP, controls, and normal damage (0.558588ms)
-✔ bushman vs bushman: independent 100 HP, controls, and normal damage (0.406433ms)
-✔ summy slot 0: facing, guard, jump, and projectile (3.500611ms)
-✔ summy slot 1: facing, guard, jump, and projectile (3.810608ms)
-✔ sadie slot 0: facing, guard, jump, and projectile (1.928278ms)
-✔ sadie slot 1: facing, guard, jump, and projectile (0.856013ms)
-✔ vee slot 0: facing, guard, jump, and projectile (11.708068ms)
-✔ vee slot 1: facing, guard, jump, and projectile (7.335383ms)
-✔ air slot 0: facing, guard, jump, and projectile (2.794332ms)
-✔ air slot 1: facing, guard, jump, and projectile (9.904257ms)
-✔ styrodog slot 0: facing, guard, jump, and projectile (4.083103ms)
-✔ styrodog slot 1: facing, guard, jump, and projectile (2.124626ms)
-✔ sonic slot 0: facing, guard, jump, and projectile (6.336952ms)
-✔ sonic slot 1: facing, guard, jump, and projectile (2.089357ms)
-✔ venomis slot 0: facing, guard, jump, and projectile (1.135907ms)
-✔ venomis slot 1: facing, guard, jump, and projectile (0.844558ms)
-✔ styro slot 0: facing, guard, jump, and projectile (7.933894ms)
-✔ styro slot 1: facing, guard, jump, and projectile (0.950031ms)
-✔ wastelander slot 0: facing, guard, jump, and projectile (1.568963ms)
-✔ wastelander slot 1: facing, guard, jump, and projectile (0.666541ms)
-✔ atomdust slot 0: facing, guard, jump, and projectile (4.022228ms)
-✔ atomdust slot 1: facing, guard, jump, and projectile (1.233643ms)
-✔ spree slot 0: facing, guard, jump, and projectile (1.038127ms)
-✔ spree slot 1: facing, guard, jump, and projectile (2.241717ms)
-✔ bushman slot 0: facing, guard, jump, and projectile (2.883878ms)
-✔ bushman slot 1: facing, guard, jump, and projectile (1.572145ms)
-✔ summy normal damage stays inside requested target ranges (0.370689ms)
-✔ sadie normal damage stays inside requested target ranges (0.099998ms)
-✔ vee normal damage stays inside requested target ranges (0.079198ms)
-✔ air normal damage stays inside requested target ranges (0.040827ms)
-✔ styrodog normal damage stays inside requested target ranges (0.031459ms)
-✔ sonic normal damage stays inside requested target ranges (0.058833ms)
-✔ venomis normal damage stays inside requested target ranges (0.030329ms)
-✔ styro normal damage stays inside requested target ranges (0.062582ms)
-✔ wastelander normal damage stays inside requested target ranges (0.052933ms)
-✔ atomdust normal damage stays inside requested target ranges (0.028341ms)
-✔ spree normal damage stays inside requested target ranges (0.030402ms)
-✔ bushman normal damage stays inside requested target ranges (0.028766ms)
-✔ summy special executes with total damage cap, cost and recovery (4.447275ms)
-✔ sadie special executes with total damage cap, cost and recovery (5.04946ms)
-✔ vee special executes with total damage cap, cost and recovery (2.364644ms)
-✔ air special executes with total damage cap, cost and recovery (22.555989ms)
-✔ styrodog special executes with total damage cap, cost and recovery (12.157717ms)
-✔ sonic special executes with total damage cap, cost and recovery (9.764089ms)
-✔ venomis special executes with total damage cap, cost and recovery (1.882102ms)
-✔ styro special executes with total damage cap, cost and recovery (1.47195ms)
-✔ wastelander special executes with total damage cap, cost and recovery (2.241176ms)
-✔ atomdust special executes with total damage cap, cost and recovery (1.230119ms)
-✔ spree special executes with total damage cap, cost and recovery (5.412762ms)
-✔ bushman special executes with total damage cap, cost and recovery (1.265798ms)
-✔ human fighters do not attack, vanish, auto-dodge, phase-change or damage each other without input (65.99475ms)
-✔ KKPP preserves a bounded sweep/uppercut chain and cannot queue more than four attacks (3.120461ms)
-✔ Bushman requires four separate unblocked qualifying hits; burn and repeats never count (0.554376ms)
-✔ Lightening Spree teleport: explicit action, bounded distance, two-second visibility and eight-second cooldown (9.375262ms)
-✔ projectile cooldown prevents spam, including after recovery; holding a button is one action (10.455592ms)
-✔ jumping avoids telegraphed ground attacks, while grounded target is hit (5.321732ms)
-✔ four-hit pressure forces knockdown and escape protection; repeated hits cannot create an infinite (1.191342ms)
-✔ difficulty changes decisions only; human and CPU share costs, health and damage (58.951272ms)
-✔ normalization is independent of render rate at 30, 60, and 120 FPS (3.567106ms)
-✔ hit at zero HP resolves once, clears effects, and rematch creates pristine fighters (0.609577ms)
-✔ simultaneous venue damage can produce a double KO (0.263051ms)
-✔ Harbor hit region treats either player symmetrically and permits jumping (0.276987ms)
-✔ Tempest contact uses separate ids in a mirror match and accepts block for either side (3.893949ms)
-✔ Queued tag keeps attacks, movement and defense available against opponent 5 (6.439543ms)
-✔ Both hero protection and opponent / hazard time remain frozen during opponent 5 tag (3.867164ms)
-✔ keys movement and block hold survive opponent 5 switch (1.589857ms)
-✔ touchHeld movement and block hold survive opponent 5 switch (2.536554ms)
-✔ padHeld movement and block hold survive opponent 5 switch (1.950492ms)
-✔ Queued tag keeps attacks, movement and defense available against opponent 0 (1.351359ms)
-✔ Both hero protection and opponent / hazard time remain frozen during opponent 0 tag (2.067123ms)
-✔ keys movement and block hold survive opponent 0 switch (1.803681ms)
-✔ touchHeld movement and block hold survive opponent 0 switch (3.710408ms)
-✔ padHeld movement and block hold survive opponent 0 switch (3.369757ms)
-✔ All stage positions have a manual swap below 0.72 seconds (23.005862ms)
-✔ Incoming hero can attack on arrival and a late entrance press is buffered once (23.04192ms)
-✔ Stale entrance actions are discarded and held attacks are not repeated (8.731385ms)
-✔ Health and special charge remain separate through repeated tags and defeated teammates are skipped (31.70909ms)
-✔ Automatic replacement preserves the defeat pose and restores input within one second (2.356638ms)
-✔ Pause freezes a swap; non-story combat still calls its original input handlers (2.771306ms)
-ℹ tests 243
-ℹ suites 0
-ℹ pass 243
-ℹ fail 0
-ℹ cancelled 0
-ℹ skipped 0
-ℹ todo 0
-ℹ duration_ms 588.151224
+TAP version 13
+# Subtest: blast deals exactly twice a regular hit
+ok 1 - blast deals exactly twice a regular hit
+  ---
+  duration_ms: 1.980548
+  type: 'test'
+  ...
+# Subtest: blast is locked at 0 landed hits
+ok 2 - blast is locked at 0 landed hits
+  ---
+  duration_ms: 0.498021
+  type: 'test'
+  ...
+# Subtest: blast is locked at 1 landed hits
+ok 3 - blast is locked at 1 landed hits
+  ---
+  duration_ms: 0.213515
+  type: 'test'
+  ...
+# Subtest: blast is locked at 2 landed hits
+ok 4 - blast is locked at 2 landed hits
+  ---
+  duration_ms: 0.167098
+  type: 'test'
+  ...
+# Subtest: blast is locked at 3 landed hits
+ok 5 - blast is locked at 3 landed hits
+  ---
+  duration_ms: 0.324488
+  type: 'test'
+  ...
+# Subtest: four distinct direct hits unlock blast and release consumes all four
+ok 6 - four distinct direct hits unlock blast and release consumes all four
+  ---
+  duration_ms: 1.995392
+  type: 'test'
+  ...
+# Subtest: misses, blocks, invulnerability, burns and the blast do not charge
+ok 7 - misses, blocks, invulnerability, burns and the blast do not charge
+  ---
+  duration_ms: 0.636041
+  type: 'test'
+  ...
+# Subtest: one swing hitting two teammates earns one credit
+ok 8 - one swing hitting two teammates earns one credit
+  ---
+  duration_ms: 0.321576
+  type: 'test'
+  ...
+# Subtest: blocked first target does not discard a real hit on second target
+ok 9 - blocked first target does not discard a real hit on second target
+  ---
+  duration_ms: 0.814656
+  type: 'test'
+  ...
+# Subtest: charge is capped at four and credit history is bounded
+ok 10 - charge is capped at four and credit history is bounded
+  ---
+  duration_ms: 0.809391
+  type: 'test'
+  ...
+# Subtest: interrupted windup retains charge; no delayed release occurs
+ok 11 - interrupted windup retains charge; no delayed release occurs
+  ---
+  duration_ms: 0.311946
+  type: 'test'
+  ...
+# Subtest: punch hits only once at contact and finishes recovery
+ok 12 - punch hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.2748
+  type: 'test'
+  ...
+# Subtest: kick hits only once at contact and finishes recovery
+ok 13 - kick hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.130442
+  type: 'test'
+  ...
+# Subtest: fireball hits only once at contact and finishes recovery
+ok 14 - fireball hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.278826
+  type: 'test'
+  ...
+# Subtest: scorch hits only once at contact and finishes recovery
+ok 15 - scorch hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.14484
+  type: 'test'
+  ...
+# Subtest: blast hits only once at contact and finishes recovery
+ok 16 - blast hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.4169
+  type: 'test'
+  ...
+# Subtest: projectile sweep does not tunnel and rejects jumping targets
+ok 17 - projectile sweep does not tunnel and rejects jumping targets
+  ---
+  duration_ms: 0.372643
+  type: 'test'
+  ...
+# Subtest: melee and blast respect facing, distance and height
+ok 18 - melee and blast respect facing, distance and height
+  ---
+  duration_ms: 0.178711
+  type: 'test'
+  ...
+# Subtest: ground fire covers one fixed spot and is avoidable by jumping
+ok 19 - ground fire covers one fixed spot and is avoidable by jumping
+  ---
+  duration_ms: 0.194091
+  type: 'test'
+  ...
+# Subtest: fresh round resets action, charge and hazardous effects
+ok 20 - fresh round resets action, charge and hazardous effects
+  ---
+  duration_ms: 1.583632
+  type: 'test'
+  ...
+# Subtest: network snapshots are detached and malformed attacks are rejected
+ok 21 - network snapshots are detached and malformed attacks are rejected
+  ---
+  duration_ms: 0.736836
+  type: 'test'
+  ...
+# Subtest: roster is complete, immutable, and contains unique character identities
+ok 22 - roster is complete, immutable, and contains unique character identities
+  ---
+  duration_ms: 15.212819
+  type: 'test'
+  ...
+# Subtest: summy vs summy: independent 100 HP, controls, and normal damage
+ok 23 - summy vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 14.417989
+  type: 'test'
+  ...
+# Subtest: summy vs sadie: independent 100 HP, controls, and normal damage
+ok 24 - summy vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.146515
+  type: 'test'
+  ...
+# Subtest: summy vs vee: independent 100 HP, controls, and normal damage
+ok 25 - summy vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 2.83935
+  type: 'test'
+  ...
+# Subtest: summy vs air: independent 100 HP, controls, and normal damage
+ok 26 - summy vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.667427
+  type: 'test'
+  ...
+# Subtest: summy vs styrodog: independent 100 HP, controls, and normal damage
+ok 27 - summy vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 4.096331
+  type: 'test'
+  ...
+# Subtest: summy vs sonic: independent 100 HP, controls, and normal damage
+ok 28 - summy vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.662116
+  type: 'test'
+  ...
+# Subtest: summy vs venomis: independent 100 HP, controls, and normal damage
+ok 29 - summy vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 2.064163
+  type: 'test'
+  ...
+# Subtest: summy vs styro: independent 100 HP, controls, and normal damage
+ok 30 - summy vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.882792
+  type: 'test'
+  ...
+# Subtest: summy vs wastelander: independent 100 HP, controls, and normal damage
+ok 31 - summy vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.985377
+  type: 'test'
+  ...
+# Subtest: summy vs atomdust: independent 100 HP, controls, and normal damage
+ok 32 - summy vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.822791
+  type: 'test'
+  ...
+# Subtest: summy vs spree: independent 100 HP, controls, and normal damage
+ok 33 - summy vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.70628
+  type: 'test'
+  ...
+# Subtest: summy vs bushman: independent 100 HP, controls, and normal damage
+ok 34 - summy vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.406217
+  type: 'test'
+  ...
+# Subtest: sadie vs summy: independent 100 HP, controls, and normal damage
+ok 35 - sadie vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.348322
+  type: 'test'
+  ...
+# Subtest: sadie vs sadie: independent 100 HP, controls, and normal damage
+ok 36 - sadie vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.639254
+  type: 'test'
+  ...
+# Subtest: sadie vs vee: independent 100 HP, controls, and normal damage
+ok 37 - sadie vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.230255
+  type: 'test'
+  ...
+# Subtest: sadie vs air: independent 100 HP, controls, and normal damage
+ok 38 - sadie vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.723363
+  type: 'test'
+  ...
+# Subtest: sadie vs styrodog: independent 100 HP, controls, and normal damage
+ok 39 - sadie vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.287087
+  type: 'test'
+  ...
+# Subtest: sadie vs sonic: independent 100 HP, controls, and normal damage
+ok 40 - sadie vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.239633
+  type: 'test'
+  ...
+# Subtest: sadie vs venomis: independent 100 HP, controls, and normal damage
+ok 41 - sadie vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.290342
+  type: 'test'
+  ...
+# Subtest: sadie vs styro: independent 100 HP, controls, and normal damage
+ok 42 - sadie vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.192046
+  type: 'test'
+  ...
+# Subtest: sadie vs wastelander: independent 100 HP, controls, and normal damage
+ok 43 - sadie vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.348203
+  type: 'test'
+  ...
+# Subtest: sadie vs atomdust: independent 100 HP, controls, and normal damage
+ok 44 - sadie vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.336821
+  type: 'test'
+  ...
+# Subtest: sadie vs spree: independent 100 HP, controls, and normal damage
+ok 45 - sadie vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.263994
+  type: 'test'
+  ...
+# Subtest: sadie vs bushman: independent 100 HP, controls, and normal damage
+ok 46 - sadie vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.276895
+  type: 'test'
+  ...
+# Subtest: vee vs summy: independent 100 HP, controls, and normal damage
+ok 47 - vee vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.372538
+  type: 'test'
+  ...
+# Subtest: vee vs sadie: independent 100 HP, controls, and normal damage
+ok 48 - vee vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.621148
+  type: 'test'
+  ...
+# Subtest: vee vs vee: independent 100 HP, controls, and normal damage
+ok 49 - vee vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.655364
+  type: 'test'
+  ...
+# Subtest: vee vs air: independent 100 HP, controls, and normal damage
+ok 50 - vee vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.334649
+  type: 'test'
+  ...
+# Subtest: vee vs styrodog: independent 100 HP, controls, and normal damage
+ok 51 - vee vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.34672
+  type: 'test'
+  ...
+# Subtest: vee vs sonic: independent 100 HP, controls, and normal damage
+ok 52 - vee vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.366451
+  type: 'test'
+  ...
+# Subtest: vee vs venomis: independent 100 HP, controls, and normal damage
+ok 53 - vee vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.312193
+  type: 'test'
+  ...
+# Subtest: vee vs styro: independent 100 HP, controls, and normal damage
+ok 54 - vee vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.048376
+  type: 'test'
+  ...
+# Subtest: vee vs wastelander: independent 100 HP, controls, and normal damage
+ok 55 - vee vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.324341
+  type: 'test'
+  ...
+# Subtest: vee vs atomdust: independent 100 HP, controls, and normal damage
+ok 56 - vee vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.209901
+  type: 'test'
+  ...
+# Subtest: vee vs spree: independent 100 HP, controls, and normal damage
+ok 57 - vee vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.150483
+  type: 'test'
+  ...
+# Subtest: vee vs bushman: independent 100 HP, controls, and normal damage
+ok 58 - vee vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.150851
+  type: 'test'
+  ...
+# Subtest: air vs summy: independent 100 HP, controls, and normal damage
+ok 59 - air vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.372702
+  type: 'test'
+  ...
+# Subtest: air vs sadie: independent 100 HP, controls, and normal damage
+ok 60 - air vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.239684
+  type: 'test'
+  ...
+# Subtest: air vs vee: independent 100 HP, controls, and normal damage
+ok 61 - air vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.180501
+  type: 'test'
+  ...
+# Subtest: air vs air: independent 100 HP, controls, and normal damage
+ok 62 - air vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.1706
+  type: 'test'
+  ...
+# Subtest: air vs styrodog: independent 100 HP, controls, and normal damage
+ok 63 - air vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.161281
+  type: 'test'
+  ...
+# Subtest: air vs sonic: independent 100 HP, controls, and normal damage
+ok 64 - air vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.171303
+  type: 'test'
+  ...
+# Subtest: air vs venomis: independent 100 HP, controls, and normal damage
+ok 65 - air vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.215085
+  type: 'test'
+  ...
+# Subtest: air vs styro: independent 100 HP, controls, and normal damage
+ok 66 - air vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.183356
+  type: 'test'
+  ...
+# Subtest: air vs wastelander: independent 100 HP, controls, and normal damage
+ok 67 - air vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.183881
+  type: 'test'
+  ...
+# Subtest: air vs atomdust: independent 100 HP, controls, and normal damage
+ok 68 - air vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.17265
+  type: 'test'
+  ...
+# Subtest: air vs spree: independent 100 HP, controls, and normal damage
+ok 69 - air vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.170247
+  type: 'test'
+  ...
+# Subtest: air vs bushman: independent 100 HP, controls, and normal damage
+ok 70 - air vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.208544
+  type: 'test'
+  ...
+# Subtest: styrodog vs summy: independent 100 HP, controls, and normal damage
+ok 71 - styrodog vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.320367
+  type: 'test'
+  ...
+# Subtest: styrodog vs sadie: independent 100 HP, controls, and normal damage
+ok 72 - styrodog vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.197827
+  type: 'test'
+  ...
+# Subtest: styrodog vs vee: independent 100 HP, controls, and normal damage
+ok 73 - styrodog vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.181776
+  type: 'test'
+  ...
+# Subtest: styrodog vs air: independent 100 HP, controls, and normal damage
+ok 74 - styrodog vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.294024
+  type: 'test'
+  ...
+# Subtest: styrodog vs styrodog: independent 100 HP, controls, and normal damage
+ok 75 - styrodog vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.906746
+  type: 'test'
+  ...
+# Subtest: styrodog vs sonic: independent 100 HP, controls, and normal damage
+ok 76 - styrodog vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.389075
+  type: 'test'
+  ...
+# Subtest: styrodog vs venomis: independent 100 HP, controls, and normal damage
+ok 77 - styrodog vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.191764
+  type: 'test'
+  ...
+# Subtest: styrodog vs styro: independent 100 HP, controls, and normal damage
+ok 78 - styrodog vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.160809
+  type: 'test'
+  ...
+# Subtest: styrodog vs wastelander: independent 100 HP, controls, and normal damage
+ok 79 - styrodog vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.190945
+  type: 'test'
+  ...
+# Subtest: styrodog vs atomdust: independent 100 HP, controls, and normal damage
+ok 80 - styrodog vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.625699
+  type: 'test'
+  ...
+# Subtest: styrodog vs spree: independent 100 HP, controls, and normal damage
+ok 81 - styrodog vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.80748
+  type: 'test'
+  ...
+# Subtest: styrodog vs bushman: independent 100 HP, controls, and normal damage
+ok 82 - styrodog vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.459177
+  type: 'test'
+  ...
+# Subtest: sonic vs summy: independent 100 HP, controls, and normal damage
+ok 83 - sonic vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.529879
+  type: 'test'
+  ...
+# Subtest: sonic vs sadie: independent 100 HP, controls, and normal damage
+ok 84 - sonic vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.226665
+  type: 'test'
+  ...
+# Subtest: sonic vs vee: independent 100 HP, controls, and normal damage
+ok 85 - sonic vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.431577
+  type: 'test'
+  ...
+# Subtest: sonic vs air: independent 100 HP, controls, and normal damage
+ok 86 - sonic vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.291199
+  type: 'test'
+  ...
+# Subtest: sonic vs styrodog: independent 100 HP, controls, and normal damage
+ok 87 - sonic vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.522827
+  type: 'test'
+  ...
+# Subtest: sonic vs sonic: independent 100 HP, controls, and normal damage
+ok 88 - sonic vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.37887
+  type: 'test'
+  ...
+# Subtest: sonic vs venomis: independent 100 HP, controls, and normal damage
+ok 89 - sonic vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.42576
+  type: 'test'
+  ...
+# Subtest: sonic vs styro: independent 100 HP, controls, and normal damage
+ok 90 - sonic vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.371926
+  type: 'test'
+  ...
+# Subtest: sonic vs wastelander: independent 100 HP, controls, and normal damage
+ok 91 - sonic vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.333897
+  type: 'test'
+  ...
+# Subtest: sonic vs atomdust: independent 100 HP, controls, and normal damage
+ok 92 - sonic vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.258714
+  type: 'test'
+  ...
+# Subtest: sonic vs spree: independent 100 HP, controls, and normal damage
+ok 93 - sonic vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.207739
+  type: 'test'
+  ...
+# Subtest: sonic vs bushman: independent 100 HP, controls, and normal damage
+ok 94 - sonic vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.215624
+  type: 'test'
+  ...
+# Subtest: venomis vs summy: independent 100 HP, controls, and normal damage
+ok 95 - venomis vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.180054
+  type: 'test'
+  ...
+# Subtest: venomis vs sadie: independent 100 HP, controls, and normal damage
+ok 96 - venomis vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.663593
+  type: 'test'
+  ...
+# Subtest: venomis vs vee: independent 100 HP, controls, and normal damage
+ok 97 - venomis vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 3.950705
+  type: 'test'
+  ...
+# Subtest: venomis vs air: independent 100 HP, controls, and normal damage
+ok 98 - venomis vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.197709
+  type: 'test'
+  ...
+# Subtest: venomis vs styrodog: independent 100 HP, controls, and normal damage
+ok 99 - venomis vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.133345
+  type: 'test'
+  ...
+# Subtest: venomis vs sonic: independent 100 HP, controls, and normal damage
+ok 100 - venomis vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.122366
+  type: 'test'
+  ...
+# Subtest: venomis vs venomis: independent 100 HP, controls, and normal damage
+ok 101 - venomis vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.546423
+  type: 'test'
+  ...
+# Subtest: venomis vs styro: independent 100 HP, controls, and normal damage
+ok 102 - venomis vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.84448
+  type: 'test'
+  ...
+# Subtest: venomis vs wastelander: independent 100 HP, controls, and normal damage
+ok 103 - venomis vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.168166
+  type: 'test'
+  ...
+# Subtest: venomis vs atomdust: independent 100 HP, controls, and normal damage
+ok 104 - venomis vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.129241
+  type: 'test'
+  ...
+# Subtest: venomis vs spree: independent 100 HP, controls, and normal damage
+ok 105 - venomis vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.118293
+  type: 'test'
+  ...
+# Subtest: venomis vs bushman: independent 100 HP, controls, and normal damage
+ok 106 - venomis vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.8044
+  type: 'test'
+  ...
+# Subtest: styro vs summy: independent 100 HP, controls, and normal damage
+ok 107 - styro vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.153386
+  type: 'test'
+  ...
+# Subtest: styro vs sadie: independent 100 HP, controls, and normal damage
+ok 108 - styro vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.124241
+  type: 'test'
+  ...
+# Subtest: styro vs vee: independent 100 HP, controls, and normal damage
+ok 109 - styro vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 2.700438
+  type: 'test'
+  ...
+# Subtest: styro vs air: independent 100 HP, controls, and normal damage
+ok 110 - styro vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.270661
+  type: 'test'
+  ...
+# Subtest: styro vs styrodog: independent 100 HP, controls, and normal damage
+ok 111 - styro vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.180226
+  type: 'test'
+  ...
+# Subtest: styro vs sonic: independent 100 HP, controls, and normal damage
+ok 112 - styro vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.139915
+  type: 'test'
+  ...
+# Subtest: styro vs venomis: independent 100 HP, controls, and normal damage
+ok 113 - styro vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.126811
+  type: 'test'
+  ...
+# Subtest: styro vs styro: independent 100 HP, controls, and normal damage
+ok 114 - styro vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.120659
+  type: 'test'
+  ...
+# Subtest: styro vs wastelander: independent 100 HP, controls, and normal damage
+ok 115 - styro vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.118064
+  type: 'test'
+  ...
+# Subtest: styro vs atomdust: independent 100 HP, controls, and normal damage
+ok 116 - styro vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.111401
+  type: 'test'
+  ...
+# Subtest: styro vs spree: independent 100 HP, controls, and normal damage
+ok 117 - styro vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.120039
+  type: 'test'
+  ...
+# Subtest: styro vs bushman: independent 100 HP, controls, and normal damage
+ok 118 - styro vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.65468
+  type: 'test'
+  ...
+# Subtest: wastelander vs summy: independent 100 HP, controls, and normal damage
+ok 119 - wastelander vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.179171
+  type: 'test'
+  ...
+# Subtest: wastelander vs sadie: independent 100 HP, controls, and normal damage
+ok 120 - wastelander vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.133416
+  type: 'test'
+  ...
+# Subtest: wastelander vs vee: independent 100 HP, controls, and normal damage
+ok 121 - wastelander vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.169886
+  type: 'test'
+  ...
+# Subtest: wastelander vs air: independent 100 HP, controls, and normal damage
+ok 122 - wastelander vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.448874
+  type: 'test'
+  ...
+# Subtest: wastelander vs styrodog: independent 100 HP, controls, and normal damage
+ok 123 - wastelander vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.173733
+  type: 'test'
+  ...
+# Subtest: wastelander vs sonic: independent 100 HP, controls, and normal damage
+ok 124 - wastelander vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.288982
+  type: 'test'
+  ...
+# Subtest: wastelander vs venomis: independent 100 HP, controls, and normal damage
+ok 125 - wastelander vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 4.676409
+  type: 'test'
+  ...
+# Subtest: wastelander vs styro: independent 100 HP, controls, and normal damage
+ok 126 - wastelander vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.216507
+  type: 'test'
+  ...
+# Subtest: wastelander vs wastelander: independent 100 HP, controls, and normal damage
+ok 127 - wastelander vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.140387
+  type: 'test'
+  ...
+# Subtest: wastelander vs atomdust: independent 100 HP, controls, and normal damage
+ok 128 - wastelander vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.169456
+  type: 'test'
+  ...
+# Subtest: wastelander vs spree: independent 100 HP, controls, and normal damage
+ok 129 - wastelander vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.123419
+  type: 'test'
+  ...
+# Subtest: wastelander vs bushman: independent 100 HP, controls, and normal damage
+ok 130 - wastelander vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.187216
+  type: 'test'
+  ...
+# Subtest: atomdust vs summy: independent 100 HP, controls, and normal damage
+ok 131 - atomdust vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 3.119643
+  type: 'test'
+  ...
+# Subtest: atomdust vs sadie: independent 100 HP, controls, and normal damage
+ok 132 - atomdust vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.78342
+  type: 'test'
+  ...
+# Subtest: atomdust vs vee: independent 100 HP, controls, and normal damage
+ok 133 - atomdust vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.156026
+  type: 'test'
+  ...
+# Subtest: atomdust vs air: independent 100 HP, controls, and normal damage
+ok 134 - atomdust vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.572241
+  type: 'test'
+  ...
+# Subtest: atomdust vs styrodog: independent 100 HP, controls, and normal damage
+ok 135 - atomdust vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.22365
+  type: 'test'
+  ...
+# Subtest: atomdust vs sonic: independent 100 HP, controls, and normal damage
+ok 136 - atomdust vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.142644
+  type: 'test'
+  ...
+# Subtest: atomdust vs venomis: independent 100 HP, controls, and normal damage
+ok 137 - atomdust vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.125208
+  type: 'test'
+  ...
+# Subtest: atomdust vs styro: independent 100 HP, controls, and normal damage
+ok 138 - atomdust vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.133478
+  type: 'test'
+  ...
+# Subtest: atomdust vs wastelander: independent 100 HP, controls, and normal damage
+ok 139 - atomdust vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.77788
+  type: 'test'
+  ...
+# Subtest: atomdust vs atomdust: independent 100 HP, controls, and normal damage
+ok 140 - atomdust vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.313181
+  type: 'test'
+  ...
+# Subtest: atomdust vs spree: independent 100 HP, controls, and normal damage
+ok 141 - atomdust vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.56161
+  type: 'test'
+  ...
+# Subtest: atomdust vs bushman: independent 100 HP, controls, and normal damage
+ok 142 - atomdust vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.228175
+  type: 'test'
+  ...
+# Subtest: spree vs summy: independent 100 HP, controls, and normal damage
+ok 143 - spree vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.331976
+  type: 'test'
+  ...
+# Subtest: spree vs sadie: independent 100 HP, controls, and normal damage
+ok 144 - spree vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.471025
+  type: 'test'
+  ...
+# Subtest: spree vs vee: independent 100 HP, controls, and normal damage
+ok 145 - spree vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.169491
+  type: 'test'
+  ...
+# Subtest: spree vs air: independent 100 HP, controls, and normal damage
+ok 146 - spree vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.699123
+  type: 'test'
+  ...
+# Subtest: spree vs styrodog: independent 100 HP, controls, and normal damage
+ok 147 - spree vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.143993
+  type: 'test'
+  ...
+# Subtest: spree vs sonic: independent 100 HP, controls, and normal damage
+ok 148 - spree vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.121389
+  type: 'test'
+  ...
+# Subtest: spree vs venomis: independent 100 HP, controls, and normal damage
+ok 149 - spree vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.125682
+  type: 'test'
+  ...
+# Subtest: spree vs styro: independent 100 HP, controls, and normal damage
+ok 150 - spree vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.225173
+  type: 'test'
+  ...
+# Subtest: spree vs wastelander: independent 100 HP, controls, and normal damage
+ok 151 - spree vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.142072
+  type: 'test'
+  ...
+# Subtest: spree vs atomdust: independent 100 HP, controls, and normal damage
+ok 152 - spree vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.1259
+  type: 'test'
+  ...
+# Subtest: spree vs spree: independent 100 HP, controls, and normal damage
+ok 153 - spree vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.219377
+  type: 'test'
+  ...
+# Subtest: spree vs bushman: independent 100 HP, controls, and normal damage
+ok 154 - spree vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.134518
+  type: 'test'
+  ...
+# Subtest: bushman vs summy: independent 100 HP, controls, and normal damage
+ok 155 - bushman vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.276554
+  type: 'test'
+  ...
+# Subtest: bushman vs sadie: independent 100 HP, controls, and normal damage
+ok 156 - bushman vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.38705
+  type: 'test'
+  ...
+# Subtest: bushman vs vee: independent 100 HP, controls, and normal damage
+ok 157 - bushman vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.37357
+  type: 'test'
+  ...
+# Subtest: bushman vs air: independent 100 HP, controls, and normal damage
+ok 158 - bushman vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.508887
+  type: 'test'
+  ...
+# Subtest: bushman vs styrodog: independent 100 HP, controls, and normal damage
+ok 159 - bushman vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.392328
+  type: 'test'
+  ...
+# Subtest: bushman vs sonic: independent 100 HP, controls, and normal damage
+ok 160 - bushman vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.265396
+  type: 'test'
+  ...
+# Subtest: bushman vs venomis: independent 100 HP, controls, and normal damage
+ok 161 - bushman vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.539506
+  type: 'test'
+  ...
+# Subtest: bushman vs styro: independent 100 HP, controls, and normal damage
+ok 162 - bushman vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.303378
+  type: 'test'
+  ...
+# Subtest: bushman vs wastelander: independent 100 HP, controls, and normal damage
+ok 163 - bushman vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.41874
+  type: 'test'
+  ...
+# Subtest: bushman vs atomdust: independent 100 HP, controls, and normal damage
+ok 164 - bushman vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.362183
+  type: 'test'
+  ...
+# Subtest: bushman vs spree: independent 100 HP, controls, and normal damage
+ok 165 - bushman vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.260536
+  type: 'test'
+  ...
+# Subtest: bushman vs bushman: independent 100 HP, controls, and normal damage
+ok 166 - bushman vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.335983
+  type: 'test'
+  ...
+# Subtest: summy slot 0: facing, guard, jump, and projectile
+ok 167 - summy slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 5.448607
+  type: 'test'
+  ...
+# Subtest: summy slot 1: facing, guard, jump, and projectile
+ok 168 - summy slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 3.637951
+  type: 'test'
+  ...
+# Subtest: sadie slot 0: facing, guard, jump, and projectile
+ok 169 - sadie slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 6.185919
+  type: 'test'
+  ...
+# Subtest: sadie slot 1: facing, guard, jump, and projectile
+ok 170 - sadie slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 0.914932
+  type: 'test'
+  ...
+# Subtest: vee slot 0: facing, guard, jump, and projectile
+ok 171 - vee slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.91915
+  type: 'test'
+  ...
+# Subtest: vee slot 1: facing, guard, jump, and projectile
+ok 172 - vee slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.31557
+  type: 'test'
+  ...
+# Subtest: air slot 0: facing, guard, jump, and projectile
+ok 173 - air slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.468567
+  type: 'test'
+  ...
+# Subtest: air slot 1: facing, guard, jump, and projectile
+ok 174 - air slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.655924
+  type: 'test'
+  ...
+# Subtest: styrodog slot 0: facing, guard, jump, and projectile
+ok 175 - styrodog slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.393438
+  type: 'test'
+  ...
+# Subtest: styrodog slot 1: facing, guard, jump, and projectile
+ok 176 - styrodog slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.366249
+  type: 'test'
+  ...
+# Subtest: sonic slot 0: facing, guard, jump, and projectile
+ok 177 - sonic slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.126296
+  type: 'test'
+  ...
+# Subtest: sonic slot 1: facing, guard, jump, and projectile
+ok 178 - sonic slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.765325
+  type: 'test'
+  ...
+# Subtest: venomis slot 0: facing, guard, jump, and projectile
+ok 179 - venomis slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.101102
+  type: 'test'
+  ...
+# Subtest: venomis slot 1: facing, guard, jump, and projectile
+ok 180 - venomis slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 0.909342
+  type: 'test'
+  ...
+# Subtest: styro slot 0: facing, guard, jump, and projectile
+ok 181 - styro slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 0.908873
+  type: 'test'
+  ...
+# Subtest: styro slot 1: facing, guard, jump, and projectile
+ok 182 - styro slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 0.933808
+  type: 'test'
+  ...
+# Subtest: wastelander slot 0: facing, guard, jump, and projectile
+ok 183 - wastelander slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.190435
+  type: 'test'
+  ...
+# Subtest: wastelander slot 1: facing, guard, jump, and projectile
+ok 184 - wastelander slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 0.620605
+  type: 'test'
+  ...
+# Subtest: atomdust slot 0: facing, guard, jump, and projectile
+ok 185 - atomdust slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 0.551243
+  type: 'test'
+  ...
+# Subtest: atomdust slot 1: facing, guard, jump, and projectile
+ok 186 - atomdust slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 0.689911
+  type: 'test'
+  ...
+# Subtest: spree slot 0: facing, guard, jump, and projectile
+ok 187 - spree slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 0.590114
+  type: 'test'
+  ...
+# Subtest: spree slot 1: facing, guard, jump, and projectile
+ok 188 - spree slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.532459
+  type: 'test'
+  ...
+# Subtest: bushman slot 0: facing, guard, jump, and projectile
+ok 189 - bushman slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.447763
+  type: 'test'
+  ...
+# Subtest: bushman slot 1: facing, guard, jump, and projectile
+ok 190 - bushman slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.942105
+  type: 'test'
+  ...
+# Subtest: summy normal damage stays inside requested target ranges
+ok 191 - summy normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.31701
+  type: 'test'
+  ...
+# Subtest: sadie normal damage stays inside requested target ranges
+ok 192 - sadie normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.081132
+  type: 'test'
+  ...
+# Subtest: vee normal damage stays inside requested target ranges
+ok 193 - vee normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.100057
+  type: 'test'
+  ...
+# Subtest: air normal damage stays inside requested target ranges
+ok 194 - air normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.059737
+  type: 'test'
+  ...
+# Subtest: styrodog normal damage stays inside requested target ranges
+ok 195 - styrodog normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.125504
+  type: 'test'
+  ...
+# Subtest: sonic normal damage stays inside requested target ranges
+ok 196 - sonic normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.034025
+  type: 'test'
+  ...
+# Subtest: venomis normal damage stays inside requested target ranges
+ok 197 - venomis normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.027953
+  type: 'test'
+  ...
+# Subtest: styro normal damage stays inside requested target ranges
+ok 198 - styro normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.02642
+  type: 'test'
+  ...
+# Subtest: wastelander normal damage stays inside requested target ranges
+ok 199 - wastelander normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.02536
+  type: 'test'
+  ...
+# Subtest: atomdust normal damage stays inside requested target ranges
+ok 200 - atomdust normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.025445
+  type: 'test'
+  ...
+# Subtest: spree normal damage stays inside requested target ranges
+ok 201 - spree normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.024559
+  type: 'test'
+  ...
+# Subtest: bushman normal damage stays inside requested target ranges
+ok 202 - bushman normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.025051
+  type: 'test'
+  ...
+# Subtest: summy special executes with total damage cap, cost and recovery
+ok 203 - summy special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 3.449932
+  type: 'test'
+  ...
+# Subtest: sadie special executes with total damage cap, cost and recovery
+ok 204 - sadie special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 2.707986
+  type: 'test'
+  ...
+# Subtest: vee special executes with total damage cap, cost and recovery
+ok 205 - vee special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 3.16211
+  type: 'test'
+  ...
+# Subtest: air special executes with total damage cap, cost and recovery
+ok 206 - air special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 6.675524
+  type: 'test'
+  ...
+# Subtest: styrodog special executes with total damage cap, cost and recovery
+ok 207 - styrodog special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 3.100521
+  type: 'test'
+  ...
+# Subtest: sonic special executes with total damage cap, cost and recovery
+ok 208 - sonic special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 4.288278
+  type: 'test'
+  ...
+# Subtest: venomis special executes with total damage cap, cost and recovery
+ok 209 - venomis special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 5.256767
+  type: 'test'
+  ...
+# Subtest: styro special executes with total damage cap, cost and recovery
+ok 210 - styro special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 4.172301
+  type: 'test'
+  ...
+# Subtest: wastelander special executes with total damage cap, cost and recovery
+ok 211 - wastelander special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 1.086409
+  type: 'test'
+  ...
+# Subtest: atomdust special executes with total damage cap, cost and recovery
+ok 212 - atomdust special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 1.795975
+  type: 'test'
+  ...
+# Subtest: spree special executes with total damage cap, cost and recovery
+ok 213 - spree special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 1.709109
+  type: 'test'
+  ...
+# Subtest: bushman special executes with total damage cap, cost and recovery
+ok 214 - bushman special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 1.797913
+  type: 'test'
+  ...
+# Subtest: human fighters do not attack, vanish, auto-dodge, phase-change or damage each other without input
+ok 215 - human fighters do not attack, vanish, auto-dodge, phase-change or damage each other without input
+  ---
+  duration_ms: 64.512274
+  type: 'test'
+  ...
+# Subtest: KKPP preserves a bounded sweep/uppercut chain and cannot queue more than four attacks
+ok 216 - KKPP preserves a bounded sweep/uppercut chain and cannot queue more than four attacks
+  ---
+  duration_ms: 4.671422
+  type: 'test'
+  ...
+# Subtest: Bushman requires four separate unblocked qualifying hits; burn and repeats never count
+ok 217 - Bushman requires four separate unblocked qualifying hits; burn and repeats never count
+  ---
+  duration_ms: 0.284887
+  type: 'test'
+  ...
+# Subtest: Lightening Spree teleport: explicit action, bounded distance, two-second visibility and eight-second cooldown
+ok 218 - Lightening Spree teleport: explicit action, bounded distance, two-second visibility and eight-second cooldown
+  ---
+  duration_ms: 22.787839
+  type: 'test'
+  ...
+# Subtest: projectile cooldown prevents spam, including after recovery; holding a button is one action
+ok 219 - projectile cooldown prevents spam, including after recovery; holding a button is one action
+  ---
+  duration_ms: 12.660073
+  type: 'test'
+  ...
+# Subtest: jumping avoids telegraphed ground attacks, while grounded target is hit
+ok 220 - jumping avoids telegraphed ground attacks, while grounded target is hit
+  ---
+  duration_ms: 2.838725
+  type: 'test'
+  ...
+# Subtest: four-hit pressure forces knockdown and escape protection; repeated hits cannot create an infinite
+ok 221 - four-hit pressure forces knockdown and escape protection; repeated hits cannot create an infinite
+  ---
+  duration_ms: 1.044322
+  type: 'test'
+  ...
+# Subtest: difficulty changes decisions only; human and CPU share costs, health and damage
+ok 222 - difficulty changes decisions only; human and CPU share costs, health and damage
+  ---
+  duration_ms: 60.28879
+  type: 'test'
+  ...
+# Subtest: normalization is independent of render rate at 30, 60, and 120 FPS
+ok 223 - normalization is independent of render rate at 30, 60, and 120 FPS
+  ---
+  duration_ms: 7.428188
+  type: 'test'
+  ...
+# Subtest: hit at zero HP resolves once, clears effects, and rematch creates pristine fighters
+ok 224 - hit at zero HP resolves once, clears effects, and rematch creates pristine fighters
+  ---
+  duration_ms: 2.057959
+  type: 'test'
+  ...
+# Subtest: simultaneous venue damage can produce a double KO
+ok 225 - simultaneous venue damage can produce a double KO
+  ---
+  duration_ms: 0.253832
+  type: 'test'
+  ...
+# Subtest: Harbor hit region treats either player symmetrically and permits jumping
+ok 226 - Harbor hit region treats either player symmetrically and permits jumping
+  ---
+  duration_ms: 0.208871
+  type: 'test'
+  ...
+# Subtest: Tempest contact uses separate ids in a mirror match and accepts block for either side
+ok 227 - Tempest contact uses separate ids in a mirror match and accepts block for either side
+  ---
+  duration_ms: 4.252272
+  type: 'test'
+  ...
+# Subtest: summy guide lists every executable attack, real damage and controls for each player
+ok 228 - summy guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 6.004113
+  type: 'test'
+  ...
+# Subtest: sadie guide lists every executable attack, real damage and controls for each player
+ok 229 - sadie guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.431997
+  type: 'test'
+  ...
+# Subtest: vee guide lists every executable attack, real damage and controls for each player
+ok 230 - vee guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.477445
+  type: 'test'
+  ...
+# Subtest: air guide lists every executable attack, real damage and controls for each player
+ok 231 - air guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.282015
+  type: 'test'
+  ...
+# Subtest: styrodog guide lists every executable attack, real damage and controls for each player
+ok 232 - styrodog guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.215501
+  type: 'test'
+  ...
+# Subtest: sonic guide lists every executable attack, real damage and controls for each player
+ok 233 - sonic guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.593197
+  type: 'test'
+  ...
+# Subtest: venomis guide lists every executable attack, real damage and controls for each player
+ok 234 - venomis guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.297013
+  type: 'test'
+  ...
+# Subtest: styro guide lists every executable attack, real damage and controls for each player
+ok 235 - styro guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.228864
+  type: 'test'
+  ...
+# Subtest: wastelander guide lists every executable attack, real damage and controls for each player
+ok 236 - wastelander guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.461614
+  type: 'test'
+  ...
+# Subtest: atomdust guide lists every executable attack, real damage and controls for each player
+ok 237 - atomdust guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.325863
+  type: 'test'
+  ...
+# Subtest: spree guide lists every executable attack, real damage and controls for each player
+ok 238 - spree guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.297413
+  type: 'test'
+  ...
+# Subtest: bushman guide lists every executable attack, real damage and controls for each player
+ok 239 - bushman guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 2.251184
+  type: 'test'
+  ...
+# Subtest: rushdown trades damage and reach for speed; heavy power carries slower startup/recovery
+ok 240 - rushdown trades damage and reach for speed; heavy power carries slower startup/recovery
+  ---
+  duration_ms: 0.226007
+  type: 'test'
+  ...
+# Subtest: summy CPU can engage a mirror using normals at its own body-aware spacing
+ok 241 - summy CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 22.497763
+  type: 'test'
+  ...
+# Subtest: sadie CPU can engage a mirror using normals at its own body-aware spacing
+ok 242 - sadie CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 15.172075
+  type: 'test'
+  ...
+# Subtest: vee CPU can engage a mirror using normals at its own body-aware spacing
+ok 243 - vee CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 8.683677
+  type: 'test'
+  ...
+# Subtest: air CPU can engage a mirror using normals at its own body-aware spacing
+ok 244 - air CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 18.330047
+  type: 'test'
+  ...
+# Subtest: styrodog CPU can engage a mirror using normals at its own body-aware spacing
+ok 245 - styrodog CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 30.388177
+  type: 'test'
+  ...
+# Subtest: sonic CPU can engage a mirror using normals at its own body-aware spacing
+ok 246 - sonic CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 32.266681
+  type: 'test'
+  ...
+# Subtest: venomis CPU can engage a mirror using normals at its own body-aware spacing
+ok 247 - venomis CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 10.489028
+  type: 'test'
+  ...
+# Subtest: styro CPU can engage a mirror using normals at its own body-aware spacing
+ok 248 - styro CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 12.784824
+  type: 'test'
+  ...
+# Subtest: wastelander CPU can engage a mirror using normals at its own body-aware spacing
+ok 249 - wastelander CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 13.116302
+  type: 'test'
+  ...
+# Subtest: atomdust CPU can engage a mirror using normals at its own body-aware spacing
+ok 250 - atomdust CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 9.627446
+  type: 'test'
+  ...
+# Subtest: spree CPU can engage a mirror using normals at its own body-aware spacing
+ok 251 - spree CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 15.007514
+  type: 'test'
+  ...
+# Subtest: bushman CPU can engage a mirror using normals at its own body-aware spacing
+ok 252 - bushman CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 27.357062
+  type: 'test'
+  ...
+# Subtest: move guide maps local players independently and describes charge/cooldown counterplay
+ok 253 - move guide maps local players independently and describes charge/cooldown counterplay
+  ---
+  duration_ms: 0.748794
+  type: 'test'
+  ...
+# Subtest: Queued tag keeps attacks, movement and defense available against opponent 5
+ok 254 - Queued tag keeps attacks, movement and defense available against opponent 5
+  ---
+  duration_ms: 8.461738
+  type: 'test'
+  ...
+# Subtest: Both hero protection and opponent / hazard time remain frozen during opponent 5 tag
+ok 255 - Both hero protection and opponent / hazard time remain frozen during opponent 5 tag
+  ---
+  duration_ms: 3.744196
+  type: 'test'
+  ...
+# Subtest: keys movement and block hold survive opponent 5 switch
+ok 256 - keys movement and block hold survive opponent 5 switch
+  ---
+  duration_ms: 2.546941
+  type: 'test'
+  ...
+# Subtest: touchHeld movement and block hold survive opponent 5 switch
+ok 257 - touchHeld movement and block hold survive opponent 5 switch
+  ---
+  duration_ms: 4.128585
+  type: 'test'
+  ...
+# Subtest: padHeld movement and block hold survive opponent 5 switch
+ok 258 - padHeld movement and block hold survive opponent 5 switch
+  ---
+  duration_ms: 2.383439
+  type: 'test'
+  ...
+# Subtest: Queued tag keeps attacks, movement and defense available against opponent 0
+ok 259 - Queued tag keeps attacks, movement and defense available against opponent 0
+  ---
+  duration_ms: 1.249922
+  type: 'test'
+  ...
+# Subtest: Both hero protection and opponent / hazard time remain frozen during opponent 0 tag
+ok 260 - Both hero protection and opponent / hazard time remain frozen during opponent 0 tag
+  ---
+  duration_ms: 3.259573
+  type: 'test'
+  ...
+# Subtest: keys movement and block hold survive opponent 0 switch
+ok 261 - keys movement and block hold survive opponent 0 switch
+  ---
+  duration_ms: 2.339346
+  type: 'test'
+  ...
+# Subtest: touchHeld movement and block hold survive opponent 0 switch
+ok 262 - touchHeld movement and block hold survive opponent 0 switch
+  ---
+  duration_ms: 2.437003
+  type: 'test'
+  ...
+# Subtest: padHeld movement and block hold survive opponent 0 switch
+ok 263 - padHeld movement and block hold survive opponent 0 switch
+  ---
+  duration_ms: 6.229811
+  type: 'test'
+  ...
+# Subtest: All stage positions have a manual swap below 0.72 seconds
+ok 264 - All stage positions have a manual swap below 0.72 seconds
+  ---
+  duration_ms: 16.762958
+  type: 'test'
+  ...
+# Subtest: Incoming hero can attack on arrival and a late entrance press is buffered once
+ok 265 - Incoming hero can attack on arrival and a late entrance press is buffered once
+  ---
+  duration_ms: 2.143042
+  type: 'test'
+  ...
+# Subtest: Stale entrance actions are discarded and held attacks are not repeated
+ok 266 - Stale entrance actions are discarded and held attacks are not repeated
+  ---
+  duration_ms: 1.406173
+  type: 'test'
+  ...
+# Subtest: Health and special charge remain separate through repeated tags and defeated teammates are skipped
+ok 267 - Health and special charge remain separate through repeated tags and defeated teammates are skipped
+  ---
+  duration_ms: 7.32886
+  type: 'test'
+  ...
+# Subtest: Automatic replacement preserves the defeat pose and restores input within one second
+ok 268 - Automatic replacement preserves the defeat pose and restores input within one second
+  ---
+  duration_ms: 3.148555
+  type: 'test'
+  ...
+# Subtest: Pause freezes a swap; non-story combat still calls its original input handlers
+ok 269 - Pause freezes a swap; non-story combat still calls its original input handlers
+  ---
+  duration_ms: 2.271215
+  type: 'test'
+  ...
+1..269
+# tests 269
+# suites 0
+# pass 269
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 979.452468

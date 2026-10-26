@@ -6,12 +6,12 @@ Status: isolated draft for user playtesting. No merge or deployment.
 
 | Suite | Result | Coverage |
 |---|---:|---|
-| Competitive simulation | 206 passed | All 144 ordered character pairings; separate 100 HP; both-facing hitboxes and guards; projectile sweep/cooldowns; every character special and damage cap; KKPP bounded combo; no human AI behavior; Bushman qualifying hits; Spree teleport/cooldown; anti-infinite protection; difficulty parity; 30/60/120 Hz input invariance; KO/rematch model; symmetric hazards |
+| Competitive simulation | 232 passed | All 144 ordered character pairings; separate 100 HP; both-facing hitboxes and guards; projectile sweep/cooldowns; every character special and damage cap; KKPP bounded combo; no human AI behavior; Bushman qualifying hits; Spree teleport/cooldown; anti-infinite protection; difficulty parity; 30/60/120 Hz input invariance; KO/rematch model; symmetric hazards |
 | Existing Bushman and Story switching unit suites | 37 passed | Original boss charging/attacks/network snapshot validation and responsive Story hero swapping |
-| Competitive browser suite | 26 passed | Both selection sides, portraits, all five venues, twelve mirror renderers, every move phase, two keyboard players, double jump/dash, simulated two-controller input, touch taps/analog release, heavy modifier, difficulty modes, hazards, outcomes, rematch/reselection, original Story and co-op entry, production opt-in boundary |
+| Competitive browser suite | 40 passed | Both selection sides, portraits, all five venues, twelve mirror renderers, every move phase, two keyboard players, double jump/dash, simulated two-controller input, touch taps/analog release, heavy modifier, difficulty modes, hazards, outcomes, rematch/reselection, original Story and co-op entry, production opt-in boundary |
 | Existing Chapter 1–3 browser suite on test entry | 32 passed | Public Chapter 1, codes, all three cave intros, correct rescue videos, transition into Chapter 3, both scorpion rounds, boss intro, ending movie routing, completion/retry/help, mobile and controller menus, original HTML entry compatibility |
 
-Total: **301 automated checks passed**. Browser runs reported **zero uncaught page errors and zero HTTP error responses**. These tests execute real Chromium, with simulated controllers and touch events. They are not physical-device tests. Chapter tests exercise routing and completion transitions; they do not represent a person playing every chapter from beginning to end or watching every video in real time.
+Total: **341 automated checks passed**. Browser runs reported **zero uncaught page errors and zero HTTP error responses**. These tests execute real Chromium, with simulated controllers and touch events. They are not physical-device tests. Chapter tests exercise routing and completion transitions; they do not represent a person playing every chapter from beginning to end or watching every video in real time.
 
 The competitive rendering tests restart each move case so a prior KO cannot silently bypass later move phases. No test outcome is inferred from source inspection alone. The Story wrapper retains the existing assertions and changes only machine-specific output paths and the entry used for its initial page load.
 
@@ -40,3 +40,12 @@ Screenshots were reviewed for the twelve-character roster, desktop and phone men
 - Two-player touch-only play on one phone is not supported; local PvP uses a shared keyboard, two controllers, or touch P1 plus a keyboard/controller P2.
 - Competitive balance needs human match play. Damage targets, shared rules and anti-spam protections are implemented, but equal HP alone does not prove matchup balance.
 - Combined verification with the ongoing Supergirls/Wastelander overhaul is pending. This branch must stay isolated until that work is finished, regenerated into a separate integration build, tested together, and explicitly approved.
+
+
+## Pause-guide and archetype follow-up — October 26, 2026
+
+Executed 269 unit checks (232 competitive plus 37 original), 40 competitive browser checks, and 32 original chapter browser checks: **341 passed**. Both final browser reports contain zero uncaught page errors and zero HTTP errors. The guide tests cover all twelve fighters on both sides, all nine attacks, exact input labels/damage/cooldowns, frozen match state while browsing, phone portrait/landscape scrolling, controller navigation, holding Start without a second toggle, Back, and resume. Unit tests verify CPU normal engagement for every character and the speed/damage/recovery tradeoffs. Screenshots of portrait and landscape guides were visually reviewed.
+
+An initial concurrent chapter run timed out while loading Summy's cave intro; the standalone rerun passed all 32 checks without changing Story code. No full human chapter playthrough or physical-controller/mobile testing was performed in this follow-up. The prior performance measurements above belong to the initial build and were not repeated for this tuning update.
+
+Combat tuning adjusts competitive normals, range, projectile commitments and CPU spacing only. Fast Vee and AtomDust trade normal damage/reach for speed; Sadie, Dr. Styro and Wastelander trade startup/recovery for damage. Each fighter's role, strength, weakness and game plan is visible in the guide. Equal matchup win rates are not established; further human balance testing remains required. All 150 original game files were rechecked against the original baseline with zero changes.

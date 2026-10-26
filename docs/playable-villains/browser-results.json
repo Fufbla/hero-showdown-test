@@ -101,6 +101,62 @@
       "pass": true
     },
     {
+      "name": "Super Summy pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "Super Sadie pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "Super Vee pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "Air Pollution Monster pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "Styrodog pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "Sonic Tusk pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "Venomis & Thornbear pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "Dr. Styro pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "Wastelander pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "AtomDust pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "Lightening Spree pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "Bushman pause guide shows actual moves for both sides and freezes combat",
+      "pass": true
+    },
+    {
+      "name": "pause guide supports touch scrolling, mirror labels and readable mobile bounds",
+      "pass": true
+    },
+    {
+      "name": "controller navigates pause guide tabs and returns to the unchanged match",
+      "pass": true
+    },
+    {
       "name": "base production entries never load the competitive feature",
       "pass": true
     }

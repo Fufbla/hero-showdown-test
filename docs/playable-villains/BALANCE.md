@@ -6,14 +6,14 @@ All twelve characters have **100 HP** for both humans and competitive CPU. Value
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Super Summy | 100 | 6 | 10 | 8 | 12 | 7 | 12 | 18 |
 | Super Sadie | 100 | 7 | 12 | 9 | 14 | 8 | 14 | 24 |
-| Super Vee | 100 | 6 | 10 | 8 | 12 | 6 | 0 | 20 |
+| Super Vee | 100 | 5 | 10 | 7 | 12 | 6 | 0 | 20 |
 | Air Pollution Monster | 100 | 6 | 10 | 8 | 12 | 8 | 12 | 18 |
 | Styrodog | 100 | 6 | 10 | 8 | 12 | 8 | 14 | 18 |
 | Sonic Tusk | 100 | 6 | 10 | 8 | 12 | 8 | 14 | 22 |
 | Venomis & Thornbear | 100 | 6 | 10 | 8 | 12 | 7 | 12 | 20 |
 | Dr. Styro | 100 | 7 | 12 | 9 | 14 | 8 | 14 | 20 |
 | Wastelander | 100 | 7 | 12 | 9 | 14 | 8 | 12 | 24 |
-| AtomDust | 100 | 6 | 10 | 8 | 12 | 7 | 12 | 18 |
+| AtomDust | 100 | 5 | 10 | 7 | 12 | 7 | 12 | 18 |
 | Lightening Spree | 100 | 6 | 10 | 8 | 12 | 8 | 0 | 20 |
 | Bushman | 100 | 6 | 11 | 8 | 12 | 8 | 14 | 22 |
 
@@ -37,3 +37,40 @@ Sweep: 10 HP. Uppercut: 12 HP. Tap Kick, Kick, Punch, Punch; a bounded queue pre
 Shoot cooldowns: 1.0–1.3 s. Skill cooldowns: generally 5 s, Vee 3 s, Lightening Spree 8 s. Specials: 5 s cooldown plus full meter; Bushman uses four-hit charge instead of meter. Activation consumes charge/meter even if interrupted. The CPU uses the exact same costs, startup, recovery, collision and hit rules.
 
 All fighters have grounded movement, double jump, directional dash, normals, heavy attacks, block, recoil, knockdown/recovery, combo input and match outcome states. Villain visuals use their existing nearest authored poses for states without dedicated art; this feature does not manufacture new animation frames.
+
+
+## Strengths, weaknesses and spacing (pause-guide update)
+
+All fighters remain at 100 HP. Faster fighters exchange normal damage and reach for faster movement and recovery. Heavy fighters have higher normal damage but slower startup and recovery. Large bodies remain large targets; their attack reach now includes their own body width so the playable range reflects their size. CPU spacing uses the same attack definitions and target hurtbox widths. No difficulty stat boosts are added.
+
+| Fighter | Role | Strength | Weakness |
+|---|---|---|---|
+| Super Summy | Mid-range controller | Long normal reach and strong Gust Push knockback. | Average speed; whirlwind travels slowly and can be blocked. |
+| Super Sadie | Close-range powerhouse | High normal damage and hard knockdowns. | Shorter reach and slow heavy recovery; missed swings are punishable. |
+| Super Vee | Fast rushdown | Fastest walk, quick normals and a three-second escape skill. | Lower normal damage and short reach; must get close to threaten. |
+| Air Pollution Monster | Area controller | Long smoke punches and delayed cloud/storm control. | Large target, slow movement and slower projectile startup. |
+| Styrodog | Advancing bruiser | Broad claw reach, foam knockdown and a multihead advancing special. | Wide hurtbox, modest projectile range and committed heavy recovery. |
+| Sonic Tusk | Spacing specialist | Long normal reach and a far-travelling low bass wave. | Slow walking and clearly telegraphed horn blast. |
+| Venomis & Thornbear | Trap specialist | Long claws and a vine snare that briefly roots opponents. | Very wide target; snare is delayed and can be escaped by jumping. |
+| Dr. Styro | Heavy trap fighter | Powerful normals and a damaging spike trap. | Slow approach, long heavy recovery and delayed double strike. |
+| Wastelander | Heavy punisher | Long mallet reach, strong normals and lingering acid. | Slowest walk, large target and long mallet recovery. |
+| AtomDust | Evasive skirmisher | Fast walking, quick bottle caps and brief evasive dashes. | Lower normal damage, short reach and a longer dash cooldown. |
+| Lightening Spree | Mobile beam fighter | Fast light shots, teleport and temporary concealment. | Eight-second teleport cooldown; beams are slow to start and recover. |
+| Bushman | Momentum fighter | Fire attacks build a four-hit blast; burning ground controls space. | Blast must be earned with unblocked hits; burns do not charge it. |
+
+| Fighter | Walk speed (units/s) | Punch reach beyond own body edge | Punch startup (s) | Punch recovery (s) | Heavy punch recovery (s) |
+|---|---:|---:|---:|---:|---:|
+| Super Summy | 300 | 110 | 0.11 | 0.23 | 0.36 |
+| Super Sadie | 270 | 85 | 0.14 | 0.27 | 0.42 |
+| Super Vee | 355 | 80 | 0.08 | 0.17 | 0.31 |
+| Air Pollution Monster | 245 | 115 | 0.15 | 0.28 | 0.36 |
+| Styrodog | 270 | 95 | 0.12 | 0.25 | 0.36 |
+| Sonic Tusk | 250 | 120 | 0.14 | 0.26 | 0.36 |
+| Venomis & Thornbear | 250 | 120 | 0.15 | 0.28 | 0.36 |
+| Dr. Styro | 240 | 100 | 0.16 | 0.29 | 0.42 |
+| Wastelander | 230 | 105 | 0.17 | 0.3 | 0.42 |
+| AtomDust | 325 | 80 | 0.085 | 0.19 | 0.31 |
+| Lightening Spree | 290 | 95 | 0.12 | 0.25 | 0.36 |
+| Bushman | 295 | 90 | 0.11 | 0.23 | 0.36 |
+
+These are initial competitive archetypes, not proof of equal matchup win rates. Human matchup and device playtesting remains necessary. The pause guide reads live definitions, so damage, startup, recovery and cooldown displays stay in sync with gameplay.

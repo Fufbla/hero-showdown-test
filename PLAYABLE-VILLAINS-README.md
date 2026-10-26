@@ -12,6 +12,12 @@ This isolated build adds a twelve-fighter competitive Versus mode. **Do not uplo
 
 No external server is needed for competitive CPU or local PvP. All character, venue, sound and video assets are included. The unchanged online co-op option still needs its existing internet/PeerJS service. A branch does not create a GitHub Pages deployment.
 
+## Pause move lists and fighter roles
+
+Press **Pause / Escape / P** or controller **Start** during a match. The pause screen now includes the selected fighters' move lists, including heroes. Choose P1, P2 or CPU, then **Movement & defense**, **Normal attacks & combos**, or **Projectiles, skills & specials**. Each attack shows the exact keyboard, controller and touch inputs, nominal damage, startup, recovery and cooldown. The guide also explains each fighter's strengths, weaknesses and game plan.
+
+Use touch/mouse scrolling or the **↑ SCROLL / ↓ SCROLL** buttons (also selectable by controller). Resume with the Resume button, Escape, controller Start, or controller B/Back. Browsing does not advance combat or cooldowns. Local player-one and player-two keyboard mappings are shown independently; CPU study uses the solo keyboard mapping.
+
 ## Controls
 
 | Action | Solo keyboard | Local P1 | Local P2 | Controller |

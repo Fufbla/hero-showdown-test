@@ -78,3 +78,33 @@ test('Harbor hit region treats either player symmetrically and permits jumping',
 test('Tempest contact uses separate ids in a mirror match and accepts block for either side',()=>{
   const h=new tempest.Hazard(()=>.2);h.begin();const hit=[];h.contactSweep(0,1280,[{id:'p0',x:500,hp:100,block:true},{id:'p1',x:800,hp:100,block:false}],e=>hit.push(e));assert.deepEqual(hit.map(e=>[e.id,e.blocked]),[['p0',true],['p1',false]]);h.contactSweep(0,1280,[{id:'p0',x:500,hp:100}],e=>hit.push(e));assert.equal(hit.length,2);
 });
+
+const Guide=require('../assets/competitive/move-guide.js');
+for(const c of Data.roster)test(c.id+' guide lists every executable attack, real damage and controls for each player',()=>{
+  for(const kind of ['cpu','local'])for(const slot of [0,1]){
+    const rows=Guide.rows(c.id,kind,slot);
+    assert.equal(rows.length,13);assert.equal(new Set(rows.map(r=>r.key)).size,13);
+    for(const [key,m] of Object.entries(Data.moves[c.id])){
+      const r=rows.find(r=>r.key===key);assert.ok(r);assert.equal(r.name,m.name);assert.equal(r.damage,m.damage);assert.equal(r.cooldown,m.cooldown);
+      for(const input of ['keyboard','controller','touch'])assert.ok(r[input]&&!r[input].includes('undefined'));
+    }
+    assert.ok(c.strength&&c.weakness&&c.plan&&c.role);
+  }
+});
+test('rushdown trades damage and reach for speed; heavy power carries slower startup/recovery',()=>{
+  for(const id of ['vee','atomdust']){assert.ok(Data.byId[id].speed>Data.byId.sadie.speed);assert.ok(Data.moves[id].punch.damage<Data.moves.sadie.punch.damage);assert.ok(Data.moves[id].punch.startup<Data.moves.sadie.punch.startup);assert.ok(Data.moves[id].heavyPunch.recovery<Data.moves.sadie.heavyPunch.recovery);}
+  assert.ok(Data.moves.air.punch.range-Data.byId.air.width>Data.moves.vee.punch.range-Data.byId.vee.width);
+  assert.ok(Data.moves.wastelander.special.recovery>Data.moves.summy.special.recovery);
+});
+for(const id of ids)test(id+' CPU can engage a mirror using normals at its own body-aware spacing',()=>{
+  const w=C.create({ids:[id,id],controls:['cpu','human'],difficulty:'medium',random:()=>.3});
+  for(const f of w.fighters){f.cooldowns={shoot:99,skill:99,special:99};f.power=0;}
+  run(w,0);for(let i=0;i<12/C.STEP;i++)C.step(w,w.fighters.map(f=>AI.input(w,f,C.STEP)),C.STEP);
+  assert.ok(w.fighters.some(f=>f.hp<100),id+' must not stand outside attack range forever');
+});
+test('move guide maps local players independently and describes charge/cooldown counterplay',()=>{
+ assert.equal(Guide.rows('bushman','local',0).find(r=>r.key==='punch').keyboard,'F');
+ assert.equal(Guide.rows('bushman','local',1).find(r=>r.key==='punch').keyboard,'J');
+ assert.match(Guide.rows('bushman').find(r=>r.key==='special').note,/four distinct unblocked/);
+ assert.match(Guide.rows('spree').find(r=>r.key==='skill').note,/not invulnerability/);
+});

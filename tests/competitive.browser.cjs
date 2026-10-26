@@ -69,6 +69,45 @@ const output=process.env.COMPETITIVE_QA_DIR||path.join(__dirname,'../competitive
  await check('co-op boss mode still initializes original two heroes and boss health',async()=>{
    await page.evaluate(()=>{showModeSelect();coChooseMode();});await page.locator('#competitive-boss').click();await page.locator('#co-local').click();await page.evaluate(()=>{coop.kind='local';coop.choices=[0,1];selected=0;opponent=5;start();});assert.equal(await page.evaluate(()=>HealthiaCompetitive.session.active),false);assert.equal(await page.evaluate(()=>coop.players.length),2);assert.equal(await page.evaluate(()=>boss.max),1000);
  });
+ for(const c of Data.roster)await check(c.name+' pause guide shows actual moves for both sides and freezes combat',async()=>{
+   await start([c.id,c.id],0,'local');await page.evaluate(()=>pauseGame());
+   const before=await page.evaluate(()=>JSON.stringify(HealthiaCompetitive.session.world));
+   for(const slot of [0,1]){
+     await page.locator('[data-guide-fighter="'+slot+'"]').click();
+     for(const pg of [1,2]){
+       await page.locator('[data-guide-page="'+pg+'"]').click();
+       for(const [key,m] of Object.entries(Data.moves[c.id]).filter(([key])=>pg===2?['shoot','skill','special'].includes(key):!['shoot','skill','special'].includes(key))){
+         const text=await page.locator('[data-guide-move="'+key+'"]').innerText();assert.ok(text.includes(m.name));assert.ok(text.includes(m.damage+' HP'));assert.ok(text.includes('Controller:'));assert.ok(text.includes('Touch:'));
+       }
+     }
+   }
+   await advance(2);assert.equal(await page.evaluate(()=>JSON.stringify(HealthiaCompetitive.session.world)),before);
+   await page.keyboard.press('Escape');assert.equal(await page.evaluate(()=>paused),false);
+ });
+ await check('pause guide supports touch scrolling, mirror labels and readable mobile bounds',async()=>{
+   for(const size of [{width:390,height:844},{width:844,height:390}]){
+     await page.setViewportSize(size);await start(['bushman','spree']);await page.locator('#pause').tap();
+     await page.locator('[data-guide-page="2"]').tap();
+     assert.ok((await page.locator('[data-guide-move="special"]').innerText()).includes('four distinct'));
+     await page.locator('#guide-scroll-down').tap();assert.ok(await page.locator('.competitive-guide').evaluate(el=>el.scrollTop>0));
+     await page.locator('[data-guide-fighter="1"]').tap();assert.ok((await page.locator('[data-guide-move="skill"]').innerText()).includes('Cooldown 8.0s'));
+     assert.ok(await page.locator('.competitive-guide').evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+     await page.locator('#guide-scroll-down').tap();await page.locator('#guide-scroll-down').tap();
+     await page.screenshot({path:path.join(output,'pause-guide-'+size.width+'.png')});
+     await page.locator('#competitive-resume').tap();assert.equal(await page.evaluate(()=>paused),false);
+   }
+ });
+ await check('controller navigates pause guide tabs and returns to the unchanged match',async()=>{
+   await page.setViewportSize({width:1440,height:1000});await start(['wastelander','vee']);
+   await page.evaluate(()=>{testPads=[{index:0,connected:true,axes:[0,0],buttons:Array.from({length:18},()=>({pressed:false,value:0}))}];pollPad();testPads[0].buttons[9].pressed=true;pollPad();});
+   assert.equal(await page.evaluate(()=>paused),true);
+   await page.evaluate(()=>pollPad());assert.equal(await page.evaluate(()=>paused),true,'held Start must not instantly resume');
+   await page.evaluate(()=>{testPads[0].buttons[9].pressed=false;pollPad();menuHighlight(document.querySelector('[data-guide-page="2"]'));testPads[0].buttons[0].pressed=true;pollPad();});
+   assert.equal(await page.locator('[data-guide-move="special"]').count(),1);
+   await page.evaluate(()=>{testPads[0].buttons[0].pressed=false;pollPad();menuHighlight(document.getElementById('guide-scroll-down'));testPads[0].buttons[0].pressed=true;pollPad();});
+   await page.evaluate(()=>{testPads[0].buttons[0].pressed=false;pollPad();testPads[0].buttons[1].pressed=true;pollPad();});
+   assert.equal(await page.evaluate(()=>paused),false);await page.evaluate(()=>{testPads=[];pollPad();});
+ });
  await check('base production entries never load the competitive feature',async()=>{for(const file of ['index.html','hero-showdown.html']){const content=fs.readFileSync(path.join(__dirname,'..',file),'utf8');assert.equal(content.includes('assets/competitive/'),false);}});
  await browser.close();await server.close();fs.writeFileSync(path.join(output,'browser-results.json'),JSON.stringify({checks,errors,requests},null,2));console.log(JSON.stringify({total:checks.length,failed:checks.filter(c=>!c.pass),errors,requests},null,2));if(checks.some(c=>!c.pass)||errors.length||requests.length)process.exitCode=1;
 })().catch(e=>{console.error(e);process.exit(1);});

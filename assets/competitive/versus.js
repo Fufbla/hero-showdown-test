@@ -125,12 +125,26 @@ window.HealthiaCompetitive=(()=>{
     document.getElementById('competitive-rematch').onclick=()=>beginMatch();document.getElementById('competitive-reselect').onclick=()=>{session.world=null;choose(0);};document.getElementById('competitive-exit').onclick=showModeSelect;
   }
   result=function(...args){if(isActive()&&session.world)return showResult();return original.result(...args);};
+  function pauseGuide(slot=0,pageIndex=0){
+    const c=Data.byId[session.world.fighters[slot].id],Guide=HealthiaCompetitiveGuide;
+    const label=i=>i===1&&session.kind==='cpu'?'CPU':'P'+(i+1);
+    const rows=Guide.rows(c.id,session.kind,slot).filter(r=>r.page===pageIndex);
+    overlay.classList.remove('hidden');
+    overlay.innerHTML='<section class="panel competitive-guide"><div class="guide-actions guide-row"><button id="competitive-resume">RESUME</button><button id="competitive-choose">CHANGE FIGHTERS</button><button id="competitive-exit">GAME MODES</button><button id="guide-scroll-up" aria-label="Scroll move list up">↑ SCROLL</button><button id="guide-scroll-down" aria-label="Scroll move list down">↓ SCROLL</button></div><h2>PAUSED · MOVE LIST</h2><div class="guide-row">'+session.world.fighters.map((f,i)=>'<button data-guide-fighter="'+i+'" aria-pressed="'+(slot===i)+'">'+label(i)+' · '+Data.byId[f.id].name+'</button>').join('')+'</div><h3>'+c.name+' · '+c.role+' · 100 HP</h3><p><strong>Strength:</strong> '+c.strength+' <strong>Weakness:</strong> '+c.weakness+'</p><p>'+c.plan+'</p><div class="guide-row guide-pages">'+Guide.pages.map((name,i)=>'<button data-guide-page="'+i+'" aria-pressed="'+(i===pageIndex)+'">'+name+'</button>').join('')+'</div><p class="guide-hint">'+(slot===1&&session.kind==='cpu'?'Studying the CPU fighter; keyboard inputs below are its solo-player controls. ':'')+'Damage is before combo scaling. Multi-hit damage is the total per activation. Cooldowns start on activation. Match stays paused while browsing.</p><div class="guide-moves">'+rows.map(r=>'<article data-guide-move="'+r.key+'"><h4>'+r.name+(r.damage!==undefined?' · '+r.damage+' HP':'')+'</h4><p><b>Keyboard:</b> '+r.keyboard+'<br><b>Controller:</b> '+r.controller+'<br><b>Touch:</b> '+r.touch+'</p>'+(r.damage!==undefined?'<p>Startup '+r.startup.toFixed(2)+'s · Recovery '+r.recovery.toFixed(2)+'s'+(r.cooldown?' · Cooldown '+r.cooldown.toFixed(1)+'s':'')+'</p>':'')+'<p>'+r.note+'</p></article>').join('')+'</div></section>';
+    document.getElementById('competitive-resume').onclick=pauseGame;
+    document.getElementById('competitive-choose').onclick=()=>{session.world=null;choose(0);};
+    document.getElementById('competitive-exit').onclick=showModeSelect;
+    document.getElementById('guide-scroll-up').onclick=()=>overlay.querySelector('.competitive-guide').scrollBy(0,-180);
+    document.getElementById('guide-scroll-down').onclick=()=>overlay.querySelector('.competitive-guide').scrollBy(0,180);
+    overlay.querySelectorAll('[data-guide-fighter]').forEach(b=>b.onclick=()=>pauseGuide(+b.dataset.guideFighter,pageIndex));
+    overlay.querySelectorAll('[data-guide-page]').forEach(b=>b.onclick=()=>pauseGuide(slot,+b.dataset.guidePage));
+    menuFocusElement=null;syncMenuFocus();
+  }
   pauseGame=function(...args){
     if(!isActive()||!session.world)return original.pauseGame(...args);
     if(session.world.status!=='fight')return;paused=!paused;clearInput();document.getElementById('pause').textContent=paused?'RESUME':'PAUSE';
     if(!paused){overlay.classList.add('hidden');return;}
-    overlay.classList.remove('hidden');overlay.innerHTML='<section class="panel"><h2>PAUSED</h2><div class="row"><button id="competitive-resume">RESUME</button><button id="competitive-choose">CHANGE FIGHTERS</button><button id="competitive-exit">GAME MODES</button></div></section>';
-    document.getElementById('competitive-resume').onclick=pauseGame;document.getElementById('competitive-choose').onclick=()=>{session.world=null;choose(0);};document.getElementById('competitive-exit').onclick=showModeSelect;menuFocusElement=null;syncMenuFocus();
+    pauseGuide();
   };
   action=function(key,...args){if(isActive()&&session.world){if(!paused&&mode==='fight')Combat.queue(session.world,0,key,session.heavy);return;}return original.action(key,...args);};
   directionPress=function(dir,...args){if(isActive()&&session.world){if(mode==='fight'&&!paused)Combat.pressDirection(session.world,0,dir);return;}return original.directionPress(dir,...args);};
@@ -154,13 +168,19 @@ window.HealthiaCompetitive=(()=>{
     session.padSlots=session.padSlots.map(id=>pads.some(g=>g.index===id)?id:null);for(const p of pads)if(!session.padSlots.includes(p.index)){const i=session.padSlots.indexOf(null);if(i>=0)session.padSlots[i]=p.index;}
     if(mode!=='fight'||paused){
       // Existing navigation handles spatial menus; intercept its legacy back routes.
-      for(const p of pads){const now=readBattleGamepad(p),i=session.padSlots.indexOf(p.index);if(now.back&&!session.padPrevious[i]?.back){const b=document.getElementById('competitive-back')||document.getElementById('competitive-resume')||document.getElementById('competitive-reselect');b?.click();}session.padPrevious[i]=now;}
+      for(const p of pads){const now=readBattleGamepad(p),i=session.padSlots.indexOf(p.index),prior=session.padPrevious[i]||{};
+        now.menuBack=now.back||!!p.buttons[1]?.pressed||p.buttons[1]?.value>.5;
+        if((now.menuBack&&!prior.menuBack)||(paused&&now.pause&&!prior.pause)){
+          const b=document.getElementById('competitive-back')||document.getElementById('competitive-resume')||document.getElementById('competitive-reselect');
+          b?.click();session.padPrevious[i]=now;gamepadPrev=now;activePadIndex=p.index;return;
+        }session.padPrevious[i]=now;
+      }
       return original.pollPad();
     }
     session.pads=[{},{}];
     for(let i=0;i<2;i++){const p=pads.find(g=>g.index===session.padSlots[i]);if(!p)continue;const read=readBattleGamepad(p),b=n=>!!p.buttons[n]?.pressed||p.buttons[n]?.value>.5;
-      const now={...read,shoot:b(1),skill:b(6),heavy:b(7),special:b(5),block:b(4),dash:b(10)};const prior=session.padPrevious[i]||{};
-      if(now.pause&&!prior.pause){pauseGame();session.padPrevious[i]=now;return;}
+      const now={...read,menuBack:read.back||b(1),shoot:b(1),skill:b(6),heavy:b(7),special:b(5),block:b(4),dash:b(10)};const prior=session.padPrevious[i]||{};
+      if(now.pause&&!prior.pause){pauseGame();session.padPrevious[i]=now;gamepadPrev=read;activePadIndex=p.index;return;}
       session.pads[i]=now;session.padPrevious[i]=now;
       if(Object.values(now).some(Boolean))padAudioUnlock();
     }

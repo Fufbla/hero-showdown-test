@@ -7,7 +7,7 @@ import json
 root = Path(__file__).resolve().parents[1]
 source = root / 'hero-showdown.html'
 text = source.read_text()
-scripts = ['roster', 'combat', 'cpu', 'animation-adapter', 'versus']
+scripts = ['roster', 'move-guide', 'combat', 'cpu', 'animation-adapter', 'versus']
 injection = '\n<!-- Isolated competitive test entry; generated from the unchanged base game. -->\n'
 injection += '<link rel="stylesheet" href="assets/competitive/versus.css">\n'
 injection += ''.join(f'<script src="assets/competitive/{name}.js"></script>\n' for name in scripts)
