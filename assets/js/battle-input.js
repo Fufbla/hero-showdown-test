@@ -26,6 +26,16 @@ function battlePadForTouch(){
  const pads=battleGamepads();
  return pads.find(p=>p.index===coop.padSlots?.[0])||pads[0];
 }
+function flushBattleCoopKeyboard(index){
+ if(!coActive()||mode!=='fight'||paused||specialSceneLocked()||story.playing)return;
+ const pads=battleGamepads().sort((a,b)=>a.index-b.index);
+ const gp=pads.find(p=>p.index===coop.padSlots?.[index])||pads[index];
+ const state=coMerged(coop.keyboard[index],readBattleGamepad(gp),index===0?touchHeld:{});
+ // Preserve taps that begin and end between render frames, just like touch.
+ // coApply keeps the edge history shared with the next regular pad poll.
+ if(coGuest()){coop.localInput=state;coSendInput();}
+ else coApply(index,state);
+}
 function flushBattleTouch(key){
  if(mode!=='fight'||paused||specialSceneLocked()||story.playing)return;
  if(!coActive()){if(key)action(key);return;}
