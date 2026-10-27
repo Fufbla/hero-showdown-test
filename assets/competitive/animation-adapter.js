@@ -20,7 +20,7 @@ window.HealthiaCompetitiveAnimation=(()=>{
   }
   function draw(f,other,world){
     const c=HealthiaCompetitiveData.byId[f.id];
-    if(custom.has(f.id)){ctx.save();try{custom.get(f.id)({ctx,fighter:f,opponent:other,state:f.state,phase:phaseOf(f),world,ground:GROUND});}finally{ctx.restore();}return;}
+    if(custom.has(f.id)){ctx.save();try{const descriptor=custom.get(f.id)({ctx,fighter:f,opponent:other,state:f.state,phase:phaseOf(f),world,ground:GROUND});if(inspection&&descriptor)last.set(f,descriptor);}finally{ctx.restore();}return;}
     const saved={hero,boss,selected,opponent,mode,ending,phase,t,elapsed,effects,atom,spree,bushman,plantShots,vines,wasteShots,wastePools,wasteBursts,styroSpikes,styroBursts,soundWaves};
     ctx.save();
     try{

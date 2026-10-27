@@ -5,7 +5,7 @@
   const actions=['jump','punch','kick','shoot','skill','special','dash'];
   function fighter(id,slot,control){
     if(!Data.byId[id])throw Error('Unknown fighter '+id);
-    return {id,slot,control,x:slot?940:340,y:GROUND,previousX:slot?940:340,face:slot?-1:1,hp:100,max:100,power:35,vx:0,vy:0,jumps:0,walk:0,clock:0,state:'idle',stateTime:0,action:null,buffer:null,block:false,stun:0,guardStun:0,knockdown:0,inv:0,slow:0,root:0,invisible:0,evade:0,dashTime:0,dashCd:0,dashDir:1,cooldowns:{},charge:0,combo:0,comboTime:0,best:0,receivedCombo:0,comboSafe:0,lastHitTime:-100,lastTap:{left:-10,right:-10},previous:{},queued:[],visual:{},cpu:{wait:.5,held:{}}};
+    return {id,slot,control,x:slot?940:340,y:GROUND,previousX:slot?940:340,previousY:GROUND,face:slot?-1:1,hp:100,max:100,power:35,vx:0,vy:0,jumps:0,jumpAt:-10,landing:0,landSpeed:0,walk:0,clock:0,state:'idle',stateTime:0,action:null,buffer:null,block:false,stun:0,guardStun:0,knockdown:0,inv:0,slow:0,root:0,invisible:0,evade:0,dashTime:0,dashCd:0,dashDir:1,cooldowns:{},charge:0,combo:0,comboTime:0,best:0,receivedCombo:0,comboSafe:0,lastHitTime:-100,lastTap:{left:-10,right:-10},previous:{},queued:[],visual:{},cpu:{wait:.5,held:{}}};
   }
   function create(options={}){
     const ids=options.ids||['summy','bushman'],controls=options.controls||['human','cpu'];
@@ -27,7 +27,7 @@
   function begin(world,f,key){
     if(!ready(f,key))return false;
     const spec=Data.moves[f.id][key],target=world.fighters[1-f.slot];
-    f.block=false;f.invisible=0;f.action={key,spec,age:0,id:++world.serial,face:f.face,targetX:clamp(target.x,f.x-spec.range,f.x+spec.range),origin:f.x,struck:0,hitSlots:new Set()};
+    f.block=false;f.invisible=0;f.action={key,spec,age:0,id:++world.serial,face:f.face,targetX:clamp(target.x,f.x-spec.range,f.x+spec.range),origin:f.x,airVx:f.y<GROUND-.1||f.vy<0?f.vx:0,struck:0,hitSlots:new Set()};
     f.power-=spec.cost;if(spec.requiresHits)f.charge=0;f.cooldowns[key]=spec.cooldown;world.events.push({type:'attack',slot:f.slot,key});setState(f);return true;
   }
   function dash(world,f,dir){
@@ -48,7 +48,7 @@
       if(key==='kick'&&ready(f,'kick')){f.chain={stage:1,queue:[],expires:world.clock+.9};return begin(world,f,'kick');}
     }else f.chain=null;
     if(key==='jump'){
-      if(f.hp>0&&!f.action&&f.stun<=0&&f.knockdown<=0&&f.guardStun<=0&&f.jumps<2&&f.root<=0){f.vy=-720;f.jumps++;f.block=false;f.dashTime=0;return true;}return false;
+      if(f.hp>0&&!f.action&&f.stun<=0&&f.knockdown<=0&&f.guardStun<=0&&f.jumps<2&&f.root<=0){f.vy=-720;f.jumps++;f.jumpAt=f.clock;f.landing=0;f.block=false;f.dashTime=0;return true;}return false;
     }
     if(key==='dash')return dash(world,f,f.face);
     const move=heavy&&['punch','kick'].includes(key)?'heavy'+key[0].toUpperCase()+key.slice(1):key;
@@ -107,8 +107,8 @@
     f.previous={...input};return input;
   }
   function stepFighter(world,f,input,dt){
-    const c=Data.byId[f.id],target=world.fighters[1-f.slot];f.previousX=f.x;f.clock+=dt;f.stateTime+=dt;
-    for(const key of ['stun','guardStun','knockdown','inv','slow','root','invisible','evade','dashCd','comboTime'])f[key]=Math.max(0,f[key]-dt);
+    const c=Data.byId[f.id],target=world.fighters[1-f.slot];f.previousX=f.x;f.previousY=f.y;f.clock+=dt;f.stateTime+=dt;
+    for(const key of ['stun','guardStun','knockdown','inv','slow','root','invisible','evade','dashCd','comboTime','landing'])f[key]=Math.max(0,f[key]-dt);
     for(const key in f.cooldowns)f.cooldowns[key]=Math.max(0,f.cooldowns[key]-dt);
     if(world.clock-f.lastHitTime>.85)f.receivedCombo=0;
     if(!f.action&&f.stun<=0&&f.knockdown<=0&&f.dashTime<=0)f.face=target.x>=f.x?1:-1;
@@ -124,13 +124,25 @@
       const n=m.strikes||1;
       while(a.struck<n&&a.age>=m.startup+a.struck*(m.interval||0)){release(world,f,a,a.struck);a.struck++;}
       if(a.age>=m.startup+m.active+m.recovery){if(f.id==='vee'&&a.key==='special')f.x=clamp(a.origin,105,1175);f.action=null;}
-      f.vx=0;
+      // Starting an air strike must not erase the jump's horizontal momentum.
+      // Grounded attacks keep their original stationary/lunge behavior.
+      if(f.y<GROUND-.1||f.vy<0){f.vx=a.airVx||0;f.x+=f.vx*dt;}else f.vx=0;
     }else if(f.stun>0||f.knockdown>0||f.guardStun>0){f.x+=f.vx*dt;f.vx*=Math.exp(-8*dt);}
     else if(f.dashTime>0){f.dashTime=Math.max(0,f.dashTime-dt);f.vx=f.dashDir*720;f.x+=f.vx*dt;}
-    else{const dir=(input.right?1:0)-(input.left?1:0);f.vx=dir*c.speed*(f.block?.22:1)*(f.slow>0?.65:1)*(f.root>0?0:1);f.x+=f.vx*dt;f.walk+=Math.abs(f.vx)*dt/130;}
+    else{
+      const dir=(input.right?1:0)-(input.left?1:0),desired=dir*c.speed*(f.block?.22:1)*(f.slow>0?.65:1)*(f.root>0?0:1);
+      if(f.y<GROUND-.1||f.vy<0){const acceleration=c.speed*(dir?6:1.8);f.vx+=clamp(desired-f.vx,-acceleration*dt,acceleration*dt);}
+      else{f.vx=desired;f.walk+=Math.abs(f.vx)*dt/130;}
+      f.x+=f.vx*dt;
+    }
     if(f.buffer&&f.buffer.expires>=world.clock&&!f.action){begin(world,f,f.buffer.key);f.buffer=null;}else if(f.buffer&&f.buffer.expires<world.clock)f.buffer=null;
-    f.vy+=2000*dt;f.y+=f.vy*dt;if(f.y>=GROUND){f.y=GROUND;f.vy=0;f.jumps=0;}
+    gravity(f,dt);
     f.x=clamp(f.x,105,1175);setState(f);
+  }
+  function gravity(f,dt){
+    const airborne=f.y<GROUND-.1||f.vy<0;
+    f.vy+=2000*dt;f.y+=f.vy*dt;
+    if(f.y>=GROUND){if(airborne){f.landSpeed=f.vy;f.landing=.16;}f.y=GROUND;f.vy=0;f.jumps=0;}
   }
   function effects(world,dt){
     for(const p of world.projectiles){
@@ -163,7 +175,7 @@
   }
   function step(world,inputs,dt=STEP){
     if(!Number.isFinite(dt)||dt<=0)return;dt=Math.min(dt,STEP);world.clock+=dt;
-    if(world.status!=='fight'){world.endTime+=dt;for(const f of world.fighters)f.stateTime+=dt;return;}
+    if(world.status!=='fight'){world.endTime+=dt;for(const f of world.fighters){f.previousY=f.y;f.clock+=dt;f.stateTime+=dt;f.landing=Math.max(0,f.landing-dt);gravity(f,dt);}return;}
     // Alternate update order each tick to avoid a permanent P1 simultaneous-hit advantage.
     const order=Math.floor(world.clock/STEP)%2?[0,1]:[1,0];for(const i of order)stepFighter(world,world.fighters[i],inputs[i]||{},dt);
     const [a,b]=world.fighters;if(Math.abs(a.y-b.y)<150){const min=Data.byId[a.id].width+Data.byId[b.id].width,dx=b.x-a.x;if(Math.abs(dx)<min){const push=(min-Math.abs(dx))/2,sign=dx>=0?1:-1;a.x=clamp(a.x-sign*push,105,1175);b.x=clamp(b.x+sign*push,105,1175);}}

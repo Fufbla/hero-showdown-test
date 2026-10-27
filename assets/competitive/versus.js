@@ -39,7 +39,7 @@ window.HealthiaCompetitive=(()=>{
     panel('<div class="eyebrow">'+session.ids.map(id=>Data.byId[id].name).join(' VS ')+'</div><h2>Choose your arena.</h2><div class="cards venues">'+venueNames.map((name,i)=>'<button class="card '+(venue===i?'selected':'')+'" data-competitive-venue="'+i+'"><img class="venue-photo" src="'+venueImages[i].src+'" alt="'+name+'"><h3>'+name+'</h3><p>'+(['Lighthouse · Hampton','Boardwalk · Virginia Beach','Fountain · Norfolk','Dodge the marked monster slams.','Block the sweeping tornado.'][i])+'</p></button>').join('')+'</div><p id="competitive-load-status" role="status"></p><div class="menu-action-dock"><button id="competitive-back">← FIGHTERS</button><button id="competitive-start" class="primary">START MATCH →</button></div>');
     overlay.querySelectorAll('[data-competitive-venue]').forEach(b=>b.onclick=()=>{venue=+b.dataset.competitiveVenue;chooseVenue();});document.getElementById('competitive-back').onclick=()=>choose(1);document.getElementById('competitive-start').onclick=beginMatch;
   }
-  function ready(){return loaded&&HealthiaBushman.ready()&&(venue!==3||harborReady())&&(venue!==4||tempestReady());}
+  function ready(){return loaded&&(!window.HealthiaVillainMotion||HealthiaVillainMotion.ready())&&HealthiaBushman.ready()&&(venue!==3||harborReady())&&(venue!==4||tempestReady());}
   function beginMatch(options){
     if(options&&Array.isArray(options.ids)){session.ids=[...options.ids];session.kind=options.kind||'cpu';session.difficulty=options.difficulty||'medium';venue=options.venue??0;}
     if(!ready()){const note=document.getElementById('competitive-load-status');if(note)note.textContent='Artwork is still loading. Try Start Match again in a moment.';return false;}
