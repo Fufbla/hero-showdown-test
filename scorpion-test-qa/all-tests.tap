@@ -1,0 +1,3844 @@
+TAP version 13
+# Subtest: sixteen complete transparent smoke bodies register within the intact source image
+ok 1 - sixteen complete transparent smoke bodies register within the intact source image
+  ---
+  duration_ms: 15.89186
+  type: 'test'
+  ...
+# Subtest: three hover poses and four glide phases animate a floating body without inventing footfalls
+ok 2 - three hover poses and four glide phases animate a floating body without inventing footfalls
+  ---
+  duration_ms: 5.020656
+  type: 'test'
+  ...
+# Subtest: punch contact appears only after the native strike; clouds channel before their damaging ground release
+ok 3 - punch contact appears only after the native strike; clouds channel before their damaging ground release
+  ---
+  duration_ms: 0.259474
+  type: 'test'
+  ...
+# Subtest: storm impact poses follow actual pulses and return to raised claws between strikes
+ok 4 - storm impact poses follow actual pulses and return to raised claws between strikes
+  ---
+  duration_ms: 0.189774
+  type: 'test'
+  ...
+# Subtest: cloud mouth registration exactly matches the original smoke origin in both facings and every charge pose
+ok 5 - cloud mouth registration exactly matches the original smoke origin in both facings and every charge pose
+  ---
+  duration_ms: 7.766188
+  type: 'test'
+  ...
+# Subtest: successful light and heavy hits remain private observations and leave native damage fields unchanged
+ok 6 - successful light and heavy hits remain private observations and leave native damage fields unchanged
+  ---
+  duration_ms: 10.48386
+  type: 'test'
+  ...
+# Subtest: blocked hits create no false recoil, and ending hitstun resumes the existing warning
+ok 7 - blocked hits create no false recoil, and ending hitstun resumes the existing warning
+  ---
+  duration_ms: 8.461107
+  type: 'test'
+  ...
+# Subtest: the original smoke counter and fading defeat keep their original body renderer
+ok 8 - the original smoke counter and fading defeat keep their original body renderer
+  ---
+  duration_ms: 6.417222
+  type: 'test'
+  ...
+# Subtest: missing or invalid artwork falls back atomically to the complete original body
+ok 9 - missing or invalid artwork falls back atomically to the complete original body
+  ---
+  duration_ms: 7.162179
+  type: 'test'
+  ...
+# Subtest: canvas-only preparation and failed bitmap creation still draw the complete new poses
+ok 10 - canvas-only preparation and failed bitmap creation still draw the complete new poses
+  ---
+  duration_ms: 10.118428
+  type: 'test'
+  ...
+# Subtest: Original comparison avoids loading the new PNG and all other sprites retain their original renderer
+ok 11 - Original comparison avoids loading the new PNG and all other sprites retain their original renderer
+  ---
+  duration_ms: 6.859297
+  type: 'test'
+  ...
+# Subtest: movement interpolation is visual only and is locked by pause, hit stop, cinematics and guest playback
+ok 12 - movement interpolation is visual only and is locked by pause, hit stop, cinematics and guest playback
+  ---
+  duration_ms: 5.788785
+  type: 'test'
+  ...
+# Subtest: teleports, changes of facing and new rounds cannot inherit stale movement or heavy reactions
+ok 13 - teleports, changes of facing and new rounds cannot inherit stale movement or heavy reactions
+  ---
+  duration_ms: 4.492724
+  type: 'test'
+  ...
+# Subtest: rendering preserves native combat data, random sequence and smoke-effect geometry
+ok 14 - rendering preserves native combat data, random sequence and smoke-effect geometry
+  ---
+  duration_ms: 8.724744
+  type: 'test'
+  ...
+# Subtest: punch matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+ok 15 - punch matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+  ---
+  duration_ms: 3140.047503
+  type: 'test'
+  ...
+# Subtest: cloud matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+ok 16 - cloud matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+  ---
+  duration_ms: 3773.233574
+  type: 'test'
+  ...
+# Subtest: storm matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+ok 17 - storm matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+  ---
+  duration_ms: 3122.118052
+  type: 'test'
+  ...
+# Subtest: punch retains its original .28-second active contact and phase-dependent damage
+ok 18 - punch retains its original .28-second active contact and phase-dependent damage
+  ---
+  duration_ms: 11.711826
+  type: 'test'
+  ...
+# Subtest: cloud release keeps its marked target, radius, lifetime and bypass-block ground damage
+ok 19 - cloud release keeps its marked target, radius, lifetime and bypass-block ground damage
+  ---
+  duration_ms: 4.676467
+  type: 'test'
+  ...
+# Subtest: storm keeps all three original impact lanes and exactly three pulse releases
+ok 20 - storm keeps all three original impact lanes and exactly three pulse releases
+  ---
+  duration_ms: 18.523006
+  type: 'test'
+  ...
+# Subtest: native invulnerability and directional blocking retain their damage reduction
+ok 21 - native invulnerability and directional blocking retain their damage reduction
+  ---
+  duration_ms: 4.843726
+  type: 'test'
+  ...
+# Subtest: interrupted warnings pause while existing toxic hazards continue ageing and hurting
+ok 22 - interrupted warnings pause while existing toxic hazards continue ageing and hurting
+  ---
+  duration_ms: 2.937358
+  type: 'test'
+  ...
+# Subtest: pause, hit stop and cinematic locks freeze the actual simulation and release observation
+ok 23 - pause, hit stop and cinematic locks freeze the actual simulation and release observation
+  ---
+  duration_ms: 8.558198
+  type: 'test'
+  ...
+# Subtest: native co-op contact checks damage both heroes independently
+ok 24 - native co-op contact checks damage both heroes independently
+  ---
+  duration_ms: 4.509431
+  type: 'test'
+  ...
+# Subtest: all direct move previews use real native warning and attack states
+ok 25 - all direct move previews use real native warning and attack states
+  ---
+  duration_ms: 124.868703
+  type: 'test'
+  ...
+# Subtest: mirrored preview keeps stored strike and ground-cloud targets on the mirrored hero
+ok 26 - mirrored preview keeps stored strike and ground-cloud targets on the mirrored hero
+  ---
+  duration_ms: 7.090812
+  type: 'test'
+  ...
+# Subtest: impact hold observes the actual release then freezes, and clearing it resumes normal play
+ok 27 - impact hold observes the actual release then freezes, and clearing it resumes normal play
+  ---
+  duration_ms: 4.669126
+  type: 'test'
+  ...
+# Subtest: production entries match, keep Story Mode and never load optional preview controls
+ok 28 - production entries match, keep Story Mode and never load optional preview controls
+  ---
+  duration_ms: 4.281029
+  type: 'test'
+  ...
+# Subtest: eight gait keys alternate planted and lifted feet and interpolate continuously
+ok 29 - eight gait keys alternate planted and lifted feet and interpolate continuously
+  ---
+  duration_ms: 3.999703
+  type: 'test'
+  ...
+# Subtest: visual joint calculations never modify authoritative skeleton inputs
+ok 30 - visual joint calculations never modify authoritative skeleton inputs
+  ---
+  duration_ms: 5.037561
+  type: 'test'
+  ...
+# Subtest: breathing keeps foot anchors fixed while walking is driven by distance
+ok 31 - breathing keeps foot anchors fixed while walking is driven by distance
+  ---
+  duration_ms: 0.623882
+  type: 'test'
+  ...
+# Subtest: ten cached body layers replace hundreds of normal per-frame tile draws
+ok 32 - ten cached body layers replace hundreds of normal per-frame tile draws
+  ---
+  duration_ms: 10.134038
+  type: 'test'
+  ...
+# Subtest: canvas-only browsers and immutable-texture failures retain the enhanced body
+ok 33 - canvas-only browsers and immutable-texture failures retain the enhanced body
+  ---
+  duration_ms: 13.045437
+  type: 'test'
+  ...
+# Subtest: invalid preparation and Original comparison use the original renderer
+ok 34 - invalid preparation and Original comparison use the original renderer
+  ---
+  duration_ms: 8.429381
+  type: 'test'
+  ...
+# Subtest: other opponents never use Atomdust layers
+ok 35 - other opponents never use Atomdust layers
+  ---
+  duration_ms: 5.66039
+  type: 'test'
+  ...
+# Subtest: disperse, counter and defeat use the original complete particle renderer
+ok 36 - disperse, counter and defeat use the original complete particle renderer
+  ---
+  duration_ms: 7.427975
+  type: 'test'
+  ...
+# Subtest: hands and feet remain at authoritative attack positions in both facings
+ok 37 - hands and feet remain at authoritative attack positions in both facings
+  ---
+  duration_ms: 28.108934
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, scene locks and guests do not interpolate moving roots
+ok 38 - pause, hitstop, scene locks and guests do not interpolate moving roots
+  ---
+  duration_ms: 7.521907
+  type: 'test'
+  ...
+# Subtest: new rounds, direction changes and teleports discard stale interpolation
+ok 39 - new rounds, direction changes and teleports discard stale interpolation
+  ---
+  duration_ms: 4.428938
+  type: 'test'
+  ...
+# Subtest: rendering does not alter the boss, hazards, hit counters or either hand
+ok 40 - rendering does not alter the boss, hazards, hit counters or either hand
+  ---
+  duration_ms: 19.310981
+  type: 'test'
+  ...
+# Subtest: punch matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 41 - punch matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 2462.771915
+  type: 'test'
+  ...
+# Subtest: kick matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 42 - kick matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 2228.366189
+  type: 'test'
+  ...
+# Subtest: jumpkick matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 43 - jumpkick matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 2481.201281
+  type: 'test'
+  ...
+# Subtest: smoke matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 44 - smoke matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 2565.255
+  type: 'test'
+  ...
+# Subtest: caps matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 45 - caps matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 2400.52853
+  type: 'test'
+  ...
+# Subtest: smoke launches once at .18 seconds from the two original hands
+ok 46 - smoke launches once at .18 seconds from the two original hands
+  ---
+  duration_ms: 7.421508
+  type: 'test'
+  ...
+# Subtest: the three sharp caps keep their exact release times and cooldown
+ok 47 - the three sharp caps keep their exact release times and cooldown
+  ---
+  duration_ms: 6.680815
+  type: 'test'
+  ...
+# Subtest: toxic inhalation bypasses block and invulnerability and retains half speed
+ok 48 - toxic inhalation bypasses block and invulnerability and retains half speed
+  ---
+  duration_ms: 4.245223
+  type: 'test'
+  ...
+# Subtest: smoke exposure affects each co-op hero independently
+ok 49 - smoke exposure affects each co-op hero independently
+  ---
+  duration_ms: 5.078851
+  type: 'test'
+  ...
+# Subtest: hitstun freezes attack timing while toxic clouds and sharp caps keep moving
+ok 50 - hitstun freezes attack timing while toxic clouds and sharp caps keep moving
+  ---
+  duration_ms: 10.818646
+  type: 'test'
+  ...
+# Subtest: the fourth hit still disperses for the original duration and reforms
+ok 51 - the fourth hit still disperses for the original duration and reforms
+  ---
+  duration_ms: 3.950972
+  type: 'test'
+  ...
+# Subtest: direct move previews initialize all five real attacks before simulation
+ok 52 - direct move previews initialize all five real attacks before simulation
+  ---
+  duration_ms: 190.019281
+  type: 'test'
+  ...
+# Subtest: production entries match and retain the original combat and Story Mode
+ok 53 - production entries match and retain the original combat and Story Mode
+  ---
+  duration_ms: 4.00239
+  type: 'test'
+  ...
+# Subtest: practice protects against smoke and Fight restores real inhalation damage
+ok 54 - practice protects against smoke and Fight restores real inhalation damage
+  ---
+  duration_ms: 5.834577
+  type: 'test'
+  ...
+# Subtest: both co-op players keep a complete keyboard tap between frames, without duplicate polling
+ok 55 - both co-op players keep a complete keyboard tap between frames, without duplicate polling
+  ---
+  duration_ms: 6.102111
+  type: 'test'
+  ...
+# Subtest: keyboard repeat does not create more co-op attack edges
+ok 56 - keyboard repeat does not create more co-op attack edges
+  ---
+  duration_ms: 2.972309
+  type: 'test'
+  ...
+# Subtest: keyboard release preserves the same action held on a controller or touch
+ok 57 - keyboard release preserves the same action held on a controller or touch
+  ---
+  duration_ms: 2.831553
+  type: 'test'
+  ...
+# Subtest: online guest transmits both short tap edges without applying local attacks
+ok 58 - online guest transmits both short tap edges without applying local attacks
+  ---
+  duration_ms: 2.815995
+  type: 'test'
+  ...
+# Subtest: online host applies its keyboard input immediately to the local player
+ok 59 - online host applies its keyboard input immediately to the local player
+  ---
+  duration_ms: 2.625963
+  type: 'test'
+  ...
+# Subtest: paused prevents a keyboard tap from firing
+ok 60 - paused prevents a keyboard tap from firing
+  ---
+  duration_ms: 2.169356
+  type: 'test'
+  ...
+# Subtest: locked prevents a keyboard tap from firing
+ok 61 - locked prevents a keyboard tap from firing
+  ---
+  duration_ms: 1.893754
+  type: 'test'
+  ...
+# Subtest: story prevents a keyboard tap from firing
+ok 62 - story prevents a keyboard tap from firing
+  ---
+  duration_ms: 6.237851
+  type: 'test'
+  ...
+# Subtest: controller 1 held Start pauses only once and resumes once after release
+ok 63 - controller 1 held Start pauses only once and resumes once after release
+  ---
+  duration_ms: 5.019432
+  type: 'test'
+  ...
+# Subtest: controller 2 held Start pauses only once and resumes once after release
+ok 64 - controller 2 held Start pauses only once and resumes once after release
+  ---
+  duration_ms: 2.896113
+  type: 'test'
+  ...
+# Subtest: the other controller can resume a co-op pause without pausing again
+ok 65 - the other controller can resume a co-op pause without pausing again
+  ---
+  duration_ms: 3.18499
+  type: 'test'
+  ...
+# Subtest: unplugging a co-op controller clears that player movement
+ok 66 - unplugging a co-op controller clears that player movement
+  ---
+  duration_ms: 5.851585
+  type: 'test'
+  ...
+# Subtest: a paused keyboard tap is discarded before resume
+ok 67 - a paused keyboard tap is discarded before resume
+  ---
+  duration_ms: 3.675773
+  type: 'test'
+  ...
+# Subtest: Bushman registers thirty-two distinct complete crops from four intact transparent sources
+ok 68 - Bushman registers thirty-two distinct complete crops from four intact transparent sources
+  ---
+  duration_ms: 40.967376
+  type: 'test'
+  ...
+# Subtest: eight walking phases follow distance and remain independent of idle time
+ok 69 - eight walking phases follow distance and remain independent of idle time
+  ---
+  duration_ms: 1.069438
+  type: 'test'
+  ...
+# Subtest: every ordinary pose has a planted ground anchor and finite body scale
+ok 70 - every ordinary pose has a planted ground anchor and finite body scale
+  ---
+  duration_ms: 0.406274
+  type: 'test'
+  ...
+# Subtest: all five attacks wait for the authoritative release flag before showing contact
+ok 71 - all five attacks wait for the authoritative release flag before showing contact
+  ---
+  duration_ms: 0.525918
+  type: 'test'
+  ...
+# Subtest: punch, kick and projectile launch points match native reach and height in both facings
+ok 72 - punch, kick and projectile launch points match native reach and height in both facings
+  ---
+  duration_ms: 10.677748
+  type: 'test'
+  ...
+# Subtest: actual damage selects light or heavy recoil without adding authoritative boss fields
+ok 73 - actual damage selects light or heavy recoil without adding authoritative boss fields
+  ---
+  duration_ms: 17.137927
+  type: 'test'
+  ...
+# Subtest: guarded hits do not invent a reaction or cancel an attack
+ok 74 - guarded hits do not invent a reaction or cancel an attack
+  ---
+  duration_ms: 14.153663
+  type: 'test'
+  ...
+# Subtest: interrupting the charged blast cancels it without spending the four earned hits
+ok 75 - interrupting the charged blast cancels it without spending the four earned hits
+  ---
+  duration_ms: 6.102092
+  type: 'test'
+  ...
+# Subtest: original counter and kneeling defeat renderers remain active
+ok 76 - original counter and kneeling defeat renderers remain active
+  ---
+  duration_ms: 8.178095
+  type: 'test'
+  ...
+# Subtest: a missing sheet or invalid crop leaves the entire original body active
+ok 77 - a missing sheet or invalid crop leaves the entire original body active
+  ---
+  duration_ms: 25.308701
+  type: 'test'
+  ...
+# Subtest: canvas preparation works without immutable bitmaps and when bitmap creation fails
+ok 78 - canvas preparation works without immutable bitmaps and when bitmap creation fails
+  ---
+  duration_ms: 21.298871
+  type: 'test'
+  ...
+# Subtest: the original comparison loads no extra textures and other opponents use their original body
+ok 79 - the original comparison loads no extra textures and other opponents use their original body
+  ---
+  duration_ms: 20.189667
+  type: 'test'
+  ...
+# Subtest: walking interpolation is visual only and locks during pauses, hit stop, cinematics and guest playback
+ok 80 - walking interpolation is visual only and locks during pauses, hit stop, cinematics and guest playback
+  ---
+  duration_ms: 5.357374
+  type: 'test'
+  ...
+# Subtest: facing changes, teleports and new rounds discard stale position or reaction history
+ok 81 - facing changes, teleports and new rounds discard stale position or reaction history
+  ---
+  duration_ms: 7.222654
+  type: 'test'
+  ...
+# Subtest: repeated rendering never mutates combat data, hazards, charge, or effects
+ok 82 - repeated rendering never mutates combat data, hazards, charge, or effects
+  ---
+  duration_ms: 7.328986
+  type: 'test'
+  ...
+# Subtest: punch preserves original combat at 30/60/120/144 Hz and three difficulty paces
+ok 83 - punch preserves original combat at 30/60/120/144 Hz and three difficulty paces
+  ---
+  duration_ms: 481.443976
+  type: 'test'
+  ...
+# Subtest: kick preserves original combat at 30/60/120/144 Hz and three difficulty paces
+ok 84 - kick preserves original combat at 30/60/120/144 Hz and three difficulty paces
+  ---
+  duration_ms: 431.945392
+  type: 'test'
+  ...
+# Subtest: fireball preserves original combat at 30/60/120/144 Hz and three difficulty paces
+ok 85 - fireball preserves original combat at 30/60/120/144 Hz and three difficulty paces
+  ---
+  duration_ms: 438.515533
+  type: 'test'
+  ...
+# Subtest: scorch preserves original combat at 30/60/120/144 Hz and three difficulty paces
+ok 86 - scorch preserves original combat at 30/60/120/144 Hz and three difficulty paces
+  ---
+  duration_ms: 465.102249
+  type: 'test'
+  ...
+# Subtest: blast preserves original combat at 30/60/120/144 Hz and three difficulty paces
+ok 87 - blast preserves original combat at 30/60/120/144 Hz and three difficulty paces
+  ---
+  duration_ms: 507.784161
+  type: 'test'
+  ...
+# Subtest: only landed unblocked unique attacks earn one charge, including co-op contact
+ok 88 - only landed unblocked unique attacks earn one charge, including co-op contact
+  ---
+  duration_ms: 5.186258
+  type: 'test'
+  ...
+# Subtest: the blast consumes charge only on release and retains double damage and original fire effect
+ok 89 - the blast consumes charge only on release and retains double damage and original fire effect
+  ---
+  duration_ms: 8.37936
+  type: 'test'
+  ...
+# Subtest: fireballs retain their swept collision and advance during an interrupted attack
+ok 90 - fireballs retain their swept collision and advance during an interrupted attack
+  ---
+  duration_ms: 8.694897
+  type: 'test'
+  ...
+# Subtest: burning ground keeps its target, seven-second cooldown and uncharged damage
+ok 91 - burning ground keeps its target, seven-second cooldown and uncharged damage
+  ---
+  duration_ms: 8.271006
+  type: 'test'
+  ...
+# Subtest: all direct move previews initialize valid native combat and defeat state
+ok 92 - all direct move previews initialize valid native combat and defeat state
+  ---
+  duration_ms: 110.268498
+  type: 'test'
+  ...
+# Subtest: mirrored review moves stored attack targets, seeds, ground zones and flares with the fighters
+ok 93 - mirrored review moves stored attack targets, seeds, ground zones and flares with the fighters
+  ---
+  duration_ms: 4.471986
+  type: 'test'
+  ...
+# Subtest: contact hold freezes only after a real release and clearing it resumes normal simulation
+ok 94 - contact hold freezes only after a real release and clearing it resumes normal simulation
+  ---
+  duration_ms: 4.501997
+  type: 'test'
+  ...
+# Subtest: production entries match, retain Story Mode and do not load optional review controls
+ok 95 - production entries match, retain Story Mode and do not load optional review controls
+  ---
+  duration_ms: 1.906584
+  type: 'test'
+  ...
+# Subtest: blast deals exactly twice a regular hit
+ok 96 - blast deals exactly twice a regular hit
+  ---
+  duration_ms: 1.79447
+  type: 'test'
+  ...
+# Subtest: blast is locked at 0 landed hits
+ok 97 - blast is locked at 0 landed hits
+  ---
+  duration_ms: 0.328379
+  type: 'test'
+  ...
+# Subtest: blast is locked at 1 landed hits
+ok 98 - blast is locked at 1 landed hits
+  ---
+  duration_ms: 0.298321
+  type: 'test'
+  ...
+# Subtest: blast is locked at 2 landed hits
+ok 99 - blast is locked at 2 landed hits
+  ---
+  duration_ms: 0.121258
+  type: 'test'
+  ...
+# Subtest: blast is locked at 3 landed hits
+ok 100 - blast is locked at 3 landed hits
+  ---
+  duration_ms: 0.096937
+  type: 'test'
+  ...
+# Subtest: four distinct direct hits unlock blast and release consumes all four
+ok 101 - four distinct direct hits unlock blast and release consumes all four
+  ---
+  duration_ms: 2.588163
+  type: 'test'
+  ...
+# Subtest: misses, blocks, invulnerability, burns and the blast do not charge
+ok 102 - misses, blocks, invulnerability, burns and the blast do not charge
+  ---
+  duration_ms: 0.204187
+  type: 'test'
+  ...
+# Subtest: one swing hitting two teammates earns one credit
+ok 103 - one swing hitting two teammates earns one credit
+  ---
+  duration_ms: 0.157157
+  type: 'test'
+  ...
+# Subtest: blocked first target does not discard a real hit on second target
+ok 104 - blocked first target does not discard a real hit on second target
+  ---
+  duration_ms: 0.257096
+  type: 'test'
+  ...
+# Subtest: charge is capped at four and credit history is bounded
+ok 105 - charge is capped at four and credit history is bounded
+  ---
+  duration_ms: 1.775191
+  type: 'test'
+  ...
+# Subtest: interrupted windup retains charge; no delayed release occurs
+ok 106 - interrupted windup retains charge; no delayed release occurs
+  ---
+  duration_ms: 0.348067
+  type: 'test'
+  ...
+# Subtest: punch hits only once at contact and finishes recovery
+ok 107 - punch hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.262663
+  type: 'test'
+  ...
+# Subtest: kick hits only once at contact and finishes recovery
+ok 108 - kick hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.158292
+  type: 'test'
+  ...
+# Subtest: fireball hits only once at contact and finishes recovery
+ok 109 - fireball hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.689054
+  type: 'test'
+  ...
+# Subtest: scorch hits only once at contact and finishes recovery
+ok 110 - scorch hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.084697
+  type: 'test'
+  ...
+# Subtest: blast hits only once at contact and finishes recovery
+ok 111 - blast hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.114245
+  type: 'test'
+  ...
+# Subtest: projectile sweep does not tunnel and rejects jumping targets
+ok 112 - projectile sweep does not tunnel and rejects jumping targets
+  ---
+  duration_ms: 0.12907
+  type: 'test'
+  ...
+# Subtest: melee and blast respect facing, distance and height
+ok 113 - melee and blast respect facing, distance and height
+  ---
+  duration_ms: 0.284133
+  type: 'test'
+  ...
+# Subtest: ground fire covers one fixed spot and is avoidable by jumping
+ok 114 - ground fire covers one fixed spot and is avoidable by jumping
+  ---
+  duration_ms: 0.560223
+  type: 'test'
+  ...
+# Subtest: fresh round resets action, charge and hazardous effects
+ok 115 - fresh round resets action, charge and hazardous effects
+  ---
+  duration_ms: 1.915113
+  type: 'test'
+  ...
+# Subtest: network snapshots are detached and malformed attacks are rejected
+ok 116 - network snapshots are detached and malformed attacks are rejected
+  ---
+  duration_ms: 0.656531
+  type: 'test'
+  ...
+# Subtest: summy punch presentation keeps combat unchanged and uses finite independent clocks
+ok 117 - summy punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 5.26698
+  type: 'test'
+  ...
+# Subtest: summy kick presentation keeps combat unchanged and uses finite independent clocks
+ok 118 - summy kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.956651
+  type: 'test'
+  ...
+# Subtest: summy shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 119 - summy shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 4.633817
+  type: 'test'
+  ...
+# Subtest: summy skill presentation keeps combat unchanged and uses finite independent clocks
+ok 120 - summy skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.065058
+  type: 'test'
+  ...
+# Subtest: summy special presentation keeps combat unchanged and uses finite independent clocks
+ok 121 - summy special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.095464
+  type: 'test'
+  ...
+# Subtest: sadie punch presentation keeps combat unchanged and uses finite independent clocks
+ok 122 - sadie punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.17243
+  type: 'test'
+  ...
+# Subtest: sadie kick presentation keeps combat unchanged and uses finite independent clocks
+ok 123 - sadie kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.43274
+  type: 'test'
+  ...
+# Subtest: sadie shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 124 - sadie shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.745454
+  type: 'test'
+  ...
+# Subtest: sadie skill presentation keeps combat unchanged and uses finite independent clocks
+ok 125 - sadie skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.622135
+  type: 'test'
+  ...
+# Subtest: sadie special presentation keeps combat unchanged and uses finite independent clocks
+ok 126 - sadie special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.625293
+  type: 'test'
+  ...
+# Subtest: vee punch presentation keeps combat unchanged and uses finite independent clocks
+ok 127 - vee punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.214204
+  type: 'test'
+  ...
+# Subtest: vee kick presentation keeps combat unchanged and uses finite independent clocks
+ok 128 - vee kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.031427
+  type: 'test'
+  ...
+# Subtest: vee shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 129 - vee shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.743404
+  type: 'test'
+  ...
+# Subtest: vee skill presentation keeps combat unchanged and uses finite independent clocks
+ok 130 - vee skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.939056
+  type: 'test'
+  ...
+# Subtest: vee special presentation keeps combat unchanged and uses finite independent clocks
+ok 131 - vee special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.968417
+  type: 'test'
+  ...
+# Subtest: air punch presentation keeps combat unchanged and uses finite independent clocks
+ok 132 - air punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.134775
+  type: 'test'
+  ...
+# Subtest: air kick presentation keeps combat unchanged and uses finite independent clocks
+ok 133 - air kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.504608
+  type: 'test'
+  ...
+# Subtest: air shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 134 - air shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.878242
+  type: 'test'
+  ...
+# Subtest: air skill presentation keeps combat unchanged and uses finite independent clocks
+ok 135 - air skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.564141
+  type: 'test'
+  ...
+# Subtest: air special presentation keeps combat unchanged and uses finite independent clocks
+ok 136 - air special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.671974
+  type: 'test'
+  ...
+# Subtest: styrodog punch presentation keeps combat unchanged and uses finite independent clocks
+ok 137 - styrodog punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.576562
+  type: 'test'
+  ...
+# Subtest: styrodog kick presentation keeps combat unchanged and uses finite independent clocks
+ok 138 - styrodog kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.88422
+  type: 'test'
+  ...
+# Subtest: styrodog shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 139 - styrodog shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.877136
+  type: 'test'
+  ...
+# Subtest: styrodog skill presentation keeps combat unchanged and uses finite independent clocks
+ok 140 - styrodog skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.756545
+  type: 'test'
+  ...
+# Subtest: styrodog special presentation keeps combat unchanged and uses finite independent clocks
+ok 141 - styrodog special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.091926
+  type: 'test'
+  ...
+# Subtest: sonic punch presentation keeps combat unchanged and uses finite independent clocks
+ok 142 - sonic punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.08528
+  type: 'test'
+  ...
+# Subtest: sonic kick presentation keeps combat unchanged and uses finite independent clocks
+ok 143 - sonic kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.914383
+  type: 'test'
+  ...
+# Subtest: sonic shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 144 - sonic shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.77179
+  type: 'test'
+  ...
+# Subtest: sonic skill presentation keeps combat unchanged and uses finite independent clocks
+ok 145 - sonic skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.280429
+  type: 'test'
+  ...
+# Subtest: sonic special presentation keeps combat unchanged and uses finite independent clocks
+ok 146 - sonic special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.932932
+  type: 'test'
+  ...
+# Subtest: venomis punch presentation keeps combat unchanged and uses finite independent clocks
+ok 147 - venomis punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.654438
+  type: 'test'
+  ...
+# Subtest: venomis kick presentation keeps combat unchanged and uses finite independent clocks
+ok 148 - venomis kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.655312
+  type: 'test'
+  ...
+# Subtest: venomis shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 149 - venomis shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.333886
+  type: 'test'
+  ...
+# Subtest: venomis skill presentation keeps combat unchanged and uses finite independent clocks
+ok 150 - venomis skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.899536
+  type: 'test'
+  ...
+# Subtest: venomis special presentation keeps combat unchanged and uses finite independent clocks
+ok 151 - venomis special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.866972
+  type: 'test'
+  ...
+# Subtest: styro punch presentation keeps combat unchanged and uses finite independent clocks
+ok 152 - styro punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.570999
+  type: 'test'
+  ...
+# Subtest: styro kick presentation keeps combat unchanged and uses finite independent clocks
+ok 153 - styro kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.346728
+  type: 'test'
+  ...
+# Subtest: styro shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 154 - styro shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.212162
+  type: 'test'
+  ...
+# Subtest: styro skill presentation keeps combat unchanged and uses finite independent clocks
+ok 155 - styro skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.667757
+  type: 'test'
+  ...
+# Subtest: styro special presentation keeps combat unchanged and uses finite independent clocks
+ok 156 - styro special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.914991
+  type: 'test'
+  ...
+# Subtest: wastelander punch presentation keeps combat unchanged and uses finite independent clocks
+ok 157 - wastelander punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.796299
+  type: 'test'
+  ...
+# Subtest: wastelander kick presentation keeps combat unchanged and uses finite independent clocks
+ok 158 - wastelander kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.234648
+  type: 'test'
+  ...
+# Subtest: wastelander shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 159 - wastelander shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.533285
+  type: 'test'
+  ...
+# Subtest: wastelander skill presentation keeps combat unchanged and uses finite independent clocks
+ok 160 - wastelander skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.563684
+  type: 'test'
+  ...
+# Subtest: wastelander special presentation keeps combat unchanged and uses finite independent clocks
+ok 161 - wastelander special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.592939
+  type: 'test'
+  ...
+# Subtest: atomdust punch presentation keeps combat unchanged and uses finite independent clocks
+ok 162 - atomdust punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.612017
+  type: 'test'
+  ...
+# Subtest: atomdust kick presentation keeps combat unchanged and uses finite independent clocks
+ok 163 - atomdust kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.543439
+  type: 'test'
+  ...
+# Subtest: atomdust shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 164 - atomdust shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.486489
+  type: 'test'
+  ...
+# Subtest: atomdust skill presentation keeps combat unchanged and uses finite independent clocks
+ok 165 - atomdust skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.852392
+  type: 'test'
+  ...
+# Subtest: atomdust special presentation keeps combat unchanged and uses finite independent clocks
+ok 166 - atomdust special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.591162
+  type: 'test'
+  ...
+# Subtest: spree punch presentation keeps combat unchanged and uses finite independent clocks
+ok 167 - spree punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.731787
+  type: 'test'
+  ...
+# Subtest: spree kick presentation keeps combat unchanged and uses finite independent clocks
+ok 168 - spree kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.244434
+  type: 'test'
+  ...
+# Subtest: spree shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 169 - spree shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.937947
+  type: 'test'
+  ...
+# Subtest: spree skill presentation keeps combat unchanged and uses finite independent clocks
+ok 170 - spree skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.667209
+  type: 'test'
+  ...
+# Subtest: spree special presentation keeps combat unchanged and uses finite independent clocks
+ok 171 - spree special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 1.033165
+  type: 'test'
+  ...
+# Subtest: bushman punch presentation keeps combat unchanged and uses finite independent clocks
+ok 172 - bushman punch presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.912007
+  type: 'test'
+  ...
+# Subtest: bushman kick presentation keeps combat unchanged and uses finite independent clocks
+ok 173 - bushman kick presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 2.230238
+  type: 'test'
+  ...
+# Subtest: bushman shoot presentation keeps combat unchanged and uses finite independent clocks
+ok 174 - bushman shoot presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.787326
+  type: 'test'
+  ...
+# Subtest: bushman skill presentation keeps combat unchanged and uses finite independent clocks
+ok 175 - bushman skill presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.900658
+  type: 'test'
+  ...
+# Subtest: bushman special presentation keeps combat unchanged and uses finite independent clocks
+ok 176 - bushman special presentation keeps combat unchanged and uses finite independent clocks
+  ---
+  duration_ms: 0.647808
+  type: 'test'
+  ...
+# Subtest: air punch reaches approved contact frame when damage releases
+ok 177 - air punch reaches approved contact frame when damage releases
+  ---
+  duration_ms: 1.386698
+  type: 'test'
+  ...
+# Subtest: styrodog punch reaches approved contact frame when damage releases
+ok 178 - styrodog punch reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.349195
+  type: 'test'
+  ...
+# Subtest: styrodog kick reaches approved contact frame when damage releases
+ok 179 - styrodog kick reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.089167
+  type: 'test'
+  ...
+# Subtest: styrodog shoot reaches approved contact frame when damage releases
+ok 180 - styrodog shoot reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.35206
+  type: 'test'
+  ...
+# Subtest: sonic punch reaches approved contact frame when damage releases
+ok 181 - sonic punch reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.404924
+  type: 'test'
+  ...
+# Subtest: sonic kick reaches approved contact frame when damage releases
+ok 182 - sonic kick reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.093119
+  type: 'test'
+  ...
+# Subtest: sonic shoot reaches approved contact frame when damage releases
+ok 183 - sonic shoot reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.061232
+  type: 'test'
+  ...
+# Subtest: venomis punch reaches approved contact frame when damage releases
+ok 184 - venomis punch reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.191204
+  type: 'test'
+  ...
+# Subtest: venomis shoot reaches approved contact frame when damage releases
+ok 185 - venomis shoot reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.407552
+  type: 'test'
+  ...
+# Subtest: styro punch reaches approved contact frame when damage releases
+ok 186 - styro punch reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.267994
+  type: 'test'
+  ...
+# Subtest: styro shoot reaches approved contact frame when damage releases
+ok 187 - styro shoot reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.30127
+  type: 'test'
+  ...
+# Subtest: wastelander punch reaches approved contact frame when damage releases
+ok 188 - wastelander punch reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.459773
+  type: 'test'
+  ...
+# Subtest: wastelander shoot reaches approved contact frame when damage releases
+ok 189 - wastelander shoot reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.105337
+  type: 'test'
+  ...
+# Subtest: wastelander skill reaches approved contact frame when damage releases
+ok 190 - wastelander skill reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.156972
+  type: 'test'
+  ...
+# Subtest: spree punch reaches approved contact frame when damage releases
+ok 191 - spree punch reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.713854
+  type: 'test'
+  ...
+# Subtest: spree shoot reaches approved contact frame when damage releases
+ok 192 - spree shoot reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.098817
+  type: 'test'
+  ...
+# Subtest: bushman punch reaches approved contact frame when damage releases
+ok 193 - bushman punch reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.586341
+  type: 'test'
+  ...
+# Subtest: bushman kick reaches approved contact frame when damage releases
+ok 194 - bushman kick reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.10962
+  type: 'test'
+  ...
+# Subtest: bushman shoot reaches approved contact frame when damage releases
+ok 195 - bushman shoot reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.060406
+  type: 'test'
+  ...
+# Subtest: bushman special reaches approved contact frame when damage releases
+ok 196 - bushman special reaches approved contact frame when damage releases
+  ---
+  duration_ms: 0.054374
+  type: 'test'
+  ...
+# Subtest: Air moves through four approved glide frames without invoking native boss AI
+ok 197 - Air moves through four approved glide frames without invoking native boss AI
+  ---
+  duration_ms: 1.678474
+  type: 'test'
+  ...
+# Subtest: Air storm displays its impact pose only after competitive release
+ok 198 - Air storm displays its impact pose only after competitive release
+  ---
+  duration_ms: 0.5782
+  type: 'test'
+  ...
+# Subtest: summy projectiles and powers use special art rather than punch art
+ok 199 - summy projectiles and powers use special art rather than punch art
+  ---
+  duration_ms: 0.350465
+  type: 'test'
+  ...
+# Subtest: sadie projectiles and powers use special art rather than punch art
+ok 200 - sadie projectiles and powers use special art rather than punch art
+  ---
+  duration_ms: 0.12229
+  type: 'test'
+  ...
+# Subtest: vee projectiles and powers use special art rather than punch art
+ok 201 - vee projectiles and powers use special art rather than punch art
+  ---
+  duration_ms: 0.304529
+  type: 'test'
+  ...
+# Subtest: both faces and both slots preserve attack direction in mirror views
+ok 202 - both faces and both slots preserve attack direction in mirror views
+  ---
+  duration_ms: 1.480555
+  type: 'test'
+  ...
+# Subtest: rendering every character restores native game globals and cannot advance competitive simulation
+ok 203 - rendering every character restores native game globals and cannot advance competitive simulation
+  ---
+  duration_ms: 4.13051
+  type: 'test'
+  ...
+# Subtest: native render failure still restores Story and co-op globals
+ok 204 - native render failure still restores Story and co-op globals
+  ---
+  duration_ms: 2.163161
+  type: 'test'
+  ...
+# Subtest: roster is complete, immutable, and contains unique character identities
+ok 205 - roster is complete, immutable, and contains unique character identities
+  ---
+  duration_ms: 5.390444
+  type: 'test'
+  ...
+# Subtest: summy vs summy: independent 100 HP, controls, and normal damage
+ok 206 - summy vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 4.210311
+  type: 'test'
+  ...
+# Subtest: summy vs sadie: independent 100 HP, controls, and normal damage
+ok 207 - summy vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.883175
+  type: 'test'
+  ...
+# Subtest: summy vs vee: independent 100 HP, controls, and normal damage
+ok 208 - summy vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.757815
+  type: 'test'
+  ...
+# Subtest: summy vs air: independent 100 HP, controls, and normal damage
+ok 209 - summy vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.994391
+  type: 'test'
+  ...
+# Subtest: summy vs styrodog: independent 100 HP, controls, and normal damage
+ok 210 - summy vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.571602
+  type: 'test'
+  ...
+# Subtest: summy vs sonic: independent 100 HP, controls, and normal damage
+ok 211 - summy vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.810421
+  type: 'test'
+  ...
+# Subtest: summy vs venomis: independent 100 HP, controls, and normal damage
+ok 212 - summy vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.767114
+  type: 'test'
+  ...
+# Subtest: summy vs styro: independent 100 HP, controls, and normal damage
+ok 213 - summy vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.768969
+  type: 'test'
+  ...
+# Subtest: summy vs wastelander: independent 100 HP, controls, and normal damage
+ok 214 - summy vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.651647
+  type: 'test'
+  ...
+# Subtest: summy vs atomdust: independent 100 HP, controls, and normal damage
+ok 215 - summy vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.632174
+  type: 'test'
+  ...
+# Subtest: summy vs spree: independent 100 HP, controls, and normal damage
+ok 216 - summy vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.617624
+  type: 'test'
+  ...
+# Subtest: summy vs bushman: independent 100 HP, controls, and normal damage
+ok 217 - summy vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.365996
+  type: 'test'
+  ...
+# Subtest: sadie vs summy: independent 100 HP, controls, and normal damage
+ok 218 - sadie vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 2.224248
+  type: 'test'
+  ...
+# Subtest: sadie vs sadie: independent 100 HP, controls, and normal damage
+ok 219 - sadie vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.321328
+  type: 'test'
+  ...
+# Subtest: sadie vs vee: independent 100 HP, controls, and normal damage
+ok 220 - sadie vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.335975
+  type: 'test'
+  ...
+# Subtest: sadie vs air: independent 100 HP, controls, and normal damage
+ok 221 - sadie vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.184462
+  type: 'test'
+  ...
+# Subtest: sadie vs styrodog: independent 100 HP, controls, and normal damage
+ok 222 - sadie vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.249506
+  type: 'test'
+  ...
+# Subtest: sadie vs sonic: independent 100 HP, controls, and normal damage
+ok 223 - sadie vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.21174
+  type: 'test'
+  ...
+# Subtest: sadie vs venomis: independent 100 HP, controls, and normal damage
+ok 224 - sadie vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.174451
+  type: 'test'
+  ...
+# Subtest: sadie vs styro: independent 100 HP, controls, and normal damage
+ok 225 - sadie vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.150564
+  type: 'test'
+  ...
+# Subtest: sadie vs wastelander: independent 100 HP, controls, and normal damage
+ok 226 - sadie vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.317119
+  type: 'test'
+  ...
+# Subtest: sadie vs atomdust: independent 100 HP, controls, and normal damage
+ok 227 - sadie vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.240515
+  type: 'test'
+  ...
+# Subtest: sadie vs spree: independent 100 HP, controls, and normal damage
+ok 228 - sadie vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.466646
+  type: 'test'
+  ...
+# Subtest: sadie vs bushman: independent 100 HP, controls, and normal damage
+ok 229 - sadie vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.276965
+  type: 'test'
+  ...
+# Subtest: vee vs summy: independent 100 HP, controls, and normal damage
+ok 230 - vee vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.290937
+  type: 'test'
+  ...
+# Subtest: vee vs sadie: independent 100 HP, controls, and normal damage
+ok 231 - vee vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.459722
+  type: 'test'
+  ...
+# Subtest: vee vs vee: independent 100 HP, controls, and normal damage
+ok 232 - vee vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.35907
+  type: 'test'
+  ...
+# Subtest: vee vs air: independent 100 HP, controls, and normal damage
+ok 233 - vee vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.424567
+  type: 'test'
+  ...
+# Subtest: vee vs styrodog: independent 100 HP, controls, and normal damage
+ok 234 - vee vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.414382
+  type: 'test'
+  ...
+# Subtest: vee vs sonic: independent 100 HP, controls, and normal damage
+ok 235 - vee vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.569653
+  type: 'test'
+  ...
+# Subtest: vee vs venomis: independent 100 HP, controls, and normal damage
+ok 236 - vee vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.492114
+  type: 'test'
+  ...
+# Subtest: vee vs styro: independent 100 HP, controls, and normal damage
+ok 237 - vee vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.724326
+  type: 'test'
+  ...
+# Subtest: vee vs wastelander: independent 100 HP, controls, and normal damage
+ok 238 - vee vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.567329
+  type: 'test'
+  ...
+# Subtest: vee vs atomdust: independent 100 HP, controls, and normal damage
+ok 239 - vee vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.182746
+  type: 'test'
+  ...
+# Subtest: vee vs spree: independent 100 HP, controls, and normal damage
+ok 240 - vee vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.18688
+  type: 'test'
+  ...
+# Subtest: vee vs bushman: independent 100 HP, controls, and normal damage
+ok 241 - vee vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.133864
+  type: 'test'
+  ...
+# Subtest: air vs summy: independent 100 HP, controls, and normal damage
+ok 242 - air vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.405407
+  type: 'test'
+  ...
+# Subtest: air vs sadie: independent 100 HP, controls, and normal damage
+ok 243 - air vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.631246
+  type: 'test'
+  ...
+# Subtest: air vs vee: independent 100 HP, controls, and normal damage
+ok 244 - air vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.785891
+  type: 'test'
+  ...
+# Subtest: air vs air: independent 100 HP, controls, and normal damage
+ok 245 - air vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.199994
+  type: 'test'
+  ...
+# Subtest: air vs styrodog: independent 100 HP, controls, and normal damage
+ok 246 - air vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.255301
+  type: 'test'
+  ...
+# Subtest: air vs sonic: independent 100 HP, controls, and normal damage
+ok 247 - air vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.163831
+  type: 'test'
+  ...
+# Subtest: air vs venomis: independent 100 HP, controls, and normal damage
+ok 248 - air vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.34509
+  type: 'test'
+  ...
+# Subtest: air vs styro: independent 100 HP, controls, and normal damage
+ok 249 - air vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.271328
+  type: 'test'
+  ...
+# Subtest: air vs wastelander: independent 100 HP, controls, and normal damage
+ok 250 - air vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.162541
+  type: 'test'
+  ...
+# Subtest: air vs atomdust: independent 100 HP, controls, and normal damage
+ok 251 - air vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.155631
+  type: 'test'
+  ...
+# Subtest: air vs spree: independent 100 HP, controls, and normal damage
+ok 252 - air vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.640931
+  type: 'test'
+  ...
+# Subtest: air vs bushman: independent 100 HP, controls, and normal damage
+ok 253 - air vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.178703
+  type: 'test'
+  ...
+# Subtest: styrodog vs summy: independent 100 HP, controls, and normal damage
+ok 254 - styrodog vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.156083
+  type: 'test'
+  ...
+# Subtest: styrodog vs sadie: independent 100 HP, controls, and normal damage
+ok 255 - styrodog vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.477433
+  type: 'test'
+  ...
+# Subtest: styrodog vs vee: independent 100 HP, controls, and normal damage
+ok 256 - styrodog vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.123071
+  type: 'test'
+  ...
+# Subtest: styrodog vs air: independent 100 HP, controls, and normal damage
+ok 257 - styrodog vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.828432
+  type: 'test'
+  ...
+# Subtest: styrodog vs styrodog: independent 100 HP, controls, and normal damage
+ok 258 - styrodog vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.190845
+  type: 'test'
+  ...
+# Subtest: styrodog vs sonic: independent 100 HP, controls, and normal damage
+ok 259 - styrodog vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.157846
+  type: 'test'
+  ...
+# Subtest: styrodog vs venomis: independent 100 HP, controls, and normal damage
+ok 260 - styrodog vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.689518
+  type: 'test'
+  ...
+# Subtest: styrodog vs styro: independent 100 HP, controls, and normal damage
+ok 261 - styrodog vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.502861
+  type: 'test'
+  ...
+# Subtest: styrodog vs wastelander: independent 100 HP, controls, and normal damage
+ok 262 - styrodog vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.167627
+  type: 'test'
+  ...
+# Subtest: styrodog vs atomdust: independent 100 HP, controls, and normal damage
+ok 263 - styrodog vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.150788
+  type: 'test'
+  ...
+# Subtest: styrodog vs spree: independent 100 HP, controls, and normal damage
+ok 264 - styrodog vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.760292
+  type: 'test'
+  ...
+# Subtest: styrodog vs bushman: independent 100 HP, controls, and normal damage
+ok 265 - styrodog vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.854165
+  type: 'test'
+  ...
+# Subtest: sonic vs summy: independent 100 HP, controls, and normal damage
+ok 266 - sonic vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.300745
+  type: 'test'
+  ...
+# Subtest: sonic vs sadie: independent 100 HP, controls, and normal damage
+ok 267 - sonic vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.824964
+  type: 'test'
+  ...
+# Subtest: sonic vs vee: independent 100 HP, controls, and normal damage
+ok 268 - sonic vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.487731
+  type: 'test'
+  ...
+# Subtest: sonic vs air: independent 100 HP, controls, and normal damage
+ok 269 - sonic vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.681363
+  type: 'test'
+  ...
+# Subtest: sonic vs styrodog: independent 100 HP, controls, and normal damage
+ok 270 - sonic vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.161364
+  type: 'test'
+  ...
+# Subtest: sonic vs sonic: independent 100 HP, controls, and normal damage
+ok 271 - sonic vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.411125
+  type: 'test'
+  ...
+# Subtest: sonic vs venomis: independent 100 HP, controls, and normal damage
+ok 272 - sonic vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.99023
+  type: 'test'
+  ...
+# Subtest: sonic vs styro: independent 100 HP, controls, and normal damage
+ok 273 - sonic vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.670607
+  type: 'test'
+  ...
+# Subtest: sonic vs wastelander: independent 100 HP, controls, and normal damage
+ok 274 - sonic vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.315064
+  type: 'test'
+  ...
+# Subtest: sonic vs atomdust: independent 100 HP, controls, and normal damage
+ok 275 - sonic vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.617653
+  type: 'test'
+  ...
+# Subtest: sonic vs spree: independent 100 HP, controls, and normal damage
+ok 276 - sonic vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.327888
+  type: 'test'
+  ...
+# Subtest: sonic vs bushman: independent 100 HP, controls, and normal damage
+ok 277 - sonic vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.169814
+  type: 'test'
+  ...
+# Subtest: venomis vs summy: independent 100 HP, controls, and normal damage
+ok 278 - venomis vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.98482
+  type: 'test'
+  ...
+# Subtest: venomis vs sadie: independent 100 HP, controls, and normal damage
+ok 279 - venomis vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.234831
+  type: 'test'
+  ...
+# Subtest: venomis vs vee: independent 100 HP, controls, and normal damage
+ok 280 - venomis vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.136536
+  type: 'test'
+  ...
+# Subtest: venomis vs air: independent 100 HP, controls, and normal damage
+ok 281 - venomis vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.163992
+  type: 'test'
+  ...
+# Subtest: venomis vs styrodog: independent 100 HP, controls, and normal damage
+ok 282 - venomis vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.118602
+  type: 'test'
+  ...
+# Subtest: venomis vs sonic: independent 100 HP, controls, and normal damage
+ok 283 - venomis vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.29004
+  type: 'test'
+  ...
+# Subtest: venomis vs venomis: independent 100 HP, controls, and normal damage
+ok 284 - venomis vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.316237
+  type: 'test'
+  ...
+# Subtest: venomis vs styro: independent 100 HP, controls, and normal damage
+ok 285 - venomis vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.253925
+  type: 'test'
+  ...
+# Subtest: venomis vs wastelander: independent 100 HP, controls, and normal damage
+ok 286 - venomis vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.1255
+  type: 'test'
+  ...
+# Subtest: venomis vs atomdust: independent 100 HP, controls, and normal damage
+ok 287 - venomis vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.115192
+  type: 'test'
+  ...
+# Subtest: venomis vs spree: independent 100 HP, controls, and normal damage
+ok 288 - venomis vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.112502
+  type: 'test'
+  ...
+# Subtest: venomis vs bushman: independent 100 HP, controls, and normal damage
+ok 289 - venomis vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.113925
+  type: 'test'
+  ...
+# Subtest: styro vs summy: independent 100 HP, controls, and normal damage
+ok 290 - styro vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.119767
+  type: 'test'
+  ...
+# Subtest: styro vs sadie: independent 100 HP, controls, and normal damage
+ok 291 - styro vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.315521
+  type: 'test'
+  ...
+# Subtest: styro vs vee: independent 100 HP, controls, and normal damage
+ok 292 - styro vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.126818
+  type: 'test'
+  ...
+# Subtest: styro vs air: independent 100 HP, controls, and normal damage
+ok 293 - styro vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.113438
+  type: 'test'
+  ...
+# Subtest: styro vs styrodog: independent 100 HP, controls, and normal damage
+ok 294 - styro vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.110946
+  type: 'test'
+  ...
+# Subtest: styro vs sonic: independent 100 HP, controls, and normal damage
+ok 295 - styro vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.11022
+  type: 'test'
+  ...
+# Subtest: styro vs venomis: independent 100 HP, controls, and normal damage
+ok 296 - styro vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.22777
+  type: 'test'
+  ...
+# Subtest: styro vs styro: independent 100 HP, controls, and normal damage
+ok 297 - styro vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.246339
+  type: 'test'
+  ...
+# Subtest: styro vs wastelander: independent 100 HP, controls, and normal damage
+ok 298 - styro vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.130068
+  type: 'test'
+  ...
+# Subtest: styro vs atomdust: independent 100 HP, controls, and normal damage
+ok 299 - styro vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.235213
+  type: 'test'
+  ...
+# Subtest: styro vs spree: independent 100 HP, controls, and normal damage
+ok 300 - styro vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.170142
+  type: 'test'
+  ...
+# Subtest: styro vs bushman: independent 100 HP, controls, and normal damage
+ok 301 - styro vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.565205
+  type: 'test'
+  ...
+# Subtest: wastelander vs summy: independent 100 HP, controls, and normal damage
+ok 302 - wastelander vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.150355
+  type: 'test'
+  ...
+# Subtest: wastelander vs sadie: independent 100 HP, controls, and normal damage
+ok 303 - wastelander vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.421295
+  type: 'test'
+  ...
+# Subtest: wastelander vs vee: independent 100 HP, controls, and normal damage
+ok 304 - wastelander vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.169656
+  type: 'test'
+  ...
+# Subtest: wastelander vs air: independent 100 HP, controls, and normal damage
+ok 305 - wastelander vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.866539
+  type: 'test'
+  ...
+# Subtest: wastelander vs styrodog: independent 100 HP, controls, and normal damage
+ok 306 - wastelander vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.176261
+  type: 'test'
+  ...
+# Subtest: wastelander vs sonic: independent 100 HP, controls, and normal damage
+ok 307 - wastelander vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.161858
+  type: 'test'
+  ...
+# Subtest: wastelander vs venomis: independent 100 HP, controls, and normal damage
+ok 308 - wastelander vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.146624
+  type: 'test'
+  ...
+# Subtest: wastelander vs styro: independent 100 HP, controls, and normal damage
+ok 309 - wastelander vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.630654
+  type: 'test'
+  ...
+# Subtest: wastelander vs wastelander: independent 100 HP, controls, and normal damage
+ok 310 - wastelander vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.283601
+  type: 'test'
+  ...
+# Subtest: wastelander vs atomdust: independent 100 HP, controls, and normal damage
+ok 311 - wastelander vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.280811
+  type: 'test'
+  ...
+# Subtest: wastelander vs spree: independent 100 HP, controls, and normal damage
+ok 312 - wastelander vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.542386
+  type: 'test'
+  ...
+# Subtest: wastelander vs bushman: independent 100 HP, controls, and normal damage
+ok 313 - wastelander vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.326357
+  type: 'test'
+  ...
+# Subtest: atomdust vs summy: independent 100 HP, controls, and normal damage
+ok 314 - atomdust vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.141152
+  type: 'test'
+  ...
+# Subtest: atomdust vs sadie: independent 100 HP, controls, and normal damage
+ok 315 - atomdust vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.119633
+  type: 'test'
+  ...
+# Subtest: atomdust vs vee: independent 100 HP, controls, and normal damage
+ok 316 - atomdust vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.269947
+  type: 'test'
+  ...
+# Subtest: atomdust vs air: independent 100 HP, controls, and normal damage
+ok 317 - atomdust vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.205108
+  type: 'test'
+  ...
+# Subtest: atomdust vs styrodog: independent 100 HP, controls, and normal damage
+ok 318 - atomdust vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.122668
+  type: 'test'
+  ...
+# Subtest: atomdust vs sonic: independent 100 HP, controls, and normal damage
+ok 319 - atomdust vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.182033
+  type: 'test'
+  ...
+# Subtest: atomdust vs venomis: independent 100 HP, controls, and normal damage
+ok 320 - atomdust vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.251153
+  type: 'test'
+  ...
+# Subtest: atomdust vs styro: independent 100 HP, controls, and normal damage
+ok 321 - atomdust vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.569113
+  type: 'test'
+  ...
+# Subtest: atomdust vs wastelander: independent 100 HP, controls, and normal damage
+ok 322 - atomdust vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.855345
+  type: 'test'
+  ...
+# Subtest: atomdust vs atomdust: independent 100 HP, controls, and normal damage
+ok 323 - atomdust vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.729823
+  type: 'test'
+  ...
+# Subtest: atomdust vs spree: independent 100 HP, controls, and normal damage
+ok 324 - atomdust vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.364581
+  type: 'test'
+  ...
+# Subtest: atomdust vs bushman: independent 100 HP, controls, and normal damage
+ok 325 - atomdust vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.127172
+  type: 'test'
+  ...
+# Subtest: spree vs summy: independent 100 HP, controls, and normal damage
+ok 326 - spree vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.362078
+  type: 'test'
+  ...
+# Subtest: spree vs sadie: independent 100 HP, controls, and normal damage
+ok 327 - spree vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.249909
+  type: 'test'
+  ...
+# Subtest: spree vs vee: independent 100 HP, controls, and normal damage
+ok 328 - spree vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.8274
+  type: 'test'
+  ...
+# Subtest: spree vs air: independent 100 HP, controls, and normal damage
+ok 329 - spree vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.484714
+  type: 'test'
+  ...
+# Subtest: spree vs styrodog: independent 100 HP, controls, and normal damage
+ok 330 - spree vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.879857
+  type: 'test'
+  ...
+# Subtest: spree vs sonic: independent 100 HP, controls, and normal damage
+ok 331 - spree vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.753418
+  type: 'test'
+  ...
+# Subtest: spree vs venomis: independent 100 HP, controls, and normal damage
+ok 332 - spree vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.443097
+  type: 'test'
+  ...
+# Subtest: spree vs styro: independent 100 HP, controls, and normal damage
+ok 333 - spree vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.433974
+  type: 'test'
+  ...
+# Subtest: spree vs wastelander: independent 100 HP, controls, and normal damage
+ok 334 - spree vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.390957
+  type: 'test'
+  ...
+# Subtest: spree vs atomdust: independent 100 HP, controls, and normal damage
+ok 335 - spree vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.712398
+  type: 'test'
+  ...
+# Subtest: spree vs spree: independent 100 HP, controls, and normal damage
+ok 336 - spree vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.477811
+  type: 'test'
+  ...
+# Subtest: spree vs bushman: independent 100 HP, controls, and normal damage
+ok 337 - spree vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.854134
+  type: 'test'
+  ...
+# Subtest: bushman vs summy: independent 100 HP, controls, and normal damage
+ok 338 - bushman vs summy: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.908926
+  type: 'test'
+  ...
+# Subtest: bushman vs sadie: independent 100 HP, controls, and normal damage
+ok 339 - bushman vs sadie: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.735705
+  type: 'test'
+  ...
+# Subtest: bushman vs vee: independent 100 HP, controls, and normal damage
+ok 340 - bushman vs vee: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.931925
+  type: 'test'
+  ...
+# Subtest: bushman vs air: independent 100 HP, controls, and normal damage
+ok 341 - bushman vs air: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.219549
+  type: 'test'
+  ...
+# Subtest: bushman vs styrodog: independent 100 HP, controls, and normal damage
+ok 342 - bushman vs styrodog: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.230405
+  type: 'test'
+  ...
+# Subtest: bushman vs sonic: independent 100 HP, controls, and normal damage
+ok 343 - bushman vs sonic: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.539389
+  type: 'test'
+  ...
+# Subtest: bushman vs venomis: independent 100 HP, controls, and normal damage
+ok 344 - bushman vs venomis: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.947295
+  type: 'test'
+  ...
+# Subtest: bushman vs styro: independent 100 HP, controls, and normal damage
+ok 345 - bushman vs styro: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.126456
+  type: 'test'
+  ...
+# Subtest: bushman vs wastelander: independent 100 HP, controls, and normal damage
+ok 346 - bushman vs wastelander: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.637546
+  type: 'test'
+  ...
+# Subtest: bushman vs atomdust: independent 100 HP, controls, and normal damage
+ok 347 - bushman vs atomdust: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 1.200463
+  type: 'test'
+  ...
+# Subtest: bushman vs spree: independent 100 HP, controls, and normal damage
+ok 348 - bushman vs spree: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.994484
+  type: 'test'
+  ...
+# Subtest: bushman vs bushman: independent 100 HP, controls, and normal damage
+ok 349 - bushman vs bushman: independent 100 HP, controls, and normal damage
+  ---
+  duration_ms: 0.902872
+  type: 'test'
+  ...
+# Subtest: summy slot 0: facing, guard, jump, and projectile
+ok 350 - summy slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 6.333125
+  type: 'test'
+  ...
+# Subtest: summy slot 1: facing, guard, jump, and projectile
+ok 351 - summy slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 4.478712
+  type: 'test'
+  ...
+# Subtest: sadie slot 0: facing, guard, jump, and projectile
+ok 352 - sadie slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 3.067163
+  type: 'test'
+  ...
+# Subtest: sadie slot 1: facing, guard, jump, and projectile
+ok 353 - sadie slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.4297
+  type: 'test'
+  ...
+# Subtest: vee slot 0: facing, guard, jump, and projectile
+ok 354 - vee slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 2.20345
+  type: 'test'
+  ...
+# Subtest: vee slot 1: facing, guard, jump, and projectile
+ok 355 - vee slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 2.47648
+  type: 'test'
+  ...
+# Subtest: air slot 0: facing, guard, jump, and projectile
+ok 356 - air slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.786051
+  type: 'test'
+  ...
+# Subtest: air slot 1: facing, guard, jump, and projectile
+ok 357 - air slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 2.01169
+  type: 'test'
+  ...
+# Subtest: styrodog slot 0: facing, guard, jump, and projectile
+ok 358 - styrodog slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 2.194902
+  type: 'test'
+  ...
+# Subtest: styrodog slot 1: facing, guard, jump, and projectile
+ok 359 - styrodog slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 6.351803
+  type: 'test'
+  ...
+# Subtest: sonic slot 0: facing, guard, jump, and projectile
+ok 360 - sonic slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.533154
+  type: 'test'
+  ...
+# Subtest: sonic slot 1: facing, guard, jump, and projectile
+ok 361 - sonic slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 8.038308
+  type: 'test'
+  ...
+# Subtest: venomis slot 0: facing, guard, jump, and projectile
+ok 362 - venomis slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 3.441276
+  type: 'test'
+  ...
+# Subtest: venomis slot 1: facing, guard, jump, and projectile
+ok 363 - venomis slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 2.054214
+  type: 'test'
+  ...
+# Subtest: styro slot 0: facing, guard, jump, and projectile
+ok 364 - styro slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 2.790041
+  type: 'test'
+  ...
+# Subtest: styro slot 1: facing, guard, jump, and projectile
+ok 365 - styro slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 2.82627
+  type: 'test'
+  ...
+# Subtest: wastelander slot 0: facing, guard, jump, and projectile
+ok 366 - wastelander slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 2.963725
+  type: 'test'
+  ...
+# Subtest: wastelander slot 1: facing, guard, jump, and projectile
+ok 367 - wastelander slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 4.660734
+  type: 'test'
+  ...
+# Subtest: atomdust slot 0: facing, guard, jump, and projectile
+ok 368 - atomdust slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 0.664858
+  type: 'test'
+  ...
+# Subtest: atomdust slot 1: facing, guard, jump, and projectile
+ok 369 - atomdust slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 1.869198
+  type: 'test'
+  ...
+# Subtest: spree slot 0: facing, guard, jump, and projectile
+ok 370 - spree slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 0.715051
+  type: 'test'
+  ...
+# Subtest: spree slot 1: facing, guard, jump, and projectile
+ok 371 - spree slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 4.818111
+  type: 'test'
+  ...
+# Subtest: bushman slot 0: facing, guard, jump, and projectile
+ok 372 - bushman slot 0: facing, guard, jump, and projectile
+  ---
+  duration_ms: 2.446416
+  type: 'test'
+  ...
+# Subtest: bushman slot 1: facing, guard, jump, and projectile
+ok 373 - bushman slot 1: facing, guard, jump, and projectile
+  ---
+  duration_ms: 9.917908
+  type: 'test'
+  ...
+# Subtest: summy normal damage stays inside requested target ranges
+ok 374 - summy normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.661684
+  type: 'test'
+  ...
+# Subtest: sadie normal damage stays inside requested target ranges
+ok 375 - sadie normal damage stays inside requested target ranges
+  ---
+  duration_ms: 2.502953
+  type: 'test'
+  ...
+# Subtest: vee normal damage stays inside requested target ranges
+ok 376 - vee normal damage stays inside requested target ranges
+  ---
+  duration_ms: 1.005065
+  type: 'test'
+  ...
+# Subtest: air normal damage stays inside requested target ranges
+ok 377 - air normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.163379
+  type: 'test'
+  ...
+# Subtest: styrodog normal damage stays inside requested target ranges
+ok 378 - styrodog normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.789279
+  type: 'test'
+  ...
+# Subtest: sonic normal damage stays inside requested target ranges
+ok 379 - sonic normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.081332
+  type: 'test'
+  ...
+# Subtest: venomis normal damage stays inside requested target ranges
+ok 380 - venomis normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.543532
+  type: 'test'
+  ...
+# Subtest: styro normal damage stays inside requested target ranges
+ok 381 - styro normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.04025
+  type: 'test'
+  ...
+# Subtest: wastelander normal damage stays inside requested target ranges
+ok 382 - wastelander normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.029422
+  type: 'test'
+  ...
+# Subtest: atomdust normal damage stays inside requested target ranges
+ok 383 - atomdust normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.026573
+  type: 'test'
+  ...
+# Subtest: spree normal damage stays inside requested target ranges
+ok 384 - spree normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.026164
+  type: 'test'
+  ...
+# Subtest: bushman normal damage stays inside requested target ranges
+ok 385 - bushman normal damage stays inside requested target ranges
+  ---
+  duration_ms: 0.025759
+  type: 'test'
+  ...
+# Subtest: summy special executes with total damage cap, cost and recovery
+ok 386 - summy special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 10.8192
+  type: 'test'
+  ...
+# Subtest: sadie special executes with total damage cap, cost and recovery
+ok 387 - sadie special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 5.789901
+  type: 'test'
+  ...
+# Subtest: vee special executes with total damage cap, cost and recovery
+ok 388 - vee special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 10.603531
+  type: 'test'
+  ...
+# Subtest: air special executes with total damage cap, cost and recovery
+ok 389 - air special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 5.609441
+  type: 'test'
+  ...
+# Subtest: styrodog special executes with total damage cap, cost and recovery
+ok 390 - styrodog special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 7.103772
+  type: 'test'
+  ...
+# Subtest: sonic special executes with total damage cap, cost and recovery
+ok 391 - sonic special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 1.664848
+  type: 'test'
+  ...
+# Subtest: venomis special executes with total damage cap, cost and recovery
+ok 392 - venomis special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 4.714913
+  type: 'test'
+  ...
+# Subtest: styro special executes with total damage cap, cost and recovery
+ok 393 - styro special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 6.221811
+  type: 'test'
+  ...
+# Subtest: wastelander special executes with total damage cap, cost and recovery
+ok 394 - wastelander special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 0.956327
+  type: 'test'
+  ...
+# Subtest: atomdust special executes with total damage cap, cost and recovery
+ok 395 - atomdust special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 3.261507
+  type: 'test'
+  ...
+# Subtest: spree special executes with total damage cap, cost and recovery
+ok 396 - spree special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 2.745865
+  type: 'test'
+  ...
+# Subtest: bushman special executes with total damage cap, cost and recovery
+ok 397 - bushman special executes with total damage cap, cost and recovery
+  ---
+  duration_ms: 5.249012
+  type: 'test'
+  ...
+# Subtest: human fighters do not attack, vanish, auto-dodge, phase-change or damage each other without input
+ok 398 - human fighters do not attack, vanish, auto-dodge, phase-change or damage each other without input
+  ---
+  duration_ms: 144.461442
+  type: 'test'
+  ...
+# Subtest: KKPP preserves a bounded sweep/uppercut chain and cannot queue more than four attacks
+ok 399 - KKPP preserves a bounded sweep/uppercut chain and cannot queue more than four attacks
+  ---
+  duration_ms: 10.506202
+  type: 'test'
+  ...
+# Subtest: Bushman requires four separate unblocked qualifying hits; burn and repeats never count
+ok 400 - Bushman requires four separate unblocked qualifying hits; burn and repeats never count
+  ---
+  duration_ms: 0.469818
+  type: 'test'
+  ...
+# Subtest: Lightening Spree teleport: explicit action, bounded distance, two-second visibility and eight-second cooldown
+ok 401 - Lightening Spree teleport: explicit action, bounded distance, two-second visibility and eight-second cooldown
+  ---
+  duration_ms: 16.227586
+  type: 'test'
+  ...
+# Subtest: projectile cooldown prevents spam, including after recovery; holding a button is one action
+ok 402 - projectile cooldown prevents spam, including after recovery; holding a button is one action
+  ---
+  duration_ms: 14.496161
+  type: 'test'
+  ...
+# Subtest: jumping avoids telegraphed ground attacks, while grounded target is hit
+ok 403 - jumping avoids telegraphed ground attacks, while grounded target is hit
+  ---
+  duration_ms: 7.551899
+  type: 'test'
+  ...
+# Subtest: four-hit pressure forces knockdown and escape protection; repeated hits cannot create an infinite
+ok 404 - four-hit pressure forces knockdown and escape protection; repeated hits cannot create an infinite
+  ---
+  duration_ms: 2.087681
+  type: 'test'
+  ...
+# Subtest: difficulty changes decisions only; human and CPU share costs, health and damage
+ok 405 - difficulty changes decisions only; human and CPU share costs, health and damage
+  ---
+  duration_ms: 198.912814
+  type: 'test'
+  ...
+# Subtest: normalization is independent of render rate at 30, 60, and 120 FPS
+ok 406 - normalization is independent of render rate at 30, 60, and 120 FPS
+  ---
+  duration_ms: 10.463672
+  type: 'test'
+  ...
+# Subtest: hit at zero HP resolves once, clears effects, and rematch creates pristine fighters
+ok 407 - hit at zero HP resolves once, clears effects, and rematch creates pristine fighters
+  ---
+  duration_ms: 1.245164
+  type: 'test'
+  ...
+# Subtest: simultaneous venue damage can produce a double KO
+ok 408 - simultaneous venue damage can produce a double KO
+  ---
+  duration_ms: 0.177199
+  type: 'test'
+  ...
+# Subtest: Harbor hit region treats either player symmetrically and permits jumping
+ok 409 - Harbor hit region treats either player symmetrically and permits jumping
+  ---
+  duration_ms: 0.191094
+  type: 'test'
+  ...
+# Subtest: Tempest contact uses separate ids in a mirror match and accepts block for either side
+ok 410 - Tempest contact uses separate ids in a mirror match and accepts block for either side
+  ---
+  duration_ms: 1.226818
+  type: 'test'
+  ...
+# Subtest: summy guide lists every executable attack, real damage and controls for each player
+ok 411 - summy guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 2.763435
+  type: 'test'
+  ...
+# Subtest: sadie guide lists every executable attack, real damage and controls for each player
+ok 412 - sadie guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.282533
+  type: 'test'
+  ...
+# Subtest: vee guide lists every executable attack, real damage and controls for each player
+ok 413 - vee guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.312225
+  type: 'test'
+  ...
+# Subtest: air guide lists every executable attack, real damage and controls for each player
+ok 414 - air guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.850076
+  type: 'test'
+  ...
+# Subtest: styrodog guide lists every executable attack, real damage and controls for each player
+ok 415 - styrodog guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 1.071389
+  type: 'test'
+  ...
+# Subtest: sonic guide lists every executable attack, real damage and controls for each player
+ok 416 - sonic guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.141918
+  type: 'test'
+  ...
+# Subtest: venomis guide lists every executable attack, real damage and controls for each player
+ok 417 - venomis guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.323198
+  type: 'test'
+  ...
+# Subtest: styro guide lists every executable attack, real damage and controls for each player
+ok 418 - styro guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.175728
+  type: 'test'
+  ...
+# Subtest: wastelander guide lists every executable attack, real damage and controls for each player
+ok 419 - wastelander guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.12477
+  type: 'test'
+  ...
+# Subtest: atomdust guide lists every executable attack, real damage and controls for each player
+ok 420 - atomdust guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.258953
+  type: 'test'
+  ...
+# Subtest: spree guide lists every executable attack, real damage and controls for each player
+ok 421 - spree guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 1.013932
+  type: 'test'
+  ...
+# Subtest: bushman guide lists every executable attack, real damage and controls for each player
+ok 422 - bushman guide lists every executable attack, real damage and controls for each player
+  ---
+  duration_ms: 0.135651
+  type: 'test'
+  ...
+# Subtest: rushdown trades damage and reach for speed; heavy power carries slower startup/recovery
+ok 423 - rushdown trades damage and reach for speed; heavy power carries slower startup/recovery
+  ---
+  duration_ms: 0.421168
+  type: 'test'
+  ...
+# Subtest: summy CPU can engage a mirror using normals at its own body-aware spacing
+ok 424 - summy CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 18.54129
+  type: 'test'
+  ...
+# Subtest: sadie CPU can engage a mirror using normals at its own body-aware spacing
+ok 425 - sadie CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 10.934416
+  type: 'test'
+  ...
+# Subtest: vee CPU can engage a mirror using normals at its own body-aware spacing
+ok 426 - vee CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 15.139586
+  type: 'test'
+  ...
+# Subtest: air CPU can engage a mirror using normals at its own body-aware spacing
+ok 427 - air CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 11.032225
+  type: 'test'
+  ...
+# Subtest: styrodog CPU can engage a mirror using normals at its own body-aware spacing
+ok 428 - styrodog CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 12.055476
+  type: 'test'
+  ...
+# Subtest: sonic CPU can engage a mirror using normals at its own body-aware spacing
+ok 429 - sonic CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 18.081784
+  type: 'test'
+  ...
+# Subtest: venomis CPU can engage a mirror using normals at its own body-aware spacing
+ok 430 - venomis CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 9.150307
+  type: 'test'
+  ...
+# Subtest: styro CPU can engage a mirror using normals at its own body-aware spacing
+ok 431 - styro CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 7.702765
+  type: 'test'
+  ...
+# Subtest: wastelander CPU can engage a mirror using normals at its own body-aware spacing
+ok 432 - wastelander CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 17.264256
+  type: 'test'
+  ...
+# Subtest: atomdust CPU can engage a mirror using normals at its own body-aware spacing
+ok 433 - atomdust CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 18.365855
+  type: 'test'
+  ...
+# Subtest: spree CPU can engage a mirror using normals at its own body-aware spacing
+ok 434 - spree CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 8.44519
+  type: 'test'
+  ...
+# Subtest: bushman CPU can engage a mirror using normals at its own body-aware spacing
+ok 435 - bushman CPU can engage a mirror using normals at its own body-aware spacing
+  ---
+  duration_ms: 23.161819
+  type: 'test'
+  ...
+# Subtest: move guide maps local players independently and describes charge/cooldown counterplay
+ok 436 - move guide maps local players independently and describes charge/cooldown counterplay
+  ---
+  duration_ms: 0.571875
+  type: 'test'
+  ...
+# Subtest: all three heroes load 32 separate registered drawings with true PNG bounds
+ok 437 - all three heroes load 32 separate registered drawings with true PNG bounds
+  ---
+  duration_ms: 44.853773
+  type: 'test'
+  ...
+# Subtest: same numeric pose resolves to each selected hero own sheet during co-op draws
+ok 438 - same numeric pose resolves to each selected hero own sheet during co-op draws
+  ---
+  duration_ms: 19.488122
+  type: 'test'
+  ...
+# Subtest: hero switches never inherit another hero previous position
+ok 439 - hero switches never inherit another hero previous position
+  ---
+  duration_ms: 23.327895
+  type: 'test'
+  ...
+# Subtest: guest interpolation, pause, hitstop and attacks render authoritative current position
+ok 440 - guest interpolation, pause, hitstop and attacks render authoritative current position
+  ---
+  duration_ms: 11.401453
+  type: 'test'
+  ...
+# Subtest: failed Vee sheet falls back without disabling Summy or Sadie
+ok 441 - failed Vee sheet falls back without disabling Summy or Sadie
+  ---
+  duration_ms: 8.064867
+  type: 'test'
+  ...
+# Subtest: original comparison mode makes no new texture requests and uses original renderer
+ok 442 - original comparison mode makes no new texture requests and uses original renderer
+  ---
+  duration_ms: 1.129254
+  type: 'test'
+  ...
+# Subtest: tag run animation uses the incoming hero sheet and automatic defeat keeps original handoff
+ok 443 - tag run animation uses the incoming hero sheet and automatic defeat keeps original handoff
+  ---
+  duration_ms: 13.490531
+  type: 'test'
+  ...
+# Subtest: extended sprite bounds remain inside both arena edges for both facings
+ok 444 - extended sprite bounds remain inside both arena edges for both facings
+  ---
+  duration_ms: 6.626247
+  type: 'test'
+  ...
+# Subtest: Sadie heavy special and Vee five-pass blitz have distinct recovery timing
+ok 445 - Sadie heavy special and Vee five-pass blitz have distinct recovery timing
+  ---
+  duration_ms: 0.356744
+  type: 'test'
+  ...
+# Subtest: regular attacks retain original impact drawings through their whole active windows
+ok 446 - regular attacks retain original impact drawings through their whole active windows
+  ---
+  duration_ms: 8.743666
+  type: 'test'
+  ...
+# Subtest: Summy original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+ok 447 - Summy original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+  ---
+  duration_ms: 32.210258
+  type: 'test'
+  ...
+# Subtest: Summy KKPP yields four contacts and existing 8% bonus at all draw rates
+ok 448 - Summy KKPP yields four contacts and existing 8% bonus at all draw rates
+  ---
+  duration_ms: 31.228903
+  type: 'test'
+  ...
+# Subtest: Summy buffers late stun input once, respects held block, then resumes
+ok 449 - Summy buffers late stun input once, respects held block, then resumes
+  ---
+  duration_ms: 3.542332
+  type: 'test'
+  ...
+# Subtest: Sadie original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+ok 450 - Sadie original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+  ---
+  duration_ms: 32.125436
+  type: 'test'
+  ...
+# Subtest: Sadie KKPP yields four contacts and existing 8% bonus at all draw rates
+ok 451 - Sadie KKPP yields four contacts and existing 8% bonus at all draw rates
+  ---
+  duration_ms: 35.986598
+  type: 'test'
+  ...
+# Subtest: Sadie buffers late stun input once, respects held block, then resumes
+ok 452 - Sadie buffers late stun input once, respects held block, then resumes
+  ---
+  duration_ms: 5.013215
+  type: 'test'
+  ...
+# Subtest: Vee original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+ok 453 - Vee original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+  ---
+  duration_ms: 36.926953
+  type: 'test'
+  ...
+# Subtest: Vee KKPP yields four contacts and existing 8% bonus at all draw rates
+ok 454 - Vee KKPP yields four contacts and existing 8% bonus at all draw rates
+  ---
+  duration_ms: 37.762796
+  type: 'test'
+  ...
+# Subtest: Vee buffers late stun input once, respects held block, then resumes
+ok 455 - Vee buffers late stun input once, respects held block, then resumes
+  ---
+  duration_ms: 4.357056
+  type: 'test'
+  ...
+# Subtest: knockdown and active specials cannot queue late-stun attacks
+ok 456 - knockdown and active specials cannot queue late-stun attacks
+  ---
+  duration_ms: 2.999091
+  type: 'test'
+  ...
+# Subtest: all runtime assets and both entry points resolve to identical checked-in game content
+ok 457 - all runtime assets and both entry points resolve to identical checked-in game content
+  ---
+  duration_ms: 2.707762
+  type: 'test'
+  ...
+# Subtest: the intact transparent sheet registers sixteen complete body crops
+ok 458 - the intact transparent sheet registers sixteen complete body crops
+  ---
+  duration_ms: 15.763583
+  type: 'test'
+  ...
+# Subtest: idle breathes in place without inventing a walking state
+ok 459 - idle breathes in place without inventing a walking state
+  ---
+  duration_ms: 3.194823
+  type: 'test'
+  ...
+# Subtest: the body remains completely hidden throughout the full invisible interval
+ok 460 - the body remains completely hidden throughout the full invisible interval
+  ---
+  duration_ms: 11.141259
+  type: 'test'
+  ...
+# Subtest: arrival uses a brief solid brace then immediately resumes the real warning
+ok 461 - arrival uses a brief solid brace then immediately resumes the real warning
+  ---
+  duration_ms: 1.531541
+  type: 'test'
+  ...
+# Subtest: charge, ready, release and recovery have distinct poses for both attacks
+ok 462 - charge, ready, release and recovery have distinct poses for both attacks
+  ---
+  duration_ms: 2.720194
+  type: 'test'
+  ...
+# Subtest: no emitting pose appears before an actual beam exists
+ok 463 - no emitting pose appears before an actual beam exists
+  ---
+  duration_ms: 0.408356
+  type: 'test'
+  ...
+# Subtest: the phase-three second volley readies again and uses the live beam release
+ok 464 - the phase-three second volley readies again and uses the live beam release
+  ---
+  duration_ms: 0.27734
+  type: 'test'
+  ...
+# Subtest: both release palms register exactly to the original beam origins in either facing
+ok 465 - both release palms register exactly to the original beam origins in either facing
+  ---
+  duration_ms: 7.208986
+  type: 'test'
+  ...
+# Subtest: reaction observation distinguishes real light and heavy hits without adding boss fields
+ok 466 - reaction observation distinguishes real light and heavy hits without adding boss fields
+  ---
+  duration_ms: 10.864463
+  type: 'test'
+  ...
+# Subtest: blocked and invisible hits do not create a reaction or damage
+ok 467 - blocked and invisible hits do not create a reaction or damage
+  ---
+  duration_ms: 5.531598
+  type: 'test'
+  ...
+# Subtest: hit reactions end with authoritative hitstun and do not replace live warnings
+ok 468 - hit reactions end with authoritative hitstun and do not replace live warnings
+  ---
+  duration_ms: 4.89828
+  type: 'test'
+  ...
+# Subtest: generic prism counters and the original shatter keep their original renderer
+ok 469 - generic prism counters and the original shatter keep their original renderer
+  ---
+  duration_ms: 3.917283
+  type: 'test'
+  ...
+# Subtest: canvas-only and failed immutable-texture preparation keep the new animation
+ok 470 - canvas-only and failed immutable-texture preparation keep the new animation
+  ---
+  duration_ms: 7.012327
+  type: 'test'
+  ...
+# Subtest: missing art or invalid metadata falls back to the complete original character
+ok 471 - missing art or invalid metadata falls back to the complete original character
+  ---
+  duration_ms: 8.127908
+  type: 'test'
+  ...
+# Subtest: Original comparison avoids loading new textures and other opponents keep their renderer
+ok 472 - Original comparison avoids loading new textures and other opponents keep their renderer
+  ---
+  duration_ms: 5.557336
+  type: 'test'
+  ...
+# Subtest: rendering cannot change combat data, timer, beam geometry or random sequence
+ok 473 - rendering cannot change combat data, timer, beam geometry or random sequence
+  ---
+  duration_ms: 8.676954
+  type: 'test'
+  ...
+# Subtest: beam matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 474 - beam matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 1499.496611
+  type: 'test'
+  ...
+# Subtest: spark matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 475 - spark matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 1459.190938
+  type: 'test'
+  ...
+# Subtest: the primary beam releases once at .10 and keeps its original width and damage
+ok 476 - the primary beam releases once at .10 and keeps its original width and damage
+  ---
+  duration_ms: 3.504637
+  type: 'test'
+  ...
+# Subtest: spark fans retain five rays and phase three adds five more at .43
+ok 477 - spark fans retain five rays and phase three adds five more at .43
+  ---
+  duration_ms: 14.623798
+  type: 'test'
+  ...
+# Subtest: live beams keep ageing and damaging during an interrupted attack
+ok 478 - live beams keep ageing and damaging during an interrupted attack
+  ---
+  duration_ms: 4.128484
+  type: 'test'
+  ...
+# Subtest: blocking keeps the original directional damage reduction and invulnerability
+ok 479 - blocking keeps the original directional damage reduction and invulnerability
+  ---
+  duration_ms: 5.219461
+  type: 'test'
+  ...
+# Subtest: beam collision retains slab intersection and correctly misses above and behind
+ok 480 - beam collision retains slab intersection and correctly misses above and behind
+  ---
+  duration_ms: 4.729041
+  type: 'test'
+  ...
+# Subtest: co-op beams mark and damage each hero independently only once
+ok 481 - co-op beams mark and damage each hero independently only once
+  ---
+  duration_ms: 4.826243
+  type: 'test'
+  ...
+# Subtest: new round objects cannot inherit the previous round heavy reaction
+ok 482 - new round objects cannot inherit the previous round heavy reaction
+  ---
+  duration_ms: 5.011112
+  type: 'test'
+  ...
+# Subtest: all direct previews initialize actual attacks, invisibility and shatter without invalid state
+ok 483 - all direct previews initialize actual attacks, invisibility and shatter without invalid state
+  ---
+  duration_ms: 92.760215
+  type: 'test'
+  ...
+# Subtest: mirrored review transforms stored aim and teleport destinations with the fighters
+ok 484 - mirrored review transforms stored aim and teleport destinations with the fighters
+  ---
+  duration_ms: 6.843929
+  type: 'test'
+  ...
+# Subtest: optional release hold freezes only after firing and normal play clears it
+ok 485 - optional release hold freezes only after firing and normal play clears it
+  ---
+  duration_ms: 5.587665
+  type: 'test'
+  ...
+# Subtest: production entries match, retain Story Mode and never load review controls
+ok 486 - production entries match, retain Story Mode and never load review controls
+  ---
+  duration_ms: 2.721436
+  type: 'test'
+  ...
+# Subtest: authoritative boss gameplay source is byte-identical to pinned GitHub main
+ok 487 - authoritative boss gameplay source is byte-identical to pinned GitHub main
+  ---
+  duration_ms: 2.92644
+  type: 'test'
+  ...
+# Subtest: original HP and every phase duration are preserved
+ok 488 - original HP and every phase duration are preserved
+  ---
+  duration_ms: 1.938437
+  type: 'test'
+  ...
+# Subtest: exactly four alternating claw swings precede the next stinger
+ok 489 - exactly four alternating claw swings precede the next stinger
+  ---
+  duration_ms: 9.120174
+  type: 'test'
+  ...
+# Subtest: early claw counters still count once in the four-swing sequence and deal 18
+ok 490 - early claw counters still count once in the four-swing sequence and deal 18
+  ---
+  duration_ms: 0.888871
+  type: 'test'
+  ...
+# Subtest: target locks at 0.6 seconds and poison is checked once at 0.22 seconds
+ok 491 - target locks at 0.6 seconds and poison is checked once at 0.22 seconds
+  ---
+  duration_ms: 1.371129
+  type: 'test'
+  ...
+# Subtest: a dodged sting is reflected only by punch/uppercut and deals exactly 150 after return
+ok 492 - a dodged sting is reflected only by punch/uppercut and deals exactly 150 after return
+  ---
+  duration_ms: 1.265428
+  type: 'test'
+  ...
+# Subtest: failed dodge and normal phases cannot trigger a reflected sting
+ok 493 - failed dodge and normal phases cannot trigger a reflected sting
+  ---
+  duration_ms: 0.261285
+  type: 'test'
+  ...
+# Subtest: body damage and specials retain their original values
+ok 494 - body damage and specials retain their original values
+  ---
+  duration_ms: 0.39324
+  type: 'test'
+  ...
+# Subtest: a lethal self-sting retains dissolve and single completion event
+ok 495 - a lethal self-sting retains dissolve and single completion event
+  ---
+  duration_ms: 0.425205
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=110
+ok 496 - connected geometry, reach and joint limits over full attack cycles at x=110
+  ---
+  duration_ms: 423.226979
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=220
+ok 497 - connected geometry, reach and joint limits over full attack cycles at x=220
+  ---
+  duration_ms: 271.91494
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=380
+ok 498 - connected geometry, reach and joint limits over full attack cycles at x=380
+  ---
+  duration_ms: 269.930189
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=640
+ok 499 - connected geometry, reach and joint limits over full attack cycles at x=640
+  ---
+  duration_ms: 263.842501
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=790
+ok 500 - connected geometry, reach and joint limits over full attack cycles at x=790
+  ---
+  duration_ms: 250.981179
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=940
+ok 501 - connected geometry, reach and joint limits over full attack cycles at x=940
+  ---
+  duration_ms: 246.049055
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=1060
+ok 502 - connected geometry, reach and joint limits over full attack cycles at x=1060
+  ---
+  duration_ms: 297.153609
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=1170
+ok 503 - connected geometry, reach and joint limits over full attack cycles at x=1170
+  ---
+  duration_ms: 342.789632
+  type: 'test'
+  ...
+# Subtest: stance feet stay fixed in world space while the body and hips move
+ok 504 - stance feet stay fixed in world space while the body and hips move
+  ---
+  duration_ms: 94.404762
+  type: 'test'
+  ...
+# Subtest: stinger aiming raises the tail arch above the carapace before striking
+ok 505 - stinger aiming raises the tail arch above the carapace before striking
+  ---
+  duration_ms: 44.606541
+  type: 'test'
+  ...
+# Subtest: both alternating gait groups move and every foot lifts independently
+ok 506 - both alternating gait groups move and every foot lifts independently
+  ---
+  duration_ms: 2.103084
+  type: 'test'
+  ...
+# Subtest: presentation sampling neither mutates a frozen combat model nor consumes events
+ok 507 - presentation sampling neither mutates a frozen combat model nor consumes events
+  ---
+  duration_ms: 0.541358
+  type: 'test'
+  ...
+# Subtest: two presentation passes reuse one snapshot and do not advance time
+ok 508 - two presentation passes reuse one snapshot and do not advance time
+  ---
+  duration_ms: 0.381677
+  type: 'test'
+  ...
+# Subtest: render frequency cannot alter combat or the final articulated pose
+ok 509 - render frequency cannot alter combat or the final articulated pose
+  ---
+  duration_ms: 349.323585
+  type: 'test'
+  ...
+# Subtest: native and rigged encounters have identical traces including counters and self-stings
+ok 510 - native and rigged encounters have identical traces including counters and self-stings
+  ---
+  duration_ms: 459.785516
+  type: 'test'
+  ...
+# Subtest: inactive post-sting recovery settles without moving any active attack anchor
+ok 511 - inactive post-sting recovery settles without moving any active attack anchor
+  ---
+  duration_ms: 0.552063
+  type: 'test'
+  ...
+# Subtest: walking advances through eight drawings with distance and stops at idle
+ok 512 - walking advances through eight drawings with distance and stops at idle
+  ---
+  duration_ms: 1.551513
+  type: 'test'
+  ...
+# Subtest: pulse cannot show release before its projectile threshold
+ok 513 - pulse cannot show release before its projectile threshold
+  ---
+  duration_ms: 0.381104
+  type: 'test'
+  ...
+# Subtest: stomp contact is held until the low waves spawn
+ok 514 - stomp contact is held until the low waves spawn
+  ---
+  duration_ms: 0.193983
+  type: 'test'
+  ...
+# Subtest: horn blast shows emission throughout the growing and sustained active cone
+ok 515 - horn blast shows emission throughout the growing and sustained active cone
+  ---
+  duration_ms: 0.200041
+  type: 'test'
+  ...
+# Subtest: hit reactions distinguish force and never cover resumed attacks
+ok 516 - hit reactions distinguish force and never cover resumed attacks
+  ---
+  duration_ms: 0.458906
+  type: 'test'
+  ...
+# Subtest: guard, counter and original defeat keep deliberate presentation
+ok 517 - guard, counter and original defeat keep deliberate presentation
+  ---
+  duration_ms: 0.975685
+  type: 'test'
+  ...
+# Subtest: interpolation handles stride wrap without blending turns, teleports or state changes
+ok 518 - interpolation handles stride wrap without blending turns, teleports or state changes
+  ---
+  duration_ms: 0.346026
+  type: 'test'
+  ...
+# Subtest: all transparent atlases register complete valid crops and anchors
+ok 519 - all transparent atlases register complete valid crops and anchors
+  ---
+  duration_ms: 44.784841
+  type: 'test'
+  ...
+# Subtest: missing any atlas or an invalid crop retains the complete original renderer
+ok 520 - missing any atlas or an invalid crop retains the complete original renderer
+  ---
+  duration_ms: 49.29834
+  type: 'test'
+  ...
+# Subtest: Original comparison loads no additional textures
+ok 521 - Original comparison loads no additional textures
+  ---
+  duration_ms: 4.642037
+  type: 'test'
+  ...
+# Subtest: other villains are unaffected by the Sonic Tusk renderer
+ok 522 - other villains are unaffected by the Sonic Tusk renderer
+  ---
+  duration_ms: 15.639053
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, cutscenes, guests and nonwalking states lock interpolation
+ok 523 - pause, hitstop, cutscenes, guests and nonwalking states lock interpolation
+  ---
+  duration_ms: 16.379166
+  type: 'test'
+  ...
+# Subtest: new round state and crossing the opponent reset visual facing without a slide
+ok 524 - new round state and crossing the opponent reset visual facing without a slide
+  ---
+  duration_ms: 19.234807
+  type: 'test'
+  ...
+# Subtest: drawing leaves gameplay and wave data untouched in both directions
+ok 525 - drawing leaves gameplay and wave data untouched in both directions
+  ---
+  duration_ms: 14.828107
+  type: 'test'
+  ...
+# Subtest: pulse matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 526 - pulse matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 1256.24292
+  type: 'test'
+  ...
+# Subtest: stomp matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 527 - stomp matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 1132.827222
+  type: 'test'
+  ...
+# Subtest: blast matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 528 - blast matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 1091.008945
+  type: 'test'
+  ...
+# Subtest: hitstun freezes attack timing while existing sound waves keep travelling
+ok 529 - hitstun freezes attack timing while existing sound waves keep travelling
+  ---
+  duration_ms: 9.732921
+  type: 'test'
+  ...
+# Subtest: actual projectile and bass-wave spawn steps match their contact drawings
+ok 530 - actual projectile and bass-wave spawn steps match their contact drawings
+  ---
+  duration_ms: 6.401555
+  type: 'test'
+  ...
+# Subtest: the growing horn cone can hurt both co-op heroes while its firing pose is shown
+ok 531 - the growing horn cone can hurt both co-op heroes while its firing pose is shown
+  ---
+  duration_ms: 6.871206
+  type: 'test'
+  ...
+# Subtest: jump clearance and facing preserve the original horn damage region
+ok 532 - jump clearance and facing preserve the original horn damage region
+  ---
+  duration_ms: 108.103801
+  type: 'test'
+  ...
+# Subtest: production entries match and contain no review controls or story restriction
+ok 533 - production entries match and contain no review controls or story restriction
+  ---
+  duration_ms: 6.254484
+  type: 'test'
+  ...
+# Subtest: Queued tag keeps attacks, movement and defense available against opponent 5
+ok 534 - Queued tag keeps attacks, movement and defense available against opponent 5
+  ---
+  duration_ms: 5.26239
+  type: 'test'
+  ...
+# Subtest: Both hero protection and opponent / hazard time remain frozen during opponent 5 tag
+ok 535 - Both hero protection and opponent / hazard time remain frozen during opponent 5 tag
+  ---
+  duration_ms: 3.003158
+  type: 'test'
+  ...
+# Subtest: keys movement and block hold survive opponent 5 switch
+ok 536 - keys movement and block hold survive opponent 5 switch
+  ---
+  duration_ms: 2.094573
+  type: 'test'
+  ...
+# Subtest: touchHeld movement and block hold survive opponent 5 switch
+ok 537 - touchHeld movement and block hold survive opponent 5 switch
+  ---
+  duration_ms: 2.604242
+  type: 'test'
+  ...
+# Subtest: padHeld movement and block hold survive opponent 5 switch
+ok 538 - padHeld movement and block hold survive opponent 5 switch
+  ---
+  duration_ms: 1.902164
+  type: 'test'
+  ...
+# Subtest: Queued tag keeps attacks, movement and defense available against opponent 0
+ok 539 - Queued tag keeps attacks, movement and defense available against opponent 0
+  ---
+  duration_ms: 1.522838
+  type: 'test'
+  ...
+# Subtest: Both hero protection and opponent / hazard time remain frozen during opponent 0 tag
+ok 540 - Both hero protection and opponent / hazard time remain frozen during opponent 0 tag
+  ---
+  duration_ms: 2.461553
+  type: 'test'
+  ...
+# Subtest: keys movement and block hold survive opponent 0 switch
+ok 541 - keys movement and block hold survive opponent 0 switch
+  ---
+  duration_ms: 2.038569
+  type: 'test'
+  ...
+# Subtest: touchHeld movement and block hold survive opponent 0 switch
+ok 542 - touchHeld movement and block hold survive opponent 0 switch
+  ---
+  duration_ms: 1.631158
+  type: 'test'
+  ...
+# Subtest: padHeld movement and block hold survive opponent 0 switch
+ok 543 - padHeld movement and block hold survive opponent 0 switch
+  ---
+  duration_ms: 1.929616
+  type: 'test'
+  ...
+# Subtest: All stage positions have a manual swap below 0.72 seconds
+ok 544 - All stage positions have a manual swap below 0.72 seconds
+  ---
+  duration_ms: 15.971584
+  type: 'test'
+  ...
+# Subtest: Incoming hero can attack on arrival and a late entrance press is buffered once
+ok 545 - Incoming hero can attack on arrival and a late entrance press is buffered once
+  ---
+  duration_ms: 6.405845
+  type: 'test'
+  ...
+# Subtest: Stale entrance actions are discarded and held attacks are not repeated
+ok 546 - Stale entrance actions are discarded and held attacks are not repeated
+  ---
+  duration_ms: 2.302275
+  type: 'test'
+  ...
+# Subtest: Health and special charge remain separate through repeated tags and defeated teammates are skipped
+ok 547 - Health and special charge remain separate through repeated tags and defeated teammates are skipped
+  ---
+  duration_ms: 7.277879
+  type: 'test'
+  ...
+# Subtest: Automatic replacement preserves the defeat pose and restores input within one second
+ok 548 - Automatic replacement preserves the defeat pose and restores input within one second
+  ---
+  duration_ms: 1.91529
+  type: 'test'
+  ...
+# Subtest: Pause freezes a swap; non-story combat still calls its original input handlers
+ok 549 - Pause freezes a swap; non-story combat still calls its original input handlers
+  ---
+  duration_ms: 1.984559
+  type: 'test'
+  ...
+# Subtest: walk resolves eight distinct distance-driven poses and stops on idle
+ok 550 - walk resolves eight distinct distance-driven poses and stops on idle
+  ---
+  duration_ms: 1.79493
+  type: 'test'
+  ...
+# Subtest: idle has a continuous four-pose breathing loop
+ok 551 - idle has a continuous four-pose breathing loop
+  ---
+  duration_ms: 1.139522
+  type: 'test'
+  ...
+# Subtest: crush full extension matches the damaging contact boundary
+ok 552 - crush full extension matches the damaging contact boundary
+  ---
+  duration_ms: 0.380113
+  type: 'test'
+  ...
+# Subtest: double full extension matches the damaging contact boundary
+ok 553 - double full extension matches the damaging contact boundary
+  ---
+  duration_ms: 0.114464
+  type: 'test'
+  ...
+# Subtest: spike release tracks each of the three actual volleys, never a fourth
+ok 554 - spike release tracks each of the three actual volleys, never a fourth
+  ---
+  duration_ms: 0.204728
+  type: 'test'
+  ...
+# Subtest: hit reactions distinguish light and heavy hits, then release resumed attacks
+ok 555 - hit reactions distinguish light and heavy hits, then release resumed attacks
+  ---
+  duration_ms: 0.265606
+  type: 'test'
+  ...
+# Subtest: split windup, merge, guard and breakout have explicit poses
+ok 556 - split windup, merge, guard and breakout have explicit poses
+  ---
+  duration_ms: 0.242805
+  type: 'test'
+  ...
+# Subtest: defeat keeps the four approved collapse poses and holds the final one
+ok 557 - defeat keeps the four approved collapse poses and holds the final one
+  ---
+  duration_ms: 0.163751
+  type: 'test'
+  ...
+# Subtest: all 32 whole-body crops fit actual transparent PNGs with grounded anchors
+ok 558 - all 32 whole-body crops fit actual transparent PNGs with grounded anchors
+  ---
+  duration_ms: 21.65608
+  type: 'test'
+  ...
+# Subtest: missing any new sheet falls back to the complete original character
+ok 559 - missing any new sheet falls back to the complete original character
+  ---
+  duration_ms: 14.192731
+  type: 'test'
+  ...
+# Subtest: Original comparison loads no new images
+ok 560 - Original comparison loads no new images
+  ---
+  duration_ms: 2.906279
+  type: 'test'
+  ...
+# Subtest: other characters always retain their own renderer
+ok 561 - other characters always retain their own renderer
+  ---
+  duration_ms: 7.976922
+  type: 'test'
+  ...
+# Subtest: drawing never mutates boss state or projectiles in either facing
+ok 562 - drawing never mutates boss state or projectiles in either facing
+  ---
+  duration_ms: 17.211751
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, cutscenes, guests and attacks lock interpolation to simulation
+ok 563 - pause, hitstop, cutscenes, guests and attacks lock interpolation to simulation
+  ---
+  duration_ms: 7.660602
+  type: 'test'
+  ...
+# Subtest: a new round or changed facing cannot inherit old interpolation
+ok 564 - a new round or changed facing cannot inherit old interpolation
+  ---
+  duration_ms: 7.875195
+  type: 'test'
+  ...
+# Subtest: crush gameplay is identical at 30/60/120/144 Hz drawing in every phase
+ok 565 - crush gameplay is identical at 30/60/120/144 Hz drawing in every phase
+  ---
+  duration_ms: 557.851501
+  type: 'test'
+  ...
+# Subtest: spikes gameplay is identical at 30/60/120/144 Hz drawing in every phase
+ok 566 - spikes gameplay is identical at 30/60/120/144 Hz drawing in every phase
+  ---
+  duration_ms: 671.858925
+  type: 'test'
+  ...
+# Subtest: double gameplay is identical at 30/60/120/144 Hz drawing in every phase
+ok 567 - double gameplay is identical at 30/60/120/144 Hz drawing in every phase
+  ---
+  duration_ms: 596.841102
+  type: 'test'
+  ...
+# Subtest: hitstun suspends attack clock and prevents premature damage
+ok 568 - hitstun suspends attack clock and prevents premature damage
+  ---
+  duration_ms: 8.070349
+  type: 'test'
+  ...
+# Subtest: split draws two complete mirrored figures and merges back to one
+ok 569 - split draws two complete mirrored figures and merges back to one
+  ---
+  duration_ms: 10.893926
+  type: 'test'
+  ...
+# Subtest: both entry points load the new module after combat without review code
+ok 570 - both entry points load the new module after combat without review code
+  ---
+  duration_ms: 2.665355
+  type: 'test'
+  ...
+# Subtest: eight walk drawings advance with distance and stop at idle
+ok 571 - eight walk drawings advance with distance and stop at idle
+  ---
+  duration_ms: 4.455065
+  type: 'test'
+  ...
+# Subtest: four idle drawings form a repeating loop
+ok 572 - four idle drawings form a repeating loop
+  ---
+  duration_ms: 0.59636
+  type: 'test'
+  ...
+# Subtest: claw reaches full extension at damage contact, never early
+ok 573 - claw reaches full extension at damage contact, never early
+  ---
+  duration_ms: 0.593724
+  type: 'test'
+  ...
+# Subtest: slam lands exactly at the shockwave and stays grounded through recovery
+ok 574 - slam lands exactly at the shockwave and stays grounded through recovery
+  ---
+  duration_ms: 0.54945
+  type: 'test'
+  ...
+# Subtest: roar release uses the same three-volley clock as projectiles
+ok 575 - roar release uses the same three-volley clock as projectiles
+  ---
+  duration_ms: 0.587756
+  type: 'test'
+  ...
+# Subtest: recoils distinguish light and heavy hits without hiding resumed attacks
+ok 576 - recoils distinguish light and heavy hits without hiding resumed attacks
+  ---
+  duration_ms: 0.627597
+  type: 'test'
+  ...
+# Subtest: guard and breakout have deliberate poses
+ok 577 - guard and breakout have deliberate poses
+  ---
+  duration_ms: 0.368333
+  type: 'test'
+  ...
+# Subtest: original defeat stages remain intact and hold the collapsed pose
+ok 578 - original defeat stages remain intact and hold the collapsed pose
+  ---
+  duration_ms: 0.387529
+  type: 'test'
+  ...
+# Subtest: walk interpolation handles stride wrap and never crosses a turn or teleport
+ok 579 - walk interpolation handles stride wrap and never crosses a turn or teleport
+  ---
+  duration_ms: 0.640298
+  type: 'test'
+  ...
+# Subtest: all 32 sprites have valid transparent PNG crops and foot anchors
+ok 580 - all 32 sprites have valid transparent PNG crops and foot anchors
+  ---
+  duration_ms: 40.425229
+  type: 'test'
+  ...
+# Subtest: either missing sheet or invalid crop preserves the complete original renderer
+ok 581 - either missing sheet or invalid crop preserves the complete original renderer
+  ---
+  duration_ms: 22.682129
+  type: 'test'
+  ...
+# Subtest: Original comparison loads no new sheets
+ok 582 - Original comparison loads no new sheets
+  ---
+  duration_ms: 3.639302
+  type: 'test'
+  ...
+# Subtest: all other villains retain their own renderer
+ok 583 - all other villains retain their own renderer
+  ---
+  duration_ms: 25.729015
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, special cutscenes, guests and nonidle states lock position
+ok 584 - pause, hitstop, special cutscenes, guests and nonidle states lock position
+  ---
+  duration_ms: 22.076515
+  type: 'test'
+  ...
+# Subtest: a new round cannot inherit previous interpolation or facing
+ok 585 - a new round cannot inherit previous interpolation or facing
+  ---
+  duration_ms: 10.224181
+  type: 'test'
+  ...
+# Subtest: drawing does not mutate combat state or projectiles in either facing
+ok 586 - drawing does not mutate combat state or projectiles in either facing
+  ---
+  duration_ms: 22.012956
+  type: 'test'
+  ...
+# Subtest: claw keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+ok 587 - claw keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+  ---
+  duration_ms: 322.492159
+  type: 'test'
+  ...
+# Subtest: slam keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+ok 588 - slam keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+  ---
+  duration_ms: 383.979081
+  type: 'test'
+  ...
+# Subtest: roar keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+ok 589 - roar keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+  ---
+  duration_ms: 604.09155
+  type: 'test'
+  ...
+# Subtest: hitstun freezes the attack clock and prevents premature damage
+ok 590 - hitstun freezes the attack clock and prevents premature damage
+  ---
+  duration_ms: 8.458424
+  type: 'test'
+  ...
+# Subtest: rendered landing and roar release match emitted hazards on the actual step
+ok 591 - rendered landing and roar release match emitted hazards on the actual step
+  ---
+  duration_ms: 9.29638
+  type: 'test'
+  ...
+# Subtest: two co-op heroes receive the same contact evaluation, unaffected by rendering
+ok 592 - two co-op heroes receive the same contact evaluation, unaffected by rendering
+  ---
+  duration_ms: 8.933032
+  type: 'test'
+  ...
+# Subtest: both production entries load matching modules without review controls
+ok 593 - both production entries load matching modules without review controls
+  ---
+  duration_ms: 4.159389
+  type: 'test'
+  ...
+# Subtest: each actor walks through eight distance-driven drawings and settles to its own idle
+ok 594 - each actor walks through eight distance-driven drawings and settles to its own idle
+  ---
+  duration_ms: 1.912561
+  type: 'test'
+  ...
+# Subtest: the claw contacts only at the original timer threshold
+ok 595 - the claw contacts only at the original timer threshold
+  ---
+  duration_ms: 0.489028
+  type: 'test'
+  ...
+# Subtest: flytrap releases follow the three actual volleys with recovery between them
+ok 596 - flytrap releases follow the three actual volleys with recovery between them
+  ---
+  duration_ms: 0.210632
+  type: 'test'
+  ...
+# Subtest: ground vines use their live age after an interrupted attack
+ok 597 - ground vines use their live age after an interrupted attack
+  ---
+  duration_ms: 0.202751
+  type: 'test'
+  ...
+# Subtest: Venomis keeps walking through commands and the bear reaction, then gestures when stationary
+ok 598 - Venomis keeps walking through commands and the bear reaction, then gestures when stationary
+  ---
+  duration_ms: 0.319968
+  type: 'test'
+  ...
+# Subtest: light and heavy reactions are distinct and give way immediately when hitstun ends
+ok 599 - light and heavy reactions are distinct and give way immediately when hitstun ends
+  ---
+  duration_ms: 0.430444
+  type: 'test'
+  ...
+# Subtest: counter overrides stale walking and both actors retain original defeat sequences
+ok 600 - counter overrides stale walking and both actors retain original defeat sequences
+  ---
+  duration_ms: 1.578764
+  type: 'test'
+  ...
+# Subtest: interpolation handles stride wrap without blending turns, teleports or state changes
+ok 601 - interpolation handles stride wrap without blending turns, teleports or state changes
+  ---
+  duration_ms: 0.646452
+  type: 'test'
+  ...
+# Subtest: all four transparent atlases register 48 complete crops and anchors
+ok 602 - all four transparent atlases register 48 complete crops and anchors
+  ---
+  duration_ms: 49.628691
+  type: 'test'
+  ...
+# Subtest: any missing atlas or invalid crop falls back to both original actors
+ok 603 - any missing atlas or invalid crop falls back to both original actors
+  ---
+  duration_ms: 72.945716
+  type: 'test'
+  ...
+# Subtest: Original comparison loads no additional textures
+ok 604 - Original comparison loads no additional textures
+  ---
+  duration_ms: 4.074434
+  type: 'test'
+  ...
+# Subtest: other villains and unrelated sprite sheets retain their original renderer
+ok 605 - other villains and unrelated sprite sheets retain their original renderer
+  ---
+  duration_ms: 17.395919
+  type: 'test'
+  ...
+# Subtest: two actor positions interpolate independently while the follower catches up
+ok 606 - two actor positions interpolate independently while the follower catches up
+  ---
+  duration_ms: 30.644562
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, cutscenes, guests and counters lock both interpolated positions
+ok 607 - pause, hitstop, cutscenes, guests and counters lock both interpolated positions
+  ---
+  duration_ms: 119.679951
+  type: 'test'
+  ...
+# Subtest: new rounds and mirrored facing never inherit another round position
+ok 608 - new rounds and mirrored facing never inherit another round position
+  ---
+  duration_ms: 9.444112
+  type: 'test'
+  ...
+# Subtest: drawing never changes combat, follower or hazard data in either direction
+ok 609 - drawing never changes combat, follower or hazard data in either direction
+  ---
+  duration_ms: 29.526899
+  type: 'test'
+  ...
+# Subtest: swipe matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 610 - swipe matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 2145.655745
+  type: 'test'
+  ...
+# Subtest: seeds matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 611 - seeds matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 2082.463841
+  type: 'test'
+  ...
+# Subtest: vines matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 612 - vines matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 1752.219411
+  type: 'test'
+  ...
+# Subtest: hitstun freezes the bear attack but follower, shots and vines continue
+ok 613 - hitstun freezes the bear attack but follower, shots and vines continue
+  ---
+  duration_ms: 11.772856
+  type: 'test'
+  ...
+# Subtest: the actual swipe hit and all three projectile spawns show contact and emission
+ok 614 - the actual swipe hit and all three projectile spawns show contact and emission
+  ---
+  duration_ms: 13.530676
+  type: 'test'
+  ...
+# Subtest: ground-vine damage and separate co-op hit flags preserve both heroes
+ok 615 - ground-vine damage and separate co-op hit flags preserve both heroes
+  ---
+  duration_ms: 25.500742
+  type: 'test'
+  ...
+# Subtest: jump clearance, hero heights and facing preserve original projectile collision
+ok 616 - jump clearance, hero heights and facing preserve original projectile collision
+  ---
+  duration_ms: 162.098141
+  type: 'test'
+  ...
+# Subtest: defeat draws the complete original bear and scientist in either direction
+ok 617 - defeat draws the complete original bear and scientist in either direction
+  ---
+  duration_ms: 9.549644
+  type: 'test'
+  ...
+# Subtest: production entries match and contain no review controls or story restriction
+ok 618 - production entries match and contain no review controls or story restriction
+  ---
+  duration_ms: 3.89412
+  type: 'test'
+  ...
+# Subtest: move-preview controls initialize real attack origins before advancing the fight
+ok 619 - move-preview controls initialize real attack origins before advancing the fight
+  ---
+  duration_ms: 48.170378
+  type: 'test'
+  ...
+# Subtest: immutable texture preparation completes before both actors use the new renderer
+ok 620 - immutable texture preparation completes before both actors use the new renderer
+  ---
+  duration_ms: 8.168891
+  type: 'test'
+  ...
+# Subtest: browsers unable to create immutable textures still draw both prepared actors
+ok 621 - browsers unable to create immutable textures still draw both prepared actors
+  ---
+  duration_ms: 12.148678
+  type: 'test'
+  ...
+# Subtest: walk uses eight poses by distance and remains still when the fighter stops
+ok 622 - walk uses eight poses by distance and remains still when the fighter stops
+  ---
+  duration_ms: 2.160671
+  type: 'test'
+  ...
+# Subtest: mallet contact pose starts exactly at the original damaging timer
+ok 623 - mallet contact pose starts exactly at the original damaging timer
+  ---
+  duration_ms: 0.229618
+  type: 'test'
+  ...
+# Subtest: throw release drawings follow the real two- and three-shot cadence
+ok 624 - throw release drawings follow the real two- and three-shot cadence
+  ---
+  duration_ms: 0.389665
+  type: 'test'
+  ...
+# Subtest: acid stream starts with the existing pool spawn and stops before return to guard
+ok 625 - acid stream starts with the existing pool spawn and stops before return to guard
+  ---
+  duration_ms: 0.177742
+  type: 'test'
+  ...
+# Subtest: hit recovery cannot conceal an active resumed attack
+ok 626 - hit recovery cannot conceal an active resumed attack
+  ---
+  duration_ms: 0.485951
+  type: 'test'
+  ...
+# Subtest: guard and counterattack have explicit body poses while defeat retains original collapse
+ok 627 - guard and counterattack have explicit body poses while defeat retains original collapse
+  ---
+  duration_ms: 0.227781
+  type: 'test'
+  ...
+# Subtest: all new drawings register within the real transparent PNG bounds
+ok 628 - all new drawings register within the real transparent PNG bounds
+  ---
+  duration_ms: 27.326707
+  type: 'test'
+  ...
+# Subtest: missing attack sheet uses the original full renderer, without partial figures
+ok 629 - missing attack sheet uses the original full renderer, without partial figures
+  ---
+  duration_ms: 9.704547
+  type: 'test'
+  ...
+# Subtest: original comparison skips every new image and retains the original renderer
+ok 630 - original comparison skips every new image and retains the original renderer
+  ---
+  duration_ms: 2.760096
+  type: 'test'
+  ...
+# Subtest: new renderer is restricted to Wastelander
+ok 631 - new renderer is restricted to Wastelander
+  ---
+  duration_ms: 9.197094
+  type: 'test'
+  ...
+# Subtest: presentation never mutates authoritative coordinates, including reversed facing
+ok 632 - presentation never mutates authoritative coordinates, including reversed facing
+  ---
+  duration_ms: 11.063762
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, attacks and network guests bypass the extra interpolation
+ok 633 - pause, hitstop, attacks and network guests bypass the extra interpolation
+  ---
+  duration_ms: 7.290653
+  type: 'test'
+  ...
+# Subtest: a fresh round never inherits the previous boss interpolation history
+ok 634 - a fresh round never inherits the previous boss interpolation history
+  ---
+  duration_ms: 6.572903
+  type: 'test'
+  ...
+# Subtest: mallet retains identical gameplay at every drawing rate
+ok 635 - mallet retains identical gameplay at every drawing rate
+  ---
+  duration_ms: 315.564912
+  type: 'test'
+  ...
+# Subtest: trash retains identical gameplay at every drawing rate
+ok 636 - trash retains identical gameplay at every drawing rate
+  ---
+  duration_ms: 325.613381
+  type: 'test'
+  ...
+# Subtest: acid retains identical gameplay at every drawing rate
+ok 637 - acid retains identical gameplay at every drawing rate
+  ---
+  duration_ms: 329.795811
+  type: 'test'
+  ...
+# Subtest: paused hitstun never advances a windup or releases a delayed mallet
+ok 638 - paused hitstun never advances a windup or releases a delayed mallet
+  ---
+  duration_ms: 4.689693
+  type: 'test'
+  ...
+# Subtest: both game entry points load the same complete Wastelander assets
+ok 639 - both game entry points load the same complete Wastelander assets
+  ---
+  duration_ms: 2.584455
+  type: 'test'
+  ...
+1..639
+# tests 639
+# suites 0
+# pass 639
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 51230.799779

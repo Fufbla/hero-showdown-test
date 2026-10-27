@@ -1,0 +1,160 @@
+TAP version 13
+# Subtest: authoritative boss gameplay source is byte-identical to pinned GitHub main
+ok 1 - authoritative boss gameplay source is byte-identical to pinned GitHub main
+  ---
+  duration_ms: 2.269536
+  type: 'test'
+  ...
+# Subtest: original HP and every phase duration are preserved
+ok 2 - original HP and every phase duration are preserved
+  ---
+  duration_ms: 0.846952
+  type: 'test'
+  ...
+# Subtest: exactly four alternating claw swings precede the next stinger
+ok 3 - exactly four alternating claw swings precede the next stinger
+  ---
+  duration_ms: 5.705236
+  type: 'test'
+  ...
+# Subtest: early claw counters still count once in the four-swing sequence and deal 18
+ok 4 - early claw counters still count once in the four-swing sequence and deal 18
+  ---
+  duration_ms: 2.12657
+  type: 'test'
+  ...
+# Subtest: target locks at 0.6 seconds and poison is checked once at 0.22 seconds
+ok 5 - target locks at 0.6 seconds and poison is checked once at 0.22 seconds
+  ---
+  duration_ms: 1.163266
+  type: 'test'
+  ...
+# Subtest: a dodged sting is reflected only by punch/uppercut and deals exactly 150 after return
+ok 6 - a dodged sting is reflected only by punch/uppercut and deals exactly 150 after return
+  ---
+  duration_ms: 0.55709
+  type: 'test'
+  ...
+# Subtest: failed dodge and normal phases cannot trigger a reflected sting
+ok 7 - failed dodge and normal phases cannot trigger a reflected sting
+  ---
+  duration_ms: 0.624969
+  type: 'test'
+  ...
+# Subtest: body damage and specials retain their original values
+ok 8 - body damage and specials retain their original values
+  ---
+  duration_ms: 0.685546
+  type: 'test'
+  ...
+# Subtest: a lethal self-sting retains dissolve and single completion event
+ok 9 - a lethal self-sting retains dissolve and single completion event
+  ---
+  duration_ms: 1.155859
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=110
+ok 10 - connected geometry, reach and joint limits over full attack cycles at x=110
+  ---
+  duration_ms: 427.22753
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=220
+ok 11 - connected geometry, reach and joint limits over full attack cycles at x=220
+  ---
+  duration_ms: 254.023572
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=380
+ok 12 - connected geometry, reach and joint limits over full attack cycles at x=380
+  ---
+  duration_ms: 292.113909
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=640
+ok 13 - connected geometry, reach and joint limits over full attack cycles at x=640
+  ---
+  duration_ms: 238.480305
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=790
+ok 14 - connected geometry, reach and joint limits over full attack cycles at x=790
+  ---
+  duration_ms: 301.292504
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=940
+ok 15 - connected geometry, reach and joint limits over full attack cycles at x=940
+  ---
+  duration_ms: 260.679837
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=1060
+ok 16 - connected geometry, reach and joint limits over full attack cycles at x=1060
+  ---
+  duration_ms: 304.494963
+  type: 'test'
+  ...
+# Subtest: connected geometry, reach and joint limits over full attack cycles at x=1170
+ok 17 - connected geometry, reach and joint limits over full attack cycles at x=1170
+  ---
+  duration_ms: 371.708602
+  type: 'test'
+  ...
+# Subtest: stance feet stay fixed in world space while the body and hips move
+ok 18 - stance feet stay fixed in world space while the body and hips move
+  ---
+  duration_ms: 100.714068
+  type: 'test'
+  ...
+# Subtest: stinger aiming raises the tail arch above the carapace before striking
+ok 19 - stinger aiming raises the tail arch above the carapace before striking
+  ---
+  duration_ms: 38.063442
+  type: 'test'
+  ...
+# Subtest: both alternating gait groups move and every foot lifts independently
+ok 20 - both alternating gait groups move and every foot lifts independently
+  ---
+  duration_ms: 1.195574
+  type: 'test'
+  ...
+# Subtest: presentation sampling neither mutates a frozen combat model nor consumes events
+ok 21 - presentation sampling neither mutates a frozen combat model nor consumes events
+  ---
+  duration_ms: 0.513654
+  type: 'test'
+  ...
+# Subtest: two presentation passes reuse one snapshot and do not advance time
+ok 22 - two presentation passes reuse one snapshot and do not advance time
+  ---
+  duration_ms: 0.726614
+  type: 'test'
+  ...
+# Subtest: render frequency cannot alter combat or the final articulated pose
+ok 23 - render frequency cannot alter combat or the final articulated pose
+  ---
+  duration_ms: 389.840081
+  type: 'test'
+  ...
+# Subtest: native and rigged encounters have identical traces including counters and self-stings
+ok 24 - native and rigged encounters have identical traces including counters and self-stings
+  ---
+  duration_ms: 595.704804
+  type: 'test'
+  ...
+# Subtest: inactive post-sting recovery settles without moving any active attack anchor
+ok 25 - inactive post-sting recovery settles without moving any active attack anchor
+  ---
+  duration_ms: 0.376802
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3802.384122

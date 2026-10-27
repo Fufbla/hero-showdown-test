@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hero Showdown — performance and controls review</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#081d24;color:#ecf7ed;font:14px system-ui}header{padding:12px 20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}h1{font-size:20px;margin:0 auto 0 0}button,a,select{font:inherit;padding:9px 12px;background:#204a3d;color:inherit;border:1px solid #7a9a82;border-radius:5px}button:disabled{opacity:.5}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #fff09a}iframe{width:100%;height:68vh;border:0}#status{margin:8px 20px}pre{margin:12px 20px;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.5 monospace}p{margin:8px 20px}.phone{width:390px;height:844px;max-width:100%}.landscape{width:844px;height:390px;max-width:100%}
+</style>
+<header><h1>Performance & controls review</h1><button id="benchmark" disabled>Measure all opponents</button><button id="checks" disabled>Check controls & story</button><button id="chapters" disabled>Check chapter transitions</button><button id="live" disabled>Compare live frames</button><button id="pixels" disabled>Compare scenery</button><button id="play" disabled>Play normally</button><label>View <select id="size"><option value="">Desktop</option><option value="phone">Phone portrait</option><option value="landscape">Phone landscape</option></select></label><a href="index.html">Game menu</a></header>
+<p>Optional local review. Measurements describe this browser, not a guarantee of device frame rate. Control checks use synthetic events and virtual gamepads; real hardware and an internet co-op session need separate testing.</p>
+<p id="status" role="status">Loading the completed character artwork…</p>
+<iframe id="preview" title="Hero Showdown test game" src="index.html" allow="autoplay;fullscreen;gamepad" allowfullscreen></iframe>
+<pre id="results">No checks run yet.</pre>
+<script src="assets/js/performance-reference.js?v=1"></script>
+<script src="assets/js/performance-review.js?v=1"></script>
+</html>

@@ -1,0 +1,134 @@
+{
+  "reviewed_at": "2026-10-26",
+  "environment": "Cloud Chrome; existing Chapter 3 battle in local isolated test page",
+  "hero_at_final_run": "Super Sadie",
+  "passed": 27,
+  "total": 27,
+  "checks": [
+    {
+      "name": "Approved artwork loaded without replacement images",
+      "pass": true
+    },
+    {
+      "name": "Actual Chapter 3 boss starts at 650 HP with all three heroes",
+      "pass": true
+    },
+    {
+      "name": "Eight articulated legs, ten connected tail sections and two claw arms",
+      "pass": true
+    },
+    {
+      "name": "Back/front draw passes do not alter combat state",
+      "pass": true
+    },
+    {
+      "name": "Pause freezes animation and the boss clock",
+      "pass": true
+    },
+    {
+      "name": "Hit-stop freezes presentation with model time",
+      "pass": true
+    },
+    {
+      "name": "Contact registration and attached joints at target 110",
+      "pass": true
+    },
+    {
+      "name": "Contact registration and attached joints at target 380",
+      "pass": true
+    },
+    {
+      "name": "Contact registration and attached joints at target 640",
+      "pass": true
+    },
+    {
+      "name": "Contact registration and attached joints at target 940",
+      "pass": true
+    },
+    {
+      "name": "Contact registration and attached joints at target 1170",
+      "pass": true
+    },
+    {
+      "name": "intro renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "clawWindup renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "clawSweep renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "clawRecover renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "stingerWindup renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "stingerPlunge renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "stingerExposed renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "stingerRecover renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "reflect renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "stunned renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "dissolve renders with a stable model snapshot",
+      "pass": true
+    },
+    {
+      "name": "Tagging pauses the boss rig and preserves hero health",
+      "pass": true
+    },
+    {
+      "name": "Normal rounds still use the original scorpion encounter",
+      "pass": true
+    },
+    {
+      "name": "Returning to Versus leaves Chapter 3 and the rig inactive",
+      "pass": true
+    },
+    {
+      "name": "Live battle update reaches the stinger after four alternating sweeps",
+      "pass": true
+    },
+    {
+      "name": "Actual hero punch reflects a dodged sting and removes exactly 150 boss HP",
+      "pass": true
+    }
+  ],
+  "bossDrawMs": {
+    "samples": 180,
+    "median": 0.4000000059604645,
+    "p95": 1.300000011920929
+  },
+  "fullUpdateAndDrawMs": {
+    "samples": 180,
+    "median": 1.199999988079071,
+    "p95": 2.2000000029802322
+  },
+  "metrics": {
+    "ready": true,
+    "draws": 36180,
+    "textureBytes": 4973208,
+    "errors": []
+  },
+  "note": "CPU submission timings in this browser, excluding display/compositor/GPU wait; not a guarantee of physical-device frame rate."
+}
