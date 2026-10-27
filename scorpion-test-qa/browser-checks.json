@@ -1,9 +1,4 @@
 {
-  "reviewed_at": "2026-10-26",
-  "environment": "Cloud Chrome; existing Chapter 3 battle in local isolated test page",
-  "hero_at_final_run": "Super Sadie",
-  "passed": 27,
-  "total": 27,
   "checks": [
     {
       "name": "Approved artwork loaded without replacement images",
@@ -112,22 +107,32 @@
     {
       "name": "Actual hero punch reflects a dodged sting and removes exactly 150 boss HP",
       "pass": true
+    },
+    {
+      "name": "Left claw counter uses the actual hero punch and keeps 18 damage",
+      "pass": true
+    },
+    {
+      "name": "Right claw counter uses the actual hero punch and keeps 18 damage",
+      "pass": true
     }
   ],
+  "passed": 29,
+  "total": 29,
   "bossDrawMs": {
     "samples": 180,
-    "median": 0.4000000059604645,
-    "p95": 1.300000011920929
+    "median": 0.2999999988824129,
+    "p95": 0.6000000014901161
   },
   "fullUpdateAndDrawMs": {
     "samples": 180,
-    "median": 1.199999988079071,
-    "p95": 2.2000000029802322
+    "median": 0.6000000014901161,
+    "p95": 1.199999999254942
   },
   "metrics": {
     "ready": true,
-    "draws": 36180,
-    "textureBytes": 4973208,
+    "draws": 36156,
+    "textureBytes": 6504328,
     "errors": []
   },
   "note": "CPU submission timings in this browser, excluding display/compositor/GPU wait; not a guarantee of physical-device frame rate."

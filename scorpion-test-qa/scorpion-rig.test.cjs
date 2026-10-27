@@ -18,7 +18,7 @@ test('a lethal self-sting retains dissolve and single completion event',()=>{con
 for(const x of [110,220,380,640,790,940,1060,1170])test('connected geometry, reach and joint limits over full attack cycles at x='+x,()=>{
  const m=new Boss.Encounter(),r=new Rig.Rig(m);for(let n=0;n<3000;n++){m.step(1/120,{x,y:604,dash:true});const p=r.advance(m);assert.equal(p.legs.length,8);assert.equal(p.claws.length,2);assert.equal(p.tail.length,11);
   for(const l of p.legs){near(Rig.dist(l.position,l.joints[3]),0);for(let i=0;i<3;i++)near(Rig.dist(l.joints[i],l.joints[i+1]),l.lengths[i]);assert.ok(l.side===1?l.joints[1].x<l.joints[0].x:l.joints[1].x>l.joints[0].x);}
-  for(const a of p.claws){near(Rig.dist(a.shoulder,a.elbow),a.lengths[0]);near(Rig.dist(a.elbow,a.wrist),a.lengths[1]);const native=m.clawPose(a.weapon.side);near(a.weapon.x,native.x);near(a.weapon.y,native.y);near(a.weapon.angle,native.angle);near(Rig.dist(a.wrist,native.wrist),0);}
+  for(const a of p.claws){near(Rig.dist(a.shoulder,a.elbow),a.lengths[0]);near(Rig.dist(a.elbow,a.wrist),a.lengths[1]);near(Rig.dist(a.wrist,a.palm),a.lengths[2]);const native=m.clawPose(a.weapon.side);near(a.weapon.x,native.x);near(a.weapon.y,native.y);near(a.weapon.angle,native.angle);near(Rig.dist(a.palm,Rig.clawPalm(native)),0);}
   near(Rig.dist(p.tail[0],p.root),0);near(Rig.dist(p.tail[10],p.stingerSocket),0,.001);for(let i=0;i<10;i++){near(distance3(p.tail[i],p.tail[i+1]),65);if(i){const a=p.tail[i-1],b=p.tail[i],c=p.tail[i+1],u=[b.x-a.x,b.y-a.y,b.z-a.z],v=[c.x-b.x,c.y-b.y,c.z-b.z];const turn=Math.acos(Math.max(-1,Math.min(1,u.reduce((s,z,j)=>s+z*v[j],0)/(65*65))));assert.ok(turn<.9,'tail joint turned '+turn);}}
   if(['stingerWindup','stingerPlunge','stingerExposed','reflect','stunned'].includes(m.state))near(Rig.dist(p.stinger,m.stingerPose()),0);
   for(const j of [...p.tail,...p.legs.flatMap(l=>l.joints)])assert.ok(Number.isFinite(j.x)&&Number.isFinite(j.y));
@@ -48,4 +48,40 @@ test('native and rigged encounters have identical traces including counters and 
 });
 test('inactive post-sting recovery settles without moving any active attack anchor',()=>{
  const m=new Boss.Encounter();m.state='stunned';m.age=1.19;m.time=3;const r=new Rig.Rig(m);const old=r.pose.stinger.y;m.step(1/120);r.advance(m);m.step(1/120);const p=r.advance(m);assert.equal(m.state,'clawWindup');assert.ok(p.stinger.y<old&&p.stinger.y>195);assert.equal(p.claws[0].weapon.x,m.clawPose(1).x);
+});
+test('all eight support feet finish planting before each fast sweep and stay fixed through it',()=>{
+ const m=new Boss.Encounter(),r=new Rig.Rig(m);let previous=null,samples=0;
+ for(let n=0;n<5000;n++){m.step(1/120,{x:110,y:604,dash:true});const p=r.advance(m);if(m.state==='clawSweep'){assert.ok(p.legs.every(l=>l.planted));if(previous?.state==='clawSweep')p.legs.forEach((l,i)=>near(Rig.dist(l.position,previous.legs[i].position),0));samples++;}previous=p;}
+ assert.ok(samples>1000);
+});
+test('claw elbows flex through the sweep with bounded joint angles and without frame jumps',()=>{
+ const m=new Boss.Encounter(),r=new Rig.Rig(m),ranges=[[Infinity,-Infinity],[Infinity,-Infinity]];let previous=null;
+ for(let n=0;n<2500;n++){m.step(1/120,{x:110,y:604,dash:true});const p=r.advance(m);p.claws.forEach((a,i)=>{
+  const u={x:a.shoulder.x-a.elbow.x,y:a.shoulder.y-a.elbow.y},v={x:a.wrist.x-a.elbow.x,y:a.wrist.y-a.elbow.y};
+  const degrees=Math.acos(Math.max(-1,Math.min(1,(u.x*v.x+u.y*v.y)/(a.lengths[0]*a.lengths[1]))))*180/Math.PI;
+  assert.ok(degrees>30&&degrees<150);ranges[i][0]=Math.min(ranges[i][0],degrees);ranges[i][1]=Math.max(ranges[i][1],degrees);
+  if(previous){assert.ok(Rig.dist(a.elbow,previous.claws[i].elbow)<4);assert.ok(Rig.dist(a.wrist,previous.claws[i].wrist)<4);}
+ });previous=p;}
+ for(const [min,max] of ranges)assert.ok(max-min>20,'elbow should flex rather than remain a rigid rotating shape');
+});
+test('moving forearm artwork meets the wrist while palm and fingers retain the combat transform',()=>{
+ const m=new Boss.Encounter(),r=new Rig.Rig(m);
+ for(let n=0;n<2200;n++){m.step(1/120,{x:940,y:604,dash:true});const p=r.advance(m);for(const a of p.claws){
+  const native=m.clawPose(a.weapon.side),rotated=Rig.rot({x:native.wrist.x-a.palm.x,y:native.wrist.y-a.palm.y},a.forearmRoll);
+  near(a.palm.x+rotated.x,a.wrist.x);near(a.palm.y+rotated.y,a.wrist.y);near(a.weapon.angle,native.angle);near(a.weapon.x,native.x);near(a.weapon.y,native.y);
+ }}
+});
+test('pincers open during anticipation then close through the active sweep without snapping',()=>{
+ const m=new Boss.Encounter(),r=new Rig.Rig(m);let windup=0,contact=0,previous=null;
+ for(let n=0;n<450;n++){m.step(1/120,{x:110,y:604,dash:true});const p=r.advance(m),a=p.claws[m.side===1?0:1];if(m.state==='clawWindup'&&m.age>.85)windup=Math.max(windup,a.opening);if(m.state==='clawSweep'&&m.age>.65)contact=a.opening;if(previous)p.claws.forEach((c,i)=>assert.ok(Math.abs(c.opening-previous.claws[i].opening)<.008));previous=p;}
+ assert.ok(windup>.11);assert.ok(contact<.07);assert.ok(windup-contact>.05);
+});
+test('early counters preserve connected recovery for either claw and never create an extra hit',()=>{
+ for(const side of [1,-1])for(const state of ['clawWindup','clawSweep']){
+  const m=new Boss.Encounter();m.totalSwings=side===1?0:1;m.enter('clawWindup');const r=new Rig.Rig(m);
+  while(m.state!==state||m.age<(state==='clawWindup'?.5:.3)){m.step(1/120,{x:110,y:604,dash:true});r.advance(m);}
+  const before=r.pose.claws[side===1?0:1];m.strike(attack(m,'punch',m.clawBox()));const after=r.advance(m).claws[side===1?0:1];near(Rig.dist(before.weapon,after.weapon),0);assert.equal(m.hp,632);assert.equal(m.clawCount,1);
+  m.drain();for(let n=0;n<60;n++){m.step(1/120,{x:110,y:604,dash:true});const p=r.advance(m);for(const a of p.claws){near(Rig.dist(a.wrist,a.palm),a.lengths[2]);near(Rig.dist(a.elbow,a.wrist),a.lengths[1]);}}
+  assert.equal(m.drain().filter(e=>e.type==='attack').length,0);
+ }
 });
