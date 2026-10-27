@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-26",
+  "character": "Atomdust",
+  "art_source": "Existing original game artwork; no new image generation",
+  "file": "assets/images/art-25.webp",
+  "sha256": "fbc50c6def9a147f947b6ab6d79c8b98072bef5d584265f24049b1078deefe13",
+  "source_size": [
+    512,
+    768
+  ],
+  "source_pieces": 694,
+  "cached_bone_layers": 10,
+  "new_visual_walk_keys": 8,
+  "unchanged_original_functions": [
+    "atomSkeleton",
+    "atomHand",
+    "atomTryDodge",
+    "atomStartAttack",
+    "updateAtomEffects",
+    "atomLaunchSmoke",
+    "atomLaunchCap"
+  ],
+  "native_rendering": "At load, existing source tiles are copied into their ten bone layers. The runtime animates joints and transforms the layers. Source pixels and source files are unchanged. Disperse, counter and defeat use the original renderer.",
+  "baseline_commit": "1fff836"
+}

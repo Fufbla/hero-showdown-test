@@ -1,0 +1,49 @@
+HERO SHOWDOWN — ALL COMPLETED WORK FROM OCTOBER 26, 2026
+
+One download containing today's cumulative character, controls, performance,
+and competitive Versus work, plus the separate Scorpion animation approval test.
+The scorpion files are already in place. No patch merging is needed to test.
+
+WHAT IS INCLUDED
+- Finished animation updates for Summy, Sadie, Vee and all nine villains.
+- Performance improvements and controller/co-op input fixes.
+- Playable villains: all 12 fighters, 100 HP competitive matches, move lists,
+  strengths/weaknesses, Player vs CPU and local Player vs Player.
+- Chapter 3 Scorpion test: eight-leg IK, articulated claws, segmented tail,
+  body weight shifts, breathing, recoil and recovery using original artwork.
+- Existing validation reports, source tests, launchers and review pages.
+
+START ON YOUR MAC (PYTHON 3 IS ALREADY THE ONLY REQUIREMENT)
+1. Extract this ZIP into a NEW folder.
+2. For the combined Versus test, open START-PLAYABLE-VILLAINS.command.
+3. For the Scorpion boss test, open START-SCORPION-TEST.command.
+4. If a launcher does not open, open Terminal in this extracted folder and run:
+   Versus:   python3 tools/serve-playable-villains.py
+   Scorpion: python3 dist/start-scorpion-test.py
+5. Keep the Terminal/server window open while playing. Ctrl+C stops that server.
+
+WINDOWS
+Use START-PLAYABLE-VILLAINS.bat or START-SCORPION-TEST.bat with Python 3 installed.
+
+REVIEW
+Versus: Pause during a match to see both fighters' moves and controls.
+Scorpion: Click Start / restart boss battle. Compare original/new animation,
+inspect attack poses, or run the built-in animation checks.
+The Scorpion test preserves 650 boss HP, the four-claw sequence, poison-stinger
+counterattack, damage, hitboxes and gameplay timing.
+
+This archive contains the assets needed for the included Versus and Scorpion
+battle tests. It does not re-send every older Story Mode chapter movie. Keep
+those videos from your existing game for a complete Story Mode playthrough.
+
+APPROVAL AND UPLOAD
+The competitive and Scorpion changes remain separate test entries. Packaging
+them together does not enable either change in the ordinary game entry points.
+No GitHub push, deployment or production merge was performed. You handle upload.
+For an optional hosted test, copy the CONTENTS of dist/ into a separate test
+folder, preserving assets/ and videos/, and open playable-villains-test.html or
+scorpion-rig-test.html. Physical-device 60 FPS and controller feel still need
+hands-on approval. Online competitive PvP is not included; existing online play
+remains co-op against a boss.
+
+This is the cumulative download. Earlier incremental ZIPs are not also needed.

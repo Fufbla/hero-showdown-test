@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-26",
+  "project": "Hero Showdown",
+  "character": "Styrodog",
+  "tool": "Built-in image_gen.imagegen",
+  "reference_art": [
+    "assets/images/art-27.webp",
+    "assets/images/art-06.webp"
+  ],
+  "identity": "The existing game sprites depict a three-headed white foam monster. Those assets, rather than an older two-head description, were used as the visual reference.",
+  "selected_sources": [
+    {
+      "generated": "exec-acbb3b6b-00f1-4de6-81f4-4d13d29a5ad2.png",
+      "output": "assets/animation/styrodog-presence.png",
+      "drawings": 16
+    },
+    {
+      "generated": "exec-41052c2a-b759-49bf-a175-d178cd594e78.png",
+      "output": "assets/animation/styrodog-attacks.png",
+      "drawings": 16
+    }
+  ],
+  "initial_prompts": [
+    "Use case: illustration-story. Asset type: production 2D fighting-game sprite animation atlas. Input images are character/style REFERENCES, not edit targets. Preserve the EXACT existing Styrodog design: THREE wolf/dog heads on one bulky bipedal foam body, central head taller, tan curled horns, jagged white mane and white pebbled Styrofoam surface, black claw hands and feet, short curved foam tail, dark eyes and red mouths. The left-facing three-quarter combat view and detailed shaded comic/pixel-like inked art must match the reference, with consistent body proportions and same anatomical sides in every frame. NO new character redesign. Create a NEW transparent PNG atlas, preferably 2048x2048, exactly four columns by four rows (16 equal cells). Each sprite is a COMPLETE WHOLE BODY inside its own cell with at least 35 px empty margins, no touching adjacent cells. Body standing height should be consistent across all cells. Camera and scale fixed, floor baseline consistent for planted feet, no backdrop, no shadows, no particles, no projectiles, no labels, no grid lines, no effects, no text. Heads and limbs remain attached, do not introduce extra limbs or additional heads. This is the LOCOMOTION/REACTION atlas. Sixteen poses, row-major: 0-7 are consecutive keyframes of ONE coherent eight-frame walking cycle toward SCREEN LEFT. 0 left foot forward contact, 1 weight settles down onto left foot, 2 rear right foot passes left while left planted, 3 right foot moving forward while left pushes off, 4 right foot forward contact, 5 weight settles down onto right foot, 6 rear left foot passes right while right planted, 7 left foot moves forward toward the next contact. Alternate weight and visibly move both legs and arms; no eight repeated neutral stances. Keep all three heads subtly following the body's weight. Poses 8-11 are four consecutive subtle breathing/idle stances with both feet planted and claws ready, chest expands then relaxes; no foot travel. Pose 12 is a light punch recoil with heads/chest rocked back, feet grounded. Pose 13 is a heavier kick recoil with torso pushed back and arms raised. Pose 14 is a stagger with one foot catching balance. Pose 15 is recovery back into neutral guard. Preserve the original threatening but comic-book monster appearance exactly.",
+    "Use case: illustration-story. Asset type: production 2D fighting-game sprite animation atlas. Input images are character/style REFERENCES, not edit targets. Preserve the EXACT existing Styrodog design: THREE wolf/dog heads on one bulky bipedal foam body, central head taller, tan curled horns, jagged white mane and white pebbled Styrofoam surface, black claw hands and feet, short curved foam tail, dark eyes and red mouths. The left-facing three-quarter combat view and detailed shaded comic/pixel-like inked art must match the reference, with consistent body proportions and same anatomical sides in every frame. NO new character redesign. Create a NEW transparent PNG atlas, preferably 2048x2048, exactly four columns by four rows (16 equal cells). Each sprite is a COMPLETE WHOLE BODY inside its own cell with at least 35 px empty margins, no touching adjacent cells. Body standing height should be consistent across all cells. Camera and scale fixed, floor baseline consistent for planted feet, no backdrop, no shadows, no particles, no projectiles, no labels, no grid lines, no effects, no text. Heads and limbs remain attached, do not introduce extra limbs or additional heads. This is the ATTACK atlas. Sixteen poses, row-major: 0 claw guard/compression crouch; 1 claw deep windup with front striking arm drawn BACK; 2 claw accelerating half-extension forward SCREEN LEFT with elbow still bent; 3 claw IMPACT fully extended SCREEN LEFT at opponent torso height (the longest arm reach in the sequence), other arm remains near body; 4 claw follow-through and recoil beginning, striking elbow bent; 5 claw retract and return to guard. Next: 6 slam preparation deep crouch with claws near floor; 7 slam rise with arms lifting; 8 slam airborne at apex with both fists above head and knees tucked (whole sprite still fully inside cell); 9 slam descending with both fists coming down; 10 slam IMPACT low and wide, BOTH fists on ground and knees deeply bent; 11 slam recovery halfway up from crouch. Last four: 12 roar drawing breath with all THREE mouths closed or barely open; 13 roar ready with heads leaning forward and jaws opening; 14 roar RELEASE with all three mouths wide open and heads thrust forward (no projectiles); 15 roar exhale/recovery with heads pulling back and jaws closing. Strict frame ordering, full bodies and consistent scale. Strongly distinguish anticipation, contact and recovery. Keep the longest claw reach ONLY on pose 3."
+  ],
+  "revision_instructions_summary": "Edit each generated atlas to preserve all sixteen poses in the same order and the same character design. Reduce figures within their cells, preserve complete bodies, remove fringe/stray material, and keep a genuinely transparent background. These were image-generation edits; the runtime source PNGs were copied intact.",
+  "registration": "A measurement script computes crop bounds and conservative outline clips, with hand-set horizontal foot anchors. Only metadata is written. Source PNG pixels are not edited.",
+  "frame_groups": {
+    "presence 0-7": "eight walking poses",
+    "presence 8-11": "four idle breathing poses",
+    "presence 12-15": "light recoil, heavy recoil, stagger, recovery",
+    "attacks 0-5": "claw guard, windup, half extension, contact, follow-through, retraction",
+    "attacks 6-11": "slam crouch, rise, apex, descent, ground contact, recovery",
+    "attacks 12-15": "roar inhale, ready, release, recovery"
+  }
+}

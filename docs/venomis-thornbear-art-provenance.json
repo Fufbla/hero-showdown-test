@@ -1,0 +1,104 @@
+{
+  "date": "2026-10-26",
+  "character": "Venomis & Thornbear",
+  "generator": "Built-in image_gen.imagegen",
+  "reference_assets": [
+    "assets/images/art-29.webp",
+    "assets/images/art-30.webp"
+  ],
+  "prompts": [
+    "Use case: illustration-story. Asset type: production 2D fighting-game transparent sprite atlas. The input is a CHARACTER AND STYLE REFERENCE. Match the original shaded inked comic rendering, anatomy, equipment, proportions and fixed left-facing three-quarter view. Create exactly SIXTEEN separate COMPLETE whole-body drawings in FOUR equal columns by FOUR equal rows on a genuinely transparent background. Center each body in its own cell, with generous transparent margins of at least 15 percent and absolutely no overlapping cells, cropping or body parts touching an image edge. All figures have consistent scale. No text, grid, labels, shadows, ground, effects, projectiles, border or background pixels. Character: Thornbear, a huge white-furred quadruped polar bear with one bear head, four legs and black claws, glowing green eyes, green thorn vines wrapped around body and legs, several red-interior green Venus flytrap mouths on stems attached to his back. Keep every flytrap and vine attached to the bear. Not a humanoid or a green-furred bear. This is his WALK / IDLE / REACTION sheet. Strict row-major order, zero-based: 0-7 are eight successive poses of one grounded four-legged walk toward screen LEFT. Show alternate front and rear paws taking weight and passing: 0 near forepaw forward contact, opposite hindpaw forward; 1 compress and plant; 2 far forepaw passing, near forepaw under shoulder; 3 near forepaw trails behind while far forepaw reaches forward; 4 far forepaw forward contact with near forepaw visibly BACK toward screen RIGHT; 5 weight on far paws, near paws lifting; 6 near forepaw passes underneath shoulder; 7 near forepaw reaches left ready for next contact. Both pairs of legs change positions; never simply repeat the first four poses. 8-11 four subtle successive breathing idle poses, paws fixed to floor, chest and attached plants rising and settling. 12 light recoil, head tilted backward and paws planted. 13 stronger kick recoil with chest lifted and jaw open. 14 low stagger catching weight, rear paw stabilizing. 15 recovery to alert four-pawed guard. Keep body mass and sizes consistent. Every claw, vine and flytrap entirely inside its cell.",
+    "Use case: illustration-story. Asset type: production 2D fighting-game transparent sprite atlas. The input is a CHARACTER AND STYLE REFERENCE. Match the original shaded inked comic rendering, anatomy, equipment, proportions and fixed left-facing three-quarter view. Create exactly SIXTEEN separate COMPLETE whole-body drawings in FOUR equal columns by FOUR equal rows on a genuinely transparent background. Center each body in its own cell, with generous transparent margins of at least 15 percent and absolutely no overlapping cells, cropping or body parts touching an image edge. All figures have consistent scale. No text, grid, labels, shadows, ground, effects, projectiles, border or background pixels. Character: Venomis, an adult female villain scientist with large auburn curly high ponytail, goggles resting on top of her head, green eyes, white long ragged lab coat, fully covered fitted black combat outfit, black gloves, tall black lace-up boots, belt with small neon-green liquid vials, holding a neon-green fluid syringe/device in one hand. Match this exact costume and facial identity, no exposed torso, no plant-witch redesign. Strict row-major zero-based poses: 0-7 one continuous EIGHT-frame walk toward screen LEFT with genuinely alternating legs, coat tails and ponytail following the movement. 0 near boot forward, far boot behind; 1 near boot planted weight down; 2 far boot passing near boot; 3 far boot reaches left and near boot trails toward right; 4 far boot forward contact with near boot visibly behind toward screen RIGHT; 5 far leg planted, near heel lifts; 6 near boot passes far boot; 7 near boot reaches left. Do NOT repeat the first row's leg arrangement in the second row, and do not mirror her upper body. Syringe stays safely held. 8-9 subtle two-frame alert breathing idle, device upright near chest. 10 preparing a command with empty gloved hand drawn toward shoulder. 11 decisive extended arm pointing command toward screen LEFT, device in other hand near chest. 12 vine-cast preparation with both forearms rising. 13 full vine command with arms lifted and spread, device retained in hand. 14 command recovery, arm and shoulders settling toward guard. 15 braced reaction to her bear being struck, leaning back slightly with empty arm shielding her torso, feet still grounded. Sixteen complete bodies with all hair, coat, syringe and boots visible. No ground vines or magic effects.",
+    "Use case: precise-object-edit. The input image is an EDIT TARGET: a 4 by 4 atlas of sixteen Thornbear attack poses. Make ONLY a spacing and transparent-cutout correction. Preserve all SIXTEEN existing poses in exactly the same row-major order, the same white-furred vine-covered four-legged polar bear, black claws, green eyes, red-interior green flytrap mouths attached to the back, and the shaded inked comic style. Keep each whole body intact and facing left. Shrink each figure about 22 percent within its own equally sized cell to create generous true transparent space around it. Reconstruct any cropped vines or claws completely, especially the left edge and bottom row, so no body part touches the image boundary or a neighboring cell. The eight front/rear paws across figures must not be cut off. Remove ALL stray red/yellow colored fringes outside the silhouettes; empty background must be truly transparent. No shadows, labels, grid, new effects, new poses, missing figures or changes to the order. Only repair cutout quality and padding."
+  ],
+  "prior_attack_sheet": "exec-bc40fb40-4833-4c4a-a5cf-bb46e74b39a2.png",
+  "prior_attack_prompt_available": false,
+  "revision_prompts": [
+    "Use case: precise-object-edit. This is an EDIT TARGET, a 4x4 sprite sheet of the adult scientist Venomis. Preserve all sixteen complete figures in exactly their current row-major order, their auburn ponytail, goggles, white coat, black combat clothes and boots, green syringe, faces, shading, scale and left-facing upper bodies. Make TWO corrections only. First REMOVE THE ENTIRE BROWN/GREEN/GRAY BACKGROUND AND ALL GLOWS. Every pixel outside the actual characters must have fully transparent alpha 0, not translucent brown haze, not a checkerboard, not a black background, no shadows or halo. Keep the original clean character outlines. Second, fix only the walking LEGS in the SECOND ROW (poses 4,5,6,7): the nearer leg must trail BACK toward screen RIGHT while the farther leg steps FORWARD toward screen LEFT, then nearer leg passes underneath the hip ready to step next. Pose 4 far boot forward at left, near boot behind at right; pose 5 weight on far boot, near heel lifts; pose 6 near boot passes under hip; pose 7 near boot swings toward left. Keep torso facing left in all four, no whole-body mirroring. First-row walking poses and last two rows' idle and commands must remain unchanged. Keep all hair, devices, coat tails and boots inside each cell with transparent space. Exactly 16 complete bodies, no text or grid."
+  ],
+  "selected_assets": [
+    {
+      "source": "exec-fc5329c9-ca41-464f-a9bd-835b4004c2d3.png",
+      "runtime_file": "assets/animation/thornbear-presence.png",
+      "sha256": "43d1baba89dc7bc3f2652ae5cb9d409af6c0cd6ed19abd4d78976e47784588d6",
+      "runtime_frame_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "source": "exec-1777a5a4-5e85-4ac3-b111-c24f88b479cb.png",
+      "runtime_file": "assets/animation/thornbear-attacks.png",
+      "sha256": "bcdbe155f05613c86bf3bccf54642f108cd21e205f9931183c1d58b0a67db1e3",
+      "runtime_frame_ids": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ]
+    },
+    {
+      "source": "exec-a5e23cc6-7bbd-4b11-a870-8fb8f499d713.png",
+      "runtime_file": "assets/animation/venomis-presence.png",
+      "sha256": "4a318b0f1210509edf771040486200762f2b86a9a6fc5e6a4bcc3cffd53d0ee6",
+      "runtime_frame_ids": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46
+      ]
+    },
+    {
+      "source": "exec-d4a52b57-5357-482b-87ef-c5880a381981.png",
+      "runtime_file": "assets/animation/venomis-reaction.png",
+      "sha256": "35818d2c23a789c7fe1e87f949cd664722dc7a4238aa56bce003f71e0532c1ae",
+      "runtime_frame_ids": [
+        47
+      ]
+    }
+  ],
+  "notes": [
+    "Runtime selects 48 drawings from four intact PNGs using crop and anchor metadata.",
+    "The revised scientist sheet improves leg positions; its bottom-right pose touches the image boundary, so frame 47 uses the complete braced reaction from the first generated sheet.",
+    "The generated-image viewer displays RGB background colors even where alpha is zero. Actual alpha components and browser rendering were checked.",
+    "No source PNG pixels were edited by scripts.",
+    "The earlier attack-sheet prompt was not retained in available context; its spacing revision prompt and final source hash are recorded here."
+  ]
+}

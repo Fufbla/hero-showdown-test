@@ -1,0 +1,33 @@
+{
+  "method": "UI-triggered local browser harness, actual production chapter functions and DOM buttons; outcomes forced for transition coverage rather than full campaign playthrough",
+  "checks": [
+    {
+      "name": "Chapter 1 ending preserves the movie, then reveals 1992",
+      "pass": true
+    },
+    {
+      "name": "Chapter 2 preserves the main hero and starts the cave mission",
+      "pass": true
+    },
+    {
+      "name": "Chapter 2 rescue movie precedes code 2014",
+      "pass": true
+    },
+    {
+      "name": "Chapter 3 starts with its movie and first scorpion round",
+      "pass": true
+    },
+    {
+      "name": "Chapter 3 advances through round two and the boss",
+      "pass": true
+    },
+    {
+      "name": "Chapter 3 ending completes without awarding an extra code",
+      "pass": true
+    },
+    {
+      "name": "A lost Story fight awards no chapter code",
+      "pass": true
+    }
+  ]
+}

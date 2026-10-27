@@ -1,0 +1,21 @@
+LOCAL CHROME REVIEW — OCTOBER 26, 2026
+
+The completed Sonic Tusk pass was exercised through sonic-tusk-review.html.
+Summy was used for the walk/pulse and normal fight, Sadie for the bass stomp,
+and Vee for the right-facing horn blast. Whole sprites, planted feet, sonic
+waves, and the horn cone were visible without rectangular backgrounds or
+neighboring-frame fragments. The opposite-step quartet is active in the walk.
+
+Pause and resume worked. A mirrored reaction-demo issue was found: it began
+the hero's attack before applying the facing change. The review control now
+sets the facing first and then starts the attack. The mirrored kick was
+retested successfully with a visible 1 HITS counter.
+
+The defeat preview reached the normal victory screen and retained Sonic
+Tusk's original collapsed sprite. Original Sonic Tusk comparison loaded and
+rendered the prior artwork. Switching back to New Sonic Tusk and starting a
+normal fight produced sonic attacks and visible hero health loss.
+
+The console inspection returned no game-origin warnings or errors. Browser
+extension messages were excluded. This is a cloud-browser visual check,
+not a physical-device frame-rate benchmark or a complete campaign test.

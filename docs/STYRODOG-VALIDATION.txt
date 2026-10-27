@@ -1,0 +1,64 @@
+STYRODOG ANIMATION VALIDATION — OCTOBER 26, 2026
+
+Automated results: 120 tests passed; 0 failed, skipped, or cancelled.
+This includes 23 new Styrodog tests and 97 existing animation, story-switch,
+and Bushman checks. The full TAP report is included separately.
+
+Styrodog coverage:
+- Eight distance-driven walking frames and four idle breathing frames.
+- Claw extension on the actual damage threshold, not before it.
+- Slam floor contact on the original shockwave threshold.
+- Roar pose changes on the three original projectile-volley thresholds.
+- Light/heavy recoils do not obscure an attack after hitstun ends.
+- Guard, breakout, and original defeat stages.
+- No interpolation across direction changes, teleports, or new rounds.
+- Pause, hitstop, cutscenes, and network guests lock interpolation.
+- Either missing atlas, an invalid crop, or original-mode selection retains
+  the original renderer; other opponents retain their renderers.
+- Original and updated simulations produce identical boss/hero state,
+  damage, shockwaves, and foam shots across three phases, all three attack
+  types, and simulated 30/60/120/144 Hz presentation schedules.
+- Two local co-op heroes remain on the original damage path.
+
+Static/package checks:
+- Both production HTML entry points are identical.
+- Their only change since the approved Dr. Styro production baseline is
+  three script references. No combat source or Story menu scope was edited.
+- 163 script occurrences parse successfully, including 37 distinct external
+  script files across the production and optional review entry points.
+- Atlas crops/anchors fit both 1254 x 1254 RGBA PNGs. Each contains 16
+  complete connected sprite bodies away from the outer image edges.
+- Source artwork PNGs match the selected image-generation outputs exactly.
+  Cropping, anchoring, and isolation are presentation metadata.
+- Every packaged game file differs from the observed GitHub main baseline.
+- Existing Styrodog art and the story-mode module match that baseline.
+- The ZIP is a cumulative update; prior required animation modules and
+  images from the saved Dr. Styro package are included.
+
+Browser review in the local Chrome preview:
+- Summy, Sadie, and Vee were used with the new Styrodog drawings.
+- Walking, claw swing, slam impact/shockwaves, roar/foam shots, and hit demos
+  were exercised. Sprites appear whole, grounded, and transparent.
+- Pause/resume, original-art comparison, and victory/collapse were checked.
+- The regular Story/Versus menu remains available.
+- No game-origin error/warning was returned by the console inspection.
+
+Limits:
+This is ready for the owner's playtest. Automated timing checks and a cloud
+browser review do not certify frame rate on the owner's device. A complete
+campaign playthrough and a physical controller/mobile-device session were
+not performed for this animation pass.
+
+Source baseline:
+GitHub main observed: 41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28
+Approved animation source: accedacdd6d9e011fe4b1a61def7f8d67a22b175
+Normalized local production baseline: ef89b62
+
+Developer materials:
+The included test and atlas registration script retain their source-layout
+paths. To run in the complete source checkout, put the test under tests/,
+the script under tools/, and the game files under dist/. Run:
+  node --test tests/styrodog-animation.test.cjs
+Atlas remeasurement requires Python, Pillow, NumPy, and SciPy:
+  python3 tools/register-styrodog-atlas.py
+The full combined run additionally uses the existing repository test files.

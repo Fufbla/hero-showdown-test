@@ -1,0 +1,27 @@
+LOCAL BROWSER REVIEW — October 26, 2026
+Reviewed lightening-spree-review.html through the managed local preview.
+
+Observed:
+- New complete crystal body renders cleanly on the beach with grounded feet.
+- Single beam against Summy: charge, release and recovery. Holding release
+  confirms the original beam starts at the new open palm.
+- Right-facing spark against Sadie: five-ray fan begins at the paired hands.
+- Vee vanish/return: no body is visible while hidden; pause/resume works;
+  the body returns at a different arena position and resumes its attack.
+- Double-spark preview completes and returns to idle. Exact ray counts and
+  the second release time are covered by the automated checks.
+- Shatter defeat retains the original crystal fragments and victory result.
+- Original comparison loads and renders the previous character artwork.
+- Vee's kick preview registers a hit and returns the character to idle.
+- A normal-speed Summy fight shows health loss from the original attacks.
+- A clean final page load starts Fight with no game console warnings or errors.
+- All three hero selectors, quarter speed, Face right, Hold release, and
+  move preview controls were exercised.
+
+The review page's Hold release control freezes simulation after a real
+beam is created, permitting visual inspection of the hand alignment.
+Unchecking releases the hold. Starting Practice or Fight clears it.
+These controls are absent from the production game entries.
+
+Remote-browser frame rate varied during review; physical-device FPS is
+not certified. No browser screenshots are included in this package.

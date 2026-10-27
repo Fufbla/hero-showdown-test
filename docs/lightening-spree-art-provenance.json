@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-26",
+  "character": "Lightening Spree",
+  "method": "Built-in image_gen tool, followed by one spacing and edge-cleanup revision",
+  "reference": {
+    "file": "assets/images/art-26.webp",
+    "sha256": "b4f513435fe2a08ee2ce039592047cf8a8020a2946f7618de8a1d71fe2dd92c4",
+    "unchanged": true
+  },
+  "output": {
+    "file": "assets/animation/lightening-spree-poses.png",
+    "sha256": "ed0bd0bfdd8cfd3e16536c11a3d6a0fa91ae0ee442c72cbee37b62af5d8014c9",
+    "size": [
+      1254,
+      1254
+    ],
+    "complete_body_drawings": 16,
+    "source_png_preserved_byte_for_byte": true
+  },
+  "registration": "Measured complete connected body bounds, ground anchors, and two release palms in lightening-spree-atlas.js. Source image pixels are unchanged. Runtime caches the sixteen crops into canvases or ImageBitmaps. Release scale and anchor place the palms exactly at the original beam origin while keeping the ground anchor fixed.",
+  "pose_order": [
+    "idle",
+    "inhale",
+    "exhale",
+    "guard",
+    "beam windup",
+    "beam ready",
+    "beam release",
+    "beam follow-through",
+    "spark charge",
+    "spark ready",
+    "spark release",
+    "spark recoil",
+    "arrival brace",
+    "arrival rise",
+    "light reaction",
+    "heavy reaction"
+  ],
+  "prompts": "lightening-spree-image-prompts.json",
+  "original_paths_preserved": [
+    "spreeVanish",
+    "spreeOrigin",
+    "spreeAttack",
+    "spreeFire",
+    "spreeBeamHit",
+    "updateSpree",
+    "drawSpree",
+    "drawSpreeEffects",
+    "spreePortrait",
+    "original shatter defeat"
+  ],
+  "baseline_commit": "c095ad751d633b606d6a287fccf7b72f2da13e30"
+}

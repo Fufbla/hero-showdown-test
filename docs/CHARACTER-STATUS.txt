@@ -1,0 +1,23 @@
+HERO SHOWDOWN — COMPLETED ANIMATION PASS
+October 26, 2026
+
+PLAYABLE HEROES
+Super Summy — complete; included in this package.
+Super Sadie — complete; included in this package.
+Super Vee — complete; included in this package.
+
+OPPONENT CHOICES
+Air Pollution Monster — complete; 16 new whole smoke-body drawings.
+Styrodog — complete; included in this package.
+Sonic Tusk — complete; included in this package.
+Venomis & Thornbear — both complete; independent animation work included.
+Dr. Styro — complete; included in this package.
+Wastelander — complete; included in this package.
+Atomdust — complete; improved native debris rig and cached rendering.
+Lightening Spree — complete; 16 new body drawings and original invisibility.
+Bushman — complete; 32 new body drawings and original wildfire mechanics.
+
+This status covers the current character animation pass. It does not mean
+every possible future game feature or separate Story Mode boss has been
+redesigned. Existing Story Mode, combat and upload workflow are preserved.
+The owner will upload this final cumulative package personally.

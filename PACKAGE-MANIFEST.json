@@ -1,0 +1,1646 @@
+{
+  "build": "Hero Showdown Combined Versus Test",
+  "date": "2026-10-26",
+  "local_commit": "1ca6ce7db1a7434ef24bd4e87324f0d0b99e2a00",
+  "competitive_source": "faf12a4bf76b6c32b83c63c27e7fb49884720b9b",
+  "normal_entry": "dist/index.html",
+  "test_entry": "dist/playable-villains-test.html",
+  "review_entry": "dist/combined-versus-review.html",
+  "files": [
+    {
+      "path": "PLAYABLE-VILLAINS-README.md",
+      "bytes": 2184,
+      "sha256": "95bcd3a4b9e6f425d3339394debbdbfc3bd402c188b655a37bb338fba48fc0ca"
+    },
+    {
+      "path": "START-HERE.txt",
+      "bytes": 2184,
+      "sha256": "95bcd3a4b9e6f425d3339394debbdbfc3bd402c188b655a37bb338fba48fc0ca"
+    },
+    {
+      "path": "START-PLAYABLE-VILLAINS.bat",
+      "bytes": 69,
+      "sha256": "fbb14f7b8cdf0d1fdbfb2c9f04003deef22e4e3f7784d240a6631c2b5e8d8068"
+    },
+    {
+      "path": "START-PLAYABLE-VILLAINS.command",
+      "bytes": 82,
+      "sha256": "1bbcfa99dbd8c37144ec3c8f1bb13903a3ccf391da335365007f932cc5452f1a"
+    },
+    {
+      "path": "dist/ASSET-NOTES.txt",
+      "bytes": 8915,
+      "sha256": "1fcfdf197ac8dfec857146dd78b94f5439697554fa95b904c6e68606b09818eb"
+    },
+    {
+      "path": "dist/READ-ME-CHAPTER-3-ENDING.txt",
+      "bytes": 1991,
+      "sha256": "6b3c4b0e1798715184eda719a3ac278ac4b7d7763647c213beca3bb13834708d"
+    },
+    {
+      "path": "dist/READ-ME-FIRST.txt",
+      "bytes": 936,
+      "sha256": "859960fefa1db64d9d5b7e500dea6152cbd95d9e9e32cbc495946b6aed634e4c"
+    },
+    {
+      "path": "dist/READ-ME-STORM-ROOFTOP.txt",
+      "bytes": 3799,
+      "sha256": "47d2ca4f7c7b52d41bd6ba55c76a9de2c96fc95c9ce9687ad246df955841cebe"
+    },
+    {
+      "path": "dist/README-BUSHMAN.txt",
+      "bytes": 4677,
+      "sha256": "cbd8980b39b833e2c707df7d062fe2805c9c0d9d7347b9dae2300106a8d4ef56"
+    },
+    {
+      "path": "dist/README-CHAPTER-CODES.txt",
+      "bytes": 2272,
+      "sha256": "9a418d8d4fde162e308d93851e0863544fd0f3d9adac5256dd9858a9ed7e6ccb"
+    },
+    {
+      "path": "dist/README.txt",
+      "bytes": 704,
+      "sha256": "6b8b33c4fc26f0cd0e09393106cfd72273bf35b8f96961bf6f47eb860ba58c73"
+    },
+    {
+      "path": "dist/UPLOAD.txt",
+      "bytes": 9851,
+      "sha256": "1bd37dfbf2574c2aba17c214d646e608a6972373c904a8cff4ceb7b5cd7e0e36"
+    },
+    {
+      "path": "dist/VALIDATION.txt",
+      "bytes": 15521,
+      "sha256": "0ee5c0c418749ab5789ba91aa42f09230b6a4fc768bcc0014f83db83f4224b10"
+    },
+    {
+      "path": "dist/air-pollution-review.html",
+      "bytes": 4093,
+      "sha256": "f498d5aca40aa8ee4291279b299d2b21b79ead46904625374ee7d4abbc9be233"
+    },
+    {
+      "path": "dist/assets/animation/air-pollution-atlas.js",
+      "bytes": 1041,
+      "sha256": "39c78f465b0ca4704a2b0a4665023e0fa3f8754c4bfc2e00db884b4a2665b8b4"
+    },
+    {
+      "path": "dist/assets/animation/air-pollution-core.js",
+      "bytes": 2293,
+      "sha256": "62fee1d90d66b0982f9817e48aef8072cf1bd48af33575a693259a46d8ca6280"
+    },
+    {
+      "path": "dist/assets/animation/air-pollution-motion.js",
+      "bytes": 5249,
+      "sha256": "a334ed6b7b46136a37669aa15bcc84f90b2d671b2e3e5c715f477848c30e9e5f"
+    },
+    {
+      "path": "dist/assets/animation/air-pollution-poses.png",
+      "bytes": 1926817,
+      "sha256": "6c9f49363fa32e9654001faf86090952830e27a0375ec57bb4e02e58909aa9a9"
+    },
+    {
+      "path": "dist/assets/animation/air-pollution-review.js",
+      "bytes": 4978,
+      "sha256": "f2354d54860d2b4ed536e2a079a805e06f022432e9bf13770f06aed6d0ece558"
+    },
+    {
+      "path": "dist/assets/animation/atomdust-core.js",
+      "bytes": 5191,
+      "sha256": "8bd895a77da16c38deaea29cfaa0386fd2f3eb57bb88c489c3d076d9dcf015d4"
+    },
+    {
+      "path": "dist/assets/animation/atomdust-motion.js",
+      "bytes": 5119,
+      "sha256": "f2f55ce93ad6ab552e4f837d54db39aa7f8aab050da7789739ba8065d068f107"
+    },
+    {
+      "path": "dist/assets/animation/atomdust-review.js",
+      "bytes": 4522,
+      "sha256": "1a24da6775db0832a8f20cdf76ac39d3ce140a1f4f4b45a76afc4c8f06bada5f"
+    },
+    {
+      "path": "dist/assets/animation/bushman-animation-atlas.js",
+      "bytes": 2120,
+      "sha256": "00be5d34197d987332864b741d3ef803a06ccb18bc37a18e2d91df963ce64881"
+    },
+    {
+      "path": "dist/assets/animation/bushman-animation-core.js",
+      "bytes": 2850,
+      "sha256": "5685ab276a0d94d2d7f0ca5277e717a24bb5854d37eb6695221662fd22215908"
+    },
+    {
+      "path": "dist/assets/animation/bushman-animation-motion.js",
+      "bytes": 4806,
+      "sha256": "fda56d16ab05b893a9db7717ff381b15af2b1c913941b77fbd53d35753778815"
+    },
+    {
+      "path": "dist/assets/animation/bushman-animation-review.js",
+      "bytes": 5231,
+      "sha256": "74c556d2baaae7c87c83c3f1589a58270d87224abd367cefa512baccd5cf4cac"
+    },
+    {
+      "path": "dist/assets/animation/bushman-attacks.png",
+      "bytes": 2237315,
+      "sha256": "b5c4a62fdf2f596ae7d42a509acc17276d521f62c11f64b794a9e552247edd23"
+    },
+    {
+      "path": "dist/assets/animation/bushman-presence.png",
+      "bytes": 2371127,
+      "sha256": "2a6d41e5c2f0224211d9cea48e6238fc59e5326546bbb2f12a602e39587c63f5"
+    },
+    {
+      "path": "dist/assets/animation/bushman-reactions.png",
+      "bytes": 1954765,
+      "sha256": "88441f49dee7be76212949c1b868e18db6302d4b7b8db78359a8391bdfc56235"
+    },
+    {
+      "path": "dist/assets/animation/bushman-walk.png",
+      "bytes": 1793279,
+      "sha256": "f188f06067b7065c7bf910c72787d3e9f60ddd923d3c00f0448f375d9b2ae477"
+    },
+    {
+      "path": "dist/assets/animation/hero-atlases.js",
+      "bytes": 3469,
+      "sha256": "92a2cf9dbeccd7a0d5ddad6afe9b4ab661661134f7d807f734a6a4b4169f5fe7"
+    },
+    {
+      "path": "dist/assets/animation/lightening-spree-atlas.js",
+      "bytes": 1008,
+      "sha256": "fe0002de96496f02646d7cd0dd6a67d62369f477942c7ce6b9c5c2d53420fbc6"
+    },
+    {
+      "path": "dist/assets/animation/lightening-spree-core.js",
+      "bytes": 2225,
+      "sha256": "23663e147b0814f0bb9416d1fe3fb9cb0e411a4e8e21606d2a03b7d0b98db133"
+    },
+    {
+      "path": "dist/assets/animation/lightening-spree-motion.js",
+      "bytes": 4070,
+      "sha256": "7ee7a12763f53af62a808cf5ad725c3a474e7007a3dfff920b065c334cfab8d5"
+    },
+    {
+      "path": "dist/assets/animation/lightening-spree-poses.png",
+      "bytes": 2183059,
+      "sha256": "ed0bd0bfdd8cfd3e16536c11a3d6a0fa91ae0ee442c72cbee37b62af5d8014c9"
+    },
+    {
+      "path": "dist/assets/animation/lightening-spree-review.js",
+      "bytes": 5031,
+      "sha256": "6ba110adc46501d507cafb8da09c8ea73a36fbdb39d7515a21926b35aa008197"
+    },
+    {
+      "path": "dist/assets/animation/motion-core.js",
+      "bytes": 3826,
+      "sha256": "c3b2fce20811c4bb560d67592503ee3efd4ef127f0e2cd261cefef5692a596be"
+    },
+    {
+      "path": "dist/assets/animation/sadie-presence.png",
+      "bytes": 1839793,
+      "sha256": "8394edf25c563c73ac0f486110d346c3d7a989651bc07842eb599e2651a02fe1"
+    },
+    {
+      "path": "dist/assets/animation/sadie-transitions.png",
+      "bytes": 1657456,
+      "sha256": "d17f0f1ab6ffc406552964feb4e70df8f27b6fd21cd839a496bf1f3c2daebc60"
+    },
+    {
+      "path": "dist/assets/animation/sonic-tusk-atlas.js",
+      "bytes": 86823,
+      "sha256": "811687efee539d0b0b1f20ce15f70a841fb8154820d1937b73d7d52ee47e7512"
+    },
+    {
+      "path": "dist/assets/animation/sonic-tusk-attacks.png",
+      "bytes": 2332189,
+      "sha256": "a618a6b5454a5c0f17cecce32e349fc158a02337034512c21e15a3af9e480c23"
+    },
+    {
+      "path": "dist/assets/animation/sonic-tusk-core.js",
+      "bytes": 2659,
+      "sha256": "de75031174c9b3026f57b8dea21d364ac670e58fcec2092daae446def2fa82f9"
+    },
+    {
+      "path": "dist/assets/animation/sonic-tusk-motion.js",
+      "bytes": 3789,
+      "sha256": "7290efbe575d4f6be4d77965f6d84985c3c145cf8df4bf70369f26fbe0cd85fa"
+    },
+    {
+      "path": "dist/assets/animation/sonic-tusk-presence.png",
+      "bytes": 2411193,
+      "sha256": "8eb485a1f1be6e15538f0a1689a4773763bb9c58d1f0862749d0fcae91209405"
+    },
+    {
+      "path": "dist/assets/animation/sonic-tusk-review.js",
+      "bytes": 4419,
+      "sha256": "c743efd3ead1331934d464851b5993b0a47bc17cace3c34a08d39783c7156ee0"
+    },
+    {
+      "path": "dist/assets/animation/sonic-tusk-walk.png",
+      "bytes": 1872703,
+      "sha256": "8fce3209268d6b7629f7b95a5d3e7c010a636fd86395da5bdbcaf7e8168287d9"
+    },
+    {
+      "path": "dist/assets/animation/styro-atlas.js",
+      "bytes": 1314,
+      "sha256": "d064b30fe7d53552e0abdf950049327b2dac8a2a32e40eec72d0e78188dbb6e7"
+    },
+    {
+      "path": "dist/assets/animation/styro-attacks.png",
+      "bytes": 2167445,
+      "sha256": "82fb13c037035cfae0c052bd13bcf5e8d1bff0d15978569e49553b5f751cb301"
+    },
+    {
+      "path": "dist/assets/animation/styro-core.js",
+      "bytes": 2840,
+      "sha256": "2f41c571298b0f9b0eef4e45deed8c5e218d388e5183459783a09be69b6e60bb"
+    },
+    {
+      "path": "dist/assets/animation/styro-motion.js",
+      "bytes": 3188,
+      "sha256": "8c9b36548d224c0f3fbd1610fe57b20239acced161a374fe918e34a1b4a2bb8f"
+    },
+    {
+      "path": "dist/assets/animation/styro-presence.png",
+      "bytes": 2043573,
+      "sha256": "463e4f322abb84218fd669b55534c2facdf703a500cc4c2e71d0141b905170c1"
+    },
+    {
+      "path": "dist/assets/animation/styro-preview-scope.js",
+      "bytes": 508,
+      "sha256": "19be0cc9b05efb4b20bd772f52585fc94fd48109a2d4ea051b13133f08d89a23"
+    },
+    {
+      "path": "dist/assets/animation/styro-review.js",
+      "bytes": 4155,
+      "sha256": "8149c15adb127d3cf2a407611b42327f87c41aee50343521da930ead489df7cc"
+    },
+    {
+      "path": "dist/assets/animation/styrodog-atlas.js",
+      "bytes": 70457,
+      "sha256": "3e5ea04e2b6d2eab852c79c5c3ad1471ddd3b2ea2378f2c46b51ec487446f2d1"
+    },
+    {
+      "path": "dist/assets/animation/styrodog-attacks.png",
+      "bytes": 2443480,
+      "sha256": "4daecfc5ddca5bdad955329128193593447fa3d02d7a02c4dadbc494c13a9d7a"
+    },
+    {
+      "path": "dist/assets/animation/styrodog-core.js",
+      "bytes": 2964,
+      "sha256": "036e784beccaa0627df1d0a659dc74e566e310ba557449a6393384344a039b59"
+    },
+    {
+      "path": "dist/assets/animation/styrodog-motion.js",
+      "bytes": 3822,
+      "sha256": "301d8028066df95098daf7abf87340ad989a9b3e34a9cba2956c5b0d36c58aca"
+    },
+    {
+      "path": "dist/assets/animation/styrodog-presence.png",
+      "bytes": 2358093,
+      "sha256": "669d1b927c0c9a64ff428131c083df1d62081b60b57357f34436171cb5ed5db8"
+    },
+    {
+      "path": "dist/assets/animation/styrodog-review.js",
+      "bytes": 4154,
+      "sha256": "f31be2a7477d3ec918997ef32fa435fa51f4f7659ea0610cf1f2856138599092"
+    },
+    {
+      "path": "dist/assets/animation/summy-motion.js",
+      "bytes": 6122,
+      "sha256": "9acbcaade728ecb76256c4be9e3ddaba0923527d0f177cdbac0cd62eee9a03ec"
+    },
+    {
+      "path": "dist/assets/animation/summy-presence.png",
+      "bytes": 1829098,
+      "sha256": "5eeee47135a31273321bbf9aea3ad2fff602942bba71f4d22f728a39b4ccc7a3"
+    },
+    {
+      "path": "dist/assets/animation/summy-transitions.png",
+      "bytes": 1745291,
+      "sha256": "e4fdd52346799d6d222787111cdf0e41de2f911d82539e621164d3e6eff200ce"
+    },
+    {
+      "path": "dist/assets/animation/thornbear-attacks.png",
+      "bytes": 2514785,
+      "sha256": "bcdbe155f05613c86bf3bccf54642f108cd21e205f9931183c1d58b0a67db1e3"
+    },
+    {
+      "path": "dist/assets/animation/thornbear-presence.png",
+      "bytes": 2661541,
+      "sha256": "43d1baba89dc7bc3f2652ae5cb9d409af6c0cd6ed19abd4d78976e47784588d6"
+    },
+    {
+      "path": "dist/assets/animation/vee-presence.png",
+      "bytes": 1846223,
+      "sha256": "c6b185416b25691a6fc29f9846694af796ff3e6b23850680168a198e999fc4b2"
+    },
+    {
+      "path": "dist/assets/animation/vee-transitions.png",
+      "bytes": 1684711,
+      "sha256": "29450fa19a6efa4c66ddb64f61f6ace570bea6798cd9eff9b6da5d6d38543e4d"
+    },
+    {
+      "path": "dist/assets/animation/venomis-presence.png",
+      "bytes": 2362634,
+      "sha256": "4a318b0f1210509edf771040486200762f2b86a9a6fc5e6a4bcc3cffd53d0ee6"
+    },
+    {
+      "path": "dist/assets/animation/venomis-reaction.png",
+      "bytes": 2348477,
+      "sha256": "35818d2c23a789c7fe1e87f949cd664722dc7a4238aa56bce003f71e0532c1ae"
+    },
+    {
+      "path": "dist/assets/animation/venomis-thornbear-atlas.js",
+      "bytes": 106412,
+      "sha256": "f5e5bb717b45c68303846df03e35c0c87bb4669ee7b900cd200f85afc91136c5"
+    },
+    {
+      "path": "dist/assets/animation/venomis-thornbear-core.js",
+      "bytes": 3710,
+      "sha256": "5c93a048da82fa61191c6735544bed77d80c4ef75d3ce9bf4ef1ba33219c8396"
+    },
+    {
+      "path": "dist/assets/animation/venomis-thornbear-motion.js",
+      "bytes": 5453,
+      "sha256": "4a41531432993cb3cfc33a42d8f187dcf347d51e4ae80170a6badd1e69a605cc"
+    },
+    {
+      "path": "dist/assets/animation/venomis-thornbear-review.js",
+      "bytes": 4867,
+      "sha256": "92738feb4474a6b3651cc72614f9ae8e2b972f316f245cda57a005f7d10d93f9"
+    },
+    {
+      "path": "dist/assets/animation/wastelander-atlas.js",
+      "bytes": 1601,
+      "sha256": "522902c57fa1a563c381c881ef326cf561de8c595e12f4a3f6ef415c1e1704ee"
+    },
+    {
+      "path": "dist/assets/animation/wastelander-attacks.png",
+      "bytes": 2395584,
+      "sha256": "df3e9edad2167af146da816a20120d57e84e3090e51687ef9975fc8371fcd26d"
+    },
+    {
+      "path": "dist/assets/animation/wastelander-core.js",
+      "bytes": 2958,
+      "sha256": "cdd63481bd9e724d3fe3cf52e81c61626643ef520f30d5567ad1529ad7094266"
+    },
+    {
+      "path": "dist/assets/animation/wastelander-motion.js",
+      "bytes": 4346,
+      "sha256": "56b58f231ee77c7fb9ed734a3163790a9678542b4dd071c85ba7de9a7d8baa3e"
+    },
+    {
+      "path": "dist/assets/animation/wastelander-presence.png",
+      "bytes": 3185770,
+      "sha256": "3ed8b3b6577bc0c9aaa18a45eea306789a478bb19533f95925a6d90e73339332"
+    },
+    {
+      "path": "dist/assets/animation/wastelander-swing.png",
+      "bytes": 1483797,
+      "sha256": "723b6c8ff25e5886b6890c7c9cfb6d5ea55f8680f5fe6e156cd7da7a3442c560"
+    },
+    {
+      "path": "dist/assets/audio/menu-music.js",
+      "bytes": 1509,
+      "sha256": "bdac99bb5dd84963a67e375a858f57266a1ae036f954d3ead41d9bef875af458"
+    },
+    {
+      "path": "dist/assets/audio/menu-music.mp3",
+      "bytes": 737916,
+      "sha256": "9e7970ecd0324d67ca9f31a85d041a89abb23cf0aba2d8828afdc68034463e18"
+    },
+    {
+      "path": "dist/assets/battle-input.css",
+      "bytes": 3044,
+      "sha256": "ef8e12dd51af9003f012447aa6633acb0c7bc2f3df8dc378047060e29990baa4"
+    },
+    {
+      "path": "dist/assets/bushman/bushman-core.js",
+      "bytes": 3354,
+      "sha256": "0c3c18a1f1ec7e303e06064c2bb66173bdb27cc28e3001ac0764bf638f1b981b"
+    },
+    {
+      "path": "dist/assets/bushman/bushman-fighter.js",
+      "bytes": 7764,
+      "sha256": "d13806c6bc66961912b8deef2af34649763e5a2942eb41ba4e9acf68ee1b2848"
+    },
+    {
+      "path": "dist/assets/bushman/bushman-renderer.js",
+      "bytes": 5166,
+      "sha256": "70e52da7746761e41df6bfbf8efc49ea9f22f9c8c5fea450187d220f74ba3155"
+    },
+    {
+      "path": "dist/assets/bushman/combat.webp",
+      "bytes": 653730,
+      "sha256": "c898544cbfce82e858db6a7cae466255bfac365cad71c3c9ac1f7c1c1ee36082"
+    },
+    {
+      "path": "dist/assets/bushman/fire-fx.webp",
+      "bytes": 395866,
+      "sha256": "a4822c0a6048feee35e6a87019c48166a9ce31c5b2b7b8c25e2e5e6eb81fa5a7"
+    },
+    {
+      "path": "dist/assets/bushman/motion.webp",
+      "bytes": 687246,
+      "sha256": "23a14439ed8c986e8477cc904c1cf36f06f28f92164f54def67bf7eda829693e"
+    },
+    {
+      "path": "dist/assets/bushman/portrait.webp",
+      "bytes": 58536,
+      "sha256": "7e46a9b20bfc938fcc7698045d283733ff54f9e5e41b4daafe8eec4de624be5b"
+    },
+    {
+      "path": "dist/assets/cave/audio/crack.wav",
+      "bytes": 23416,
+      "sha256": "6a8036cd5d43dc9cb9c6881a5b90730a7e4e9e4c50ff63cd14157a783a165124"
+    },
+    {
+      "path": "dist/assets/cave/audio/damage.wav",
+      "bytes": 19888,
+      "sha256": "39a4dbf947cb8be662a50933a7a46d1547259e9ee6c67614fde2cfb8207c3300"
+    },
+    {
+      "path": "dist/assets/cave/audio/debris.wav",
+      "bytes": 30912,
+      "sha256": "02e55c4987ec5ec55984aed60dbae7b96ae82f59b9de2ff4d247260ccf240b97"
+    },
+    {
+      "path": "dist/assets/cave/audio/defeat.wav",
+      "bytes": 48554,
+      "sha256": "8034bf49f24549f02bfc79db216cef087d0feb668a4e64ace5e9226c983babc7"
+    },
+    {
+      "path": "dist/assets/cave/audio/fall.wav",
+      "bytes": 39734,
+      "sha256": "16c2dcd1d5bc2879e60e18ed7c0e9e8e2ea6dba1b54245376577e9fabed0ff6e"
+    },
+    {
+      "path": "dist/assets/cave/audio/footstep-1.wav",
+      "bytes": 8864,
+      "sha256": "3672bc7a9d6db2fa9ab18b8a93d2a9fd723df8defd7b9f86eced36271e3ef1bb"
+    },
+    {
+      "path": "dist/assets/cave/audio/footstep-2.wav",
+      "bytes": 8864,
+      "sha256": "d905fd20001d132e6e4430ee0b73fab4445bc9089a4cd5c82a94f33459861678"
+    },
+    {
+      "path": "dist/assets/cave/audio/footstep-3.wav",
+      "bytes": 8864,
+      "sha256": "f594cb9a4830b8bd8a5effb8d05e139839f3cb05d945e59872b9da5546f80321"
+    },
+    {
+      "path": "dist/assets/cave/audio/impact.wav",
+      "bytes": 35324,
+      "sha256": "484c3fcb90305e9aae8ce1c9c364b6ae034e444c625f526200073d99d7eb2e9c"
+    },
+    {
+      "path": "dist/assets/cave/audio/pebbles.wav",
+      "bytes": 19448,
+      "sha256": "ce05bab906a0aaf7e6bd5cb414d55335199d4211b4e60b0c405f904e34147dac"
+    },
+    {
+      "path": "dist/assets/cave/audio/rumble.wav",
+      "bytes": 176444,
+      "sha256": "38125e12ecb1d9cfe8c744b0947193373ad223ba38b6ae694ddd1eefdebd3cae"
+    },
+    {
+      "path": "dist/assets/cave/audio/shatter.wav",
+      "bytes": 37528,
+      "sha256": "f9adee659cb38acdf214f91d25c35eb9742e401a62627810257f50a3da582f9e"
+    },
+    {
+      "path": "dist/assets/cave/audio/whirlwind.wav",
+      "bytes": 27386,
+      "sha256": "da2734610776b5423a601f405258a9c8ca813661b83dc0b09e3543723eb2b75f"
+    },
+    {
+      "path": "dist/assets/cave/cave-audio.js",
+      "bytes": 2238,
+      "sha256": "854a6489873351530702ebf76f51fe4dfcdd7a636ac017478f928a4fc6cfac70"
+    },
+    {
+      "path": "dist/assets/cave/cave-core.js",
+      "bytes": 13418,
+      "sha256": "f0534c082f6573c4b3ea2e70f82eed2a0bd65b78a38829260c03c77c179d039d"
+    },
+    {
+      "path": "dist/assets/cave/cave-environment.webp",
+      "bytes": 416184,
+      "sha256": "a8c0950aaf3780ae4966d701a0fa8c6671ff8b94069dbbe5d23bd5818644c020"
+    },
+    {
+      "path": "dist/assets/cave/cave-intro.js",
+      "bytes": 5050,
+      "sha256": "13207745c419208b8ee581b90f4d10bf8506e4af29fcaeb5e951d42a90766cbb"
+    },
+    {
+      "path": "dist/assets/cave/cave-renderer.js",
+      "bytes": 21252,
+      "sha256": "cd56c686e92fccdec308cbcda2426d17de6c7cd6e0b14b358d1ad4e44eb82bcc"
+    },
+    {
+      "path": "dist/assets/cave/cave-scene.js",
+      "bytes": 25487,
+      "sha256": "5997576a0e61a11795b8b03d923021331a7a6e7fc4257c3b15089c32acbf9729"
+    },
+    {
+      "path": "dist/assets/cave/cave-tunnel.js",
+      "bytes": 16565,
+      "sha256": "8704dad8fe98a546665cf5d05cb54e4644a7e1877b632351acd3737275c92def"
+    },
+    {
+      "path": "dist/assets/cave/cave.css",
+      "bytes": 12551,
+      "sha256": "d7d6f00d4da15d0f5afb44a636f9bd1e5e666549fb0236ae3884cc6e9526d426"
+    },
+    {
+      "path": "dist/assets/cave/fall-atlases.json",
+      "bytes": 18708,
+      "sha256": "3c608b7aa3c0a86f59775f3bb86d95278ea9503879494ed5d74f517a7c99b7d6"
+    },
+    {
+      "path": "dist/assets/cave/heroes-reference.webp",
+      "bytes": 474316,
+      "sha256": "854df71b051d5674a10dd723963a7be499d717feb11ca7481ff23854b65b3d17"
+    },
+    {
+      "path": "dist/assets/cave/rocks.webp",
+      "bytes": 213480,
+      "sha256": "e13b00574971ea3bbb3a5430dbb990d8fcff0801ab7bbaee7c74993718eb3140"
+    },
+    {
+      "path": "dist/assets/cave/sadie-fall.webp",
+      "bytes": 662432,
+      "sha256": "576d8a691364c299e991f456b88371ab5420a4b7493ae9b93790d5b4f431a7da"
+    },
+    {
+      "path": "dist/assets/cave/sadie-sheet.webp",
+      "bytes": 488330,
+      "sha256": "81388c68fd2771e486071606a35b4283ff6b1145ac4f9ade258642de85dfee03"
+    },
+    {
+      "path": "dist/assets/cave/stalactites.webp",
+      "bytes": 377130,
+      "sha256": "9b73bcea8285e1f1a5d9e159367f003961cee195d6dec905909a3badd9d2ae2c"
+    },
+    {
+      "path": "dist/assets/cave/summy-damage.webp",
+      "bytes": 153122,
+      "sha256": "3cc8602158e56c523eca0950501bf36bde73d78a1b776a43d97bad080a1f27c2"
+    },
+    {
+      "path": "dist/assets/cave/summy-defeat.webp",
+      "bytes": 234330,
+      "sha256": "5e8fad628bc81ca38d2577037e397e36a52f824b07b83cc410faffda3646c5d7"
+    },
+    {
+      "path": "dist/assets/cave/summy-fall.webp",
+      "bytes": 630560,
+      "sha256": "455592db839a7929d3adcaf54377663a6835a05d96625c99b75415c12943c40d"
+    },
+    {
+      "path": "dist/assets/cave/summy-portrait.webp",
+      "bytes": 13236,
+      "sha256": "4414f8e942e93f4d056a847bf9e759c4460686ba23ec6e33f45715cec5cf7e99"
+    },
+    {
+      "path": "dist/assets/cave/summy-recovery.webp",
+      "bytes": 154334,
+      "sha256": "c80591729e9f1fb758eadaf02c847f7deb61ebdcb1505ee39472b632cc303d97"
+    },
+    {
+      "path": "dist/assets/cave/summy-run.webp",
+      "bytes": 314208,
+      "sha256": "e7810acb772d2602fee7c144292fd8eadcf5290d009c0ebf04ccdb25aa7a86f1"
+    },
+    {
+      "path": "dist/assets/cave/summy-upper.webp",
+      "bytes": 117102,
+      "sha256": "e88a0c00dfdfbe657f20d35414da110c15c998595a7df03246461d16cc2e0642"
+    },
+    {
+      "path": "dist/assets/cave/vee-fall.webp",
+      "bytes": 502228,
+      "sha256": "49b9cf4de7aa05cf34a3d24404c2e81350274309c69f03ec4919ace28a3ce2e2"
+    },
+    {
+      "path": "dist/assets/cave/vee-sheet.webp",
+      "bytes": 417636,
+      "sha256": "9cef8c337378fa4520ac1e1178fe5dc6008b9003cca165667aa02deb8294aabd"
+    },
+    {
+      "path": "dist/assets/combos/ARTWORK-NOTES.txt",
+      "bytes": 8300,
+      "sha256": "7554237e8ef941056e8dfedf39cc2e5aaa106eab00b09730954e8a5d2c32f86e"
+    },
+    {
+      "path": "dist/assets/combos/sadie-combos.png",
+      "bytes": 2082243,
+      "sha256": "6cbe2e2907a0d34c283678e0c1ece8a34c18e7965adede821bbf9bdb7985555c"
+    },
+    {
+      "path": "dist/assets/combos/summy-combos.png",
+      "bytes": 2049746,
+      "sha256": "da5b15c750149a7e3f00a2de3a1596acf774c19aba8b525d36a03f4d1362c341"
+    },
+    {
+      "path": "dist/assets/combos/vee-combos.png",
+      "bytes": 2049539,
+      "sha256": "e0b32659e9860abdcd8738a3ed2cb5ac08d24832aa93af42231a14cf22ab751d"
+    },
+    {
+      "path": "dist/assets/competitive/animation-adapter.js",
+      "bytes": 7131,
+      "sha256": "058bddb6e464ac15c2f78da939fea4312cccdc8f5e367673e0c58cc0c0313d66"
+    },
+    {
+      "path": "dist/assets/competitive/animation-state.js",
+      "bytes": 5632,
+      "sha256": "d153309ac87130adaf2f9a5206ce67f1b50035a8c5590d35727b95ea22e2274c"
+    },
+    {
+      "path": "dist/assets/competitive/combat.js",
+      "bytes": 14554,
+      "sha256": "475f45dcdcc411cdc25b623426c21d60464aa48869b48b01c753782a959e8dc8"
+    },
+    {
+      "path": "dist/assets/competitive/combined-review.js",
+      "bytes": 12836,
+      "sha256": "e360817eec94b6fb339adb94174aee31092742fe6ef605934cd75badd38e41ed"
+    },
+    {
+      "path": "dist/assets/competitive/cpu.js",
+      "bytes": 3088,
+      "sha256": "9ceeb4e961bf1a6aebf2768068b6f4ee42eaa6a536e6f74446b62f44224e5f51"
+    },
+    {
+      "path": "dist/assets/competitive/move-guide.js",
+      "bytes": 4280,
+      "sha256": "ecab572beb59d22ed46aaf25a3901ebfaebaa88bbaad644b6a6d3f67475099ac"
+    },
+    {
+      "path": "dist/assets/competitive/roster.js",
+      "bytes": 11772,
+      "sha256": "b7906fe0909a94b950e297d4e14180cbfa0e4ac867d230123da7c77b223985a5"
+    },
+    {
+      "path": "dist/assets/competitive/versus.css",
+      "bytes": 3779,
+      "sha256": "5e18d7778e8718bf77e32e6316fe11e0851d95446f9b2ba2326a585ffeb8278c"
+    },
+    {
+      "path": "dist/assets/competitive/versus.js",
+      "bytes": 25254,
+      "sha256": "0dd6d311dfb3e66951433de76c2a3ae91a331b7b6e7ecc86b89df337b4b9887f"
+    },
+    {
+      "path": "dist/assets/harbor/ARTWORK-NOTES.txt",
+      "bytes": 3122,
+      "sha256": "fd686284e36e1ac3a053410ade8068a7d5ffe12f7be70cc42fef5fe0a68b5bc1"
+    },
+    {
+      "path": "dist/assets/harbor/harbor-background.png",
+      "bytes": 2989468,
+      "sha256": "ad02d0040cf76de2f6f5b8d75df16bcabb3df8b6cde0bdd2e459943bb44f73be"
+    },
+    {
+      "path": "dist/assets/harbor/harbor-core.js",
+      "bytes": 3682,
+      "sha256": "f42a301043669b5ecec16e2e97a0617dbe71fc4584b1f65c9dd637c05d773d2f"
+    },
+    {
+      "path": "dist/assets/harbor/harbor-preview.webp",
+      "bytes": 765390,
+      "sha256": "b1dbd8ae18d8adcceed443c37a090dfc3c290f1d04cc05603af47a33ae967e21"
+    },
+    {
+      "path": "dist/assets/harbor/harbor-stage.js",
+      "bytes": 13054,
+      "sha256": "9552e4bb9fade89dcb5fb6023c974dd3ab1119535985d968a6af30dd8e54158d"
+    },
+    {
+      "path": "dist/assets/harbor/monster-parts.png",
+      "bytes": 3023774,
+      "sha256": "10ce005d92f2930bb74e2299ccbd8e7899f791b6b4a9fb88e1ae3509e3334089"
+    },
+    {
+      "path": "dist/assets/images/art-01.webp",
+      "bytes": 693906,
+      "sha256": "134b7d0e637bd8e9ad2fff4643b1e0a54a59de345f52e1de8666f153a446f4d7"
+    },
+    {
+      "path": "dist/assets/images/art-02.webp",
+      "bytes": 729042,
+      "sha256": "7a01d7a608c0ce0b1c19e1354b84140392ddbdf1f83c0c9440b0bff258835899"
+    },
+    {
+      "path": "dist/assets/images/art-03.webp",
+      "bytes": 474316,
+      "sha256": "854df71b051d5674a10dd723963a7be499d717feb11ca7481ff23854b65b3d17"
+    },
+    {
+      "path": "dist/assets/images/art-04.webp",
+      "bytes": 456280,
+      "sha256": "dae16cd525ca642abe9a554e79c7872f6c94370c681989d28f71bb01c7f21bda"
+    },
+    {
+      "path": "dist/assets/images/art-05.webp",
+      "bytes": 464578,
+      "sha256": "7d5a6a50e37daf0c6042e926348dc55543d87f66c8c4c78ff03eb1edba0ccd7f"
+    },
+    {
+      "path": "dist/assets/images/art-06.webp",
+      "bytes": 487966,
+      "sha256": "073bddb5132acea11d150c4478c15caa84e809ed98441bbd02bf621386a5a51f"
+    },
+    {
+      "path": "dist/assets/images/art-07.webp",
+      "bytes": 527806,
+      "sha256": "5b083ccbcdfd1ecaa30faa48115d1290736c88f965ed64e78f44126e3b0314a5"
+    },
+    {
+      "path": "dist/assets/images/art-08.webp",
+      "bytes": 489230,
+      "sha256": "35b76372caf46627c1072af5e5286728f6724f6599313376ef4fa5fe35cb6040"
+    },
+    {
+      "path": "dist/assets/images/art-09.webp",
+      "bytes": 1074878,
+      "sha256": "ef041c82cb07a5198adc882af2ac67a866cdb4a8487e08737059e917d2462dff"
+    },
+    {
+      "path": "dist/assets/images/art-10.webp",
+      "bytes": 614734,
+      "sha256": "9397a7ba6f20411851e64083336509e1f3d3b63e9507597821988473d4214b9e"
+    },
+    {
+      "path": "dist/assets/images/art-11.webp",
+      "bytes": 622392,
+      "sha256": "3e4d06c05410989a26e29d516255ffcec91882c63a300bc9bcad52a9b1be7e12"
+    },
+    {
+      "path": "dist/assets/images/art-12.webp",
+      "bytes": 644970,
+      "sha256": "7ac9c14452f08de53089302adcb2bc6d57e9ce7689c7efd967a5beccc33c5325"
+    },
+    {
+      "path": "dist/assets/images/art-13.webp",
+      "bytes": 510348,
+      "sha256": "7119849ab2f63d6f7478dd35b14eacc92e0b3df2eb2fd76411787fc628c2208e"
+    },
+    {
+      "path": "dist/assets/images/art-14.webp",
+      "bytes": 858730,
+      "sha256": "82c1a42a179cd4b7c5012e509308a34cf92cb381fb1c6bca26d5593cba1e59c8"
+    },
+    {
+      "path": "dist/assets/images/art-15.webp",
+      "bytes": 741224,
+      "sha256": "b69c3322795eb8a39a1d263515618a00ff7aab808cbfa8ab50b9ecec3c4c7dd7"
+    },
+    {
+      "path": "dist/assets/images/art-16.webp",
+      "bytes": 913280,
+      "sha256": "9faf4acbc938dde8f23c7db7e524345a5754c1758fffc7cd508448ce93667914"
+    },
+    {
+      "path": "dist/assets/images/art-17.webp",
+      "bytes": 524294,
+      "sha256": "03c1dc5040dd59a8d816020d597b162c36a7e5240ab9126a96c0d35586688195"
+    },
+    {
+      "path": "dist/assets/images/art-18.webp",
+      "bytes": 365346,
+      "sha256": "21b35cb81fcdb00db5cfc9c0cdb981fc5bcc29c4a9a7b9612f47baad2437495e"
+    },
+    {
+      "path": "dist/assets/images/art-19.webp",
+      "bytes": 476496,
+      "sha256": "33c05a0d4599ff291f6c72e0e4b25f23b76c5f6a92c44616daeb6c01b14704f1"
+    },
+    {
+      "path": "dist/assets/images/art-20.webp",
+      "bytes": 338228,
+      "sha256": "4d7c3025ec987577a29b7de7829f9cfad19b5fc0f4bfb9f7ce89490fd0638da1"
+    },
+    {
+      "path": "dist/assets/images/art-21.webp",
+      "bytes": 963434,
+      "sha256": "d516e4e36169ba26101970f86c5fc4bd6437e1b0fec79bb925e750dfe9a2aff6"
+    },
+    {
+      "path": "dist/assets/images/art-22.webp",
+      "bytes": 894872,
+      "sha256": "b66562a52f72e83ac074919275ece9666298e89c6371536c46c7cf456d479adb"
+    },
+    {
+      "path": "dist/assets/images/art-23.webp",
+      "bytes": 79232,
+      "sha256": "b30f738f05ff0a92e54fb8eb5b26393c968cea517be88ea17c833a77ab6728a7"
+    },
+    {
+      "path": "dist/assets/images/art-24.webp",
+      "bytes": 66822,
+      "sha256": "ee02a0f5ecb0654d6acc7eb7f9386225137ab86e0494f6907cbbc4d8a7fa7af2"
+    },
+    {
+      "path": "dist/assets/images/art-25.webp",
+      "bytes": 241922,
+      "sha256": "fbc50c6def9a147f947b6ab6d79c8b98072bef5d584265f24049b1078deefe13"
+    },
+    {
+      "path": "dist/assets/images/art-26.webp",
+      "bytes": 840450,
+      "sha256": "b4f513435fe2a08ee2ce039592047cf8a8020a2946f7618de8a1d71fe2dd92c4"
+    },
+    {
+      "path": "dist/assets/images/art-27.webp",
+      "bytes": 766176,
+      "sha256": "8cba7c3daab17833ae1227b77c2a808f3c0478bb76099f7203672371274babda"
+    },
+    {
+      "path": "dist/assets/images/art-28.webp",
+      "bytes": 746882,
+      "sha256": "30c44a66f238cb50d2a2d3f8fa9f13efdeed502c3f1aecbd68d64656d1c86269"
+    },
+    {
+      "path": "dist/assets/images/art-29.webp",
+      "bytes": 776526,
+      "sha256": "82b1af491f185e68eab977c1f0525e10f0ce04ec1bbdf6a78e768f33dd48b5d3"
+    },
+    {
+      "path": "dist/assets/images/art-30.webp",
+      "bytes": 439930,
+      "sha256": "670ce2da4c3255f74c7abe85787a83e0dcb5cb7087889b0bcac3e8904a6f1952"
+    },
+    {
+      "path": "dist/assets/images/story-smog-rooftop.webp",
+      "bytes": 436370,
+      "sha256": "945632e53ecf849ce0e423e064bcc381882f7c5cb8485ec02a61a5b75447f141"
+    },
+    {
+      "path": "dist/assets/images/story-toxic-harbor.webp",
+      "bytes": 765390,
+      "sha256": "b1dbd8ae18d8adcceed443c37a090dfc3c290f1d04cc05603af47a33ae967e21"
+    },
+    {
+      "path": "dist/assets/js/battle-input.js",
+      "bytes": 8198,
+      "sha256": "494185e458c6d9e072d051562c1de8c154da1175e5b2aa8f0433b05bdedcc52c"
+    },
+    {
+      "path": "dist/assets/js/combat-combos.js",
+      "bytes": 9198,
+      "sha256": "d39771b4ee4453a55934882a3706dba809b529e08aa479d76b12ce6646554b7a"
+    },
+    {
+      "path": "dist/assets/js/performance-reference.js",
+      "bytes": 1440,
+      "sha256": "8a083be520849352a3b09b2ae5fa97be45836698b3c3609164516d7252bf6166"
+    },
+    {
+      "path": "dist/assets/js/performance-review.js",
+      "bytes": 18241,
+      "sha256": "d2ea2a8947ad1311b772bf699958a3ce8eea084b9fae49582ab5f8e765e30532"
+    },
+    {
+      "path": "dist/assets/js/story-cave.js",
+      "bytes": 2478,
+      "sha256": "bc3958d779310371526a6ad6ca88c61ca4cc9784ab255df332c369accfd36760"
+    },
+    {
+      "path": "dist/assets/js/story-chapters.js",
+      "bytes": 11888,
+      "sha256": "e0316958bbc2ec1a1a90f4b87661a671c1b94c4ea68b126c310be537244f17ec"
+    },
+    {
+      "path": "dist/assets/js/story-mode.js",
+      "bytes": 16340,
+      "sha256": "41342b73a98b049eb8cc3db6e9ddca5dd47979b63556c7ca8ccb1379964f662e"
+    },
+    {
+      "path": "dist/assets/js/story-team.js",
+      "bytes": 9650,
+      "sha256": "b838bf4150c05a720e20c3418f57664598ce83b3b762eaffe0a2cf9809829c29"
+    },
+    {
+      "path": "dist/assets/shore/ARTWORK-NOTES.txt",
+      "bytes": 1292,
+      "sha256": "cca529eaab17c9945e3b38302077094243388d7ddb0ff2735459179f711a8d41"
+    },
+    {
+      "path": "dist/assets/shore/boss-core.js",
+      "bytes": 8468,
+      "sha256": "9aa1e4df937f4429c2f5a4a5819fb301d04692bf07d5d57d29dbffb69c2222ff"
+    },
+    {
+      "path": "dist/assets/shore/boss-defeat.png",
+      "bytes": 2350525,
+      "sha256": "db39d8480610f6a2c6c44545918e718bba5ad3b6e4dff7e25c31ecc54a6e38b5"
+    },
+    {
+      "path": "dist/assets/shore/boss-parts.png",
+      "bytes": 2098440,
+      "sha256": "a69b822ac60774273cecafb3bdda5889e07349aa137d09740aebb2eb88c3e7fc"
+    },
+    {
+      "path": "dist/assets/shore/boss-renderer.js",
+      "bytes": 4740,
+      "sha256": "79ccf7c9f496bc6fe0a15a0ca463ec80bd8d1b8d5b54b7ed214461575d22bfb3"
+    },
+    {
+      "path": "dist/assets/shore/scorpion-atlas.png",
+      "bytes": 2429229,
+      "sha256": "4500ef9c9dff1eb7527ac35773b9bd8fbfae274b11e27eeb5e79a1b86990289f"
+    },
+    {
+      "path": "dist/assets/shore/scorpion-split.png",
+      "bytes": 2031391,
+      "sha256": "e61de776fd6ddacc22f7a5ccce2b57dd5dfbbedc20e09d5508c1bf7e88eac6bb"
+    },
+    {
+      "path": "dist/assets/shore/shore-core.js",
+      "bytes": 10311,
+      "sha256": "7bf5d92ad117a04baf1e647c3518ae757583cad7941c491d82186591042daf92"
+    },
+    {
+      "path": "dist/assets/shore/shore-front.jpg",
+      "bytes": 744116,
+      "sha256": "4c79c78502b1f5621d8d1499eb1c80c36643949a8650c7362fc8a43e2a50f533"
+    },
+    {
+      "path": "dist/assets/shore/shore-renderer.js",
+      "bytes": 10188,
+      "sha256": "6257411d11e4aa26a88ec46578041c0ed0dfb02fb6016f69d49cd80ecc2e94e9"
+    },
+    {
+      "path": "dist/assets/shore/shore.css",
+      "bytes": 4085,
+      "sha256": "7ec08b659a358f2c5392fde7b4ee60010613433850b77da2124f4ba4d926fd2b"
+    },
+    {
+      "path": "dist/assets/shore/story-shore.js",
+      "bytes": 19876,
+      "sha256": "82b73ed811d0bcd522d1f694b998076a3ba4ee42d3392a5e6beef027ec8a82b0"
+    },
+    {
+      "path": "dist/assets/story-chapters.css",
+      "bytes": 3539,
+      "sha256": "3ae659cacaee6694800e70a279af8c045bfe5299f94a991a2be0deb1f036ba08"
+    },
+    {
+      "path": "dist/assets/story-mode.css",
+      "bytes": 2088,
+      "sha256": "34bad230f67fd3dcec551a4cacef32a9595dda8dee1c41413286cabcfd078342"
+    },
+    {
+      "path": "dist/assets/tempest/ARTWORK-NOTES.txt",
+      "bytes": 5640,
+      "sha256": "3e11d2ab1b26b89161dc30ad645c86c1c9a941f6c2323299a78079b8d1743387"
+    },
+    {
+      "path": "dist/assets/tempest/monster.webp",
+      "bytes": 612276,
+      "sha256": "1066f5b6692e8bdb34593e4aebcef19f40dabbb628c39b98674d70fe5159a57e"
+    },
+    {
+      "path": "dist/assets/tempest/preview.webp",
+      "bytes": 113376,
+      "sha256": "63661bcf615c7949d9182f605faffea7cbab23574aa6d2e378475636edc2d65c"
+    },
+    {
+      "path": "dist/assets/tempest/rooftop.webp",
+      "bytes": 308694,
+      "sha256": "dce2769ad9487f4ea4cf5180488cba7201477fde2a57841ef5148868369bbbaa"
+    },
+    {
+      "path": "dist/assets/tempest/tempest-core.js",
+      "bytes": 3875,
+      "sha256": "e12b9ca7830333b0d8c5537240c0e9c81e5e233962d6a90cbbca2601c301e627"
+    },
+    {
+      "path": "dist/assets/tempest/tempest-stage.js",
+      "bytes": 15205,
+      "sha256": "454e20fb0e4781a965c1cb40ff087b1176a11a51edcec55c661db0919d1cd067"
+    },
+    {
+      "path": "dist/assets/tempest/tornado.webp",
+      "bytes": 743126,
+      "sha256": "7838de5d647e177bfc1a7665cabddab96d58c19b3baaa9fb96e3e217298f97d1"
+    },
+    {
+      "path": "dist/atomdust-review.html",
+      "bytes": 4131,
+      "sha256": "6f044f59e91348ac9eae7c8cd03dbf7e78eadc211da17d42acdb92e7ac45bc16"
+    },
+    {
+      "path": "dist/bushman-review.html",
+      "bytes": 4137,
+      "sha256": "6178ec01b438747c8fb9aa1a6b9a869dffda8fad8063e5926e341a0442be6e11"
+    },
+    {
+      "path": "dist/cave-test.html",
+      "bytes": 424,
+      "sha256": "28f9f67d1ec119dfdfc4622198448aaff986a76c98515ac8f1799b2072a86524"
+    },
+    {
+      "path": "dist/combined-versus-review.html",
+      "bytes": 2617,
+      "sha256": "23ca58f59de95a02f3ebfc72f5bc42cd59bed90d9020fee165949af3e4686547"
+    },
+    {
+      "path": "dist/dr-styro-lab.html",
+      "bytes": 3902,
+      "sha256": "e44b05c7607e954bc35612f2334353aeb612adc5de34b36b172456fa597a3e00"
+    },
+    {
+      "path": "dist/game.html",
+      "bytes": 367093,
+      "sha256": "1ed7eef11957b7d7e24891f4454e7c850c9cccb126f8b4eef62f4b0512d4d6e1"
+    },
+    {
+      "path": "dist/hero-showdown.html",
+      "bytes": 368765,
+      "sha256": "c78a3ae0383be69780a11f9c131cf37131f5726bfd341ecafd5b4a57bad84472"
+    },
+    {
+      "path": "dist/index.html",
+      "bytes": 368765,
+      "sha256": "c78a3ae0383be69780a11f9c131cf37131f5726bfd341ecafd5b4a57bad84472"
+    },
+    {
+      "path": "dist/lightening-spree-review.html",
+      "bytes": 4141,
+      "sha256": "8f2c8c21c99ba845413066e9433616c6e47fe1cb28a8c69173cf7a97a84810f5"
+    },
+    {
+      "path": "dist/performance-review.html",
+      "bytes": 2134,
+      "sha256": "f7ca4521751e5e371df96afd1d089812859a72a848e5c7f65aaf3eea260dc92f"
+    },
+    {
+      "path": "dist/playable-villains-test.html",
+      "bytes": 369326,
+      "sha256": "b49548f88a156215015657e35759a5e29bad036612f5fac5bb7bbd2879ed9599"
+    },
+    {
+      "path": "dist/shore-front-test.html",
+      "bytes": 424,
+      "sha256": "28f9f67d1ec119dfdfc4622198448aaff986a76c98515ac8f1799b2072a86524"
+    },
+    {
+      "path": "dist/sonic-tusk-review.html",
+      "bytes": 3957,
+      "sha256": "450b1ddaa841a3cc99693de01f33d8378ba001f00295937239cb78c6efab8424"
+    },
+    {
+      "path": "dist/styrodog-review.html",
+      "bytes": 3879,
+      "sha256": "cdc80c07f8171f9189b5557544c46297793d7b68f12a3377f00175e5a6c545a7"
+    },
+    {
+      "path": "dist/venomis-thornbear-review.html",
+      "bytes": 4060,
+      "sha256": "86406fafec325d3d7a071f501851bc1351ca22c11260393ec554e4cc90e74a86"
+    },
+    {
+      "path": "dist/videos/newherocut.mp4",
+      "bytes": 14090933,
+      "sha256": "d14cb63cd9173065c0245f6704149dc6d96b87b84ed4f6ee0ce98b3b9ef8c6a7"
+    },
+    {
+      "path": "dist/videos/super-sadie.mp4",
+      "bytes": 1163210,
+      "sha256": "92fbffbf403f18cd31b483b1bc9525497e9c693bc347eb320941478ea47609ba"
+    },
+    {
+      "path": "dist/videos/super-summy.mp4",
+      "bytes": 1275039,
+      "sha256": "b4c82c21334bebee0e8a9b55cde91734ca7f8cd28ab803160484b424a87a618f"
+    },
+    {
+      "path": "dist/videos/super-vee.mp4",
+      "bytes": 1576022,
+      "sha256": "ebb05589eed58435d767a0c64b5624328e143f00eb588ef51fd5fe4abed9d084"
+    },
+    {
+      "path": "docs/ALL-CHARACTERS-README.txt",
+      "bytes": 2793,
+      "sha256": "5432957161b7049d5f9132c3ba6ab6a893b3a2ab926f526d3dbedb41c6b729b2"
+    },
+    {
+      "path": "docs/ALL-CHARACTERS-VALIDATION.txt",
+      "bytes": 3343,
+      "sha256": "0a59d415a79c582a96752f1665de846821a14914b4b20e7ef5bb38bafe0aa651"
+    },
+    {
+      "path": "docs/ATOMDUST-README.txt",
+      "bytes": 1990,
+      "sha256": "e739024e523d3c433c8dbe9f09a2552f662b83bfbbd79d480b011a386425a76b"
+    },
+    {
+      "path": "docs/ATOMDUST-VALIDATION.txt",
+      "bytes": 2134,
+      "sha256": "644b6e5add1f4340a20d5736711fc5e199daab2045228d686031171f00eae60a"
+    },
+    {
+      "path": "docs/BUSHMAN-README.txt",
+      "bytes": 2035,
+      "sha256": "cf049f730cc09fab4854f25aeca0ca108d27c828333e78e5108b10285d911de4"
+    },
+    {
+      "path": "docs/BUSHMAN-VALIDATION.txt",
+      "bytes": 2274,
+      "sha256": "1dd3395ec2356a5f4d9dbcdd1d3b0d8a3abd51a5c4970ea1aabc75225c8bc03a"
+    },
+    {
+      "path": "docs/CHARACTER-STATUS.txt",
+      "bytes": 1110,
+      "sha256": "1804be81beb454acee0b825c3321df66d675c90282690e086374d127051f742d"
+    },
+    {
+      "path": "docs/DR-STYRO-REVIEW.md",
+      "bytes": 3679,
+      "sha256": "0606005dccdd245a9bbcce4c5ddd184762bc5c1350c4d5c9a14491a1d843f65d"
+    },
+    {
+      "path": "docs/LIGHTENING-SPREE-README.txt",
+      "bytes": 2113,
+      "sha256": "9892b2b3c427e48e460f415a8ff12459b4505581d7946938a6e725dd334afab9"
+    },
+    {
+      "path": "docs/LIGHTENING-SPREE-VALIDATION.txt",
+      "bytes": 2847,
+      "sha256": "6cb9ef28e6d72ab36d9f19958199ecec27951999ed0a77d53a11c92513bd55d2"
+    },
+    {
+      "path": "docs/PERFORMANCE-CONTROLS-README.txt",
+      "bytes": 3508,
+      "sha256": "e1f2f602467eabc908423545433eeadebb9065432eab3dc2cdd499c3b64d05ea"
+    },
+    {
+      "path": "docs/PERFORMANCE-CONTROLS-VALIDATION.txt",
+      "bytes": 3898,
+      "sha256": "ed199cc37197749478f1974e085eec867dde31b6cdf93940bb51d9d476f76dfe"
+    },
+    {
+      "path": "docs/SONIC-TUSK-README.txt",
+      "bytes": 2409,
+      "sha256": "25f955fb49690c9017ecb06362136dc85462ec1de82af52200b63dc01e8095cd"
+    },
+    {
+      "path": "docs/SONIC-TUSK-VALIDATION.txt",
+      "bytes": 3042,
+      "sha256": "aa1a607188f2711f644f4ed7fa3262c419f3329498ebac75e889b11d2393317d"
+    },
+    {
+      "path": "docs/STYRODOG-README.txt",
+      "bytes": 2108,
+      "sha256": "3e70a63d8d7b3dfd5127ae9e4de5862af37f17d404d8963a84342537030effbd"
+    },
+    {
+      "path": "docs/STYRODOG-VALIDATION.txt",
+      "bytes": 3518,
+      "sha256": "984060e96bb05d50c0c5b37e0b29c8e05815cbb6885fa91b1411c4640d817c0d"
+    },
+    {
+      "path": "docs/VENOMIS-THORNBEAR-README.txt",
+      "bytes": 2419,
+      "sha256": "5d6f7c00ab203d0625c3d68a4959fc869c9fae4e1d60bbd40f6b423427393bae"
+    },
+    {
+      "path": "docs/VENOMIS-THORNBEAR-VALIDATION.txt",
+      "bytes": 2556,
+      "sha256": "9f5db179d14120a40cd0ae756b95c36add5f62ad8791d7ff2cf77dbdeaa81d5a"
+    },
+    {
+      "path": "docs/air-pollution-art-provenance.json",
+      "bytes": 1802,
+      "sha256": "c8464eae616cfb62dfebc1d0f64b369474ae96b570433a10d59e66819d2cb31a"
+    },
+    {
+      "path": "docs/air-pollution-browser-review.txt",
+      "bytes": 1373,
+      "sha256": "e205b3a49f30fa494996a8273168d6b100a11f2f696aa61e9db08d7b3ac5700c"
+    },
+    {
+      "path": "docs/air-pollution-image-prompts.json",
+      "bytes": 3429,
+      "sha256": "94c819b14b053136de595a91948f7a89dba5419a4d7581af22d401e75f093856"
+    },
+    {
+      "path": "docs/air-pollution-measurements.json",
+      "bytes": 2409,
+      "sha256": "d667e76997f539daa6f88ca639201a76a88a48cd24f2bc69d9730d3a103b159c"
+    },
+    {
+      "path": "docs/all-characters-package-files.json",
+      "bytes": 2947,
+      "sha256": "e83cf36355efebe34b3c91c66bd17208f0224dd9465fe3528674c31ba33784fd"
+    },
+    {
+      "path": "docs/all-characters-static-validation.json",
+      "bytes": 631,
+      "sha256": "39a02d3d0fe0ef969f9f13869d156fe45abe6f716f7e333804085886278f7c07"
+    },
+    {
+      "path": "docs/all-characters-validation.tap",
+      "bytes": 60737,
+      "sha256": "ac769abcf88454e288985150b93c585cbc2583e45492c695c308669ffbc63ed7"
+    },
+    {
+      "path": "docs/atomdust-art-provenance.json",
+      "bytes": 842,
+      "sha256": "ffc3d5feef50f7a1a546bc36d7dcdeaa8c3216bde241267d18967233e8ac2fe3"
+    },
+    {
+      "path": "docs/atomdust-browser-review.txt",
+      "bytes": 1839,
+      "sha256": "bcf32efdfa7aadf847cb31d806cb1238729e5030f51d9e6c3761f1b4e9207015"
+    },
+    {
+      "path": "docs/atomdust-combined-validation.tap",
+      "bytes": 40890,
+      "sha256": "cd526e912efcae8a77ad4880c8b06d52107f0f400369058262c582f32ee6d65e"
+    },
+    {
+      "path": "docs/atomdust-package-files.json",
+      "bytes": 2023,
+      "sha256": "d50239c403c6c317ca3adf6ffdc83f21a3d8ce0a468fd7326cd599eb61967088"
+    },
+    {
+      "path": "docs/atomdust-static-validation.json",
+      "bytes": 521,
+      "sha256": "b7cbd51a665f27e2063ac466b8e9d8a6435cb215e0ca3a50c140726fb7fd3f97"
+    },
+    {
+      "path": "docs/atomdust-validation.tap",
+      "bytes": 5701,
+      "sha256": "ec035635851bd54463a435e90bd55888f979565ed8b138e0df3deba25489ed65"
+    },
+    {
+      "path": "docs/bushman-animation-measurements.json",
+      "bytes": 6462,
+      "sha256": "81f3d977634701b12170869087a17b804f3288217fe8badd3caab44fab38e4a4"
+    },
+    {
+      "path": "docs/bushman-art-provenance.json",
+      "bytes": 3565,
+      "sha256": "9a2f8841b82cced8ab22da793bb5152825fbc5a83ef6a861d3c4bc5ad1915b6c"
+    },
+    {
+      "path": "docs/bushman-browser-review.txt",
+      "bytes": 1280,
+      "sha256": "dbeba6805c73db8b6fa430143698e24287b585f1a49f8597901e41952165db01"
+    },
+    {
+      "path": "docs/bushman-combined-validation.tap",
+      "bytes": 53811,
+      "sha256": "cbbcdc65e03d40209f71cdab1446e2abd931c6df9c2c7b6d933f3f80d5d99fce"
+    },
+    {
+      "path": "docs/bushman-image-prompts.json",
+      "bytes": 11626,
+      "sha256": "f6076d621faf85cd9f3904d5136d347d768a08814d073f2ee72770b2ee90773f"
+    },
+    {
+      "path": "docs/bushman-package-files.json",
+      "bytes": 2689,
+      "sha256": "4a60b016976ce1ba3674d52fd0988166713699527d5d0099a601cf90b9f57aa1"
+    },
+    {
+      "path": "docs/bushman-static-validation.json",
+      "bytes": 573,
+      "sha256": "4654abd7712b17bafdae7c92d23c619a3748ab86c909dca2e3d32817340e64c6"
+    },
+    {
+      "path": "docs/combined-all-tests.tap",
+      "bytes": 130713,
+      "sha256": "eaad56c85c4805231343282e0c70a6ed2990cffa8d2b823b0616b0b17755a541"
+    },
+    {
+      "path": "docs/combined-validation.json",
+      "bytes": 1692,
+      "sha256": "76a0721c25a945bda3f7a380af80f298e760d1856c989fafc17dd9844caac37d"
+    },
+    {
+      "path": "docs/combined-validation.tap",
+      "bytes": 19726,
+      "sha256": "13bcbc9b0b4c6059c5ef4cd1967945dae0b146f19b0e9e6c35a8cf9b7e96abd1"
+    },
+    {
+      "path": "docs/combined-versus-source.json",
+      "bytes": 3116,
+      "sha256": "b92594309842e9defbef14b5557db993432ef45b09bfd37e924c761c0288aad8"
+    },
+    {
+      "path": "docs/lightening-spree-art-provenance.json",
+      "bytes": 1632,
+      "sha256": "b6a7f9d23d32a7495a0a5fb836bb030971337cad5246459dfeb8e21959d656bc"
+    },
+    {
+      "path": "docs/lightening-spree-browser-review.txt",
+      "bytes": 1594,
+      "sha256": "6da1862db9cf87d834a84eeb86301cfbee500c9ba030fe7a03f726120a504fa8"
+    },
+    {
+      "path": "docs/lightening-spree-combined-validation.tap",
+      "bytes": 47293,
+      "sha256": "0080fab5e2f1683e1a804301e4511fee8928bd94edae6b20410d952766015bb8"
+    },
+    {
+      "path": "docs/lightening-spree-image-prompts.json",
+      "bytes": 3789,
+      "sha256": "bdba6d0a78414260b0c0ffcaba5e2da77f5944b24aeae2f4525a321b96a23ad7"
+    },
+    {
+      "path": "docs/lightening-spree-package-files.json",
+      "bytes": 2299,
+      "sha256": "1e98019720eb95ba615ad5aa425d315c06667365327eea6e48afd425de822033"
+    },
+    {
+      "path": "docs/lightening-spree-static-validation.json",
+      "bytes": 582,
+      "sha256": "c3e17091791bac7c2c7c44887ff9b888f3f528335be1cad017f6e35b9b70d4d3"
+    },
+    {
+      "path": "docs/lightening-spree-validation.tap",
+      "bytes": 6486,
+      "sha256": "dc29b4966bdc3c5aac3cb5683cc8489e2d7946cdd998729ff93bf1897ff23adf"
+    },
+    {
+      "path": "docs/performance-baseline-timings.json",
+      "bytes": 1410,
+      "sha256": "eee59dea9bc39caff3425191b67871038038a571bab1925eb2c4faf12911149d"
+    },
+    {
+      "path": "docs/performance-controls-baseline.json",
+      "bytes": 1649,
+      "sha256": "9f685e4836412bd67045ce3a6b74df3215c8f1c94d19a9908b2c0b4e10b3f8b4"
+    },
+    {
+      "path": "docs/performance-controls-browser.json",
+      "bytes": 1509,
+      "sha256": "43eb1489109f195dad6ac084c8045e075e6f6ab47c77ea30a12a391639842591"
+    },
+    {
+      "path": "docs/performance-controls-validation.tap",
+      "bytes": 63286,
+      "sha256": "f0abb42d3d7907256f093ebcbd5325201316695d2f8705190b33251532c33ad4"
+    },
+    {
+      "path": "docs/performance-live-timing.json",
+      "bytes": 672,
+      "sha256": "2ccde8dc2fc71877b1f9f5161fd5c04d23c470b64ff74b88e3b49244f013fff0"
+    },
+    {
+      "path": "docs/performance-optimized-timings.json",
+      "bytes": 1839,
+      "sha256": "a3e2a496ad0227d9e3ef62a51f23df981822bd1b4582d4aa0e4b4aea44ca430c"
+    },
+    {
+      "path": "docs/performance-package-files.json",
+      "bytes": 3084,
+      "sha256": "bf929f37d1ee7b59c27e4961ddd8e01a23180bcb63c97149967bc10987e2a851"
+    },
+    {
+      "path": "docs/performance-phone-review.json",
+      "bytes": 536,
+      "sha256": "0968ada45600ab3e0384fc77da5a6ab03c7a26079663c72cf67e5d002f66a518"
+    },
+    {
+      "path": "docs/performance-scenery-pixels.json",
+      "bytes": 4584,
+      "sha256": "c13028d8476673bd75086e2c2c931ce9efe7da27e25d671f1323dd477c2be898"
+    },
+    {
+      "path": "docs/performance-static-validation.json",
+      "bytes": 122,
+      "sha256": "eb748c5d1701993d18ac9c52a8469f832b520d9f03b76e631793b58eac8971ef"
+    },
+    {
+      "path": "docs/performance-story-browser.json",
+      "bytes": 913,
+      "sha256": "5bb963bf21216873677dbfea515e5ae26b2b00d2f58a510620a5229c95c1f313"
+    },
+    {
+      "path": "docs/playable-villains/AUDIT.md",
+      "bytes": 4283,
+      "sha256": "2c30f5a3e939847427c8e3b7d9ca1a5cf699f118348b30fe64ab2794118235fe"
+    },
+    {
+      "path": "docs/playable-villains/BALANCE.md",
+      "bytes": 7442,
+      "sha256": "10e96acf7075dccbdc4d1067f704a1f269578eef8cd496fe99a64ef387a3428a"
+    },
+    {
+      "path": "docs/playable-villains/INTEGRATION.md",
+      "bytes": 2580,
+      "sha256": "68c7585f16d071f8e9f5cafa751467e74e0c3d11c5795bcde508c17489e5d034"
+    },
+    {
+      "path": "docs/playable-villains/QA.md",
+      "bytes": 1289,
+      "sha256": "03a3adf444ed4fbe7e6a93bdff395824a891762f700b43b769342ba58f11d2ca"
+    },
+    {
+      "path": "docs/playable-villains/build.json",
+      "bytes": 259,
+      "sha256": "cac412b03cd6f9f2314324464fb6119e412591302061e03173498a11dfa9622a"
+    },
+    {
+      "path": "docs/sonic-tusk-art-provenance.json",
+      "bytes": 10596,
+      "sha256": "a7d925bfc7fafea1dd95c99036ad178df97eb61be64193db60c5acd34eac0c47"
+    },
+    {
+      "path": "docs/sonic-tusk-browser-review.txt",
+      "bytes": 1212,
+      "sha256": "e6478dd76eab834c42593740e27c9b6e98fb51d41383206fde881c4f67e3f583"
+    },
+    {
+      "path": "docs/sonic-tusk-combined-validation.tap",
+      "bytes": 29043,
+      "sha256": "7baebd959094375a15f7c39080282ac651535c628409ede3fa6ac116f40ba2fd"
+    },
+    {
+      "path": "docs/sonic-tusk-package-files.json",
+      "bytes": 1469,
+      "sha256": "2dddcca58f2b7151036ca7b3c201e6e87af9db81099bf4478b924322a1743685"
+    },
+    {
+      "path": "docs/sonic-tusk-static-validation.json",
+      "bytes": 329,
+      "sha256": "d29a03b20072ad1a1d6fd73334e06891eedc08a01ec26a4382ed6549bda436d3"
+    },
+    {
+      "path": "docs/styro-animation-assets.json",
+      "bytes": 3875,
+      "sha256": "3075d1a01e590c310a74147b79e2aec6b84d4461dc0bd9fbfe1c8a9608053a1b"
+    },
+    {
+      "path": "docs/styrodog-art-provenance.json",
+      "bytes": 6512,
+      "sha256": "b0ac2bf12bb720587e86d162d58694755483d0a60b7d8d1c3ac454850d7bc018"
+    },
+    {
+      "path": "docs/styrodog-combined-validation.tap",
+      "bytes": 24346,
+      "sha256": "1431701eb1c717945be8594b3445e57354b5c4ffcd44906689f84014b1d85bb0"
+    },
+    {
+      "path": "docs/styrodog-package-files.json",
+      "bytes": 1139,
+      "sha256": "7a14b5162454d72bac600a385d9594a1914b6cc0faad7282b0f070ecaa414e04"
+    },
+    {
+      "path": "docs/styrodog-static-validation.json",
+      "bytes": 172,
+      "sha256": "80b57155d4bb80fc613923e20bc9fc2d9ba919d60dc56913e76f1574184e8912"
+    },
+    {
+      "path": "docs/venomis-thornbear-art-provenance.json",
+      "bytes": 9663,
+      "sha256": "a0a885d70a0622372cde93eface54e88cb6377152d3ac172bcb1ad1cb1dd592b"
+    },
+    {
+      "path": "docs/venomis-thornbear-atlas-measurements.json",
+      "bytes": 1782,
+      "sha256": "04b0c1ad7db952881ca485b6ac78943779de9fb1e809550868458f007cf8c9e3"
+    },
+    {
+      "path": "docs/venomis-thornbear-browser-review.txt",
+      "bytes": 2101,
+      "sha256": "0cebf008224c73aea4528c5e8fd1af957520b6cbc5cd38f81e8d9926ab0d6e33"
+    },
+    {
+      "path": "docs/venomis-thornbear-combined-validation.tap",
+      "bytes": 35287,
+      "sha256": "57540dde65833e247fbee787eeb7afd6b6181bee2c3fb0650f392a4f3095e88c"
+    },
+    {
+      "path": "docs/venomis-thornbear-package-files.json",
+      "bytes": 1876,
+      "sha256": "86490df96e1e6fd6543797be12a26d252ab472c8443cc6f09758dad620ddbd4e"
+    },
+    {
+      "path": "docs/venomis-thornbear-static-validation.json",
+      "bytes": 516,
+      "sha256": "c8800fa51ead5b83878b251635728ced7ebc9febeaa1bea475f98b10bb9a577e"
+    },
+    {
+      "path": "docs/venomis-thornbear-validation.tap",
+      "bytes": 6334,
+      "sha256": "8a59aed3276b7d8e07d873779d2341e24de7754a0aa6f4be365cdf987fa19817"
+    },
+    {
+      "path": "docs/venomis-trainer-revision-prompt.txt",
+      "bytes": 1328,
+      "sha256": "02c0114403c61643dada13bd611bd216fbaa2c4bd286f6befd726d8586af133e"
+    },
+    {
+      "path": "tests/air-pollution-animation.test.cjs",
+      "bytes": 17666,
+      "sha256": "f1a4052aa267c9a3f745aca7f806ab118fa76f84aa93ac046f889e85b65e3e17"
+    },
+    {
+      "path": "tests/atomdust-animation.test.cjs",
+      "bytes": 13690,
+      "sha256": "c72c8b5581ad2875d6f360919f4114f3b24ebca1a8a8dad959ac466d5059311f"
+    },
+    {
+      "path": "tests/battle-controls.test.cjs",
+      "bytes": 5697,
+      "sha256": "13eb5c2f707cd0e8ad6d8dff05d3f7a053de0ee6e95023116f55a34dfa9e49a7"
+    },
+    {
+      "path": "tests/bushman-animation.test.cjs",
+      "bytes": 17573,
+      "sha256": "0c790f36723a8a15798d117cfbf42dc75016c43a484575f98a69338f2edaffaf"
+    },
+    {
+      "path": "tests/bushman.test.cjs",
+      "bytes": 3868,
+      "sha256": "9465d01ab936bf81b4482d63a5d9339e3ce8e643a97ada2222818b9bcb8c5956"
+    },
+    {
+      "path": "tests/combined-versus.test.cjs",
+      "bytes": 5998,
+      "sha256": "dd0ba64d9853b423d342b8284e28441b580b7b7d30348b0cd377ba92b02a73ae"
+    },
+    {
+      "path": "tests/competitive.test.cjs",
+      "bytes": 10617,
+      "sha256": "25522344e4992303479a511fde281602e300e22db41a45fe7b033208abde1a02"
+    },
+    {
+      "path": "tests/hero-animation.test.cjs",
+      "bytes": 10210,
+      "sha256": "b7d5af30c3b5adc18e3fcb03f3f26faf6c61f3ca917508ff0915a8ae2aa722f6"
+    },
+    {
+      "path": "tests/lightening-spree-animation.test.cjs",
+      "bytes": 16885,
+      "sha256": "ebbfe2aaeac915d723de2d1bbbe47f87507113b53b1285c6efb81a938f6ddbfa"
+    },
+    {
+      "path": "tests/sonic-tusk-animation.test.cjs",
+      "bytes": 11943,
+      "sha256": "1125132fde82145e67f57e1e341ee7f539ad979331205d3e44dfd1e70133af1b"
+    },
+    {
+      "path": "tests/story-chapters.browser.cjs",
+      "bytes": 15329,
+      "sha256": "50dd28d5e8fd687a06b1334dc39a400b62d7089be261ea2fa4aa0766938d8f4a"
+    },
+    {
+      "path": "tests/story-switch.test.cjs",
+      "bytes": 6134,
+      "sha256": "3f3c4f14cc02491e5480b5eae16831df06c011f2cef75ce7f8c536429806121a"
+    },
+    {
+      "path": "tests/styro-animation.test.cjs",
+      "bytes": 9927,
+      "sha256": "1da0b5f9a19964145a6a51732ef6bff6ab74d794d124d1e005f0aa8ebfa13843"
+    },
+    {
+      "path": "tests/styrodog-animation.test.cjs",
+      "bytes": 11834,
+      "sha256": "23e1d87c278f66069a39c1dc09ed4c1a5f0810d49b6a19f01167f186eab3def0"
+    },
+    {
+      "path": "tests/venomis-thornbear-animation.test.cjs",
+      "bytes": 16878,
+      "sha256": "82d3e1c2282042930d9d00c2f98ef10a5b07163f7115f2653ee5af8b183e18fb"
+    },
+    {
+      "path": "tests/wastelander-animation.test.cjs",
+      "bytes": 8954,
+      "sha256": "ffde460dbbdd2f574b5acb8cd6a76fa72a2d6c6ff7081f1bf046e9bac9a973bd"
+    },
+    {
+      "path": "tools/build-playable-villains.py",
+      "bytes": 1433,
+      "sha256": "0af9a78c0af7c637e425c6d68c08eb3b62a1de1eb1f37a1a80a5742a6a17b590"
+    },
+    {
+      "path": "tools/register-sonic-tusk-atlas.py",
+      "bytes": 3983,
+      "sha256": "2bfb7387e5225d35a9ef66426966ecd1b223ea251bebd9ae6748dd69a2e0a28a"
+    },
+    {
+      "path": "tools/register-styrodog-atlas.py",
+      "bytes": 3563,
+      "sha256": "89ee2acef72401d51ce259ebda5746248606330c624ef8bddb50295e4a212d37"
+    },
+    {
+      "path": "tools/register-venomis-thornbear-atlas.py",
+      "bytes": 3988,
+      "sha256": "fc8f9b5a316e2f4b537f104ad136c2d09cd6afc534d215820d16aa815e8a0f31"
+    },
+    {
+      "path": "tools/serve-playable-villains.py",
+      "bytes": 982,
+      "sha256": "2a36c791bb30f10ace8f2a3af515b59f33532939a5e5498f0da561b6598077fb"
+    }
+  ]
+}

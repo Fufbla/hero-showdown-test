@@ -1,0 +1,124 @@
+{
+  "date": "2026-10-26",
+  "character": "Bushman",
+  "method": "Built-in image_gen; initial presence/attack sheets, pose corrections, reaction detail and opposite-leg walk redraw",
+  "references": [
+    {
+      "file": "assets/bushman/portrait.webp",
+      "sha256": "7e46a9b20bfc938fcc7698045d283733ff54f9e5e41b4daafe8eec4de624be5b",
+      "unchanged": true
+    },
+    {
+      "file": "assets/bushman/motion.webp",
+      "sha256": "23a14439ed8c986e8477cc904c1cf36f06f28f92164f54def67bf7eda829693e",
+      "unchanged": true
+    },
+    {
+      "file": "assets/bushman/combat.webp",
+      "sha256": "c898544cbfce82e858db6a7cae466255bfac365cad71c3c9ac1f7c1c1ee36082",
+      "unchanged": true
+    }
+  ],
+  "outputs": [
+    {
+      "file": "assets/animation/bushman-presence.png",
+      "source_generation_file": "exec-d092fcb0-69e4-43cd-a68f-f9e1805ff565.png",
+      "sha256": "2a6d41e5c2f0224211d9cea48e6238fc59e5326546bbb2f12a602e39587c63f5",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 2371127,
+      "selected_pose_ids": [
+        0,
+        1,
+        2,
+        3,
+        8,
+        9,
+        10,
+        11
+      ],
+      "source_png_preserved_byte_for_byte": true
+    },
+    {
+      "file": "assets/animation/bushman-walk.png",
+      "source_generation_file": "exec-3ac6eac4-ba98-44d3-bb14-f3764bc9fa59.png",
+      "sha256": "f188f06067b7065c7bf910c72787d3e9f60ddd923d3c00f0448f375d9b2ae477",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 1793279,
+      "selected_pose_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "source_png_preserved_byte_for_byte": true
+    },
+    {
+      "file": "assets/animation/bushman-reactions.png",
+      "source_generation_file": "exec-c945a5a1-cd8d-4ed5-85d6-e008b14e1c9d.png",
+      "sha256": "88441f49dee7be76212949c1b868e18db6302d4b7b8db78359a8391bdfc56235",
+      "size": [
+        1774,
+        887
+      ],
+      "bytes": 1954765,
+      "selected_pose_ids": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_png_preserved_byte_for_byte": true
+    },
+    {
+      "file": "assets/animation/bushman-attacks.png",
+      "source_generation_file": "exec-2e6406ab-51b4-46b5-8022-5b106ee7d10c.png",
+      "sha256": "b5c4a62fdf2f596ae7d42a509acc17276d521f62c11f64b794a9e552247edd23",
+      "size": [
+        1254,
+        1254
+      ],
+      "bytes": 2237315,
+      "selected_pose_ids": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "source_png_preserved_byte_for_byte": true
+    }
+  ],
+  "added_drawings": 32,
+  "walk_drawings": 8,
+  "registration": "Measured full-body crops and ground anchors; native punch, kick and projectile contact points align in both directions. Original pixels preserved; runtime prepares cropped canvases or ImageBitmaps.",
+  "selection": "Presence: first four walking keys and four idle/guard keys. Walk: four opposite-leg keys. Reactions: four grounded bottom-row recoil/recovery keys. Attacks: all sixteen keys, with the final crossed-arm blast revision. Unselected source poses are not registered.",
+  "preserved_native_paths": [
+    "updateBushman",
+    "bushmanRelease",
+    "advanceBushmanEffects",
+    "drawBushman",
+    "drawBushmanEffects",
+    "four-hit charge accounting",
+    "original kneeling defeat",
+    "coState/coReceive"
+  ],
+  "prompts": "bushman-image-prompts.json",
+  "baseline_commit": "5c24669001880d10c813da3580d319fb1c2a9972"
+}

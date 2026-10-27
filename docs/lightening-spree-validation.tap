@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: the intact transparent sheet registers sixteen complete body crops
+ok 1 - the intact transparent sheet registers sixteen complete body crops
+  ---
+  duration_ms: 35.821156
+  type: 'test'
+  ...
+# Subtest: idle breathes in place without inventing a walking state
+ok 2 - idle breathes in place without inventing a walking state
+  ---
+  duration_ms: 6.842029
+  type: 'test'
+  ...
+# Subtest: the body remains completely hidden throughout the full invisible interval
+ok 3 - the body remains completely hidden throughout the full invisible interval
+  ---
+  duration_ms: 18.096772
+  type: 'test'
+  ...
+# Subtest: arrival uses a brief solid brace then immediately resumes the real warning
+ok 4 - arrival uses a brief solid brace then immediately resumes the real warning
+  ---
+  duration_ms: 0.398108
+  type: 'test'
+  ...
+# Subtest: charge, ready, release and recovery have distinct poses for both attacks
+ok 5 - charge, ready, release and recovery have distinct poses for both attacks
+  ---
+  duration_ms: 1.237134
+  type: 'test'
+  ...
+# Subtest: no emitting pose appears before an actual beam exists
+ok 6 - no emitting pose appears before an actual beam exists
+  ---
+  duration_ms: 0.185821
+  type: 'test'
+  ...
+# Subtest: the phase-three second volley readies again and uses the live beam release
+ok 7 - the phase-three second volley readies again and uses the live beam release
+  ---
+  duration_ms: 0.189646
+  type: 'test'
+  ...
+# Subtest: both release palms register exactly to the original beam origins in either facing
+ok 8 - both release palms register exactly to the original beam origins in either facing
+  ---
+  duration_ms: 6.212496
+  type: 'test'
+  ...
+# Subtest: reaction observation distinguishes real light and heavy hits without adding boss fields
+ok 9 - reaction observation distinguishes real light and heavy hits without adding boss fields
+  ---
+  duration_ms: 13.973115
+  type: 'test'
+  ...
+# Subtest: blocked and invisible hits do not create a reaction or damage
+ok 10 - blocked and invisible hits do not create a reaction or damage
+  ---
+  duration_ms: 7.000813
+  type: 'test'
+  ...
+# Subtest: hit reactions end with authoritative hitstun and do not replace live warnings
+ok 11 - hit reactions end with authoritative hitstun and do not replace live warnings
+  ---
+  duration_ms: 10.454982
+  type: 'test'
+  ...
+# Subtest: generic prism counters and the original shatter keep their original renderer
+ok 12 - generic prism counters and the original shatter keep their original renderer
+  ---
+  duration_ms: 3.183144
+  type: 'test'
+  ...
+# Subtest: canvas-only and failed immutable-texture preparation keep the new animation
+ok 13 - canvas-only and failed immutable-texture preparation keep the new animation
+  ---
+  duration_ms: 13.75559
+  type: 'test'
+  ...
+# Subtest: missing art or invalid metadata falls back to the complete original character
+ok 14 - missing art or invalid metadata falls back to the complete original character
+  ---
+  duration_ms: 10.352086
+  type: 'test'
+  ...
+# Subtest: Original comparison avoids loading new textures and other opponents keep their renderer
+ok 15 - Original comparison avoids loading new textures and other opponents keep their renderer
+  ---
+  duration_ms: 5.619797
+  type: 'test'
+  ...
+# Subtest: rendering cannot change combat data, timer, beam geometry or random sequence
+ok 16 - rendering cannot change combat data, timer, beam geometry or random sequence
+  ---
+  duration_ms: 13.266121
+  type: 'test'
+  ...
+# Subtest: beam matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 17 - beam matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 2389.426049
+  type: 'test'
+  ...
+# Subtest: spark matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 18 - spark matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 1521.043
+  type: 'test'
+  ...
+# Subtest: the primary beam releases once at .10 and keeps its original width and damage
+ok 19 - the primary beam releases once at .10 and keeps its original width and damage
+  ---
+  duration_ms: 5.572091
+  type: 'test'
+  ...
+# Subtest: spark fans retain five rays and phase three adds five more at .43
+ok 20 - spark fans retain five rays and phase three adds five more at .43
+  ---
+  duration_ms: 13.644822
+  type: 'test'
+  ...
+# Subtest: live beams keep ageing and damaging during an interrupted attack
+ok 21 - live beams keep ageing and damaging during an interrupted attack
+  ---
+  duration_ms: 6.155783
+  type: 'test'
+  ...
+# Subtest: blocking keeps the original directional damage reduction and invulnerability
+ok 22 - blocking keeps the original directional damage reduction and invulnerability
+  ---
+  duration_ms: 7.149643
+  type: 'test'
+  ...
+# Subtest: beam collision retains slab intersection and correctly misses above and behind
+ok 23 - beam collision retains slab intersection and correctly misses above and behind
+  ---
+  duration_ms: 7.252807
+  type: 'test'
+  ...
+# Subtest: co-op beams mark and damage each hero independently only once
+ok 24 - co-op beams mark and damage each hero independently only once
+  ---
+  duration_ms: 11.497035
+  type: 'test'
+  ...
+# Subtest: new round objects cannot inherit the previous round heavy reaction
+ok 25 - new round objects cannot inherit the previous round heavy reaction
+  ---
+  duration_ms: 8.145431
+  type: 'test'
+  ...
+# Subtest: all direct previews initialize actual attacks, invisibility and shatter without invalid state
+ok 26 - all direct previews initialize actual attacks, invisibility and shatter without invalid state
+  ---
+  duration_ms: 73.225266
+  type: 'test'
+  ...
+# Subtest: mirrored review transforms stored aim and teleport destinations with the fighters
+ok 27 - mirrored review transforms stored aim and teleport destinations with the fighters
+  ---
+  duration_ms: 6.986557
+  type: 'test'
+  ...
+# Subtest: optional release hold freezes only after firing and normal play clears it
+ok 28 - optional release hold freezes only after firing and normal play clears it
+  ---
+  duration_ms: 5.263158
+  type: 'test'
+  ...
+# Subtest: production entries match, retain Story Mode and never load review controls
+ok 29 - production entries match, retain Story Mode and never load review controls
+  ---
+  duration_ms: 6.090211
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4478.407574

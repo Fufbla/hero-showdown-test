@@ -1,0 +1,40 @@
+BUSHMAN — VALIDATION
+October 26, 2026
+
+253 automated checks passed, with zero failures or skips: 28 Bushman
+animation checks plus 225 earlier checks. Full results are recorded in
+bushman-combined-validation.tap.
+
+The original and updated native simulations were compared on every rendered
+frame for all five attacks, at difficulty paces 1 / 1.3 / 1.65 and rendering
+rates 30 / 60 / 120 / 144 Hz around the 120 Hz simulation. Each of the sixty
+scenarios runs for six seconds, including subsequent AI actions. Boss data,
+hero health, charge, projectiles, ground zones, flares, sounds and effects
+match exactly. AI pacing and hazard ageing retain their separate clocks.
+
+Additional checks cover thirty-two transparent crop registrations, all
+eight distance-driven gait phases, ground anchors, real-release gating,
+exact punch/kick/fireball contact coordinates in both facings, private
+light/heavy reaction observation, guard and interruption behavior,
+four-hit blast consumption, swept fireball collision, burning-ground
+cooldown and damage, co-op credit deduplication, original counter/defeat,
+missing-art fallback, canvas/bitmap preparation, pause and guest locks,
+new-round history, and optional review mirroring/contact-hold controls.
+
+Static checks parsed 276 script occurrences across the twelve local HTML
+pages and 58 distinct external scripts. Production entry files are identical;
+their only changes from Lightening Spree commit
+5c24669001880d10c813da3580d319fb1c2a9972 are three script references.
+All 65 cumulative game files differ from the observed main tree
+41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28.
+
+Original Bushman controller, damage, charge accounting, ground/fire effects,
+portrait, sprite sheets and networking code are unchanged. The new adapter
+replaces body drawing and observes successful hits and movement privately.
+Review controls never load in the production entry points.
+
+Browser observations are in bushman-browser-review.txt. Remote browser
+frame rates vary; these checks do not certify 60 FPS on physical devices.
+The full Story campaign, networked two-device play and mobile/controller
+hardware were not retested. Source provenance and exact generation prompts
+are included. No remote push, game upload, deployment or publication occurred.

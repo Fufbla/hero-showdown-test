@@ -1,0 +1,60 @@
+HERO SHOWDOWN — FINAL ANIMATION VALIDATION
+October 26, 2026
+
+281 automated checks passed, zero failures and zero skips. This includes
+28 Air Pollution Monster checks, 28 Bushman animation checks, and all 225
+earlier character, combat and Story checks. Full TAP output is included.
+
+AIR POLLUTION MONSTER
+The actual original updateStep, difficulty pacing, attack controller,
+damage and hazard functions were run alongside the visual adapter.
+Punch, cloud and storm were compared on every rendered frame for all three
+phases, all three difficulty settings, and 30 / 60 / 120 / 144 Hz rendering
+around the original 120 Hz simulation. Each of the 108 scenarios runs for
+eight seconds, including follow-up AI actions. Boss and hero data, health,
+hazards, effects, particles, sounds, clocks and hit stop match exactly.
+
+Additional checks cover:
+- Sixteen transparent full-body crops; three hover and four glide poses.
+- Punch pose gated by actual strike; cloud channel and ground release.
+- Storm pose tied to actual pulse events, with all three impact lanes.
+- Exact original cloud-mouth coordinates in both directions.
+- Light/heavy reactions observed privately after successful damage only.
+- Original smoke counter and fading defeat renderer.
+- Missing-art, invalid-crop and canvas/bitmap fallbacks.
+- No rendering mutation of combat data, RNG or native smoke-effect geometry.
+- Visual interpolation locks for pause, hit stop, cinematics and guests.
+- Native .28-second punch contact and phase-dependent 14/18 damage.
+- Original cloud target, 110 radius, 4.8-second lifetime and ground damage.
+- Original three storm pulses, directional blocking and invulnerability.
+- Existing hazards continue while hitstun pauses an attack warning.
+- Independent co-op damage checks; new-round movement/reaction reset.
+- Direct move previews, mirrored targets and hold-after-impact behavior.
+
+BUSHMAN
+The earlier 253-check checkpoint is included. His five attacks were compared
+against the native simulation at three difficulty paces and four rendering
+rates, with sixty six-second scenarios. Four-hit credit, double blast damage,
+interruption, projectiles, burning ground and original defeat are unchanged.
+
+STATIC AND PACKAGE CHECKS
+Both production entry files are identical. Their only change from Bushman
+commit 152786c345c6f3e1b3ea3ff32301b1568eec760e is three Air Pollution Monster
+script references. Native controller, damage, smoke-effect geometry, portraits,
+defeat, Story Mode and networking source are unchanged.
+283 script occurrences across thirteen local HTML pages and 62 distinct
+external scripts parse successfully. Optional review controls do not load
+in the production entry points.
+
+All 71 cumulative game files differ from observed main tree
+41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28. The package manifest contains sizes
+and SHA-256 hashes. This update relies on the other existing game files.
+
+LIMITS
+The full Story campaign, a networked two-device session, and mobile/controller
+hardware were not retested. Remote-browser frame rates varied; automated
+render-rate comparisons verify deterministic behavior, not 60 FPS hardware
+performance. Browser observations and original image-generation provenance
+are included. Source PNGs are preserved byte for byte.
+
+No remote source push, game upload, deployment or publication was performed.

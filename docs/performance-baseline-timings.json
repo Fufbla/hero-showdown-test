@@ -1,0 +1,63 @@
+{
+  "source": "Browser review, production code at 67f694d",
+  "method": "100 timer-yielded frames per scene, 1/60 fixed simulation time; first 10 excluded. CPU elapsed time around draw(), instrumentation enabled. Not end-device FPS. All scenes quality 2.",
+  "samples": 90,
+  "records": [
+    {
+      "scene": "Air / Buckroe",
+      "meanDrawMs": 3.379,
+      "p95DrawMs": 8.1
+    },
+    {
+      "scene": "Styrodog / Virginia Beach",
+      "meanDrawMs": 3.143,
+      "p95DrawMs": 7
+    },
+    {
+      "scene": "Sonic / Scope",
+      "meanDrawMs": 2.813,
+      "p95DrawMs": 6
+    },
+    {
+      "scene": "Venomis / Harbor",
+      "meanDrawMs": 1.453,
+      "p95DrawMs": 2.3
+    },
+    {
+      "scene": "Dr Styro / Rooftop",
+      "meanDrawMs": 0.376,
+      "p95DrawMs": 0.6
+    },
+    {
+      "scene": "Wastelander / Buckroe",
+      "meanDrawMs": 3.033,
+      "p95DrawMs": 6.5
+    },
+    {
+      "scene": "Atomdust / Virginia Beach",
+      "meanDrawMs": 3.718,
+      "p95DrawMs": 8.9
+    },
+    {
+      "scene": "Spree / Scope",
+      "meanDrawMs": 3,
+      "p95DrawMs": 6.9
+    },
+    {
+      "scene": "Bushman / Harbor",
+      "meanDrawMs": 3.302,
+      "p95DrawMs": 6.1
+    },
+    {
+      "scene": "Air storm / Scope",
+      "meanDrawMs": 3.501,
+      "p95DrawMs": 7.4
+    },
+    {
+      "scene": "Local co-op Bushman / Buckroe",
+      "meanDrawMs": 3.416,
+      "p95DrawMs": 8.8
+    }
+  ],
+  "errors": []
+}

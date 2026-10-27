@@ -1,0 +1,35 @@
+LOCAL BROWSER REVIEW — October 26, 2026
+Reviewed venomis-thornbear-review.html through the managed local preview.
+
+Observed:
+- Both actors loaded as complete cutouts over the beach, with consistent
+  grounding and no rectangular background from the generated PNGs.
+- Walking switches independently between Thornbear and his following trainer.
+- Claw windup, contact/follow-through with the original green claw arc, and
+  Venomis walking to catch up after the lunge.
+- Right-facing flytrap release and visible original projectiles with Sadie.
+- Ground-vine warning rings followed by emerged vines with Vee; scientist
+  raised-arm command and recovery are visible.
+- Summy, Sadie and Vee selections work.
+- A mirrored Vee kick registers 1 HITS; both actors remain correctly oriented.
+- Pause shows the pause overlay and Resume Fight returns to the game.
+- Defeat shows the original collapsed bear and kneeling scientist, and the
+  original victory message: Venomis loses control; Thornbear is subdued.
+- Original comparison displays the old sprites and supports normal play.
+- Normal candidate combat reduces the hero's health without practice protection.
+- Story Mode remains visibly available on the game menu.
+- Browser error/warning inspection returned no game-origin entries.
+
+Found and corrected during inspection:
+The optional direct claw-preview setup initially omitted startX and target,
+which the normal gameplay warning transition initializes. The preview now
+sets both values, mirrors them correctly, and has a regression check that
+advances each attack while requiring finite actor positions. Production
+attack logic was never changed.
+
+Prepared sprite canvases were changed to immutable textures where supported
+after a rendering comparison. The final candidate was checked again in a
+normal-speed live fight. Displayed remote-browser FPS varied on both the
+original and candidate; these observations do not certify physical-device FPS.
+Timing and gameplay consistency at varied render schedules are covered by
+the deterministic simulation checks, not inferred from browser screenshots.

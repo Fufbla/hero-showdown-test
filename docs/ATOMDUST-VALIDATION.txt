@@ -1,0 +1,38 @@
+ATOMDUST — VALIDATION
+October 26, 2026
+
+196 automated checks passed, with zero failures or skips: 26 Atomdust checks
+plus the 170 earlier animation and story checks. Full results are included
+in atomdust-combined-validation.tap.
+
+Original and updated combat were compared on every rendered frame for punch,
+kick, jump kick, smoke and caps, all three phases, difficulty paces 1 / 1.3 /
+1.65, and 30 / 60 / 120 / 144 Hz rendering around the 120 Hz simulation.
+The checks compare boss state, hazards, hero health, hits, sounds and effects.
+
+Additional checks cover alternating foot plants and continuous gait keys,
+input immutability, fixed idle foot anchors, preparation of all 694 original
+pieces into ten body layers, immutable-texture/canvas compatibility, fallback,
+original disperse/counter/defeat paths, exact attack-hand and foot alignment,
+pause/hitstop/scene/guest interpolation locks, round changes, smoke origin and
+cooldown, three cap-release times, inhalation bypassing block/invulnerability,
+half speed, independent co-op smoke exposure, hazards during hitstun, the
+fourth-hit dodge, all direct attack previews, and Practice/Fight smoke rules.
+
+Static checks parsed 182 script occurrences and 48 distinct external scripts.
+The production HTML entries are identical. Their only change from the Venomis
+& Thornbear baseline is two Atomdust script references. All 50 cumulative
+package files differ from the observed main tree at
+41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28.
+
+No original image, rig definition, atomSkeleton, atomHand, damage function,
+attack controller, hazard, cooldown, or Story Mode source was edited.
+The new visual adapter wraps drawing and observes updates with private state.
+Source art and metadata are recorded in atomdust-art-provenance.json.
+
+Browser observations are recorded in atomdust-browser-review.txt. Remote
+browser FPS varied during inspection; draw-call reduction does not certify
+physical-device FPS. The full Story campaign, a networked two-device session,
+and mobile/controller hardware were not retested.
+
+No remote source push, game upload, deployment, or publication was performed.

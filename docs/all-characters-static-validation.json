@@ -1,0 +1,14 @@
+{
+  "html_pages_checked": 13,
+  "script_occurrences_checked": 283,
+  "unique_external_scripts": 62,
+  "production_entries_identical": true,
+  "only_entry_change": "Three Air Pollution Monster animation script references",
+  "combined_game_files": 71,
+  "production_game_files": 57,
+  "optional_review_files": 14,
+  "all_packaged_game_files_differ_from_observed_main": true,
+  "observed_main_sha": "41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28",
+  "prior_package_baseline_commit": "152786c345c6f3e1b3ea3ff32301b1568eec760e",
+  "original_controller_damage_hazards_effect_geometry_portraits_defeat_story_and_networking_unchanged": true
+}

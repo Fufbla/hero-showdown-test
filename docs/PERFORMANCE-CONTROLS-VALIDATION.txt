@@ -1,0 +1,69 @@
+PERFORMANCE & CONTROLS VALIDATION — October 26, 2026
+
+Base: animation-complete commit 67f694d17aca478ab46836f336ef18f5b79aa996.
+Changes: direct scenery drawing in the two active HTML entry points;
+co-op pause/menu edge handoff; immediate co-op keyboard press/release dispatch.
+No character artwork, damage, attack timing or simulation frequency changed.
+
+AUTOMATED REGRESSIONS
+node --test --test-concurrency=1 --test-reporter=tap tests/*.test.cjs
+294 passed; 0 failed; 0 cancelled; 0 skipped. See the saved TAP report.
+The 13 new tests exercise native input functions, both keyboard players,
+repeat suppression, keyboard/controller/touch merging, online host/guest
+dispatch, locked input, both controller pause/resume paths, changing the
+controller used to resume, and disconnect cleanup.
+
+BROWSER INPUT & SCENARIO CHECKS
+The initial 14 checks exposed three failing scenarios caused by two bugs:
+missed short co-op keyboard taps, and Start pause bouncing in either pad slot.
+All 14 passed after fixes, including a final run in the phone landscape view.
+The scenario loop launched all 3 heroes x 9 opponents x 5 venues, stepped
+the actual simulation and drew each scenario. This is launch/render coverage,
+not 135 complete human-played battles.
+
+STORY
+Seven browser checks cover Chapter 1 ending/code, original main hero into
+the cave mission, Chapter 2 rescue/code, Chapter 3 opening, both scorpion
+round transitions, final boss/ending/completion, and no code on a lost fight.
+The harness uses real chapter functions and movie skip buttons, with forced
+outcomes to exercise transitions. Existing tag/combat tests also passed.
+
+SCENERY
+All 3 changed stages x 3 quality tiers x 3 times matched the original
+1280x720 RGBA canvas exactly in 27 comparisons. These comparisons used
+untransformed stage frames. Animation rate and quality tiers are preserved.
+The Harbor and Storm Rooftop use their existing separate renderers.
+
+CPU PERFORMANCE
+11 standardized scenes, 100 draws each; first 10 excluded; 90 samples each.
+Fixed 1/60 simulation increment, original 120 Hz simulation, quality tier 2.
+Timer yields allow browser work between samples. Timing covers JavaScript
+and synchronous Canvas2D drawing calls; it is not a GPU or display-FPS test.
+Instrumentation is confined to the optional review page.
+Before/after values and method are in performance-*-timings.json.
+Typical beach/fountain draw cost dropped about 68-74%. The storm-heavy
+Air/Scope sample dropped from 3.501 to 1.828 ms mean drawing time.
+Results fluctuate with shared browser load; unaffected stages are included
+in the report rather than presented as improvements.
+
+LIVE TIMING LIMIT
+The raw live callback interval reached roughly 1,016 ms in this environment.
+The existing animation metrics exclude intervals >=250 ms, so those filtered
+FPS numbers were not used to certify performance. The review page reports
+raw callback intervals and marks insufficient/long-gap samples for a device
+recheck. There is no verified 60 FPS claim for this release.
+
+PHONE / CONTROLLER / NETWORK LIMITS
+CSS phone previews: portrait 390x844, landscape 844x390. All movement/action
+controls fit within the viewport, with minimum action button sizes 55 / 52 px.
+Jump, pause and resume were operated through visible controls. Gamepad and
+touch edge tests are synthetic; no physical controller/touchscreen was used.
+Online dispatch uses the established sequence-numbered input protocol;
+no live internet two-device session was performed. No source was published.
+
+STATIC AND PACKAGING
+Both production HTML entry points match. 285 script occurrences across
+14 local HTML pages parse; 64 unique external scripts resolve; no missing
+static asset references. The cumulative package retains all earlier character
+files and adds the updated battle-input.js plus three optional review files.
+MANIFEST.json records sizes and SHA256 for every GAME-FILES member.

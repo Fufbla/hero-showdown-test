@@ -1,0 +1,57 @@
+SONIC TUSK VALIDATION — OCTOBER 26, 2026
+
+142 automated checks passed; zero failures, skipped tests, or cancellations.
+This combines 22 Sonic Tusk checks with the prior 120 animation, story-switch,
+and Bushman checks. See sonic-tusk-combined-validation.tap for the full report.
+
+GAMEPLAY COMPARISON
+The original and updated Sonic Tusk simulations were compared for pulse,
+stomp, and blast, across all three phases, difficulty paces 1 / 1.3 / 1.65,
+and 30 / 60 / 120 / 144 Hz presentation schedules. Boss state, hero state,
+damage calls, sound waves, and shake remain identical.
+Additional checks cover two-hero co-op cone contact, both facings, different
+hero heights, jump clearance, and travelling waves during boss hitstun.
+
+PRESENTATION CHECKS
+- Eight distance-driven walk drawings, four breathing idle drawings.
+- Pulse release and stomp contact match actual wave-creation steps.
+- Horn-blast emission covers both cone growth and sustained damage time.
+- Distinct light/heavy reactions that yield when hitstun expires.
+- Guard, counterattack, original defeat, and a fresh round.
+- Interpolation stops at a turn, teleport, attack, pause, hitstop, cutscene,
+  or network guest; drawing does not mutate combat state.
+- Missing any atlas or an invalid crop retains the original renderer.
+- Original comparison loads no new Sonic Tusk textures.
+- Other opponents retain their own renderers.
+
+SOURCE / FILE CHECKS
+- Both production HTML entries are identical. Their only change since the
+  saved Styrodog baseline is three Sonic Tusk script references.
+- 170 script occurrences parsed successfully, covering 41 distinct external
+  scripts in the game and its two optional review pages.
+- All selected crops/anchors fit their transparent source PNGs. Source PNG
+  bytes are retained intact; registration writes only presentation metadata.
+- Original Sonic Tusk artwork, sound FX artwork, and the Story module match
+  the observed main baseline. No Story restrictions are added.
+- All 37 packaged game files differ from that observed main baseline.
+
+DEVELOPER REPRODUCTION
+The test and registration script use the source checkout layout: game files
+under dist/, test under tests/, and registration script under tools/.
+  node --test tests/sonic-tusk-animation.test.cjs
+The combined run uses --test-concurrency=1 and the seven included/existing
+animation, story-switch, and Bushman test files. This keeps test workers from
+competing for memory. No application behavior depends on that test setting.
+Atlas remeasurement uses Python with Pillow, NumPy, and SciPy:
+  python3 tools/register-sonic-tusk-atlas.py
+
+BASELINES
+Observed main: 41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28
+Approved animation source: accedacdd6d9e011fe4b1a61def7f8d67a22b175
+Saved Styrodog source: 7acbece
+
+LIMITS
+Ready for the owner's playtest. Cloud-browser inspection and simulated
+presentation rates do not guarantee frame rate on a physical device.
+A complete campaign playthrough and physical mobile/controller session
+were not performed for this focused animation pass.

@@ -1,0 +1,22 @@
+AIR POLLUTION MONSTER — BROWSER REVIEW
+October 26, 2026; managed local preview, Chrome.
+
+- New full smoke-body artwork loads cleanly. Hovering and gliding retain
+  the floating tail, orange eyes, claws and dark billowing silhouette.
+- Summy: held toxic-cloud release joins the open mouth to the original
+  smoke stream and creates the ground hazard beneath the marked hero.
+- Sadie: mirrored smoke punch uses the new body strike while retaining
+  the original extending smoke arm, fist and ground contact ring.
+- Vee: held storm impact uses lowered claws while the original three-lane
+  smoke-fist effect remains present. Quarter-speed and hold controls work.
+- Starting Fight Monster clears preview holds and uses normal damage;
+  Vee's health visibly falls below half while ordinary enemy attacks run.
+- Pause presents the standard pause menu; Resume Fight returns to play.
+- Defeat preview dissipates the monster and reaches the original victory
+  screen, with the correct Buckroe Beach message and rematch/menu buttons.
+- Browser console reports no game errors or warnings.
+
+Exact hit times, all phases/difficulties, blocking, co-op damage, hazards,
+reaction selection and fallback paths are covered by automated checks.
+Remote-browser frame rates varied; physical-device performance was not
+certified. Screenshots were used for internal QA and are not deliverables.
