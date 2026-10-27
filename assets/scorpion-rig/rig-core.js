@@ -41,12 +41,38 @@
   const q=(p-duty)/(1-duty),u=ease(q),end=target(serial+1),lift=(10+def.index*2)*Math.sin(PI*q)**2;
   return {position:point(lerp(planted.x,end.x,u),lerp(planted.y,end.y,u)-lift),planted:false,serial,lift};
  }
+ // A loaded leg finishes its step, then holds a world-space foothold. The gait
+ // never starts another step during the fast part of a claw or stinger strike.
+ function braceAt(m){
+  if(m.state==='clawWindup')return ease((m.age-.15)/.45);
+  if(m.state==='clawSweep')return 1;
+  if(m.state==='clawRecover')return 1-ease(m.age/.48);
+  if(m.state==='stingerWindup')return ease(m.age/.65);
+  if(['stingerPlunge','stingerExposed','reflect'].includes(m.state))return 1;
+  if(m.state==='stunned')return 1-ease(m.age/.85);
+  return 0;
+ }
+ class Foothold{
+  constructor(def,time){this.def=def;this.position={...def.rest[3]};this.serial=0;this.lift=0;this.swing=null;this.lastCycle=-Infinity;}
+  advance(time,dt,body,brace){
+   const def=this.def,cycle=time/3.4+def.group*.5+def.index*.014,serial=Math.floor(cycle),p=cycle-serial;
+   if(!this.swing&&brace<.2&&p>.78&&this.lastCycle!==serial){
+    this.lastCycle=serial;this.swing={age:0,from:{...this.position},to:add(def.rest[3],point(Math.sin(serial*.87+def.index*.9)*3.2+body.x*.4,Math.cos(serial*.73+def.index)*1.5)),height:10+def.index*2};
+   }
+   if(this.swing){
+    const s=this.swing;s.age=Math.min(1,s.age+dt*lerp(1/.65,1/.19,brace));const u=ease(s.age);this.lift=s.height*Math.sin(PI*s.age)**2;
+    this.position=point(lerp(s.from.x,s.to.x,u),lerp(s.from.y,s.to.y,u)-this.lift);
+    if(s.age>=1){this.position=s.to;this.lift=0;this.swing=null;this.serial++;}
+   }
+   return {position:{...this.position},planted:!this.swing,serial:this.serial,lift:this.lift};
+  }
+ }
  function spring(s,target,omega,dt){const y=s.p-target,j=s.v+omega*y,e=Math.exp(-omega*dt);s.p=target+(y+j*dt)*e;s.v=(s.v-omega*j*dt)*e;}
  function bodyTarget(m){
   const time=m.time||0,age=m.age||0,side=m.side||1;let x=Math.sin(time*1.15)*1.2,y=Math.sin(time*1.9)*1.1,roll=Math.sin(time*.9)*.002;
-  if(m.state==='clawWindup'){const p=ease(age/.9);x-=side*5*p;y+=2*p;roll-=side*.007*p;}
-  if(m.state==='clawSweep'){const p=ease(age/.82);x+=side*lerp(-5,7,p);y+=Math.sin(p*PI)*3;roll+=side*lerp(-.007,.012,p);}
-  if(m.state==='clawRecover'){const q=1-ease(age/.65);x+=side*7*q;y+=3*q;roll+=side*.012*q;}
+  if(m.state==='clawWindup'){const p=ease(age/.9);x-=side*7*p;y+=3.5*p;roll-=side*.011*p;}
+  if(m.state==='clawSweep'){const p=ease(age/.82);x+=side*lerp(-7,9,p);y+=3.5+Math.sin(p*PI)*2;roll+=side*lerp(-.011,.016,p);}
+  if(m.state==='clawRecover'){const q=1-ease(age/.65);x+=side*9*q;y+=3.5*q;roll+=side*.016*q;}
   if(m.state==='stingerWindup'){y-=3*ease(age/1.15);x+=(m.targetX-640)/530*2;}
   if(m.state==='stingerPlunge'){y+=6*ease(age/.22);}
   if(m.state==='reflect'){y+=Math.sin(clamp(age/.72)*PI)*4;roll+=Math.sin(age*12)*.007;}
@@ -76,37 +102,67 @@
   for(let n=0;n<80;n++){points[10]={...end,z:0};for(let i=9;i>=0;i--)points[i]=place(points[i],points[i+1],65);points[0]={...root,z:0};for(let i=0;i<10;i++)points[i+1]=place(points[i+1],points[i],65);if(length3(points[10],{...end,z:0})<1e-7)break;}
   return {points,plane,desired,theta,feasible:qmin<=qmax};
  }
- function clawArm(p,body){
-  const shoulder=bodyPoint(p.shoulder,body),l1=62,l2=63,knee=twoBone(shoulder,p.wrist,l1,l2,p.side);
-  return {shoulder,elbow:knee[1],wrist:{...p.wrist},lengths:[l1,l2],weapon:{...p},opening:0};
+ // The palm and the complete striking fingers retain the combat transform.
+ // Only the non-contact forearm gains another degree of freedom. Its native
+ // artwork is rotated about this seam; the IK chain meets it without scaling.
+ function clawPalm(p){
+  const local=p.side===1?point((900-625)/380*210-p.anchor[0]*210,(244-44)/473*260-p.anchor[1]*260):point((1220-1080)/432*210-p.anchor[0]*210,(244-44)/470*260-p.anchor[1]*260);
+  return add(p,rot(local,p.angle));
+ }
+ function clawArm(p,body,flex=0){
+  const shoulder=bodyPoint(p.shoulder,body),palm=clawPalm(p),l1=70,l2=72,l3=dist(palm,p.wrist),delta=sub(shoulder,palm),D=len(delta),phi=angle(palm,shoulder);
+  const lo=Math.acos(clamp((D*D+l3*l3-(Math.abs(l1-l2)+2)**2)/(2*D*l3),-1,1));
+  const hi=Math.acos(clamp((D*D+l3*l3-(l1+l2-2)**2)/(2*D*l3),-1,1));
+  const desired=angle(palm,p.wrist)+flex,raw=wrap(desired-phi),theta=phi+Math.sign(raw||p.side)*clamp(Math.abs(raw),lo,hi);
+  const wrist=add(palm,point(Math.cos(theta)*l3,Math.sin(theta)*l3)),chain=twoBone(shoulder,wrist,l1,l2,p.side);
+  return {shoulder,elbow:chain[1],wrist,palm,nativeWrist:{...p.wrist},lengths:[l1,l2,l3],weapon:{...p},forearmRoll:wrap(theta-angle(palm,p.wrist)),opening:0};
+ }
+ function clawFlex(m,side){
+  let v=.035*Math.sin(m.time*1.45+side*1.3);
+  if(m.side===side){
+   if(m.state==='clawWindup')v+=side*.24*ease(m.age/.9);
+   if(m.state==='clawSweep')v+=side*lerp(.24,-.22,ease(m.age/.82));
+   if(m.state==='clawRecover')v-=side*.22*(1-ease(m.age/.65));
+  }else if(['clawWindup','clawSweep','clawRecover'].includes(m.state))v-=side*.08*braceAt(m);
+  if(m.state==='stunned')v+=side*.16*Math.sin(m.age*13)*Math.exp(-m.age*3);
+  return v;
+ }
+ function clawOpening(m,side){
+  let v=.035+.012*Math.sin(m.time*1.8+side*1.2);
+  if(m.side===side){
+   if(m.state==='clawWindup')v+=.105*ease(m.age/.9);
+   if(m.state==='clawSweep')v+=.105*(1-ease(m.age/.48));
+  }
+  if(m.state==='stunned')v+=.07*Math.exp(-m.age*3);
+  return v;
  }
  function snapshot(m){return {time:m.time||0,state:m.state,age:m.age||0,hp:m.hp,reflections:m.reflections||0,side:m.side||1,targetX:m.targetX||640};}
  class Rig{
-  constructor(m){this.body={x:{p:0,v:0},y:{p:0,v:0},roll:{p:0,v:0}};this.last=snapshot(m);this.tail=null;this.tailPlane=undefined;this.stinger={...m.stingerPose()};this.pose=null;this.sample(m,0);}
+  constructor(m){this.body={x:{p:0,v:0},y:{p:0,v:0},roll:{p:0,v:0}};this.last=snapshot(m);this.feet=legs.map(def=>new Foothold(def,m.time||0));this.arms=[1,-1].map(side=>({flex:{p:clawFlex(this.last,side),v:0},jaw:{p:clawOpening(this.last,side),v:0}}));this.tail=null;this.tailPlane=undefined;this.stinger={...m.stingerPose()};this.pose=null;this.sample(m,0);}
   sample(m,dt){
    const now=snapshot(m),target=bodyTarget(now);dt=clamp(dt,0,.05);
    if(dt&&now.hp<this.last.hp){const big=this.last.hp-now.hp>=100;this.body.y.v+=big?88:24;this.body.roll.v+=(big?.22:.06)*(now.side||1);}
    for(const k of ['x','y','roll'])spring(this.body[k],target[k],k==='roll'?9:11,dt);
    const body={x:clamp(this.body.x.p,-12,12),y:clamp(this.body.y.p,-8,15),roll:clamp(this.body.roll.p,-.032,.032),breath:1+Math.sin(now.time*1.9)*.0025};
-   const legPoses=legs.map(def=>{const foot=footAt(def,now.time),hip=bodyPoint(def.rest[0],body);return {id:def.id,side:def.side,index:def.index,foot,...foot,joints:legIK(def,hip,foot.position,body.roll),lengths:def.lengths};});
+   const brace=braceAt(now),legPoses=legs.map((def,i)=>{const foot=this.feet[i].advance(now.time,dt,body,brace),hip=bodyPoint(def.rest[0],body);return {id:def.id,side:def.side,index:def.index,foot,...foot,joints:legIK(def,hip,foot.position,body.roll),lengths:def.lengths};});
    const nativeTip=m.stingerPose(),active=['stingerWindup','stingerPlunge','stingerExposed','reflect','stunned'].includes(m.state);
    // The inactive reset after a self-sting settles instead of teleporting upward.
-   if(active||dt===0)this.stinger={...nativeTip};else{const a=1-Math.exp(-dt*15);this.stinger=point(lerp(this.stinger.x,nativeTip.x,a),lerp(this.stinger.y,nativeTip.y,a));}
+   if(active||dt===0)this.stinger={...nativeTip};else{const a=1-Math.exp(-dt*15),idle=now.state!=='stingerRecover';this.stinger=point(lerp(this.stinger.x,nativeTip.x+(idle?body.x*.45+Math.sin(now.time*1.15)*2.5:0),a),lerp(this.stinger.y,nativeTip.y+(idle?body.y*.3+Math.sin(now.time*1.7)*1.4:0),a));}
    const tip=this.stinger,root=bodyPoint(point(640,250),body),end=add(tip,point(65,-131));
    const reactionAge=['stunned','stingerRecover'].includes(now.state)?now.age:-1,upperArch=active||now.state==='stingerRecover';let tail=solveTail(root,end,now.time,this.tailPlane,reactionAge,upperArch);
    if(dt&&this.tailPlane!==undefined){this.tailPlane=lerp(tail.plane,tail.desired,1-Math.exp(-dt*9));tail=solveTail(root,end,now.time,this.tailPlane,reactionAge,upperArch);}else this.tailPlane=tail.plane;
    this.tail=tail.points;
-   const claws=[1,-1].map((side,i)=>{const a=clawArm(m.clawPose(side),body),active=side===m.side;
-    a.opening=.035+.018*Math.sin(now.time*1.8+i*2);
-    if(active&&m.state==='clawWindup')a.opening+=.08*ease(now.age/.9);
-    if(active&&m.state==='clawSweep')a.opening+=.08*(1-ease(now.age/.42));
-    if(m.state==='stunned')a.opening+=.07*Math.exp(-now.age*3);
+   const claws=[1,-1].map((side,i)=>{const springState=this.arms[i];
+    if(dt&&now.hp<this.last.hp)springState.flex.v+=side*(this.last.hp-now.hp>=100?1.1:.5);
+    spring(springState.flex,clawFlex(now,side),12,dt);spring(springState.jaw,clawOpening(now,side),18,dt);
+    const a=clawArm(m.clawPose(side),body,clamp(springState.flex.p,-.35,.35));a.opening=clamp(springState.jaw.p,0,.17);
+    a.trail=m.state==='clawSweep'&&m.side===side?[.09,.045,0].map(ago=>m.clawPose.call(Object.create(m,{age:{value:Math.max(0,m.age-ago)}}),side)):[];
     return a;
    });
-   this.pose={time:now.time,state:now.state,body,legs:legPoses,claws,tail:this.tail.map(p=>({...p})),tailLengths,tailPlane:tail.plane,tailFeasible:tail.feasible,stinger:{...tip},stingerSocket:end,root};this.last=now;return this.pose;
+   this.pose={time:now.time,state:now.state,body,brace,legs:legPoses,claws,tail:this.tail.map(p=>({...p})),tailLengths,tailPlane:tail.plane,tailFeasible:tail.feasible,stinger:{...tip},stingerSocket:end,root};this.last=now;return this.pose;
   }
   advance(m){const dt=Math.max(0,(m.time||0)-this.last.time);if(dt>0||m.state!==this.last.state||m.hp!==this.last.hp)return this.sample(m,dt);return this.pose;}
  }
  function sections(joints,widths){return joints.map((p,i)=>{const a=i===0?sub(joints[1],p):i===joints.length-1?sub(p,joints[i-1]):add(unit(sub(p,joints[i-1])),unit(sub(joints[i+1],p)));const normal=unit(point(-a.y,a.x)),w=widths[i];return [add(p,mul(normal,w)),add(p,mul(normal,-w))];});}
- return Object.freeze({Rig,legs,profiles,bodyScale,sourceWorld,bodyPoint,twoBone,legIK,footAt,solveTail,tailLengths,tailLength,sections,point,dist,clamp,lerp,ease,rot});
+ return Object.freeze({Rig,legs,profiles,bodyScale,sourceWorld,bodyPoint,twoBone,legIK,footAt,braceAt,clawPalm,clawArm,solveTail,tailLengths,tailLength,sections,point,dist,clamp,lerp,ease,rot});
 });

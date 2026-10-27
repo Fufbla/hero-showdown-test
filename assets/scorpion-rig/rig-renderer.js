@@ -8,15 +8,20 @@
  const leftJaw=[[884,280],[911,308],[909,350],[899,386],[868,420],[835,450],[794,472],[741,495],[695,508],[720,486],[743,450],[770,412],[793,367],[810,335],[840,310]];
  const rightJaw=[[1235,280],[1203,313],[1207,360],[1229,399],[1262,435],[1302,464],[1361,491],[1438,507],[1399,480],[1353,443],[1311,397],[1290,356],[1272,323]];
  const jawCuts=[[[824,335],[911,337],...leftJaw.slice(3,14)],[[1207,350],...rightJaw.slice(3),[1272,350]]];
+ // Split at the painted carpal seam. The striking palm/fingers keep their
+ // original transform, while this existing forearm artwork bends behind them.
+ const forearmCuts=[[[625,44],[1005,44],[1005,265],[955,265],[920,240],[890,220],[855,205],[625,205]],[[1080,44],[1512,44],[1512,205],[1270,205],[1240,220],[1205,240],[1155,265],[1080,265]]];
+ const forearmMasks=forearmCuts.map(poly=>poly.map(([x,y],i)=>[x,y+(i>1?32:0)]));
  const path=(c,points)=>{points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();};
  function cache(rect,polygon,cut){
-  const [x,y,w,h]=rect,canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const c=canvas.getContext('2d');c.translate(-x,-y);c.beginPath();path(c,polygon||[[x,y],[x+w,y],[x+w,y+h],[x,y+h]]);if(cut)path(c,cut);c.clip(cut?'evenodd':'nonzero');c.drawImage(shoreBossParts,0,0);textureBytes+=w*h*4;return {canvas,x,y,w,h};
+  const [x,y,w,h]=rect,canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const c=canvas.getContext('2d');c.translate(-x,-y);c.beginPath();path(c,polygon||[[x,y],[x+w,y],[x+w,y+h],[x,y+h]]);if(cut)for(const poly of typeof cut[0][0]==='number'?[cut]:cut)path(c,poly);c.clip(cut?'evenodd':'nonzero');c.drawImage(shoreBossParts,0,0);textureBytes+=w*h*4;return {canvas,x,y,w,h};
  }
  function prepare(){if(prepared||!shoreBossParts.complete||!shoreBossParts.naturalWidth)return;try{
   textures.body=cache([123,73,394,380],bodyPolygon);
   textures.legs=Core.legs.map(def=>{const sections=Core.sections(def.source,def.widths),poly=[...sections.map(s=>[s[0].x,s[0].y]),...sections.slice().reverse().map(s=>[s[1].x,s[1].y])];const xs=poly.map(p=>p[0]),ys=poly.map(p=>p[1]),x=Math.floor(Math.min(...xs))-2,y=Math.floor(Math.min(...ys))-2;return cache([x,y,Math.ceil(Math.max(...xs))-x+2,Math.ceil(Math.max(...ys))-y+2],poly);});
   textures.plate=cache([177,674,208,170]);
-  textures.claws=[cache(shoreBossRects[1],null,jawCuts[0]),cache(shoreBossRects[2],null,jawCuts[1])];
+  textures.claws=[cache(shoreBossRects[1],null,[jawCuts[0],forearmCuts[0]]),cache(shoreBossRects[2],null,[jawCuts[1],forearmCuts[1]])];
+  textures.forearms=[cache(shoreBossRects[1],forearmMasks[0]),cache(shoreBossRects[2],forearmMasks[1])];
   textures.jaws=[cache(shoreBossRects[1],leftJaw),cache(shoreBossRects[2],rightJaw)];
   prepared=true;
  }catch(e){errors.push(e.message);}}
@@ -46,11 +51,17 @@
  }
  function claw(a,i,trail){
   const p=a.weapon,[x,y,w,h]=shoreBossRects[i+1],sx=210/w,sy=260/h;
-  if(trail){ctx.save();ctx.globalAlpha=.18;ctx.strokeStyle='#ffe5a1';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(p.x-p.side*30,p.y+10);ctx.quadraticCurveTo(p.x-p.side*15,p.y-8,p.x,p.y);ctx.stroke();ctx.restore();}
+  if(trail&&a.trail.length===3){const [start,mid,end]=a.trail;ctx.save();ctx.globalAlpha=.14;ctx.strokeStyle='#ffe5a1';ctx.lineWidth=5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(start.x,start.y);ctx.quadraticCurveTo(mid.x,mid.y,end.x,end.y);ctx.stroke();ctx.restore();}
   ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.scale(sx,sy);ctx.translate(-p.anchor[0]*w,-p.anchor[1]*h);
   ctx.drawImage(textures.claws[i].canvas,0,0);draws++;
   const pivot=i?[1238-x,320-y]:[875-x,315-y];ctx.translate(...pivot);ctx.rotate(-p.side*a.opening);ctx.drawImage(textures.jaws[i].canvas,-pivot[0],-pivot[1]);draws++;ctx.restore();
  }
+ function forearm(a,i){
+  const p=a.weapon,[, ,w,h]=shoreBossRects[i+1];ctx.save();
+  ctx.translate(a.palm.x,a.palm.y);ctx.rotate(a.forearmRoll);ctx.translate(-a.palm.x,-a.palm.y);
+  ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.scale(210/w,260/h);ctx.drawImage(textures.forearms[i].canvas,-p.anchor[0]*w,-p.anchor[1]*h);draws++;ctx.restore();
+ }
+ const inFront=(m,i)=>['clawWindup','clawSweep','clawRecover'].includes(m.state)&&(m.side===1?i===0:i===1);
  function warnings(m){
   if(m.state==='clawWindup'){const p=m.clawPose();ctx.save();ctx.globalAlpha=.45+.25*Math.sin(m.age*18);ctx.strokeStyle='#ffd689';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(p.x,608,95,14,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
   if(['stingerWindup','stingerPlunge','stingerExposed'].includes(m.state)){
@@ -65,14 +76,14 @@
   for(const s of segments)plate(s.a,s.b,50-s.i*1.2);
   for(const l of p.legs){ctx.save();ctx.globalAlpha=l.planted?.2:.12;ellipse(l.position.x,l.position.y+l.lift+2,10,3,'#07111a');ctx.restore();}
   for(let i=0;i<8;i++)leg(Core.legs[i],p.legs[i],textures.legs[i]);
-  for(const a of p.claws){plate(a.shoulder,a.elbow,53);plate(a.elbow,a.wrist,49);}
+  p.claws.forEach((a,i)=>{plate(a.shoulder,a.elbow,53);plate(a.elbow,a.wrist,49);forearm(a,i);});
   body(p);
   if(m.flash>0){ctx.save();ctx.globalAlpha=m.flash*1.1;ellipse(640+p.body.x,395+p.body.y,110,100,'#e9ffad');ctx.restore();}
-  p.claws.forEach((a,i)=>{if(!['clawWindup','clawSweep'].includes(m.state)||(m.side===1?i!==0:i!==1))claw(a,i,false);});ctx.restore();warnings(m);
+  p.claws.forEach((a,i)=>{if(!inFront(m,i))claw(a,i,false);});ctx.restore();warnings(m);
  }
  function front(m){
   if(!enabled||!prepared||m.kind!=='boss'||m.state==='dissolve')return original.front(m);
-  const p=get(m);ctx.save();ctx.beginPath();ctx.rect(0,0,W,608);ctx.clip();p.claws.forEach((a,i)=>{if(['clawWindup','clawSweep'].includes(m.state)&&(m.side===1?i===0:i===1))claw(a,i,m.state==='clawSweep');});
+  const p=get(m);ctx.save();ctx.beginPath();ctx.rect(0,0,W,608);ctx.clip();p.claws.forEach((a,i)=>{if(inFront(m,i))claw(a,i,m.state==='clawSweep');});
   const tip=p.stinger,glow=m.state==='stingerExposed'&&m.dodged;
   if(glow){ctx.save();ctx.globalAlpha=.35+.18*Math.sin(m.time*12);ctx.strokeStyle='#e5ffac';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(tip.x+16,tip.y-45,64,82,0,0,Math.PI*2);ctx.stroke();ctx.restore();}
   shoreBossPart(4,tip.x,tip.y,118,165,0,.20,.92);
@@ -81,7 +92,7 @@
  }
  function drawDebug(m,p){
   const chain=(points,color)=>{ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();points.forEach((v,i)=>i?ctx.lineTo(v.x,v.y):ctx.moveTo(v.x,v.y));ctx.stroke();for(const v of points)ellipse(v.x,v.y,3,3,color);};
-  for(const l of p.legs)chain(l.joints,l.planted?'#a8ffaf':'#ffff77');for(const a of p.claws)chain([a.shoulder,a.elbow,a.wrist],'#75deff');chain(p.tail,'#fbb9ff');
+  for(const l of p.legs)chain(l.joints,l.planted?'#a8ffaf':'#ffff77');for(const a of p.claws)chain([a.shoulder,a.elbow,a.wrist,a.palm],'#75deff');chain(p.tail,'#fbb9ff');
   for(const box of [m.clawBox(1),m.clawBox(-1),m.stingerBox(),m.bodyBox()]){ctx.strokeStyle='#ffde83';ctx.lineWidth=1;ctx.strokeRect(box.x,box.y,box.w,box.h);}
  }
  drawShoreBossBack=back;drawShoreBossFront=front;
