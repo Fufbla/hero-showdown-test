@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173d40">
+  <meta name="description" content="Create your own hero and explore Coastal Beginnings in the Hero Showdown Royale Phase 1 playtest.">
+  <title>Hero Showdown Royale · Coastal Beginnings</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23173d40'/%3E%3Cpath d='M32 8 53 32 32 56 11 32Z' fill='%23e8d298'/%3E%3Cpath d='m24 41 16-20-6 23Z' fill='%232b8067'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="royale.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <a class="brand" href="../index.html" aria-label="Return to Hero Showdown"><span class="brand-mark">✦</span><span><small>HEALTHIA</small><strong>HERO SHOWDOWN <em>ROYALE</em></strong></span></a>
+      <div class="top-actions"><span class="phase-label"><i></i> PHASE 1 PLAYTEST</span><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
+    </header>
+    <main id="stage" aria-label="Coastal Beginnings game">
+      <canvas id="game" aria-label="2D beach adventure. Use A and D to move, Space to jump, J to punch and K to kick."></canvas>
+      <div id="hud" class="hud" hidden>
+        <section class="hero-hud" aria-label="Hero status">
+          <div class="level-seal"><small>LV</small><b id="level">1</b></div>
+          <div class="vitals"><strong id="hero-name">Coast Guardian</strong><div class="bar health"><span id="hp-fill"></span><small id="hp-text">100 / 100</small></div><div class="xp-line"><div class="bar xp"><span id="xp-fill"></span></div><small id="xp-text">0 / 50 XP</small></div></div>
+        </section>
+        <div class="region-label"><small>COASTAL BEGINNINGS</small><strong id="region">Sunwash Strand</strong></div>
+        <div class="coins" aria-label="Coins"><span>◈</span><b id="coins">0</b><small>COINS</small></div>
+      </div>
+      <div id="mission" class="mission" hidden><span class="mission-icon">✧</span><div><small>YOUR FIRST PATROL</small><strong id="mission-title">Meet the coast's troublemakers</strong><span id="mission-progress">Defeat 6 monsters · Discover all 3 types</span></div><b id="mission-count">0/6</b></div>
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      <button id="rest" class="rest-button" data-control="interact" hidden>✦ REST <kbd>E</kbd></button>
+      <div id="death" class="death-overlay" hidden><span>✦</span><h2>Take a breath, hero.</h2><p>Returning to your checkpoint with full health.</p><small>You keep your XP and coins.</small></div>
+      <output id="diagnostics" hidden></output>
+      <section id="creator" class="overlay">
+        <div class="creator-card">
+          <div class="creator-art">
+            <div class="eyebrow">A NEW HERO. YOUR STORY.</div><h1>Every legend<br>starts <em>somewhere.</em></h1>
+            <div class="preview-wrap"><div class="hero-halo"></div><canvas id="hero-preview" width="560" height="620" aria-label="Live preview of your customized superhero"></canvas><span class="preview-badge">✦ COASTAL BEGINNINGS</span></div>
+            <p>A little courage. A coast worth protecting.<br>Your adventure begins here.</p>
+          </div>
+          <form id="creator-form" class="creator-form">
+            <div class="eyebrow">HERO SHOWDOWN ROYALE <span>01</span></div><h2>Make it your own.</h2><p class="form-intro">Create your hero, then head for the shore.</p>
+            <label class="field">Hero name<input id="name" name="name" maxlength="22" value="Coast Guardian" autocomplete="off"></label>
+            <fieldset><legend>Body build</legend><div class="build-options"><label><input type="radio" name="build" value="slender"><span>Slender</span></label><label><input type="radio" name="build" value="balanced" checked><span>Balanced</span></label><label><input type="radio" name="build" value="strong"><span>Strong</span></label><label><input type="radio" name="build" value="full"><span>Full</span></label></div></fieldset>
+            <div class="proportions"><label>Height<input aria-label="Hero height" type="range" id="height" min="0.88" max="1.12" step="0.01" value="1"></label><label>Leg proportion<input aria-label="Leg proportion" type="range" id="legs" min="0.85" max="1.15" step="0.01" value="1"></label></div>
+            <div class="appearance-row"><label class="field">Hair<select id="hair"><option value="curls">Curls</option><option value="locs">Locs</option><option value="short">Short</option><option value="none">No hair</option></select></label><label class="color-field">Skin<input aria-label="Skin color" type="color" id="skin" value="#a96943"></label><label class="color-field">Suit<input aria-label="Suit color" type="color" id="suit" value="#247e69"></label><label class="color-field">Accent<input aria-label="Accent color" type="color" id="trim" value="#ffe0a0"></label></div>
+            <div class="cape-row"><label class="switch-label"><input type="checkbox" id="cape" checked><span class="switch"></span>Wear a cape</label><label class="cape-color">Cape color<input aria-label="Cape color" type="color" id="capeColor" value="#194e4c"></label></div>
+            <button type="submit" class="primary" id="begin">BEGIN YOUR ADVENTURE <span>→</span></button>
+            <button type="button" id="continue" class="secondary" hidden>Continue saved patrol →</button>
+            <button type="button" id="cancel-look" class="secondary" hidden>Cancel appearance changes</button>
+            <p class="save-note" id="save-note">Your patrol saves automatically on this browser.</p>
+          </form>
+        </div>
+      </section>
+      <section id="pause-menu" class="overlay" hidden>
+        <div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+          <div class="eyebrow">COASTAL BEGINNINGS</div><h2 id="pause-title">A moment to breathe.</h2><p>Your adventure is paused.</p>
+          <button id="resume" class="primary">BACK TO THE SHORE <span>→</span></button><button id="edit-look" class="secondary">Customize your hero</button><button id="return-camp" class="secondary">Return to checkpoint · full health</button>
+          <div class="control-guide"><strong>YOUR FIELD GUIDE</strong><div><kbd>A D / ← →</kbd><span>Move</span><kbd>Shift</kbd><span>Run</span><kbd>Space / W / ↑</kbd><span>Jump · press again to double-jump</span><kbd>J / Z</kbd><span>Punch · hold to chain</span><kbd>K / X</kbd><span>Kick · works in the air</span><kbd>E</kbd><span>Rest at a camp</span><kbd>P / Esc</kbd><span>Pause</span></div><p>On touch screens, slide the stick gently to walk or to its edge to run. Use a second finger for jump and attacks.</p></div>
+          <div class="pause-bottom"><a href="../index.html">← Hero Showdown</a><button id="new-patrol" class="text-button">Start a new patrol</button></div>
+        </div>
+      </section>
+      <section id="reset-dialog" class="overlay" hidden><div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="reset-title"><div class="eyebrow">A FRESH START</div><h2 id="reset-title">Start a new patrol?</h2><p>This replaces only the Royale Phase 1 progress saved in this browser.</p><button id="confirm-reset" class="primary">Start fresh</button><button id="cancel-reset" class="secondary">Keep my patrol</button></div></section>
+      <noscript><div class="noscript">Enable JavaScript to play Hero Showdown Royale.</div></noscript>
+    </main>
+    <footer class="controls-footer">
+      <div class="desktop-guide"><span><kbd>A</kbd><kbd>D</kbd> MOVE</span><span><kbd>SHIFT</kbd> RUN</span><span><kbd>SPACE</kbd> DOUBLE JUMP</span><span><kbd>J</kbd> PUNCH</span><span><kbd>K</kbd> KICK</span><span><kbd>ESC</kbd> PAUSE</span><small>EXPLORE. PROTECT. BECOME.</small></div>
+      <div id="touch-controls" class="touch-controls"><div class="stick-wrap"><div id="stick" aria-label="Movement stick: drag left or right, farther to run"><span class="stick-arrows">‹ &nbsp; &nbsp; ›</span><div id="stick-knob"></div></div><small>WALK · RUN</small></div><span class="touch-note">YOUR COAST.<br>YOUR STORY.</span><div class="action-buttons"><button data-control="punch" aria-label="Punch"><b>✧</b><span>PUNCH</span></button><button data-control="kick" aria-label="Kick"><b>⌁</b><span>KICK</span></button><button data-control="jump" class="jump-button" aria-label="Jump"><b>↑</b><span>JUMP</span></button></div></div>
+    </footer>
+  </div>
+  <script src="../assets/animation/motion-core.js"></script>
+  <script type="module" src="app.mjs"></script>
+</body>
+</html>

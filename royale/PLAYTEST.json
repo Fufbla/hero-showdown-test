@@ -1,0 +1,10 @@
+{
+  "source_repository": "https://github.com/Fufbla/hero-showdown-test",
+  "source_branch": "feature/showdown-royale",
+  "base_commit": "b11a1d8103f10e38d63788496660b99d4a8d9e6e",
+  "entry": "royale/index.html",
+  "private_playtest_project_id": "appgprj_6ae50514724081918db148465cc8eeeb",
+  "private_playtest_url": "https://healthia-showdown-royale-phase1.gladcreek512.chatgpt.site",
+  "deployment_scope": "Royale plus the unchanged assets/animation/motion-core.js helper only",
+  "save_key": "healthia.royale.phase1.v1"
+}
