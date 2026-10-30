@@ -7,7 +7,7 @@ import pathlib
 import socket
 import webbrowser
 
-parser = argparse.ArgumentParser(description="Launch the Hero Showdown Royale Phase 1 playtest")
+parser = argparse.ArgumentParser(description="Launch the Hero Showdown Royale Phase 2 playtest")
 parser.add_argument("--port", type=int, default=8000)
 parser.add_argument("--lan", action="store_true", help="Allow phones on the same local network to connect")
 parser.add_argument("--no-browser", action="store_true")

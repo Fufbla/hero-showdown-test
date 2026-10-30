@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#173d40">
-  <meta name="description" content="Create your own hero and explore Coastal Beginnings in the Hero Showdown Royale Phase 1 playtest.">
+  <meta name="description" content="Create your own hero and explore Coastal Beginnings in the Hero Showdown Royale Phase 2 playtest.">
   <title>Hero Showdown Royale · Coastal Beginnings</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23173d40'/%3E%3Cpath d='M32 8 53 32 32 56 11 32Z' fill='%23e8d298'/%3E%3Cpath d='m24 41 16-20-6 23Z' fill='%232b8067'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="royale.css">
@@ -13,7 +13,7 @@
   <div id="app">
     <header class="topbar">
       <a class="brand" href="../index.html" aria-label="Return to Hero Showdown"><span class="brand-mark">✦</span><span><small>HEALTHIA</small><strong>HERO SHOWDOWN <em>ROYALE</em></strong></span></a>
-      <div class="top-actions"><span class="phase-label"><i></i> PHASE 1 PLAYTEST</span><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
+      <div class="top-actions"><span class="phase-label"><i></i> PHASE 2 PLAYTEST</span><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
     </header>
     <main id="stage" aria-label="Coastal Beginnings game">
       <canvas id="game" aria-label="2D beach adventure. Use A and D to move, Space to jump, J to punch and K to kick."></canvas>
@@ -28,26 +28,49 @@
       <div id="mission" class="mission" hidden><span class="mission-icon">✧</span><div><small>YOUR FIRST PATROL</small><strong id="mission-title">Meet the coast's troublemakers</strong><span id="mission-progress">Defeat 6 monsters · Discover all 3 types</span></div><b id="mission-count">0/6</b></div>
       <div id="toast" class="toast" role="status" aria-live="polite"></div>
       <button id="rest" class="rest-button" data-control="interact" hidden>✦ REST <kbd>E</kbd></button>
-      <div id="death" class="death-overlay" hidden><span>✦</span><h2>Take a breath, hero.</h2><p>Returning to your checkpoint with full health.</p><small>You keep your XP and coins.</small></div>
+      <div id="death" class="death-overlay" hidden role="status"><span>✦</span><h2>Take a breath, hero.</h2><p>Returning to your checkpoint with full health.</p><small>You keep your XP and coins.</small></div>
       <output id="diagnostics" hidden></output>
-      <section id="creator" class="overlay">
-        <div class="creator-card">
-          <div class="creator-art">
-            <div class="eyebrow">A NEW HERO. YOUR STORY.</div><h1>Every legend<br>starts <em>somewhere.</em></h1>
-            <div class="preview-wrap"><div class="hero-halo"></div><canvas id="hero-preview" width="560" height="620" aria-label="Live preview of your customized superhero"></canvas><span class="preview-badge">✦ COASTAL BEGINNINGS</span></div>
-            <p>A little courage. A coast worth protecting.<br>Your adventure begins here.</p>
-          </div>
-          <form id="creator-form" class="creator-form">
-            <div class="eyebrow">HERO SHOWDOWN ROYALE <span>01</span></div><h2>Make it your own.</h2><p class="form-intro">Create your hero, then head for the shore.</p>
-            <label class="field">Hero name<input id="name" name="name" maxlength="22" value="Coast Guardian" autocomplete="off"></label>
-            <fieldset><legend>Body build</legend><div class="build-options"><label><input type="radio" name="build" value="slender"><span>Slender</span></label><label><input type="radio" name="build" value="balanced" checked><span>Balanced</span></label><label><input type="radio" name="build" value="strong"><span>Strong</span></label><label><input type="radio" name="build" value="full"><span>Full</span></label></div></fieldset>
-            <div class="proportions"><label>Height<input aria-label="Hero height" type="range" id="height" min="0.88" max="1.12" step="0.01" value="1"></label><label>Leg proportion<input aria-label="Leg proportion" type="range" id="legs" min="0.85" max="1.15" step="0.01" value="1"></label></div>
-            <div class="appearance-row"><label class="field">Hair<select id="hair"><option value="curls">Curls</option><option value="locs">Locs</option><option value="short">Short</option><option value="none">No hair</option></select></label><label class="color-field">Skin<input aria-label="Skin color" type="color" id="skin" value="#a96943"></label><label class="color-field">Suit<input aria-label="Suit color" type="color" id="suit" value="#247e69"></label><label class="color-field">Accent<input aria-label="Accent color" type="color" id="trim" value="#ffe0a0"></label></div>
-            <div class="cape-row"><label class="switch-label"><input type="checkbox" id="cape" checked><span class="switch"></span>Wear a cape</label><label class="cape-color">Cape color<input aria-label="Cape color" type="color" id="capeColor" value="#194e4c"></label></div>
-            <button type="submit" class="primary" id="begin">BEGIN YOUR ADVENTURE <span>→</span></button>
-            <button type="button" id="continue" class="secondary" hidden>Continue saved patrol →</button>
-            <button type="button" id="cancel-look" class="secondary" hidden>Cancel appearance changes</button>
-            <p class="save-note" id="save-note">Your patrol saves automatically on this browser.</p>
+      <section id="roster" class="overlay" aria-label="Choose your hero">
+        <div class="roster-card" role="dialog" aria-modal="true" aria-labelledby="roster-title">
+          <div class="eyebrow">HERO SHOWDOWN ROYALE · PHASE 02</div>
+          <h1 id="roster-title" tabindex="-1">Your coast. <em>Your heroes.</em></h1>
+          <p>Three heroes. Three beginnings. Choose who takes the next step.</p>
+          <div id="hero-slots" class="hero-slots"></div>
+          <p class="storage-note" id="roster-note" role="status">Saved on this browser only. No account or cloud saving.</p>
+          <button id="back-to-patrol" class="secondary" hidden>Return to current patrol</button>
+        </div>
+      </section>
+      <section id="creator" class="overlay" hidden>
+        <div class="creator-card" role="dialog" aria-modal="true" aria-labelledby="creator-title">
+          <aside class="creator-art">
+            <div class="eyebrow">A HERO ONLY YOU CAN BE</div><h1 id="creator-title" tabindex="-1">Make your <em>mark.</em></h1>
+            <div class="view-toggle" role="group" aria-label="Preview view"><button type="button" id="view-front" aria-pressed="true">Front</button><button type="button" id="view-back" aria-pressed="false">Back</button></div>
+            <div class="preview-wrap"><div class="hero-halo"></div><canvas id="hero-preview" width="480" height="480" aria-label="Front view of your superhero"></canvas></div>
+            <strong id="preview-name">Coast Guardian</strong>
+            <label class="pose-field">Preview movement<select id="preview-pose" aria-label="Preview animation"></select></label>
+            <p>Every build. The same heroic potential.</p>
+          </aside>
+          <form id="creator-form" class="creator-form" novalidate>
+            <header class="creator-heading"><div class="eyebrow" id="creator-slot">HERO SLOT 01</div><h2>Your hero, your way.</h2></header>
+            <div class="creator-tabs" role="tablist" aria-label="Customization sections">
+              <button type="button" id="tab-identity" role="tab" aria-controls="panel-identity" aria-selected="true" data-tab="identity">Identity</button>
+              <button type="button" id="tab-face" role="tab" aria-controls="panel-face" aria-selected="false" tabindex="-1" data-tab="face">Face &amp; hair</button>
+              <button type="button" id="tab-body" role="tab" aria-controls="panel-body" aria-selected="false" tabindex="-1" data-tab="body">Body</button>
+              <button type="button" id="tab-suit" role="tab" aria-controls="panel-suit" aria-selected="false" tabindex="-1" data-tab="suit">Starter suit</button>
+            </div>
+            <div class="creator-fields">
+              <section id="panel-identity" role="tabpanel" aria-labelledby="tab-identity">
+                <label class="field">Superhero name<input id="name" name="name" maxlength="44" autocomplete="off" spellcheck="false" aria-describedby="name-help name-error" required></label>
+                <small id="name-help">2–22 characters. Letters, numbers, spaces, apostrophes and hyphens.</small>
+                <p id="name-error" class="field-error" role="alert" hidden></p>
+                <div id="identity-fields" class="field-grid"></div>
+                <p class="creator-hint">Appearance never changes your health, speed, collision size or combat reach.</p>
+              </section>
+              <section id="panel-face" role="tabpanel" aria-labelledby="tab-face" hidden><div id="face-fields" class="field-grid"></div></section>
+              <section id="panel-body" role="tabpanel" aria-labelledby="tab-body" hidden><div id="body-fields" class="field-grid"></div><p class="creator-hint">A shared skeleton adapts to your proportions. All heroes use the same gameplay rules.</p></section>
+              <section id="panel-suit" role="tabpanel" aria-labelledby="tab-suit" hidden><div id="suit-fields" class="field-grid"></div><p id="outfit-note" class="creator-hint">Colors apply to the starter suit only. Future earned or purchased equipment keeps its own colors. Every cape has the same length.</p></section>
+            </div>
+            <div class="creator-actions"><button type="submit" class="primary" id="begin">BEGIN YOUR ADVENTURE <span>→</span></button><button type="button" id="cancel-look" class="secondary">Back to heroes</button><p class="save-note" id="save-note">Saves automatically on this browser. No cloud saving.</p></div>
           </form>
         </div>
       </section>
@@ -56,10 +79,11 @@
           <div class="eyebrow">COASTAL BEGINNINGS</div><h2 id="pause-title">A moment to breathe.</h2><p>Your adventure is paused.</p>
           <button id="resume" class="primary">BACK TO THE SHORE <span>→</span></button><button id="edit-look" class="secondary">Customize your hero</button><button id="return-camp" class="secondary">Return to checkpoint · full health</button>
           <div class="control-guide"><strong>YOUR FIELD GUIDE</strong><div><kbd>A D / ← →</kbd><span>Move</span><kbd>Shift</kbd><span>Run</span><kbd>Space / W / ↑</kbd><span>Jump · press again to double-jump</span><kbd>J / Z</kbd><span>Punch · hold to chain</span><kbd>K / X</kbd><span>Kick · works in the air</span><kbd>E</kbd><span>Rest at a camp</span><kbd>P / Esc</kbd><span>Pause</span></div><p>On touch screens, slide the stick gently to walk or to its edge to run. Use a second finger for jump and attacks.</p></div>
-          <div class="pause-bottom"><a href="../index.html">← Hero Showdown</a><button id="new-patrol" class="text-button">Start a new patrol</button></div>
+          <div class="pause-bottom"><a href="../index.html">← Hero Showdown</a><button id="choose-hero" class="text-button">Choose another hero</button></div>
         </div>
       </section>
-      <section id="reset-dialog" class="overlay" hidden><div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="reset-title"><div class="eyebrow">A FRESH START</div><h2 id="reset-title">Start a new patrol?</h2><p>This replaces only the Royale Phase 1 progress saved in this browser.</p><button id="confirm-reset" class="primary">Start fresh</button><button id="cancel-reset" class="secondary">Keep my patrol</button></div></section>
+      <section id="delete-dialog" class="overlay" hidden><div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="delete-title"><div class="eyebrow">DELETE LOCAL HERO</div><h2 id="delete-title">Retire this hero?</h2><p id="delete-description"></p><p>This removes this slot’s hero and progress from this browser. Other slots are kept.</p><button id="cancel-delete" class="secondary">Keep my hero</button><button id="confirm-delete" class="primary danger">Delete this hero</button></div></section>
+      <div id="storage-warning" role="status" hidden></div>
       <noscript><div class="noscript">Enable JavaScript to play Hero Showdown Royale.</div></noscript>
     </main>
     <footer class="controls-footer">

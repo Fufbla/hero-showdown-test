@@ -1,39 +1,52 @@
-# Phase 1 validation — October 30, 2026
+# Phase 2 validation — October 30, 2026
 
-Base: `b11a1d8103f10e38d63788496660b99d4a8d9e6e`. Target: `feature/showdown-royale` only.
+Base: `d2fd2bfb902c1a778d50a2608fbf56a5e5dc54b4`, branch `feature/showdown-royale`.
+All Phase 2 source, tests, documentation and review captures stay inside `royale/`.
 
-## Passed
+## Automated model and storage checks
 
-| Check | Result |
-| --- | --- |
-| Deterministic gameplay tests | 20 / 20 |
-| Desktop browser viewport, 1280 × 800 | 18 / 18 input and layout checks |
-| Portrait phone viewport, 390 × 844 | 18 / 18 input and layout checks |
-| Landscape phone viewport, 844 × 390 | 18 / 18 input and layout checks |
-| Small phone viewport, 320 × 568 | 18 / 18 input and layout checks |
-| Direct desktop UI at 1363 × 936 | Creator, full build, height control, hair selection, cape toggle, start/continue and walking exercised |
-| Save reload | Creator offered the saved patrol on a fresh page load; round-trip and malformed saves covered by unit tests |
-| JavaScript syntax and whitespace | Passed |
-| Python launcher | Compiles and displays its launch options |
-| Branch/file isolation | Passed: the only existing-file edits are the three locked Royale menu tiles |
+`node --test royale/tests/*.test.mjs`: **38 passed, 0 failed** (20 existing Phase 1 tests and 18 Phase 2 tests).
 
-Core tests cover acceleration and stopping, run/walk speeds, world boundaries, double-jump limits, air steering, coyote time, jump buffering, one-way platforms, solid walls/ceilings, swept landings, end-to-end coast traversal, single-hit attacks, facing, attack chaining, airborne hits, rewards, leveling, enemy respawns, enemy warning/recovery/invulnerability behavior, platform patrol bounds, pause, death recovery, camps, cosmetic build parity, and save validation.
+The original suite covers movement, run/walk speeds, double-jump limits, air steering, coyote time, buffering, one-way platforms, walls/ceilings, swept collisions, connected coast traversal, ground/air attack hits, chaining, facing, rewards, leveling, monster respawns, telegraphs, leashing, invulnerability, pause, checkpoints and defeat recovery.
 
-Browser checks use the real input handlers and visible HUD/diagnostics. They cover viewport bounds, keyboard movement/run/jumps, simultaneous stick movement and jumping, touch attacks, pointer cancellation, focus-loss pause and release, pause freezing, and opening/canceling customization. Synthetic pointers cannot request native capture; the harness temporarily stubs only capture for those synthetic events and restores it afterward. These checks are **not physical-device testing**.
+The Phase 2 suite checks every appearance enum/color/range, Unicode name validation, fixed equipment palette guards, appearance persistence, legacy migration, three independent slots, stable IDs/timestamps/regions, deletion, malformed/future saves, quota failures, and stale writes from other tabs. It also checks **128 extreme proportion combinations** for identical gameplay outcomes, fixed bone lengths, connected joints, grounded stance feet, consistent visual attack endpoints and standard cape length across all animation states and views.
 
-## Fixes during validation
+`node royale/tests/compare-phase1.mjs`: **passed**. Compares 7,200 fixed steps directly with code loaded from the approved Phase 1 commit. Hero physics, collisions, combat, enemy state, rewards, checkpoints and emitted events match exactly, including damage and respawn. Only appearance/save data and added visual timers are outside this comparison. The script also asserts that Phase 2 changes stay inside `royale/`.
 
-- Corrected the custom hero's idle leg pose so the legs do not cross.
-- Zoomed the world closer on short landscape displays and added gentle vertical camera follow for upper paths.
-- Kept level-up notifications from being replaced by a reward notification on the same simulation step.
-- Adjusted the QA harness to wait on the game's visible simulation clock and keep its iframe visible, avoiding false results from background/visibility timing.
+`node royale/tests/verify-isolation.mjs`: **passed**. Original assets, videos, Story/Versus code and tests are unchanged. Relative to the original pre-Royale base, only the three already-approved Phase 1 Royale menu tiles differ outside the Royale directory. Phase 2 makes no further changes to those entry points.
 
-## Performance and remaining limits
+`git diff --check`: **passed**.
 
-The simulation uses fixed 1/60-second steps and interpolated rendering, with a 60 FPS target. Observed canvas draw work was about **0.6–0.8 ms** per frame in the sampled landscape, compact phone, and desktop checks. The instrumented cloud browser's observed frame rate varied and often ran below 60 FPS (roughly 10–49 FPS in sampled QA states). This does not certify sustained 60 FPS, browser scheduling, or physical-device responsiveness.
+## Automated browser checks (viewport simulation)
 
-Still needs hands-on validation: actual iPhone Safari and Android touch capture, orientation changes during a gesture, safe areas, longer sessions, audio on those devices, and sustained frame rate. The sprite/rig artwork is a prototype and remains open to visual and movement feedback.
+Run in the connected Chromium browser via the visible `royale/tests/mobile.html` harness against the same static source packaged for the private playtest.
 
-The full 99-level curve, nine upgradeable powers, remaining regions, bosses, equipment, Tree of Eris, Villain Merge, accounts, three save slots and multiplayer are intentionally not implemented in this phase. Phase 1 balances levels 1–10 and uses a single independent local playtest save.
+| Simulated viewport | Creator / save / render checks | Movement / input / layout checks |
+| --- | ---: | ---: |
+| Phone portrait, 390 × 844 | 131 / 131 | 18 / 18 |
+| Phone landscape, 844 × 390 | 131 / 131 | 18 / 18 |
+| Small phone, 320 × 568 | 131 / 131 | 18 / 18 |
+| Tablet, 768 × 1024 | 131 / 131 | 18 / 18 |
+| Desktop, 1280 × 800 | 131 / 131 | 18 / 18 |
 
-Existing Story/Versus code and all existing assets are byte-for-byte preserved, except for replacing each entry page's locked Royale menu tile with navigation to `royale/`. This is an isolation check, not a new full regression playthrough of those existing modes.
+Total: **655 creator/save/render checks and 90 movement/input checks passed**. The creator checks were rerun at all five sizes after the final rig refinement.
+
+Creator checks exercise the real form, invalid/valid name submission, immediate view changes, reachability of every field, persistent action buttons, all saved appearance fields, respawn/reload, canceling edits and new-slot creation, all three slots, deletion confirmation and preservation of the old Phase 1 backup. Pixel checks render every appearance option at a fixed clock, compare front/back output and verify each animation produces a distinct pose.
+
+Input checks exercise real app handlers through DOM keyboard/pointer events: walking, faster running, jump/double jump, air steering, pause, simultaneous stick+jump, cancellation, touch attacks, blur pause, release clearing and edit/cancel return. **Synthetic pointer capture is stubbed only during the synthetic event sequence and restored afterward.** These checks do not certify hardware touch capture. Each run uses a separate session-storage namespace; real local hero slots are not replaced.
+
+## Visual review
+
+Inspected the live desktop creator, phone portrait suit editor, three-slot roster and a gallery of every pose. Reviewed front/back, tall/full and short/slender proportions, moving limbs, attack extension and cape placement. Direct browser clicks also opened a saved customized hero and its pause/editor flow.
+
+The review found and corrected an over-bent punch/kick pose and possible floating stance feet at long strides. Regression checks now assert fixed limb lengths and grounded stance feet across the tested builds. See `qa/character-creator-phase2.jpg` for the final creator view and `tests/animations.html` for repeatable pose review.
+
+## Performance and physical-device status
+
+The simulation remains fixed at 60 Hz with interpolated rendering and a **60 FPS target**. Sampled canvas draw work during the five input runs was approximately **0.66–0.84 ms per frame**. The instrumented cloud browser reported approximately **12–21 FPS** at the sampled completion points. The environment's frame scheduling is variable; these measurements do **not** establish sustained 60 FPS on real devices.
+
+**No physical iPhone, Android phone, tablet, laptop or desktop hardware testing was performed in this environment.** Actual iOS Safari/Android browser behavior, safe areas, mobile keyboard resizing, pointer capture, orientation changes during gestures, audio, long-session performance and sustained frame rate still need hands-on testing. Browser viewport simulation is reported separately above. Cross-browser Safari/Firefox verification is also outstanding.
+
+## Scope remaining
+
+Phase 2's creator, animation states, local hero selection and migration are implemented. The art remains procedural prototype artwork and can receive further feedback/polish. Account authentication, cloud synchronization, equipment acquisition, the nine-power system and all other Phase 3 systems are intentionally absent. Fixed palettes are a data/rendering boundary only; no equipment is obtainable beyond the starter suit. The existing levels 1–10 balance and Coastal Beginnings content remain intact.

@@ -1,9 +1,11 @@
 // A visible, repeatable same-origin QA page. Exercises the real DOM event handlers.
 const frame=document.getElementById('phone'),report=document.getElementById('report');
-for(const [id,w,h] of [['portrait',390,844],['landscape',844,390],['small',320,568],['desktop',1280,800]])document.getElementById(id).onclick=()=>{frame.style.width=w+'px';frame.style.height=h+'px';};
+for(const [id,w,h] of [['portrait',390,844],['landscape',844,390],['small',320,568],['tablet',768,1024],['desktop',1280,800]])document.getElementById(id).onclick=()=>{frame.style.width=w+'px';frame.style.height=h+'px';};
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 document.getElementById('test').onclick=async()=>{
   const button=document.getElementById('test');button.disabled=true;report.textContent='Running real input checks…\n';
+  await new Promise(resolve=>{frame.onload=resolve;frame.src=`../?qa=1&touch=1&testSession=input-${Date.now()}`;});
+  while(!frame.contentDocument.querySelector('.hero-slot'))await wait(30);
   const d=frame.contentDocument,w=frame.contentWindow;const el=id=>d.getElementById(id);
   const check=(name,ok,detail='')=>{report.textContent+=`${ok?'PASS':'FAIL'} · ${name}${detail?' · '+detail:''}\n`;if(!ok)throw Error(name);};
   const stats=()=>{const s=el('diagnostics').textContent;return {time:Number(s.match(/ · t ([\d.]+)/)?.[1]),vx:Number(s.match(/vx ([\d.-]+)/)?.[1]),x:Number(s.match(/x ([\d.-]+)/)?.[1]),y:Number(s.match(/y ([\d.-]+)/)?.[1]),jumps:Number(s.match(/jumps (\d)/)?.[1]),text:s};};
@@ -12,6 +14,7 @@ document.getElementById('test').onclick=async()=>{
   const pointer=(target,type,id,x,y)=>target.dispatchEvent(new w.PointerEvent(type,{pointerId:id,pointerType:'touch',clientX:x,clientY:y,bubbles:true,cancelable:true}));
   try{
     frame.focus();await wait(100);
+    if(!el('roster').hidden){d.querySelector('[data-slot="0"] [data-action]').click();}
     if(!el('creator').hidden)el('begin').click();
     if(!el('pause-menu').hidden)el('resume').click();
     el('pause').click();el('return-camp').click();await advance(.3);

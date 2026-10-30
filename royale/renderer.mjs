@@ -1,5 +1,7 @@
 import { SURFACES, WORLD_WIDTH, CAMPS, TYPES } from './world.mjs';
 import { clamp, ATTACKS } from './core.mjs';
+import { drawHero } from './hero-art.mjs';
+export { drawHero } from './hero-art.mjs';
 const PI = Math.PI;
 const OUTLINE = '#183c43';
 function path(c, points, fill, stroke = OUTLINE, width = 2) {
@@ -13,71 +15,9 @@ function line(c,points,color,width=2) {c.beginPath();points.forEach(([x,y],i)=>i
 function limb(c,points,color,width) {line(c,points,OUTLINE,width+4);line(c,points,color,width);}
 function round(c,x,y,w,h,r,color) {c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();}
 const lerp=(a,b,t)=>a+(b-a)*t;
-export function poseFor(h,time) {
-  const phase=h.cycle*PI*2, run=h.pose==='run', moving=['run','walk'].includes(h.pose), stride=moving?(run?19:13):0;
-  const p={ bob:moving?Math.abs(Math.sin(phase))*3:Math.sin(time*2.6)*1.1, lean:run?5:0,
-    frontFoot:Math.sin(phase)*stride, backFoot:-Math.sin(phase)*stride,
-    frontKnee:-5+Math.sin(phase+.6)*stride*.5, backKnee:-5-Math.sin(phase+.6)*stride*.5,
-    frontHandX:15-Math.sin(phase)*stride*.6, frontHandY:-35, backHandX:-14+Math.sin(phase)*stride*.6, backHandY:-34,
-    frontFootY:0, backFootY:0, headTilt:0 };
-  if(!moving){p.frontKnee=8;p.backKnee=-9;p.frontFoot=8;p.backFoot=-9;p.frontHandX=17;p.backHandX=-13;}
-  if(['jump','fall'].includes(h.pose)||!h.grounded){p.frontKnee=15;p.backKnee=-13;p.frontFoot=6;p.backFoot=-15;p.frontFootY=-11;p.backFootY=-5;p.frontHandX=23;p.frontHandY=-62;p.backHandX=-17;p.backHandY=-52;p.bob=0;}
-  if(h.pose==='land'){p.bob=5;p.frontKnee=15;p.backKnee=-10;p.frontFoot=15;p.backFoot=-13;}
-  if(h.attack){
-    const a=h.attack,d=ATTACKS[a.kind],t=a.age, extension=t<d.startup?t/d.startup:t<d.startup+d.active?1:1-(t-d.startup-d.active)/(d.duration-d.startup-d.active);
-    const k=clamp(extension,0,1);p.lean=k*6;
-    if(a.kind==='punch'){p.frontHandX=lerp(15,57,k);p.frontHandY=lerp(-38,-54,k);p.backHandX=-4;p.backHandY=-51;}
-    else {p.frontKnee=lerp(0,36,k);p.frontFoot=lerp(9,67,k);p.frontFootY=lerp(0,-43,k);p.frontHandX=3;p.frontHandY=-57;p.backHandX=-20;p.backHandY=-48;p.lean=-4*k;}
-  }
-  if(h.pose==='hurt'){p.lean=-10;p.frontHandX=0;p.frontHandY=-44;p.headTilt=-3;}
-  return p;
-}
-// One articulated rig is shared by every body build and appearance.
-export function drawHero(c,x,y,look,h,time,scale=1,rig=null) {
-  const target=poseFor(h,time),p=rig||target;
-  if(rig) for(const key of Object.keys(target)) rig[key]=lerp(rig[key]??target[key],target[key],.30);
-  const build={slender:[12,10,6],balanced:[15,12,8],strong:[20,13,10],full:[18,17,11]}[look.build];
-  const [shoulder,hip,thick]=build,face=h.attack?.face||h.face||1;
-  c.save();c.translate(x,y);c.scale(scale*face*look.height,scale*look.height);
-  if(h.dead){c.rotate(-1.1);c.globalAlpha=.5;}
-  if(h.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha=.65;
-  c.translate(0,p.bob);
-  const legLength=look.legs,hipY=-32*legLength,shoulderY=hipY-29;
-  if(look.cape){
-    const sway=Math.sin(time*5)*4+Math.min(13,Math.abs(h.vx||0)*.04);
-    c.beginPath();c.moveTo(-shoulder+3,shoulderY);c.bezierCurveTo(-29-sway,-48,-34-sway,-15,-23-sway,-5);c.quadraticCurveTo(-7,-10,hip+1,-7);c.quadraticCurveTo(-4,-31,5,shoulderY);c.closePath();c.fillStyle=look.capeColor;c.fill();c.strokeStyle=OUTLINE;c.lineWidth=2.5;c.stroke();
-    line(c,[[-shoulder+3,shoulderY+5],[-20-sway,-24],[-22-sway,-9]],'#ffffff26',2);
-  }
-  const backLeg=[[-hip*.52,hipY], [p.backKnee,-18*legLength],[p.backFoot,p.backFootY-5]];
-  limb(c,backLeg,look.suit,thick+2);limb(c,[[p.backFoot,p.backFootY-10],[p.backFoot+3,p.backFootY-3],[p.backFoot+10,p.backFootY-3]],look.trim,thick+1);
-  limb(c,[[-shoulder+3+p.lean,shoulderY+5],[-shoulder-6,-43],[p.backHandX,p.backHandY]],look.suit,thick);
-  oval(c,p.backHandX,p.backHandY,5,5,look.trim,OUTLINE);
-  path(c,[[-shoulder+p.lean,shoulderY],[shoulder+p.lean,shoulderY],[hip,hipY],[ -hip,hipY]],look.suit,OUTLINE,3);
-  path(c,[[2+p.lean,shoulderY+2],[shoulder-3+p.lean,shoulderY+3],[hip-3,hipY-4],[2,hipY-5]],'#ffffff17',null);
-  line(c,[[-hip,hipY-1],[hip,hipY-1]],look.trim,6);round(c,-3,hipY-5,7,8,2,'#fff2cc');
-  // Original leaf/diamond crest for the customizable hero, not a canonical girl's costume.
-  path(c,[[p.lean,shoulderY+7],[p.lean+8,shoulderY+15],[p.lean,shoulderY+23],[p.lean-8,shoulderY+15]],look.trim,null);
-  line(c,[[p.lean-3,shoulderY+18],[p.lean+3,shoulderY+11]],look.suit,2);
-  limb(c,[[hip*.45,hipY],[p.frontKnee,-19*legLength+(p.frontFootY*.35)],[p.frontFoot,p.frontFootY-5]],look.suit,thick+2);
-  limb(c,[[p.frontFoot,p.frontFootY-12],[p.frontFoot+3,p.frontFootY-4],[p.frontFoot+12,p.frontFootY-4]],look.trim,thick+1);
-  const hand=[p.frontHandX+p.lean,p.frontHandY], elbow=[(shoulder+hand[0])*.5+2,(shoulderY+hand[1])*.5+10];
-  limb(c,[[shoulder-3+p.lean,shoulderY+5],elbow,hand],look.suit,thick);oval(c,...hand,6.3,5.7,look.trim,OUTLINE);
-  line(c,[[p.lean,shoulderY],[p.lean,shoulderY-8]],look.skin,10);
-  const hx=p.lean+p.headTilt,hy=shoulderY-16;
-  oval(c,hx,hy,13.7,15.5,look.skin,OUTLINE,2.4);
-  if(look.hair!=='none'){
-    if(look.hair==='curls'){for(let i=0;i<7;i++)oval(c,hx-12+i*4,hy-12-Math.sin(i/6*PI)*5,5.5,5.8,'#2c2630',OUTLINE,1);}
-    if(look.hair==='short')path(c,[[hx-13,hy-3],[hx-14,hy-15],[hx-5,hy-21],[hx+9,hy-18],[hx+14,hy-8],[hx+4,hy-12],[hx-8,hy-9]],'#282731',OUTLINE,1);
-    if(look.hair==='locs'){for(let i=0;i<6;i++)limb(c,[[hx-12+i*4,hy-12],[hx-15+i*4,hy-16],[hx-16+i*3,hy+2+(i<3?12:1)]],'#342b32',4);}
-  }
-  path(c,[[hx-12,hy-4],[hx+13,hy-5],[hx+14,hy+2],[hx+5,hy+5],[hx,hy+1],[hx-7,hy+5],[hx-13,hy+1]],look.suit,null);
-  oval(c,hx-5,hy,2.7,2.2,'#fff6dc');oval(c,hx+8,hy,2.7,2.2,'#fff6dc');
-  line(c,[[hx+3,hy+9],[hx+8,hy+8]],'#542f30',1.5);
-  c.restore();
-}
 export class Renderer {
   constructor(canvas) {
-    this.canvas=canvas;this.c=canvas.getContext('2d',{alpha:false});this.camera=0;this.cameraY=0;this.rig={};this.particles=[];this.width=1280;this.height=720;
+    this.canvas=canvas;this.c=canvas.getContext('2d',{alpha:false});this.camera=0;this.cameraY=0;this.particles=[];this.width=1280;this.height=720;
     this.resize();this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(canvas);
   }
   resize(){const r=this.canvas.getBoundingClientRect();this.dpr=Math.min(window.devicePixelRatio||1,2);this.canvas.width=Math.round(r.width*this.dpr);this.canvas.height=Math.round(r.height*this.dpr);this.height=r.height<360?480:720;this.scale=r.height/this.height;this.width=r.width/this.scale;}
@@ -144,7 +84,12 @@ export class Renderer {
     }
     for(const e of game.enemies)if(e.x>this.camera-90&&e.x<this.camera+this.width+90)this.enemy(e,t,alpha);
     const pos=globalThis.HealthiaMotionCore?.renderPosition({x:h.prevX,y:h.prevY,face:h.prevFace},{x:h.x,y:h.y,face:h.face},alpha,h.dead)||{x:lerp(h.prevX,h.x,alpha),y:lerp(h.prevY,h.y,alpha)};
-    oval(c,pos.x,pos.y+2,24,5,'#284f4b2f');drawHero(c,pos.x,pos.y,game.look,h,t,1,this.rig);
+    let visualHero=h;
+    if(h.dead&&!h.grounded){
+      const floor=Math.min(...game.surfaces.filter(s=>h.x+h.w/2>s.x&&h.x-h.w/2<s.x+s.w&&s.y>=h.y).map(s=>s.y));
+      pos.y=Math.min(floor,h.y+520*h.defeatAge*h.defeatAge);visualHero={...h,grounded:pos.y>=floor};
+    }
+    oval(c,pos.x,pos.y+2,24,5,'#284f4b2f');drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{outfit:game.outfit});
     if(h.attack){const a=h.attack,d=ATTACKS[a.kind];if(a.age>=d.startup&&a.age<d.startup+d.active){c.save();c.translate(h.x,h.y-43);c.scale(a.face,1);c.strokeStyle='#fff7d8c9';c.lineWidth=3;c.beginPath();c.arc(24,-8,a.kind==='kick'?48:35,-.7,.7);c.stroke();c.restore();}}
     for(const p of this.particles){if(!game.paused){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=210*dt;}c.globalAlpha=Math.max(0,p.life/p.max);oval(c,p.x,p.y,p.size,p.size,p.color);}c.globalAlpha=1;this.particles=this.particles.filter(p=>p.life>0);
     // Small foreground details give continuous ground a readable silhouette.

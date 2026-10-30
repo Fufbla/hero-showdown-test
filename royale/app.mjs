@@ -1,58 +1,92 @@
-import { Game, STEP, SAVE_KEY, DEFAULT_LOOK, sanitizeLook, decodeSave, xpForLevel, LEVEL_CAP } from './core.mjs';
+import { Game, STEP, DEFAULT_LOOK, xpForLevel, LEVEL_CAP } from './core.mjs';
 import { regionAt } from './world.mjs';
 import { Input } from './input.mjs';
 import { Renderer, drawHero } from './renderer.mjs';
-const $ = id => document.getElementById(id);
-const params = new URLSearchParams(location.search);
-if (params.has('touch')) document.body.classList.add('force-touch');
-let saved = null, storageAvailable = true;
-try { saved = decodeSave(localStorage.getItem(SAVE_KEY)); } catch { storageAvailable = false; }
-let game = new Game({ look: saved?.look || DEFAULT_LOOK });
-let screen = 'creator', editing = false, look = game.look, audioContext, soundEnabled = false, toastUntil = 0, saveAge = 0, regionName = '', lastHud = '', fps = 60, drawMs = 0, qaClock = 0;
-const input = new Input(document, () => { if (screen === 'play') pause(); else if (screen === 'pause') resume(); });
-const renderer = new Renderer($('game'));
-const preview = $('hero-preview').getContext('2d');
-const previewHero = { face: 1, grounded: true, pose: 'idle', cycle: 0, vx: 0, invulnerable: 0 };
-const editingFields = ['name', 'height', 'legs', 'hair', 'skin', 'suit', 'trim', 'capeColor'];
-function fillCreator(value) {
-  look = sanitizeLook(value);
-  for (const field of editingFields) $(field).value = look[field];
-  $('cape').checked = look.cape;
-  document.querySelector(`input[name="build"][value="${look.build}"]`).checked = true;
+import { LocalHeroStore, PROFILE_KEY } from './saves.mjs';
+import { Creator } from './creator.mjs';
+import { previewHero, animationState } from './hero-rig.mjs';
+import { STARTER_OUTFIT } from './appearance.mjs';
+const $=id=>document.getElementById(id),params=new URLSearchParams(location.search);
+if(params.has('touch'))document.body.classList.add('force-touch');
+function sizeVisibleViewport(){
+  const viewport=window.visualViewport;
+  if(viewport&&viewport.scale===1){document.documentElement.style.setProperty('--visible-height',`${viewport.height}px`);document.body.classList.toggle('keyboard-open',innerWidth<=700&&viewport.height<innerHeight*.78);}
 }
-function readCreator() {
-  const values = Object.fromEntries(editingFields.map(key => [key, $(key).value]));
-  values.cape = $('cape').checked; values.build = document.querySelector('input[name="build"]:checked').value;
-  look = sanitizeLook(values); return look;
+window.visualViewport?.addEventListener('resize',sizeVisibleViewport);sizeVisibleViewport();
+// The visible QA harness uses its own session-storage namespace, never real hero slots.
+const testPrefix=params.has('qa')&&params.get('testSession')?`royale-test-${params.get('testSession')}:`:'';
+const storage={getItem:key=>(testPrefix?sessionStorage:localStorage).getItem(testPrefix+key),setItem:(key,value)=>(testPrefix?sessionStorage:localStorage).setItem(testPrefix+key,value)};
+const store=new LocalHeroStore(storage);
+let game=new Game(),screen='roster',editing=false,activeSlot=store.data.activeSlot,activeId=null,creatorSlot=activeSlot,deleteTarget=null;
+let audioContext,soundEnabled=false,toastUntil=0,saveAge=0,regionName='',lastHud='',fps=60,drawMs=0,qaClock=0;
+const input=new Input(document,()=>{if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();});
+const renderer=new Renderer($('game')),creator=new Creator();
+function say(message,seconds=3){$('toast').textContent=message;$('toast').classList.add('visible');toastUntil=performance.now()+seconds*1000;}
+function storageNotice(){
+  const message=store.durable?store.message||'Saved on this browser only. No account or cloud saving.':store.message;
+  $('roster-note').textContent=message;$('save-note').textContent=message;
+  $('storage-warning').textContent=store.durable?'':message;$('storage-warning').hidden=store.durable;
 }
-function say(message, seconds = 3) { $('toast').textContent = message; $('toast').classList.add('visible'); toastUntil = performance.now() + seconds * 1000; }
-function persist() {
-  if (!game.started) return;
-  try { localStorage.setItem(SAVE_KEY, game.save()); storageAvailable = true; }
-  catch { storageAvailable = false; $('save-note').textContent = 'Browser storage is unavailable. This patrol lasts until the page closes.'; }
+function persist(){
+  if(!game.started)return;
+  const result=store.writeSlot(activeSlot,game.save(),{region:`Coastal Beginnings · ${regionAt(game.hero.x).name}`,expectedId:activeId});
+  if((result.ok||result.retained)&&store.data.slots[activeSlot])activeId=store.data.slots[activeSlot].id;
+  storageNotice();return result;
 }
-function setScreen(next) {
-  screen = next; input.enabled = next === 'play'; input.clear(); game.paused = next !== 'play';
-  $('creator').hidden = next !== 'creator'; $('pause-menu').hidden = next !== 'pause'; $('reset-dialog').hidden = next !== 'reset';
-  $('hud').hidden = !game.started; $('mission').hidden = !game.started; $('pause').disabled = !game.started;
-  $('pause').setAttribute('aria-label', next === 'play' ? 'Pause game' : 'Resume game');
-  $('pause').textContent = next === 'play' ? 'Ⅱ' : '▷';
-  document.body.classList.toggle('playing', next === 'play');
+function setScreen(next){
+  screen=next;input.enabled=next==='play';input.clear();game.paused=next!=='play';
+  for(const [name,id] of Object.entries({roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog'}))$(id).hidden=next!==name;
+  const inGame=game.started&&['play','pause'].includes(next);
+  $('hud').hidden=!inGame;$('mission').hidden=!inGame;$('pause').disabled=!inGame;
+  $('pause').setAttribute('aria-label',next==='play'?'Pause game':'Resume game');$('pause').textContent=next==='play'?'Ⅱ':'▷';
+  document.body.classList.toggle('playing',next==='play');document.body.classList.toggle('game-view',inGame);
+  if(next!=='play'){$('rest').hidden=true;$('death').hidden=true;}
 }
-function begin(fromSave = false) {
-  if (editing) { game.look = readCreator(); persist(); editing = false; resume(); say('Your hero, your style.'); return; }
-  // Existing progress is kept while changing the initial appearance; only the explicit reset deletes it.
-  game = new Game({ look: fromSave && saved ? saved.look : readCreator(), save: saved });
-  game.started = true; regionName = ''; renderer.camera = Math.max(0, game.hero.x - renderer.width * .37); setScreen('play');
-  say(saved ? 'Welcome back, hero. Your patrol continues.' : 'Welcome to the coast! Move right to find your first Bottle Critter.', 5);
-  persist(); updateHud();
+function dateText(value){const date=new Date(value);return value&&Number.isFinite(date.getTime())?new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(date):'Imported from Phase 1';}
+function renderRoster(){
+  const container=$('hero-slots');container.replaceChildren();
+  for(let i=0;i<3;i++){
+    const slot=store.slot(i),card=document.createElement('article');card.className='hero-slot';card.dataset.slot=i;
+    const number=document.createElement('small');number.className='slot-number';number.textContent=`HERO SLOT 0${i+1}`;card.append(number);
+    const canvas=document.createElement('canvas');canvas.width=360;canvas.height=320;canvas.setAttribute('aria-label',slot?`Portrait of ${slot.snapshot.look.name}`:'Empty hero slot');card.append(canvas);
+    const name=document.createElement('h2');name.textContent=slot?slot.snapshot.look.name:'A new beginning';card.append(name);
+    const detail=document.createElement('p');detail.className='slot-detail';detail.textContent=slot?`Level ${slot.snapshot.level} · ${slot.lastRegion}`:'The coast is waiting for its next hero.';card.append(detail);
+    const saved=document.createElement('p');saved.className='last-saved';saved.textContent=slot?`Last saved: ${dateText(slot.updatedAt)}`:'Create your look. Find your courage.';card.append(saved);
+    const button=document.createElement('button');button.className=slot?'primary':'secondary';button.dataset.action=slot?'continue':'create';button.textContent=slot?'Continue →':'Create Hero +';button.disabled=!store.writable&&!slot;button.onclick=()=>slot?continueHero(i):openCreator(i,false);card.append(button);
+    if(slot){const del=document.createElement('button');del.className='text-button delete-hero';del.textContent='Delete Hero';del.disabled=!store.writable;del.onclick=()=>{deleteTarget={index:i,id:slot.id,name:slot.snapshot.look.name};$('delete-description').textContent=`Delete ${slot.snapshot.look.name}, level ${slot.snapshot.level}?`;setScreen('delete');$('cancel-delete').focus();};card.append(del);}
+    container.append(card);
+    const c=canvas.getContext('2d');c.fillStyle='#c4d4a41c';c.beginPath();c.ellipse(180,284,62,10,0,0,Math.PI*2);c.fill();
+    if(slot)drawHero(c,180,282,slot.snapshot.look,previewHero('idle',0),0,2.2,{view:'front',outfit:slot.snapshot.outfit});
+    else{c.fillStyle='#b6cda77a';c.font='66px Georgia';c.textAlign='center';c.fillText('✦',180,190);}
+  }
+  $('back-to-patrol').hidden=!game.started;storageNotice();
 }
-function pause() { if (!game.started || screen === 'creator' || screen === 'reset') return; setScreen('pause'); persist(); $('resume').focus(); }
-function resume() { setScreen('play'); $('pause').blur(); }
-function openCreator() {
-  editing = true; fillCreator(game.look); $('begin').innerHTML = 'SAVE YOUR LOOK <span>→</span>'; $('continue').hidden = true; $('cancel-look').hidden = false;
-  setScreen('creator'); $('name').focus();
+function openRoster(){persist();renderRoster();setScreen('roster');$('roster-title').focus();}
+function continueHero(index){
+  const slot=store.slot(index);if(!slot)return;
+  activeSlot=index;activeId=slot.id;game=new Game({save:slot.snapshot});startPatrol(true);
 }
+function openCreator(index=activeSlot,isEdit=true){
+  editing=isEdit;creatorSlot=index;
+  creator.fill(editing?game.look:DEFAULT_LOOK,editing?game.outfit:STARTER_OUTFIT);
+  $('creator-slot').textContent=`${editing?'CUSTOMIZE':'CREATE'} · HERO SLOT 0${index+1}`;
+  $('begin').textContent=editing?'SAVE YOUR LOOK →':'BEGIN YOUR ADVENTURE →';$('cancel-look').textContent=editing?'Cancel appearance changes':'Back to heroes';
+  setScreen('creator');$('creator-title').focus();
+}
+function cancelCreator(){if(editing){editing=false;resume();}else{renderRoster();setScreen('roster');}}
+function startPatrol(continued){
+  game.started=true;regionName='';lastHud='';saveAge=0;renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.cameraY=0;renderer.particles=[];
+  setScreen('play');persist();updateHud();say(continued?'Welcome back, hero. Your patrol continues.':'Welcome to the coast! Move right to find your first Bottle Critter.',4);
+}
+function begin(){
+  const validation=creator.validate();if(!validation.ok)return;
+  const look=creator.read();look.name=validation.name;
+  if(editing){game.look=look;persist();editing=false;resume();say('Your hero, your style.');}
+  else{activeSlot=creatorSlot;activeId=null;game=new Game({look});startPatrol(false);}
+}
+function pause(){if(!game.started||screen!=='play')return;setScreen('pause');persist();$('resume').focus();}
+function resume(){if(!game.started)return;setScreen('play');$('pause').blur();}
+function closeDelete(){deleteTarget=null;renderRoster();setScreen('roster');}
 function tone(type) {
   if (!soundEnabled) return;
   try {
@@ -85,67 +119,58 @@ function updateHud() {
     lastHud = snapshot; $('hero-name').textContent = game.look.name; $('level').textContent = h.level; $('coins').textContent = h.coins.toLocaleString();
     $('hp-fill').style.width = `${100 * h.hp / h.maxHp}%`; $('hp-text').textContent = `${h.hp} / ${h.maxHp}`;
     $('xp-fill').style.width = h.level === LEVEL_CAP ? '100%' : `${100 * h.xp / xpForLevel(h.level)}%`;
-    $('xp-text').textContent = h.level === LEVEL_CAP ? 'PHASE 1 MAX' : `${h.xp} / ${xpForLevel(h.level)} XP`;
+    $('xp-text').textContent = h.level === LEVEL_CAP ? 'PROTOTYPE MAX' : `${h.xp} / ${xpForLevel(h.level)} XP`;
     const cleared = game.kills >= 6 && game.species.size === 3;
     $('mission-title').textContent = cleared ? (game.reachedEnd ? 'A hero on the horizon' : 'Follow the coast to the lighthouse') : "Meet the coast's troublemakers";
     $('mission-progress').textContent = cleared ? (game.reachedEnd ? 'Patrol complete · Keep exploring and training' : 'Reach Lighthouse Point at the end of the trail') : `${Math.min(6, game.kills)} / 6 monsters · ${game.species.size} / 3 types discovered`;
     $('mission-count').textContent = cleared ? (game.reachedEnd ? '✓' : '→') : `${Math.min(6, game.kills)}/6`;
   }
   $('rest').hidden = screen !== 'play' || game.nearCamp() < 0 || h.dead;
-  $('death').hidden = !h.dead; $('diagnostics').hidden = !params.has('qa');
-  if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${h.pose}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nviewport ${innerWidth}×${innerHeight} · save ${storageAvailable ? 'ready' : 'unavailable'}`;
+  $('death').hidden = !h.dead || screen !== 'play'; $('diagnostics').hidden = !params.has('qa');
+  if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}`;
 }
-$('creator-form').addEventListener('input', readCreator);
-$('creator-form').addEventListener('submit', e => { e.preventDefault(); begin(); });
-$('continue').addEventListener('click', () => begin(true));
-$('cancel-look').addEventListener('click', () => { editing = false; resume(); });
-$('pause').addEventListener('click', () => { if (screen === 'play') pause(); else if (screen === 'pause') resume(); });
-$('resume').addEventListener('click', resume); $('edit-look').addEventListener('click', openCreator);
-$('return-camp').addEventListener('click', () => { game.respawn(); handleEvents(); persist(); resume(); });
-$('new-patrol').addEventListener('click', () => { setScreen('reset'); $('cancel-reset').focus(); });
-$('cancel-reset').addEventListener('click', () => { setScreen('pause'); $('resume').focus(); });
-$('confirm-reset').addEventListener('click', () => {
-  try { localStorage.removeItem(SAVE_KEY); } catch {}
-  saved = null; editing = false; game = new Game({ look: game.look }); game.started = false; fillCreator(game.look);
-  $('begin').innerHTML = 'BEGIN YOUR ADVENTURE <span>→</span>'; $('continue').hidden = true; $('cancel-look').hidden = true; setScreen('creator');
+$('creator-form').addEventListener('submit',e=>{e.preventDefault();begin();});
+$('cancel-look').onclick=cancelCreator;
+$('pause').onclick=()=>{if(screen==='play')pause();else if(screen==='pause')resume();};
+$('resume').onclick=resume;$('edit-look').onclick=()=>openCreator(activeSlot,true);
+$('return-camp').onclick=()=>{game.respawn();handleEvents();persist();resume();};
+$('choose-hero').onclick=openRoster;$('back-to-patrol').onclick=resume;
+$('cancel-delete').onclick=closeDelete;
+$('confirm-delete').onclick=()=>{
+  if(!deleteTarget)return;
+  const target=deleteTarget,result=store.deleteSlot(target.index,target.id);
+  if(result.ok||!store.slot(target.index)){
+    if(activeId===target.id){game=new Game();activeId=null;}
+    closeDelete();
+  }else{closeDelete();say(result.error,6);}
+};
+$('sound').onclick=()=>{soundEnabled=!soundEnabled;$('sound').setAttribute('aria-pressed',String(soundEnabled));$('sound').setAttribute('aria-label',soundEnabled?'Mute sound':'Enable sound');tone('camp');};
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(screen==='play')pause();persist();}});
+window.addEventListener('blur',()=>{if(screen==='play')pause();});
+window.addEventListener('pagehide',persist);
+window.addEventListener('storage',e=>{if(testPrefix||e.key!==PROFILE_KEY)return;if(game.started)persist();else{store.load();renderRoster();}});
+// Keyboard focus stays in the active panel. Tabs also support arrow-key navigation.
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Tab'||screen==='play')return;
+  const panel=$({creator:'creator',roster:'roster',delete:'delete-dialog',pause:'pause-menu'}[screen]);
+  const nodes=[...panel.querySelectorAll('a[href],button,input,select')].filter(n=>!n.disabled&&n.tabIndex!==-1&&n.getClientRects().length);
+  if(!nodes.length)return;
+  if(e.shiftKey&&(document.activeElement===nodes[0]||!panel.contains(document.activeElement))){e.preventDefault();nodes.at(-1).focus();}
+  if(!e.shiftKey&&(document.activeElement===nodes.at(-1)||!panel.contains(document.activeElement))){e.preventDefault();nodes[0].focus();}
 });
-$('sound').addEventListener('click', () => { soundEnabled = !soundEnabled; $('sound').setAttribute('aria-pressed', String(soundEnabled)); $('sound').setAttribute('aria-label', soundEnabled ? 'Mute sound' : 'Enable sound'); tone('camp'); });
-document.addEventListener('visibilitychange', () => { if (document.hidden) { if (screen === 'play') pause(); persist(); } });
-window.addEventListener('blur', () => { if (screen === 'play') pause(); });
-window.addEventListener('pagehide', persist);
-// Keep keyboard focus inside open dialogs; Escape is handled by the input controller.
-document.addEventListener('keydown', e => {
-  if (e.key !== 'Tab' || screen === 'play') return;
-  const panel = screen === 'creator' ? $('creator') : screen === 'reset' ? $('reset-dialog') : $('pause-menu');
-  const nodes = [...panel.querySelectorAll('a[href],button,input,select')].filter(n => !n.disabled && n.getClientRects().length);
-  if (!nodes.length) return;
-  if (e.shiftKey && (document.activeElement === nodes[0] || !panel.contains(document.activeElement))) { e.preventDefault(); nodes.at(-1).focus(); }
-  if (!e.shiftKey && document.activeElement === nodes.at(-1)) { e.preventDefault(); nodes[0].focus(); }
-});
-fillCreator(look); $('continue').hidden = !saved;
-if (saved) $('begin').innerHTML = 'CONTINUE WITH THIS LOOK <span>→</span>';
-if (!storageAvailable) $('save-note').textContent = 'Browser storage is unavailable. Progress lasts until this page closes.';
-setScreen('creator');
-let last = performance.now(), accumulator = 0;
-function frame(now) {
-  const elapsed = Math.min(.1, Math.max(0, (now - last) / 1000)); last = now;
-  if (elapsed > 0) fps = fps * .95 + .05 / elapsed;
-  if (screen === 'play') {
-    accumulator += elapsed;
-    while (accumulator >= STEP) { game.step(STEP, input.sample()); accumulator -= STEP; }
-    handleEvents(); saveAge += elapsed;
-    if (saveAge > 5) { persist(); saveAge = 0; }
-  } else accumulator = 0;
-  const drawStart = performance.now();
-  renderer.draw(game, screen === 'play' ? accumulator / STEP : 1, elapsed);
-  drawMs = drawMs * .95 + (performance.now() - drawStart) * .05;
-  qaClock += elapsed; if (qaClock >= .1) { updateHud(); qaClock = 0; }
-  if (screen === 'creator') {
-    preview.clearRect(0, 0, 560, 620); preview.save(); preview.translate(280, 525);
-    preview.fillStyle = '#112f3933'; preview.beginPath(); preview.ellipse(0, 0, 85, 13, 0, 0, Math.PI * 2); preview.fill();
-    drawHero(preview, 0, 0, look, previewHero, now / 1000, 4.1); preview.restore();
-  }
-  if (toastUntil && now > toastUntil) { $('toast').classList.remove('visible'); toastUntil = 0; }
+renderRoster();setScreen('roster');
+let last=performance.now(),accumulator=0;
+function frame(now){
+  const elapsed=Math.min(.1,Math.max(0,(now-last)/1000));last=now;if(elapsed>0)fps=fps*.95+.05/elapsed;
+  if(screen==='play'){
+    accumulator+=elapsed;while(accumulator>=STEP){game.step(STEP,input.sample());accumulator-=STEP;}
+    handleEvents();saveAge+=elapsed;if(saveAge>5){persist();saveAge=0;}
+  }else accumulator=0;
+  const drawStart=performance.now();renderer.draw(game,screen==='play'?accumulator/STEP:1,elapsed);
+  drawMs=drawMs*.95+(performance.now()-drawStart)*.05;
+  qaClock+=elapsed;if(qaClock>=.1){updateHud();qaClock=0;}
+  if(screen==='creator')creator.draw(now);
+  if(toastUntil&&now>toastUntil){$('toast').classList.remove('visible');toastUntil=0;}
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);

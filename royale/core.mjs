@@ -1,3 +1,4 @@
+import { DEFAULT_LOOK, sanitizeLook, sanitizeOutfit } from './appearance.mjs';
 import { WORLD_WIDTH, DEATH_Y, SURFACES, TYPES, SPAWNS, CAMPS } from './world.mjs';
 export const STEP = 1 / 60;
 export const LEVEL_CAP = 10; // Phase 1 balance range; the 99-level system comes later.
@@ -10,22 +11,14 @@ export const ATTACKS = Object.freeze({
   punch: { startup: .055, active: .105, duration: .27, reach: 59, damage: 13 },
   kick: { startup: .10, active: .13, duration: .39, reach: 76, damage: 19 },
 });
-export const DEFAULT_LOOK = Object.freeze({ name: 'Coast Guardian', build: 'balanced', height: 1, legs: 1, skin: '#a96943', suit: '#247e69', trim: '#ffe0a0', capeColor: '#194e4c', cape: true, hair: 'curls' });
-export function sanitizeLook(raw = {}) {
-  const color = (key) => /^#[0-9a-f]{6}$/i.test(raw[key] || '') ? raw[key] : DEFAULT_LOOK[key];
-  return { name: String(raw.name || DEFAULT_LOOK.name).trim().slice(0, 22) || DEFAULT_LOOK.name,
-    build: ['slender', 'balanced', 'strong', 'full'].includes(raw.build) ? raw.build : 'balanced',
-    height: clamp(Number(raw.height) || 1, .88, 1.12), legs: clamp(Number(raw.legs) || 1, .85, 1.15),
-    skin: color('skin'), suit: color('suit'), trim: color('trim'), capeColor: color('capeColor'),
-    cape: raw.cape === undefined ? true : Boolean(raw.cape), hair: ['curls', 'locs', 'short', 'none'].includes(raw.hair) ? raw.hair : 'curls' };
-}
+export { DEFAULT_LOOK, sanitizeLook } from './appearance.mjs';
 export function decodeSave(text) {
   try {
     const data = JSON.parse(text);
-    if (!data || data.version !== 1) return null;
+    if (!data || ![1,2].includes(data.version) || (data.version===2 && (!data.look || typeof data.look!=='object'))) return null;
     const integer = (value, max) => clamp(Math.floor(Number(value) || 0), 0, max);
     const level = Math.max(1, integer(data.level, LEVEL_CAP));
-    return { ...sanitizeLook(data.look), look: sanitizeLook(data.look), level,
+    return { version: 2, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
       xp: integer(data.xp, xpForLevel(level) - 1), coins: integer(data.coins, 999999),
       checkpoint: integer(data.checkpoint, CAMPS.length - 1), kills: integer(data.kills, 999999),
       species: [...new Set((Array.isArray(data.species) ? data.species : []).filter(t => t in TYPES))],
@@ -33,8 +26,8 @@ export function decodeSave(text) {
   } catch { return null; }
 }
 export class Game {
-  constructor({ look = DEFAULT_LOOK, save = null, surfaces = SURFACES } = {}) {
-    this.look = sanitizeLook(look); this.surfaces = surfaces; this.time = 0; this.paused = false;
+  constructor({ look, save = null, surfaces = SURFACES } = {}) {
+    this.look = sanitizeLook(look ?? save?.look); this.outfit = sanitizeOutfit(save?.outfit); this.surfaces = surfaces; this.time = 0; this.paused = false;
     this.checkpoint = save?.checkpoint || 0; this.kills = save?.kills || 0;
     this.species = new Set(save?.species || []); this.reachedEnd = save?.reachedEnd || false;
     this.events = []; this.attackSerial = 0; this.deathTimer = 0; this.started = false;
@@ -43,7 +36,7 @@ export class Game {
       vx: 0, vy: 0, face: 1, prevFace: 1, grounded: true, jumps: 0, coyote: .10, jumpBuffer: 0,
       level, xp: save?.xp || 0, coins: save?.coins || 0, hp: 100 + (level - 1) * 10,
       maxHp: 100 + (level - 1) * 10, invulnerable: 1.7, attack: null, attackBuffer: null,
-      pose: 'idle', cycle: 0, landing: 0, stun: 0, dead: false };
+      pose: 'idle', cycle: 0, landing: 0, stun: 0, dead: false, jumpAge: 100, hurtAge: 100, defeatAge: 0, respawnAge: 100 };
     this.enemies = SPAWNS.map(([type, x, surface], id) => this.makeEnemy(type, x, surface, id));
   }
   makeEnemy(type, x, surface, id) {
@@ -103,7 +96,7 @@ export class Game {
   hurt(amount, fromX) {
     const h = this.hero;
     if (h.invulnerable > 0 || h.dead) return false;
-    h.hp = Math.max(0, h.hp - amount); h.invulnerable = 1.05; h.stun = .16;
+    h.hp = Math.max(0, h.hp - amount); h.invulnerable = 1.05; h.stun = .16; h.hurtAge = 0;
     h.vx = (h.x >= fromX ? 1 : -1) * 210; h.attack = null; h.attackBuffer = null;
     this.emit('hurt');
     if (h.hp <= 0) this.defeat();
@@ -111,13 +104,13 @@ export class Game {
   }
   defeat() {
     const h = this.hero; if (h.dead) return;
-    h.dead = true; h.hp = 0; h.vx = h.vy = 0; h.attack = null; h.attackBuffer = null;
+    h.dead = true; h.defeatAge = 0; h.hp = 0; h.vx = h.vy = 0; h.attack = null; h.attackBuffer = null;
     this.deathTimer = 1.5; this.emit('defeat');
   }
   respawn() {
     const h = this.hero, camp = CAMPS[this.checkpoint];
     Object.assign(h, { x: camp.x, y: camp.y, prevX: camp.x, prevY: camp.y, vx: 0, vy: 0, dead: false,
-      hp: h.maxHp, invulnerable: 2.5, stun: 0, grounded: true, jumps: 0, jumpBuffer: 0, coyote: .1, attack: null, attackBuffer: null, pose: 'idle' });
+      hp: h.maxHp, invulnerable: 2.5, stun: 0, grounded: true, jumps: 0, jumpBuffer: 0, coyote: .1, attack: null, attackBuffer: null, pose: 'idle', respawnAge: 0, hurtAge: 100, jumpAge: 100, defeatAge: 0 });
     this.emit('respawn', { name: camp.name });
   }
   nearCamp() { return CAMPS.findIndex(c => Math.abs(c.x - this.hero.x) < 90 && Math.abs(c.y - this.hero.y) < 40); }
@@ -132,13 +125,14 @@ export class Game {
     dt = Math.min(dt, STEP); this.time += dt;
     const h = this.hero;
     h.prevX = h.x; h.prevY = h.y; h.prevFace = h.face;
-    if (h.dead) { this.deathTimer -= dt; if (this.deathTimer <= 0) this.respawn(); return; }
+    if (h.dead) { h.defeatAge += dt; this.deathTimer -= dt; if (this.deathTimer <= 0) this.respawn(); return; }
+    h.jumpAge += dt; h.hurtAge += dt; h.respawnAge += dt;
     h.invulnerable = Math.max(0, h.invulnerable - dt); h.stun = Math.max(0, h.stun - dt); h.landing = Math.max(0, h.landing - dt);
     h.coyote = Math.max(0, h.coyote - dt); h.jumpBuffer = Math.max(0, h.jumpBuffer - dt);
     if (!h.grounded && h.coyote <= 0 && h.jumps === 0) h.jumps = 1;
     if (input.jump) h.jumpBuffer = .13;
     if (h.jumpBuffer > 0 && h.jumps < 2 && h.stun <= 0) {
-      h.vy = h.jumps === 0 ? -565 : -520; h.jumps++; h.grounded = false; h.coyote = 0; h.jumpBuffer = 0;
+      h.vy = h.jumps === 0 ? -565 : -520; h.jumps++; h.jumpAge = 0; h.grounded = false; h.coyote = 0; h.jumpBuffer = 0;
       this.emit('jump', { x: h.x, y: h.y, double: h.jumps === 2 });
     }
     const axis = clamp(Number(input.move) || 0, -1, 1);
@@ -208,6 +202,6 @@ export class Game {
   }
   save() {
     const h = this.hero;
-    return JSON.stringify({ version: 1, look: this.look, level: h.level, xp: h.xp, coins: h.coins, checkpoint: this.checkpoint, kills: this.kills, species: [...this.species], reachedEnd: this.reachedEnd });
+    return JSON.stringify({ version: 2, look: this.look, outfit: this.outfit, level: h.level, xp: h.xp, coins: h.coins, checkpoint: this.checkpoint, kills: this.kills, species: [...this.species], reachedEnd: this.reachedEnd });
   }
 }
