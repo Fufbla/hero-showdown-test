@@ -11,3 +11,9 @@
 @media(max-width:700px){.power-button{min-height:var(--touch-size)}.power-bar{padding-right:calc(10px + min(var(--touch-right),2vw));padding-left:calc(10px + min(var(--touch-left),2vw))}}
 
 .practice-link{display:inline-block;margin-top:12px;font-size:11px;color:#dfd59c;min-height:36px}
+
+/* Joystick dimensions remain bounded on narrow and short viewports. */
+#stick{width:min(var(--touch-stickSize,92px),27vw);height:min(calc(var(--touch-stickSize,92px) * .87),24vw)}
+@media(max-height:560px) and (min-width:601px){#stick{width:min(var(--touch-stickSize,92px),92px);height:min(calc(var(--touch-stickSize,92px) * .65),60px)}}
+
+.audio-settings{display:grid;grid-template-columns:1fr 1fr;gap:16px}.audio-settings input{width:100%;accent-color:#d9d29d}

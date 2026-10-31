@@ -4,13 +4,17 @@ import { LOOT, RESPAWN, worldClock, monsterXP, xpForLevel, maximumHP } from './p
 import { emptyInventory, equipmentBonuses, equipmentOutfit, itemDefinition, rollEquipment } from './equipment.mjs';
 import { initialWorld } from './world-state.mjs';
 import { equipmentStats, isBoss } from './powers.mjs';
+import {ProjectilePool,clearProjectiles,compactProjectiles} from './projectiles.mjs';
 
 export function initializeJourney(g,save,now){
   g.now=now;g.world=structuredClone(save?.world||initialWorld(now()));g.regionId=g.world.region;
   g.camps=regionCamps(g.regionId);g.healthRoots=save?.healthRoots||0;g.inventory=structuredClone(save?.inventory||emptyInventory());
-  g.enemyShots=[];g.treeVisit=false;g.bossEncounter=null;g.board=0;
+  g.enemyShots=[];g.enemyShotPool=new ProjectilePool(64);g.treeVisit=false;g.bossEncounter=null;g.board=0;
 }
 export const journeyMethods={
+  spawnEnemyShot(values){const p=this.enemyShotPool.acquire(values);if(p)this.enemyShots.push(p);return p;},
+  clearEnemyShots(){clearProjectiles(this.enemyShots,this.enemyShotPool);},
+  removeEnemyShots(source){compactProjectiles(this.enemyShots,this.enemyShotPool,p=>p.source!==source);},
   nearPortal(){return !this.arenaScene&&!this.treeVisit&&this.camps.some(c=>Math.abs(this.hero.x-(c.x+90))<=90&&Math.abs(this.hero.y-c.y)<100);},
   getRegion(){return regionDefinition(this.regionId);},
   clock(){return worldClock(this.world.clockReference,this.now(),this.regionId);},
@@ -19,7 +23,7 @@ export const journeyMethods={
     const active=matchingMerge(this.inventory,this.hero?.level||99);if(this.legendary.active!==active)this.cancelMergeEffects();this.legendary.active=active;if(this.powers)this.powers.mergeEntitlement=mergeEntitlement(active);
     this.equipment=equipmentStats(Object.fromEntries(Object.keys(earned).map(k=>[k,earned[k]+(base?.[k]||0)])));
   },
-  visualOutfit(){return equipmentOutfit(this.inventory,this.outfit);},
+  visualOutfit(){const e=this.inventory.equipped;if(this._outfitInventory!==this.inventory||this._outfitHelmet!==e.helmet||this._outfitChest!==e.chest||this._outfitBoots!==e.boots||this._outfitBase!==this.outfit){this._outfitInventory=this.inventory;this._outfitHelmet=e.helmet;this._outfitChest=e.chest;this._outfitBoots=e.boots;this._outfitBase=this.outfit;this._visualOutfit=equipmentOutfit(this.inventory,this.outfit);}return this._visualOutfit;},
   canSave(){return !this.hero.dead&&!this.inCombat();},
   canTravel(){return !this.treeVisit&&this.canSave()&&!this.bossEncounter&&this.inventory.pending.length===0&&!this.pendingMergeReward();},
   visitTree(){if(!this.canTravel())return false;this.treeVisit=true;return true;},
@@ -83,7 +87,7 @@ export const journeyMethods={
   loadRegion(id,{x,y,checkpoint=false}={}){
     if(this.treeVisit)return false;
     if(this.arenaScene)this.leaveBoss('travel');
-    this.powers.cancelEffects();this.hero.attack=null;this.hero.attackBuffer=null;this.enemyShots=[];
+    this.powers.cancelEffects();this.hero.attack=null;this.hero.attackBuffer=null;this.clearEnemyShots();
     this.regionId=id;this.world.region=id;this.camps=regionCamps(id);this.surfaces=regionSurfaces(id);
     this.enemies=regionSpawns(id).map(([type,sx,surface],i)=>this.makeEnemy(type,sx,surface,i));
     const camp=this.camps[0],h=this.hero;

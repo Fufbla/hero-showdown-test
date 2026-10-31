@@ -1,3 +1,4 @@
+import {advanceUI} from './ui-clock.mjs';
 // A visible, repeatable same-origin QA page. Exercises the real DOM event handlers.
 const frame=document.getElementById('phone'),report=document.getElementById('report');
 for(const [id,w,h] of [['portrait',390,844],['landscape',844,390],['small',320,568],['tablet',768,1024],['desktop',1280,800]])document.getElementById(id).onclick=()=>{frame.style.width=w+'px';frame.style.height=h+'px';};
@@ -9,7 +10,7 @@ document.getElementById('test').onclick=async()=>{
   const d=frame.contentDocument,w=frame.contentWindow;const el=id=>d.getElementById(id);
   const check=(name,ok,detail='')=>{report.textContent+=`${ok?'PASS':'FAIL'} · ${name}${detail?' · '+detail:''}\n`;if(!ok)throw Error(name);};
   const stats=()=>{const s=el('diagnostics').textContent;return {time:Number(s.match(/ · t ([\d.]+)/)?.[1]),vx:Number(s.match(/vx ([\d.-]+)/)?.[1]),x:Number(s.match(/x ([\d.-]+)/)?.[1]),y:Number(s.match(/y ([\d.-]+)/)?.[1]),jumps:Number(s.match(/jumps (\d)/)?.[1]),text:s};};
-  const advance=async seconds=>{const start=stats().time,deadline=Date.now()+120000;while(stats().time-start<seconds){if(Date.now()>deadline)throw Error('Simulation did not advance while visible');await wait(30);}};
+  const advance=seconds=>advanceUI(frame,seconds);
   const key=(code,down)=>d.body.dispatchEvent(new w.KeyboardEvent(down?'keydown':'keyup',{code,key:code,bubbles:true}));
   const pointer=(target,type,id,x,y)=>target.dispatchEvent(new w.PointerEvent(type,{pointerId:id,pointerType:'touch',clientX:x,clientY:y,bubbles:true,cancelable:true}));
   try{

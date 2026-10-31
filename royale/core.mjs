@@ -199,7 +199,7 @@ export class Game {
     // Compatibility for old callers changing the local checkpoint index.
     if(cp.region===this.regionId)cp.index=this.checkpoint;
     if(cp.region!==this.regionId)this.loadRegion(cp.region);
-    const camp=regionCamps(cp.region)[cp.index];this.checkpoint=cp.index;this.enemyShots=[];this.combatTimer=0;
+    const camp=regionCamps(cp.region)[cp.index];this.checkpoint=cp.index;this.clearEnemyShots();this.combatTimer=0;
     this.powers.cancelEffects();this.cancelMergeEffects();
     Object.assign(h, { x: camp.x, y: camp.y, prevX: camp.x, prevY: camp.y, vx: 0, vy: 0, dead: false,
       hp: h.maxHp, invulnerable: 2.5, stun: 0, grounded: true, jumps: 0, jumpBuffer: 0, coyote: .1, attack: null, attackBuffer: null, pose: 'idle', respawnAge: 0, hurtAge: 100, jumpAge: 100, defeatAge: 0 });

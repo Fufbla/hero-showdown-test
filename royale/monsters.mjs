@@ -1,5 +1,6 @@
 import { TYPES } from './world.mjs';
 import { segmentHit } from './powers.mjs';
+import {compactProjectiles} from './projectiles.mjs';
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const ranged=new Set(['spore','bolt','acid','spit','orb','pulse','volley']);
 // State timers are attack timers, never damage-reaction timers. Desperation is a
@@ -32,7 +33,7 @@ export function advancedEnemy(g,e,dt){
       if(ranged.has(info.behavior)){
         const count=info.behavior==='volley'?3:info.behavior==='pulse'?2:1;
         const x=e.x+e.face*(e.w/2+8),y=e.y-e.h*.55,angle=Math.atan2(h.y-h.h*.5-y,h.x-x),speed=175+info.region*18;
-        for(let i=0;i<count;i++)if(g.enemyShots.length<32){const a=angle+(i-(count-1)/2)*.16;g.enemyShots.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,life:2.6,source:e,color:info.color});}
+        for(let i=0;i<count;i++)if(g.enemyShots.length<32){const a=angle+(i-(count-1)/2)*.16;g.spawnEnemyShot({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,life:2.6,source:e,color:info.color});}
       }else if(Math.abs(h.y-e.y)<(info.behavior==='slam'?85:65)&&Math.abs(h.x-e.x)<(coast?76:range)&&(h.x-e.x)*e.face>-20)g.hurt(g.monsterDamage(e),e.x,e);
     }
     if(e.age>(coast?.24:.28)){e.state='recover';e.age=0;}
@@ -43,13 +44,17 @@ export function advancedEnemy(g,e,dt){
   }
 }
 export function stepEnemyProjectiles(g,dt){
+  if(!g.enemyShots.length)return;
+  const h=g.heroBox();
   for(const p of g.enemyShots){
     if(p.gravity)p.vy+=p.gravity*dt;
-    const nx=p.x+p.vx*dt,ny=p.y+p.vy*dt,h=g.heroBox();
-    const hit=segmentHit(p.x,p.y,nx,ny,h,5),wall=g.surfaces.filter(s=>!s.oneWay).map(s=>segmentHit(p.x,p.y,nx,ny,s,5)).filter(t=>t!==null).sort((a,b)=>a-b)[0];
-    if(hit!==null&&(wall===undefined||hit<wall)){g.hurt(p.damage??g.monsterDamage(p.source),p.x,p.source);p.life=0;}
-    else if(wall!==undefined){if(p.bounce>0&&p.vy>0&&p.y<595){p.bounce--;p.vy=-Math.max(180,Math.abs(p.vy)*.7);p.y=589;}else p.life=0;}
-    p.x=nx;if(!(wall!==undefined&&p.bounce>=0&&p.vy<0))p.y=ny;p.life-=dt;
+    const nx=p.x+p.vx*dt,ny=p.y+p.vy*dt;
+    const hit=segmentHit(p.x,p.y,nx,ny,h,5);let wall=null,surface=null;
+    for(const s of g.surfaces){if(s.oneWay)continue;const t=segmentHit(p.x,p.y,nx,ny,s,5);if(t!==null&&(wall===null||t<wall)){wall=t;surface=s;}}
+    let bounced=false;
+    if(hit!==null&&(wall===null||hit<wall)){g.hurt(p.damage??g.monsterDamage(p.source),p.x,p.source);p.life=0;}
+    else if(wall!==null){if(p.bounce>0&&p.vy>0&&p.y<=surface.y-5){p.bounce--;p.vy=-Math.max(180,Math.abs(p.vy)*.7);p.y=surface.y-6;bounced=true;}else p.life=0;}
+    p.x=nx;if(!bounced)p.y=ny;p.life-=dt;
   }
-  g.enemyShots=g.enemyShots.filter(p=>p.life>0);
+  compactProjectiles(g.enemyShots,g.enemyShotPool);
 }

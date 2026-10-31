@@ -1,11 +1,12 @@
 // Explicit, disposable browser fixtures. Never installed for a real hero namespace.
 import { createEquipment } from './equipment.mjs';
-export function installBossQA(getGame,refresh){
+export function installBossQA(getGame,refresh,hooks={}){
   const p=new URLSearchParams(location.search);if(!p.has('qa')||!/^boss-(practice|checks)-/.test(p.get('testSession')||''))return;
   const status=()=>{const g=getGame(),b=g.arenaScene?.boss;return {region:g.regionId,boss:b?{name:b.type,hp:b.hp,maxHp:b.maxHp,phase:b.phase,state:b.state}:null,active:!!g.bossEncounter,cleared:!!g.arenaScene?.cleared,waves:g.bossEncounter?.waves||0,spawned:g.bossEncounter?.spawned||0,helpers:g.enemies.filter(e=>e.summoned&&e.state!=='dead').length,coins:g.hero.coins,xp:g.hero.xp,level:g.hero.level,hp:g.hero.hp,maxHp:g.hero.maxHp,dead:g.hero.dead,roots:g.healthRoots,items:g.inventory.items.length,pending:g.inventory.pending.length,unlocked:[...g.world.unlocked],wins:g.bossProgress.records[g.regionId]?.wins||0,chest:g.bossProgress.records[g.regionId]?.chest?.state||null,x:g.hero.x,y:g.hero.y,combat:g.inCombat()};};
   window.addEventListener('message',e=>{
     if(e.origin!==location.origin||e.source!==parent||e.data?.type!=='royale-boss-fixture')return;
     const g=getGame(),b=g.bossEncounter?.boss,{action,value,request}=e.data;
+    if(action==='fail-save')hooks.failSave?.();
     if(action==='phase'&&b){b.hp=b.maxHp*({1:1,2:.5,3:.2}[value]||1);g.bossDamaged(b);}
     if(action==='wave'&&b){b.hp=b.maxHp*.2;g.bossDamaged(b);g.stepEncounter(0);g.stepEncounter(2.1);}
     if(action==='boss-down'&&b)g.damageEnemy(b,b.maxHp*2,{stagger:false});

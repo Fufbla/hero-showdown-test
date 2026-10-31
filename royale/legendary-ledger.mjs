@@ -4,12 +4,19 @@
 import { decodeSave } from './core.mjs';
 import { legendaryDominates } from './legendary-state.mjs';
 export function validateLedgerWrite(previous,heroId,expectedRevision,snapshot){
+ if(previous?.deleted)throw Error('This hero was permanently deleted.');
  const state=decodeSave(typeof snapshot==='string'?snapshot:JSON.stringify(snapshot));
  if(typeof heroId!=='string'||!heroId||heroId.length>160||!state||state.version<7)throw Error('Invalid permanent-progress transaction.');
  if((previous?.revision||0)!==expectedRevision)throw Error('Permanent progress changed in another tab. Reload the latest hero.');
  if(state.legendary.revision<=expectedRevision||previous&&!legendaryDominates(state.legendary,previous.snapshot.legendary))throw Error('This transaction would restore permanently lost progress.');
  if(previous&&Object.keys(previous.snapshot.inventory.retired).some(uid=>!state.inventory.retired[uid]))throw Error('A destroyed item cannot be restored.');
  return {heroId,revision:state.legendary.revision,snapshot:state};
+}
+export function deletionRecord(previous,heroId,expectedRevision){
+ if(typeof heroId!=='string'||!heroId||heroId.length>160||!Number.isSafeInteger(expectedRevision)||expectedRevision<0)throw Error('Invalid hero deletion.');
+ if(previous?.deleted)return previous;
+ if((previous?.revision||0)!==expectedRevision)throw Error('Permanent progress changed. Reload before deleting this hero.');
+ return {heroId,revision:expectedRevision,deleted:true};
 }
 export class LegendaryLedger{
  constructor(db){this.db=db;}
@@ -27,12 +34,19 @@ export class LegendaryLedger{
    tx.oncomplete=()=>resolve(result);tx.onabort=tx.onerror=()=>reject(failure||tx.error||Error('Permanent progress could not be saved.'));
   });
  }
+ deleteHero(heroId,expectedRevision){
+  return new Promise((resolve,reject)=>{let result,failure;const tx=this.db.transaction('heroes','readwrite',{durability:'strict'}),store=tx.objectStore('heroes'),request=store.get(heroId);
+   request.onsuccess=()=>{try{result=deletionRecord(request.result,heroId,expectedRevision);store.put(result);}catch(error){failure=error;tx.abort();}};
+   tx.oncomplete=()=>resolve(result);tx.onabort=tx.onerror=()=>reject(failure||tx.error||Error('Hero deletion could not be recorded.'));
+  });
+ }
  close(){this.db.close();}
 }
 export async function reconcileLegendaryStore(store,ledger){
  const records=await ledger.all();let changed=false;
  for(const record of records){
   const index=store.data.slots.findIndex(s=>s?.id===record.heroId);if(index<0)continue;
+  if(record.deleted){store.data.slots[index]=null;changed=true;continue;}
   const local=store.data.slots[index].snapshot,permanent=decodeSave(JSON.stringify(record.snapshot));
   if(!permanent||permanent.legendary.revision!==record.revision)throw Error('Permanent progress needs recovery. It has not been overwritten.');
   if(local.legendary.revision<record.revision||!legendaryDominates(local.legendary,permanent.legendary)||Object.keys(permanent.inventory.retired).some(uid=>!local.inventory.retired[uid])){

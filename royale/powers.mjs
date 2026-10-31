@@ -1,4 +1,5 @@
 import { MERGE_POWERS } from './legendary-data.mjs';
+import {ProjectilePool,clearProjectiles,compactProjectiles} from './projectiles.mjs';
 // Phase 3 rules. Values not specified by the design are collected here for balancing.
 export const POWER_CAP = 20;
 export const ACTIVE_SLOTS = 3;
@@ -69,23 +70,23 @@ const box = e => ({x:e.x-e.w/2,y:e.y-e.h,w:e.w,h:e.h});
 const EPS=1e-8;
 // Swept point vs expanded rectangle. Earliest contact keeps fast projectiles from tunneling.
 export function segmentHit(x,y,nx,ny,rect,r=0) {
-  let lo=0,hi=1;
-  for(const [origin,delta,min,max] of [[x,nx-x,rect.x-r,rect.x+rect.w+r],[y,ny-y,rect.y-r,rect.y+rect.h+r]]) {
-    if(Math.abs(delta)<EPS){if(origin<min||origin>max)return null;continue;}
-    const a=(min-origin)/delta,b=(max-origin)/delta;lo=Math.max(lo,Math.min(a,b));hi=Math.min(hi,Math.max(a,b));if(lo>hi)return null;
-  }
+  let lo=0,hi=1;const dx=nx-x,dy=ny-y;
+  if(Math.abs(dx)<EPS){if(x<rect.x-r||x>rect.x+rect.w+r)return null;}
+  else{const a=(rect.x-r-x)/dx,b=(rect.x+rect.w+r-x)/dx;lo=Math.max(lo,Math.min(a,b));hi=Math.min(hi,Math.max(a,b));if(lo>hi)return null;}
+  if(Math.abs(dy)<EPS){if(y<rect.y-r||y>rect.y+rect.h+r)return null;}
+  else{const a=(rect.y-r-y)/dy,b=(rect.y+rect.h+r-y)/dy;lo=Math.max(lo,Math.min(a,b));hi=Math.min(hi,Math.max(a,b));if(lo>hi)return null;}
   return lo;
 }
 export class PowerSystem {
   constructor(game,data) {
-    Object.defineProperty(this,'game',{value:game});this.data=data;this.cooldowns={...data.recovery};this.active={};this.projectiles=[];this.bursts=[];
+    Object.defineProperty(this,'game',{value:game});this.data=data;this.cooldowns={...data.recovery};this.active={};this.projectiles=[];this.projectilePool=new ProjectilePool(12);this.bursts=[];
     // The slot resolver is extensible; Phase 3 exposes only three standard slots.
     this.mergeEntitlement=null;
   }
   stats(id) {return powerStats(id,this.data.levels[id],{heroLevel:this.game.hero.level,equipment:this.game.equipment});}
   get flying(){return !!this.active.flight;}
-  get speed(){return Math.min(.6,(this.data.levels.speed?this.stats('speed').runBonus:0)+equipmentStats(this.game.equipment).moveSpeed);}
-  get attackRate(){return attackRate(this.data.levels.speed,this.game.equipment);}
+  get speed(){return Math.min(.6,(this.data.levels.speed?scale(this.data.levels.speed,.05,.6):0)+this.game.equipment.moveSpeed);}
+  get attackRate(){return 1+Math.min(.5,(this.data.levels.speed?scale(this.data.levels.speed,.03,.5):0)+this.game.equipment.attackSpeed);}
   ready(id){return this.game.disruptedPower!==id&&POWER_IDS.includes(id)&&!!this.data.levels[id]&&!POWERS[id]?.passive&&!this.active[id]&&(this.cooldowns[id]||0)<=EPS;}
   activateSlot(index){if(index===3&&this.game.legendary?.active)return this.game.activateMerge();const slot=resolveAbilitySlots(this.data,this.mergeEntitlement)[index];return slot?.id?this.activate(slot.id,slot):false;}
   activate(id,slot=null) {
@@ -129,7 +130,7 @@ export class PowerSystem {
     this.sync();
   }
   sync(){const h=this.game.hero;h.flying=this.flying;h.steel=!!this.active.steel;h.agile=!!this.active.agility;}
-  cancelEffects(){for(const id of Object.keys(this.active))this.end(id);this.bursts=[];this.projectiles=[];}
+  cancelEffects(){for(const id of Object.keys(this.active))this.end(id);this.bursts.length=0;clearProjectiles(this.projectiles,this.projectilePool);}
   incoming(amount,source={}) {
     const g=this.game;
     if(this.flying&&(!isBoss(source)||g.random()>=.5))return null;
@@ -176,14 +177,14 @@ export class PowerSystem {
     for(const burst of this.bursts){
       burst.next-=dt;
       while(burst.left>0&&burst.next<=EPS){
-        this.projectiles.push({x:h.x+burst.face*22,y:h.y-45,vx:burst.face*BALANCE.fireballSpeed,life:BALANCE.fireballLife,damage:burst.damage,pierce:burst.pierce,hits:new Set()});
+        const p=this.projectilePool.acquire({x:h.x+burst.face*22,y:h.y-45,vx:burst.face*BALANCE.fireballSpeed,life:BALANCE.fireballLife,damage:burst.damage,pierce:burst.pierce});if(p)this.projectiles.push(p);
         burst.left--;burst.next+=BALANCE.burstInterval;
       }
     }
-    this.bursts=this.bursts.filter(b=>b.left>0);
+    compactProjectiles(this.bursts,null,b=>b.left>0);
     for(const p of this.projectiles){
       const nx=p.x+p.vx*dt,contacts=[];
-      for(const wall of g.surfaces.filter(s=>!s.oneWay)){const t=segmentHit(p.x,p.y,nx,p.y,wall,6);if(t!==null)contacts.push({t,wall:true});}
+      for(const wall of g.surfaces){if(wall.oneWay)continue;const t=segmentHit(p.x,p.y,nx,p.y,wall,6);if(t!==null)contacts.push({t,wall:true});}
       for(const e of g.enemies){if(e.state==='dead'||e.protection>0||p.hits.has(e.id))continue;const t=segmentHit(p.x,p.y,nx,p.y,box(e),6);if(t!==null)contacts.push({t,e});}
       contacts.sort((a,b)=>a.t-b.t||Number(b.wall)-Number(a.wall));
       for(const contact of contacts){
@@ -193,7 +194,7 @@ export class PowerSystem {
       }
       p.x=nx;p.life-=dt;
     }
-    this.projectiles=this.projectiles.filter(p=>p.life>0);
+    compactProjectiles(this.projectiles,this.projectilePool);
     this.sync();
   }
   snapshot(){

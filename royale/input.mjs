@@ -2,11 +2,11 @@ import { normalizeControls } from './controls.mjs';
 // Every physical pointer owns its action. Releasing one finger never releases another.
 export class Input {
   constructor(root, onPause, controls) {
-    this.controls=normalizeControls(controls);this.padHeld=new Set();this.padPrevious=new Set();this.vertical=0;this.gamepadLabel='No controller connected';
+    this.abort=new AbortController();const listen=(target,event,handler)=>target.addEventListener(event,handler,{signal:this.abort.signal});this.controls=normalizeControls(controls);this.padHeld=new Set();this.padPrevious=new Set();this.vertical=0;this.gamepadLabel='No controller connected';
     this.keys = new Set(); this.pointers = new Map(); this.edges = new Set(); this.axis = 0; this.stickPointer = null; this.enabled = false;
     this.root = root; this.onPause = onPause;
     this.stick = root.querySelector('#stick'); this.knob = root.querySelector('#stick-knob');
-    window.addEventListener('keydown', e => {
+    listen(window,'keydown', e => {
       if(e.code==='Escape'&&!e.repeat){e.preventDefault();this.onPause();return;}
       if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
       if (this.controls.keys.pause.includes(e.code) && !e.repeat) { e.preventDefault(); this.onPause(); return; }
@@ -15,18 +15,18 @@ export class Input {
       if (!e.repeat) for(const [action,codes] of Object.entries(this.controls.keys))if(codes.includes(e.code))this.edges.add(action);
       this.keys.add(e.code);
     });
-    window.addEventListener('keyup', e => this.keys.delete(e.code));
-    window.addEventListener('blur', () => this.clear());
-    document.addEventListener('visibilitychange', () => { if (document.hidden) this.clear(); });
+    listen(window,'keyup', e => this.keys.delete(e.code));
+    listen(window,'blur', () => this.clear());
+    listen(document,'visibilitychange', () => { if (document.hidden) this.clear(); });
     for (const b of root.querySelectorAll('[data-control]')) {
-      b.addEventListener('contextmenu', e => e.preventDefault());
-      b.addEventListener('pointerdown', e => {
+      listen(b,'contextmenu', e => e.preventDefault());
+      listen(b,'pointerdown', e => {
         if (!this.enabled) return;
         e.preventDefault(); b.setPointerCapture(e.pointerId); this.pointers.set(e.pointerId, b.dataset.control);
         this.edges.add(b.dataset.control); b.classList.add('pressed');
       });
       const release = e => { this.pointers.delete(e.pointerId); if (![...this.pointers.values()].includes(b.dataset.control)) b.classList.remove('pressed'); };
-      for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) b.addEventListener(event, release);
+      for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) listen(b,event, release);
     }
     const moveStick = e => {
       if (e.pointerId !== this.stickPointer) return;
@@ -37,32 +37,34 @@ export class Input {
       this.axis = Math.abs(dx) < radius * .14 ? 0 : dx / radius;
       this.knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
     };
-    this.stick.addEventListener('pointerdown', e => { if (!this.enabled || this.stickPointer !== null) return; e.preventDefault(); this.stickPointer = e.pointerId; this.stick.setPointerCapture(e.pointerId); moveStick(e); });
-    this.stick.addEventListener('pointermove', moveStick);
-    for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) this.stick.addEventListener(event, e => {
+    listen(this.stick,'pointerdown', e => { if (!this.enabled || this.stickPointer !== null) return; e.preventDefault(); this.stickPointer = e.pointerId; this.stick.setPointerCapture(e.pointerId); moveStick(e); });
+    listen(this.stick,'pointermove', moveStick);
+    for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) listen(this.stick,event, e => {
       if (e.pointerId === this.stickPointer) { this.stickPointer = null; this.axis = this.vertical = 0; this.knob.style.transform = 'translate(-50%, -50%)'; }
     });
   }
+  destroy(){this.enabled=false;this.destroyed=true;this.clear();this.padHeld.clear();this.padPrevious.clear();this.abort.abort();}
   clear() {
     this.keys.clear(); this.pointers.clear(); this.edges.clear(); this.axis = this.vertical = 0; this.stickPointer = null;
     this.root.querySelectorAll('.pressed').forEach(e => e.classList.remove('pressed'));
     this.knob.style.transform = 'translate(-50%, -50%)';
   }
   pollGamepad() {
+    if(this.destroyed)return;
     let pad;try{pad=[...(navigator.getGamepads?.()||[])].find(p=>p?.connected&&p.mapping==='standard');}catch{}
     this.gamepadLabel=pad?'Standard controller connected':'No standard controller connected';
-    this.padHeld=new Set();this.padX=this.padY=0;
+    this.padHeld.clear();this.padX=this.padY=0;
     if(pad){
       for(const [action,index] of Object.entries(this.controls.pad))if(pad.buttons[index]?.pressed)this.padHeld.add(action);
       this.padX=Math.abs(pad.axes[0]||0)>.18?pad.axes[0]:0;this.padY=Math.abs(pad.axes[1]||0)>.18?pad.axes[1]:0;
     }
-    const edges=[...this.padHeld].filter(a=>!this.padPrevious.has(a));this.padPrevious=new Set(this.padHeld);
+    const edges=[];for(const action of this.padHeld)if(!this.padPrevious.has(action))edges.push(action);this.padPrevious.clear();for(const action of this.padHeld)this.padPrevious.add(action);
     if(edges.includes('pause'))this.onPause();
     if(this.enabled)for(const action of edges)this.edges.add(action);
   }
   sample() {
     if (!this.enabled) { this.clear(); return {}; }
-    const held = action => [...this.pointers.values()].includes(action)||this.controls.keys[action]?.some(k=>this.keys.has(k))||this.padHeld.has(action);
+    const held = action => {if(this.padHeld.has(action)||this.controls.keys[action]?.some(k=>this.keys.has(k)))return true;for(const value of this.pointers.values())if(value===action)return true;return false;};
     const left = held('left'), right = held('right');
     const result = { move: this.axis || this.padX || Number(right) - Number(left), run: Math.abs(this.axis) > .72 || Math.abs(this.padX)> .72 || held('run'),
       vertical:this.vertical||this.padY||(held('down')?1:held('up')||held('jump')?-1:0),powers:[0,1,2,3].map(i=>this.edges.has(`power${i}`)),heal:this.edges.has('heal'),tree:this.edges.has('tree'),

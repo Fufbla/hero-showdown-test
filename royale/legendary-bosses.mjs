@@ -14,7 +14,7 @@ export function legendaryZones(b,a){
 }
 function fireLegendary(g,b){
  const a=b.attack,h=g.hero,damage=b.damage*a.damage;
- const shot=(x,y,vx,vy=0,extra={})=>{if(g.enemyShots.length<40)g.enemyShots.push({x,y,vx,vy,life:5,source:b,damage,color:a.color||LEGENDARY[b.legendaryId].colors[1],bossShot:true,...extra});};
+ const shot=(x,y,vx,vy=0,extra={})=>{if(g.enemyShots.length<40)g.spawnEnemyShot({x,y,vx,vy,life:5,source:b,damage,color:a.color||LEGENDARY[b.legendaryId].colors[1],bossShot:true,...extra});};
  if(a.shape==='projectile'||a.shape==='bounce'){
   const x=b.x+b.face*(b.w/2+12),y=b.y-75,angle=Math.atan2(h.y-45-y,h.x-x);
   for(let i=0;i<a.count;i++){const theta=angle+(i-(a.count-1)/2)*.18;shot(x,y,Math.cos(theta)*a.speed,a.shape==='bounce'?-270-i*55:Math.sin(theta)*a.speed,a.shape==='bounce'?{bounce:3,gravity:650}:{});}
@@ -61,7 +61,7 @@ export const legendaryMethods={
  startLegendaryScene(id,mode='restart'){
   const h=this.hero,defeated=!!this.legendary.defeated[id];mode=defeated?'cleared':mode;
   this.arenaScene={legendary:id,region:this.regionId,cleared:mode==='cleared',returnLocation:{x:h.x,y:h.y,face:h.face},surfaces:this.surfaces,enemies:this.enemies,camps:this.camps};
-  this.powers.cancelEffects();this.cancelMergeEffects();this.enemyShots=[];this.legendaryHazards=[];this.surfaces=arenaSurfaces();this.camps=[];
+  this.powers.cancelEffects();this.cancelMergeEffects();this.clearEnemyShots();this.legendaryHazards=[];this.surfaces=arenaSurfaces();this.camps=[];
   Object.assign(h,{x:420,prevX:420,y:600,prevY:600,vx:0,vy:0,grounded:true,jumps:0,jumpBuffer:0,coyote:.1,attack:null,attackBuffer:null,face:1,invulnerable:1.2});
   const b=makeLegendary(id,this.surfaces[0]);this.arenaScene.boss=b;this.enemies=[b];this.disruptedPower=null;
   if(mode==='cleared'){b.hp=0;b.state='dead';b.age=2;this.bossEncounter=null;this.combatTimer=0;}
@@ -92,7 +92,7 @@ export const legendaryMethods={
   const id=this.pendingLegendaryVictory,fight=this.bossEncounter;
   if(!id||!fight?.legendary||this.hero.dead||fight.boss.hp>0||this.enemies.some(e=>e.state!=='dead')||this.legendary.defeated[id])return false;
   this.legendary.defeated[id]={claimed:false,pieces:['helmet','chest','boots'].map(part=>({uid:`drop-${this.inventory.nextId++}`,catalogId:`merge-${id}-${part}`,state:'unclaimed'}))};
-  this.legendary.revision++;this.recordEconomy('legendary');this.bossEncounter=null;this.arenaScene.cleared=true;this.disruptedPower=null;this.powers.cancelEffects();this.cancelMergeEffects();this.enemyShots=[];this.legendaryHazards=[];this.hero.attack=null;this.hero.attackBuffer=null;this.combatTimer=0;this.pendingLegendaryVictory=null;return true;
+  this.legendary.revision++;this.recordEconomy('legendary');this.bossEncounter=null;this.arenaScene.cleared=true;this.disruptedPower=null;this.powers.cancelEffects();this.cancelMergeEffects();this.clearEnemyShots();this.legendaryHazards=[];this.hero.attack=null;this.hero.attackBuffer=null;this.combatTimer=0;this.pendingLegendaryVictory=null;return true;
  },
  pendingMergeReward(){return Object.entries(this.legendary.defeated).find(([,r])=>!r.claimed)?.[0]||null;},
  claimMergeReward(id,keepUids,discardUids,{confirmed=false,revision}={}){

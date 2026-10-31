@@ -13,7 +13,7 @@ export function installLegendaryQA(getGame,refresh,art,input,hooks={}){
   if(action==='retreat')g.leaveBoss();
   if(action==='defeat')g.defeat();
   if(action==='heal'){g.hero.hp=g.hero.maxHp/2;g.healthRoots=4;}
-  if(action==='safe'){g.combatTimer=0;g.hero.attack=null;g.hero.attackBuffer=null;g.enemyShots=[];g.powers.cancelEffects();g.cancelMergeEffects();}
+  if(action==='safe'){g.combatTimer=0;g.hero.attack=null;g.hero.attackBuffer=null;g.clearEnemyShots();g.powers.cancelEffects();g.cancelMergeEffects();}
   if(action==='step'){const paused=g.paused;g.paused=false;for(let i=0;i<Math.min(1200,Number(value)||0);i++)g.step(1/60,input.sample());g.paused=paused;}
   if(action==='power'){const paused=g.paused;g.paused=false;g.powers.activateSlot(Number(value));g.paused=paused;}
   if(action==='fill'&&!g.pendingMergeReward()){while(g.inventory.items.length<7)g.inventory.items.push(createEquipment(7,'ordinary',0,g.inventory.nextId++));g.refreshEquipment();}

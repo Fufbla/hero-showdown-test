@@ -89,7 +89,7 @@ export class ControlMenu {
       pad.onchange=()=>{const n=Number(pad.value),old=this.input.controls.pad[id],other=Object.keys(this.input.controls.pad).find(a=>a!==id&&this.input.controls.pad[a]===n);if(other)this.input.controls.pad[other]=old;this.input.controls.pad[id]=n;this.save();this.render();};row.append(pad);$('mapping-list').append(row);
     }
     $('touch-settings').replaceChildren();
-    for(const [id,title,min,max] of [['size','Button size',44,64],['left','Move stick inward',0,24],['right','Move actions inward',0,24],['rise','Raise touch controls',0,20]]){
+    for(const [id,title,min,max] of [['stickSize','Joystick size',76,106],['size','Button size',44,64],['left','Move stick inward',0,24],['right','Move actions inward',0,24],['rise','Raise touch controls',0,20]]){
       const label=node('label',undefined,'field'),caption=node('span'),slider=node('input');slider.type='range';slider.min=min;slider.max=max;slider.value=this.input.controls.touch[id];slider.id=`touch-${id}`;slider.setAttribute('aria-label',title);
       const update=()=>{caption.textContent=`${title} · ${slider.value}px`;this.input.controls.touch[id]=Number(slider.value);this.save();};slider.oninput=update;caption.textContent=`${title} · ${slider.value}px`;label.append(caption,slider);$('touch-settings').append(label);
     }

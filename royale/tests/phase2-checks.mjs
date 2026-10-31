@@ -51,7 +51,7 @@ button.onclick=async()=>{
     el('cancel-look').click();el('close-tree').click();el('pause').click();el('choose-hero').click();clickSlot(2,'create');set('name','Third Guardian');el('begin').click();el('pause').click();el('choose-hero').click();
     check('three independent slots are usable',data().slots.every(Boolean)&&new Set(data().slots.map(s=>s.id)).size===3);
     d.querySelector('[data-slot="2"] .delete-hero').click();check('delete requires confirmation',!el('delete-dialog').hidden&&data().slots[2]!==null);el('cancel-delete').click();check('cancel deletion keeps hero',data().slots[2]!==null);
-    d.querySelector('[data-slot="2"] .delete-hero').click();el('confirm-delete').click();check('confirmed delete only clears selected test slot',data().slots[2]===null&&data().slots[0]&&data().slots[1]);
+    d.querySelector('[data-slot="2"] .delete-hero').click();el('confirm-delete').click();await until(()=>data().slots[2]===null);check('confirmed durable delete only clears selected test slot',data().slots[2]===null&&data().slots[0]&&data().slots[1]);
     // Render pixel checks at a fixed clock, independent of idle animation timing.
     const canvas=document.createElement('canvas');canvas.width=480;canvas.height=480;const c=canvas.getContext('2d',{willReadFrequently:true});
     const fingerprint=(look,view='front',pose='idle')=>{c.clearRect(0,0,480,480);drawHero(c,240,435,look,previewHero(pose,.12),.12,3,{view});const p=c.getImageData(0,0,480,480).data;let hash=2166136261;for(let i=0;i<p.length;i++){hash=Math.imul(hash^p[i],16777619);}return hash;};

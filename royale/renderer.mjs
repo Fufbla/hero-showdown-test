@@ -5,7 +5,7 @@ import {trackCamera,inView} from './camera.mjs';
 import { drawLegendarySky, drawLegendaryWorld, drawMergeWorld } from './legendary-art.mjs';
 import { BossArt } from './boss-art.mjs';
 import { drawArena } from './boss-ui.mjs';
-import { drawNewMonster, regionSky, worldLandmarks } from './world-art.mjs';
+import { worldLandmarks } from './world-art.mjs';
 import { drawEris, drawPowerWorld, drawPowerHero } from './power-art.mjs';
 import { SURFACES, WORLD_WIDTH, CAMPS, TYPES } from './world.mjs';
 import { clamp, ATTACKS } from './core.mjs';
@@ -29,22 +29,10 @@ export class Renderer {
     this.environment=new EnvironmentArt();this.monsterAtlas=new MonsterAtlas();this.cloth=new CapeCloth();this.bossArt=new BossArt();this.canvas=canvas;this.c=canvas.getContext('2d',{alpha:false});this.camera=0;this.cameraY=0;this.particles=Array.from({length:96},()=>({life:0}));this.particleCursor=0;this.width=1280;this.height=720;
     this.resize();this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(canvas);
   }
-  resize(){const r=this.canvas.getBoundingClientRect();this.dpr=Math.min(window.devicePixelRatio||1,2);this.canvas.width=Math.round(r.width*this.dpr);this.canvas.height=Math.round(r.height*this.dpr);this.height=r.height<360?480:720;this.scale=r.height/this.height;this.width=r.width/this.scale;}
+  resize(){const r=this.canvas.getBoundingClientRect();if(!r.width||!r.height)return;this.dpr=Math.min(window.devicePixelRatio||1,2);const w=Math.round(r.width*this.dpr),h=Math.round(r.height*this.dpr);if(this.canvas.width!==w)this.canvas.width=w;if(this.canvas.height!==h)this.canvas.height=h;this.height=r.height<360?480:720;this.scale=r.height/this.height;this.width=r.width/this.scale;}
+  destroy(){this.observer.disconnect();this.clearParticles();}
   clearParticles(){for(const p of this.particles)p.life=0;this.particleCursor=0;}
   event(e){if(['hit','reward','jump','land','level','spawn'].includes(e.type)){const count=e.type==='level'?26:e.type==='reward'?12:e.type==='hit'?9:6;for(let i=0;i<count;i++){const a=i/count*PI*2;Object.assign(this.particles[this.particleCursor++%96],{x:e.x??0,y:e.y??0,vx:Math.cos(a)*(35+i*6),vy:-40-Math.abs(Math.sin(a))*100,life:.5+i*.02,max:.5+i*.02,color:e.type==='reward'?'#ffe19b':e.type==='hit'?'#fffbe1':'#c8f3d1',size:e.type==='reward'?4:3});}}}
-  sky(t){
-    const c=this.c,w=this.width;const sky=c.createLinearGradient(0,0,0,530);sky.addColorStop(0,'#83c0c9');sky.addColorStop(.5,'#c2e3d5');sky.addColorStop(1,'#f6e3ad');c.fillStyle=sky;c.fillRect(0,0,w,720);
-    oval(c,w*.76-this.camera*.025,145,66,66,'#fff3c4');oval(c,w*.76-this.camera*.025,145,86,86,'#fff4c326');
-    for(let i=-1;i<8;i++){const x=i*280-(this.camera*.12%280);const y=80+(i%3)*44;oval(c,x,y,70,14,'#f5f5ddaa');oval(c,x+40,y-10,49,20,'#f5f5ddaa');oval(c,x+80,y+2,52,12,'#f5f5ddaa');}
-    // Distant islands and headlands move more slowly than the playable beach.
-    path(c,[[-20,350],[80-this.camera*.08,300],[180-this.camera*.08,330],[360-this.camera*.08,280],[550-this.camera*.08,350],[w,350],[w,430],[-20,430]],'#72a9a9',null);
-    const sea=c.createLinearGradient(0,340,0,610);sea.addColorStop(0,'#4b9fa5');sea.addColorStop(.55,'#58b9b2');sea.addColorStop(1,'#a9d6ba');c.fillStyle=sea;c.fillRect(0,350,w,320);
-    for(let row=0;row<8;row++){const y=372+row*32;for(let i=-1;i<w/160+1;i++){const x=i*160+Math.sin(t*.3+row)*34-(this.camera*(.15+row*.015)%160);line(c,[[x,y],[x+28,y-2],[x+62,y]],row%2?'#d5e9c566':'#9bd8c666',2+row*.2);}}
-    for(let i=0;i<4;i++){const x=(i*280+130+t*9-this.camera*.09)%(w+100),y=180+i%2*38;line(c,[[x-6,y],[x,y+3],[x+6,y]],'#426b72',1.8);}
-    // Far-off lighthouse anchors the destination before you reach it.
-    const lx=5750-this.camera*.86;
-    if(lx<w+150&&lx>-150)this.lighthouse(lx,500,.55);
-  }
   palm(x,y,scale,t){const c=this.c;c.save();c.translate(x,y);c.scale(scale,scale);line(c,[[0,0],[-11,-64],[-9,-125],[4,-180]],'#a77e50',16);line(c,[[-4,-5],[-15,-65],[-12,-121],[1,-178]],'#d3ae6e',5);for(let i=0;i<6;i++){const a=(i/5)*PI+PI;const ex=Math.cos(a)*96,ey=-175+Math.sin(a)*48+Math.sin(t+i)*3;c.beginPath();c.moveTo(4,-179);c.quadraticCurveTo(ex*.4,-235,ex,ey);c.quadraticCurveTo(ex*.5,-187,4,-179);c.fillStyle=i%2?'#328b73':'#247c66';c.fill();}oval(c,2,-174,9,7,'#8b643d');c.restore();}
   lighthouse(x,y,s=1){const c=this.c;c.save();c.translate(x,y);c.scale(s,s);path(c,[[-30,0],[-20,-160],[20,-160],[30,0]],'#faf0cd','#4b7473',3);path(c,[[-25,-70],[-23,-100],[23,-100],[25,-70]],'#d57c61',null);round(c,-25,-182,50,28,3,'#315a66');round(c,-18,-178,36,20,1,'#ffd993');path(c,[[-35,-184],[0,-208],[35,-184]],'#b56950','#3b5b60',2);round(c,-8,-30,16,30,4,'#325e69');line(c,[[-35,-150],[35,-150]],'#406a70',5);c.restore();}
   terrain(surface){this.environment.surface(this.c,surface,this.regionTheme);}
@@ -81,7 +69,7 @@ export class Renderer {
       if(game.nearCamp()===i){round(c,camp.x-85,camp.y-157,170,24,12,'#153b40e6');c.fillStyle='#fff1cd';c.font='11px system-ui';c.textAlign='center';c.fillText('E / REST · heal & set checkpoint',camp.x,camp.y-141);}
     }
     if(!game.arenaScene){if(visible(150,390,260,230))drawEris(c,t);worldLandmarks(c,game,this.camera,this.width);}else{drawArena(c,game);if(game.arenaScene.legendary)drawLegendaryWorld(c,game);}
-    for(const shot of game.enemyShots){oval(c,shot.x,shot.y,7,5,shot.color,'#283b43',2);line(c,[[shot.x-shot.vx*.025,shot.y-shot.vy*.025],[shot.x,shot.y]],'#eadcac',2);}
+    for(const shot of game.enemyShots){if(!visible(shot.x-12,shot.y-12,24,24))continue;oval(c,shot.x,shot.y,7,5,shot.color,'#283b43',2);line(c,[[shot.x-shot.vx*.025,shot.y-shot.vy*.025],[shot.x,shot.y]],'#eadcac',2);}
     for(const e of game.enemies)if(visible(e.x-e.w/2,e.y-e.h-40,e.w,e.h+50))this.enemy(e,t,alpha);
     drawPowerWorld(c,game);drawMergeWorld(c,game);
     const pos=globalThis.HealthiaMotionCore?.renderPosition({x:h.prevX,y:h.prevY,face:h.prevFace},{x:h.x,y:h.y,face:h.face},alpha,h.dead)||{x:lerp(h.prevX,h.x,alpha),y:lerp(h.prevY,h.y,alpha)};

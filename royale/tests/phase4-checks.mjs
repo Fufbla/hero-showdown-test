@@ -1,3 +1,4 @@
+import {advanceUI} from './ui-clock.mjs';
 import {CONTROL_KEY} from '../controls.mjs';
 import {Game} from '../core.mjs';
 import {bossVictory,CLOCK} from '../progression.mjs';
@@ -23,7 +24,7 @@ button.onclick=async()=>{
   const data=()=>JSON.parse(sessionStorage.getItem(prefix+PROFILE_KEY)).slots[0].snapshot;
   const inside=n=>{const r=n.getBoundingClientRect();return r.width>0&&r.height>0&&r.left>=-1&&r.right<=w.innerWidth+1&&r.top>=-1&&r.bottom<=w.innerHeight+1;};
   const time=()=>Number(el('diagnostics').textContent.match(/ · t ([\d.]+)/)?.[1]);
-  const advance=async seconds=>{await until(()=>Number.isFinite(time()));const start=time();await until(()=>time()-start>=seconds);};
+  const advance=seconds=>advanceUI(frame,seconds);
   const tap=code=>{for(const type of ['keydown','keyup'])d.body.dispatchEvent(new w.KeyboardEvent(type,{code,key:code,bubbles:true,cancelable:true}));};
   try{
     await new Promise(resolve=>{frame.onload=resolve;frame.src=`../?qa=1&touch=1&testSession=${session}`;});await attach();d.querySelector('[data-action="continue"]').click();
@@ -42,11 +43,11 @@ button.onclick=async()=>{
     const before=el('world-clock').textContent,pausedTime=time();await until(()=>el('world-clock').textContent!==before);check('clock advances while at Tree',time()===pausedTime);
     el('close-tree').click();el('pause').click();el('open-map').click();check('world map contains all seven regions',d.querySelectorAll('.region-card').length===7);check('all regular regions are open',[1,2,3,4,5,6,7].every(id=>!d.querySelector(`[data-travel="${id}"]`).disabled));
     for(const region of WORLD_REGIONS){const b=d.querySelector(`[data-travel="${region.id}"]`);b.scrollIntoView({block:'nearest'});check(`${region.name} card is reachable`,inside(b));}
-    d.querySelector('[data-travel="3"]').click();await advance(.2);check('fast travel lands at safe destination camp',data().world.region===3&&data().world.location.x===160&&data().world.checkpoint.region===3);
+    d.querySelector('[data-travel="3"]').click();await advance(.2);el('pause').click();el('manual-save').click();el('resume').click();check('fast travel lands at safe destination camp',data().world.region===3&&data().world.location.x===160&&data().world.checkpoint.region===3);
     check('shared-clock countdown visible in Region 3',!el('world-clock').hidden);
     tap('KeyJ');await advance(.2);el('pause').click();check('combat disables safe saving, Tree and checkpoint return',el('tree-from-pause').disabled&&el('return-camp').disabled&&el('safe-save-note').textContent.includes('locked'));
     el('open-map').click();check('combat disables all map travel',[...d.querySelectorAll('[data-travel]')].every(b=>b.disabled));el('map-close').click();el('resume').click();await advance(5.3);el('pause').click();el('open-map').click();
-    d.querySelector('[data-travel="1"]').click();await advance(.2);check('unlocked backward travel works and Coast remains daytime',data().world.region===1&&el('world-clock').hidden);
+    d.querySelector('[data-travel="1"]').click();await advance(.2);el('pause').click();el('manual-save').click();el('resume').click();check('unlocked backward travel works and Coast remains daytime',data().world.region===1&&el('world-clock').hidden);
     el('pause').click();const clockReference=data().world.clockReference,look=data().look;await new Promise(resolve=>{frame.onload=resolve;w.location.reload();});await attach();d.querySelector('[data-action="continue"]').click();await advance(.2);
     check('reload preserves appearance, roots, gear, clock and world history',JSON.stringify(data().look)===JSON.stringify(look)&&data().healthRoots===3&&data().inventory.items.length===7&&data().world.clockReference===clockReference&&data().world.unlocked.join(',')==='1,2,3,4,5,6,7');el('pause').click();
     // Canvas fingerprints cover each new silhouette and its instantaneous yellow-eye change.

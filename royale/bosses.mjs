@@ -14,7 +14,7 @@ function attackZones(b,attack){
 }
 function overlap(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
 function fire(g,b){
-  const a=b.attack,h=g.hero,damage=b.damage*a.damage,shot=(x,y,vx,vy=0,color='#e6cc83')=>g.enemyShots.push({x,y,vx,vy,life:5,source:b,damage,color,bossShot:true});
+  const a=b.attack,h=g.hero,damage=b.damage*a.damage,shot=(x,y,vx,vy=0,color='#e6cc83')=>g.spawnEnemyShot({x,y,vx,vy,life:5,source:b,damage,color,bossShot:true});
   if(a.shape==='projectile'){
     const x=b.x+b.face*(b.w*.5+10),y=b.y-70,angle=Math.atan2(h.y-48-y,h.x-x),speed=a.speed*(b.phase===1?1:1.12);
     for(let i=0;i<a.count;i++){const theta=angle+(i-(a.count-1)/2)*.14;shot(x,y,Math.cos(theta)*speed,Math.sin(theta)*speed,a.color);}
@@ -54,7 +54,7 @@ export const bossMethods={
   },
   startBossScene(mode='restart'){
     const h=this.hero;this.arenaScene={region:this.regionId,cleared:mode==='cleared',returnLocation:{x:h.x,y:h.y,face:h.face},surfaces:this.surfaces,enemies:this.enemies,camps:this.camps};
-    this.powers.cancelEffects();this.enemyShots=[];this.surfaces=arenaSurfaces();this.camps=[];
+    this.powers.cancelEffects();this.clearEnemyShots();this.surfaces=arenaSurfaces();this.camps=[];
     Object.assign(h,{x:ARENA.heroX,prevX:ARENA.heroX,y:ARENA.floor,prevY:ARENA.floor,vx:0,vy:0,grounded:true,jumps:0,jumpBuffer:0,coyote:.1,attack:null,attackBuffer:null,face:1,invulnerable:1.2});
     const b=makeBoss(this.regionId,this.surfaces[0]);this.arenaScene.boss=b;this.enemies=[b];
     if(mode==='cleared'){b.hp=0;b.state='dead';this.bossEncounter=null;this.combatTimer=0;}
@@ -63,14 +63,14 @@ export const bossMethods={
   },
   leaveBoss(reason='retreat'){
     const scene=this.arenaScene;if(!scene)return false;
-    this.powers.cancelEffects();this.cancelMergeEffects();this.legendaryHazards=[];this.disruptedPower=null;this.pendingLegendaryVictory=null;this.enemyShots=[];this.hero.attack=null;this.hero.attackBuffer=null;
+    this.powers.cancelEffects();this.cancelMergeEffects();this.legendaryHazards=[];this.disruptedPower=null;this.pendingLegendaryVictory=null;this.clearEnemyShots();this.hero.attack=null;this.hero.attackBuffer=null;
     this.surfaces=scene.surfaces;this.enemies=scene.enemies;this.camps=scene.camps;this.arenaScene=null;this.bossEncounter=null;
     Object.assign(this.hero,{x:scene.returnLocation.x,prevX:scene.returnLocation.x,y:scene.returnLocation.y,prevY:scene.returnLocation.y,vx:0,vy:0,grounded:true,jumps:0,face:-1,invulnerable:1.5});
     this.combatTimer=reason==='defeat'?0:5;this.emit('arena-exit',{reason});return true;
   },
   bossDamaged(b){
     const old=b.phase;b.phase=bossPhase(b.hp/b.maxHp);if(b.legendary&&b.phase>=2)this.disruptedPower=null;if(old!==b.phase)this.emit('boss-phase',{phase:b.phase});
-    if(b.hp<=0){b.state='dead';b.age=0;b.attack=null;b.rooted=false;this.enemyShots=this.enemyShots.filter(p=>p.source!==b);this.emit('boss-down');}
+    if(b.hp<=0){b.state='dead';b.age=0;b.attack=null;b.rooted=false;this.removeEnemyShots(b);this.emit('boss-down');}
   },
   stepEncounter(dt){
     const scene=this.arenaScene;if(!scene)return;if(scene.legendary){this.stepLegendaryEncounter(dt);return;}
@@ -97,7 +97,7 @@ export const bossMethods={
     const existing=this.bossProgress.records[fight.region];
     this.bossProgress.records[fight.region]=existing?{...existing,wins:existing.wins+1}:{wins:1,chest:rollChest(fight.region,this.random)};
     this.hero.coins=Math.min(999999,this.hero.coins+reward.coins);const xp=this.hero.level<99?monsterXP(BOSSES[fight.region].xp,this.hero.level,BOSSES[fight.region].level):0;this.gainXP(xp);
-    this.bossEncounter=null;this.arenaScene.cleared=true;this.powers.cancelEffects();this.cancelMergeEffects();this.legendaryHazards=[];this.disruptedPower=null;this.pendingLegendaryVictory=null;this.enemyShots=[];this.hero.attack=null;this.hero.attackBuffer=null;this.combatTimer=0;
+    this.bossEncounter=null;this.arenaScene.cleared=true;this.powers.cancelEffects();this.cancelMergeEffects();this.legendaryHazards=[];this.disruptedPower=null;this.pendingLegendaryVictory=null;this.clearEnemyShots();this.hero.attack=null;this.hero.attackBuffer=null;this.combatTimer=0;
     this.emit('boss-victory',{...reward,xp,name:BOSSES[fight.region].name,region:fight.region});return true;
   },
   availableChest(){return !this.arenaScene?.legendary&&this.arenaScene?.cleared&&this.bossProgress.records[this.regionId]?.chest.state==='available'?this.bossProgress.records[this.regionId].chest:null;},

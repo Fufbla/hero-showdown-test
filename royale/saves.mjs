@@ -62,6 +62,6 @@ export class LocalHeroStore{
     if(![0,1,2].includes(index))throw Error('Invalid hero slot');
     if(!expectedId||this.data.slots[index]?.id!==expectedId)return {ok:false,error:'This hero slot changed. Select it again.'};
     const next=copy(this.data);next.slots[index]=null;next.legacyImported=true;
-    return this.flush(next);
+    return this.flush(next,{atomic:true});
   }
 }

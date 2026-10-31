@@ -1,0 +1,121 @@
+COMPLETE · 120 Phase 8 browser assertions passed across five viewport sizes. Authentication/network integration and physical devices remain untested.
+PASS · 390: three personalized hero portraits
+PASS · 390: roster stays within viewport
+PASS · 390: all seven regular destinations enabled at level one
+PASS · 390: Legendary arenas remain level-99 locked
+PASS · 390: Coastal Beginnings touch target fits
+PASS · 390: L1 reaches Coastal Beginnings safely without boss wins
+PASS · 390: Polluted Forest touch target fits
+PASS · 390: L1 reaches Polluted Forest safely without boss wins
+PASS · 390: Industrial Wasteland touch target fits
+PASS · 390: L1 reaches Industrial Wasteland safely without boss wins
+PASS · 390: Toxic Underground touch target fits
+PASS · 390: L1 reaches Toxic Underground safely without boss wins
+PASS · 390: Mutated Territories touch target fits
+PASS · 390: L1 reaches Mutated Territories safely without boss wins
+PASS · 390: Dark Energy Realm touch target fits
+PASS · 390: L1 reaches Dark Energy Realm safely without boss wins
+PASS · 390: Final Showdown touch target fits
+PASS · 390: L1 reaches Final Showdown safely without boss wins
+PASS · 390: map has no horizontal overflow
+PASS · 390: other two heroes retain separate resources
+PASS · 390: no-recovery warning is explicit
+PASS · 390: unconfigured Google, Apple and email controls are disabled
+PASS · 390: undeployed cloud service cannot claim a working signup
+PASS · 390: account form scrolls without horizontal overflow
+PASS · 844: three personalized hero portraits
+PASS · 844: roster stays within viewport
+PASS · 844: all seven regular destinations enabled at level one
+PASS · 844: Legendary arenas remain level-99 locked
+PASS · 844: Coastal Beginnings touch target fits
+PASS · 844: L1 reaches Coastal Beginnings safely without boss wins
+PASS · 844: Polluted Forest touch target fits
+PASS · 844: L1 reaches Polluted Forest safely without boss wins
+PASS · 844: Industrial Wasteland touch target fits
+PASS · 844: L1 reaches Industrial Wasteland safely without boss wins
+PASS · 844: Toxic Underground touch target fits
+PASS · 844: L1 reaches Toxic Underground safely without boss wins
+PASS · 844: Mutated Territories touch target fits
+PASS · 844: L1 reaches Mutated Territories safely without boss wins
+PASS · 844: Dark Energy Realm touch target fits
+PASS · 844: L1 reaches Dark Energy Realm safely without boss wins
+PASS · 844: Final Showdown touch target fits
+PASS · 844: L1 reaches Final Showdown safely without boss wins
+PASS · 844: map has no horizontal overflow
+PASS · 844: other two heroes retain separate resources
+PASS · 844: no-recovery warning is explicit
+PASS · 844: unconfigured Google, Apple and email controls are disabled
+PASS · 844: undeployed cloud service cannot claim a working signup
+PASS · 844: account form scrolls without horizontal overflow
+PASS · 360: three personalized hero portraits
+PASS · 360: roster stays within viewport
+PASS · 360: all seven regular destinations enabled at level one
+PASS · 360: Legendary arenas remain level-99 locked
+PASS · 360: Coastal Beginnings touch target fits
+PASS · 360: L1 reaches Coastal Beginnings safely without boss wins
+PASS · 360: Polluted Forest touch target fits
+PASS · 360: L1 reaches Polluted Forest safely without boss wins
+PASS · 360: Industrial Wasteland touch target fits
+PASS · 360: L1 reaches Industrial Wasteland safely without boss wins
+PASS · 360: Toxic Underground touch target fits
+PASS · 360: L1 reaches Toxic Underground safely without boss wins
+PASS · 360: Mutated Territories touch target fits
+PASS · 360: L1 reaches Mutated Territories safely without boss wins
+PASS · 360: Dark Energy Realm touch target fits
+PASS · 360: L1 reaches Dark Energy Realm safely without boss wins
+PASS · 360: Final Showdown touch target fits
+PASS · 360: L1 reaches Final Showdown safely without boss wins
+PASS · 360: map has no horizontal overflow
+PASS · 360: other two heroes retain separate resources
+PASS · 360: no-recovery warning is explicit
+PASS · 360: unconfigured Google, Apple and email controls are disabled
+PASS · 360: undeployed cloud service cannot claim a working signup
+PASS · 360: account form scrolls without horizontal overflow
+PASS · 820: three personalized hero portraits
+PASS · 820: roster stays within viewport
+PASS · 820: all seven regular destinations enabled at level one
+PASS · 820: Legendary arenas remain level-99 locked
+PASS · 820: Coastal Beginnings touch target fits
+PASS · 820: L1 reaches Coastal Beginnings safely without boss wins
+PASS · 820: Polluted Forest touch target fits
+PASS · 820: L1 reaches Polluted Forest safely without boss wins
+PASS · 820: Industrial Wasteland touch target fits
+PASS · 820: L1 reaches Industrial Wasteland safely without boss wins
+PASS · 820: Toxic Underground touch target fits
+PASS · 820: L1 reaches Toxic Underground safely without boss wins
+PASS · 820: Mutated Territories touch target fits
+PASS · 820: L1 reaches Mutated Territories safely without boss wins
+PASS · 820: Dark Energy Realm touch target fits
+PASS · 820: L1 reaches Dark Energy Realm safely without boss wins
+PASS · 820: Final Showdown touch target fits
+PASS · 820: L1 reaches Final Showdown safely without boss wins
+PASS · 820: map has no horizontal overflow
+PASS · 820: other two heroes retain separate resources
+PASS · 820: no-recovery warning is explicit
+PASS · 820: unconfigured Google, Apple and email controls are disabled
+PASS · 820: undeployed cloud service cannot claim a working signup
+PASS · 820: account form scrolls without horizontal overflow
+PASS · 1440: three personalized hero portraits
+PASS · 1440: roster stays within viewport
+PASS · 1440: all seven regular destinations enabled at level one
+PASS · 1440: Legendary arenas remain level-99 locked
+PASS · 1440: Coastal Beginnings touch target fits
+PASS · 1440: L1 reaches Coastal Beginnings safely without boss wins
+PASS · 1440: Polluted Forest touch target fits
+PASS · 1440: L1 reaches Polluted Forest safely without boss wins
+PASS · 1440: Industrial Wasteland touch target fits
+PASS · 1440: L1 reaches Industrial Wasteland safely without boss wins
+PASS · 1440: Toxic Underground touch target fits
+PASS · 1440: L1 reaches Toxic Underground safely without boss wins
+PASS · 1440: Mutated Territories touch target fits
+PASS · 1440: L1 reaches Mutated Territories safely without boss wins
+PASS · 1440: Dark Energy Realm touch target fits
+PASS · 1440: L1 reaches Dark Energy Realm safely without boss wins
+PASS · 1440: Final Showdown touch target fits
+PASS · 1440: L1 reaches Final Showdown safely without boss wins
+PASS · 1440: map has no horizontal overflow
+PASS · 1440: other two heroes retain separate resources
+PASS · 1440: no-recovery warning is explicit
+PASS · 1440: unconfigured Google, Apple and email controls are disabled
+PASS · 1440: undeployed cloud service cannot claim a working signup
+PASS · 1440: account form scrolls without horizontal overflow

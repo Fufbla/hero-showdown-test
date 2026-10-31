@@ -1,3 +1,4 @@
+import {advanceUI} from './ui-clock.mjs';
 import {SAVE_KEY} from '../core.mjs';
 import {PROFILE_KEY} from '../saves.mjs';
 import {POWER_IDS,POWERS} from '../powers.mjs';
@@ -14,7 +15,7 @@ button.onclick=async()=>{
   const until=async fn=>{const end=Date.now()+120000;while(!fn()){if(Date.now()>end)throw Error('Timed out waiting for UI');await wait(30);}};
   const attach=async()=>{d=frame.contentDocument;w=frame.contentWindow;el=id=>d.getElementById(id);await until(()=>d.querySelector('.hero-slot'));frame.focus();};
   const time=()=>Number(el('diagnostics').textContent.match(/ · t ([\d.]+)/)?.[1]);
-  const advance=async seconds=>{await until(()=>Number.isFinite(time()));const start=time();await until(()=>time()-start>=seconds);};
+  const advance=seconds=>advanceUI(frame,seconds);
   const key=(code,down=true)=>d.body.dispatchEvent(new w.KeyboardEvent(down?'keydown':'keyup',{code,key:code,bubbles:true,cancelable:true}));
   const tap=code=>{key(code);key(code,false);};
   const data=()=>JSON.parse(sessionStorage.getItem(prefix+PROFILE_KEY)).slots[0].snapshot;
@@ -39,8 +40,8 @@ button.onclick=async()=>{
     d.querySelector('[data-power="strength"]').click();quantity(19);check('multi-upgrade shows exact final target tier',el('upgrade-preview').textContent.includes('5')&&!el('review-upgrade').disabled);el('review-upgrade').click();el('cancel-upgrade').click();check('cancel keeps points and level',data().powers.levels.strength===1&&el('tree-points').textContent==='89');
     el('review-upgrade').click();el('confirm-upgrade').click();check('19-level purchase reaches cap and deducts 19 points',data().powers.levels.strength===20&&el('tree-points').textContent==='70'&&el('review-upgrade').disabled);
     el('close-tree').click();el('pause').click();select(el('slot-0'),'strength');select(el('slot-1'),'fireball');select(el('slot-2'),'flight');
-    check('three slots save and omit passive Speed',[...el('slot-0').options].every(o=>o.value!=='speed')&&data().powers.equipped.join(',')==='strength,fireball,flight');
-    select(el('slot-1'),'strength');check('equipped choices swap without duplicates',data().powers.equipped.join(',')==='fireball,strength,flight');select(el('slot-0'),'strength');
+    el('manual-save').click();check('three slots save and omit passive Speed',[...el('slot-0').options].every(o=>o.value!=='speed')&&data().powers.equipped.join(',')==='strength,fireball,flight');
+    select(el('slot-1'),'strength');el('manual-save').click();check('equipped choices swap without duplicates',data().powers.equipped.join(',')==='fireball,strength,flight');select(el('slot-0'),'strength');
     el('open-controls').click();check('control settings open with visible vitals',!el('controls-menu').hidden&&inside(el('hp-text'))&&inside(el('close-controls')));
     d.querySelector('[data-map="power0"]').click();tap('KeyQ');check('keyboard remap persisted',JSON.parse(sessionStorage.getItem(prefix+CONTROL_KEY)).keys.power0[0]==='KeyQ');
     for(const id of ['size','left','right','rise']){const slider=el(`touch-${id}`);slider.scrollIntoView({block:'nearest'});check(`${id} layout adjustment reachable`,inside(slider));slider.value=slider.max;slider.dispatchEvent(new w.Event('input',{bubbles:true}));}
@@ -49,7 +50,7 @@ button.onclick=async()=>{
     tap('KeyQ');await advance(.12);check('remapped ability darkens on cooldown',d.querySelector('[data-control="power0"]').classList.contains('cooldown'));
     check('no numerical cooldown countdown',d.querySelector('[data-control="power0"] span').textContent==='Super Strength');
     el('pause').click();check('combat blocks swapping and Tree spending',el('slot-0').disabled&&el('tree-from-pause').disabled);el('resume').click();await advance(5.3);el('pause').click();check('loadout unlocks outside combat',!el('slot-0').disabled);
-    el('choose-hero').click();await new Promise(resolve=>{frame.onload=resolve;frame.contentWindow.location.reload();});await attach();d.querySelector('[data-slot="0"] [data-action="continue"]').click();await advance(.2);
+    el('manual-save').click();el('choose-hero').click();await new Promise(resolve=>{frame.onload=resolve;frame.contentWindow.location.reload();});await attach();d.querySelector('[data-slot="0"] [data-action="continue"]').click();await advance(.2);
     check('reload keeps levels, three powers and controls',data().powers.levels.strength===20&&data().powers.equipped.join(',')==='strength,fireball,flight'&&d.querySelector('[data-control="power0"] kbd').textContent==='Q');
     const power=d.querySelector('[data-control="power2"]'),capture=power.setPointerCapture;power.setPointerCapture=()=>{};
     for(const type of ['pointerdown','pointerup'])power.dispatchEvent(new w.PointerEvent(type,{pointerId:42,pointerType:'touch',bubbles:true,cancelable:true}));await advance(.2);check('touch activates Flight',power.classList.contains('active'));
