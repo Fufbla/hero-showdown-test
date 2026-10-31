@@ -1,3 +1,4 @@
+import {ReferenceMonsterAtlas} from './monster-sprites.mjs';
 import {drawNewMonster} from './world-art.mjs';
 import {TYPES} from './world.mjs';
 const INK='#243741',TAU=Math.PI*2;
@@ -34,7 +35,7 @@ export function drawMonsterSprite(c,e,t,night=false){
 }
 // Display-sized atlases: eight gait frames plus four attack poses. Six entries max
 // (three species x day/night), so touring all regions cannot grow texture memory.
-export class MonsterAtlas{
+class ProceduralMonsterAtlas{
  constructor(){this.entries=new Map();this.limit=6;this.cell={w:144,h:152,scale:1.5};}
  atlas(type,night){
   const key=`${type}:${night}`;
@@ -51,4 +52,9 @@ export class MonsterAtlas{
   const frame=e.state==='warn'?8:e.state==='strike'?9+Math.min(2,Math.floor(e.age/.28*3)):Math.floor((e.walkCycle??t*TYPES[e.type].speed/60)*8)%8;
   c.drawImage(canvas,(frame%6)*w*scale,Math.floor(frame/6)*h*scale,w*scale,h*scale,-w/2,-h+10,w,h);
  }
+}
+
+// Keep original artwork as a bounded loading/error fallback.
+export class MonsterAtlas extends ReferenceMonsterAtlas{
+ constructor(options={}){super({fallback:new ProceduralMonsterAtlas(),heights:MONSTER_HEIGHT,...options});}
 }

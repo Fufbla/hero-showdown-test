@@ -52,3 +52,8 @@ Other review pages: [vertical](tests/phase9-browser.html), [Legendary/Merge](tes
 Physical iPhone/Android/tablet/controllers, Safari/Firefox, long sessions and sustained 60 FPS need testing. Canonical Trash Monster/Ultimate Pollution Boss art, eight Merge costume motifs and skeletal remains remain provisional. The synthesized music loops need listening/creative review. No Phase 11 work is included.
 
 Historical design and implementation notes: [early validation](VALIDATION.md), [Phase 3](PHASE3.md), [Phase 4](PHASE4.md), [Phase 5](PHASE5.md), [Phase 6](PHASE6.md), [Phase 7](PHASE7.md), [Phase 8](PHASE8.md), [Phase 9](PHASE9.md). Current behavior above supersedes historical autosave and boss-gate descriptions.
+
+
+## Approved monster-reference review build
+
+The 21 regular monsters now use transparent cutouts of the supplied comic-book concept art, with cached, aligned procedural idle/move/attack/hit/defeat motion. These are provisional single-pose animations, **not verified authored frame atlases**. See [asset audit, completed/remaining list and test results](MONSTER-SPRITES.md) and the [interactive sprite review](tests/monster-sprites.html). Monster AI, stats, attacks, rewards, desperation, physics and saves are unchanged.

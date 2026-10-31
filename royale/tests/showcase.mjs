@@ -1,7 +1,7 @@
 import {Game} from '../core.mjs';
 import {WORLD_REGIONS,TYPES} from '../world.mjs';
 import {EnvironmentArt} from '../environment-art.mjs';
-import {drawMonsterSprite,MONSTER_HEIGHT} from '../monster-art.mjs';
+import {MonsterAtlas,MONSTER_HEIGHT} from '../monster-art.mjs';
 import {drawHero} from '../hero-art.mjs';
 import {previewHero} from '../hero-rig.mjs';
 import {CapeCloth} from '../cape.mjs';
@@ -10,18 +10,20 @@ import {BOSSES} from '../boss-data.mjs';
 import {BossArt} from '../boss-art.mjs';
 import {makeBoss,arenaSurfaces} from '../bosses.mjs';
 import {makeLegendary} from '../legendary-bosses.mjs';
+const monsterArt=new MonsterAtlas();
 const $=id=>document.getElementById(id),dynamic=[];
 function card(parent,label,w=360,h=320){const figure=document.createElement('figure'),canvas=document.createElement('canvas'),caption=document.createElement('figcaption');canvas.width=w;canvas.height=h;canvas.setAttribute('aria-label',label);caption.textContent=label;figure.append(canvas,caption);$(parent).append(figure);return canvas;}
 function floor(c,w,h){c.clearRect(0,0,w,h);c.fillStyle='#c1dbc429';c.beginPath();c.ellipse(w/2,h-27,w*.23,7,0,0,Math.PI*2);c.fill();}
 for(const region of WORLD_REGIONS){
+ await monsterArt.preload(region.id);
  const g=new Game();g.travel(region.id);const canvas=card('regions',`${region.id}. ${region.name} · recommended ${region.levels.join('–')} · first climbing circuit (one of three)`,1164,510),c=canvas.getContext('2d'),art=new EnvironmentArt(),scale=.6;
  c.scale(scale,scale);art.sky(c,region,1940,850,0,-120,0,false);c.translate(0,120);
  for(const s of g.surfaces)if(s.x<1940)art.surface(c,s,region);
- for(const e of g.enemies)if(e.x<1940){c.save();c.translate(e.x,e.y);drawMonsterSprite(c,e,0,false);c.restore();c.fillStyle='#172b38';c.fillRect(e.x-24,e.y-(MONSTER_HEIGHT[e.type]||e.h)-10,48,5);c.fillStyle='#c5dc99';c.fillRect(e.x-23,e.y-(MONSTER_HEIGHT[e.type]||e.h)-9,46,3);}
+ for(const e of g.enemies)if(e.x<1940){c.save();c.translate(e.x,e.y);monsterArt.draw(c,e,0,false);c.restore();c.fillStyle='#172b38';c.fillRect(e.x-24,e.y-(MONSTER_HEIGHT[e.type]||e.h)-10,48,5);c.fillStyle='#c5dc99';c.fillRect(e.x-23,e.y-(MONSTER_HEIGHT[e.type]||e.h)-9,46,3);}
  drawHero(c,160,600,g.look,previewHero('idle',0),0,1.1);c.fillStyle='#fff1c5';c.font='bold 18px system-ui';c.fillText('GROUND · Safe checkpoint / portal',45,655);
 }
 for(const [type,info] of Object.entries(TYPES)){
- const canvas=card('monsters',`${info.name} · ${info.behavior}`,320,280),c=canvas.getContext('2d');dynamic.push(t=>{floor(c,320,280);c.save();c.translate(160,250);c.scale(1.8,1.8);drawMonsterSprite(c,{type,id:0,face:1,state:t%4>2.5?'strike':'patrol',age:(t%4-2.5)% .28},t,false);c.restore();});
+ const canvas=card('monsters',`${info.name} · approved reference pose / provisional motion`,320,280),c=canvas.getContext('2d');await monsterArt.load(type);floor(c,320,280);c.save();c.translate(160,250);c.scale(1.8,1.8);monsterArt.draw(c,{type,id:0,face:1,state:'idle'},.2,false);c.restore();
 }
 for(const [i,build] of['slender','balanced','strong','full'].entries()){
  const canvas=card('heroes',`${build} · ${['teen','young','older','young'][i]} · unchanged combat hitbox`,360,340),c=canvas.getContext('2d'),cloth=new CapeCloth();dynamic.push(t=>{floor(c,360,340);drawHero(c,174,307,{build,presentation:i%2?'female':'male',age:['teen','young','older','young'][i],hair:['short','braids','locs','waves'][i],skin:['#f4cda4','#bd845f','#81533d','#dcab83'][i],suit:'#315c7a',trim:'#e7c77e',cape:true},previewHero(t%6<3?'idle':'run',t),t,2.1,{cloth,dt:1/60});});

@@ -1,0 +1,118 @@
+{
+  "regions": [
+    {
+      "region": 1,
+      "checks": 1967,
+      "passed": true,
+      "ms": 114.3999999910593,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 2,
+      "checks": 1967,
+      "passed": true,
+      "ms": 92.40000000596046,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 3,
+      "checks": 1911,
+      "passed": true,
+      "ms": 111.5,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 4,
+      "checks": 1967,
+      "passed": true,
+      "ms": 98.20000000298023,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 5,
+      "checks": 1967,
+      "passed": true,
+      "ms": 162.20000000298023,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 6,
+      "checks": 1855,
+      "passed": true,
+      "ms": 92.79999999701977,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 7,
+      "checks": 1967,
+      "passed": true,
+      "ms": 53.400000005960464,
+      "textureBytes": 20643840,
+      "errors": []
+    }
+  ],
+  "benchmarks": [
+    {
+      "region": 7,
+      "viewport": [
+        1300,
+        540
+      ],
+      "assetLoadMs": 11.799999997019768,
+      "atlasBuildMs": 5.700000002980232,
+      "simulationSeconds": 1.2166666666666672,
+      "samples": 16,
+      "seconds": 10.497699999999996,
+      "averageFPS": 1.5241433837888303,
+      "onePercentLowFPS": 0.9836710603974045,
+      "meanStepAndDrawMs": 3.0764705889365254,
+      "p95StepAndDrawMs": 20.299999997019768,
+      "cacheTextureBytes": 10321920,
+      "errors": []
+    },
+    {
+      "region": 7,
+      "viewport": [
+        390,
+        720
+      ],
+      "assetLoadMs": 52.79999999701977,
+      "atlasBuildMs": 7.4000000059604645,
+      "simulationSeconds": 1.0500000000000012,
+      "samples": 14,
+      "seconds": 10.230944000000003,
+      "averageFPS": 1.368397676695327,
+      "onePercentLowFPS": 0.9837678307919331,
+      "meanStepAndDrawMs": 2.8466666668653486,
+      "p95StepAndDrawMs": 14.300000011920929,
+      "cacheTextureBytes": 10321920,
+      "errors": []
+    },
+    {
+      "region": 1,
+      "viewport": [
+        1300,
+        540
+      ],
+      "assetLoadMs": 52.5,
+      "atlasBuildMs": 8.200000002980232,
+      "simulationSeconds": 1.0666666666666678,
+      "samples": 14,
+      "seconds": 10.247699999999982,
+      "averageFPS": 1.3661602115596694,
+      "onePercentLowFPS": 0.9836710603974257,
+      "meanStepAndDrawMs": 3.3466666668653486,
+      "p95StepAndDrawMs": 19,
+      "cacheTextureBytes": 10321920,
+      "errors": []
+    }
+  ],
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "scope": "Cloud browser; no physical device claims"
+}

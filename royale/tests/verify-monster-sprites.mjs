@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+import {readFileSync} from 'node:fs';
+const base='b3251aee6c55a11dd24747e1e5455c7a74d9ed40',git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim();
+assert.equal(git('branch','--show-current'),'feature/showdown-royale');
+const changed=[...git('diff','--name-only',base).split('\n'),...git('ls-files','--others','--exclude-standard').split('\n')].filter(Boolean);
+const allowed=['royale/index.html','royale/README.md','royale/MONSTER-SPRITES.md','royale/monster-art.mjs','royale/monster-sprites.mjs','royale/monster-sprite-catalog.mjs','royale/renderer.mjs','royale/tests/showcase.mjs'];
+assert.ok(changed.every(p=>allowed.includes(p)||p.startsWith('royale/assets/monsters/')||p.startsWith('royale/tests/monster-sprites')||p.startsWith('royale/tests/evidence/monster-sprites/')||p==='royale/tests/verify-monster-sprites.mjs'||p==='royale/tools/prepare-monster-refs.py'),'No unrelated changes');
+const protectedPaths=['core.mjs','monsters.mjs','world.mjs','powers.mjs','progression.mjs','equipment.mjs','bosses.mjs','boss-art.mjs','legendary-bosses.mjs','legendary-state.mjs','legendary-ledger.mjs','world-art.mjs','hero-art.mjs','saves.mjs','input.mjs'];
+for(const p of protectedPaths)assert.deepEqual(readFileSync('royale/'+p),execFileSync('git',['show',`${base}:royale/${p}`]),p+' must remain byte-for-byte identical');
+assert.equal(git('diff','--name-only',base,'--',':(exclude)royale'),'');
+assert.equal(git('rev-parse','b11a1d8103f10e38d63788496660b99d4a8d9e6e^{commit}'),'b11a1d8103f10e38d63788496660b99d4a8d9e6e');
+console.log('PASS: artwork-only Royale scope; AI, combat, stats, drops, world geometry, saves, hero/boss art, Versus, Story and main unchanged.');
