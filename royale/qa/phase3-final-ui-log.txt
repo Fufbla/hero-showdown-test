@@ -1,0 +1,139 @@
+FINAL SMALL PHONE RETEST
+Running Phase 3 UI, save and control checks…
+PASS · legacy hero retains appearance, level and coins
+PASS · health uses Phase 3 level growth
+PASS · 98 earned points imported
+PASS · Tree reachable at Shore camp
+PASS · Tree interface and vitals remain visible
+PASS · Super Strength preview and choice fit
+PASS · strength purchase reachable
+PASS · strength requires confirmation
+PASS · strength upgrade persists immediately
+PASS · Super Kick preview and choice fit
+PASS · superKick purchase reachable
+PASS · superKick requires confirmation
+PASS · superKick upgrade persists immediately
+PASS · Fireball preview and choice fit
+PASS · fireball purchase reachable
+PASS · fireball requires confirmation
+PASS · fireball upgrade persists immediately
+PASS · Flight preview and choice fit
+PASS · flight purchase reachable
+PASS · flight requires confirmation
+PASS · flight upgrade persists immediately
+PASS · Steel Body preview and choice fit
+PASS · steel purchase reachable
+PASS · steel requires confirmation
+PASS · steel upgrade persists immediately
+PASS · Ground Roots preview and choice fit
+PASS · roots purchase reachable
+PASS · roots requires confirmation
+PASS · roots upgrade persists immediately
+PASS · Agility preview and choice fit
+PASS · agility purchase reachable
+PASS · agility requires confirmation
+PASS · agility upgrade persists immediately
+PASS · Speed preview and choice fit
+PASS · speed purchase reachable
+PASS · speed requires confirmation
+PASS · speed upgrade persists immediately
+PASS · Whirlwind preview and choice fit
+PASS · whirlwind purchase reachable
+PASS · whirlwind requires confirmation
+PASS · whirlwind upgrade persists immediately
+PASS · Speed is passive, all nine upgrades cost one point
+PASS · multi-upgrade shows exact final target tier
+PASS · cancel keeps points and level
+PASS · 19-level purchase reaches cap and deducts 19 points
+PASS · three slots save and omit passive Speed
+PASS · equipped choices swap without duplicates
+PASS · control settings open with visible vitals
+PASS · keyboard remap persisted
+PASS · size layout adjustment reachable
+PASS · left layout adjustment reachable
+PASS · right layout adjustment reachable
+PASS · rise layout adjustment reachable
+PASS · Escape closes settings even with a field focused
+PASS · maximum touch layout stays on screen
+PASS · remapped ability darkens on cooldown
+PASS · no numerical cooldown countdown
+PASS · combat blocks swapping and Tree spending
+PASS · loadout unlocks outside combat
+PASS · reload keeps levels, three powers and controls
+PASS · touch activates Flight
+PASS · touch cancellation ends Flight with full recovery
+PASS · simulated standard controller jumps
+PASS · controller pauses
+PASS · controller resumes from pause
+COMPLETE · 65 Phase 3 checks passed at 320 × 568.
+Synthetic pointer/controller inputs; physical devices not tested.
+
+FINAL DESKTOP RETEST
+Running Phase 3 UI, save and control checks…
+PASS · legacy hero retains appearance, level and coins
+PASS · health uses Phase 3 level growth
+PASS · 98 earned points imported
+PASS · Tree reachable at Shore camp
+PASS · Tree interface and vitals remain visible
+PASS · Super Strength preview and choice fit
+PASS · strength purchase reachable
+PASS · strength requires confirmation
+PASS · strength upgrade persists immediately
+PASS · Super Kick preview and choice fit
+PASS · superKick purchase reachable
+PASS · superKick requires confirmation
+PASS · superKick upgrade persists immediately
+PASS · Fireball preview and choice fit
+PASS · fireball purchase reachable
+PASS · fireball requires confirmation
+PASS · fireball upgrade persists immediately
+PASS · Flight preview and choice fit
+PASS · flight purchase reachable
+PASS · flight requires confirmation
+PASS · flight upgrade persists immediately
+PASS · Steel Body preview and choice fit
+PASS · steel purchase reachable
+PASS · steel requires confirmation
+PASS · steel upgrade persists immediately
+PASS · Ground Roots preview and choice fit
+PASS · roots purchase reachable
+PASS · roots requires confirmation
+PASS · roots upgrade persists immediately
+PASS · Agility preview and choice fit
+PASS · agility purchase reachable
+PASS · agility requires confirmation
+PASS · agility upgrade persists immediately
+PASS · Speed preview and choice fit
+PASS · speed purchase reachable
+PASS · speed requires confirmation
+PASS · speed upgrade persists immediately
+PASS · Whirlwind preview and choice fit
+PASS · whirlwind purchase reachable
+PASS · whirlwind requires confirmation
+PASS · whirlwind upgrade persists immediately
+PASS · Speed is passive, all nine upgrades cost one point
+PASS · multi-upgrade shows exact final target tier
+PASS · cancel keeps points and level
+PASS · 19-level purchase reaches cap and deducts 19 points
+PASS · three slots save and omit passive Speed
+PASS · equipped choices swap without duplicates
+PASS · control settings open with visible vitals
+PASS · keyboard remap persisted
+PASS · size layout adjustment reachable
+PASS · left layout adjustment reachable
+PASS · right layout adjustment reachable
+PASS · rise layout adjustment reachable
+PASS · Escape closes settings even with a field focused
+PASS · maximum touch layout stays on screen
+PASS · remapped ability darkens on cooldown
+PASS · no numerical cooldown countdown
+PASS · combat blocks swapping and Tree spending
+PASS · loadout unlocks outside combat
+PASS · reload keeps levels, three powers and controls
+PASS · touch activates Flight
+PASS · touch cancellation ends Flight with full recovery
+PASS · simulated standard controller jumps
+PASS · controller pauses
+PASS · controller resumes from pause
+COMPLETE · 65 Phase 3 checks passed at 1280 × 800.
+Synthetic pointer/controller inputs; physical devices not tested.

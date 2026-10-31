@@ -71,6 +71,7 @@ function head(c,l,p,back,time,palette){
 }
 export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
   const look=sanitizeLook(raw),palette=costumePalette(look,options.outfit),view=options.view||'game',back=view==='back';
+  if(h.steel){look.skin='#aebec2';Object.assign(palette,{suit:'#819ba4',trim:'#d6e2df',emblemColor:'#f0e7c3'});}
   const p=poseFor(look,h,time,view),d=p.d,[hx,hy]=p.hip,[sx,sy]=p.shoulder;
   c.save();c.translate(x,y);c.scale(scale*(view==='game'?(h.attack?.face||h.face||1):1),scale);c.rotate(p.rotation);c.globalAlpha*=p.opacity;
   if(h.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;

@@ -1,3 +1,4 @@
+import { drawEris, drawPowerWorld, drawPowerHero } from './power-art.mjs';
 import { SURFACES, WORLD_WIDTH, CAMPS, TYPES } from './world.mjs';
 import { clamp, ATTACKS } from './core.mjs';
 import { drawHero } from './hero-art.mjs';
@@ -46,8 +47,8 @@ export class Renderer {
     if(s.oneWay){path(c,[[s.x+10,s.y+18],[s.x+s.w-8,s.y+18],[s.x+s.w-26,s.y+49],[s.x+45,s.y+57]],'#a48e64',null);line(c,[[s.x+2,s.y+1],[s.x+s.w-2,s.y+1]],'#4b9c70',9);for(let x=s.x+10;x<s.x+s.w-5;x+=23)path(c,[[x-5,s.y],[x-4,s.y-9],[x,s.y-2],[x+5,s.y-12],[x+6,s.y]],'#3e946b',null);}
     else for(let x=s.x+22;x<s.x+s.w;x+=65){line(c,[[x,s.y+43],[x+16,s.y+41]],'#b8935d',2);oval(c,x+18,s.y+24,2,1.2,'#fff1bf');}
   }
-  enemy(e,t,alpha){if(e.state==='dead')return;const c=this.c,x=lerp(e.prevX,e.x,alpha),y=e.y;const bob=Math.sin(t*7+e.id)*1.5;const info=TYPES[e.type];
-    oval(c,x,y+1,e.w*.56,5,'#274e4a26');c.save();c.translate(x,y);c.scale(e.face,1);c.globalAlpha=e.protection>0?.65:1;
+  enemy(e,t,alpha){if(e.state==='dead')return;const c=this.c,x=lerp(e.prevX,e.x,alpha),y=lerp(e.prevY,e.y,alpha);const bob=Math.sin(t*7+e.id)*1.5;const info=TYPES[e.type];
+    oval(c,x,y+1,e.w*.56,5,'#274e4a26');c.save();c.translate(x,y);if(e.lifted){c.translate(0,-e.h/2);c.rotate(t*7+e.id);c.translate(0,e.h/2);}c.scale(e.face,1);c.globalAlpha=e.protection>0?.65:1;
     const fill=e.flash>0?'#fff3cf':info.color;
     if(e.type==='bottle'){
       const sway=Math.sin(t*7+e.id)*3;line(c,[[-9,-4],[-13+sway,0]],OUTLINE,5);line(c,[[9,-4],[13-sway,0]],OUTLINE,5);
@@ -82,15 +83,17 @@ export class Renderer {
       path(c,[[camp.x+20,camp.y],[camp.x+44,camp.y-45],[camp.x+75,camp.y]],'#e7d2a4',OUTLINE,2);path(c,[[camp.x+34,camp.y],[camp.x+44,camp.y-31],[camp.x+53,camp.y]],'#5b8673',null);
       if(game.nearCamp()===i){round(c,camp.x-85,camp.y-157,170,24,12,'#153b40e6');c.fillStyle='#fff1cd';c.font='11px system-ui';c.textAlign='center';c.fillText('E / REST · heal & set checkpoint',camp.x,camp.y-141);}
     }
+    drawEris(c,t);
     for(const e of game.enemies)if(e.x>this.camera-90&&e.x<this.camera+this.width+90)this.enemy(e,t,alpha);
+    drawPowerWorld(c,game);
     const pos=globalThis.HealthiaMotionCore?.renderPosition({x:h.prevX,y:h.prevY,face:h.prevFace},{x:h.x,y:h.y,face:h.face},alpha,h.dead)||{x:lerp(h.prevX,h.x,alpha),y:lerp(h.prevY,h.y,alpha)};
     let visualHero=h;
     if(h.dead&&!h.grounded){
       const floor=Math.min(...game.surfaces.filter(s=>h.x+h.w/2>s.x&&h.x-h.w/2<s.x+s.w&&s.y>=h.y).map(s=>s.y));
       pos.y=Math.min(floor,h.y+520*h.defeatAge*h.defeatAge);visualHero={...h,grounded:pos.y>=floor};
     }
-    oval(c,pos.x,pos.y+2,24,5,'#284f4b2f');drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{outfit:game.outfit});
-    if(h.attack){const a=h.attack,d=ATTACKS[a.kind];if(a.age>=d.startup&&a.age<d.startup+d.active){c.save();c.translate(h.x,h.y-43);c.scale(a.face,1);c.strokeStyle='#fff7d8c9';c.lineWidth=3;c.beginPath();c.arc(24,-8,a.kind==='kick'?48:35,-.7,.7);c.stroke();c.restore();}}
+    oval(c,pos.x,pos.y+2,24,5,'#284f4b2f');const pose=drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{outfit:game.outfit});drawPowerHero(c,game,pos,pose);
+    if(h.attack&&h.attack.power!=='superKick'){const a=h.attack,d=ATTACKS[a.kind];if(a.age>=d.startup&&a.age<d.startup+d.active){c.save();c.translate(h.x,h.y-43);c.scale(a.face,1);c.strokeStyle='#fff7d8c9';c.lineWidth=3;c.beginPath();c.arc(24,-8,a.kind==='kick'?48:35,-.7,.7);c.stroke();c.restore();}}
     for(const p of this.particles){if(!game.paused){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=210*dt;}c.globalAlpha=Math.max(0,p.life/p.max);oval(c,p.x,p.y,p.size,p.size,p.color);}c.globalAlpha=1;this.particles=this.particles.filter(p=>p.life>0);
     // Small foreground details give continuous ground a readable silhouette.
     for(let x=65;x<WORLD_WIDTH;x+=190){if(x<this.camera-60||x>this.camera+this.width+60)continue;const surface=SURFACES.find(s=>!s.oneWay&&s.kind==='sand'&&x>s.x+20&&x<s.x+s.w-20);if(!surface)continue;const y=surface.y+8;for(let i=0;i<5;i++)line(c,[[x+i*3,y],[x-8+i*6,y-14-(i%2)*10]],'#448d67',2);if(x%3===0)oval(c,x+25,y+4,7,3,'#fff1cb');}

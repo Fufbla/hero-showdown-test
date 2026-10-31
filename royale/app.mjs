@@ -1,3 +1,6 @@
+import { POWERS } from './powers.mjs';
+import { PowerMenu, ControlMenu } from './power-menu.mjs';
+import { loadControls } from './controls.mjs';
 import { Game, STEP, DEFAULT_LOOK, xpForLevel, LEVEL_CAP } from './core.mjs';
 import { regionAt } from './world.mjs';
 import { Input } from './input.mjs';
@@ -19,7 +22,8 @@ const storage={getItem:key=>(testPrefix?sessionStorage:localStorage).getItem(tes
 const store=new LocalHeroStore(storage);
 let game=new Game(),screen='roster',editing=false,activeSlot=store.data.activeSlot,activeId=null,creatorSlot=activeSlot,deleteTarget=null;
 let audioContext,soundEnabled=false,toastUntil=0,saveAge=0,regionName='',lastHud='',fps=60,drawMs=0,qaClock=0;
-const input=new Input(document,()=>{if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();});
+const input=new Input(document,()=>{if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();else if(['tree','controls'].includes(screen))showPause();},loadControls(storage));
+const powerMenu=new PowerMenu(()=>game,persist,say),controlMenu=new ControlMenu(input,storage,say);
 const renderer=new Renderer($('game')),creator=new Creator();
 function say(message,seconds=3){$('toast').textContent=message;$('toast').classList.add('visible');toastUntil=performance.now()+seconds*1000;}
 function storageNotice(){
@@ -35,12 +39,12 @@ function persist(){
 }
 function setScreen(next){
   screen=next;input.enabled=next==='play';input.clear();game.paused=next!=='play';
-  for(const [name,id] of Object.entries({roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog'}))$(id).hidden=next!==name;
-  const inGame=game.started&&['play','pause'].includes(next);
+  for(const [name,id] of Object.entries({roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog',tree:'tree-menu',controls:'controls-menu'}))$(id).hidden=next!==name;
+  const inGame=game.started&&['play','pause','tree','controls'].includes(next);
   $('hud').hidden=!inGame;$('mission').hidden=!inGame;$('pause').disabled=!inGame;
   $('pause').setAttribute('aria-label',next==='play'?'Pause game':'Resume game');$('pause').textContent=next==='play'?'Ⅱ':'▷';
   document.body.classList.toggle('playing',next==='play');document.body.classList.toggle('game-view',inGame);
-  if(next!=='play'){$('rest').hidden=true;$('death').hidden=true;}
+  if(next!=='play'){$('rest').hidden=true;$('visit-tree').hidden=true;$('death').hidden=true;}
 }
 function dateText(value){const date=new Date(value);return value&&Number.isFinite(date.getTime())?new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(date):'Imported from Phase 1';}
 function renderRoster(){
@@ -84,7 +88,9 @@ function begin(){
   if(editing){game.look=look;persist();editing=false;resume();say('Your hero, your style.');}
   else{activeSlot=creatorSlot;activeId=null;game=new Game({look});startPatrol(false);}
 }
-function pause(){if(!game.started||screen!=='play')return;setScreen('pause');persist();$('resume').focus();}
+function pause(){if(!game.started||screen!=='play')return;showPause();persist();}
+function showPause(){controlMenu.capture=null;setScreen('pause');powerMenu.loadout();$('resume').focus();}
+function openTree(){if(!game.nearTree()||game.inCombat()){say('Visit the Tree of Eris at Shore camp while outside combat.');return;}setScreen('tree');powerMenu.open();$('tree-title').focus();}
 function resume(){if(!game.started)return;setScreen('play');$('pause').blur();}
 function closeDelete(){deleteTarget=null;renderRoster();setScreen('roster');}
 function tone(type) {
@@ -103,8 +109,9 @@ function tone(type) {
 function handleEvents() {
   const events = game.drain(), leveled = events.some(e => e.type === 'level');
   for (const event of events) {
+    if(event.type==='tree')openTree();
     renderer.event(event.type === 'level' ? { ...event, x: game.hero.x, y: game.hero.y - 45 } : event); tone(event.type);
-    if (event.type === 'level') say(`Level ${event.level}! Health restored. Keep going, hero.`, 4);
+    if (event.type === 'level') say(`Level ${event.level}! Health restored · +1 Power Point.`, 4);
     if (event.type === 'reward' && !leveled) say(`${event.enemy} cleared · +${event.xp} XP · +${event.coins} coins`, 2.3);
     if (event.type === 'camp') { persist(); say(`${event.name} set as your checkpoint. Health restored.`); }
     if (event.type === 'respawn') { input.clear(); say(`Back at ${event.name}. Your XP and coins are safe.`); }
@@ -117,18 +124,32 @@ function updateHud() {
   const snapshot = `${h.hp}|${h.maxHp}|${h.level}|${h.xp}|${h.coins}|${game.look.name}|${game.kills}|${game.species.size}|${game.reachedEnd}`;
   if (snapshot !== lastHud) {
     lastHud = snapshot; $('hero-name').textContent = game.look.name; $('level').textContent = h.level; $('coins').textContent = h.coins.toLocaleString();
-    $('hp-fill').style.width = `${100 * h.hp / h.maxHp}%`; $('hp-text').textContent = `${h.hp} / ${h.maxHp}`;
+    $('hp-fill').style.width = `${100 * h.hp / h.maxHp}%`; $('hp-text').textContent = `${Math.ceil(h.hp)} / ${h.maxHp}`;
     $('xp-fill').style.width = h.level === LEVEL_CAP ? '100%' : `${100 * h.xp / xpForLevel(h.level)}%`;
-    $('xp-text').textContent = h.level === LEVEL_CAP ? 'PROTOTYPE MAX' : `${h.xp} / ${xpForLevel(h.level)} XP`;
+    $('xp-text').textContent = h.level === LEVEL_CAP ? 'MAX LEVEL' : `${h.xp} / ${xpForLevel(h.level)} XP`;
     const cleared = game.kills >= 6 && game.species.size === 3;
     $('mission-title').textContent = cleared ? (game.reachedEnd ? 'A hero on the horizon' : 'Follow the coast to the lighthouse') : "Meet the coast's troublemakers";
     $('mission-progress').textContent = cleared ? (game.reachedEnd ? 'Patrol complete · Keep exploring and training' : 'Reach Lighthouse Point at the end of the trail') : `${Math.min(6, game.kills)} / 6 monsters · ${game.species.size} / 3 types discovered`;
     $('mission-count').textContent = cleared ? (game.reachedEnd ? '✓' : '→') : `${Math.min(6, game.kills)}/6`;
   }
+  $('visit-tree').hidden=screen!=='play'||!game.nearTree()||game.inCombat();
+  updatePowers();
+  if(screen==='controls')$('controller-status').textContent=input.gamepadLabel;
   $('rest').hidden = screen !== 'play' || game.nearCamp() < 0 || h.dead;
   $('death').hidden = !h.dead || screen !== 'play'; $('diagnostics').hidden = !params.has('qa');
-  if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}`;
+  if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\npowers ${game.powers.data.equipped.join(',')} · points ${game.powers.data.points} · combat ${game.inCombat()}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}`;
 }
+function updatePowers(){
+  for(const [i,b] of [...document.querySelectorAll('.power-button')].entries()){
+    const id=game.powers.data.equipped[i],def=POWERS[id],active=id&&!!game.powers.active[id],cooldown=id&&(game.powers.cooldowns[id]||0)>0;
+    b.querySelector('b').textContent=def?.icon||'+';b.querySelector('span').textContent=def?.name||'Empty slot';b.querySelector('kbd').textContent=input.controls.keys[`power${i}`][0].replace('Digit','').replace('Key','');
+    b.classList.toggle('cooldown',!!cooldown);b.classList.toggle('active',!!active);b.classList.toggle('flight-locked',!!(game.powers.flying&&def?.offensive&&id!=='fireball'));b.disabled=!id||screen!=='play'||game.hero.dead;
+    b.setAttribute('aria-label',`${def?.name||`Power slot ${i+1}`}${cooldown?' · recovering':active?(id==='flight'?' · flying, press to cancel':' · active'):' · ready'}`);b.setAttribute('aria-pressed',String(!!active));
+  }
+  $('power-context').textContent=game.powers.flying?'FLIGHT · steer ↑ ↓ · press Flight to land':game.inCombat()?'IN COMBAT':game.powers.data.points?`${game.powers.data.points} Power Points · visit the Tree of Eris`:'Learn powers at the Tree of Eris';
+}
+$('tree-from-pause').onclick=openTree;$('close-tree').onclick=showPause;
+$('open-controls').onclick=()=>{setScreen('controls');controlMenu.render();$('settings-title').focus();};$('close-controls').onclick=showPause;
 $('creator-form').addEventListener('submit',e=>{e.preventDefault();begin();});
 $('cancel-look').onclick=cancelCreator;
 $('pause').onclick=()=>{if(screen==='play')pause();else if(screen==='pause')resume();};
@@ -152,7 +173,7 @@ window.addEventListener('storage',e=>{if(testPrefix||e.key!==PROFILE_KEY)return;
 // Keyboard focus stays in the active panel. Tabs also support arrow-key navigation.
 document.addEventListener('keydown',e=>{
   if(e.key!=='Tab'||screen==='play')return;
-  const panel=$({creator:'creator',roster:'roster',delete:'delete-dialog',pause:'pause-menu'}[screen]);
+  const panel=$({creator:'creator',roster:'roster',delete:'delete-dialog',pause:'pause-menu',tree:'tree-menu',controls:'controls-menu'}[screen]);
   const nodes=[...panel.querySelectorAll('a[href],button,input,select')].filter(n=>!n.disabled&&n.tabIndex!==-1&&n.getClientRects().length);
   if(!nodes.length)return;
   if(e.shiftKey&&(document.activeElement===nodes[0]||!panel.contains(document.activeElement))){e.preventDefault();nodes.at(-1).focus();}
@@ -161,7 +182,8 @@ document.addEventListener('keydown',e=>{
 renderRoster();setScreen('roster');
 let last=performance.now(),accumulator=0;
 function frame(now){
-  const elapsed=Math.min(.1,Math.max(0,(now-last)/1000));last=now;if(elapsed>0)fps=fps*.95+.05/elapsed;
+  input.pollGamepad();
+  const wallElapsed=Math.max(0,(now-last)/1000),elapsed=Math.min(.1,wallElapsed);last=now;if(wallElapsed>0)fps=fps*.95+.05/wallElapsed;
   if(screen==='play'){
     accumulator+=elapsed;while(accumulator>=STEP){game.step(STEP,input.sample());accumulator-=STEP;}
     handleEvents();saveAge+=elapsed;if(saveAge>5){persist();saveAge=0;}

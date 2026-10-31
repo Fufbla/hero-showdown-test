@@ -67,9 +67,9 @@ test('a defeated enemy rewards once, respawns later, and avoids spawning on the 
   ticks(g,600,{punchHeld:true});assert.equal(e.state,'dead');assert.equal(g.hero.coins,3);
   g.hero.x=800;ticks(g,2);assert.equal(e.state,'patrol');assert.equal(e.hp,e.maxHp);assert.ok(e.protection>0);
 });
-test('level ups restore health, carry remaining XP, and enforce the Phase 1 cap', () => {
-  const {g,e}=duel();g.hero.hp=25;g.hero.xp=45;g.reward(e);assert.equal(g.hero.level,2);assert.equal(g.hero.xp,9);assert.equal(g.hero.hp,110);
-  for(let i=0;i<300;i++)g.reward(e);assert.equal(g.hero.level,LEVEL_CAP);assert.equal(g.hero.xp,0);
+test('level ups restore health, carry remaining XP, and enforce the 99-level cap', () => {
+  const {g,e}=duel();g.hero.hp=25;g.hero.xp=45;g.reward(e);assert.equal(g.hero.level,2);assert.equal(g.hero.xp,9);assert.equal(g.hero.hp,115);
+  for(let i=0;i<12000;i++)g.reward(e);assert.equal(g.hero.level,LEVEL_CAP);assert.equal(g.hero.xp,0);
 });
 test('enemies telegraph before hitting and respect invulnerability', () => {
   const {g,e}=duel();e.state='patrol';e.age=0;e.x=220;
@@ -99,6 +99,6 @@ test('save round-trip and malformed or future saves fail safely', () => {
   const saved=decodeSave(g.save());assert.equal(saved.level,3);assert.equal(saved.coins,35);assert.deepEqual(saved.species,['bottle']);assert.equal(new Game({save:saved}).hero.x,2340);
   for(const text of ['{','null','{}','{"version":2}'])assert.equal(decodeSave(text),null);
   const bad=decodeSave(JSON.stringify({version:1,level:999,xp:1e10,coins:-12,checkpoint:999,look:{height:-9,suit:'url(secret)'},species:['invalid','bottle','bottle']}));
-  assert.equal(bad.level,10);assert.equal(bad.coins,0);assert.equal(bad.checkpoint,2);assert.equal(bad.look.height,.88);assert.ok(/^#[0-9a-f]{6}$/i.test(bad.look.suit));assert.equal(bad.species.length,1);assert.ok(bad.xp<xpForLevel(10));
+  assert.equal(bad.level,99);assert.equal(bad.coins,0);assert.equal(bad.checkpoint,2);assert.equal(bad.look.height,.88);assert.ok(/^#[0-9a-f]{6}$/i.test(bad.look.suit));assert.equal(bad.species.length,1);assert.ok(bad.xp<xpForLevel(99));
 });
 test('invalid elapsed times do not corrupt the model', () => {const g=empty();const before=JSON.stringify(g);for(const dt of [0,-1,NaN,Infinity])g.step(dt,{move:1});assert.equal(JSON.stringify(g),before);});

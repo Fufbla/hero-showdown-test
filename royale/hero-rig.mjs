@@ -27,6 +27,8 @@ export function animationState(h) {
   if(h.respawnAge<.6) return 'respawn';
   if(h.stun>0) return 'hurt';
   if(h.attack) return `${h.grounded?'':'air-'}${h.attack.kind}`;
+  if(h.flying)return 'flight';
+  if((h.castAge??100)<.25)return 'fireball';
   if(!h.grounded) return h.vy<0?(h.jumps===2?'double-jump':'jump'):'fall';
   if(h.landing>0) return 'land';
   return Math.abs(h.vx)>240?'run':Math.abs(h.vx)>5?'walk':'idle';
@@ -66,6 +68,8 @@ export function poseFor(raw,h,time,view='game') {
     handA=[d.shoulder+8,hipY-d.torso*.65];handB=[-d.shoulder-8,hipY-d.torso*.5];lean=3;
     if(h.vy>0){a[1]=mix(a[1],-7,clamp(h.vy/400));b[1]=-4;handA[0]+=4;handB[0]-=3;}
   }
+  if(h.flying){a=[10,-12];b=[-11,-8];lean=4;handA=[d.shoulder+9,hipY-d.torso*.8];handB=[-d.shoulder-6,hipY-d.torso*.4];}
+  if((h.castAge??100)<.25){const extend=Math.sin(clamp(h.castAge/.25)*PI);handA=[mix(handA[0],43,extend),mix(handA[1],-48,extend)];}
   const landing=clamp((h.landing||0)/.13);
   hipY+=Math.sin(landing*PI*.75)*7;
   let extension=0;
@@ -79,7 +83,7 @@ export function poseFor(raw,h,time,view='game') {
       const reach=Math.sqrt(Math.max(1,(d.leg-.2)**2-(-39-kickHipY)**2));
       hipX=Math.max(0,56-d.hip*.42-reach)*extension;hipY=mix(hipY,kickHipY,extension);lean=mix(lean,-5,extension);
       a=[mix(a[0],56,extension),mix(a[1],-39,extension)];b=[mix(b[0],hipX-d.hip*.42,extension),b[1]];
-      handA=[mix(handA[0],hipX+d.shoulder+4,extension),mix(handA[1],hipY-d.torso-6,extension)];handB=[mix(handB[0],hipX-d.shoulder-4,extension),mix(handB[1],hipY-d.torso-2,extension)];
+      handA=[mix(handA[0],hipX+d.shoulder+(h.attack.power==='superKick'&&h.attack.comboIndex%2?-2:4),extension),mix(handA[1],hipY-d.torso-6,extension)];handB=[mix(handB[0],hipX-d.shoulder-4,extension),mix(handB[1],hipY-d.torso-2,extension)];
     }
   }
   if(state==='hurt'){lean=-7*(1-clamp((h.hurtAge||0)/.3));handA=[8,hipY-9];handB=[-10,hipY-7];}
