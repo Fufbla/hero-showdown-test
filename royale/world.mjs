@@ -30,10 +30,10 @@ export const SURFACES = [
   { id: 'p13', x: 5120, y: 470, w: 240, h: 28, kind: 'grass', oneWay: true },
 ];
 export const CAMPS = [{ x: 160, y: 600, name: 'Shore camp' }, { x: 2340, y: 600, name: 'Driftwood camp' }, { x: 4370, y: 600, name: 'Lighthouse camp' }];
-export const TYPES = {
-  bottle: { name: 'Bottle Critter', hp: 34, damage: 5, speed: 43, xp: 14, coins: 3, w: 34, h: 49, color: '#65d9c6' },
-  slime: { name: 'Trash Slime', hp: 48, damage: 6, speed: 32, xp: 20, coins: 5, w: 53, h: 36, color: '#b1ce67' },
-  crawler: { name: 'Sand Crawler', hp: 60, damage: 7, speed: 54, xp: 26, coins: 7, w: 49, h: 32, color: '#efaa66' },
+const COAST_TYPES = {
+  bottle: { name: 'Bottle Critter', hp: 34, damage: 5, speed: 43, xp: 14, coins: 1, w: 34, h: 49, color: '#65d9c6' },
+  slime: { name: 'Trash Slime', hp: 48, damage: 6, speed: 32, xp: 20, coins: 1, w: 53, h: 36, color: '#b1ce67' },
+  crawler: { name: 'Sand Crawler', hp: 60, damage: 7, speed: 54, xp: 26, coins: 1, w: 49, h: 32, color: '#efaa66' },
 };
 export const SPAWNS = [
   ['bottle', 600, 'sand-a'], ['bottle', 940, 'sand-a'], ['slime', 1230, 'sand-a'],
@@ -44,3 +44,57 @@ export const SPAWNS = [
   ['crawler', 5570, 'sand-d'], ['bottle', 4880, 'p12'],
 ];
 export const regionAt = x => [...REGIONS].reverse().find(r => x >= r.x) || REGIONS[0];
+
+// Region IDs are stable save identifiers. Board boundaries remain physical, visible paths.
+export const WORLD_REGIONS=[
+  {id:1,name:'Coastal Beginnings',levels:[1,10],boss:'Trash Monster',theme:'coast',sky:['#83c0c9','#f6e3ad'],ground:'#c9aa6e',edge:'#f2dba0',accent:'#328b73',boards:REGIONS.map(b=>b.name),types:['bottle','slime','crawler']},
+  {id:2,name:'Polluted Forest',levels:[11,20],boss:'Bushman',theme:'forest',sky:['#5f9290','#d4dbab'],ground:'#6c6650',edge:'#a6bc72',accent:'#48795c',boards:['Briar Approach','Sporewood Canopy','Hollow Clearing'],types:['sprout','mushroom','bark']},
+  {id:3,name:'Industrial Wasteland',levels:[21,35],boss:'Wastelander',theme:'factory',sky:['#76818d','#ddbb9b'],ground:'#5f7480',edge:'#e7bd76',accent:'#9d6850',boards:['Scrapline Yard','Furnace Walk','Foundry Threshold'],types:['scrap','sludge','drone']},
+  {id:4,name:'Toxic Underground',levels:[36,50],boss:'Giant Scorpion',theme:'cave',sky:['#38445c','#8b9f86'],ground:'#66637c',edge:'#c3b8d5',accent:'#b1ce67',boards:['Violet Descent','Acid Galleries','Scorpion Vault'],types:['scorpion','beetle','venomCrawler']},
+  {id:5,name:'Mutated Territories',levels:[51,65],boss:'Venomis',theme:'mutant',sky:['#9b83a7','#d4bf9e'],ground:'#80627f',edge:'#deb0b0',accent:'#b5ce73',boards:['Overgrowth Verge','Twisted Wilds','Venomis Approach'],types:['thornBeast','stalker','spitter']},
+  {id:6,name:'Dark Energy Realm',levels:[66,80],boss:'AtomDust',theme:'energy',sky:['#3c486d','#8e8cb1'],ground:'#545e88',edge:'#c8c4eb',accent:'#81b5cf',boards:['Fractured Horizon','Echo Causeway','AtomDust Seal'],types:['wisp','phantom','sentinel']},
+  {id:7,name:'Final Showdown',levels:[81,99],boss:'Ultimate Pollution Boss',theme:'final',sky:['#8c666f','#d5ad8a'],ground:'#705e65',edge:'#e2c2aa',accent:'#cc9773',boards:['Last City Outskirts','Broken Boulevard','Final Gate'],types:['apocalypse','guardian','titan']},
+];
+const lineup=[
+  ['sprout','Thorn Sprout',2,11,120,10,49,90,37,52,'#8baf65','lunge','common'],
+  ['mushroom','Toxic Mushroom',2,15,180,14,24,125,51,48,'#bf8fbc','spore','common'],
+  ['bark','Bark Crawler',2,20,250,18,65,175,57,34,'#a88960','skitter','strong'],
+  ['scrap','Scrap Crawler',3,21,300,20,78,200,53,36,'#b4bdba','skitter','common'],
+  ['sludge','Sludge Beast',3,28,420,28,38,280,65,55,'#95a85a','slam','strong'],
+  ['drone','Rust Drone',3,35,550,35,68,360,53,45,'#c58756','bolt','strong'],
+  ['scorpion','Cave Scorpion',4,36,650,40,80,410,58,40,'#b49aca','sting','common'],
+  ['beetle','Acid Beetle',4,43,820,50,57,520,51,36,'#adc86d','acid','common'],
+  ['venomCrawler','Venom Crawler',4,50,1000,60,104,650,61,32,'#a0b7bb','pounce','strong'],
+  ['thornBeast','Thorn Beast',5,51,1200,65,75,720,70,58,'#b19d65','slam','common'],
+  ['stalker','Mutant Stalker',5,58,1550,78,118,880,46,72,'#b18ea9','pounce','strong'],
+  ['spitter','Poison Spitter',5,65,1900,90,57,1040,60,51,'#a7c879','spit','strong'],
+  ['wisp','Shadow Wisp',6,66,2200,100,95,1160,38,47,'#9896cf','orb','common'],
+  ['phantom','Energy Phantom',6,73,2850,120,110,1400,49,67,'#91bccc','phase','strong'],
+  ['sentinel','Dark Sentinel',6,80,3500,140,66,1650,62,81,'#858fae','pulse','elite'],
+  ['apocalypse','Apocalypse Mutant',7,81,4000,150,125,1800,59,66,'#c88b91','pounce','common'],
+  ['guardian','Corrupted Guardian',7,90,5500,185,89,2250,66,83,'#afa2b5','volley','strong'],
+  ['titan','Pollution Titan',7,99,7000,220,49,2800,81,95,'#b4a584','quake','elite'],
+];
+export const TYPES={
+  ...Object.fromEntries(Object.entries(COAST_TYPES).map(([id,info],i)=>[id,{...info,region:1,level:[1,4,8][i],behavior:['lunge','hop','skitter'][i],rank:'common',peaceful:i<2}])),
+  ...Object.fromEntries(lineup.map(([id,name,region,level,hp,damage,speed,xp,w,h,color,behavior,rank])=>[id,{name,region,level,hp,damage,speed,xp,w,h,color,behavior,rank,coins:1,flying:['drone','wisp','phantom'].includes(id)}])),
+};
+export const regionDefinition=id=>WORLD_REGIONS.find(r=>r.id===id)||WORLD_REGIONS[0];
+export const boardIndex=x=>x>=4020?2:x>=1940?1:0;
+export const boardAt=(region,x)=>({index:boardIndex(x),name:regionDefinition(region).boards[boardIndex(x)]});
+export function regionSurfaces(id){
+  if(id===1)return SURFACES;
+  const region=regionDefinition(id),offsets=[0,-20,25,-35,15,0];
+  const result=SURFACES.map((s,i)=>({...s,kind:s.kind==='wood'?(id===2||id===5?'wood':'metal'):region.theme,y:s.oneWay?s.y+offsets[(i+id)%6]:s.y}));
+  // Optional higher routes: lower paths stay connected, including forgiving gap floors.
+  result.push({id:'high-a',x:1160,y:275-(id%3)*20,w:210,h:26,kind:region.theme,oneWay:true},{id:'high-b',x:3870,y:300+(id%2)*25,w:200,h:26,kind:region.theme,oneWay:true});
+  if(id===4)result.push({id:'cave-roof',x:3040,y:110,w:750,h:40,kind:'cave'});
+  return result;
+}
+export const regionCamps=id=>CAMPS.map((c,i)=>({...c,name:id===1?c.name:`${regionDefinition(id).boards[i]} camp`}));
+export function regionSpawns(id){
+  if(id===1)return SPAWNS;
+  const types=regionDefinition(id).types;
+  return SPAWNS.map(([_,x,surface],i)=>[types[(i+Math.floor(x/1900))%3],x,surface]);
+}
+export const GATES=Object.freeze({back:44,arena:5840,forward:6070});

@@ -19,8 +19,8 @@ export class PowerMenu {
       select.onchange=()=>{if(g.equipPower(i,select.value||null)){this.persist();this.loadout();}else this.say('Leave combat to change your loadout.');};label.append(select);$('loadout-slots').append(label);
     }
     $('power-points').textContent=g.powers.data.points;
-    $('tree-from-pause').disabled=!safe||!g.nearTree();
-    $('tree-location').textContent=g.nearTree()?'The Tree of Eris is beside you.':'Find the Tree of Eris beside Shore camp, at the start of the coast.';
+    $('tree-from-pause').disabled=!safe;
+    $('tree-location').textContent=g.nearTree()?'The Tree of Eris is beside you.':'Visit safely from this menu. You return to this exact location.';
   }
   open(){this.pending=null;this.renderList();this.detail();}
   renderList(){

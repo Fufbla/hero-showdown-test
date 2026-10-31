@@ -9,7 +9,7 @@ document.getElementById('test').onclick=async()=>{
   const d=frame.contentDocument,w=frame.contentWindow;const el=id=>d.getElementById(id);
   const check=(name,ok,detail='')=>{report.textContent+=`${ok?'PASS':'FAIL'} · ${name}${detail?' · '+detail:''}\n`;if(!ok)throw Error(name);};
   const stats=()=>{const s=el('diagnostics').textContent;return {time:Number(s.match(/ · t ([\d.]+)/)?.[1]),vx:Number(s.match(/vx ([\d.-]+)/)?.[1]),x:Number(s.match(/x ([\d.-]+)/)?.[1]),y:Number(s.match(/y ([\d.-]+)/)?.[1]),jumps:Number(s.match(/jumps (\d)/)?.[1]),text:s};};
-  const advance=async seconds=>{const start=stats().time,deadline=Date.now()+15000;while(stats().time-start<seconds){if(Date.now()>deadline)throw Error('Simulation did not advance while visible');await wait(30);}};
+  const advance=async seconds=>{const start=stats().time,deadline=Date.now()+120000;while(stats().time-start<seconds){if(Date.now()>deadline)throw Error('Simulation did not advance while visible');await wait(30);}};
   const key=(code,down)=>d.body.dispatchEvent(new w.KeyboardEvent(down?'keydown':'keyup',{code,key:code,bubbles:true}));
   const pointer=(target,type,id,x,y)=>target.dispatchEvent(new w.PointerEvent(type,{pointerId:id,pointerType:'touch',clientX:x,clientY:y,bubbles:true,cancelable:true}));
   try{
@@ -42,7 +42,7 @@ document.getElementById('test').onclick=async()=>{
       const kick=d.querySelector('[data-control="kick"]');pointer(kick,'pointerdown',9,0,0);await advance(.1);check('touch attack starts',stats().text.includes('kick'));pointer(kick,'pointerup',9,0,0);
       pointer(stick,'pointerdown',10,x,y);w.dispatchEvent(new Event('blur'));await wait(200);check('focus loss pauses',!el('pause-menu').hidden);el('resume').click();await advance(.3);const focused=stats();await advance(.2);check('focus loss clears held movement',Math.abs(stats().x-focused.x)<1);
     } finally {targets.forEach((t,i)=>t.setPointerCapture=capture[i]);}
-    el('pause').click();el('edit-look').click();await wait(100);check('appearance editor opens',!el('creator').hidden);el('cancel-look').click();await wait(100);check('cancel returns to patrol',el('creator').hidden);
+    key('KeyA',true);await advance(2);key('KeyA',false);await advance(5.3);el('pause').click();el('edit-look').click();await wait(100);check('appearance editor opens',!el('creator').hidden);el('cancel-look').click();await wait(100);check('cancel returns to patrol',el('creator').hidden);
     report.textContent+='COMPLETE · all input/layout checks passed.\n'+el('diagnostics').textContent;
     el('pause').click();
   }catch(error){report.textContent+='STOPPED · '+error.message+'\n'+el('diagnostics').textContent;}

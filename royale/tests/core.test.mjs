@@ -63,16 +63,16 @@ test('airborne attacks connect using the current hero and enemy positions', () =
   g.step(STEP,{kick:true});ticks(g,10);assert.ok(e.hp<e.maxHp);
 });
 test('a defeated enemy rewards once, respawns later, and avoids spawning on the hero', () => {
-  const {g,e}=duel();e.hp=13;g.step(STEP,{punch:true});ticks(g,10);assert.equal(e.state,'dead');assert.equal(g.kills,1);assert.equal(g.hero.coins,3);assert.equal(g.hero.xp,14);
-  ticks(g,600,{punchHeld:true});assert.equal(e.state,'dead');assert.equal(g.hero.coins,3);
+  const {g,e}=duel();e.hp=13;g.step(STEP,{punch:true});ticks(g,10);assert.equal(e.state,'dead');assert.equal(g.kills,1);assert.equal(g.hero.coins,1);assert.equal(g.hero.xp,14);
+  ticks(g,1140,{punchHeld:true});assert.equal(e.state,'dead');assert.equal(g.hero.coins,1);
   g.hero.x=800;ticks(g,2);assert.equal(e.state,'patrol');assert.equal(e.hp,e.maxHp);assert.ok(e.protection>0);
 });
 test('level ups restore health, carry remaining XP, and enforce the 99-level cap', () => {
   const {g,e}=duel();g.hero.hp=25;g.hero.xp=45;g.reward(e);assert.equal(g.hero.level,2);assert.equal(g.hero.xp,9);assert.equal(g.hero.hp,115);
-  for(let i=0;i<12000;i++)g.reward(e);assert.equal(g.hero.level,LEVEL_CAP);assert.equal(g.hero.xp,0);
+  g.gainXP(100000000);assert.equal(g.hero.level,LEVEL_CAP);assert.equal(g.hero.xp,0);
 });
 test('enemies telegraph before hitting and respect invulnerability', () => {
-  const {g,e}=duel();e.state='patrol';e.age=0;e.x=220;
+  const {g,e}=duel();e.provoked=true;e.state='patrol';e.age=0;e.x=e.spawnX=1045;g.hero.x=1000;
   ticks(g,35);assert.equal(g.hero.hp,100);assert.equal(e.state,'warn');ticks(g,17);assert.equal(g.hero.hp,95);
   const hp=g.hero.hp;assert.equal(g.hurt(7,e.x),false);assert.equal(g.hero.hp,hp);
 });
@@ -85,7 +85,7 @@ test('pause freezes health, position, attacks, enemy AI, and respawn timers', ()
 });
 test('death and returning to a checkpoint preserve progression and clear input buffers', () => {
   const g=empty();g.checkpoint=1;g.hero.coins=23;g.hero.xp=17;g.hero.invulnerable=0;g.hero.hp=1;g.hurt(9,0);assert.equal(g.hero.dead,true);
-  ticks(g,100);assert.equal(g.hero.dead,false);assert.equal(g.hero.x,CAMPS[1].x);assert.equal(g.hero.hp,100);assert.equal(g.hero.coins,23);assert.equal(g.hero.xp,17);assert.equal(g.hero.jumpBuffer,0);
+  ticks(g,100);assert.equal(g.hero.dead,false);assert.equal(g.hero.x,CAMPS[1].x);assert.equal(g.hero.hp,100);assert.equal(g.hero.coins,23);assert.equal(g.hero.xp,12);assert.equal(g.hero.jumpBuffer,0);
 });
 test('camp interaction heals, updates checkpoint, and ignores distant input', () => {
   const g=empty();g.hero.x=2340;g.hero.hp=50;g.step(STEP,{interact:true});assert.equal(g.checkpoint,1);assert.equal(g.hero.hp,100);
@@ -96,7 +96,7 @@ test('all appearance presets preserve movement, attack timing, and hitboxes', ()
 });
 test('save round-trip and malformed or future saves fail safely', () => {
   const g=empty();g.hero.level=3;g.hero.xp=20;g.hero.coins=35;g.species.add('bottle');g.checkpoint=1;
-  const saved=decodeSave(g.save());assert.equal(saved.level,3);assert.equal(saved.coins,35);assert.deepEqual(saved.species,['bottle']);assert.equal(new Game({save:saved}).hero.x,2340);
+  const saved=decodeSave(g.save());assert.equal(saved.level,3);assert.equal(saved.coins,35);assert.deepEqual(saved.species,['bottle']);assert.equal(new Game({save:saved}).hero.x,160);
   for(const text of ['{','null','{}','{"version":2}'])assert.equal(decodeSave(text),null);
   const bad=decodeSave(JSON.stringify({version:1,level:999,xp:1e10,coins:-12,checkpoint:999,look:{height:-9,suit:'url(secret)'},species:['invalid','bottle','bottle']}));
   assert.equal(bad.level,99);assert.equal(bad.coins,0);assert.equal(bad.checkpoint,2);assert.equal(bad.look.height,.88);assert.ok(/^#[0-9a-f]{6}$/i.test(bad.look.suit));assert.equal(bad.species.length,1);assert.ok(bad.xp<xpForLevel(99));

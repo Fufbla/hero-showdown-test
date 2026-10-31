@@ -48,7 +48,7 @@ button.onclick=async()=>{
     check('maximum touch layout stays on screen',[el('stick'),...d.querySelectorAll('.action-buttons button,.power-button')].every(inside));
     tap('KeyQ');await advance(.12);check('remapped ability darkens on cooldown',d.querySelector('[data-control="power0"]').classList.contains('cooldown'));
     check('no numerical cooldown countdown',d.querySelector('[data-control="power0"] span').textContent==='Super Strength');
-    el('pause').click();check('combat blocks swapping and Tree spending',el('slot-0').disabled&&el('tree-from-pause').disabled);el('resume').click();await advance(4.3);el('pause').click();check('loadout unlocks outside combat',!el('slot-0').disabled);
+    el('pause').click();check('combat blocks swapping and Tree spending',el('slot-0').disabled&&el('tree-from-pause').disabled);el('resume').click();await advance(5.3);el('pause').click();check('loadout unlocks outside combat',!el('slot-0').disabled);
     el('choose-hero').click();await new Promise(resolve=>{frame.onload=resolve;frame.contentWindow.location.reload();});await attach();d.querySelector('[data-slot="0"] [data-action="continue"]').click();await advance(.2);
     check('reload keeps levels, three powers and controls',data().powers.levels.strength===20&&data().powers.equipped.join(',')==='strength,fireball,flight'&&d.querySelector('[data-control="power0"] kbd').textContent==='Q');
     const power=d.querySelector('[data-control="power2"]'),capture=power.setPointerCapture;power.setPointerCapture=()=>{};

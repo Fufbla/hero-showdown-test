@@ -70,26 +70,42 @@ function head(c,l,p,back,time,palette){
   c.restore();
 }
 export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
+  const pieces=options.outfit?.pieces||{};
   const look=sanitizeLook(raw),palette=costumePalette(look,options.outfit),view=options.view||'game',back=view==='back';
+  for(const [part,field] of [['suit','suit'],['cape','capeColor'],['emblem','emblemColor']])if(pieces[part])palette[field]=pieces[part].color;
+  const gloves=()=>h.steel?palette.trim:pieces.gloves?.color||palette.trim,boots=()=>h.steel?palette.trim:pieces.boots?.color||palette.trim;
   if(h.steel){look.skin='#aebec2';Object.assign(palette,{suit:'#819ba4',trim:'#d6e2df',emblemColor:'#f0e7c3'});}
   const p=poseFor(look,h,time,view),d=p.d,[hx,hy]=p.hip,[sx,sy]=p.shoulder;
   c.save();c.translate(x,y);c.scale(scale*(view==='game'?(h.attack?.face||h.face||1):1),scale);c.rotate(p.rotation);c.globalAlpha*=p.opacity;
   if(h.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;
   if(look.cape&&!back)drawCape(c,p,palette.capeColor);
-  const leg=i=>{const pts=p.legs[i],foot=pts[2];limb(c,pts,palette.suit,d.thick+1);limb(c,[pts[1],[foot[0],foot[1]-3]],palette.trim,d.thick*.85);const dir=p.front&&i===1?-1:1;path(c,[[-d.thick*.55,-5],[d.thick*.5,-4],[d.thick*.9+4,2],[d.thick*.9+4,5],[-d.thick*.55,5]].map(([x,y])=>[foot[0]+x*dir,foot[1]+y]),palette.trim,INK,1.2);};
-  const arm=i=>{const pts=p.arms[i],hand=pts[2],elbow=pts[1];limb(c,pts,palette.suit,d.thick*.84);limb(c,[[hand[0]+(elbow[0]-hand[0])*.34,hand[1]+(elbow[1]-hand[1])*.34],hand],palette.trim,d.thick*.9);oval(c,...hand,4.5+d.thick*.1,4.8,palette.trim,INK,1.4);};
+  const leg=i=>{const pts=p.legs[i],foot=pts[2];limb(c,pts,palette.suit,d.thick+1);limb(c,[pts[1],[foot[0],foot[1]-3]],boots(),d.thick*.85);const dir=p.front&&i===1?-1:1;path(c,[[-d.thick*.55,-5],[d.thick*.5,-4],[d.thick*.9+4,2],[d.thick*.9+4,5],[-d.thick*.55,5]].map(([x,y])=>[foot[0]+x*dir,foot[1]+y]),boots(),INK,1.2);};
+  const arm=i=>{const pts=p.arms[i],hand=pts[2],elbow=pts[1];limb(c,pts,palette.suit,d.thick*.84);limb(c,[[hand[0]+(elbow[0]-hand[0])*.34,hand[1]+(elbow[1]-hand[1])*.34],hand],gloves(),d.thick*.9);oval(c,...hand,4.5+d.thick*.1,4.8,gloves(),INK,1.4);};
   leg(1);arm(1);
   path(c,[[sx-d.shoulder,sy],[sx+d.shoulder,sy],[hx+d.hip*d.waist,hy-10],[hx+d.hip,hy],[hx-d.hip,hy],[hx-d.hip*d.waist,hy-10]],palette.suit,INK,2);
   path(c,[[sx+1,sy+2],[sx+d.shoulder-3,sy+3],[hx+d.hip*d.waist-2,hy-10],[hx+2,hy-6]],'#ffffff14',null);
   if(look.muscle>.2){line(c,[[sx-d.shoulder*.7,sy+8],[sx-2,sy+10],[sx+d.shoulder*.7,sy+8]],'#102e3544',look.muscle*1.2);line(c,[[hx,hy-7],[hx,sy+16]],'#102e3533',1);}
-  line(c,[[hx-d.hip,hy-1],[hx+d.hip,hy-1]],palette.trim,4.5);
+  line(c,[[hx-d.hip,hy-1],[hx+d.hip,hy-1]],h.steel?palette.trim:pieces.belt?.color||palette.trim,4.5);
   if(!back){oval(c,hx,hy-1,3,3,palette.emblemColor,INK,1);emblem(c,sx,sy+d.torso*.42,look.emblem,palette.emblemColor);}
   leg(0);arm(0);
   limb(c,[[sx,sy+2],[sx,sy-8]],look.skin,8);
   if(look.cape&&back)drawCape(c,p,palette.capeColor);
   // Cape collar, always attached to the shoulders.
   if(look.cape){oval(c,sx-d.shoulder*.65,sy+1,2.7,2.4,palette.emblemColor);oval(c,sx+d.shoulder*.65,sy+1,2.7,2.4,palette.emblemColor);}
-  head(c,look,p,back,time,palette);
+  head(c,look,p,back,time,{...palette,suit:h.steel?palette.suit:pieces.mask?.color||palette.suit});
   if(!h.grounded&&h.jumps===2&&h.jumpAge<.3){c.globalAlpha*=1-h.jumpAge/.3;c.beginPath();c.ellipse(0,7,20+h.jumpAge*45,4+h.jumpAge*12,0,0,TAU);c.strokeStyle=palette.emblemColor;c.lineWidth=1.5;c.stroke();}
-  c.restore();return p;
+  // Rare outlines are drawn at a fixed brightness, after hit flashes and pose opacity.
+  // The same articulated points follow the item through movement, attacks and defeat.
+  c.save();c.globalAlpha=1;c.shadowColor='#ffffff';c.shadowBlur=6;c.strokeStyle='#ffffff';c.lineWidth=1.5;
+  const glowLine=pts=>line(c,pts,'#ffffff',1.5);
+  for(const [part,item] of Object.entries(pieces))if(item.rarity==='rare'){
+    if(part==='suit')glowLine([[sx-d.shoulder,sy],[sx+d.shoulder,sy],[hx+d.hip,hy],[hx-d.hip,hy],[sx-d.shoulder,sy]]);
+    if(part==='gloves')for(const a of p.arms)glowLine([a[1],a[2]]);
+    if(part==='boots')for(const l of p.legs)glowLine([l[1],l[2]]);
+    if(part==='belt')glowLine([[hx-d.hip,hy-1],[hx+d.hip,hy-1]]);
+    if(part==='mask')glowLine([[p.head[0]-11,p.head[1]-4],[p.head[0]+11,p.head[1]-4]]);
+    if(part==='emblem')glowLine([[sx-6,sy+9],[sx,sy+3],[sx+6,sy+9],[sx,sy+15],[sx-6,sy+9]]);
+    if(part==='cape'&&look.cape)glowLine(p.cape);
+  }
+  c.restore();c.restore();return p;
 }

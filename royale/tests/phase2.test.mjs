@@ -72,7 +72,7 @@ test('jump, double-jump, land, hurt, defeat and respawn have explicit animation 
 });
 test('customization survives checkpoint changes, defeat, respawn and reload',()=>{
   const look=sanitizeLook({...variants.at(-1),name:'Golden Current',hair:'braids',emblem:'sun',eyes:'#60ccff',cape:false}),g=new Game({look});g.hero.coins=37;g.hero.xp=42;g.checkpoint=2;g.respawn();g.defeat();g.respawn();
-  const restored=new Game({save:decodeSave(g.save())});assert.deepEqual(restored.look,look);assert.equal(restored.hero.coins,37);assert.equal(restored.hero.xp,42);assert.equal(restored.checkpoint,2);
+  const restored=new Game({save:decodeSave(g.save())});assert.deepEqual(restored.look,look);assert.equal(restored.hero.coins,37);assert.equal(restored.hero.xp,37);assert.equal(restored.checkpoint,2);
 });
 test('legacy Phase 1 migration retains progress, colors and untouched backup',()=>{
   const storage=memory(),legacy=JSON.stringify({version:1,look:{name:'Old Hero',build:'full',skin:'#f0c290',trim:'#12ff34',hair:'locs',height:1.1,legs:.9,cape:false},level:6,xp:75,coins:201,checkpoint:2,kills:12,species:['bottle','slime'],reachedEnd:true});

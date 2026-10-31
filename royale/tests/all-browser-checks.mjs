@@ -5,7 +5,7 @@ run.onclick=async()=>{
   try{
     for(const viewport of ['portrait','landscape','small','tablet','desktop']){
       document.getElementById(viewport).click();
-      for(const [id,name] of [['test','Input'],['test-creator','Creator'],['test-powers','Powers']]){
+      for(const [id,name] of [['test','Input'],['test-creator','Creator'],['test-powers','Powers'],['test-world','World']]){
         run.textContent=`Running ${viewport} · ${name}`;
         await document.getElementById(id).onclick();
         const text=report.textContent,passed=text.includes('COMPLETE')&&!text.includes('FAIL')&&!text.includes('STOPPED');
@@ -14,7 +14,7 @@ run.onclick=async()=>{
         if(!passed)throw Error(line);
       }
     }
-    report.textContent=`COMPLETE · all 15 viewport/suite runs passed.\n${results.join('\n')}\nFull results are in the Browser suite log below.`;
+    report.textContent=`COMPLETE · all 20 viewport/suite runs passed.\n${results.join('\n')}\nFull results are in the Browser suite log below.`;
   }catch(error){report.textContent=`${report.textContent}\nSTOPPED · ${error.message}\n${results.join('\n')}`;}
   finally{run.disabled=false;run.textContent='Run all five viewports';}
 };

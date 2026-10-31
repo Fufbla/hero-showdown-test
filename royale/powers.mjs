@@ -2,7 +2,7 @@
 export const POWER_CAP = 20;
 export const ACTIVE_SLOTS = 3;
 export const FUTURE_MERGE_SLOT = Object.freeze({ index: 3, requiredPieces: 3, cooldownMultiplier: .5 });
-// Adapter for a future equipment service. Production passes no merge entitlement in Phase 3.
+// Villain Merge adapter remains reserved; production has no merge entitlement.
 export function resolveAbilitySlots(data,merge=null) {
   const slots=Array.from({length:ACTIVE_SLOTS},(_,index)=>({id:data.equipped[index],level:data.levels[data.equipped[index]]||0,cooldownMultiplier:1}));
   if(merge?.completePieces===FUTURE_MERGE_SLOT.requiredPieces&&POWER_IDS.includes(merge.ability)&&!POWERS[merge.ability].passive)
@@ -21,7 +21,7 @@ export const POWERS = Object.freeze({
   speed: { name: 'Speed', icon: '»', passive: true, summary: 'Permanent running and attack speed. No damage bonus or active slot.' },
   whirlwind: { name: 'Whirlwind', icon: '≋', cooldown: 12, after: true, offensive: true, summary: 'Lift regular foes. Damage once per second. Bosses stay grounded.' },
 });
-export const BALANCE = Object.freeze({ fireballSpeed: 520, fireballLife: 1.6, burstInterval: .12, controlRange: 260, combatGrace: 4, tree: { x: 290, y: 600 }, flightSpeed: 250 });
+export const BALANCE = Object.freeze({ fireballSpeed: 520, fireballLife: 1.6, burstInterval: .12, controlRange: 260, combatGrace: 5, tree: { x: 290, y: 600 }, flightSpeed: 250 });
 const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
 const integer = (x,a,b) => clamp(Math.floor(Number(x)||0),a,b);
 export const tier = level => level >= 20 ? 5 : 1 + Math.floor(level / 5);
@@ -32,7 +32,7 @@ function interpolate(level,anchors) {
   }
   return anchors.at(-1)[1];
 }
-// Reserved equipment stat boundary; no equipment acquisition or Villain Merge is enabled.
+// Bounded equipped-item stat adapter. The Villain Merge slot remains disabled.
 export function equipmentStats(raw={}) {
   return { strength: clamp(Number(raw.strength)||0,0,1000), damage: clamp(Number(raw.damage)||0,0,1000), attackSpeed: clamp(Number(raw.attackSpeed)||0,0,.5) };
 }

@@ -1,15 +1,16 @@
 {
   "source_repository": "https://github.com/Fufbla/hero-showdown-test",
   "source_branch": "feature/showdown-royale",
-  "base_commit": "6c81ad47dd7dc36176d2754d82c79d7597b75da8",
+  "base_commit": "cbc57946a39228b9d3866f71f9da86e6a0e8143c",
   "entry": "royale/index.html",
   "private_playtest_project_id": "appgprj_6ae50514724081918db148465cc8eeeb",
   "private_playtest_url": "https://healthia-showdown-royale-phase1.gladcreek512.chatgpt.site",
   "deployment_scope": "Royale plus the unchanged assets/animation/motion-core.js helper only",
   "save_key": "healthia.royale.profiles.v2",
-  "phase": 3,
+  "phase": 4,
   "legacy_save_key": "healthia.royale.phase1.v1",
-  "saving": "Three browser-local slots; no cloud/account saving",
-  "snapshot_version": 3,
-  "combat_lab": "royale/tests/powers.html"
+  "saving": "Three browser-local slots; saves only after five seconds out of combat; no cloud/account saving",
+  "snapshot_version": 4,
+  "combat_lab": "royale/tests/powers.html",
+  "world_practice": "royale/tests/world.html"
 }

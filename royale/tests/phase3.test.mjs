@@ -55,7 +55,7 @@ for(const level of [1,4,5,9,10,14,15,19,20]){
   });
   test(`Speed L${level}: passive running and attack rate, no damage bonus or active slot`,()=>{
     const g=setup('speed',level),s=powerStats('speed',level);tick(g,.4,{move:1,run:true});near(g.hero.vx,315*(1+s.runBonus));assert.equal(g.powers.activate('speed'),false);near(g.powers.attackRate,1+s.attackBonus);
-    const d=setup('speed',level),e=enemy(d);d.step(STEP,{punch:true});tick(d,.2);near(10000-e.hp,13);
+    const d=setup('speed',level),e=enemy(d);d.step(STEP,{punch:true});tick(d,.2);near(10000-e.hp,d.attackDefinition('punch').damage);const base=d.attackDefinition('punch').damage;d.powers.data.levels.speed=0;near(d.attackDefinition('punch').damage,base);
   });
   test(`Whirlwind L${level}: tier, lift, ticks, falling gravity, cooldown`,()=>{
     const g=setup('whirlwind',level),targets=Array.from({length:6},(_,i)=>enemy(g,1020+i*25)),s=g.powers.stats('whirlwind');cast(g,'whirlwind');
@@ -117,12 +117,12 @@ test('independent cooldowns pause, persist, survive respawn and cannot reset thr
 test('legacy saves credit earned points without changing look, XP, coins or checkpoints',()=>{
   for(const version of [1,2]){
     const save=decodeSave(JSON.stringify({version,look:{name:'Old Coast',suit:'#ff9900'},level:10,xp:24,coins:77,checkpoint:1})),g=new Game({save});
-    assert.equal(save.version,3);assert.equal(g.powers.data.points,9);assert.equal(g.hero.maxHp,235);assert.equal(g.hero.xp,24);assert.equal(g.hero.coins,77);assert.equal(g.checkpoint,1);assert.equal(g.look.suit,'#ff9900');
+    assert.equal(save.version,4);assert.equal(g.powers.data.points,9);assert.equal(g.hero.maxHp,235);assert.equal(g.hero.xp,24);assert.equal(g.hero.coins,77);assert.equal(g.checkpoint,1);assert.equal(g.look.suit,'#ff9900');
   }
 });
 test('level ups award points in combat, refill to 100+15/level, stop at 99',()=>{
   const g=new Game();g.hero.xp=49;g.hero.hp=1;g.markCombat();g.reward({type:'bottle',x:1,y:600});assert.equal(g.hero.level,2);assert.equal(g.hero.hp,115);assert.equal(g.powers.data.points,1);assert.ok(g.inCombat());
-  g.hero.level=98;g.hero.hp=1;g.hero.xp=xpForLevel(98)-1;g.reward({type:'bottle',x:1,y:600});assert.equal(g.hero.level,99);assert.equal(g.hero.hp,1570);assert.equal(g.hero.xp,0);const p=g.powers.data.points;g.reward({type:'bottle',x:1,y:600});assert.equal(g.powers.data.points,p);
+  g.hero.level=98;g.hero.hp=1;g.hero.xp=xpForLevel(98)-1;g.reward({type:'titan',x:1,y:600});assert.equal(g.hero.level,99);assert.equal(g.hero.hp,1570);assert.equal(g.hero.xp,0);const p=g.powers.data.points;g.reward({type:'bottle',x:1,y:600});assert.equal(g.powers.data.points,p);
 });
 test('Tree upgrades: location, combat, balance, one/multiple levels, cap, no redistribution',()=>{
   const g=setup('speed',1);g.powers.data.levels.speed=0;g.powers.data.points=98;assert.equal(g.upgradePower('strength',3).ok,false);
