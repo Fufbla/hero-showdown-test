@@ -1,11 +1,15 @@
+import { drawEquipmentPreview, statComparison } from './eris-ui.mjs';
+import { STAT_KEYS, STAT_LABELS, formatStat } from './costume-catalog.mjs';
 import { WORLD_REGIONS } from './world.mjs';
 import { EQUIPMENT_PARTS, EQUIPMENT_NAMES, itemDefinition } from './equipment.mjs';
 import { LOOT } from './progression.mjs';
 const $=id=>document.getElementById(id);
 const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
-export function statsText(def){return `Strength +${def.stats.strength} · Damage +${def.stats.damage}${def.stats.attackSpeed?` · Attack speed +${Number((def.stats.attackSpeed*100).toFixed(2))}%`:''}`;}
+export function statsText(def){return STAT_KEYS.filter(k=>def.stats[k]).map(k=>`${STAT_LABELS[k]} +${formatStat(k,def.stats[k])}`).join(' · ');}
 export class JourneyMenu {
-  constructor(getGame,persist,say,resume){this.getGame=getGame;this.persist=persist;this.say=say;this.resume=resume;this.confirmation=null;}
+  constructor(getGame,persist,say,resume,transaction=null){this.transaction=transaction;this.getGame=getGame;this.persist=persist;this.say=say;this.resume=resume;this.confirmation=null;}
+  commit(action){if(this.transaction)return this.transaction(action).ok;const ok=action();if(ok)this.persist();return !!ok;}
+  preview(item){const g=this.getGame(),def=itemDefinition(item),panel=el('section',undefined,'equipment-preview'),canvas=el('canvas');canvas.width=360;canvas.height=420;const inv=structuredClone(g.inventory);if(!inv.items.some(i=>i.uid===item.uid))inv.items.push(item);inv.equipped[def.part]=item.uid;const body=el('div');body.append(el('h3',def.name),el('p',`${def.rarity} · Level ${def.level||1} · Fixed colors`),el('p',statsText(def)));for(const view of ['front','back']){const b=el('button',view==='front'?'Front preview':'Back preview','secondary');b.onclick=()=>drawEquipmentPreview(canvas,g,inv,view);body.append(b);}panel.append(canvas,body);$('equipment-list').prepend(panel);drawEquipmentPreview(canvas,g,inv);panel.scrollIntoView({block:'nearest'});}
   shop(){
     const g=this.getGame(),section=$('root-shop');section.replaceChildren();
     const text=el('div');text.append(el('strong','Health Roots'),el('p',`Restore 25% HP anywhere. ${g.healthRoots} / 4 carried · 50 coins each.`));
@@ -31,7 +35,7 @@ export class JourneyMenu {
     if(!g.inventory.items.length)list.append(el('p','Your starter suit is always yours. Regular monsters may drop fixed-color costume equipment.','empty-equipment'));
     const pending=g.inventory.pending[0],reward=$('pending-reward');reward.replaceChildren();reward.hidden=!pending;
     if(pending){const def=itemDefinition(pending);reward.append(el('div',g.inventory.items.length>=7?'INVENTORY FULL · CHOOSE YOUR REWARD':'CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`${def.rarity==='rare'?'Constant white glow.':'No glow.'} Choose a carried item below to compare and replace, or discard this reward.`));
-      if(g.inventory.items.length<7){const keep=el('button','Keep this equipment','primary');keep.id='accept-reward';keep.onclick=()=>{if(g.acceptReward()){this.persist();this.inventory();}};reward.append(keep);}
+      if(g.inventory.items.length<7){const keep=el('button','Keep this equipment','primary');keep.id='accept-reward';keep.disabled=!g.canSave();keep.onclick=()=>{if(this.commit(()=>g.acceptReward()))this.inventory();};reward.append(keep);}
       const decline=el('button','Discard new reward','secondary');decline.id='discard-reward';decline.onclick=()=>this.confirm(null,true);reward.append(decline);}
     for(const item of g.inventory.items){
       const def=itemDefinition(item),equipped=g.inventory.equipped[def.part]===item.uid,card=el('article',undefined,`equipment-card ${def.rarity}`);card.dataset.item=item.uid;
@@ -40,10 +44,10 @@ export class JourneyMenu {
       const actions=el('div',undefined,'equipment-actions');
       if(pending){const compare=el('button','Compare & replace','secondary');compare.onclick=()=>this.confirm(item.uid,true);actions.append(compare);}
       else{
-        const wear=el('button',equipped?'Unequip':'Equip','secondary');wear.disabled=!g.canSave();wear.onclick=()=>{if(g.equipItem(item.uid)){this.persist();this.inventory();}};
+        const wear=el('button',equipped?'Unequip':'Equip','secondary');wear.disabled=!g.canSave()||g.hero.level<(def.level||1);wear.onclick=()=>{if(this.commit(()=>g.equipItem(item.uid)))this.inventory();};
         const discard=el('button','Discard','text-button');discard.disabled=!g.canSave();discard.onclick=()=>this.confirm(item.uid,false);actions.append(wear,discard);
       }
-      card.append(actions);list.append(card);
+      const preview=el('button','Preview','secondary');preview.onclick=()=>this.preview(item);actions.append(preview);card.append(actions);list.append(card);
     }
     $('inventory-close').textContent=pending?'Keep reward pending · back':'Back to pause';
   }
@@ -51,10 +55,10 @@ export class JourneyMenu {
     const g=this.getGame(),section=$('equipment-confirm');section.replaceChildren();section.hidden=false;
     const old=g.inventory.items.find(i=>i.uid===uid),incoming=g.inventory.pending[0],oldDef=itemDefinition(old),newDef=itemDefinition(incoming);
     section.append(el('h3',uid&&pending?'Replace this equipment?':'Discard this equipment?'));
-    if(uid&&pending){const table=el('table'),head=el('tr');head.append(el('th','Stat'),el('th',oldDef.name),el('th',newDef.name));table.append(head);for(const key of ['strength','damage','attackSpeed']){const row=el('tr');row.append(el('th',key),el('td',String(oldDef.stats[key])),el('td',String(newDef.stats[key])));table.append(row);}section.append(table);}
-    section.append(el('p',`${uid?oldDef.name:newDef.name} will be permanently discarded. Discarded equipment cannot be recovered.`));
+    if(uid&&pending){const table=el('table'),head=el('tr');head.append(el('th','Stat'),el('th',oldDef.name),el('th',newDef.name));table.append(head);for(const key of STAT_KEYS){const row=el('tr');row.append(el('th',key),el('td',String(oldDef.stats[key])),el('td',String(newDef.stats[key])));table.append(row);}section.append(table);}
+    section.append(el('p',`${(uid?oldDef:newDef).rarity==='rare'?'RARE EQUIPMENT. ':''}${(uid?oldDef:newDef).rarity==='legendary'?'LEGENDARY: cannot be earned again. ':''}${uid?oldDef.name:newDef.name} will be permanently discarded. Discarded equipment cannot be recovered.`));
     const yes=el('button',uid&&pending?'Confirm replacement':'Confirm discard','primary danger'),no=el('button','Keep equipment','secondary');yes.id='confirm-equipment';no.id='cancel-equipment';
-    yes.onclick=()=>{const ok=pending?g.resolveReward(uid,true):g.discardItem(uid,true);if(ok){this.persist();this.inventory();this.say('Equipment selection updated.');}};
+    const revision=g.economy.revision,incomingId=incoming?.uid;yes.disabled=!g.canSave();yes.onclick=()=>{const ok=this.commit(()=>revision===g.economy.revision&&(!pending||g.inventory.pending[0]?.uid===incomingId)&&(pending?g.resolveReward(uid,true):g.discardItem(uid,true)));if(ok){this.inventory();this.say('Equipment selection updated.');}};
     no.onclick=()=>{section.hidden=true;};section.append(yes,no);section.scrollIntoView({block:'nearest'});no.focus();
   }
 }

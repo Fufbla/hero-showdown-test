@@ -1,8 +1,8 @@
-# Hero Showdown Royale — Phase 5
+# Hero Showdown Royale — Phase 6
 
-An isolated game mode in Hero Showdown — James Clan Comics. Development stays on `feature/showdown-royale`; Phase 5 builds on `a8064a5e626e151c77e4f30b18471a5531c69be2`. No Phase 5 files outside `royale/` are changed.
+An isolated game mode in Hero Showdown — James Clan Comics. Development stays on `feature/showdown-royale`; Phase 6 builds on `3310c269b6b33a702235e68632dbe60b9ccd65ef`. No Phase 6 files outside `royale/` are changed.
 
-**[Playtest](https://healthia-showdown-royale-phase1.gladcreek512.chatgpt.site)** · **[Phase 5 guide](PHASE5.md)** · **[Validation report](PHASE5-VALIDATION.md)**
+**[Playtest](https://healthia-showdown-royale-phase1.gladcreek512.chatgpt.site)** · **[Phase 6 guide](PHASE6.md)** · **[Validation report](PHASE6-VALIDATION.md)**
 
 ## Launch
 
@@ -13,6 +13,10 @@ python3 royale/serve.py
 ```
 
 Open `http://localhost:8000/royale/`, or use the existing macOS/Windows launchers. Use `--lan` for phones/tablets on the same Wi-Fi; the launcher prints possible LAN addresses. `--port 8001` chooses another port. Serve the repository root so the unchanged shared animation helper resolves correctly.
+
+## New in Phase 6
+
+Pause safely → **Tree of Eris** → **Costume Wardrobe** opens the single central shop. Buy individual pieces or three-piece outfits, compare and equip them, sell at 25%, customize appearance with coins, buy multiple Health Roots, and upgrade powers with exact previews. Return to Adventure restores the exact previous location. Choose **Explore the Tree & Costume Shop** on character selection for an isolated practice hero with test coins. Read [PHASE6.md](PHASE6.md) for prices, caps, migration and a purchase/equip/sale walkthrough. Villain Merge remains unavailable.
 
 ## What is playable
 
@@ -32,7 +36,7 @@ In the seven-region practice page, choose Region 3–7 and **Night**, **Night st
 
 ## Saving
 
-The existing `healthia.royale.profiles.v2` three-slot envelope now contains version-5 snapshots. Versions 1–4 migrate without resetting earned levels, numeric XP, coins, customization, checkpoints or powers. The original Phase 1 key remains as a backup. World location, current health, clock, region unlocks, checkpoint history, monster progress, Roots and equipment now persist.
+The existing `healthia.royale.profiles.v2` three-slot envelope now contains version-6 snapshots. Versions 1–5 migrate without resetting earned levels, numeric XP, coins, customization, checkpoints or powers. The original Phase 1 key remains as a backup. World location, current health, clock, region unlocks, checkpoint history, monster progress, Roots, equipment and Eris return locations persist. Economic revisions and retired item IDs protect against stale transactions; failed durable transaction saves roll back.
 
 Autosave runs only safely outside combat. Closing during ordinary combat restores the last safe save. Boss entry makes one safe snapshot; reopening during a boss attempt restarts the whole encounter from that snapshot, including its hero resources. Boss wins and chest claims are stored independently per hero. The clock uses real elapsed time even while closed. Malformed/future data and conflicting writes remain protected from overwrite; unavailable storage shows a warning. There are no game accounts, cloud saves or cross-device synchronization.
 
@@ -44,10 +48,10 @@ Node 20+; no dependencies to install:
 node --test royale/tests/*.test.mjs
 node royale/tests/compare-phase1.mjs
 node royale/tests/verify-isolation.mjs
-node royale/tests/verify-phase5.mjs
+node royale/tests/verify-phase6.mjs
 ```
 
-`tests/phase5-browser.html` checks all seven bosses across five viewport sizes; `tests/bosses.html` offers manual boss practice and performance sampling. `tests/mobile.html` runs actual DOM input, creator/save/render, power, and world/economy suites in five viewport sizes. All fixture storage is isolated. `tests/world.html` is the seven-region practice world; `tests/powers.html` is the nine-power combat lab; `tests/animations.html` is the pose gallery. The Phase 1 differential now compares movement, collisions and basic attack timing, because Phase 4 deliberately changes rewards, AI, XP and defeat rules. Those have separate tests.
+`tests/phase6-browser.html` checks the sanctuary/shop flows across five sizes; `tests/eris.html` offers manual economic practice. `tests/phase5-browser.html` checks all seven bosses across five viewport sizes; `tests/bosses.html` offers manual boss practice and performance sampling. `tests/mobile.html` runs actual DOM input, creator/save/render, power, and world/economy suites in five viewport sizes. All fixture storage is isolated. `tests/world.html` is the seven-region practice world; `tests/powers.html` is the nine-power combat lab; `tests/animations.html` is the pose gallery. The Phase 1 differential now compares movement, collisions and basic attack timing, because Phase 4 deliberately changes rewards, AI, XP and defeat rules. Those have separate tests.
 
 Browser emulation is separate from physical-device testing. Physical iPhone/Android/tablet/controller testing, Safari/Firefox coverage, sustained performance and long-session balancing require hands-on review. Never infer 60 FPS from the fixed 60 Hz simulation; use actual rendered-frame measurements.
 
@@ -59,7 +63,8 @@ Browser emulation is separate from physical-device testing. Physical iPhone/Andr
 - `progression.mjs`: XP curve, clock, loot/respawn constants and the boss-reward boundary.
 - `world.mjs`, `world-state.mjs`: seven-region geometry, 21 species and validated world saves.
 - `journey.mjs`, `monsters.mjs`: progression, economy, inventory actions, travel and advanced enemy behavior.
-- `equipment.mjs`: fixed item catalog, rarity rolls, seven-space validation and equipped-stat adapter.
+- `costume-catalog.mjs`, `equipment.mjs`: configurable three-piece catalog, fixed colors, rarity rolls, seven-space validation and equipped-stat adapter.
+- `eris.mjs`, `eris-ui.mjs`, `eris.css`: dedicated sanctuary, atomic economy, appearance services and responsive central shop.
 - `journey-menu.mjs`, `journey.css`, `world-art.mjs`: map, inventory, Root shop, scenery and new monster art.
 - `appearance.mjs`, `creator.mjs`, `hero-rig.mjs`, `hero-art.mjs`: existing cosmetic creator and shared animated rig. Equipment follows the same joints.
 - `input.mjs`, `controls.mjs`: remappable keyboard/controller and multi-pointer touch controls.
@@ -67,4 +72,4 @@ Browser emulation is separate from physical-device testing. Physical iPhone/Andr
 - `renderer.mjs`, `app.mjs`: canvas rendering, camera, HUD, sound and browser loop.
 - `../assets/animation/motion-core.js`: reused **unchanged** interpolation helper.
 
-The private playtest deploys Royale plus unchanged shared artwork/helpers enumerated in `boss-art.mjs`. It does not deploy or modify Story or Versus. Earlier guides remain historical records; [PHASE5-VALIDATION.md](PHASE5-VALIDATION.md) describes current verification. Trash Monster and Ultimate Pollution Boss artwork is explicitly temporary. Phase 6 has not begun.
+The private playtest deploys Royale plus unchanged shared artwork/helpers enumerated in `boss-art.mjs`. It does not deploy or modify Story or Versus. Earlier guides remain historical records; [PHASE6-VALIDATION.md](PHASE6-VALIDATION.md) describes current verification. Trash Monster and Ultimate Pollution Boss artwork is explicitly temporary. Phase 7 has not begun.

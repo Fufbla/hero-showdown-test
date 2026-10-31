@@ -1,9 +1,10 @@
+import { erisMethods, emptyEconomy, normalizeEconomy, normalizeSanctuary } from './eris.mjs';
 import { bossMethods, stepBoss } from './bosses.mjs';
 import { normalizeBossProgress, normalizeArena, initialBossProgress } from './boss-state.mjs';
 import { initializeJourney, journeyMethods } from './journey.mjs';
 import { advancedEnemy, stepEnemyProjectiles } from './monsters.mjs';
 import { normalizeWorld } from './world-state.mjs';
-import { normalizeInventory, emptyInventory } from './equipment.mjs';
+import { normalizeInventory, emptyInventory, itemDefinition } from './equipment.mjs';
 import { xpForLevel, PROGRESSION, RESPAWN } from './progression.mjs';
 export { xpForLevel } from './progression.mjs';
 import { PowerSystem, POWERS, normalizePowers, equipmentStats, BALANCE, isBoss } from './powers.mjs';
@@ -23,7 +24,8 @@ export { DEFAULT_LOOK, sanitizeLook } from './appearance.mjs';
 export function decodeSave(text) {
   try {
     const data = JSON.parse(text);
-    if (!data || ![1,2,3,4,5].includes(data.version) || (data.version>=2 && (!data.look || typeof data.look!=='object'))) return null;
+    if (!data || ![1,2,3,4,5,6].includes(data.version) || (data.version>=2 && (!data.look || typeof data.look!=='object'))) return null;
+    if(data.version>=6&&(!data.economy||data.inventory?.retired==null||!Object.hasOwn(data,'sanctuary')))return null;
     const integer = (value, max) => clamp(Math.floor(Number(value) || 0), 0, max);
     const level = Math.max(1, integer(data.level, LEVEL_CAP));
     const powers=normalizePowers(data.version>=3?data.powers:null,level,{strict:data.version>=3});
@@ -31,9 +33,12 @@ export function decodeSave(text) {
     const checkpoint=integer(data.checkpoint,CAMPS.length-1);
     const world=normalizeWorld(data.version>=4?data.world:null,checkpoint),inventory=data.version>=4?normalizeInventory(data.inventory):emptyInventory();
     if(!world||!inventory||data.version>=4&&(!data.world||!Number.isInteger(data.healthRoots)||data.healthRoots<0||data.healthRoots>4))return null;
-    const bossProgress=normalizeBossProgress(data.version===5?data.bossProgress:null,world.bossVictories,{strict:data.version===5});if(!bossProgress)return null;
-    const arena=normalizeArena(data.version===5?data.arena:null,world,bossProgress);if(arena===false)return null;
-    return { version: 5, bossProgress, arena, powers, world, inventory, healthRoots:data.version>=4?data.healthRoots:0, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
+    if(Object.values(inventory.equipped).some(uid=>(itemDefinition(inventory.items.find(i=>i.uid===uid))?.level||1)>level))return null;
+    const bossProgress=normalizeBossProgress(data.version>=5?data.bossProgress:null,world.bossVictories,{strict:data.version>=5});if(!bossProgress)return null;
+    const arena=normalizeArena(data.version>=5?data.arena:null,world,bossProgress);if(arena===false)return null;
+    const economy=normalizeEconomy(data.version>=6?data.economy:null),sanctuary=normalizeSanctuary(data.version>=6?data.sanctuary:null,world,arena);
+    if(!economy||sanctuary===false)return null;
+    return { version: 6, economy, sanctuary, bossProgress, arena, powers, world, inventory, healthRoots:data.version>=4?data.healthRoots:0, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
       xp: level===99?0:integer(data.xp, xpForLevel(level) - 1), coins: integer(data.coins, 999999),
       checkpoint: integer(data.checkpoint, CAMPS.length - 1), kills: integer(data.kills, 999999),
       species: [...new Set((Array.isArray(data.species) ? data.species : []).filter(t => Object.hasOwn(TYPES,t)))],
@@ -45,6 +50,7 @@ export class Game {
     this.look = sanitizeLook(look ?? save?.look); this.outfit = sanitizeOutfit(save?.outfit); this.surfaces = surfaces||regionSurfaces(save?.world?.region||1); this.time = 0; this.paused = false;
     this.checkpoint = save?.checkpoint || 0; this.kills = save?.kills || 0;
     this.species = new Set(save?.species || []); this.reachedEnd = save?.reachedEnd || false;
+    this.economy=structuredClone(save?.economy||emptyEconomy());this.sanctuary=structuredClone(save?.sanctuary||null);
     this.random=random; this.baseEquipment=equipmentStats(equipment); this.combatTimer=0;initializeJourney(this,save,now);this.initializeBosses(save);this.refreshEquipment();
     this.events = []; this.attackSerial = 0; this.deathTimer = 0; this.started = false;
     const camp = this.camps[this.world.checkpoint.region===this.regionId?this.world.checkpoint.index:0], level = save?.level || 1;
@@ -53,6 +59,7 @@ export class Game {
       level, xp: save?.xp || 0, coins: save?.coins || 0, hp: 100 + (level - 1) * 15,
       maxHp: 100 + (level - 1) * 15, invulnerable: 1.7, attack: null, attackBuffer: null,
       pose: 'idle', cycle: 0, landing: 0, stun: 0, dead: false, jumpAge: 100, hurtAge: 100, defeatAge: 0, respawnAge: 100 };
+    this.refreshEquipment();
     this.powers=new PowerSystem(this,normalizePowers(save?.powers,level)||normalizePowers(null,level));
     this.enemies = regionSpawns(this.regionId).map(([type, x, surface], id) => this.makeEnemy(type, x, surface, id));
     const location=save?.world?.location;
@@ -61,6 +68,7 @@ export class Game {
     this.board=boardIndex(this.hero.x);
     for(const old of save?.world?.monsters||[]){const e=this.enemies.find(e=>e.id===old.id&&e.type===old.type);if(e){e.hp=old.hp;e.respawn=old.respawn;if(e.hp<=0){e.state='dead';e.rewarded=true;}}}
     if(save?.arena)this.startBossScene(save.arena.mode);
+    if(this.sanctuary){this.treeVisit=true;this.paused=true;if(this.sanctuary.returnLocation.arena){const r=this.sanctuary.returnLocation;Object.assign(this.hero,{x:r.x,y:r.y,prevX:r.x,prevY:r.y});}}
   }
   makeEnemy(type, x, surface, id) {
     const ground = this.surfaces.find(s => s.id === surface) || this.surfaces[0];
@@ -88,7 +96,7 @@ export class Game {
   upgradePower(id,count=1){
     const preview=this.upgradePreview(id,count);if(!preview.ok)return preview;
     this.powers.data.levels[id]+=count;this.powers.data.points-=count;
-    this.emit('upgrade',{id,count});return preview;
+    this.recordEconomy('upgrade');this.emit('upgrade',{id,count});return preview;
   }
   equipPower(index,id){
     if(!Number.isInteger(index)||index<0||index>=3||this.inCombat()||!this.paused||this.hero.dead)return false;
@@ -298,7 +306,7 @@ export class Game {
     const location=this.arenaScene?{...this.arenaScene.returnLocation,hp:h.hp,vx:0,vy:0,jumps:0}:{x:h.x,y:h.y,face:h.face,hp:h.hp,vx:h.vx,vy:this.powers.flying?Math.max(0,h.vy):h.vy,jumps:h.jumps};
     for(const region of this.world.bossVictories)if(!this.bossProgress.records[region])this.bossProgress.records[region]=initialBossProgress([region]).records[region];
     const world={...this.world,region:this.regionId,location,monsters:(this.arenaScene?.enemies||this.enemies).filter(e=>!isBoss(e)&&!e.summoned).map(e=>({id:e.id,type:e.type,hp:e.hp,respawn:Math.max(0,e.respawn)}))};
-    return JSON.stringify({version:5,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?{region:this.regionId,mode:'cleared'}:null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
+    return JSON.stringify({version:6,economy:this.economy,sanctuary:this.sanctuary,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?{region:this.regionId,mode:'cleared'}:null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
   }
 }
-Object.assign(Game.prototype,journeyMethods,bossMethods);
+Object.assign(Game.prototype,journeyMethods,bossMethods,erisMethods);

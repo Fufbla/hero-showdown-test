@@ -1,4 +1,5 @@
-import { createEquipment, itemDefinition } from './equipment.mjs';
+import { costumeDrop } from './costume-catalog.mjs';
+import { itemDefinition } from './equipment.mjs';
 export function initialBossProgress(victories=[]){return {records:Object.fromEntries(victories.map(id=>[id,{wins:1,chest:{state:'legacy',coins:0,roots:0,items:[]}}]))};}
 export function normalizeBossProgress(raw,victories,{strict=false}={}){
   if(!raw)return strict?null:initialBossProgress(victories);
@@ -16,7 +17,7 @@ export function normalizeBossProgress(raw,victories,{strict=false}={}){
 }
 export function rollChest(region,random=Math.random){
   const coins=20+Math.floor(random()*21),roots=1+Math.floor(random()*2),count=random()<.35?2:1,items=[];
-  for(let i=0;i<count;i++){const rarity=region>=4&&random()<.3?'rare':'ordinary',item=createEquipment(region,rarity,Math.floor(random()*7),1);item.uid=`chest-${region}-${i}`;items.push(item);}
+  for(let i=0;i<count;i++){const rarity=region>=4&&random()<.3?'rare':'ordinary',item=costumeDrop(region,rarity,Math.floor(random()*3),1);item.uid=`chest-${region}-${i}`;items.push(item);}
   return {state:'available',coins,roots,items};
 }
 export function normalizeArena(raw,world,bosses){

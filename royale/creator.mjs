@@ -35,7 +35,7 @@ export class Creator{
     $('name').value=this.look.name;
     for(const field of Object.values(FIELD_GROUPS).flat()){$(field)[$(field).type==='checkbox'?'checked':'value']=this.look[field];}
     for(const field of['suit','trim','emblemColor','capeColor'])$(field).disabled=!canRecolorOutfit(outfit);
-    $('outfit-note').textContent=canRecolorOutfit(outfit)?'Colors apply to the starter suit only. Future earned or purchased equipment keeps its own colors. Every cape has the same length.':'This outfit keeps its original colors. Starter color controls are locked.';
+    $('outfit-note').textContent=canRecolorOutfit(outfit)?'Colors apply to the starter suit only. Earned and purchased equipment keeps its fixed colors. Every cape has the same length.':'This outfit keeps its original colors. Starter color controls are locked.';
     $('name-error').hidden=true;$('name').setAttribute('aria-invalid','false');this.tab('identity');this.read();this.draw();
   }
   read(){

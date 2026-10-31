@@ -13,17 +13,17 @@ export const journeyMethods={
   getRegion(){return regionDefinition(this.regionId);},
   clock(){return worldClock(this.world.clockReference,this.now(),this.regionId);},
   refreshEquipment(){
-    const earned=equipmentBonuses(this.inventory),base=this.baseEquipment;
+    const earned=equipmentBonuses(this.inventory,this.hero?.level||99),base=this.baseEquipment;
     this.equipment=equipmentStats(Object.fromEntries(Object.keys(earned).map(k=>[k,earned[k]+(base?.[k]||0)])));
   },
   visualOutfit(){return equipmentOutfit(this.inventory,this.outfit);},
   canSave(){return !this.hero.dead&&!this.inCombat();},
-  canTravel(){return this.canSave()&&!this.bossEncounter&&this.inventory.pending.length===0;},
+  canTravel(){return !this.treeVisit&&this.canSave()&&!this.bossEncounter&&this.inventory.pending.length===0;},
   visitTree(){if(!this.canTravel())return false;this.treeVisit=true;return true;},
   leaveTree(){this.treeVisit=false;}, // Visiting is a modal sanctuary; the world location is never changed.
   useHealthRoot(){
     const h=this.hero;if(h.dead||this.healthRoots<1||h.hp>=h.maxHp)return false;
-    this.healthRoots--;h.hp=Math.min(h.maxHp,h.hp+h.maxHp*.25);this.emit('heal');return true;
+    this.healthRoots--;h.hp=Math.min(h.maxHp,h.hp+h.maxHp*.25);this.recordEconomy('heal');this.emit('heal');return true;
   },
   buyHealthRoot(){
     if(!this.nearTree()||!this.canSave()||this.healthRoots>=LOOT.rootLimit||this.hero.coins<LOOT.rootPrice)return false;
@@ -31,23 +31,23 @@ export const journeyMethods={
   },
   equipItem(uid){
     if(!this.canSave()||!this.paused)return false;
-    const item=this.inventory.items.find(i=>i.uid===uid),def=itemDefinition(item);if(!def)return false;
-    if(this.inventory.equipped[def.part]===uid)delete this.inventory.equipped[def.part];else this.inventory.equipped[def.part]=uid;
-    this.refreshEquipment();return true;
+    const item=this.inventory.items.find(i=>i.uid===uid),def=itemDefinition(item);if(!def||this.hero.level<(def.level||1))return false;
+    if(this.inventory.equipped[def.part]===uid)delete this.inventory.equipped[def.part];else{if(def.part==='helmet')delete this.inventory.equipped.mask;if(def.part==='mask')delete this.inventory.equipped.helmet;if(def.part==='chest')delete this.inventory.equipped.suit;if(def.part==='suit')delete this.inventory.equipped.chest;this.inventory.equipped[def.part]=uid;}
+    this.recordEconomy('equip');this.refreshEquipment();return true;
   },
   discardItem(uid,confirmed=false){
     if(!confirmed||!this.canSave())return false;
     const i=this.inventory.items.findIndex(item=>item.uid===uid);if(i<0)return false;
-    this.inventory.items.splice(i,1);for(const [part,id] of Object.entries(this.inventory.equipped))if(id===uid)delete this.inventory.equipped[part];
+    this.retireItem(uid);this.recordEconomy('discard');this.inventory.items.splice(i,1);for(const [part,id] of Object.entries(this.inventory.equipped))if(id===uid)delete this.inventory.equipped[part];
     this.refreshEquipment();return true;
   },
   resolveReward(uid,confirmed=false){
     // Pending loot is unclaimed. It cannot be equipped or count as an eighth carried item.
-    if(!confirmed||!this.inventory.pending.length)return false;
-    if(uid===null){this.inventory.pending.shift();return true;}
+    if(!confirmed||!this.canSave()||!this.inventory.pending.length)return false;
+    if(uid===null){this.retireItem(this.inventory.pending[0].uid);this.recordEconomy('discard');this.inventory.pending.shift();return true;}
     const index=this.inventory.items.findIndex(i=>i.uid===uid);if(index<0)return false;
     for(const [part,id] of Object.entries(this.inventory.equipped))if(id===uid)delete this.inventory.equipped[part];
-    this.inventory.items.splice(index,1,this.inventory.pending.shift());this.refreshEquipment();return true;
+    this.retireItem(uid);this.recordEconomy('reward');this.inventory.items.splice(index,1,this.inventory.pending.shift());this.refreshEquipment();return true;
   },
   gainXP(amount){
     const h=this.hero;if(!Number.isFinite(amount)||amount<=0||h.level>=99)return;
@@ -69,14 +69,15 @@ export const journeyMethods={
       item=rollEquipment(info.region,this.random,this.inventory.nextId);
       if(item){
         this.inventory.nextId++;
-        if(this.inventory.items.length<LOOT.inventoryLimit)this.inventory.items.push(item);
-        else this.inventory.pending.push(item);
+        // Reveal every item before the player accepts it, even when capacity remains.
+        this.inventory.pending.push(item);
         this.emit('equipment',{item,pending:this.inventory.pending.length>0});
       }
     }
     this.emit('reward',{x:e.x,y:e.y-24,xp,coins,root,item:!!item,enemy:info.name});
   },
   loadRegion(id,{x,y,checkpoint=false}={}){
+    if(this.treeVisit)return false;
     if(this.arenaScene)this.leaveBoss('travel');
     this.powers.cancelEffects();this.hero.attack=null;this.hero.attackBuffer=null;this.enemyShots=[];
     this.regionId=id;this.world.region=id;this.camps=regionCamps(id);this.surfaces=regionSurfaces(id);

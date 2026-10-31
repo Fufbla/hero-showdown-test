@@ -34,7 +34,7 @@ function interpolate(level,anchors) {
 }
 // Bounded equipped-item stat adapter. The Villain Merge slot remains disabled.
 export function equipmentStats(raw={}) {
-  return { strength: clamp(Number(raw.strength)||0,0,1000), damage: clamp(Number(raw.damage)||0,0,1000), attackSpeed: clamp(Number(raw.attackSpeed)||0,0,.5) };
+  return { strength: clamp(Number(raw.strength)||0,0,1000), damage: clamp(Number(raw.damage)||0,0,1000), attackSpeed: clamp(Number(raw.attackSpeed)||0,0,.5), defense:clamp(Number(raw.defense)||0,0,.25),moveSpeed:clamp(Number(raw.moveSpeed)||0,0,.6),fireball:clamp(Number(raw.fireball)||0,0,80),roots:clamp(Number(raw.roots)||0,0,15),whirlwind:clamp(Number(raw.whirlwind)||0,0,20) };
 }
 export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
   level=integer(level,1,20);const n=tier(level),eq=equipmentStats(equipment),strength=10+2*(heroLevel-1)+eq.strength;
@@ -42,13 +42,13 @@ export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
   switch(id) {
     case 'strength': return {...base,targets:n,damage:45+8*(level-1)+2*strength+eq.damage,bossEffectiveness:scale(level,.25,1),reach:59};
     case 'superKick': return {...base,kicks:n+1,damage:16+2*(level-1)+.5*strength+eq.damage,reach:76};
-    case 'fireball': return {...base,projectiles:level===20?3:level>=10?2:1,damage:24+5*(level-1),pierce:level===20?2:1};
+    case 'fireball': return {...base,projectiles:level===20?3:level>=10?2:1,damage:24+5*(level-1)+eq.fireball,pierce:level===20?2:1};
     case 'flight': return {...base,duration:level+2,bossHitChance:.5};
     case 'steel': return {...base,reduction:interpolate(level,[[1,.2],[5,.3],[10,.45],[15,.6],[20,.75]]),duration:interpolate(level,[[1,3],[5,4],[10,5],[15,6],[20,8]])};
-    case 'roots': return {...base,targets:n,duration:n+1,damage:6+2*(level-1)};
+    case 'roots': return {...base,targets:n,duration:n+1,damage:6+2*(level-1)+eq.roots};
     case 'agility': return {...base,duration:scale(level,5,15),dodge:.75,legendaryDodge:.5};
     case 'speed': return {...base,runBonus:scale(level,.05,.6),attackBonus:scale(level,.03,.5)};
-    case 'whirlwind': return {...base,targets:n,duration:n+1,damage:10+3*(level-1)};
+    case 'whirlwind': return {...base,targets:n,duration:n+1,damage:10+3*(level-1)+eq.whirlwind};
     default: throw new Error('Unknown power');
   }
 }
@@ -83,7 +83,7 @@ export class PowerSystem {
   }
   stats(id) {return powerStats(id,this.data.levels[id],{heroLevel:this.game.hero.level,equipment:this.game.equipment});}
   get flying(){return !!this.active.flight;}
-  get speed(){return this.data.levels.speed?this.stats('speed').runBonus:0;}
+  get speed(){return Math.min(.6,(this.data.levels.speed?this.stats('speed').runBonus:0)+equipmentStats(this.game.equipment).moveSpeed);}
   get attackRate(){return attackRate(this.data.levels.speed,this.game.equipment);}
   ready(id){return POWER_IDS.includes(id)&&!!this.data.levels[id]&&!POWERS[id]?.passive&&!this.active[id]&&(this.cooldowns[id]||0)<=EPS;}
   activateSlot(index){const slot=resolveAbilitySlots(this.data,this.mergeEntitlement)[index];return slot?.id?this.activate(slot.id,slot):false;}
@@ -133,7 +133,7 @@ export class PowerSystem {
     const g=this.game;
     if(this.flying&&(!isBoss(source)||g.random()>=.5))return null;
     if(this.active.agility&&g.random()<(source.legendary? .5:.75)){g.emit('dodge');return null;}
-    return amount*(1-(this.active.steel?.reduction||0));
+    return amount*(1-(this.active.steel?.reduction||0))*(1-equipmentStats(g.equipment).defense);
   }
   melee(attack,candidates) {
     const g=this.game,stats=attack.stats;

@@ -44,7 +44,7 @@ run.onclick=async()=>{
       check(`${label}: chest controls, HP and XP remain usable`,inside(el('chest-close'))&&inside(el('collect-chest'))&&inside(el('hp-text'))&&inside(el('xp-text'))&&d.documentElement.scrollWidth===width);
       if(region<4)check(`${label}: no rare equipment in early-region chest`,el('chest-contents').querySelectorAll('.rare').length===0);
       el('collect-chest').click();check(`${label}: equipment waits for choice and never exceeds seven`,!el('inventory-menu').hidden&&data().inventory.items.length===7&&data().inventory.pending.length>=1);
-      const old=data().inventory.items[0].uid;d.querySelector(`[data-item="${old}"] button`).click();check(`${label}: replacement shows stat comparison and asks confirmation`,!el('equipment-confirm').hidden&&el('equipment-confirm').querySelectorAll('td').length===6&&data().inventory.items[0].uid===old);
+      const old=data().inventory.items[0].uid;d.querySelector(`[data-item="${old}"] button`).click();check(`${label}: replacement shows stat comparison and asks confirmation`,!el('equipment-confirm').hidden&&el('equipment-confirm').querySelectorAll('td').length===16&&data().inventory.items[0].uid===old);
       el('cancel-equipment').click();check(`${label}: cancel preserves owned and pending equipment`,data().inventory.items[0].uid===old&&data().inventory.pending.length>=1);
       d.querySelector(`[data-item="${old}"] button`).click();el('confirm-equipment').click();check(`${label}: confirmed replacement enforces seven slots`,data().inventory.items.length===7&&!data().inventory.items.some(i=>i.uid===old));
       while(data().inventory.pending.length){el('discard-reward').click();el('confirm-equipment').click();}

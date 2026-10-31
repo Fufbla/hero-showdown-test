@@ -117,7 +117,7 @@ test('independent cooldowns pause, persist, survive respawn and cannot reset thr
 test('legacy saves credit earned points without changing look, XP, coins or checkpoints',()=>{
   for(const version of [1,2]){
     const save=decodeSave(JSON.stringify({version,look:{name:'Old Coast',suit:'#ff9900'},level:10,xp:24,coins:77,checkpoint:1})),g=new Game({save});
-    assert.equal(save.version,5);assert.equal(g.powers.data.points,9);assert.equal(g.hero.maxHp,235);assert.equal(g.hero.xp,24);assert.equal(g.hero.coins,77);assert.equal(g.checkpoint,1);assert.equal(g.look.suit,'#ff9900');
+    assert.equal(save.version,6);assert.equal(g.powers.data.points,9);assert.equal(g.hero.maxHp,235);assert.equal(g.hero.xp,24);assert.equal(g.hero.coins,77);assert.equal(g.checkpoint,1);assert.equal(g.look.suit,'#ff9900');
   }
 });
 test('level ups award points in combat, refill to 100+15/level, stop at 99',()=>{

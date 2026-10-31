@@ -1,0 +1,192 @@
+COMPLETE · 185 Phase 6 assertions passed across five viewports. Synthetic Chromium interactions; physical devices not tested.
+PASS · 390×844 · sanctuary restores with HP/XP and return reachable
+PASS · five services and locked Villain Merge
+PASS · maximum affordable preview stops at 20
+PASS · Power Points unchanged before confirmation
+PASS · max purchase spends 20 once and caps Strength
+PASS · bulk Fireball exact damage preview
+PASS · upgrade cancellation keeps points
+PASS · bulk upgrade persists instantly
+PASS · exactly one central shop, complete outfits and no purchasable rare items
+PASS · back preview differs from front
+PASS · Level 99 outfit inspectable but locked for Level 50
+PASS · purchase reveals all three items before spending
+PASS · cancel purchase retains inventory
+PASS · complete suit purchase charges 150 once, adds three physical items
+PASS · all three equipped pieces still count as three inventory spaces
+PASS · exact equipped stats and eight-row comparisons present
+PASS · sale asks confirmation without removing equipment
+PASS · sale credits floor(25%) once and clears worn reference
+PASS · individual helmet category
+PASS · individual purchase adds exactly one slot
+PASS · capacity includes worn and unworn pieces
+PASS · full inventory shows seven owned choices alongside incoming set
+PASS · confirmed replacement stays within seven and persists discards
+PASS · bulk Roots preview cost and free storage
+PASS · Root confirmation before spending
+PASS · bulk purchase reaches four separate Roots
+PASS · Health Root heals at sanctuary
+PASS · appearance uses the existing creator and preserves vitals
+PASS · hair changes are one 100-coin category
+PASS · makeover previews cost before applying
+PASS · paid appearance persists without changing abilities or inventory
+PASS · starter colors remain free
+PASS · starter recolor preserves fixed equipment catalog
+PASS · reload preserves sanctuary, receipts, discarded IDs, powers, colors and equipped refs
+PASS · Return to Adventure restores exact region, position and checkpoint
+PASS · no outer horizontal overflow
+PASS · HP and XP remain on-screen
+COMPLETE 390×844
+PASS · 844×390 · sanctuary restores with HP/XP and return reachable
+PASS · five services and locked Villain Merge
+PASS · maximum affordable preview stops at 20
+PASS · Power Points unchanged before confirmation
+PASS · max purchase spends 20 once and caps Strength
+PASS · bulk Fireball exact damage preview
+PASS · upgrade cancellation keeps points
+PASS · bulk upgrade persists instantly
+PASS · exactly one central shop, complete outfits and no purchasable rare items
+PASS · back preview differs from front
+PASS · Level 99 outfit inspectable but locked for Level 50
+PASS · purchase reveals all three items before spending
+PASS · cancel purchase retains inventory
+PASS · complete suit purchase charges 150 once, adds three physical items
+PASS · all three equipped pieces still count as three inventory spaces
+PASS · exact equipped stats and eight-row comparisons present
+PASS · sale asks confirmation without removing equipment
+PASS · sale credits floor(25%) once and clears worn reference
+PASS · individual helmet category
+PASS · individual purchase adds exactly one slot
+PASS · capacity includes worn and unworn pieces
+PASS · full inventory shows seven owned choices alongside incoming set
+PASS · confirmed replacement stays within seven and persists discards
+PASS · bulk Roots preview cost and free storage
+PASS · Root confirmation before spending
+PASS · bulk purchase reaches four separate Roots
+PASS · Health Root heals at sanctuary
+PASS · appearance uses the existing creator and preserves vitals
+PASS · hair changes are one 100-coin category
+PASS · makeover previews cost before applying
+PASS · paid appearance persists without changing abilities or inventory
+PASS · starter colors remain free
+PASS · starter recolor preserves fixed equipment catalog
+PASS · reload preserves sanctuary, receipts, discarded IDs, powers, colors and equipped refs
+PASS · Return to Adventure restores exact region, position and checkpoint
+PASS · no outer horizontal overflow
+PASS · HP and XP remain on-screen
+COMPLETE 844×390
+PASS · 320×568 · sanctuary restores with HP/XP and return reachable
+PASS · five services and locked Villain Merge
+PASS · maximum affordable preview stops at 20
+PASS · Power Points unchanged before confirmation
+PASS · max purchase spends 20 once and caps Strength
+PASS · bulk Fireball exact damage preview
+PASS · upgrade cancellation keeps points
+PASS · bulk upgrade persists instantly
+PASS · exactly one central shop, complete outfits and no purchasable rare items
+PASS · back preview differs from front
+PASS · Level 99 outfit inspectable but locked for Level 50
+PASS · purchase reveals all three items before spending
+PASS · cancel purchase retains inventory
+PASS · complete suit purchase charges 150 once, adds three physical items
+PASS · all three equipped pieces still count as three inventory spaces
+PASS · exact equipped stats and eight-row comparisons present
+PASS · sale asks confirmation without removing equipment
+PASS · sale credits floor(25%) once and clears worn reference
+PASS · individual helmet category
+PASS · individual purchase adds exactly one slot
+PASS · capacity includes worn and unworn pieces
+PASS · full inventory shows seven owned choices alongside incoming set
+PASS · confirmed replacement stays within seven and persists discards
+PASS · bulk Roots preview cost and free storage
+PASS · Root confirmation before spending
+PASS · bulk purchase reaches four separate Roots
+PASS · Health Root heals at sanctuary
+PASS · appearance uses the existing creator and preserves vitals
+PASS · hair changes are one 100-coin category
+PASS · makeover previews cost before applying
+PASS · paid appearance persists without changing abilities or inventory
+PASS · starter colors remain free
+PASS · starter recolor preserves fixed equipment catalog
+PASS · reload preserves sanctuary, receipts, discarded IDs, powers, colors and equipped refs
+PASS · Return to Adventure restores exact region, position and checkpoint
+PASS · no outer horizontal overflow
+PASS · HP and XP remain on-screen
+COMPLETE 320×568
+PASS · 768×1024 · sanctuary restores with HP/XP and return reachable
+PASS · five services and locked Villain Merge
+PASS · maximum affordable preview stops at 20
+PASS · Power Points unchanged before confirmation
+PASS · max purchase spends 20 once and caps Strength
+PASS · bulk Fireball exact damage preview
+PASS · upgrade cancellation keeps points
+PASS · bulk upgrade persists instantly
+PASS · exactly one central shop, complete outfits and no purchasable rare items
+PASS · back preview differs from front
+PASS · Level 99 outfit inspectable but locked for Level 50
+PASS · purchase reveals all three items before spending
+PASS · cancel purchase retains inventory
+PASS · complete suit purchase charges 150 once, adds three physical items
+PASS · all three equipped pieces still count as three inventory spaces
+PASS · exact equipped stats and eight-row comparisons present
+PASS · sale asks confirmation without removing equipment
+PASS · sale credits floor(25%) once and clears worn reference
+PASS · individual helmet category
+PASS · individual purchase adds exactly one slot
+PASS · capacity includes worn and unworn pieces
+PASS · full inventory shows seven owned choices alongside incoming set
+PASS · confirmed replacement stays within seven and persists discards
+PASS · bulk Roots preview cost and free storage
+PASS · Root confirmation before spending
+PASS · bulk purchase reaches four separate Roots
+PASS · Health Root heals at sanctuary
+PASS · appearance uses the existing creator and preserves vitals
+PASS · hair changes are one 100-coin category
+PASS · makeover previews cost before applying
+PASS · paid appearance persists without changing abilities or inventory
+PASS · starter colors remain free
+PASS · starter recolor preserves fixed equipment catalog
+PASS · reload preserves sanctuary, receipts, discarded IDs, powers, colors and equipped refs
+PASS · Return to Adventure restores exact region, position and checkpoint
+PASS · no outer horizontal overflow
+PASS · HP and XP remain on-screen
+COMPLETE 768×1024
+PASS · 1280×800 · sanctuary restores with HP/XP and return reachable
+PASS · five services and locked Villain Merge
+PASS · maximum affordable preview stops at 20
+PASS · Power Points unchanged before confirmation
+PASS · max purchase spends 20 once and caps Strength
+PASS · bulk Fireball exact damage preview
+PASS · upgrade cancellation keeps points
+PASS · bulk upgrade persists instantly
+PASS · exactly one central shop, complete outfits and no purchasable rare items
+PASS · back preview differs from front
+PASS · Level 99 outfit inspectable but locked for Level 50
+PASS · purchase reveals all three items before spending
+PASS · cancel purchase retains inventory
+PASS · complete suit purchase charges 150 once, adds three physical items
+PASS · all three equipped pieces still count as three inventory spaces
+PASS · exact equipped stats and eight-row comparisons present
+PASS · sale asks confirmation without removing equipment
+PASS · sale credits floor(25%) once and clears worn reference
+PASS · individual helmet category
+PASS · individual purchase adds exactly one slot
+PASS · capacity includes worn and unworn pieces
+PASS · full inventory shows seven owned choices alongside incoming set
+PASS · confirmed replacement stays within seven and persists discards
+PASS · bulk Roots preview cost and free storage
+PASS · Root confirmation before spending
+PASS · bulk purchase reaches four separate Roots
+PASS · Health Root heals at sanctuary
+PASS · appearance uses the existing creator and preserves vitals
+PASS · hair changes are one 100-coin category
+PASS · makeover previews cost before applying
+PASS · paid appearance persists without changing abilities or inventory
+PASS · starter colors remain free
+PASS · starter recolor preserves fixed equipment catalog
+PASS · reload preserves sanctuary, receipts, discarded IDs, powers, colors and equipped refs
+PASS · Return to Adventure restores exact region, position and checkpoint
+PASS · no outer horizontal overflow
+PASS · HP and XP remain on-screen
+COMPLETE 1280×800
+COMPLETE · 185 Phase 6 assertions passed across five viewports. Synthetic Chromium interactions; physical devices not tested.

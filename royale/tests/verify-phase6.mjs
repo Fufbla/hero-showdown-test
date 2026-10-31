@@ -1,0 +1,13 @@
+import {execFileSync} from 'node:child_process';
+import {readFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {BOSS_ART_DEPENDENCIES} from '../boss-art.mjs';
+const base='3310c269b6b33a702235e68632dbe60b9ccd65ef';
+const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+assert.equal(git('branch','--show-current'),'feature/showdown-royale');
+const paths=[...git('diff','--name-only',base).split('\n'),...git('ls-files','--others','--exclude-standard').split('\n')].filter(Boolean);
+assert.ok(paths.every(p=>p.startsWith('royale/')),'Phase 6 changes must stay entirely in royale/');
+const dependencies=[...BOSS_ART_DEPENDENCIES,'assets/animation/motion-core.js'];
+for(const file of dependencies)assert.deepEqual(readFileSync(file),execFileSync('git',['show',`${base}:${file}`],{maxBuffer:32*1024*1024}),file+' must remain byte-identical');
+assert.equal(git('diff','--name-only',base,'--',':(exclude)royale'),'');
+console.log(`PASS: Phase 6 is isolated to royale/; ${dependencies.length} approved shared art/motion dependencies are byte-identical to Phase 5.`);

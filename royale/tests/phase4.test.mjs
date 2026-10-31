@@ -93,7 +93,7 @@ test('summons award XP only, never coins, Health Roots or equipment even with gu
 });
 test('seven-slot equipment cap includes worn items; full drops require confirmed replacement or discard',()=>{
   const g=regional(4,{random:()=>0});g.paused=true;
-  for(let i=0;i<9;i++)g.reward({type:'scorpion'});assert.equal(g.inventory.items.length,7);assert.equal(g.inventory.pending.length,2);
+  g.hero.level=50;for(let i=0;i<9;i++)g.reward({type:'scorpion'});assert.equal(g.inventory.items.length,0);for(let i=0;i<7;i++)assert.ok(g.acceptReward());assert.equal(g.inventory.items.length,7);assert.equal(g.inventory.pending.length,2);
   assert.ok(g.equipItem(g.inventory.items[0].uid));const equipped=g.inventory.items[0].uid;
   assert.equal(g.resolveReward(equipped),false);assert.equal(g.inventory.items.length,7);assert.ok(g.resolveReward(equipped,true));assert.equal(g.inventory.items.length,7);assert.equal(Object.values(g.inventory.equipped).includes(equipped),false);
   assert.equal(g.resolveReward(null),false);assert.ok(g.resolveReward(null,true));assert.equal(g.inventory.pending.length,0);assert.equal(g.discardItem(g.inventory.items[0].uid),false);assert.ok(g.discardItem(g.inventory.items[0].uid,true));assert.equal(g.inventory.items.length,6);
@@ -128,7 +128,7 @@ test('safe fast travel lands at destination camp; backward connected paths and c
 });
 test('v1, v2 and v3 migration preserve level, XP, coins, look, checkpoint and permanent powers',()=>{
   for(const version of [1,2,3]){const old={version,level:35,xp:947,coins:785,checkpoint:2,look:{name:'Long Journey',hair:'locs',suit:'#c0ffee'}};if(version===3)old.powers={levels:Object.fromEntries(POWER_IDS.map(id=>[id,id==='strength'?20:0])),equipped:['strength',null,null]};
-    const save=decodeSave(JSON.stringify(old));assert.ok(save);assert.equal(save.version,5);const g=new Game({save});assert.equal(g.hero.level,35);assert.equal(g.hero.xp,947);assert.equal(g.hero.coins,785);assert.equal(g.hero.x,4370);assert.equal(g.look.suit,'#c0ffee');assert.equal(g.powers.data.points,version===3?14:34);assert.deepEqual(g.world.unlocked,[1]);assert.equal(g.healthRoots,0);assert.ok(decodeSave(JSON.stringify(save)));}
+    const save=decodeSave(JSON.stringify(old));assert.ok(save);assert.equal(save.version,6);const g=new Game({save});assert.equal(g.hero.level,35);assert.equal(g.hero.xp,947);assert.equal(g.hero.coins,785);assert.equal(g.hero.x,4370);assert.equal(g.look.suit,'#c0ffee');assert.equal(g.powers.data.points,version===3?14:34);assert.deepEqual(g.world.unlocked,[1]);assert.equal(g.healthRoots,0);assert.ok(decodeSave(JSON.stringify(save)));}
 });
 test('v4 round-trip retains location, damaged HP, roots, inventory, monsters, clock and world history',()=>{
   const g=regional(5);g.hero.level=65;g.hero.maxHp=1060;g.hero.hp=500;g.hero.x=3450;g.hero.y=600;g.hero.xp=500;g.healthRoots=3;g.hero.coins=300;g.powers.data.levels.strength=20;g.powers.data.points=44;const e=g.enemies[0];e.hp=0;e.state='dead';e.respawn=12;

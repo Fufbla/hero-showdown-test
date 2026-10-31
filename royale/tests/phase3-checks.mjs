@@ -26,7 +26,7 @@ button.onclick=async()=>{
     check('legacy hero retains appearance, level and coins',data().look.name==='Eris Test Hero'&&data().level===99&&data().coins===87);
     check('health uses Phase 3 level growth',el('hp-text').textContent==='1570 / 1570');
     key('KeyD');await advance(.65);key('KeyD',false);await advance(.2);el('pause').click();
-    check('98 earned points imported',el('power-points').textContent==='98');check('Tree reachable at Shore camp',!el('tree-from-pause').disabled);el('tree-from-pause').click();
+    check('98 earned points imported',el('power-points').textContent==='98');check('Tree reachable at Shore camp',!el('tree-from-pause').disabled);el('tree-from-pause').click();d.querySelector('.eris-nav [data-eris="powers"]').click();
     check('Tree interface and vitals remain visible',!el('tree-menu').hidden&&inside(el('hp-text'))&&inside(el('xp-text'))&&inside(el('close-tree')));
     for(const id of POWER_IDS){
       const choice=d.querySelector(`[data-power="${id}"]`);choice.scrollIntoView({block:'nearest',inline:'nearest'});choice.click();
@@ -38,7 +38,7 @@ button.onclick=async()=>{
     check('Speed is passive, all nine upgrades cost one point',el('tree-points').textContent==='89');
     d.querySelector('[data-power="strength"]').click();quantity(19);check('multi-upgrade shows exact final target tier',el('upgrade-preview').textContent.includes('5')&&!el('review-upgrade').disabled);el('review-upgrade').click();el('cancel-upgrade').click();check('cancel keeps points and level',data().powers.levels.strength===1&&el('tree-points').textContent==='89');
     el('review-upgrade').click();el('confirm-upgrade').click();check('19-level purchase reaches cap and deducts 19 points',data().powers.levels.strength===20&&el('tree-points').textContent==='70'&&el('review-upgrade').disabled);
-    el('close-tree').click();select(el('slot-0'),'strength');select(el('slot-1'),'fireball');select(el('slot-2'),'flight');
+    el('close-tree').click();el('pause').click();select(el('slot-0'),'strength');select(el('slot-1'),'fireball');select(el('slot-2'),'flight');
     check('three slots save and omit passive Speed',[...el('slot-0').options].every(o=>o.value!=='speed')&&data().powers.equipped.join(',')==='strength,fireball,flight');
     select(el('slot-1'),'strength');check('equipped choices swap without duplicates',data().powers.equipped.join(',')==='fireball,strength,flight');select(el('slot-0'),'strength');
     el('open-controls').click();check('control settings open with visible vitals',!el('controls-menu').hidden&&inside(el('hp-text'))&&inside(el('close-controls')));

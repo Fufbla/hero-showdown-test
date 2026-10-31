@@ -35,23 +35,27 @@ export class LocalHeroStore{
     }catch{this.durable=false;this.message='Browser storage is unavailable. Heroes will last for this session only.';}
   }
   slot(index){return this.data.slots[index]?copy(this.data.slots[index]):null;}
-  flush(next){
+  flush(next,{atomic=false}={}){
     if(!this.writable)return {ok:false,error:this.message};
     const candidate=copy(next);candidate.revision=this.data.revision+1;
     try{
       const current=this.storage.getItem(PROFILE_KEY);
       if(current!==this.lastRaw){this.writable=false;this.durable=false;this.message='Heroes changed in another tab. Reload before saving here to avoid overwriting them.';return {ok:false,error:this.message};}
       const raw=JSON.stringify(candidate);this.storage.setItem(PROFILE_KEY,raw);this.lastRaw=raw;this.data=candidate;this.durable=true;return {ok:true};
-    }catch{this.data=candidate;this.durable=false;this.message='Saving is unavailable. Keep this tab open; this patrol is only in memory.';return {ok:false,retained:true,error:this.message};}
+    }catch{if(!atomic)this.data=candidate;this.durable=false;this.message='Saving is unavailable. Keep this tab open; this patrol is only in memory.';return {ok:false,retained:!atomic,error:this.message};}
   }
-  writeSlot(index,snapshot,{region='Coastal Beginnings',expectedId}={}){
+  writeSlot(index,snapshot,{region='Coastal Beginnings',expectedId,requireDurable=false}={}){
     if(![0,1,2].includes(index))throw Error('Invalid hero slot');
     const state=decodeSave(typeof snapshot==='string'?snapshot:JSON.stringify(snapshot));if(!state)throw Error('Invalid hero snapshot');
     const current=this.data.slots[index];
     if(expectedId!==undefined&&(current?.id??null)!==expectedId)return {ok:false,error:'This hero slot changed. Select it again before saving.'};
+    if(current){
+      const old=current.snapshot;
+      if(state.economy.revision<old.economy.revision||state.inventory.nextId<old.inventory.nextId||Object.keys(old.inventory.retired).some(uid=>!state.inventory.retired[uid])||state.level<old.level||Object.keys(old.powers.levels).some(id=>state.powers.levels[id]<old.powers.levels[id]))return {ok:false,error:'This snapshot predates permanent progress. Reload the latest hero before saving.'};
+    }
     const next=copy(this.data),now=this.now();
     next.slots[index]={id:current?.id||this.id(),createdAt:current?.createdAt||now,updatedAt:now,lastRegion:String(region).slice(0,100),snapshot:state};next.activeSlot=index;next.legacyImported=true;
-    return this.flush(next);
+    return this.flush(next,{atomic:requireDurable});
   }
   deleteSlot(index,expectedId){
     if(![0,1,2].includes(index))throw Error('Invalid hero slot');

@@ -1,0 +1,297 @@
+
+PASS · portrait · Input · 18 checks
+Running real input checks…
+PASS · game starts
+PASS · no page overflow · 390 × 844
+PASS · pause fits viewport
+PASS · stick fits viewport
+PASS · touch controls visible
+PASS · keyboard walking · 160 → 288.2
+PASS · running is faster
+PASS · first jump
+PASS · double jump
+PASS · air steering
+PASS · pause freezes position
+PASS · two-finger move plus jump
+PASS · cancel releases stick
+PASS · touch attack starts
+PASS · focus loss pauses
+PASS · focus loss clears held movement
+PASS · appearance editor opens
+PASS · cancel returns to patrol
+COMPLETE · all input/layout checks passed.
+FPS 1 · draw 0.76ms · play · t 13.38
+x 267.4 y 600.0 · idle
+vx 0.0 vy 0.0 · jumps 0
+monsters 17 · kills 0
+region 1 · roots 0 · gear 0/7 · clock Permanent day
+powers ,, · points 0 · combat false
+viewport 390×844 · save ready
+
+PASS · portrait · Creator · 131 checks
+Running creator / save checks…
+PASS · three-slot selection and legacy import
+PASS · legacy progress and original backup preserved
+PASS · new hero creator opens
+PASS · invalid name rejected: (empty)
+PASS · invalid name rejected:   
+PASS · invalid name rejected: 1234
+PASS · invalid name rejected: Hero<script>
+PASS · invalid name rejected: AAAAAAAAAAAAAAAAAAAAAAA
+PASS · live preview immediately reflects name
+PASS · back preview is selectable
+PASS · front preview is selectable
+PASS · identity panel visible
+PASS · name reachable without horizontal clipping
+PASS · presentation reachable without horizontal clipping
+PASS · age reachable without horizontal clipping
+PASS · skin reachable without horizontal clipping
+PASS · identity actions remain visible
+PASS · face panel visible
+PASS · hair reachable without horizontal clipping
+PASS · hairColor reachable without horizontal clipping
+PASS · eyes reachable without horizontal clipping
+PASS · face reachable without horizontal clipping
+PASS · eyeShape reachable without horizontal clipping
+PASS · brows reachable without horizontal clipping
+PASS · nose reachable without horizontal clipping
+PASS · mouth reachable without horizontal clipping
+PASS · facialHair reachable without horizontal clipping
+PASS · face actions remain visible
+PASS · body panel visible
+PASS · build reachable without horizontal clipping
+PASS · height reachable without horizontal clipping
+PASS · shoulders reachable without horizontal clipping
+PASS · muscle reachable without horizontal clipping
+PASS · torso reachable without horizontal clipping
+PASS · arms reachable without horizontal clipping
+PASS · legs reachable without horizontal clipping
+PASS · body actions remain visible
+PASS · suit panel visible
+PASS · suit reachable without horizontal clipping
+PASS · trim reachable without horizontal clipping
+PASS · emblem reachable without horizontal clipping
+PASS · emblemColor reachable without horizontal clipping
+PASS · capeColor reachable without horizontal clipping
+PASS · cape reachable without horizontal clipping
+PASS · suit actions remain visible
+PASS · no outer page overflow
+PASS · new hero enters gameplay
+PASS · all chosen fields save without losing legacy slot
+PASS · appearance survives checkpoint respawn
+PASS · cancel leaves saved identity unchanged
+PASS · canceling slot creation preserves active save identity
+PASS · reload restores roster portrait and metadata
+PASS · all customization persists after reload
+PASS · three independent slots are usable
+PASS · delete requires confirmation
+PASS · cancel deletion keeps hero
+PASS · confirmed delete only clears selected test slot
+PASS · rendered presentation: female
+PASS · rendered age: teen
+PASS · rendered age: older
+PASS · rendered build: slender
+PASS · rendered build: strong
+PASS · rendered build: full
+PASS · rendered hair: locs
+PASS · rendered hair: short
+PASS · rendered hair: waves
+PASS · rendered hair: ponytail
+PASS · rendered hair: braids
+PASS · rendered hair: none
+PASS · rendered face: round
+PASS · rendered face: angular
+PASS · rendered eyeShape: round
+PASS · rendered eyeShape: wide
+PASS · rendered brows: straight
+PASS · rendered brows: bold
+PASS · rendered nose: small
+PASS · rendered nose: broad
+PASS · rendered mouth: neutral
+PASS · rendered mouth: full
+PASS · rendered facialHair: stubble
+PASS · rendered facialHair: beard
+PASS · rendered emblem: bolt
+PASS · rendered emblem: shield
+PASS · rendered emblem: star
+PASS · rendered emblem: wave
+PASS · rendered emblem: sun
+PASS · rendered height: 0.88
+PASS · rendered height: 1.12
+PASS · rendered shoulders: 0.8
+PASS · rendered shoulders: 1.2
+PASS · rendered muscle: 0
+PASS · rendered muscle: 1
+PASS · rendered torso: 0.85
+PASS · rendered torso: 1.15
+PASS · rendered arms: 0.85
+PASS · rendered arms: 1.15
+PASS · rendered legs: 0.85
+PASS · rendered legs: 1.15
+PASS · rendered skin
+PASS · rendered eyes
+PASS · rendered hairColor
+PASS · rendered suit
+PASS · rendered trim
+PASS · rendered emblemColor
+PASS · rendered capeColor
+PASS · cape toggle changes rendered silhouette
+PASS · back has a distinct appearance
+PASS · back honors skin
+PASS · back honors hair
+PASS · back honors hairColor
+PASS · back honors capeColor
+PASS · back honors cape
+PASS · back honors height
+PASS · back honors build
+PASS · back honors torso
+PASS · back honors arms
+PASS · back honors legs
+PASS · back honors shoulders
+PASS · rendered animation: walk
+PASS · rendered animation: run
+PASS · rendered animation: jump
+PASS · rendered animation: double-jump
+PASS · rendered animation: fall
+PASS · rendered animation: land
+PASS · rendered animation: punch
+PASS · rendered animation: kick
+PASS · rendered animation: air-punch
+PASS · rendered animation: air-kick
+PASS · rendered animation: hurt
+PASS · rendered animation: defeat
+PASS · rendered animation: respawn
+COMPLETE · 131 creator / save / render checks passed · 390 × 844
+Physical-device testing remains separate.
+
+
+PASS · portrait · Powers · 65 checks
+Running Phase 3 UI, save and control checks…
+PASS · legacy hero retains appearance, level and coins
+PASS · health uses Phase 3 level growth
+PASS · 98 earned points imported
+PASS · Tree reachable at Shore camp
+PASS · Tree interface and vitals remain visible
+PASS · Super Strength preview and choice fit
+PASS · strength purchase reachable
+PASS · strength requires confirmation
+PASS · strength upgrade persists immediately
+PASS · Super Kick preview and choice fit
+PASS · superKick purchase reachable
+PASS · superKick requires confirmation
+PASS · superKick upgrade persists immediately
+PASS · Fireball preview and choice fit
+PASS · fireball purchase reachable
+PASS · fireball requires confirmation
+PASS · fireball upgrade persists immediately
+PASS · Flight preview and choice fit
+PASS · flight purchase reachable
+PASS · flight requires confirmation
+PASS · flight upgrade persists immediately
+PASS · Steel Body preview and choice fit
+PASS · steel purchase reachable
+PASS · steel requires confirmation
+PASS · steel upgrade persists immediately
+PASS · Ground Roots preview and choice fit
+PASS · roots purchase reachable
+PASS · roots requires confirmation
+PASS · roots upgrade persists immediately
+PASS · Agility preview and choice fit
+PASS · agility purchase reachable
+PASS · agility requires confirmation
+PASS · agility upgrade persists immediately
+PASS · Speed preview and choice fit
+PASS · speed purchase reachable
+PASS · speed requires confirmation
+PASS · speed upgrade persists immediately
+PASS · Whirlwind preview and choice fit
+PASS · whirlwind purchase reachable
+PASS · whirlwind requires confirmation
+PASS · whirlwind upgrade persists immediately
+PASS · Speed is passive, all nine upgrades cost one point
+PASS · multi-upgrade shows exact final target tier
+PASS · cancel keeps points and level
+PASS · 19-level purchase reaches cap and deducts 19 points
+PASS · three slots save and omit passive Speed
+PASS · equipped choices swap without duplicates
+PASS · control settings open with visible vitals
+PASS · keyboard remap persisted
+PASS · size layout adjustment reachable
+PASS · left layout adjustment reachable
+PASS · right layout adjustment reachable
+PASS · rise layout adjustment reachable
+PASS · Escape closes settings even with a field focused
+PASS · maximum touch layout stays on screen
+PASS · remapped ability darkens on cooldown
+PASS · no numerical cooldown countdown
+PASS · combat blocks swapping and Tree spending
+PASS · loadout unlocks outside combat
+PASS · reload keeps levels, three powers and controls
+PASS · touch activates Flight
+PASS · touch cancellation ends Flight with full recovery
+PASS · simulated standard controller jumps
+PASS · controller pauses
+PASS · controller resumes from pause
+COMPLETE · 65 Phase 3 checks passed at 390 × 844.
+Synthetic pointer/controller inputs; physical devices not tested.
+
+
+PASS · portrait · World · 52 checks
+Running Phase 4 world / economy / save / rendering checks…
+PASS · pending equipment survives reload and opens reward selection
+PASS · equipment screen keeps HP and XP visible
+PASS · replacement shows exact stat comparison
+PASS · cancel replacement changes nothing
+PASS · confirmed replacement keeps seven carried items
+PASS · rare equipment equips and persists
+PASS · ordinary discard also requires confirmation
+PASS · inventory has no horizontal overflow
+PASS · Health Root button fits beside persistent vitals
+PASS · Health Root restores 25% HP immediately
+PASS · second Root works through touch without cooldown
+PASS · existing H and button 11 mappings survive Root control migration
+PASS · remote Tree opens without changing region or location
+PASS · Root purchase fits small screens
+PASS · Root purchase costs 50 and persists
+PASS · insufficient coins disable purchasing
+PASS · clock advances while at Tree
+PASS · world map contains all seven regions
+PASS · locked regions cannot fast travel
+PASS · Coastal Beginnings card is reachable
+PASS · Polluted Forest card is reachable
+PASS · Industrial Wasteland card is reachable
+PASS · Toxic Underground card is reachable
+PASS · Mutated Territories card is reachable
+PASS · Dark Energy Realm card is reachable
+PASS · Final Showdown card is reachable
+PASS · fast travel lands at safe destination camp
+PASS · night countdown visible in Region 3
+PASS · combat disables safe saving, Tree and checkpoint return
+PASS · combat disables all map travel
+PASS · unlocked backward travel works and Coast remains daytime
+PASS · reload preserves appearance, roots, gear, clock and world history
+PASS · Thorn Sprout has distinct art and yellow night eyes
+PASS · Toxic Mushroom has distinct art and yellow night eyes
+PASS · Bark Crawler has distinct art and yellow night eyes
+PASS · Scrap Crawler has distinct art and yellow night eyes
+PASS · Sludge Beast has distinct art and yellow night eyes
+PASS · Rust Drone has distinct art and yellow night eyes
+PASS · Cave Scorpion has distinct art and yellow night eyes
+PASS · Acid Beetle has distinct art and yellow night eyes
+PASS · Venom Crawler has distinct art and yellow night eyes
+PASS · Thorn Beast has distinct art and yellow night eyes
+PASS · Mutant Stalker has distinct art and yellow night eyes
+PASS · Poison Spitter has distinct art and yellow night eyes
+PASS · Shadow Wisp has distinct art and yellow night eyes
+PASS · Energy Phantom has distinct art and yellow night eyes
+PASS · Dark Sentinel has distinct art and yellow night eyes
+PASS · Apocalypse Mutant has distinct art and yellow night eyes
+PASS · Corrupted Guardian has distinct art and yellow night eyes
+PASS · Pollution Titan has distinct art and yellow night eyes
+PASS · all 18 new species have different silhouettes
+PASS · rare white outline stays bright through idle, run and combat hit-flashes
+COMPLETE · 52 Phase 4 checks passed at 390 × 844.
+Synthetic browser checks, not physical-device certification.
+
+
+Focused portrait regression complete. Other sizes are covered by the Phase 6 and boss matrices.

@@ -4,19 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#173d40">
-  <meta name="description" content="Create your own hero and explore Coastal Beginnings in the Hero Showdown Royale Phase 5 playtest.">
-<title>Hero Showdown Royale · Regional Boss Battles</title>
+  <meta name="description" content="Create your own hero and explore Coastal Beginnings in the Hero Showdown Royale Phase 6 playtest.">
+<title>Hero Showdown Royale · Tree of Eris & Costume Wardrobe</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23173d40'/%3E%3Cpath d='M32 8 53 32 32 56 11 32Z' fill='%23e8d298'/%3E%3Cpath d='m24 41 16-20-6 23Z' fill='%232b8067'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="royale.css">
   <link rel="stylesheet" href="powers.css">
   <link rel="stylesheet" href="journey.css">
   <link rel="stylesheet" href="bosses.css">
+  <link rel="stylesheet" href="eris.css">
 </head>
 <body>
   <div id="app">
     <header class="topbar">
       <a class="brand" href="../index.html" aria-label="Return to Hero Showdown"><span class="brand-mark">✦</span><span><small>JAMES CLAN COMICS</small><strong>HERO SHOWDOWN <em>ROYALE</em></strong></span></a>
-      <div class="top-actions"><span class="phase-label"><i></i> PHASE 5 PLAYTEST</span><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
+      <div class="top-actions"><span class="phase-label"><i></i> PHASE 6 PLAYTEST</span><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
     </header>
     <main id="stage" aria-label="Hero Showdown Royale game">
       <canvas id="game" aria-label="2D side-scrolling adventure. Use A and D to move, Space to jump, J to punch and K to kick."></canvas>
@@ -37,12 +38,12 @@
       <output id="diagnostics" hidden></output><button id="measure-performance" hidden>Measure performance</button><output id="performance-result" hidden></output>
       <section id="roster" class="overlay" aria-label="Choose your hero">
         <div class="roster-card" role="dialog" aria-modal="true" aria-labelledby="roster-title">
-          <div class="eyebrow">HERO SHOWDOWN ROYALE · PHASE 05</div>
+          <div class="eyebrow">HERO SHOWDOWN ROYALE · PHASE 06</div>
           <h1 id="roster-title" tabindex="-1">One world. <em>Your heroes.</em></h1>
           <p>Three heroes. Three beginnings. Choose who takes the next step.</p>
           <div id="hero-slots" class="hero-slots"></div>
           <p class="storage-note" id="roster-note" role="status">Saved on this browser only. No account or cloud saving.</p>
-          <div class="practice-links"><a class="text-button practice-link" href="tests/bosses.html">Practice all seven bosses →</a><a class="text-button practice-link" href="tests/world.html">Explore all seven regions →</a><a class="text-button practice-link" href="tests/powers.html">Practice all nine powers →</a></div>
+          <div class="practice-links"><a class="text-button practice-link" href="tests/eris.html">Explore the Tree &amp; Costume Shop →</a><a class="text-button practice-link" href="tests/bosses.html">Practice all seven bosses →</a><a class="text-button practice-link" href="tests/world.html">Explore all seven regions →</a><a class="text-button practice-link" href="tests/powers.html">Practice all nine powers →</a></div>
           <button id="back-to-patrol" class="secondary" hidden>Return to current patrol</button>
         </div>
       </section>
@@ -74,21 +75,37 @@
               </section>
               <section id="panel-face" role="tabpanel" aria-labelledby="tab-face" hidden><div id="face-fields" class="field-grid"></div></section>
               <section id="panel-body" role="tabpanel" aria-labelledby="tab-body" hidden><div id="body-fields" class="field-grid"></div><p class="creator-hint">A shared skeleton adapts to your proportions. All heroes use the same gameplay rules.</p></section>
-              <section id="panel-suit" role="tabpanel" aria-labelledby="tab-suit" hidden><div id="suit-fields" class="field-grid"></div><p id="outfit-note" class="creator-hint">Colors apply to the starter suit only. Future earned or purchased equipment keeps its own colors. Every cape has the same length.</p></section>
+              <section id="panel-suit" role="tabpanel" aria-labelledby="tab-suit" hidden><div id="suit-fields" class="field-grid"></div><p id="outfit-note" class="creator-hint">Colors apply to the starter suit only. Earned and purchased equipment keeps its fixed colors. Every cape has the same length.</p></section>
             </div>
-            <div class="creator-actions"><button type="submit" class="primary" id="begin">BEGIN YOUR ADVENTURE <span>→</span></button><button type="button" id="cancel-look" class="secondary">Back to heroes</button><p class="save-note" id="save-note">Saves automatically after five seconds safely outside combat. No cloud saving.</p></div>
+            <div class="creator-actions"><p id="makeover-cost" class="makeover-cost" role="status" hidden></p><div id="makeover-confirm" class="upgrade-confirm" hidden><p id="makeover-confirm-text"></p><button type="button" id="confirm-makeover" class="primary">Confirm appearance changes</button><button type="button" id="cancel-makeover" class="secondary">Keep previewing</button></div><button type="submit" class="primary" id="begin">BEGIN YOUR ADVENTURE <span>→</span></button><button type="button" id="cancel-look" class="secondary">Back to heroes</button><p class="save-note" id="save-note">Saves automatically after five seconds safely outside combat. No cloud saving.</p></div>
           </form>
         </div>
       </section>
       <section id="pause-menu" class="overlay" hidden>
         <div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
           <div class="eyebrow" id="pause-region">COASTAL BEGINNINGS</div><h2 id="pause-title">A moment to breathe.</h2><p>Your adventure is paused.</p>
-          <button id="resume" class="primary">BACK TO YOUR JOURNEY <span>→</span></button><button id="manual-save" class="secondary">Save hero on this browser</button><button id="edit-look" class="secondary">Customize your hero</button><button id="return-camp" class="secondary">Return to checkpoint · full health</button>
+          <button id="resume" class="primary">BACK TO YOUR JOURNEY <span>→</span></button><button id="manual-save" class="secondary">Save hero on this browser</button><button id="edit-look" class="secondary">Appearance services at Eris</button><button id="return-camp" class="secondary">Return to checkpoint · full health</button>
           <section class="loadout"><div class="loadout-heading"><strong>Your superpowers</strong><span><b id="power-points">0</b> Power Points</span></div><p id="loadout-note"></p><div id="loadout-slots"></div><p id="tree-location"></p><button id="tree-from-pause" class="secondary">Visit the Tree of Eris</button></section><button id="open-map" class="secondary">World map &amp; safe travel</button><button id="open-inventory" class="secondary">Equipment · 7 slots</button><p id="safe-save-note" class="storage-note"></p><button id="open-controls" class="secondary">Keyboard, controller &amp; touch settings</button><div class="control-guide"><strong>YOUR FIELD GUIDE</strong><div><kbd>A D / ← →</kbd><span>Move</span><kbd>Shift</kbd><span>Run</span><kbd>Space / W / ↑</kbd><span>Jump · press again to double-jump</span><kbd>J / Z</kbd><span>Punch · hold to chain</span><kbd>K / X</kbd><span>Kick · works in the air</span><kbd>1 / 2 / 3</kbd><span>Equipped superpowers</span><kbd>↑ / ↓</kbd><span>Steer Flight vertically</span><kbd>H</kbd><span>Use Health Root · no cooldown</span><kbd>E / T</kbd><span>Rest / Tree of Eris</span><kbd>P / Esc</kbd><span>Pause</span></div><p>On touch screens, slide the stick gently to walk or to its edge to run. Use a second finger for jump and attacks.</p></div>
           <div class="pause-bottom"><a href="../index.html">← Hero Showdown</a><button id="choose-hero" class="text-button">Choose another hero</button></div>
         </div>
       </section>
-      <section id="tree-menu" class="overlay game-panel" hidden><div class="tree-card" role="dialog" aria-modal="true" aria-labelledby="tree-title"><header class="tree-heading"><div><div class="eyebrow">GROW INTO YOUR POWER</div><h2 id="tree-title" tabindex="-1">The Tree of Eris</h2><p>One point. One step. A permanent choice.</p></div><div class="point-balance"><b id="tree-points">0</b><span>POWER POINTS</span></div><button id="close-tree" class="secondary">Back to pause</button></header><section id="root-shop" class="root-shop" aria-label="Buy Health Roots"></section><div class="tree-body"><nav id="power-list" aria-label="Choose a superpower"></nav><section id="power-detail" aria-label="Upgrade preview"></section></div></div></section>
+      <section id="tree-menu" class="overlay game-panel" hidden>
+        <div class="eris-card" role="dialog" aria-modal="true" aria-labelledby="tree-title">
+          <header class="eris-heading"><div><div class="eyebrow">SANCTUARY · NO COMBAT</div><h2 id="tree-title" tabindex="-1">The Tree of <em>Eris</em></h2></div><div class="eris-balances"><span><b id="eris-coins">0</b> ◈</span><span><b id="tree-points">0</b> Power Points</span><small id="eris-capacity">0/7 equipment</small></div><button id="close-tree" class="secondary">Return to Adventure →</button></header>
+          <nav class="eris-nav" aria-label="Sanctuary services"><button data-eris="home" aria-pressed="true">Sanctuary</button><button data-eris="powers">Upgrade Powers</button><button data-eris="wardrobe">Costume Wardrobe</button><button id="eris-appearance">Appearance</button><button data-eris="roots">Health Root Shop</button><button disabled title="Available when Legendary Boss rewards arrive in Phase 7">Villain Merge · Locked</button></nav>
+          <div class="eris-scroll">
+            <section data-eris-panel="home" class="sanctuary-home">
+              <div class="sanctuary-art"><div class="sanctuary-copy"><div class="eyebrow">ROOTED IN POSSIBILITY</div><h3>Every hero<br>needs a place<br>to grow.</h3><p>Rest beneath the ancient branches.<br>Your journey will be waiting.</p></div><canvas id="eris-hero" width="360" height="420" aria-label="Your hero at the Tree of Eris"></canvas><span class="tree-sign">ERIS · THE ANCIENT SANCTUARY</span></div>
+              <div class="sanctuary-services"><div class="eyebrow">MAKE YOUR NEXT CHAPTER</div><button data-eris="powers"><span>ϟ</span><div><b>Upgrade Powers</b><small>Spend your Power Points. Make them count.</small></div><i>↗</i></button><button data-eris="wardrobe"><span>⬡</span><div><b>Costume Wardrobe</b><small>Visit the central shop. Buy, equip &amp; sell.</small></div><i>↗</i></button><button data-eris="appearance"><span>◇</span><div><b>Appearance Customization</b><small>A new look. The same hero.</small></div><i>↗</i></button><button data-eris="roots"><span>♧</span><div><b>Health Root Shop</b><small>A little healing for the road ahead.</small></div><i>↗</i></button><div class="merge-locked">♜ <b>Villain Merge</b><small>Locked · awaits Legendary Boss rewards</small></div></div>
+            </section>
+            <section data-eris-panel="powers" class="eris-powers" hidden><div class="tree-body"><nav id="power-list" aria-label="Choose a superpower"></nav><section id="power-detail" aria-label="Upgrade preview"></section></div></section>
+            <section data-eris-panel="wardrobe" hidden>
+              <div class="wardrobe-layout"><aside class="wardrobe-preview"><div class="eyebrow">YOUR NEXT LOOK</div><div class="view-toggle" aria-label="Costume preview view"><button id="gear-view-front" aria-pressed="true">Front</button><button id="gear-view-back" aria-pressed="false">Back</button></div><canvas id="gear-preview" width="360" height="420"></canvas><p>Preview only. Your equipped items change when you choose Equip.</p><p id="equipped-bonuses"></p></aside><div class="wardrobe-main"><header class="wardrobe-heading"><div><div class="eyebrow">THE CENTRAL COSTUME SHOP</div><h3>Dress for your journey.</h3></div><label id="shop-category-wrap" class="field">Category<select id="shop-category"><option value="sets">Complete outfits</option><option value="helmet">Helmets</option><option value="chest">Chest pieces</option><option value="boots">Boots</option><option value="all">All individual pieces</option></select></label></header><div class="wardrobe-tabs" aria-label="Costume shop section"><button data-wardrobe="buy" aria-pressed="true">Buy</button><button data-wardrobe="owned">Owned · Equip</button><button data-wardrobe="sell">Sell</button></div><p id="wardrobe-note"></p><div class="shop-layout"><div id="shop-items" aria-label="Equipment catalog"></div><section id="shop-detail" aria-label="Equipment details and comparison"></section></div><section id="shop-confirm" class="upgrade-confirm" aria-label="Confirm equipment transaction" hidden></section></div></div>
+            </section>
+            <section data-eris-panel="roots" class="eris-roots" hidden><div class="root-emblem" aria-hidden="true">♧</div><section id="root-shop" aria-label="Buy Health Roots"></section></section>
+          </div><footer class="eris-footer"><span id="eris-return"></span><span id="eris-clock"></span></footer>
+        </div>
+      </section>
       <section id="controls-menu" class="overlay game-panel" hidden><div class="settings-card" role="dialog" aria-modal="true" aria-labelledby="settings-title"><header><h2 id="settings-title" tabindex="-1">Make yourself comfortable.</h2><button id="close-controls" class="secondary">Back to pause</button></header><p id="controller-status"></p><p id="mapping-note" role="status"></p><div class="mapping-heading"><span>Action</span><span>Keyboard</span><span>Controller</span></div><div id="mapping-list"></div><h3>Touch layout</h3><p>Sizes and offsets stay within the screen. Drag the stick up or down to steer Flight.</p><div id="touch-settings"></div><button id="reset-controls" class="secondary">Restore default controls</button></div></section>
       <section id="world-menu" class="overlay game-panel" hidden><div class="journey-card" role="dialog" aria-modal="true" aria-labelledby="map-title"><header class="journey-heading"><div><div class="eyebrow">SEVEN REGIONS · ONE JOURNEY</div><h2 id="map-title" tabindex="-1">A world worth protecting.</h2></div><button id="map-close" class="secondary">Back to pause</button></header><p id="map-note" class="journey-note"></p><div class="journey-scroll"><div id="region-cards" class="region-cards"></div><p class="storage-note">Defeat each regional boss and every summoned helper to unlock the next region. Rematches remain available. Practice worlds never change saved heroes.</p></div></div></section>
       <section id="inventory-menu" class="overlay game-panel" hidden><div class="journey-card" role="dialog" aria-modal="true" aria-labelledby="inventory-title"><header class="journey-heading"><div><div class="eyebrow">YOUR FIELD KIT</div><h2 id="inventory-title" tabindex="-1">Carry what matters.</h2></div><button id="inventory-close" class="secondary">Back to pause</button></header><p id="inventory-summary" class="journey-note"></p><div class="journey-scroll"><section id="pending-reward" class="pending-reward" hidden></section><div id="equipment-list" class="equipment-list"></div><section id="equipment-confirm" class="equipment-confirm" role="group" aria-label="Confirm permanent equipment discard" hidden></section><p class="storage-note">Equipment colors are fixed. Only your starter outfit can be recolored. Rare pieces have a constant white glow.</p></div></div></section>

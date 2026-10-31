@@ -41,14 +41,14 @@ button.onclick=async()=>{
     check('all chosen fields save without losing legacy slot',JSON.stringify(data().slots[1].snapshot.look)===JSON.stringify(sanitizeLook(choices))&&data().slots[0].snapshot.coins===87);
     el('return-camp').click();el('pause').click();el('edit-look').click();
     check('appearance survives checkpoint respawn',Object.entries(choices).every(([key,value])=>String(el(key).type==='checkbox'?el(key).checked:el(key).value)===String(value)));
-    set('name','Unsaved Edit');el('cancel-look').click();el('pause').click();el('choose-hero').click();
+    set('name','Unsaved Edit');el('cancel-look').click();el('close-tree').click();el('pause').click();el('choose-hero').click();
     check('cancel leaves saved identity unchanged',data().slots[1].snapshot.look.name==='Azure Beacon');
     // Canceling a new-slot creator must not redirect the current hero's autosave.
     clickSlot(2,'create');el('cancel-look').click();el('back-to-patrol').click();el('pause').click();
     check('canceling slot creation preserves active save identity',data().slots[2]===null&&data().slots[1].snapshot.look.name==='Azure Beacon');
     await reload();check('reload restores roster portrait and metadata',d.querySelector('[data-slot="1"] canvas').getAttribute('aria-label').includes('Azure Beacon')&&d.querySelector('[data-slot="1"]').textContent.includes('Last saved:'));
     clickSlot(1,'continue');el('pause').click();el('edit-look').click();check('all customization persists after reload',Object.entries(choices).every(([key,value])=>String(el(key).type==='checkbox'?el(key).checked:el(key).value)===String(value)));
-    el('cancel-look').click();el('pause').click();el('choose-hero').click();clickSlot(2,'create');set('name','Third Guardian');el('begin').click();el('pause').click();el('choose-hero').click();
+    el('cancel-look').click();el('close-tree').click();el('pause').click();el('choose-hero').click();clickSlot(2,'create');set('name','Third Guardian');el('begin').click();el('pause').click();el('choose-hero').click();
     check('three independent slots are usable',data().slots.every(Boolean)&&new Set(data().slots.map(s=>s.id)).size===3);
     d.querySelector('[data-slot="2"] .delete-hero').click();check('delete requires confirmation',!el('delete-dialog').hidden&&data().slots[2]!==null);el('cancel-delete').click();check('cancel deletion keeps hero',data().slots[2]!==null);
     d.querySelector('[data-slot="2"] .delete-hero').click();el('confirm-delete').click();check('confirmed delete only clears selected test slot',data().slots[2]===null&&data().slots[0]&&data().slots[1]);

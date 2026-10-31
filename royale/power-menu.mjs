@@ -6,7 +6,7 @@ const labels={targets:'Maximum targets',damage:'Damage per hit',bossEffectivenes
 const percent=new Set(['bossEffectiveness','reduction','dodge','legendaryDodge','runBonus','attackBonus','bossHitChance']);
 function format(key,value){return `${Number((value*(percent.has(key)?100:1)).toFixed(4))}${percent.has(key)?'%':['duration','cooldown'].includes(key)?' s':key==='reach'?' units':''}`;}
 export class PowerMenu {
-  constructor(getGame,persist,say){this.getGame=getGame;this.persist=persist;this.say=say;this.selected='strength';this.pending=null;}
+  constructor(getGame,persist,say,transaction=null){this.transaction=transaction;this.getGame=getGame;this.persist=persist;this.say=say;this.selected='strength';this.pending=null;}
   loadout(){
     const g=this.getGame(),safe=!g.inCombat()&&!g.hero.dead;
     $('loadout-note').textContent=safe?'Choose three learned powers. Selecting an equipped power swaps its slot.':'Loadout locked during combat. Move away from enemies and wait until safe.';
@@ -53,13 +53,14 @@ export class PowerMenu {
       status.textContent=level===20?'Maximum level reached.':result.ok?`${count} Power Point${count===1?'':'s'} · Level ${level} → ${next}. This choice is permanent.`:result.error;
       review.disabled=!result.ok;
     };
+    const choices=node('div',undefined,'quantity-actions'),one=node('button','One level','secondary'),maximum=node('button','Maximum affordable','secondary');maximum.id='max-upgrade';one.type=maximum.type='button';one.onclick=()=>{amount.value=1;update();};maximum.disabled=level>=20||g.powers.data.points===0;maximum.onclick=()=>{amount.value=Math.min(20-level,g.powers.data.points);update();};choices.append(one,maximum);label.after(choices);
     amount.oninput=update;update();
     review.onclick=()=>{const count=Number(amount.value),result=g.upgradePreview(id,count);if(!result.ok){update();return;}this.pending={id,count,level};confirmText.textContent=`Spend ${count} Power Point${count===1?'':'s'} on ${def.name}, level ${level} → ${level+count}? Points cannot be redistributed.`;confirmation.hidden=false;confirm.focus();};
     cancel.onclick=()=>{this.pending=null;confirmation.hidden=true;review.focus();};
     confirm.onclick=()=>{
       const pending=this.pending;if(!pending||g.powers.data.levels[id]!==pending.level)return;
-      const result=g.upgradePower(pending.id,pending.count);this.pending=null;
-      if(result.ok){this.persist();this.renderList();this.detail();this.say(`${def.name} upgraded to level ${g.powers.data.levels[id]}.`);$('upgrade-status').focus();}
+      const result=this.transaction?this.transaction(()=>g.upgradePower(pending.id,pending.count)):g.upgradePower(pending.id,pending.count);this.pending=null;
+      if(result.ok){if(!this.transaction)this.persist();this.renderList();this.detail();this.say(`${def.name} upgraded to level ${g.powers.data.levels[id]}.`);$('upgrade-status').focus();}
       else{status.textContent=result.error;confirmation.hidden=true;}
     };
   }
