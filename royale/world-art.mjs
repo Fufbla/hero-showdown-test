@@ -69,7 +69,7 @@ export function worldLandmarks(c,g,camera,width){
   for(const [x,text,color] of [[1940,'→ '+region.boards[1],region.edge],[4020,'→ '+region.boards[2],region.edge]]){
     if(x<camera-200||x>camera+width+200)continue;line(c,[[x,600],[x,508]],'#4d5d59',6);rect(c,x-90,500,180,32,'#233d45');c.fillStyle=color;c.font='bold 12px system-ui';c.textAlign='center';c.fillText(text,x,521);
   }
-  for(const [x,label,locked] of [[GATES.back,g.regionId>1?'E · Previous region':'Shoreward path',false],[GATES.arena,region.boss+' · Arena',true],[GATES.forward,g.regionId===7?'Final seal':g.world.unlocked.includes(g.regionId+1)?'E · Next region':'Boss seal · Locked',!g.world.unlocked.includes(g.regionId+1)]]){
+  for(const [x,label,locked] of [[GATES.back,g.regionId>1?'E · Previous region':'Shoreward path',false],[GATES.arena,'E · '+region.boss+' Arena',false],[GATES.forward,g.regionId===7?'Final seal':g.world.unlocked.includes(g.regionId+1)?'E · Next region':'Boss seal · Locked',!g.world.unlocked.includes(g.regionId+1)]]){
     if(x<camera-240||x>camera+width+240)continue;
     line(c,[[x-33,600],[x-33,490],[x,470],[x+33,490],[x+33,600]],locked?'#7c8589':'#59987f',10);line(c,[[x-29,497],[x+29,497]],'#e2ce95',3);
     if(locked){poly(c,[[x,514],[x+13,531],[x,548],[x-13,531]],'#e5cf96');line(c,[[x-22,575],[x+22,535]],'#c9b88e',3);}

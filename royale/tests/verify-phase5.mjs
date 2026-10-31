@@ -1,0 +1,12 @@
+import {execFileSync} from 'node:child_process';
+import {readFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {BOSS_ART_DEPENDENCIES} from '../boss-art.mjs';
+const base='a8064a5e626e151c77e4f30b18471a5531c69be2';
+const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+assert.equal(git('branch','--show-current'),'feature/showdown-royale');
+const paths=[...git('diff','--name-only',base).split('\n'),...git('ls-files','--others','--exclude-standard').split('\n')].filter(Boolean);
+assert.ok(paths.every(p=>p.startsWith('royale/')),'Phase 5 changes must stay entirely in royale/');
+for(const file of BOSS_ART_DEPENDENCIES)assert.deepEqual(readFileSync(file),execFileSync('git',['show',`${base}:${file}`],{maxBuffer:32*1024*1024}),file+' must remain byte-identical');
+assert.equal(git('diff','--name-only',base,'--','assets','index.html','game.html','hero-showdown.html'),'');
+console.log(`PASS: Phase 5 is isolated to royale/; ${BOSS_ART_DEPENDENCIES.length} approved asset dependencies are byte-identical to Phase 4.`);

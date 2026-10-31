@@ -1,8 +1,8 @@
-# Hero Showdown Royale — Phase 4
+# Hero Showdown Royale — Phase 5
 
-An isolated game mode in Hero Showdown — James Clan Comics. Development stays on `feature/showdown-royale`; Phase 4 builds on `cbc57946a39228b9d3866f71f9da86e6a0e8143c`. No Phase 4 files outside `royale/` are changed.
+An isolated game mode in Hero Showdown — James Clan Comics. Development stays on `feature/showdown-royale`; Phase 5 builds on `a8064a5e626e151c77e4f30b18471a5531c69be2`. No Phase 5 files outside `royale/` are changed.
 
-**[Playtest](https://healthia-showdown-royale-phase1.gladcreek512.chatgpt.site)** · **[Phase 4 guide](PHASE4.md)** · **[Validation report](PHASE4-VALIDATION.md)**
+**[Playtest](https://healthia-showdown-royale-phase1.gladcreek512.chatgpt.site)** · **[Phase 5 guide](PHASE5.md)** · **[Validation report](PHASE5-VALIDATION.md)**
 
 ## Launch
 
@@ -22,7 +22,7 @@ Open `http://localhost:8000/royale/`, or use the existing macOS/Windows launcher
 - Level 99, nonlinear XP, reduced low-level rewards, level-up healing, death XP penalty, automatic coins, Health Roots and ordinary/rare fixed-color equipment.
 - World map, safe travel, Tree purchases/upgrades, strict seven-item inventory, confirmed reward comparisons, and a persistent real-time day/night cycle.
 
-**Boss battles are reserved for Phase 5.** Forward region unlocks require actual boss victories, so normal saves remain in Coastal Beginnings for now. To review later content, choose **Explore all seven regions** from character selection. Its practice fixtures use isolated session storage and do not change real heroes or record real boss victories.
+All seven regional bosses now have three combat phases, telegraphed attacks, limited reinforcements, first-victory treasure, rematches and permanent region unlocks. Enter the marked arena at each region’s far end with E or the touch Passage button. Walk left to retreat. Choose **Practice all seven bosses** on character selection for immediate, disposable recommended-level tests; it does not change saved heroes. See [PHASE5.md](PHASE5.md) for boss stats, controls and artwork status.
 
 Pause opens the World Map, Equipment, Tree and control settings. Save/travel/upgrade/equipment changes require five seconds without attacking or taking damage and no active offensive effect or boss encounter. H uses a Health Root without cooldown; a touch button beside the HUD does the same. See [PHASE4.md](PHASE4.md) for the full controls, XP table, monster stats, drop rules and provisional balancing.
 
@@ -32,9 +32,9 @@ In the seven-region practice page, choose Region 3–7 and **Night**, **Night st
 
 ## Saving
 
-The existing `healthia.royale.profiles.v2` three-slot envelope now contains version-4 snapshots. Versions 1–3 migrate without resetting earned levels, numeric XP, coins, customization, checkpoints or powers. The original Phase 1 key remains as a backup. World location, current health, clock, region unlocks, checkpoint history, monster progress, Roots and equipment now persist.
+The existing `healthia.royale.profiles.v2` three-slot envelope now contains version-5 snapshots. Versions 1–4 migrate without resetting earned levels, numeric XP, coins, customization, checkpoints or powers. The original Phase 1 key remains as a backup. World location, current health, clock, region unlocks, checkpoint history, monster progress, Roots and equipment now persist.
 
-Autosave runs only safely outside combat. Closing during combat restores the last safe save. The clock uses real elapsed time even while closed. Malformed/future data and conflicting writes remain protected from overwrite; unavailable storage shows a warning. There are no game accounts, cloud saves or cross-device synchronization.
+Autosave runs only safely outside combat. Closing during ordinary combat restores the last safe save. Boss entry makes one safe snapshot; reopening during a boss attempt restarts the whole encounter from that snapshot, including its hero resources. Boss wins and chest claims are stored independently per hero. The clock uses real elapsed time even while closed. Malformed/future data and conflicting writes remain protected from overwrite; unavailable storage shows a warning. There are no game accounts, cloud saves or cross-device synchronization.
 
 ## Tests
 
@@ -44,17 +44,19 @@ Node 20+; no dependencies to install:
 node --test royale/tests/*.test.mjs
 node royale/tests/compare-phase1.mjs
 node royale/tests/verify-isolation.mjs
+node royale/tests/verify-phase5.mjs
 ```
 
-`tests/mobile.html` runs actual DOM input, creator/save/render, power, and world/economy suites in five viewport sizes. All fixture storage is isolated. `tests/world.html` is the seven-region practice world; `tests/powers.html` is the nine-power combat lab; `tests/animations.html` is the pose gallery. The Phase 1 differential now compares movement, collisions and basic attack timing, because Phase 4 deliberately changes rewards, AI, XP and defeat rules. Those have separate tests.
+`tests/phase5-browser.html` checks all seven bosses across five viewport sizes; `tests/bosses.html` offers manual boss practice and performance sampling. `tests/mobile.html` runs actual DOM input, creator/save/render, power, and world/economy suites in five viewport sizes. All fixture storage is isolated. `tests/world.html` is the seven-region practice world; `tests/powers.html` is the nine-power combat lab; `tests/animations.html` is the pose gallery. The Phase 1 differential now compares movement, collisions and basic attack timing, because Phase 4 deliberately changes rewards, AI, XP and defeat rules. Those have separate tests.
 
 Browser emulation is separate from physical-device testing. Physical iPhone/Android/tablet/controller testing, Safari/Firefox coverage, sustained performance and long-session balancing require hands-on review. Never infer 60 FPS from the fixed 60 Hz simulation; use actual rendered-frame measurements.
 
 ## Architecture
 
+- `boss-data.mjs`, `bosses.mjs`, `boss-state.mjs`, `boss-art.mjs`, `boss-ui.mjs`: regional encounter rules, saves, canonical artwork adapters, boss HUD and treasure.
 - `core.mjs`: fixed-step hero movement, collision, combat integration and snapshot conversion.
 - `powers.mjs`, `power-menu.mjs`, `power-art.mjs`: established nine-power system and Tree upgrades.
-- `progression.mjs`: XP curve, clock, loot/respawn constants and the future boss-reward boundary.
+- `progression.mjs`: XP curve, clock, loot/respawn constants and the boss-reward boundary.
 - `world.mjs`, `world-state.mjs`: seven-region geometry, 21 species and validated world saves.
 - `journey.mjs`, `monsters.mjs`: progression, economy, inventory actions, travel and advanced enemy behavior.
 - `equipment.mjs`: fixed item catalog, rarity rolls, seven-space validation and equipped-stat adapter.
@@ -65,4 +67,4 @@ Browser emulation is separate from physical-device testing. Physical iPhone/Andr
 - `renderer.mjs`, `app.mjs`: canvas rendering, camera, HUD, sound and browser loop.
 - `../assets/animation/motion-core.js`: reused **unchanged** interpolation helper.
 
-The private playtest deploys only Royale plus that helper. It does not deploy or modify Story or Versus. Historical Phase 2/3 guides and validation reports remain in the repository; [PHASE4-VALIDATION.md](PHASE4-VALIDATION.md) describes current verification. Phase 5 has not begun.
+The private playtest deploys Royale plus unchanged shared artwork/helpers enumerated in `boss-art.mjs`. It does not deploy or modify Story or Versus. Earlier guides remain historical records; [PHASE5-VALIDATION.md](PHASE5-VALIDATION.md) describes current verification. Trash Monster and Ultimate Pollution Boss artwork is explicitly temporary. Phase 6 has not begun.

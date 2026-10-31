@@ -19,7 +19,7 @@ export class JourneyMenu {
       const open=g.world.unlocked.includes(region.id),current=region.id===g.regionId,card=el('article',undefined,'region-card');card.style.setProperty('--region-color',region.sky[0]);card.dataset.region=region.id;if(current)card.setAttribute('aria-current','location');
       const art=el('div',undefined,`region-art ${region.theme}`);art.append(el('span',String(region.id).padStart(2,'0'),'region-number'),el('b',['','≋','♧','▥','◇','❧','✧','✦'][region.id]));card.append(art);
       const body=el('div',undefined,'region-copy');body.append(el('small',`LEVELS ${region.levels.join('–')} · ${region.id<=2?'PERMANENT DAY':'DAY / NIGHT'}`),el('h3',region.name),el('p',region.boards.join(' → ')));
-      body.append(el('p',`${document.body.classList.contains('practice-world')?'Unlocked practice fixture':g.world.bossVictories.includes(region.id)?'Victory recorded':'Arena prepared'} · ${region.boss}`,'boss-note'));
+      body.append(el('p',`${document.body.classList.contains('practice-world')?'Unlocked practice fixture':g.world.bossVictories.includes(region.id)?'Victory recorded':'Challenge available'} · ${region.boss}`,'boss-note'));
       const button=el('button',!open?'Locked · previous boss required':current?'Return to safe camp':'Travel to safe camp',open?'secondary':'secondary locked');button.disabled=!open||!g.canTravel();button.dataset.travel=region.id;
       button.onclick=()=>{if(g.travel(region.id)){this.persist();this.resume();this.say(`${region.name} · arrived at safe camp.`);}else{this.say('That route is locked or combat is active.');this.map();}};body.append(button);card.append(body);list.append(card);
     }
@@ -30,7 +30,8 @@ export class JourneyMenu {
     const list=$('equipment-list');list.replaceChildren();
     if(!g.inventory.items.length)list.append(el('p','Your starter suit is always yours. Regular monsters may drop fixed-color costume equipment.','empty-equipment'));
     const pending=g.inventory.pending[0],reward=$('pending-reward');reward.replaceChildren();reward.hidden=!pending;
-    if(pending){const def=itemDefinition(pending);reward.append(el('div','INVENTORY FULL · CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`${def.rarity==='rare'?'Constant white glow.':'No glow.'} Choose a carried item below to compare and replace, or discard this reward.`));
+    if(pending){const def=itemDefinition(pending);reward.append(el('div',g.inventory.items.length>=7?'INVENTORY FULL · CHOOSE YOUR REWARD':'CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`${def.rarity==='rare'?'Constant white glow.':'No glow.'} Choose a carried item below to compare and replace, or discard this reward.`));
+      if(g.inventory.items.length<7){const keep=el('button','Keep this equipment','primary');keep.id='accept-reward';keep.onclick=()=>{if(g.acceptReward()){this.persist();this.inventory();}};reward.append(keep);}
       const decline=el('button','Discard new reward','secondary');decline.id='discard-reward';decline.onclick=()=>this.confirm(null,true);reward.append(decline);}
     for(const item of g.inventory.items){
       const def=itemDefinition(item),equipped=g.inventory.equipped[def.part]===item.uid,card=el('article',undefined,`equipment-card ${def.rarity}`);card.dataset.item=item.uid;

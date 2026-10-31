@@ -1,3 +1,6 @@
+import { installBossQA } from './boss-qa.mjs';
+import { updateBossHud, openChestMenu } from './boss-ui.mjs';
+import { BOSSES, ARENA } from './boss-data.mjs';
 import { JourneyMenu } from './journey-menu.mjs';
 import { formatClock } from './progression.mjs';
 import { equipmentOutfit } from './equipment.mjs';
@@ -26,7 +29,7 @@ const storage={getItem:key=>(testPrefix?sessionStorage:localStorage).getItem(tes
 const store=new LocalHeroStore(storage);
 let game=new Game(),screen='roster',editing=false,activeSlot=store.data.activeSlot,activeId=null,creatorSlot=activeSlot,deleteTarget=null;
 let audioContext,soundEnabled=false,toastUntil=0,saveAge=0,regionName='',lastHud='',fps=60,drawMs=0,qaClock=0;
-const input=new Input(document,()=>{if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();else if(['tree','controls','world','inventory'].includes(screen))showPause();},loadControls(storage));
+const input=new Input(document,()=>{if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();else if(['tree','controls','world','inventory','chest'].includes(screen))showPause();},loadControls(storage));
 const journeyMenu=new JourneyMenu(()=>game,persist,say,resume);
 const powerMenu=new PowerMenu(()=>game,persist,say),controlMenu=new ControlMenu(input,storage,say);
 const renderer=new Renderer($('game')),creator=new Creator();
@@ -38,15 +41,18 @@ function storageNotice(){
 }
 function persist(){
   if(!game.started||!game.canSave())return {ok:false,error:'Saving resumes after five seconds outside combat.'};
-  const result=store.writeSlot(activeSlot,game.save(),{region:`${game.getRegion().name} · ${boardAt(game.regionId,game.hero.x).name}`,expectedId:activeId});
+  return persistSnapshot(game.save());
+}
+function persistSnapshot(snapshot){
+  const result=store.writeSlot(activeSlot,snapshot,{region:`${game.getRegion().name} · ${boardAt(game.regionId,game.hero.x).name}`,expectedId:activeId});
   if((result.ok||result.retained)&&store.data.slots[activeSlot])activeId=store.data.slots[activeSlot].id;
   storageNotice();return result;
 }
 function setScreen(next){
   if(screen==='tree'&&next!=='tree')game.leaveTree();
   screen=next;input.enabled=next==='play';input.clear();game.paused=next!=='play';
-  for(const [name,id] of Object.entries({roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu'}))$(id).hidden=next!==name;
-  const inGame=game.started&&['play','pause','tree','controls','world','inventory'].includes(next);
+  for(const [name,id] of Object.entries({roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu'}))$(id).hidden=next!==name;
+  const inGame=game.started&&['play','pause','tree','controls','world','inventory','chest'].includes(next);
   $('hud').hidden=!inGame;$('mission').hidden=!inGame;$('pause').disabled=!inGame;
   $('pause').setAttribute('aria-label',next==='play'?'Pause game':'Resume game');$('pause').textContent=next==='play'?'Ⅱ':'▷';
   document.body.classList.toggle('playing',next==='play');document.body.classList.toggle('game-view',inGame);
@@ -85,6 +91,8 @@ function openCreator(index=activeSlot,isEdit=true){
 }
 function cancelCreator(){if(editing){editing=false;resume();}else{renderRoster();setScreen('roster');}}
 function startPatrol(continued){
+  game.onBossVisualStep=(boss,time,dt,x)=>renderer.bossArt.step(boss,time,dt,x);
+  if(game.arenaScene)renderer.bossArt.step(game.arenaScene.boss,game.time,0,game.hero.x);
   game.started=true;regionName='';lastHud='';saveAge=0;renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.cameraY=0;renderer.particles=[];
   setScreen('play');persist();updateHud();if(game.inventory.pending.length){setScreen('inventory');journeyMenu.inventory();}say(continued?'Welcome back, hero. Your patrol continues.':'Welcome to the coast! Move right to find your first Bottle Critter.',4);
 }
@@ -95,8 +103,9 @@ function begin(){
   else{activeSlot=creatorSlot;activeId=null;game=new Game({look});startPatrol(false);}
 }
 function pause(){if(!game.started||screen!=='play')return;showPause();persist();}
-function showPause(){$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero'])$(id).disabled=!game.canSave();$('return-camp').disabled=!game.canTravel();$('safe-save-note').textContent=game.canSave()?'Saving is available · browser-local only.':'Saving is locked. Resume and spend five seconds without attacking or taking damage.';$('resume').focus();}
+function showPause(){$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero','manual-save'])$(id).disabled=!game.canSave();$('return-camp').disabled=!game.canTravel();$('safe-save-note').textContent=game.canSave()?'Saving is available · browser-local only.':'Saving is locked. Resume and spend five seconds without attacking or taking damage.';$('resume').focus();}
 function openTree(){if(!game.visitTree()){say('Leave combat for five seconds before visiting the Tree.');return;}setScreen('tree');powerMenu.open();journeyMenu.shop();$('tree-title').focus();}
+function showChest(){if(!game.availableChest()||!game.canSave())return;setScreen('chest');openChestMenu(game,()=>{if(game.claimChest()){persist();setScreen('inventory');journeyMenu.inventory();say('Coins and Roots collected. Choose which equipment to keep.');}});$('chest-title').focus();}
 function resume(){if(!game.started)return;if(game.inventory.pending.length){setScreen('inventory');journeyMenu.inventory();say('Choose your pending reward before continuing.');return;}setScreen('play');$('pause').blur();}
 function closeDelete(){deleteTarget=null;renderRoster();setScreen('roster');}
 function tone(type) {
@@ -116,6 +125,15 @@ function handleEvents() {
   const events = game.drain(), leveled = events.some(e => e.type === 'level');
   for (const event of events) {
     if(event.type==='tree')openTree();
+    if(event.type==='boss-entry'&&event.snapshot)persistSnapshot(event.snapshot);
+    if(event.type==='arena'&&game.arenaScene)renderer.bossArt.step(game.arenaScene.boss,game.time,0,game.hero.x);
+    if(event.type==='arena'||event.type==='arena-exit'){renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.particles=[];regionName='';lastHud='';}
+    if(event.type==='arena-exit'&&event.reason==='retreat')say('You retreated. The encounter has reset; earned XP is kept.',4);
+    if(event.type==='boss-phase')say(`Phase ${event.phase} · watch for new attack patterns.`,3);
+    if(event.type==='boss-wave')say(`Reinforcement wave ${event.wave} of 3 · three helpers.`,3);
+    if(event.type==='boss-down')say('Boss down! Defeat every remaining helper to confirm victory.',5);
+    if(event.type==='boss-victory'){persist();tone('level');say(`${event.name} defeated! +${event.coins} coins · +${event.xp} XP.${event.first?' First-victory treasure is ready.':''}`,7);}
+    if(event.type==='chest-preview')showChest();
     if(event.type==='gate')say(event.message,6);
     if(event.type==='region'){regionName='';lastHud='';renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.particles=[];say(`${event.name} · a new path ahead.`);}
     if(event.type==='equipment'&&event.pending){setScreen('inventory');journeyMenu.inventory();$('inventory-title').focus();}
@@ -123,12 +141,15 @@ function handleEvents() {
     if (event.type === 'level') say(`Level ${event.level}! Health restored · +1 Power Point.`, 4);
     if (event.type === 'reward' && !leveled) say(`${event.enemy} · +${event.xp} XP · +${event.coins} coin${event.coins===1?'':'s'}${event.root?' · Health Root':''}${event.item?' · Equipment':''}`, 2.3);
     if (event.type === 'camp') { persist(); say(`${event.name} set as your checkpoint. Health restored.`); }
-    if (event.type === 'respawn') { input.clear(); say(`Back at ${event.name}. Full health restored. Levels, coins and items kept.`); }
-    if (event.type === 'destination') { persist(); say('You reached Lighthouse Point! The boss arena is prepared for Phase 5. Explore or head back along the coast.', 6); }
+    if (event.type === 'respawn') { persist();input.clear(); say(`Back at ${event.name}. Full health restored. Levels, coins and items kept.`); }
+    if (event.type === 'destination') { persist(); say('You reached Lighthouse Point! Use the marked arena entrance to challenge Trash Monster.', 6); }
   }
+  if(game.arenaScene)updateBossHud(game,game.started&&['play','pause','tree','controls','world','inventory','chest'].includes(screen));
 }
 function updateHud() {
-  const h = game.hero, region = boardAt(game.regionId,h.x);
+  const h = game.hero, region = game.arenaScene?{name:`${BOSSES[game.regionId].name} Arena`}:boardAt(game.regionId,h.x);
+  updateBossHud(game,game.started&&['play','pause','tree','controls','world','inventory','chest'].includes(screen));
+  if(game.arenaScene&&!renderer.bossArt.ready)$('boss-cue').textContent=renderer.bossArt.errors.length?'Approved art could not load. Reload to retry.':'Loading approved boss artwork…';
   $('world-region').textContent=game.getRegion().name.toUpperCase();$('world-clock').hidden=game.regionId<3;$('world-clock').textContent=formatClock(game.clock());
   $('root-count').textContent=game.healthRoots;$('health-root').querySelector('kbd').textContent=input.controls.keys.heal[0].replace('Key','').replace('Digit','');$('health-root').disabled=screen!=='play'||h.dead||game.healthRoots===0||h.hp>=h.maxHp;
   $('health-root').setAttribute('aria-label',`Use Health Root · ${game.healthRoots} of 4 · restore 25% HP`);
@@ -149,9 +170,10 @@ function updateHud() {
   updatePowers();
   if(screen==='controls')$('controller-status').textContent=input.gamepadLabel;
   $('rest').hidden = screen !== 'play' || !game.canSave() || h.dead || (game.nearCamp()<0&&Math.abs(h.x-5840)>110&&h.x<5995&&!(game.regionId>1&&h.x<110));
-  $('rest').innerHTML=game.nearCamp()>=0?'✦ REST <kbd>E</kbd>':'→ PASSAGE <kbd>E</kbd>';
+  if(game.arenaScene)$('rest').hidden=screen!=='play'||!game.availableChest()||Math.abs(h.x-ARENA.chestX)>140;
+  $('rest').innerHTML=game.arenaScene?'✦ VIEW TREASURE <kbd>E</kbd>':game.nearCamp()>=0?'✦ REST <kbd>E</kbd>':'→ PASSAGE <kbd>E</kbd>';
   $('death').hidden = !h.dead || screen !== 'play'; $('diagnostics').hidden = !params.has('qa');
-  if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nregion ${game.regionId} · roots ${game.healthRoots} · gear ${game.inventory.items.length}/7 · clock ${game.clock().phase}\npowers ${game.powers.data.equipped.join(',')} · points ${game.powers.data.points} · combat ${game.inCombat()}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}`;
+  if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nregion ${game.regionId} · roots ${game.healthRoots} · gear ${game.inventory.items.length}/7 · clock ${game.clock().phase}\npowers ${game.powers.data.equipped.join(',')} · points ${game.powers.data.points} · combat ${game.inCombat()}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}${game.arenaScene?`\nboss ${game.arenaScene.boss.hp.toFixed(0)}/${game.arenaScene.boss.maxHp} · phase ${game.arenaScene.boss.phase} · waves ${game.bossEncounter?.waves||0} · helpers ${game.enemies.filter(e=>e.summoned&&e.state!=='dead').length} · cleared ${game.arenaScene.cleared}`:''}`;
 }
 function updatePowers(){
   for(const [i,b] of [...document.querySelectorAll('.power-button')].entries()){
@@ -162,6 +184,8 @@ function updatePowers(){
   }
   $('power-context').textContent=game.powers.flying?'FLIGHT · steer ↑ ↓ · press Flight to land':game.inCombat()?'IN COMBAT':game.powers.data.points?`${game.powers.data.points} Power Points · visit the Tree of Eris`:'Learn powers at the Tree of Eris';
 }
+$('manual-save').onclick=()=>{const result=persist();say(result.ok?'Hero saved on this browser.':result.error||'Save unavailable.');};
+$('chest-close').onclick=resume;
 $('open-map').onclick=()=>{setScreen('world');journeyMenu.map();$('map-title').focus();};$('map-close').onclick=showPause;
 $('open-inventory').onclick=()=>{setScreen('inventory');journeyMenu.inventory();$('inventory-title').focus();};$('inventory-close').onclick=showPause;
 $('tree-from-pause').onclick=openTree;$('close-tree').onclick=showPause;
@@ -189,12 +213,13 @@ window.addEventListener('storage',e=>{if(testPrefix||e.key!==PROFILE_KEY)return;
 // Keyboard focus stays in the active panel. Tabs also support arrow-key navigation.
 document.addEventListener('keydown',e=>{
   if(e.key!=='Tab'||screen==='play')return;
-  const panel=$({creator:'creator',roster:'roster',delete:'delete-dialog',pause:'pause-menu',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu'}[screen]);
+  const panel=$({creator:'creator',roster:'roster',delete:'delete-dialog',pause:'pause-menu',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu'}[screen]);
   const nodes=[...panel.querySelectorAll('a[href],button,input,select')].filter(n=>!n.disabled&&n.tabIndex!==-1&&n.getClientRects().length);
   if(!nodes.length)return;
   if(e.shiftKey&&(document.activeElement===nodes[0]||!panel.contains(document.activeElement))){e.preventDefault();nodes.at(-1).focus();}
   if(!e.shiftKey&&(document.activeElement===nodes.at(-1)||!panel.contains(document.activeElement))){e.preventDefault();nodes[0].focus();}
 });
+installBossQA(()=>game,()=>{handleEvents();updateHud();});
 renderRoster();setScreen('roster');
 let last=performance.now(),accumulator=0,measurement=null;
 $('measure-performance').onclick=()=>{if(screen==='pause')resume();if(screen!=='play'){$('performance-result').textContent='Start gameplay before measuring.';return;}measurement={start:performance.now(),frames:0,draw:0,max:0,intervals:[]};$('performance-result').textContent='Measuring 30 seconds of visible gameplay…';};
@@ -202,13 +227,15 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden&&measuremen
 function frame(now){
   input.pollGamepad();
   const wallElapsed=Math.max(0,(now-last)/1000),elapsed=Math.min(.1,wallElapsed);last=now;if(wallElapsed>0)fps=fps*.95+.05/wallElapsed;
-  if(screen==='play'){
+  if(game.started&&!game.arenaScene)renderer.bossArt.prepare(game.regionId);
+  const waitingForArt=game.arenaScene&&!renderer.bossArt.ready;
+  if(screen==='play'&&!waitingForArt){
     accumulator+=elapsed;while(accumulator>=STEP){game.step(STEP,input.sample());accumulator-=STEP;}
     handleEvents();saveAge+=elapsed;if(saveAge>5){persist();saveAge=0;}
   }else accumulator=0;
   const drawStart=performance.now();renderer.draw(game,screen==='play'?accumulator/STEP:1,elapsed);
   const cost=performance.now()-drawStart;drawMs=drawMs*.95+cost*.05;
-  if(measurement&&screen!=='play'){measurement=null;$('performance-result').textContent='Sample cancelled: keep gameplay active.';}
+  if(measurement&&(screen!=='play'||waitingForArt)){measurement=null;$('performance-result').textContent='Sample cancelled: keep gameplay active.';}
   if(measurement){const m=measurement;m.frames++;m.draw+=cost;m.max=Math.max(m.max,cost);m.intervals.push(wallElapsed*1000);if(now-m.start>=30000){const seconds=(now-m.start)/1000,sorted=m.intervals.sort((a,b)=>a-b);$('performance-result').textContent=`${seconds.toFixed(1)}s · ${(m.frames/seconds).toFixed(1)} rendered FPS · draw avg ${(m.draw/m.frames).toFixed(2)}ms / max ${m.max.toFixed(2)}ms · p95 frame ${sorted[Math.floor(sorted.length*.95)].toFixed(1)}ms · Region ${game.regionId} · ${innerWidth}×${innerHeight}. This browser only.`;measurement=null;}}
   qaClock+=elapsed;if(qaClock>=.1){updateHud();qaClock=0;}
   if(screen==='creator')creator.draw(now);

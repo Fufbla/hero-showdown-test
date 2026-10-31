@@ -1,3 +1,5 @@
+import { bossMethods, stepBoss } from './bosses.mjs';
+import { normalizeBossProgress, normalizeArena, initialBossProgress } from './boss-state.mjs';
 import { initializeJourney, journeyMethods } from './journey.mjs';
 import { advancedEnemy, stepEnemyProjectiles } from './monsters.mjs';
 import { normalizeWorld } from './world-state.mjs';
@@ -21,15 +23,17 @@ export { DEFAULT_LOOK, sanitizeLook } from './appearance.mjs';
 export function decodeSave(text) {
   try {
     const data = JSON.parse(text);
-    if (!data || ![1,2,3,4].includes(data.version) || (data.version>=2 && (!data.look || typeof data.look!=='object'))) return null;
+    if (!data || ![1,2,3,4,5].includes(data.version) || (data.version>=2 && (!data.look || typeof data.look!=='object'))) return null;
     const integer = (value, max) => clamp(Math.floor(Number(value) || 0), 0, max);
     const level = Math.max(1, integer(data.level, LEVEL_CAP));
     const powers=normalizePowers(data.version>=3?data.powers:null,level,{strict:data.version>=3});
     if(!powers)return null;
     const checkpoint=integer(data.checkpoint,CAMPS.length-1);
-    const world=normalizeWorld(data.version===4?data.world:null,checkpoint),inventory=data.version===4?normalizeInventory(data.inventory):emptyInventory();
-    if(!world||!inventory||data.version===4&&(!data.world||!Number.isInteger(data.healthRoots)||data.healthRoots<0||data.healthRoots>4))return null;
-    return { version: 4, powers, world, inventory, healthRoots:data.version===4?data.healthRoots:0, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
+    const world=normalizeWorld(data.version>=4?data.world:null,checkpoint),inventory=data.version>=4?normalizeInventory(data.inventory):emptyInventory();
+    if(!world||!inventory||data.version>=4&&(!data.world||!Number.isInteger(data.healthRoots)||data.healthRoots<0||data.healthRoots>4))return null;
+    const bossProgress=normalizeBossProgress(data.version===5?data.bossProgress:null,world.bossVictories,{strict:data.version===5});if(!bossProgress)return null;
+    const arena=normalizeArena(data.version===5?data.arena:null,world,bossProgress);if(arena===false)return null;
+    return { version: 5, bossProgress, arena, powers, world, inventory, healthRoots:data.version>=4?data.healthRoots:0, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
       xp: level===99?0:integer(data.xp, xpForLevel(level) - 1), coins: integer(data.coins, 999999),
       checkpoint: integer(data.checkpoint, CAMPS.length - 1), kills: integer(data.kills, 999999),
       species: [...new Set((Array.isArray(data.species) ? data.species : []).filter(t => Object.hasOwn(TYPES,t)))],
@@ -41,7 +45,7 @@ export class Game {
     this.look = sanitizeLook(look ?? save?.look); this.outfit = sanitizeOutfit(save?.outfit); this.surfaces = surfaces||regionSurfaces(save?.world?.region||1); this.time = 0; this.paused = false;
     this.checkpoint = save?.checkpoint || 0; this.kills = save?.kills || 0;
     this.species = new Set(save?.species || []); this.reachedEnd = save?.reachedEnd || false;
-    this.random=random; this.baseEquipment=equipmentStats(equipment); this.combatTimer=0;initializeJourney(this,save,now);this.refreshEquipment();
+    this.random=random; this.baseEquipment=equipmentStats(equipment); this.combatTimer=0;initializeJourney(this,save,now);this.initializeBosses(save);this.refreshEquipment();
     this.events = []; this.attackSerial = 0; this.deathTimer = 0; this.started = false;
     const camp = this.camps[this.world.checkpoint.region===this.regionId?this.world.checkpoint.index:0], level = save?.level || 1;
     this.hero = { x: camp.x, y: camp.y, prevX: camp.x, prevY: camp.y, w: 34, h: 88,
@@ -56,6 +60,7 @@ export class Game {
     if(location&&!this.hero.grounded){this.hero.coyote=0;this.hero.jumps=Math.max(1,this.hero.jumps);}
     this.board=boardIndex(this.hero.x);
     for(const old of save?.world?.monsters||[]){const e=this.enemies.find(e=>e.id===old.id&&e.type===old.type);if(e){e.hp=old.hp;e.respawn=old.respawn;if(e.hp<=0){e.state='dead';e.rewarded=true;}}}
+    if(save?.arena)this.startBossScene(save.arena.mode);
   }
   makeEnemy(type, x, surface, id) {
     const ground = this.surfaces.find(s => s.id === surface) || this.surfaces[0];
@@ -70,7 +75,7 @@ export class Game {
   markCombat(){this.combatTimer=PROGRESSION.combatGrace;}
   inCombat(){return !!this.bossEncounter||this.combatTimer>1e-8||!!this.hero.attack||Object.entries(this.powers.active).some(([id])=>POWERS[id].offensive)||this.powers.projectiles.length>0||this.powers.bursts.length>0||this.enemyShots.length>0;}
 
-  nearTree(){return !this.hero.dead&&(this.treeVisit||(this.hero.grounded&&Math.abs(this.hero.x-BALANCE.tree.x)<85&&Math.abs(this.hero.y-BALANCE.tree.y)<40));}
+  nearTree(){return !this.hero.dead&&(this.treeVisit||(!this.arenaScene&&this.hero.grounded&&Math.abs(this.hero.x-BALANCE.tree.x)<85&&Math.abs(this.hero.y-BALANCE.tree.y)<40));}
   upgradePreview(id,count=1){
     if(!Object.hasOwn(POWERS,id))return {ok:false,error:'Unknown power.'};
     const levels=this.powers.data.levels,current=levels[id];
@@ -97,7 +102,7 @@ export class Game {
     if(stagger&&!isBoss(e)){e.stagger=.26;e.state='recover';e.age=0;}
     if(knock&&!e.rooted&&!e.lifted&&!isBoss(e))e.x=clamp(e.x+face*knock,e.surface.x+e.w/2,e.surface.x+e.surface.w-e.w/2);
     this.emit('hit',{x:e.x,y:e.y-e.h/2,kind});
-    if(e.hp<=0){e.state='dead';e.respawn=this.respawnDelay(e);e.rooted=false;e.lifted=false;this.reward(e);}
+    if(isBoss(e)&&e.type.startsWith('boss-')){this.bossDamaged(e);}else if(e.hp<=0){e.state='dead';e.respawn=e.summoned?0:this.respawnDelay(e);e.rooted=false;e.lifted=false;this.reward(e);}
     return true;
   }
   moveEnemyAir(e,nx,ny){
@@ -164,6 +169,7 @@ export class Game {
   }
   defeat() {
     const h = this.hero; if (h.dead) return;
+    if(this.arenaScene)this.leaveBoss('defeat');
     this.powers.cancelEffects();
     this.lastDefeatPenalty=h.level<99?Math.min(h.xp,Math.floor(xpForLevel(h.level)*PROGRESSION.defeatFraction)):0;h.xp-=this.lastDefeatPenalty;
     h.dead = true; h.defeatAge = 0; h.hp = 0; h.vx = h.vy = 0; h.attack = null; h.attackBuffer = null;
@@ -183,6 +189,7 @@ export class Game {
   isSafeCamp(){return !this.bossEncounter&&this.camps.some(c=>Math.abs(c.x-this.hero.x)<180&&Math.abs(c.y-this.hero.y)<100);}
   nearCamp() { return this.camps.findIndex(c => Math.abs(c.x - this.hero.x) < 90 && Math.abs(c.y - this.hero.y) < 40); }
   interact() {
+    if(this.arenaScene){if(this.availableChest()&&Math.abs(this.hero.x-1060)<140)this.emit('chest-preview');return;}
     const i = this.nearCamp();
     if (i < 0) {this.usePassage();return;}
     if (!this.canSave()) return;
@@ -234,12 +241,14 @@ export class Game {
       this.powers.melee(attack,candidates);
     }
     for (const e of this.enemies) this.stepEnemy(e, dt);
-    stepEnemyProjectiles(this,dt);this.enterBoard(boardIndex(h.x));
+    stepEnemyProjectiles(this,dt);this.stepEncounter(dt);if(!this.arenaScene)this.enterBoard(boardIndex(h.x));
     h.cycle += Math.abs(h.x - h.prevX) / 52;
     h.pose = h.stun > 0 ? 'hurt' : h.attack ? h.attack.kind : !h.grounded ? (h.vy < 0 ? 'jump' : 'fall') : h.landing > 0 ? 'land' : Math.abs(h.vx) > 220 ? 'run' : Math.abs(h.vx) > 8 ? 'walk' : 'idle';
-    if (this.regionId===1&&h.x >= 5860 && !this.reachedEnd) { this.reachedEnd = true; this.emit('destination'); }
+    if (!this.arenaScene&&this.regionId===1&&h.x >= 5860 && !this.reachedEnd) { this.reachedEnd = true; this.emit('destination'); }
   }
   stepEnemy(e, dt) {
+    if(isBoss(e)&&e.type.startsWith('boss-')){stepBoss(this,e,dt);this.onBossVisualStep?.(e,this.time,dt,this.hero.x);return;}
+    if(e.summoned&&e.state==='dead')return;
     if(!e.lifted){e.prevX = e.x; e.prevY = e.y;}
     if (e.state === 'dead') {
       e.respawn -= dt;
@@ -286,8 +295,10 @@ export class Game {
     const h=this.hero;
     this.world.checkpoint=this.world.checkpoint.region===this.regionId?{region:this.regionId,index:this.checkpoint}:this.world.checkpoint;
     if(!this.world.activated.includes(`${this.world.checkpoint.region}:${this.world.checkpoint.index}`))this.world.activated.push(`${this.world.checkpoint.region}:${this.world.checkpoint.index}`);
-    const world={...this.world,region:this.regionId,location:{x:h.x,y:h.y,face:h.face,hp:h.hp,vx:h.vx,vy:this.powers.flying?Math.max(0,h.vy):h.vy,jumps:h.jumps},monsters:this.enemies.filter(e=>!isBoss(e)&&!e.summoned).map(e=>({id:e.id,type:e.type,hp:e.hp,respawn:Math.max(0,e.respawn)}))};
-    return JSON.stringify({version:4,powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
+    const location=this.arenaScene?{...this.arenaScene.returnLocation,hp:h.hp,vx:0,vy:0,jumps:0}:{x:h.x,y:h.y,face:h.face,hp:h.hp,vx:h.vx,vy:this.powers.flying?Math.max(0,h.vy):h.vy,jumps:h.jumps};
+    for(const region of this.world.bossVictories)if(!this.bossProgress.records[region])this.bossProgress.records[region]=initialBossProgress([region]).records[region];
+    const world={...this.world,region:this.regionId,location,monsters:(this.arenaScene?.enemies||this.enemies).filter(e=>!isBoss(e)&&!e.summoned).map(e=>({id:e.id,type:e.type,hp:e.hp,respawn:Math.max(0,e.respawn)}))};
+    return JSON.stringify({version:5,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?{region:this.regionId,mode:'cleared'}:null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
   }
 }
-Object.assign(Game.prototype,journeyMethods);
+Object.assign(Game.prototype,journeyMethods,bossMethods);

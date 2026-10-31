@@ -77,6 +77,7 @@ export const journeyMethods={
     this.emit('reward',{x:e.x,y:e.y-24,xp,coins,root,item:!!item,enemy:info.name});
   },
   loadRegion(id,{x,y,checkpoint=false}={}){
+    if(this.arenaScene)this.leaveBoss('travel');
     this.powers.cancelEffects();this.hero.attack=null;this.hero.attackBuffer=null;this.enemyShots=[];
     this.regionId=id;this.world.region=id;this.camps=regionCamps(id);this.surfaces=regionSurfaces(id);
     this.enemies=regionSpawns(id).map(([type,sx,surface],i)=>this.makeEnemy(type,sx,surface,i));
@@ -97,9 +98,9 @@ export const journeyMethods={
     if(x<110&&id>1){this.loadRegion(id-1,{x:5660,y:600});return true;}
     if(x>GATES.forward-75&&id<7){
       if(this.world.bossVictories.includes(id)&&this.world.unlocked.includes(id+1)){this.loadRegion(id+1,{checkpoint:true});return true;}
-      this.emit('gate',{message:`Defeat ${this.getRegion().boss} to open this passage. Boss battles arrive in Phase 5.`});return false;
+      this.emit('gate',{message:`Defeat ${this.getRegion().boss} and all its helpers to open this passage.`});return false;
     }
-    if(Math.abs(x-GATES.arena)<110){this.emit('gate',{message:`${this.getRegion().boss} arena entrance · battle coming in Phase 5.`});return false;}
+    if(Math.abs(x-GATES.arena)<110)return this.enterBoss();
     return false;
   },
   returnCheckpoint(){
@@ -112,5 +113,5 @@ export const journeyMethods={
     this.emit('board');
   },
   respawnDelay(e){return RESPAWN[TYPES[e.type]?.rank]||RESPAWN.common;},
-  monsterDamage(e){return TYPES[e.type].damage*(this.clock().night&&!isBoss(e)?2:1);},
+  monsterDamage(e){if(isBoss(e))return e.damage??TYPES[e.type]?.damage??0;return TYPES[e.type].damage*(this.clock().night&&!isBoss(e)?2:1);},
 };

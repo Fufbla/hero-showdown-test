@@ -1,0 +1,1 @@
+30.6s · 1.5 rendered FPS · draw avg 1.63ms / max 7.90ms · p95 frame 1016.5ms · Region 4 · 1348×781. This browser only.

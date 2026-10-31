@@ -128,7 +128,7 @@ test('safe fast travel lands at destination camp; backward connected paths and c
 });
 test('v1, v2 and v3 migration preserve level, XP, coins, look, checkpoint and permanent powers',()=>{
   for(const version of [1,2,3]){const old={version,level:35,xp:947,coins:785,checkpoint:2,look:{name:'Long Journey',hair:'locs',suit:'#c0ffee'}};if(version===3)old.powers={levels:Object.fromEntries(POWER_IDS.map(id=>[id,id==='strength'?20:0])),equipped:['strength',null,null]};
-    const save=decodeSave(JSON.stringify(old));assert.ok(save);assert.equal(save.version,4);const g=new Game({save});assert.equal(g.hero.level,35);assert.equal(g.hero.xp,947);assert.equal(g.hero.coins,785);assert.equal(g.hero.x,4370);assert.equal(g.look.suit,'#c0ffee');assert.equal(g.powers.data.points,version===3?14:34);assert.deepEqual(g.world.unlocked,[1]);assert.equal(g.healthRoots,0);assert.ok(decodeSave(JSON.stringify(save)));}
+    const save=decodeSave(JSON.stringify(old));assert.ok(save);assert.equal(save.version,5);const g=new Game({save});assert.equal(g.hero.level,35);assert.equal(g.hero.xp,947);assert.equal(g.hero.coins,785);assert.equal(g.hero.x,4370);assert.equal(g.look.suit,'#c0ffee');assert.equal(g.powers.data.points,version===3?14:34);assert.deepEqual(g.world.unlocked,[1]);assert.equal(g.healthRoots,0);assert.ok(decodeSave(JSON.stringify(save)));}
 });
 test('v4 round-trip retains location, damaged HP, roots, inventory, monsters, clock and world history',()=>{
   const g=regional(5);g.hero.level=65;g.hero.maxHp=1060;g.hero.hp=500;g.hero.x=3450;g.hero.y=600;g.hero.xp=500;g.healthRoots=3;g.hero.coins=300;g.powers.data.levels.strength=20;g.powers.data.points=44;const e=g.enemies[0];e.hp=0;e.state='dead';e.respawn=12;

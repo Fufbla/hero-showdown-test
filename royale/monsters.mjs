@@ -34,7 +34,7 @@ export function stepEnemyProjectiles(g,dt){
   for(const p of g.enemyShots){
     const nx=p.x+p.vx*dt,ny=p.y+p.vy*dt,h=g.heroBox();
     const hit=segmentHit(p.x,p.y,nx,ny,h,5),wall=g.surfaces.filter(s=>!s.oneWay).map(s=>segmentHit(p.x,p.y,nx,ny,s,5)).filter(t=>t!==null).sort((a,b)=>a-b)[0];
-    if(hit!==null&&(wall===undefined||hit<wall)){g.hurt(g.monsterDamage(p.source),p.x,p.source);p.life=0;}
+    if(hit!==null&&(wall===undefined||hit<wall)){g.hurt(p.damage??g.monsterDamage(p.source),p.x,p.source);p.life=0;}
     else if(wall!==undefined)p.life=0;
     p.x=nx;p.y=ny;p.life-=dt;
   }
