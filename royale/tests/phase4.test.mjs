@@ -5,7 +5,7 @@ import {PROGRESSION,CLOCK,LOOT,RESPAWN,monsterXP,worldClock,bossVictory} from '.
 import {WORLD_REGIONS,TYPES,regionSurfaces,regionSpawns,boardIndex} from '../world.mjs';
 import {createEquipment,rollEquipment,equipmentBonuses,normalizeInventory} from '../equipment.mjs';
 import {normalizeControls} from '../controls.mjs';
-import {initialWorld} from '../world-state.mjs';
+import {initialWorld,WORLD_CLOCK_REFERENCE} from '../world-state.mjs';
 import {powerStats,POWER_IDS,attackRate} from '../powers.mjs';
 import {LocalHeroStore,PROFILE_KEY} from '../saves.mjs';
 const tick=(g,n,input={})=>{for(let i=0;i<n;i++)g.step(STEP,input);};
@@ -42,7 +42,7 @@ test('five seconds after every attack, including whiffs, blocks save, travel, Tr
   tick(g,299);assert.equal(g.canSave(),false);tick(g,2);assert.ok(g.canSave());assert.ok(g.save());g.hero.invulnerable=0;g.hurt(1,0);assert.equal(g.canSave(),false);tick(g,299);assert.equal(g.canSave(),false);tick(g,2);assert.ok(g.canSave());
 });
 test('boss encounter always blocks safety; pause freezes combat recovery but never the real clock',()=>{
-  let now=0;const g=regional(3,{now:()=>now});g.markCombat();g.paused=true;tick(g,600);assert.equal(g.combatTimer,5);now=CLOCK.day;assert.ok(g.clock().night);g.combatTimer=0;g.bossEncounter={};assert.equal(g.canTravel(),false);assert.equal(g.save(),null);
+  let now=WORLD_CLOCK_REFERENCE;const g=regional(3,{now:()=>now});g.markCombat();g.paused=true;tick(g,600);assert.equal(g.combatTimer,5);now=WORLD_CLOCK_REFERENCE+CLOCK.day;assert.ok(g.clock().night);g.combatTimer=0;g.bossEncounter={};assert.equal(g.canTravel(),false);assert.equal(g.save(),null);
 });
 test('Tree is safely accessible remotely and leaves the exact previous location unchanged',()=>{
   const g=regional(2);g.hero.x=1700;g.hero.y=470;g.hero.grounded=false;const pos=[g.hero.x,g.hero.y];assert.ok(g.visitTree());g.paused=true;g.hero.coins=100;assert.ok(g.buyHealthRoot());g.hero.level=2;g.powers.data.points=1;assert.ok(g.upgradePower('fireball',1).ok);g.leaveTree();assert.deepEqual([g.hero.x,g.hero.y],pos);assert.equal(g.nearTree(),false);
@@ -55,7 +55,7 @@ for(const r of WORLD_REGIONS){
   });
   test(`Region ${r.id}: reward rates, night invariants, rare restrictions`,()=>{
     const types=r.types,results=[];
-    for(const type of types){let now=0;const g=regional(r.id,{now:()=>now});g.hero.level=TYPES[type].level;const e=enemy(g,type);const hp=e.maxHp,day=g.monsterDamage(e);g.reward(e);assert.equal(g.hero.coins,1);now=CLOCK.day;const next=enemy(g,type);g.reward(next);assert.equal(g.hero.coins,r.id<3?2:3);assert.equal(next.maxHp,hp);assert.equal(g.monsterDamage(next),day*(r.id<3?1:2));results.push(next.type);}
+    for(const type of types){let now=WORLD_CLOCK_REFERENCE;const g=regional(r.id,{now:()=>now});g.hero.level=TYPES[type].level;const e=enemy(g,type);const hp=e.maxHp,day=g.monsterDamage(e);g.reward(e);assert.equal(g.hero.coins,1);now=WORLD_CLOCK_REFERENCE+CLOCK.day;const next=enemy(g,type);g.reward(next);assert.equal(g.hero.coins,r.id<3?2:3);assert.equal(next.maxHp,hp);assert.equal(g.monsterDamage(next),day*(r.id<3?1:2));results.push(next.type);}
     let rare=0,ordinary=0;for(let i=0;i<10000;i++){let draws=0;const item=rollEquipment(r.id,()=>draws++===0?(i+.5)/10000:.4,i+1);if(item?.catalogId.includes('-rare-'))rare++;else if(item)ordinary++;}
     assert.equal(rare,Math.round(LOOT.rareChance[r.id]*10000));assert.equal(ordinary,1200);
   });
@@ -105,37 +105,37 @@ test('fixed equipment stats survive save; worn part swaps do not expand inventor
   const copy=new Game({save:decodeSave(g.save())});assert.deepEqual(copy.inventory,g.inventory);assert.deepEqual(copy.equipment,g.equipment);
 });
 test('clock uses real elapsed time: exact day/night boundaries, pause, closing, repeat cycles',()=>{
-  const epoch=100000;
+  const epoch=WORLD_CLOCK_REFERENCE;
   for(const region of [1,2])for(const now of [epoch,epoch+CLOCK.day,epoch+1e12])assert.equal(worldClock(epoch,now,region).night,false);
   for(const region of [3,4,5,6,7]){assert.equal(worldClock(epoch,epoch+CLOCK.day-1,region).night,false);assert.equal(worldClock(epoch,epoch+CLOCK.day,region).night,true);assert.equal(worldClock(epoch,epoch+CLOCK.day+CLOCK.night,region).night,false);assert.equal(worldClock(epoch,epoch-1,region).night,false);}
   let now=epoch;const g=regional(3,{now:()=>now});g.paused=true;const saved=g.save();now+=CLOCK.day+1234;const restored=new Game({save:decodeSave(saved),now:()=>now});assert.ok(restored.clock().night);assert.equal(restored.world.clockReference,epoch);assert.equal(restored.clock().remaining,599);
 });
 test('night doubles regular attacks but not bosses, HP, XP or drop rates; returns instantly to day',()=>{
-  let now=0;const g=regional(6,{now:()=>now}),e=enemy(g,'sentinel');const hp=e.maxHp,day=g.monsterDamage(e);now=CLOCK.day;assert.equal(g.monsterDamage(e),day*2);e.boss=true;assert.equal(g.monsterDamage(e),day);e.boss=false;now=CLOCK.day+CLOCK.night;assert.equal(g.monsterDamage(e),day);assert.equal(e.maxHp,hp);
+  let now=WORLD_CLOCK_REFERENCE;const g=regional(6,{now:()=>now}),e=enemy(g,'sentinel');const hp=e.maxHp,day=g.monsterDamage(e);now=WORLD_CLOCK_REFERENCE+CLOCK.day;assert.equal(g.monsterDamage(e),day*2);e.boss=true;assert.equal(g.monsterDamage(e),day);e.boss=false;now=WORLD_CLOCK_REFERENCE+CLOCK.day+CLOCK.night;assert.equal(g.monsterDamage(e),day);assert.equal(e.maxHp,hp);
 });
 test('Flight, Steel, Agility and Roots preserve rules against ranged and airborne monsters',()=>{
   const g=regional(3);g.hero.level=99;g.hero.invulnerable=0;g.powers.data.levels.flight=20;g.powers.data.levels.fireball=20;g.powers.data.levels.roots=20;g.powers.data.equipped=['flight','fireball','roots'];
   const e=enemy(g,'drone',g.hero.x+40);assert.ok(g.powers.activate('roots'));assert.equal(e.rooted,undefined);g.powers.end('roots');g.hero.grounded=true;assert.ok(g.powers.activate('flight'));assert.equal(g.hurt(200,e.x,e),false);assert.equal(g.powers.activate('roots'),false);assert.ok(g.powers.activate('fireball'));
 });
-test('normal saves start in Region 1 and cannot bypass boss gates with travel or passages',()=>{
-  const g=empty();assert.deepEqual(g.world.unlocked,[1]);for(let id=2;id<=7;id++)assert.equal(g.travel(id),false);g.hero.x=6070;assert.equal(g.usePassage(),false);assert.equal(g.regionId,1);assert.equal(g.hero.coins,0);assert.deepEqual(g.world.bossVictories,[]);
+test('new level-one heroes can travel through every region without boss victories',()=>{
+ const g=empty();assert.deepEqual(g.world.unlocked,[1,2,3,4,5,6,7]);for(let id=1;id<=7;id++)assert.ok(g.travel(id));g.travel(1);g.hero.x=6070;assert.ok(g.usePassage());assert.equal(g.regionId,2);assert.equal(g.hero.level,1);assert.equal(g.hero.coins,0);assert.deepEqual(g.world.bossVictories,[]);
 });
-test('future boss reward boundary: first 100, repeats 10, per hero and sequential forward unlocks',()=>{
-  const a=initialWorld(0),b=initialWorld(0);assert.equal(bossVictory(a,2).ok,false);assert.equal(bossVictory(a,1).coins,100);assert.equal(bossVictory(a,1).coins,10);assert.deepEqual(a.unlocked,[1,2]);assert.deepEqual(b.unlocked,[1]);for(let i=2;i<=7;i++)assert.equal(bossVictory(a,i).coins,100);assert.equal(a.unlocked.length,7);
+test('first and repeat boss rewards remain independent of open-world access',()=>{
+ const a=initialWorld(),b=initialWorld();for(let id=7;id>=1;id--){assert.equal(bossVictory(a,id).coins,100);assert.equal(bossVictory(a,id).coins,10);}assert.deepEqual(b.bossVictories,[]);assert.deepEqual(a.unlocked,b.unlocked);
 });
-test('safe fast travel lands at destination camp; backward connected paths and checkpoints persist',()=>{
-  const g=regional(3);assert.ok(g.travel(2));assert.equal(g.hero.x,160);assert.equal(g.hero.y,600);assert.deepEqual(g.world.checkpoint,{region:2,index:0});g.hero.x=44;assert.ok(g.usePassage());assert.equal(g.regionId,1);assert.equal(g.hero.x,5660);g.defeat();g.respawn();assert.equal(g.regionId,2);assert.equal(g.hero.x,160);
+test('both portal and backward passages arrive at the destination safe checkpoint',()=>{
+ const g=regional(3);assert.ok(g.travel(2));assert.equal(g.hero.x,160);assert.equal(g.hero.y,600);assert.deepEqual(g.world.checkpoint,{region:2,index:0});g.hero.x=44;assert.ok(g.usePassage());assert.equal(g.regionId,1);assert.equal(g.hero.x,160);g.defeat();g.respawn();assert.equal(g.regionId,1);assert.equal(g.hero.x,160);
 });
 test('v1, v2 and v3 migration preserve level, XP, coins, look, checkpoint and permanent powers',()=>{
   for(const version of [1,2,3]){const old={version,level:35,xp:947,coins:785,checkpoint:2,look:{name:'Long Journey',hair:'locs',suit:'#c0ffee'}};if(version===3)old.powers={levels:Object.fromEntries(POWER_IDS.map(id=>[id,id==='strength'?20:0])),equipped:['strength',null,null]};
-    const save=decodeSave(JSON.stringify(old));assert.ok(save);assert.equal(save.version,7);const g=new Game({save});assert.equal(g.hero.level,35);assert.equal(g.hero.xp,947);assert.equal(g.hero.coins,785);assert.equal(g.hero.x,4370);assert.equal(g.look.suit,'#c0ffee');assert.equal(g.powers.data.points,version===3?14:34);assert.deepEqual(g.world.unlocked,[1]);assert.equal(g.healthRoots,0);assert.ok(decodeSave(JSON.stringify(save)));}
+    const save=decodeSave(JSON.stringify(old));assert.ok(save);assert.equal(save.version,8);const g=new Game({save});assert.equal(g.hero.level,35);assert.equal(g.hero.xp,947);assert.equal(g.hero.coins,785);assert.equal(g.hero.x,4370);assert.equal(g.look.suit,'#c0ffee');assert.equal(g.powers.data.points,version===3?14:34);assert.deepEqual(g.world.unlocked,[1,2,3,4,5,6,7]);assert.equal(g.healthRoots,0);assert.ok(decodeSave(JSON.stringify(save)));}
 });
 test('v4 round-trip retains location, damaged HP, roots, inventory, monsters, clock and world history',()=>{
   const g=regional(5);g.hero.level=65;g.hero.maxHp=1060;g.hero.hp=500;g.hero.x=3450;g.hero.y=600;g.hero.xp=500;g.healthRoots=3;g.hero.coins=300;g.powers.data.levels.strength=20;g.powers.data.points=44;const e=g.enemies[0];e.hp=0;e.state='dead';e.respawn=12;
   const text=g.save(),save=decodeSave(text);assert.ok(save);const restored=new Game({save});assert.equal(restored.hero.x,3450);assert.equal(restored.hero.hp,500);assert.equal(restored.healthRoots,3);assert.equal(restored.enemies[0].state,'dead');assert.equal(restored.enemies[0].respawn,12);assert.deepEqual(restored.world.bossVictories,g.world.bossVictories);assert.equal(restored.world.clockReference,g.world.clockReference);
 });
 test('invalid future, inventory overflow, duplicate gear and inconsistent world saves are rejected intact',()=>{
-  const raw=JSON.parse(empty().save()),variants=[];let a=structuredClone(raw);a.version=99;variants.push(a);a=structuredClone(raw);a.world.unlocked=[1,7];variants.push(a);a=structuredClone(raw);a.healthRoots=5;variants.push(a);a=structuredClone(raw);a.inventory.items=Array.from({length:8},(_,i)=>createEquipment(1,'ordinary',0,i+1));variants.push(a);a=structuredClone(raw);a.world.location.y=700;variants.push(a);
+  const raw=JSON.parse(empty().save()),variants=[];let a=structuredClone(raw);a.version=99;variants.push(a);a=structuredClone(raw);a.world.unlocked=[1,8];variants.push(a);a=structuredClone(raw);a.healthRoots=5;variants.push(a);a=structuredClone(raw);a.inventory.items=Array.from({length:8},(_,i)=>createEquipment(1,'ordinary',0,i+1));variants.push(a);a=structuredClone(raw);a.world.location.y=700;variants.push(a);
   for(const v of variants)assert.equal(decodeSave(JSON.stringify(v)),null);
   assert.equal(normalizeInventory({items:[createEquipment(1,'ordinary',0),createEquipment(1,'ordinary',0)],equipped:{},pending:[]}),null);
   const data=new Map([[PROFILE_KEY,JSON.stringify({version:2,slots:[{id:'old',snapshot:variants[1]},null,null]})]]),storage={getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v)},before=data.get(PROFILE_KEY),store=new LocalHeroStore(storage);assert.equal(store.writable,false);assert.equal(data.get(PROFILE_KEY),before);

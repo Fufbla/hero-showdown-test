@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#173d40">
   <meta name="description" content="Create your own hero and explore Coastal Beginnings in the Hero Showdown Royale Phase 7 playtest.">
-<title>Hero Showdown Royale · Legendary Bosses & Villain Merge</title>
+<title>Hero Showdown Royale · Open World & My Heroes</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23173d40'/%3E%3Cpath d='M32 8 53 32 32 56 11 32Z' fill='%23e8d298'/%3E%3Cpath d='m24 41 16-20-6 23Z' fill='%232b8067'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="royale.css">
   <link rel="stylesheet" href="powers.css">
@@ -13,12 +13,13 @@
   <link rel="stylesheet" href="bosses.css">
   <link rel="stylesheet" href="eris.css">
   <link rel="stylesheet" href="legendary.css">
+  <link rel="stylesheet" href="accounts.css">
 </head>
 <body>
   <div id="app">
     <header class="topbar">
       <a class="brand" href="../index.html" aria-label="Return to Hero Showdown"><span class="brand-mark">✦</span><span><small>JAMES CLAN COMICS</small><strong>HERO SHOWDOWN <em>ROYALE</em></strong></span></a>
-      <div class="top-actions"><span class="phase-label"><i></i> PHASE 7 PLAYTEST</span><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
+      <div class="top-actions"><span class="phase-label"><i></i> PHASE 8 PLAYTEST</span><button id="account-open" class="account-button">Account</button><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
     </header>
     <main id="stage" aria-label="Hero Showdown Royale game">
       <canvas id="game" aria-label="2D side-scrolling adventure. Use A and D to move, Space to jump, J to punch and K to kick."></canvas>
@@ -33,19 +34,39 @@
       <section id="boss-hud" class="boss-hud" aria-label="Boss status" hidden><div class="boss-heading"><strong id="boss-name"></strong><small id="boss-phase"></small></div><div id="boss-health" class="boss-health" role="progressbar" aria-label="Boss health" aria-valuemin="0"><span id="boss-health-fill"></span></div><div id="boss-cue" class="boss-cue"></div><small id="boss-art-note" class="boss-art-note"></small></section>
       <div id="mission" class="mission" hidden><span class="mission-icon">✧</span><div><small>YOUR FIRST PATROL</small><strong id="mission-title">Meet the coast's troublemakers</strong><span id="mission-progress">Defeat 6 monsters · Discover all 3 types</span></div><b id="mission-count">0/6</b></div>
       <div id="toast" class="toast" role="status" aria-live="polite"></div>
-      <button id="rest" class="rest-button" data-control="interact" hidden>✦ REST <kbd>E</kbd></button>
+      <button id="world-portal" class="rest-button" hidden>◎ WORLD PORTAL</button><button id="rest" class="rest-button" data-control="interact" hidden>✦ REST <kbd>E</kbd></button>
       <button id="visit-tree" class="rest-button tree-button" data-control="tree" hidden>♧ TREE OF ERIS <kbd>T</kbd></button>
       <div id="death" class="death-overlay" hidden role="status"><span>✦</span><h2>Take a breath, hero.</h2><p>Returning to your checkpoint with full health.</p><small>10% of next-level XP is lost. Levels, coins and items are kept.</small></div>
       <output id="diagnostics" hidden></output><button id="measure-performance" hidden>Measure performance</button><output id="performance-result" hidden></output>
       <section id="roster" class="overlay" aria-label="Choose your hero">
         <div class="roster-card" role="dialog" aria-modal="true" aria-labelledby="roster-title">
-          <div class="eyebrow">HERO SHOWDOWN ROYALE · PHASE 07</div>
-          <h1 id="roster-title" tabindex="-1">One world. <em>Your heroes.</em></h1>
+          <div class="eyebrow">HERO SHOWDOWN ROYALE · PHASE 08</div>
+          <h1 id="roster-title" tabindex="-1">My <em>Heroes.</em></h1>
           <p>Three heroes. Three beginnings. Choose who takes the next step.</p>
           <div id="hero-slots" class="hero-slots"></div>
-          <p class="storage-note" id="roster-note" role="status">Saved on this browser only. No account or cloud saving.</p>
+          <p class="storage-note" id="roster-note" role="status">Local heroes stay on this browser. Open Account for cloud heroes.</p>
           <div class="practice-links"><a class="text-button practice-link" href="tests/legendary.html">Practice all eight Legendary bosses →</a><a class="text-button practice-link" href="tests/eris.html">Explore the Tree &amp; Costume Shop →</a><a class="text-button practice-link" href="tests/bosses.html">Practice all seven bosses →</a><a class="text-button practice-link" href="tests/world.html">Explore all seven regions →</a><a class="text-button practice-link" href="tests/powers.html">Practice all nine powers →</a></div>
           <button id="back-to-patrol" class="secondary" hidden>Return to current patrol</button>
+        </div>
+      </section>
+      <section id="account-menu" class="overlay game-panel" hidden>
+        <div id="account-panel" class="account-card" role="dialog" aria-modal="true" aria-labelledby="account-title">
+          <header><div><div class="eyebrow">HERO SHOWDOWN ROYALE</div><h2 id="account-title" tabindex="-1">Your account. Your heroes.</h2></div><button id="account-close" class="secondary">Back to heroes</button></header>
+          <div class="account-scroll"><p id="account-session"></p><p class="account-warning">Cloud progress saves when you choose Pause → Save Game. Save before switching accounts or leaving. Permanent Legendary events are recorded immediately.</p><div class="account-columns">
+          <section><h3>Sign in or begin again</h3><form id="account-form">
+            <label class="field">Action<select id="account-mode"><option value="login">Sign in</option><option value="signup">Create account</option><option value="reset">Reset password from email link</option></select></label>
+            <label class="field">Method<select id="account-method"><option value="username">Username &amp; passcode</option><option id="account-email-option" value="email" disabled>Email &amp; password</option></select></label>
+            <label id="account-username-field" class="field">Username<input id="account-username" autocomplete="username" maxlength="24" autocapitalize="none" spellcheck="false" placeholder="Your hero account"></label>
+            <label id="account-email-field" class="field" hidden>Email<input id="account-email" type="email" autocomplete="email" maxlength="254"></label>
+            <label class="field">Password or secure passcode<input id="account-passcode" type="password" autocomplete="current-password" maxlength="72" placeholder="Use a long passphrase"></label>
+            <p class="field-note">New passcodes need at least 15 characters, up to 72 UTF-8 bytes. Use a varied passphrase, never a short numeric PIN.</p>
+            <label id="account-confirm-field" class="field" hidden>Confirm passcode<input id="account-confirm" type="password" autocomplete="new-password" maxlength="72"></label>
+            <section id="no-recovery-warning" class="account-warning" hidden><p>This account has no recovery method. If you forget your username or passcode, you may permanently lose access to your superheroes and saved progress.</p><label><input id="acknowledge-recovery" type="checkbox"> I understand and accept this risk.</label></section>
+            <button id="account-submit" class="primary" type="submit">Sign in</button><button id="account-forgot" class="text-button" type="button" hidden>Forgot Password</button>
+          </form><div class="account-providers"><button id="account-google" class="secondary" disabled>Google · configuration required</button><button id="account-apple" class="secondary" disabled>Apple · configuration required</button></div><p id="email-method-note"></p><p class="field-note">Google and Apple recover access through their identity provider. When already signed in, a provider button links that identity to this account.</p></section>
+          <section><h3>Three independent adventures</h3><p>Each account has three hero slots. Coins, equipment, abilities and rewards stay with the hero who earned them.</p><button id="account-cloud" class="primary" hidden>Open my cloud heroes</button><button id="account-local" class="secondary">Play with this browser’s local heroes</button><button id="account-logout" class="text-button" hidden>Sign out</button>
+          <section id="recovery-settings" hidden><h3>Add a recovery email</h3><p id="recovery-note"></p><label class="field">New recovery email<input id="recovery-email" type="email" autocomplete="email"></label><label class="field">Current passcode<input id="recovery-passcode" type="password" autocomplete="current-password"></label><button id="add-recovery" class="secondary" disabled>Send verification email</button></section>
+          <section id="local-migration"></section></section></div><p id="account-status" role="status" aria-live="polite"></p></div>
         </div>
       </section>
       <section id="creator" class="overlay" hidden>
@@ -85,7 +106,7 @@
       <section id="pause-menu" class="overlay" hidden>
         <div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
           <div class="eyebrow" id="pause-region">COASTAL BEGINNINGS</div><h2 id="pause-title">A moment to breathe.</h2><p>Your adventure is paused.</p>
-          <button id="resume" class="primary">BACK TO YOUR JOURNEY <span>→</span></button><button id="manual-save" class="secondary">Save hero on this browser</button><button id="edit-look" class="secondary">Appearance services at Eris</button><button id="return-camp" class="secondary">Return to checkpoint · full health</button>
+          <button id="resume" class="primary">BACK TO YOUR JOURNEY <span>→</span></button><button id="manual-save" class="secondary">Save Game</button><button id="edit-look" class="secondary">Appearance services at Eris</button><button id="return-camp" class="secondary">Return to checkpoint · full health</button>
           <section class="loadout"><div class="loadout-heading"><strong>Your superpowers</strong><span><b id="power-points">0</b> Power Points</span></div><p id="loadout-note"></p><div id="loadout-slots"></div><p id="tree-location"></p><button id="tree-from-pause" class="secondary">Visit the Tree of Eris</button></section><button id="open-map" class="secondary">World map &amp; safe travel</button><button id="open-inventory" class="secondary">Equipment · 7 slots</button><p id="safe-save-note" class="storage-note"></p><button id="open-controls" class="secondary">Keyboard, controller &amp; touch settings</button><div class="control-guide"><strong>YOUR FIELD GUIDE</strong><div><kbd>A D / ← →</kbd><span>Move</span><kbd>Shift</kbd><span>Run</span><kbd>Space / W / ↑</kbd><span>Jump · press again to double-jump</span><kbd>J / Z</kbd><span>Punch · hold to chain</span><kbd>K / X</kbd><span>Kick · works in the air</span><kbd>1 / 2 / 3</kbd><span>Equipped superpowers</span><kbd>↑ / ↓</kbd><span>Steer Flight vertically</span><kbd>H</kbd><span>Use Health Root · no cooldown</span><kbd>E / T</kbd><span>Rest / Tree of Eris</span><kbd>P / Esc</kbd><span>Pause</span></div><p>On touch screens, slide the stick gently to walk or to its edge to run. Use a second finger for jump and attacks.</p></div>
           <div class="pause-bottom"><a href="../index.html">← Hero Showdown</a><button id="choose-hero" class="text-button">Choose another hero</button></div>
         </div>
@@ -109,7 +130,7 @@
         </div>
       </section>
       <section id="controls-menu" class="overlay game-panel" hidden><div class="settings-card" role="dialog" aria-modal="true" aria-labelledby="settings-title"><header><h2 id="settings-title" tabindex="-1">Make yourself comfortable.</h2><button id="close-controls" class="secondary">Back to pause</button></header><p id="controller-status"></p><p id="mapping-note" role="status"></p><div class="mapping-heading"><span>Action</span><span>Keyboard</span><span>Controller</span></div><div id="mapping-list"></div><h3>Touch layout</h3><p>Sizes and offsets stay within the screen. Drag the stick up or down to steer Flight.</p><div id="touch-settings"></div><button id="reset-controls" class="secondary">Restore default controls</button></div></section>
-      <section id="world-menu" class="overlay game-panel" hidden><div class="journey-card" role="dialog" aria-modal="true" aria-labelledby="map-title"><header class="journey-heading"><div><div class="eyebrow">SEVEN REGIONS · ONE JOURNEY</div><h2 id="map-title" tabindex="-1">A world worth protecting.</h2></div><button id="map-close" class="secondary">Back to pause</button></header><p id="map-note" class="journey-note"></p><div class="journey-scroll"><div id="region-cards" class="region-cards"></div><header class="legendary-map-heading"><div class="eyebrow">THE LEGENDARY FRONTIER</div><h3>Eight rivals. One chance.</h3><p id="legendary-map-note"></p></header><div id="legendary-cards" class="legendary-cards"></div><p class="storage-note">Defeat each regional boss and every summoned helper to unlock the next region. Rematches remain available. Practice worlds never change saved heroes.</p></div></div></section>
+      <section id="world-menu" class="overlay game-panel" hidden><div class="journey-card" role="dialog" aria-modal="true" aria-labelledby="map-title"><header class="journey-heading"><div><div class="eyebrow">SEVEN REGIONS · ONE JOURNEY</div><h2 id="map-title" tabindex="-1">A world worth protecting.</h2></div><button id="map-close" class="secondary">Back to pause</button></header><p id="map-note" class="journey-note"></p><div class="journey-scroll"><div id="region-cards" class="region-cards"></div><header class="legendary-map-heading"><div class="eyebrow">THE LEGENDARY FRONTIER</div><h3>Eight rivals. One chance.</h3><p id="legendary-map-note"></p></header><div id="legendary-cards" class="legendary-cards"></div><p class="storage-note">All seven regular regions are open from the start. Bosses keep their rewards and rematches. Legendary arenas require Level 99.</p></div></div></section>
       <section id="inventory-menu" class="overlay game-panel" hidden><div class="journey-card" role="dialog" aria-modal="true" aria-labelledby="inventory-title"><header class="journey-heading"><div><div class="eyebrow">YOUR FIELD KIT</div><h2 id="inventory-title" tabindex="-1">Carry what matters.</h2></div><button id="inventory-close" class="secondary">Back to pause</button></header><p id="inventory-summary" class="journey-note"></p><div class="journey-scroll"><section id="pending-reward" class="pending-reward" hidden></section><div id="equipment-list" class="equipment-list"></div><section id="equipment-confirm" class="equipment-confirm" role="group" aria-label="Confirm permanent equipment discard" hidden></section><p class="storage-note">Equipment colors are fixed. Only your starter outfit can be recolored. Rare pieces have a constant white glow.</p></div></div></section>
       <section id="chest-menu" class="overlay game-panel" hidden><div class="journey-card" role="dialog" aria-modal="true" aria-labelledby="chest-title"><header class="journey-heading"><div><div class="eyebrow">FIRST VICTORY TREASURE</div><h2 id="chest-title" tabindex="-1">Your hard-earned rewards.</h2></div><button id="chest-close" class="secondary">Leave unopened</button></header><p id="chest-summary" class="journey-note"></p><div class="journey-scroll chest-columns"><section id="chest-contents"></section><section id="chest-owned"></section></div><div class="chest-actions"><button id="collect-chest" class="primary">Collect coins &amp; Roots · choose equipment →</button></div></div></section>
       <section id="merge-reward" class="overlay game-panel" hidden><div class="journey-card merge-reward-card" role="dialog" aria-modal="true" aria-labelledby="merge-reward-title"><header class="journey-heading"><div><div class="eyebrow">LEGENDARY VICTORY · PERMANENTLY RECORDED</div><h2 id="merge-reward-title" tabindex="-1">Villain Merge rewards</h2></div></header><div class="journey-scroll"><div id="merge-reward-body" class="merge-layout"></div></div></div></section>

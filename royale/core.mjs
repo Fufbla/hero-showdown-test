@@ -1,3 +1,4 @@
+import {sharedNow} from './shared-clock.mjs';
 import { legendaryMethods, stepLegendaryBoss } from './legendary-bosses.mjs';
 import { mergeMethods } from './merge-powers.mjs';
 import { emptyLegendary, normalizeLegendary, normalizeLegendaryArena } from './legendary-state.mjs';
@@ -27,7 +28,7 @@ export { DEFAULT_LOOK, sanitizeLook } from './appearance.mjs';
 export function decodeSave(text) {
   try {
     const data = JSON.parse(text);
-    if (!data || ![1,2,3,4,5,6,7].includes(data.version) || (data.version>=2 && (!data.look || typeof data.look!=='object'))) return null;
+    if (!data || ![1,2,3,4,5,6,7,8].includes(data.version) || (data.version>=2 && (!data.look || typeof data.look!=='object'))) return null;
     if(data.version>=6&&(!data.economy||data.inventory?.retired==null||!Object.hasOwn(data,'sanctuary')))return null;
     const integer = (value, max) => clamp(Math.floor(Number(value) || 0), 0, max);
     const level = Math.max(1, integer(data.level, LEVEL_CAP));
@@ -44,7 +45,7 @@ export function decodeSave(text) {
     const arena=legendaryArena===undefined?normalizeArena(data.version>=5?data.arena:null,world,bossProgress):legendaryArena;if(arena===false)return null;
     const economy=normalizeEconomy(data.version>=6?data.economy:null),sanctuary=normalizeSanctuary(data.version>=6?data.sanctuary:null,world,arena);
     if(!economy||sanctuary===false)return null;
-    return { version: 7, legendary, economy, sanctuary, bossProgress, arena, powers, world, inventory, healthRoots:data.version>=4?data.healthRoots:0, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
+    return { version: 8, legendary, economy, sanctuary, bossProgress, arena, powers, world, inventory, healthRoots:data.version>=4?data.healthRoots:0, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
       xp: level===99?0:integer(data.xp, xpForLevel(level) - 1), coins: integer(data.coins, 999999),
       checkpoint: integer(data.checkpoint, CAMPS.length - 1), kills: integer(data.kills, 999999),
       species: [...new Set((Array.isArray(data.species) ? data.species : []).filter(t => Object.hasOwn(TYPES,t)))],
@@ -52,7 +53,7 @@ export function decodeSave(text) {
   } catch { return null; }
 }
 export class Game {
-  constructor({ look, save = null, surfaces = null, random = Math.random, equipment = {}, now = Date.now } = {}) {
+  constructor({ look, save = null, surfaces = null, random = Math.random, equipment = {}, now = sharedNow } = {}) {
     this.look = sanitizeLook(look ?? save?.look); this.outfit = sanitizeOutfit(save?.outfit); this.surfaces = surfaces||regionSurfaces(save?.world?.region||1); this.time = 0; this.paused = false;
     this.checkpoint = save?.checkpoint || 0; this.kills = save?.kills || 0;
     this.species = new Set(save?.species || []); this.reachedEnd = save?.reachedEnd || false;
@@ -315,7 +316,7 @@ export class Game {
     for(const region of this.world.bossVictories)if(!this.bossProgress.records[region])this.bossProgress.records[region]=initialBossProgress([region]).records[region];
     const world={...this.world,region:this.regionId,location,monsters:(this.arenaScene?.enemies||this.enemies).filter(e=>!isBoss(e)&&!e.summoned).map(e=>({id:e.id,type:e.type,hp:e.hp,respawn:Math.max(0,e.respawn)}))};
     const legendary={...this.legendary,recovery:this.mergeSnapshot()};
-    return JSON.stringify({version:7,legendary,economy:this.economy,sanctuary:this.sanctuary,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?(this.arenaScene.legendary?{legendary:this.arenaScene.legendary,mode:'cleared'}:{region:this.regionId,mode:'cleared'}):null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
+    return JSON.stringify({version:8,legendary,economy:this.economy,sanctuary:this.sanctuary,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?(this.arenaScene.legendary?{legendary:this.arenaScene.legendary,mode:'cleared'}:{region:this.regionId,mode:'cleared'}):null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
   }
 }
 Object.assign(Game.prototype,journeyMethods,bossMethods,erisMethods,legendaryMethods,mergeMethods);

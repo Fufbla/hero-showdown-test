@@ -11,6 +11,7 @@ export function initializeJourney(g,save,now){
   g.enemyShots=[];g.treeVisit=false;g.bossEncounter=null;g.board=0;
 }
 export const journeyMethods={
+  nearPortal(){return !this.arenaScene&&!this.treeVisit&&this.camps.some(c=>Math.abs(this.hero.x-(c.x+90))<=90&&Math.abs(this.hero.y-c.y)<100);},
   getRegion(){return regionDefinition(this.regionId);},
   clock(){return worldClock(this.world.clockReference,this.now(),this.regionId);},
   refreshEquipment(){
@@ -93,16 +94,15 @@ export const journeyMethods={
     this.emit('region',{name:this.getRegion().name});
   },
   travel(id){
-    if(!this.canTravel()||!Number.isInteger(id)||!this.world.unlocked.includes(id))return false;
+    if(!this.canTravel()||!Number.isInteger(id)||id<1||id>7)return false;
     this.loadRegion(id,{checkpoint:true});return true;
   },
   usePassage(){
     if(!this.canTravel()||!this.hero.grounded)return false;
     const x=this.hero.x,id=this.regionId;
-    if(x<110&&id>1){this.loadRegion(id-1,{x:5660,y:600});return true;}
+    if(x<110&&id>1){this.loadRegion(id-1,{checkpoint:true});return true;}
     if(x>GATES.forward-75&&id<7){
-      if(this.world.bossVictories.includes(id)&&this.world.unlocked.includes(id+1)){this.loadRegion(id+1,{checkpoint:true});return true;}
-      this.emit('gate',{message:`Defeat ${this.getRegion().boss} and all its helpers to open this passage.`});return false;
+      this.loadRegion(id+1,{checkpoint:true});return true;
     }
     if(Math.abs(x-GATES.arena)<110)return this.enterBoss();
     return false;

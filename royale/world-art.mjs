@@ -66,10 +66,11 @@ export function regionSky(c,region,w,camera,t,night){
 }
 export function worldLandmarks(c,g,camera,width){
   const region=g.getRegion();
+  for(const camp of g.camps){const x=camp.x+90;if(x<camera-90||x>camera+width+90)continue;c.save();c.strokeStyle='#81e5cd';c.lineWidth=4;c.fillStyle='#68d8c62b';c.beginPath();c.ellipse(x,camp.y-43,23,40,0,0,Math.PI*2);c.fill();c.stroke();c.fillStyle='#ecedba';c.font='bold 10px system-ui';c.textAlign='center';c.fillText('WORLD PORTAL',x,camp.y-95);c.restore();}
   for(const [x,text,color] of [[1940,'→ '+region.boards[1],region.edge],[4020,'→ '+region.boards[2],region.edge]]){
     if(x<camera-200||x>camera+width+200)continue;line(c,[[x,600],[x,508]],'#4d5d59',6);rect(c,x-90,500,180,32,'#233d45');c.fillStyle=color;c.font='bold 12px system-ui';c.textAlign='center';c.fillText(text,x,521);
   }
-  for(const [x,label,locked] of [[GATES.back,g.regionId>1?'E · Previous region':'Shoreward path',false],[GATES.arena,'E · '+region.boss+' Arena',false],[GATES.forward,g.regionId===7?'Final seal':g.world.unlocked.includes(g.regionId+1)?'E · Next region':'Boss seal · Locked',!g.world.unlocked.includes(g.regionId+1)]]){
+  for(const [x,label,locked] of [[GATES.back,g.regionId>1?'E · Previous region':'Shoreward path',false],[GATES.arena,'E · '+region.boss+' Arena',false],[GATES.forward,g.regionId===7?'World edge':'E · Next region',false]]){
     if(x<camera-240||x>camera+width+240)continue;
     line(c,[[x-33,600],[x-33,490],[x,470],[x+33,490],[x+33,600]],locked?'#7c8589':'#59987f',10);line(c,[[x-29,497],[x+29,497]],'#e2ce95',3);
     if(locked){poly(c,[[x,514],[x+13,531],[x,548],[x-13,531]],'#e5cf96');line(c,[[x-22,575],[x+22,535]],'#c9b88e',3);}

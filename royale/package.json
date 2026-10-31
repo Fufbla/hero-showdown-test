@@ -1,0 +1,16 @@
+{
+  "name": "healthia-royale",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:auth": "esbuild auth-provider-entry.mjs --bundle --format=esm --platform=browser --minify --outfile=vendor/auth-provider.mjs",
+    "build:server": "esbuild cloud-validation.mjs --bundle --format=esm --platform=neutral --outfile=backend/validation.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.118.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.14",
+    "esbuild": "0.28.2"
+  }
+}

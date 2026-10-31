@@ -2,7 +2,7 @@ import { drawEquipmentPreview, statComparison } from './eris-ui.mjs';
 import { STAT_KEYS, STAT_LABELS, formatStat } from './costume-catalog.mjs';
 import { WORLD_REGIONS } from './world.mjs';
 import { EQUIPMENT_PARTS, EQUIPMENT_NAMES, itemDefinition } from './equipment.mjs';
-import { LOOT } from './progression.mjs';
+import { LOOT, worldClock, formatClock } from './progression.mjs';
 const $=id=>document.getElementById(id);
 const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
 export function statsText(def){return STAT_KEYS.filter(k=>def.stats[k]).map(k=>`${STAT_LABELS[k]} +${formatStat(k,def.stats[k])}`).join(' · ');}
@@ -16,16 +16,18 @@ export class JourneyMenu {
     const button=el('button','Buy Health Root · 50 ◈','secondary');button.id='buy-root';button.disabled=!g.canSave()||g.healthRoots>=4||g.hero.coins<50;
     button.onclick=()=>{if(g.buyHealthRoot()){this.persist();this.shop();this.say('One Health Root added.');}};section.append(text,button);
   }
+  updateClock(){const g=this.getGame();for(const region of WORLD_REGIONS){const n=document.querySelector(`[data-region="${region.id}"] small`);if(n)n.textContent=`RECOMMENDED ${region.levels.join('–')} · ${formatClock(worldClock(g.world.clockReference,g.now(),region.id))}`;}}
   map(){
     const g=this.getGame(),list=$('region-cards');list.replaceChildren();
-    $('map-note').textContent=g.canTravel()?'Travel to any unlocked region’s safe checkpoint. Connected paths also lead backward.':'Travel locked. Finish the encounter and spend five seconds without attacking or taking damage.';
+    $('map-note').textContent=g.canTravel()?'Free portals reach all seven regions. Recommended levels describe danger, not entry requirements.':'Travel locked. Finish the encounter and spend five seconds without attacking or taking damage.';
     for(const region of WORLD_REGIONS){
-      const open=g.world.unlocked.includes(region.id),current=region.id===g.regionId,card=el('article',undefined,'region-card');card.style.setProperty('--region-color',region.sky[0]);card.dataset.region=region.id;if(current)card.setAttribute('aria-current','location');
+      const open=true,current=region.id===g.regionId,card=el('article',undefined,'region-card');card.style.setProperty('--region-color',region.sky[0]);card.dataset.region=region.id;if(current)card.setAttribute('aria-current','location');
       const art=el('div',undefined,`region-art ${region.theme}`);art.append(el('span',String(region.id).padStart(2,'0'),'region-number'),el('b',['','≋','♧','▥','◇','❧','✧','✦'][region.id]));card.append(art);
-      const body=el('div',undefined,'region-copy');body.append(el('small',`LEVELS ${region.levels.join('–')} · ${region.id<=2?'PERMANENT DAY':'DAY / NIGHT'}`),el('h3',region.name),el('p',region.boards.join(' → ')));
+      const body=el('div',undefined,'region-copy');body.append(el('small',`RECOMMENDED ${region.levels.join('–')} · ${formatClock(worldClock(g.world.clockReference,g.now(),region.id))}`),el('h3',region.name),el('p',region.boards.join(' → ')));
+      body.append(el('p',`Portal destination: ${region.boards[0]} · safe checkpoint`));
       body.append(el('p',`${document.body.classList.contains('practice-world')?'Unlocked practice fixture':g.world.bossVictories.includes(region.id)?'Victory recorded':'Challenge available'} · ${region.boss}`,'boss-note'));
-      const button=el('button',!open?'Locked · previous boss required':current?'Return to safe camp':'Travel to safe camp',open?'secondary':'secondary locked');button.disabled=!open||!g.canTravel();button.dataset.travel=region.id;
-      button.onclick=()=>{if(g.travel(region.id)){this.persist();this.resume();this.say(`${region.name} · arrived at safe camp.`);}else{this.say('That route is locked or combat is active.');this.map();}};body.append(button);card.append(body);list.append(card);
+      const button=el('button',current?'Portal to safe camp':'Travel to safe camp',open?'secondary':'secondary locked');button.disabled=!open||!g.canTravel();button.dataset.travel=region.id;
+      button.onclick=()=>{if(g.travel(region.id)){this.persist();this.resume();this.say(`${region.name} · arrived at safe camp.`);}else{this.say('Portal travel requires five safe seconds outside combat.');this.map();}};body.append(button);card.append(body);list.append(card);
     }
   }
   inventory(){

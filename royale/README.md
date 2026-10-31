@@ -1,3 +1,7 @@
+# Latest review: Phase 8
+
+See [PHASE8.md](PHASE8.md) for open portals, account architecture, tests and deployment blockers. **Cloud accounts are not operational yet.** The earlier phase notes below remain historical.
+
 # Hero Showdown Royale — Phase 7
 
 An isolated game mode in Hero Showdown — James Clan Comics. Development stays on `feature/showdown-royale`; Phase 7 builds on `7e19386f7e2d9b8fd3936bda755d27ae6a1dccc0`. No Phase 7 files outside `royale/` are changed.

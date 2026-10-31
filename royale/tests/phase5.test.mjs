@@ -114,7 +114,7 @@ test('safe entry snapshot restarts whole boss on reload; active battle cannot sa
 });
 test('v1–4 conversion retains prior progression; v5 validates wins, chest claims and arena state',()=>{
   const old=new Game();old.hero.level=35;old.hero.coins=200;old.hero.xp=900;old.powers.data.points=34;let source=JSON.parse(old.save());
-  for(const version of [1,2,3,4]){const migrated=decodeSave(JSON.stringify({...source,version}));assert.equal(migrated.level,35);assert.equal(migrated.coins,200);assert.equal(migrated.xp,900);assert.equal(migrated.version,7);assert.deepEqual(migrated.bossProgress.records,{});}
+  for(const version of [1,2,3,4]){const migrated=decodeSave(JSON.stringify({...source,version}));assert.equal(migrated.level,35);assert.equal(migrated.coins,200);assert.equal(migrated.xp,900);assert.equal(migrated.version,8);assert.deepEqual(migrated.bossProgress.records,{});}
   const g=fixture(4);clear(g);source=JSON.parse(g.save());assert.ok(decodeSave(JSON.stringify(source)));source.bossProgress.records[4].wins=0;assert.equal(decodeSave(JSON.stringify(source)),null);source.bossProgress.records[4].wins=1;source.arena.region=5;assert.equal(decodeSave(JSON.stringify(source)),null);assert.equal(normalizeBossProgress({records:{1:{wins:1,chest:{state:'available',coins:20,roots:1,items:[{uid:'chest-1-0',catalogId:'r4-rare-mask'}]}}}},[1]),null);
 });
 test('boss wins and chest claims are independent across local hero slots',()=>{

@@ -1,3 +1,4 @@
+import {WORLD_CLOCK_REFERENCE} from '../world-state.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Game, decodeSave, STEP } from '../core.mjs';
@@ -16,8 +17,8 @@ const tick=(g,n,input={})=>{for(let i=0;i<n;i++)g.step(STEP,input);};
 function storage(){const data=new Map();return {getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v)};}
 
 test('sanctuary freezes the exact board, position, velocity, HP and live monster objects; real clock advances',()=>{
- let now=0;const g=new Game({now:()=>now});for(let r=1;r<4;r++)bossVictory(g.world,r);g.travel(4);g.hero.x=2498.25;g.hero.y=330.5;g.hero.vx=85;g.hero.vy=144;g.hero.grounded=false;g.hero.hp=75;g.hero.xp=30;const enemies=g.enemies,enemiesBefore=JSON.stringify(enemies),camps=g.camps;
- assert.ok(g.visitTree());assert.equal(g.sanctuary.returnLocation.board,1);tick(g,1000,{move:1});now=CLOCK.day;assert.ok(g.clock().night);assert.equal(JSON.stringify(g.enemies),enemiesBefore);assert.equal(g.travel(1),false);assert.equal(g.usePassage(),false);g.leaveTree();assert.deepEqual([g.hero.x,g.hero.y,g.hero.vx,g.hero.vy,g.hero.hp,g.hero.xp],[2498.25,330.5,85,144,75,30]);assert.equal(g.enemies,enemies);assert.equal(g.camps,camps);
+ let now=WORLD_CLOCK_REFERENCE;const g=new Game({now:()=>now});for(let r=1;r<4;r++)bossVictory(g.world,r);g.travel(4);g.hero.x=2498.25;g.hero.y=330.5;g.hero.vx=85;g.hero.vy=144;g.hero.grounded=false;g.hero.hp=75;g.hero.xp=30;const enemies=g.enemies,enemiesBefore=JSON.stringify(enemies),camps=g.camps;
+ assert.ok(g.visitTree());assert.equal(g.sanctuary.returnLocation.board,1);tick(g,1000,{move:1});now=WORLD_CLOCK_REFERENCE+CLOCK.day;assert.ok(g.clock().night);assert.equal(JSON.stringify(g.enemies),enemiesBefore);assert.equal(g.travel(1),false);assert.equal(g.usePassage(),false);g.leaveTree();assert.deepEqual([g.hero.x,g.hero.y,g.hero.vx,g.hero.vy,g.hero.hp,g.hero.xp],[2498.25,330.5,85,144,75,30]);assert.equal(g.enemies,enemies);assert.equal(g.camps,camps);
 });
 test('Tree requires five full safe seconds and active boss encounters always block it',()=>{
  const g=new Game();g.enemies=[];g.hero.x=1000;g.startAttack('punch');assert.equal(g.visitTree(),false);tick(g,299);assert.equal(g.visitTree(),false);tick(g,2);assert.ok(g.visitTree());g.leaveTree();g.paused=false;g.hero.invulnerable=0;g.hurt(1,0);tick(g,299);assert.equal(g.visitTree(),false);tick(g,2);g.combatTimer=0;g.bossEncounter={};assert.equal(g.visitTree(),false);
@@ -87,7 +88,7 @@ test('atomic storage failures do not retain failed transactions in the save enve
  const memory=storage(),g=camp(),store=new LocalHeroStore(memory);store.writeSlot(0,g.save());const before=store.slot(0);memory.setItem=()=>{throw Error('Quota');};buy(g,item());const result=store.writeSlot(0,g.save(),{requireDurable:true});assert.equal(result.ok,false);assert.equal(result.retained,false);assert.deepEqual(store.slot(0),before);
 });
 test('Phase 1–5 saves migrate without resetting legacy inventory, powers, appearance, coins or boss rewards',()=>{
- const g=camp(50);g.leaveTree();g.inventory.items=[createEquipment(4,'rare',1,1)];g.inventory.equipped.suit='drop-1';g.inventory.nextId=2;g.powers.data.levels.strength=20;g.powers.data.points=29;const raw=JSON.parse(g.save());raw.version=5;delete raw.economy;delete raw.sanctuary;delete raw.inventory.retired;const state=decodeSave(JSON.stringify(raw));assert.equal(state.version,7);assert.equal(state.coins,10000);assert.equal(state.powers.levels.strength,20);assert.equal(state.inventory.equipped.suit,'drop-1');assert.deepEqual(state.look,g.look);assert.equal(state.inventory.items[0].catalogId,'r4-rare-suit');const copy=new Game({save:state});assert.ok(copy.equipment.damage>0);
+ const g=camp(50);g.leaveTree();g.inventory.items=[createEquipment(4,'rare',1,1)];g.inventory.equipped.suit='drop-1';g.inventory.nextId=2;g.powers.data.levels.strength=20;g.powers.data.points=29;const raw=JSON.parse(g.save());raw.version=5;delete raw.economy;delete raw.sanctuary;delete raw.inventory.retired;const state=decodeSave(JSON.stringify(raw));assert.equal(state.version,8);assert.equal(state.coins,10000);assert.equal(state.powers.levels.strength,20);assert.equal(state.inventory.equipped.suit,'drop-1');assert.deepEqual(state.look,g.look);assert.equal(state.inventory.items[0].catalogId,'r4-rare-suit');const copy=new Game({save:state});assert.ok(copy.equipment.damage>0);
 });
 
 for(const [region,level] of [[1,10],[2,20],[3,35],[4,50],[5,65],[6,80],[7,99]])test(`Region ${region}: recommended-level full suit keeps regional bosses dangerous and power rules intact`,()=>{
