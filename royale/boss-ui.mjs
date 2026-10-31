@@ -1,10 +1,11 @@
+import { LEGENDARY } from './legendary-data.mjs';
 import { BOSSES, ARENA } from './boss-data.mjs';
 import { itemDefinition } from './equipment.mjs';
 const $=id=>document.getElementById(id);
 const node=(tag,text,className='')=>{const n=document.createElement(tag);n.textContent=text;n.className=className;return n;};
 export function updateBossHud(game,visible){
-  const scene=game.arenaScene,bar=$('boss-hud');bar.hidden=!scene||!visible;if(!scene)return;
-  const b=scene.boss,def=BOSSES[scene.region],helpers=game.enemies.filter(e=>e.summoned&&e.state!=='dead').length;
+  const scene=game.arenaScene,bar=$('boss-hud');bar.hidden=!scene||!visible||!!(scene.legendary&&scene.cleared);if(!scene)return;
+  const b=scene.boss,def=scene.legendary?LEGENDARY[scene.legendary]:BOSSES[scene.region],helpers=game.enemies.filter(e=>e.summoned&&e.state!=='dead').length;
   $('boss-name').textContent=def.name;$('boss-phase').textContent=scene.cleared?'ARENA CLEARED':b.hp<=0?`${helpers} HELPERS REMAIN`:`PHASE ${b.phase} / 3`;
   bar.dataset.phase=b.phase;$('boss-health-fill').style.width=`${100*b.hp/b.maxHp}%`;
   $('boss-health').setAttribute('aria-valuenow',String(Math.ceil(b.hp)));$('boss-health').setAttribute('aria-valuemax',String(b.maxHp));

@@ -1,0 +1,11 @@
+PASS · 10 real IndexedDB durability/concurrency/recovery assertions. No adventure slots modified.
+PASS · real IndexedDB: simultaneous victory CAS commits exactly once
+PASS · full unclaimed three-piece suit is in the atomic victory record
+PASS · claim persists inventory and claimed flag together
+PASS · invalid transaction abort leaves prior authoritative record intact
+PASS · discard tombstone and ownership change commit atomically
+PASS · stale second connection cannot recreate discarded Legendary equipment
+PASS · ordinary cache starts before permanent discard
+PASS · startup recovers journal after crash between durable commit and ordinary cache
+PASS · closing and reopening DB retains irreversible history
+PASS · failed ordinary-cache write keeps authoritative recovery available

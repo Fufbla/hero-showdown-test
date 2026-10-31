@@ -1,3 +1,4 @@
+import { matchingMerge, mergeEntitlement } from './legendary-state.mjs';
 import { WORLD_REGIONS, TYPES, regionDefinition, regionCamps, regionSpawns, regionSurfaces, boardIndex, GATES } from './world.mjs';
 import { LOOT, RESPAWN, worldClock, monsterXP, xpForLevel, maximumHP } from './progression.mjs';
 import { emptyInventory, equipmentBonuses, equipmentOutfit, itemDefinition, rollEquipment } from './equipment.mjs';
@@ -14,11 +15,12 @@ export const journeyMethods={
   clock(){return worldClock(this.world.clockReference,this.now(),this.regionId);},
   refreshEquipment(){
     const earned=equipmentBonuses(this.inventory,this.hero?.level||99),base=this.baseEquipment;
+    const active=matchingMerge(this.inventory,this.hero?.level||99);if(this.legendary.active!==active)this.cancelMergeEffects();this.legendary.active=active;if(this.powers)this.powers.mergeEntitlement=mergeEntitlement(active);
     this.equipment=equipmentStats(Object.fromEntries(Object.keys(earned).map(k=>[k,earned[k]+(base?.[k]||0)])));
   },
   visualOutfit(){return equipmentOutfit(this.inventory,this.outfit);},
   canSave(){return !this.hero.dead&&!this.inCombat();},
-  canTravel(){return !this.treeVisit&&this.canSave()&&!this.bossEncounter&&this.inventory.pending.length===0;},
+  canTravel(){return !this.treeVisit&&this.canSave()&&!this.bossEncounter&&this.inventory.pending.length===0&&!this.pendingMergeReward();},
   visitTree(){if(!this.canTravel())return false;this.treeVisit=true;return true;},
   leaveTree(){this.treeVisit=false;}, // Visiting is a modal sanctuary; the world location is never changed.
   useHealthRoot(){
@@ -32,6 +34,7 @@ export const journeyMethods={
   equipItem(uid){
     if(!this.canSave()||!this.paused)return false;
     const item=this.inventory.items.find(i=>i.uid===uid),def=itemDefinition(item);if(!def||this.hero.level<(def.level||1))return false;
+    const paired={mask:'helmet',helmet:'mask',suit:'chest',chest:'suit'};const worn=itemDefinition(this.inventory.items.find(i=>i.uid===(this.inventory.equipped[def.part]||this.inventory.equipped[paired[def.part]])));if((def.rarity==='legendary'||worn?.rarity==='legendary')&&!this.treeVisit)return false;
     if(this.inventory.equipped[def.part]===uid)delete this.inventory.equipped[def.part];else{if(def.part==='helmet')delete this.inventory.equipped.mask;if(def.part==='mask')delete this.inventory.equipped.helmet;if(def.part==='chest')delete this.inventory.equipped.suit;if(def.part==='suit')delete this.inventory.equipped.chest;this.inventory.equipped[def.part]=uid;}
     this.recordEconomy('equip');this.refreshEquipment();return true;
   },
@@ -114,5 +117,5 @@ export const journeyMethods={
     this.emit('board');
   },
   respawnDelay(e){return RESPAWN[TYPES[e.type]?.rank]||RESPAWN.common;},
-  monsterDamage(e){if(isBoss(e))return e.damage??TYPES[e.type]?.damage??0;return TYPES[e.type].damage*(this.clock().night&&!isBoss(e)?2:1);},
+  monsterDamage(e){if(e.legendaryHelper)return e.damage;if(isBoss(e))return e.damage??TYPES[e.type]?.damage??0;return TYPES[e.type].damage*(this.clock().night&&!isBoss(e)?2:1);},
 };

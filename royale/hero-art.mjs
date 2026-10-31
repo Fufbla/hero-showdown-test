@@ -1,3 +1,4 @@
+import { drawMergeCostume } from './merge-costume-art.mjs';
 import { sanitizeLook, costumePalette } from './appearance.mjs';
 import { poseFor } from './hero-rig.mjs';
 const TAU=Math.PI*2,INK='#18383e';
@@ -94,8 +95,9 @@ export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
   // Cape collar, always attached to the shoulders.
   if(look.cape){oval(c,sx-d.shoulder*.65,sy+1,2.7,2.4,palette.emblemColor);oval(c,sx+d.shoulder*.65,sy+1,2.7,2.4,palette.emblemColor);}
   head(c,look,p,back,time,{...palette,suit:h.steel?palette.suit:pieces.mask?.color||palette.suit});
-  if(pieces.helmet){const [xx,yy]=p.head,fill=h.steel?palette.suit:pieces.helmet.color;path(c,[[xx-13,yy-9],[xx-9,yy-18],[xx+9,yy-18],[xx+13,yy-9],[xx+12,yy+3],[xx+8,yy+6],[xx+8,yy-6],[xx-8,yy-6],[xx-8,yy+6],[xx-12,yy+3]],fill,INK,1.2);line(c,[[xx-6,yy-14],[xx+6,yy-14]],h.steel?palette.trim:pieces.helmet.accent,2);}
+  if(pieces.helmet&&!pieces.helmet.mergeId){const [xx,yy]=p.head,fill=h.steel?palette.suit:pieces.helmet.color;path(c,[[xx-13,yy-9],[xx-9,yy-18],[xx+9,yy-18],[xx+13,yy-9],[xx+12,yy+3],[xx+8,yy+6],[xx+8,yy-6],[xx-8,yy-6],[xx-8,yy+6],[xx-12,yy+3]],fill,INK,1.2);line(c,[[xx-6,yy-14],[xx+6,yy-14]],h.steel?palette.trim:pieces.helmet.accent,2);}
   if(pieces.chest){line(c,[[sx-d.shoulder+2,sy+2],[sx-6,sy+8],[sx,sy+12],[sx+6,sy+8],[sx+d.shoulder-2,sy+2]],palette.trim,2.5);}
+  drawMergeCostume(c,p,pieces,back,h.steel);
   if(!h.grounded&&h.jumps===2&&h.jumpAge<.3){c.globalAlpha*=1-h.jumpAge/.3;c.beginPath();c.ellipse(0,7,20+h.jumpAge*45,4+h.jumpAge*12,0,0,TAU);c.strokeStyle=palette.emblemColor;c.lineWidth=1.5;c.stroke();}
   // Rare outlines are drawn at a fixed brightness, after hit flashes and pose opacity.
   // The same articulated points follow the item through movement, attacks and defeat.
@@ -103,7 +105,8 @@ export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
   let glowColor='#ffffff';const glowLine=pts=>line(c,pts,glowColor,1.5);
   for(const [part,item] of Object.entries(pieces))if(['rare','legendary'].includes(item.rarity)){
     glowColor=item.rarity==='legendary'?'#65ff7a':'#ffffff';c.shadowColor=glowColor;
-    if(part==='suit')glowLine([[sx-d.shoulder,sy],[sx+d.shoulder,sy],[hx+d.hip,hy],[hx-d.hip,hy],[sx-d.shoulder,sy]]);
+    if(part==='helmet')glowLine([[p.head[0]-14,p.head[1]-7],[p.head[0]-16,p.head[1]-16],[p.head[0]-9,p.head[1]-19]]),glowLine([[p.head[0]+14,p.head[1]-7],[p.head[0]+16,p.head[1]-16],[p.head[0]+9,p.head[1]-19]]);
+    if(part==='suit'||part==='chest')glowLine([[sx-d.shoulder,sy],[sx+d.shoulder,sy],[hx+d.hip,hy],[hx-d.hip,hy],[sx-d.shoulder,sy]]);
     if(part==='gloves')for(const a of p.arms)glowLine([a[1],a[2]]);
     if(part==='boots')for(const l of p.legs)glowLine([l[1],l[2]]);
     if(part==='belt')glowLine([[hx-d.hip,hy-1],[hx+d.hip,hy-1]]);

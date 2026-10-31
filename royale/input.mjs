@@ -65,7 +65,7 @@ export class Input {
     const held = action => [...this.pointers.values()].includes(action)||this.controls.keys[action]?.some(k=>this.keys.has(k))||this.padHeld.has(action);
     const left = held('left'), right = held('right');
     const result = { move: this.axis || this.padX || Number(right) - Number(left), run: Math.abs(this.axis) > .72 || Math.abs(this.padX)> .72 || held('run'),
-      vertical:this.vertical||this.padY||Number(held('down'))-Number(held('up')||held('jump')),powers:[0,1,2].map(i=>this.edges.has(`power${i}`)),heal:this.edges.has('heal'),tree:this.edges.has('tree'),
+      vertical:this.vertical||this.padY||Number(held('down'))-Number(held('up')||held('jump')),powers:[0,1,2,3].map(i=>this.edges.has(`power${i}`)),heal:this.edges.has('heal'),tree:this.edges.has('tree'),
       jump: this.edges.has('jump'), punch: this.edges.has('punch'), kick: this.edges.has('kick'), interact: this.edges.has('interact'),
       punchHeld: held('punch'), kickHeld: held('kick') };
     this.edges.clear(); return result;

@@ -63,17 +63,17 @@ export const bossMethods={
   },
   leaveBoss(reason='retreat'){
     const scene=this.arenaScene;if(!scene)return false;
-    this.powers.cancelEffects();this.enemyShots=[];this.hero.attack=null;this.hero.attackBuffer=null;
+    this.powers.cancelEffects();this.cancelMergeEffects();this.legendaryHazards=[];this.disruptedPower=null;this.pendingLegendaryVictory=null;this.enemyShots=[];this.hero.attack=null;this.hero.attackBuffer=null;
     this.surfaces=scene.surfaces;this.enemies=scene.enemies;this.camps=scene.camps;this.arenaScene=null;this.bossEncounter=null;
     Object.assign(this.hero,{x:scene.returnLocation.x,prevX:scene.returnLocation.x,y:scene.returnLocation.y,prevY:scene.returnLocation.y,vx:0,vy:0,grounded:true,jumps:0,face:-1,invulnerable:1.5});
     this.combatTimer=reason==='defeat'?0:5;this.emit('arena-exit',{reason});return true;
   },
   bossDamaged(b){
-    const old=b.phase;b.phase=bossPhase(b.hp/b.maxHp);if(old!==b.phase)this.emit('boss-phase',{phase:b.phase});
+    const old=b.phase;b.phase=bossPhase(b.hp/b.maxHp);if(b.legendary&&b.phase>=2)this.disruptedPower=null;if(old!==b.phase)this.emit('boss-phase',{phase:b.phase});
     if(b.hp<=0){b.state='dead';b.age=0;b.attack=null;b.rooted=false;this.enemyShots=this.enemyShots.filter(p=>p.source!==b);this.emit('boss-down');}
   },
   stepEncounter(dt){
-    const scene=this.arenaScene;if(!scene)return;
+    const scene=this.arenaScene;if(!scene)return;if(scene.legendary){this.stepLegendaryEncounter(dt);return;}
     if(this.hero.x<ARENA.left&&!this.hero.dead){this.leaveBoss();return;}
     const encounter=this.bossEncounter;if(!encounter||this.hero.dead)return;
     const b=encounter.boss;encounter.elapsed+=dt;
@@ -97,10 +97,10 @@ export const bossMethods={
     const existing=this.bossProgress.records[fight.region];
     this.bossProgress.records[fight.region]=existing?{...existing,wins:existing.wins+1}:{wins:1,chest:rollChest(fight.region,this.random)};
     this.hero.coins=Math.min(999999,this.hero.coins+reward.coins);const xp=this.hero.level<99?monsterXP(BOSSES[fight.region].xp,this.hero.level,BOSSES[fight.region].level):0;this.gainXP(xp);
-    this.bossEncounter=null;this.arenaScene.cleared=true;this.powers.cancelEffects();this.enemyShots=[];this.hero.attack=null;this.hero.attackBuffer=null;this.combatTimer=0;
+    this.bossEncounter=null;this.arenaScene.cleared=true;this.powers.cancelEffects();this.cancelMergeEffects();this.legendaryHazards=[];this.disruptedPower=null;this.pendingLegendaryVictory=null;this.enemyShots=[];this.hero.attack=null;this.hero.attackBuffer=null;this.combatTimer=0;
     this.emit('boss-victory',{...reward,xp,name:BOSSES[fight.region].name,region:fight.region});return true;
   },
-  availableChest(){return this.arenaScene?.cleared&&this.bossProgress.records[this.regionId]?.chest.state==='available'?this.bossProgress.records[this.regionId].chest:null;},
+  availableChest(){return !this.arenaScene?.legendary&&this.arenaScene?.cleared&&this.bossProgress.records[this.regionId]?.chest.state==='available'?this.bossProgress.records[this.regionId].chest:null;},
   claimChest(){
     const chest=this.availableChest();if(!chest||!this.canSave()||this.inventory.pending.length)return false;
     this.hero.coins=Math.min(999999,this.hero.coins+chest.coins);const roots=Math.min(4-this.healthRoots,chest.roots);this.healthRoots+=roots;

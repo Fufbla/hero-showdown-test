@@ -1,3 +1,4 @@
+import { MERGE_POWERS } from './legendary-data.mjs';
 // Phase 3 rules. Values not specified by the design are collected here for balancing.
 export const POWER_CAP = 20;
 export const ACTIVE_SLOTS = 3;
@@ -5,7 +6,7 @@ export const FUTURE_MERGE_SLOT = Object.freeze({ index: 3, requiredPieces: 3, co
 // Villain Merge adapter remains reserved; production has no merge entitlement.
 export function resolveAbilitySlots(data,merge=null) {
   const slots=Array.from({length:ACTIVE_SLOTS},(_,index)=>({id:data.equipped[index],level:data.levels[data.equipped[index]]||0,cooldownMultiplier:1}));
-  if(merge?.completePieces===FUTURE_MERGE_SLOT.requiredPieces&&POWER_IDS.includes(merge.ability)&&!POWERS[merge.ability].passive)
+  if(merge?.completePieces===FUTURE_MERGE_SLOT.requiredPieces&&((POWER_IDS.includes(merge.ability)&&!POWERS[merge.ability].passive)||Object.hasOwn(MERGE_POWERS,merge.ability?.replace('merge:',''))))
     slots.push({id:merge.ability,level:integer(merge.level,1,20),cooldownMultiplier:FUTURE_MERGE_SLOT.cooldownMultiplier});
   return slots;
 }
@@ -85,12 +86,12 @@ export class PowerSystem {
   get flying(){return !!this.active.flight;}
   get speed(){return Math.min(.6,(this.data.levels.speed?this.stats('speed').runBonus:0)+equipmentStats(this.game.equipment).moveSpeed);}
   get attackRate(){return attackRate(this.data.levels.speed,this.game.equipment);}
-  ready(id){return POWER_IDS.includes(id)&&!!this.data.levels[id]&&!POWERS[id]?.passive&&!this.active[id]&&(this.cooldowns[id]||0)<=EPS;}
-  activateSlot(index){const slot=resolveAbilitySlots(this.data,this.mergeEntitlement)[index];return slot?.id?this.activate(slot.id,slot):false;}
+  ready(id){return this.game.disruptedPower!==id&&POWER_IDS.includes(id)&&!!this.data.levels[id]&&!POWERS[id]?.passive&&!this.active[id]&&(this.cooldowns[id]||0)<=EPS;}
+  activateSlot(index){if(index===3&&this.game.legendary?.active)return this.game.activateMerge();const slot=resolveAbilitySlots(this.data,this.mergeEntitlement)[index];return slot?.id?this.activate(slot.id,slot):false;}
   activate(id,slot=null) {
     const g=this.game,h=g.hero,def=POWERS[id];
     const resolved=resolveAbilitySlots(this.data,this.mergeEntitlement).find(s=>s.id===id);
-    if(g.paused||h.dead||!POWER_IDS.includes(id)||def.passive||!resolved)return false;
+    if(g.paused||h.dead||g.disruptedPower===id||!POWER_IDS.includes(id)||def.passive||!resolved)return false;
     slot=slot||resolved;
     if(id==='flight'&&this.flying){this.end('flight');return true;}
     if(!slot.level||this.active[id]||(this.cooldowns[id]||0)>EPS||h.stun>0||(this.flying&&def.offensive&&id!=='fireball'))return false;
@@ -103,7 +104,7 @@ export class PowerSystem {
     if(id==='strength'){g.startAttack('punch');Object.assign(h.attack,{power:id,stats:s});}
     if(id==='superKick'){state.left=s.kicks;state.target=null;this.nextKick(state);}
     if(id==='fireball'){this.bursts.push({...state,left:s.projectiles,next:0});h.castAge=0;}
-    if(id==='flight'){for(const other of ['roots','whirlwind'])this.end(other);h.attack=null;h.attackBuffer=null;h.jumpBuffer=0;h.grounded=false;h.vy=-170;h.jumpAge=100;h.jumps=1;}
+    if(id==='flight'){for(const effect of this.game.mergeEffects.filter(e=>e.offensive))this.game.endMergeEffect(effect);this.game.mergeShots=[];for(const other of ['roots','whirlwind'])this.end(other);h.attack=null;h.attackBuffer=null;h.jumpBuffer=0;h.grounded=false;h.vy=-170;h.jumpAge=100;h.jumps=1;}
     if(id==='roots'||id==='whirlwind'){
       state.targets=g.enemies.filter(e=>e.state!=='dead'&&e.protection<=0&&Math.abs(e.x-h.x)<=BALANCE.controlRange&&Math.abs(e.y-h.y)<120&&
         (id!=='roots'||(!e.flying&&!e.airborne&&Math.abs(e.y-e.surface.y)<1))&&(id!=='whirlwind'||!e.rooted||isBoss(e)))
@@ -123,7 +124,7 @@ export class PowerSystem {
     this.cooldowns[id]=state.cooldown;delete this.active[id];
     if(id==='flight')this.game.hero.vy=Math.max(0,this.game.hero.vy);
     if(id==='roots'||id==='whirlwind')for(const e of this.game.enemies)if(state.targets.includes(e.id)){
-      if(id==='roots')e.rooted=false;else if(e.lifted){e.lifted=false;e.airborne=true;e.vy=0;}
+      if(id==='roots')e.rooted=!!e.mergeRooted;else if(e.lifted){e.lifted=!!e.mergeLifted;e.airborne=true;e.vy=0;}
     }
     this.sync();
   }
@@ -133,7 +134,7 @@ export class PowerSystem {
     const g=this.game;
     if(this.flying&&(!isBoss(source)||g.random()>=.5))return null;
     if(this.active.agility&&g.random()<(source.legendary? .5:.75)){g.emit('dodge');return null;}
-    return amount*(1-(this.active.steel?.reduction||0))*(1-equipmentStats(g.equipment).defense);
+    return g.mergeDefense(amount*(1-(this.active.steel?.reduction||0))*(1-equipmentStats(g.equipment).defense));
   }
   melee(attack,candidates) {
     const g=this.game,stats=attack.stats;

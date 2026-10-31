@@ -1,3 +1,6 @@
+import { legendaryMethods, stepLegendaryBoss } from './legendary-bosses.mjs';
+import { mergeMethods } from './merge-powers.mjs';
+import { emptyLegendary, normalizeLegendary, normalizeLegendaryArena } from './legendary-state.mjs';
 import { erisMethods, emptyEconomy, normalizeEconomy, normalizeSanctuary } from './eris.mjs';
 import { bossMethods, stepBoss } from './bosses.mjs';
 import { normalizeBossProgress, normalizeArena, initialBossProgress } from './boss-state.mjs';
@@ -24,7 +27,7 @@ export { DEFAULT_LOOK, sanitizeLook } from './appearance.mjs';
 export function decodeSave(text) {
   try {
     const data = JSON.parse(text);
-    if (!data || ![1,2,3,4,5,6].includes(data.version) || (data.version>=2 && (!data.look || typeof data.look!=='object'))) return null;
+    if (!data || ![1,2,3,4,5,6,7].includes(data.version) || (data.version>=2 && (!data.look || typeof data.look!=='object'))) return null;
     if(data.version>=6&&(!data.economy||data.inventory?.retired==null||!Object.hasOwn(data,'sanctuary')))return null;
     const integer = (value, max) => clamp(Math.floor(Number(value) || 0), 0, max);
     const level = Math.max(1, integer(data.level, LEVEL_CAP));
@@ -35,10 +38,13 @@ export function decodeSave(text) {
     if(!world||!inventory||data.version>=4&&(!data.world||!Number.isInteger(data.healthRoots)||data.healthRoots<0||data.healthRoots>4))return null;
     if(Object.values(inventory.equipped).some(uid=>(itemDefinition(inventory.items.find(i=>i.uid===uid))?.level||1)>level))return null;
     const bossProgress=normalizeBossProgress(data.version>=5?data.bossProgress:null,world.bossVictories,{strict:data.version>=5});if(!bossProgress)return null;
-    const arena=normalizeArena(data.version>=5?data.arena:null,world,bossProgress);if(arena===false)return null;
+    const legendary=normalizeLegendary(data.version>=7?data.legendary:null,inventory,level);if(!legendary||data.version>=7&&!data.legendary)return null;
+    const legendaryArena=normalizeLegendaryArena(data.arena,legendary,level);
+    if(legendaryArena?.mode==='restart'&&!powers.equipped.some(id=>id&&powers.levels[id]))return null;
+    const arena=legendaryArena===undefined?normalizeArena(data.version>=5?data.arena:null,world,bossProgress):legendaryArena;if(arena===false)return null;
     const economy=normalizeEconomy(data.version>=6?data.economy:null),sanctuary=normalizeSanctuary(data.version>=6?data.sanctuary:null,world,arena);
     if(!economy||sanctuary===false)return null;
-    return { version: 6, economy, sanctuary, bossProgress, arena, powers, world, inventory, healthRoots:data.version>=4?data.healthRoots:0, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
+    return { version: 7, legendary, economy, sanctuary, bossProgress, arena, powers, world, inventory, healthRoots:data.version>=4?data.healthRoots:0, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
       xp: level===99?0:integer(data.xp, xpForLevel(level) - 1), coins: integer(data.coins, 999999),
       checkpoint: integer(data.checkpoint, CAMPS.length - 1), kills: integer(data.kills, 999999),
       species: [...new Set((Array.isArray(data.species) ? data.species : []).filter(t => Object.hasOwn(TYPES,t)))],
@@ -50,6 +56,7 @@ export class Game {
     this.look = sanitizeLook(look ?? save?.look); this.outfit = sanitizeOutfit(save?.outfit); this.surfaces = surfaces||regionSurfaces(save?.world?.region||1); this.time = 0; this.paused = false;
     this.checkpoint = save?.checkpoint || 0; this.kills = save?.kills || 0;
     this.species = new Set(save?.species || []); this.reachedEnd = save?.reachedEnd || false;
+    this.legendary=structuredClone(save?.legendary||emptyLegendary());this.initializeLegendaryRuntime();this.initializeMergeRuntime();
     this.economy=structuredClone(save?.economy||emptyEconomy());this.sanctuary=structuredClone(save?.sanctuary||null);
     this.random=random; this.baseEquipment=equipmentStats(equipment); this.combatTimer=0;initializeJourney(this,save,now);this.initializeBosses(save);this.refreshEquipment();
     this.events = []; this.attackSerial = 0; this.deathTimer = 0; this.started = false;
@@ -60,14 +67,14 @@ export class Game {
       maxHp: 100 + (level - 1) * 15, invulnerable: 1.7, attack: null, attackBuffer: null,
       pose: 'idle', cycle: 0, landing: 0, stun: 0, dead: false, jumpAge: 100, hurtAge: 100, defeatAge: 0, respawnAge: 100 };
     this.refreshEquipment();
-    this.powers=new PowerSystem(this,normalizePowers(save?.powers,level)||normalizePowers(null,level));
+    this.powers=new PowerSystem(this,normalizePowers(save?.powers,level)||normalizePowers(null,level));this.refreshEquipment();
     this.enemies = regionSpawns(this.regionId).map(([type, x, surface], id) => this.makeEnemy(type, x, surface, id));
     const location=save?.world?.location;
     if(location){Object.assign(this.hero,{x:location.x,y:location.y,prevX:location.x,prevY:location.y,face:location.face,hp:clamp(location.hp||this.hero.maxHp,Number.EPSILON,this.hero.maxHp),vx:location.vx||0,vy:location.vy||0,jumps:location.jumps||0,grounded:this.surfaces.some(s=>location.x>=s.x&&location.x<=s.x+s.w&&Math.abs(location.y-s.y)<.01)});}
     if(location&&!this.hero.grounded){this.hero.coyote=0;this.hero.jumps=Math.max(1,this.hero.jumps);}
     this.board=boardIndex(this.hero.x);
     for(const old of save?.world?.monsters||[]){const e=this.enemies.find(e=>e.id===old.id&&e.type===old.type);if(e){e.hp=old.hp;e.respawn=old.respawn;if(e.hp<=0){e.state='dead';e.rewarded=true;}}}
-    if(save?.arena)this.startBossScene(save.arena.mode);
+    if(save?.arena){if(save.arena.legendary)this.startLegendaryScene(save.arena.legendary,save.arena.mode);else this.startBossScene(save.arena.mode);}
     if(this.sanctuary){this.treeVisit=true;this.paused=true;if(this.sanctuary.returnLocation.arena){const r=this.sanctuary.returnLocation;Object.assign(this.hero,{x:r.x,y:r.y,prevX:r.x,prevY:r.y});}}
   }
   makeEnemy(type, x, surface, id) {
@@ -81,7 +88,7 @@ export class Game {
   }
   attackDefinition(kind) {return {...ATTACKS[kind],damage:ATTACKS[kind].damage+3*(this.hero.level-1)+this.equipment.damage+this.equipment.strength*.5};}
   markCombat(){this.combatTimer=PROGRESSION.combatGrace;}
-  inCombat(){return !!this.bossEncounter||this.combatTimer>1e-8||!!this.hero.attack||Object.entries(this.powers.active).some(([id])=>POWERS[id].offensive)||this.powers.projectiles.length>0||this.powers.bursts.length>0||this.enemyShots.length>0;}
+  inCombat(){return !!this.bossEncounter||this.combatTimer>1e-8||!!this.hero.attack||Object.entries(this.powers.active).some(([id])=>POWERS[id].offensive)||this.powers.projectiles.length>0||this.powers.bursts.length>0||this.enemyShots.length>0||this.mergeEffects.some(e=>e.offensive)||this.mergeShots.length>0;}
 
   nearTree(){return !this.hero.dead&&(this.treeVisit||(!this.arenaScene&&this.hero.grounded&&Math.abs(this.hero.x-BALANCE.tree.x)<85&&Math.abs(this.hero.y-BALANCE.tree.y)<40));}
   upgradePreview(id,count=1){
@@ -106,6 +113,7 @@ export class Game {
   }
   damageEnemy(e,amount,{kind='punch',knock=0,face=this.hero.face,stagger=true}={}){
     if(e.state==='dead'||e.protection>0||!Number.isFinite(amount)||amount<=0)return false;
+    if(e.legendary&&e.state==='active'&&e.attack?.shape==='barrier')amount*=.5;
     this.markCombat();e.provoked=true;e.hp=Math.max(0,e.hp-amount);e.flash=.12;
     if(stagger&&!isBoss(e)){e.stagger=.26;e.state='recover';e.age=0;}
     if(knock&&!e.rooted&&!e.lifted&&!isBoss(e))e.x=clamp(e.x+face*knock,e.surface.x+e.w/2,e.surface.x+e.surface.w-e.w/2);
@@ -178,7 +186,7 @@ export class Game {
   defeat() {
     const h = this.hero; if (h.dead) return;
     if(this.arenaScene)this.leaveBoss('defeat');
-    this.powers.cancelEffects();
+    this.powers.cancelEffects();this.cancelMergeEffects();
     this.lastDefeatPenalty=h.level<99?Math.min(h.xp,Math.floor(xpForLevel(h.level)*PROGRESSION.defeatFraction)):0;h.xp-=this.lastDefeatPenalty;
     h.dead = true; h.defeatAge = 0; h.hp = 0; h.vx = h.vy = 0; h.attack = null; h.attackBuffer = null;
     this.deathTimer = 1.5; this.emit('defeat');
@@ -189,7 +197,7 @@ export class Game {
     if(cp.region===this.regionId)cp.index=this.checkpoint;
     if(cp.region!==this.regionId)this.loadRegion(cp.region);
     const camp=regionCamps(cp.region)[cp.index];this.checkpoint=cp.index;this.enemyShots=[];this.combatTimer=0;
-    this.powers.cancelEffects();
+    this.powers.cancelEffects();this.cancelMergeEffects();
     Object.assign(h, { x: camp.x, y: camp.y, prevX: camp.x, prevY: camp.y, vx: 0, vy: 0, dead: false,
       hp: h.maxHp, invulnerable: 2.5, stun: 0, grounded: true, jumps: 0, jumpBuffer: 0, coyote: .1, attack: null, attackBuffer: null, pose: 'idle', respawnAge: 0, hurtAge: 100, jumpAge: 100, defeatAge: 0 });
     this.emit('respawn', { name: camp.name });
@@ -208,7 +216,7 @@ export class Game {
   step(dt = STEP, input = {}) {
     if (this.paused || !Number.isFinite(dt) || dt <= 0) return;
     dt = Math.min(dt, STEP); this.time += dt;this.combatTimer=Math.max(0,this.combatTimer-dt);
-    this.powers.step(dt);
+    this.powers.step(dt);this.stepMerge(dt);
     const h = this.hero;
     h.prevX = h.x; h.prevY = h.y; h.prevFace = h.face;
     if (h.dead) { h.defeatAge += dt; this.deathTimer -= dt; if (this.deathTimer <= 0) this.respawn(); return; }
@@ -228,7 +236,7 @@ export class Game {
       if (Math.abs(axis) > .08) h.face = axis > 0 ? 1 : -1;
     }
     if(this.powers.flying){h.vy=approach(h.vy,(input.vertical?clamp(Number(input.vertical),-1,1):this.powers.active.flight.age<.35?-1:0)*BALANCE.flightSpeed,1200*dt);if(h.y<120){h.y=120;h.vy=Math.max(0,h.vy);}}
-    this.moveHero(dt);
+    this.applyMergeMovement();this.moveHero(dt);
     if (h.y > DEATH_Y) { this.defeat(); return; }
     if(input.heal)this.useHealthRoot();
     if (input.interact) this.interact();
@@ -255,7 +263,7 @@ export class Game {
     if (!this.arenaScene&&this.regionId===1&&h.x >= 5860 && !this.reachedEnd) { this.reachedEnd = true; this.emit('destination'); }
   }
   stepEnemy(e, dt) {
-    if(isBoss(e)&&e.type.startsWith('boss-')){stepBoss(this,e,dt);this.onBossVisualStep?.(e,this.time,dt,this.hero.x);return;}
+    if(isBoss(e)&&e.type.startsWith('boss-')){if(e.legendary)stepLegendaryBoss(this,e,dt);else stepBoss(this,e,dt);this.onBossVisualStep?.(e,this.time,dt,this.hero.x);return;}
     if(e.summoned&&e.state==='dead')return;
     if(!e.lifted){e.prevX = e.x; e.prevY = e.y;}
     if (e.state === 'dead') {
@@ -306,7 +314,8 @@ export class Game {
     const location=this.arenaScene?{...this.arenaScene.returnLocation,hp:h.hp,vx:0,vy:0,jumps:0}:{x:h.x,y:h.y,face:h.face,hp:h.hp,vx:h.vx,vy:this.powers.flying?Math.max(0,h.vy):h.vy,jumps:h.jumps};
     for(const region of this.world.bossVictories)if(!this.bossProgress.records[region])this.bossProgress.records[region]=initialBossProgress([region]).records[region];
     const world={...this.world,region:this.regionId,location,monsters:(this.arenaScene?.enemies||this.enemies).filter(e=>!isBoss(e)&&!e.summoned).map(e=>({id:e.id,type:e.type,hp:e.hp,respawn:Math.max(0,e.respawn)}))};
-    return JSON.stringify({version:6,economy:this.economy,sanctuary:this.sanctuary,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?{region:this.regionId,mode:'cleared'}:null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
+    const legendary={...this.legendary,recovery:this.mergeSnapshot()};
+    return JSON.stringify({version:7,legendary,economy:this.economy,sanctuary:this.sanctuary,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?(this.arenaScene.legendary?{legendary:this.arenaScene.legendary,mode:'cleared'}:{region:this.regionId,mode:'cleared'}):null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
   }
 }
-Object.assign(Game.prototype,journeyMethods,bossMethods,erisMethods);
+Object.assign(Game.prototype,journeyMethods,bossMethods,erisMethods,legendaryMethods,mergeMethods);

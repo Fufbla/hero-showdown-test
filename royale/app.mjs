@@ -1,3 +1,8 @@
+import { installLegendaryQA } from './legendary-qa.mjs';
+import { LegendaryMenu } from './legendary-ui.mjs';
+import { LEGENDARY, MERGE_POWERS } from './legendary-data.mjs';
+import { LegendaryLedger, reconcileLegendaryStore } from './legendary-ledger.mjs';
+import { LegendaryMusic } from './legendary-music.mjs';
 import { ErisMenu } from './eris-ui.mjs';
 import { installBossQA } from './boss-qa.mjs';
 import { updateBossHud, openChestMenu } from './boss-ui.mjs';
@@ -28,22 +33,27 @@ window.visualViewport?.addEventListener('resize',sizeVisibleViewport);sizeVisibl
 const testPrefix=params.has('qa')&&params.get('testSession')?`royale-test-${params.get('testSession')}:`:'';
 const storage={getItem:key=>(testPrefix?sessionStorage:localStorage).getItem(testPrefix+key),setItem:(key,value)=>(testPrefix?sessionStorage:localStorage).setItem(testPrefix+key,value)};
 const store=new LocalHeroStore(storage);
+let ledger=null,ledgerError='',criticalPending=null,fixtureSaveFailures=0;
+try{ledger=await LegendaryLedger.open(window.indexedDB,testPrefix?testPrefix+'permanent':'healthia.royale.permanent.v1');await reconcileLegendaryStore(store,ledger);}catch(error){ledger?.close();ledger=null;ledgerError=error.message||'Permanent storage is unavailable.';}
+const legendaryMusic=new LegendaryMusic();
 let game=new Game(),screen='roster',editing=false,activeSlot=store.data.activeSlot,activeId=null,creatorSlot=activeSlot,deleteTarget=null;
 let audioContext,soundEnabled=false,toastUntil=0,saveAge=0,regionName='',lastHud='',fps=60,drawMs=0,qaClock=0;
-const input=new Input(document,()=>{if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();else if(screen==='tree')returnAdventure();else if(['controls','world','inventory','chest'].includes(screen))showPause();},loadControls(storage));
+const input=new Input(document,()=>{if(criticalPending||screen==='mergeReward')return;if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();else if(screen==='tree')returnAdventure();else if(['controls','world','inventory','chest','mergeReward'].includes(screen))showPause();},loadControls(storage));
 const journeyMenu=new JourneyMenu(()=>game,persist,say,resume,transaction);
 const powerMenu=new PowerMenu(()=>game,persist,say,transaction),controlMenu=new ControlMenu(input,storage,say);
 const renderer=new Renderer($('game')),creator=new Creator();
 const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,say,appearance:()=>openCreator(activeSlot,true),leave:returnAdventure});
+const legendaryMenu=new LegendaryMenu(()=>game,{transaction,say,enter:enterLegendary,onClaim:resume});
+erisMenu.mergeMenu=legendaryMenu;
 let makeoverReview=null;
 function say(message,seconds=3){$('toast').textContent=message;$('toast').classList.add('visible');toastUntil=performance.now()+seconds*1000;}
 function storageNotice(){
   const message=store.durable?store.message||'Saved on this browser only. No account or cloud saving.':store.message;
   $('roster-note').textContent=message;$('save-note').textContent=message;
-  $('storage-warning').textContent=store.durable?'':message;$('storage-warning').hidden=store.durable;
+  $('storage-warning').textContent=!store.durable?message:ledgerError?'Legendary storage: '+ledgerError:'';$('storage-warning').hidden=store.durable&&!ledgerError;
 }
 function persist(){
-  if(!game.started||!game.canSave())return {ok:false,error:'Saving resumes after five seconds outside combat.'};
+  if(criticalPending||!game.started||!game.canSave())return {ok:false,error:'Saving resumes after five seconds outside combat.'};
   return persistSnapshot(game.save());
 }
 function persistSnapshot(snapshot,requireDurable=false){
@@ -51,12 +61,36 @@ function persistSnapshot(snapshot,requireDurable=false){
   if((result.ok||result.retained)&&store.data.slots[activeSlot])activeId=store.data.slots[activeSlot].id;
   storageNotice();return result;
 }
+function startCritical(expectedRevision,snapshot){
+  const sourceScreen=screen;
+  criticalPending={expectedRevision,snapshot,sourceScreen};game.paused=true;input.enabled=false;input.clear();
+  $('permanent-save').hidden=false;$('permanent-retry').hidden=true;$('permanent-reload').hidden=true;$('permanent-status').textContent='Saving the complete permanent transaction…';
+  void finishCritical();
+}
+async function finishCritical(){
+  const pending=criticalPending;if(!pending||pending.writing)return;pending.writing=true;
+  $('permanent-retry').hidden=true;$('permanent-status').textContent='Saving the complete permanent transaction…';
+  try{
+    if(!ledger||!activeId)throw Error('Durable hero storage is not ready.');
+    if(fixtureSaveFailures>0){fixtureSaveFailures--;throw Error('Simulated practice storage failure.');}
+    await ledger.commit(activeId,pending.expectedRevision,pending.snapshot);
+    const saved=persistSnapshot(pending.snapshot,true);criticalPending=null;$('permanent-save').hidden=true;
+    if(!saved.ok){ledgerError='Permanent progress is recorded. Reload to synchronize the ordinary save.';storageNotice();say(ledgerError,8);}
+    if(game.pendingMergeReward())showMergeReward();else if(pending.sourceScreen==='tree'){setScreen('tree');erisMenu.open(erisMenu.panel);}else if(pending.sourceScreen==='inventory'){setScreen('inventory');journeyMenu.inventory();}else resume();
+    updateHud();
+  }catch(error){pending.writing=false;$('permanent-status').textContent='The transaction has not been confirmed. '+error.message+' Gameplay stays paused so nothing can be duplicated.';$('permanent-retry').hidden=false;$('permanent-reload').hidden=false;$('permanent-retry').focus();}
+}
+$('permanent-retry').onclick=()=>void finishCritical();$('permanent-reload').onclick=()=>location.reload();
+function showMergeReward(){setScreen('mergeReward');legendaryMenu.reward();$('merge-reward-title').focus();}
+function enterLegendary(id){if(!game.enterLegendary(id)){say('Reach level 99, leave combat and resolve rewards before entering.');return;}handleEvents();setScreen('play');updateHud();}
 function transaction(action){
+  if(criticalPending)return {ok:false,error:'A permanent transaction is already saving.'};
   if(!game.canSave())return {ok:false,error:'Wait five seconds outside combat.'};
-  const before=structuredClone({inventory:game.inventory,economy:game.economy,look:game.look,powers:game.powers.data,coins:game.hero.coins,hp:game.hero.hp,roots:game.healthRoots}),eventCount=game.events.length;
+  const before=structuredClone({inventory:game.inventory,economy:game.economy,legendary:game.legendary,look:game.look,powers:game.powers.data,coins:game.hero.coins,hp:game.hero.hp,roots:game.healthRoots}),eventCount=game.events.length;
   const value=action();if(value===false||value?.ok===false){if(value?.error)say(value.error);return value||{ok:false,error:'This action is no longer available.'};}
+  if(game.legendary.revision!==before.legendary.revision){if(ledger){startCritical(before.legendary.revision,game.save());return {ok:false,pending:true,error:'Saving permanent progress…'};}game.inventory=before.inventory;game.economy=before.economy;game.legendary=before.legendary;game.hero.coins=before.coins;game.refreshEquipment();return {ok:false,error:'Permanent storage is unavailable. No equipment was destroyed.'};}
   const saved=persistSnapshot(game.save(),true);
-  if(!saved.ok){game.inventory=before.inventory;game.economy=before.economy;game.look=before.look;game.powers.data=before.powers;game.hero.coins=before.coins;game.hero.hp=before.hp;game.healthRoots=before.roots;game.events.length=eventCount;game.refreshEquipment();say('No transaction completed. '+saved.error,7);return saved;}
+  if(!saved.ok){game.inventory=before.inventory;game.economy=before.economy;game.legendary=before.legendary;game.look=before.look;game.powers.data=before.powers;game.hero.coins=before.coins;game.hero.hp=before.hp;game.healthRoots=before.roots;game.events.length=eventCount;game.refreshEquipment();say('No transaction completed. '+saved.error,7);return saved;}
   return typeof value==='object'?value:{ok:true};
 }
 function updateMakeoverQuote(){
@@ -67,9 +101,10 @@ $('creator-form').addEventListener('input',updateMakeoverQuote);
 $('cancel-makeover').onclick=()=>{makeoverReview=null;$('makeover-confirm').hidden=true;};
 $('confirm-makeover').onclick=()=>{const q=makeoverReview;if(!q)return;makeoverReview=null;const result=transaction(()=>game.applyMakeover(q.next,{confirmed:true,revision:q.revision}));if(result.ok){editing=false;setScreen('tree');erisMenu.open();say('Appearance updated. Your progress is unchanged.');}else updateMakeoverQuote();};
 function setScreen(next){
+  if(criticalPending)return;
   screen=next;input.enabled=next==='play';input.clear();game.paused=next!=='play';
-  for(const [name,id] of Object.entries({roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu'}))$(id).hidden=next!==name;
-  const inGame=game.started&&(['play','pause','tree','controls','world','inventory','chest'].includes(next)||(next==='creator'&&editing));
+  for(const [name,id] of Object.entries({roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',mergeReward:'merge-reward'}))$(id).hidden=next!==name;
+  const inGame=game.started&&(['play','pause','tree','controls','world','inventory','chest','mergeReward'].includes(next)||(next==='creator'&&editing));
   $('hud').hidden=!inGame;$('mission').hidden=!inGame;$('pause').disabled=!inGame;
   $('pause').setAttribute('aria-label',next==='play'?'Pause game':'Resume game');$('pause').textContent=next==='play'?'Ⅱ':'▷';
   document.body.classList.toggle('sanctuary-view',game.treeVisit);document.body.classList.toggle('playing',next==='play');document.body.classList.toggle('game-view',inGame);
@@ -96,7 +131,7 @@ function renderRoster(){
 }
 function openRoster(){if(!game.canSave()){say('Leave combat before switching heroes.');return;}persist();renderRoster();setScreen('roster');$('roster-title').focus();}
 function continueHero(index){
-  const slot=store.slot(index);if(!slot)return;
+  const slot=store.slot(index);if(!slot)return;if(slot.snapshot.legendary.revision&&!ledger){say('This hero needs its permanent progress record. '+ledgerError,9);return;}
   activeSlot=index;activeId=slot.id;game=new Game({save:slot.snapshot});startPatrol(true);
 }
 function openCreator(index=activeSlot,isEdit=true){
@@ -110,10 +145,11 @@ function openCreator(index=activeSlot,isEdit=true){
 }
 function cancelCreator(){if(editing){editing=false;setScreen('tree');erisMenu.open('home');}else{renderRoster();setScreen('roster');}}
 function startPatrol(continued){
+  game.legendaryStorageReady=!!ledger&&store.writable;
   game.onBossVisualStep=(boss,time,dt,x)=>renderer.bossArt.step(boss,time,dt,x);
   if(game.arenaScene)renderer.bossArt.step(game.arenaScene.boss,game.time,0,game.hero.x);
   game.started=true;regionName='';lastHud='';saveAge=0;renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.cameraY=0;renderer.particles=[];
-  setScreen('play');persist();updateHud();if(game.treeVisit){setScreen('tree');erisMenu.open();}else if(game.inventory.pending.length){setScreen('inventory');journeyMenu.inventory();}say(continued?'Welcome back, hero. Your patrol continues.':'Welcome to the coast! Move right to find your first Bottle Critter.',4);
+  setScreen('play');persist();updateHud();if(game.pendingMergeReward())showMergeReward();else if(game.treeVisit){setScreen('tree');erisMenu.open();}else if(game.inventory.pending.length){setScreen('inventory');journeyMenu.inventory();}say(continued?'Welcome back, hero. Your patrol continues.':'Welcome to the coast! Move right to find your first Bottle Critter.',4);
 }
 function begin(){
   const validation=creator.validate();if(!validation.ok)return;
@@ -126,7 +162,7 @@ function showPause(){$('pause-region').textContent=game.getRegion().name.toUpper
 function openTree(panel='home'){if(typeof panel!=='string')panel='home';if(!game.visitTree()){say('Leave combat for five seconds before visiting the Tree.');return;}setScreen('tree');persist();erisMenu.open(panel);$('tree-title').focus();}
 function returnAdventure(){if(!game.treeVisit)return;game.leaveTree();persist();resume();}
 function showChest(){if(!game.availableChest()||!game.canSave())return;setScreen('chest');openChestMenu(game,()=>{if(game.claimChest()){persist();setScreen('inventory');journeyMenu.inventory();say('Coins and Roots collected. Choose which equipment to keep.');}});$('chest-title').focus();}
-function resume(){if(!game.started)return;if(game.treeVisit){setScreen('tree');erisMenu.open();return;}if(game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();say('Choose your pending reward before continuing.');return;}setScreen('play');$('pause').blur();}
+function resume(){if(criticalPending||!game.started)return;if(game.pendingMergeReward()){showMergeReward();return;}if(game.treeVisit){setScreen('tree');erisMenu.open();return;}if(game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();say('Choose your pending reward before continuing.');return;}setScreen('play');$('pause').blur();}
 function closeDelete(){deleteTarget=null;renderRoster();setScreen('roster');}
 function tone(type) {
   if (!soundEnabled) return;
@@ -144,6 +180,7 @@ function tone(type) {
 function handleEvents() {
   const events = game.drain(), leveled = events.some(e => e.type === 'level');
   for (const event of events) {
+    if(event.type==='legendary-clear-ready'){const revision=game.legendary.revision;if(game.prepareLegendaryVictory())startCritical(revision,game.save());}
     if(event.type==='tree')openTree();
     if(event.type==='boss-entry'&&event.snapshot)persistSnapshot(event.snapshot);
     if(event.type==='arena'&&game.arenaScene)renderer.bossArt.step(game.arenaScene.boss,game.time,0,game.hero.x);
@@ -164,11 +201,11 @@ function handleEvents() {
     if (event.type === 'respawn') { persist();input.clear(); say(`Back at ${event.name}. Full health restored. Levels, coins and items kept.`); }
     if (event.type === 'destination') { persist(); say('You reached Lighthouse Point! Use the marked arena entrance to challenge Trash Monster.', 6); }
   }
-  if(game.arenaScene)updateBossHud(game,game.started&&['play','pause','tree','controls','world','inventory','chest'].includes(screen));
+  if(game.arenaScene)updateBossHud(game,game.started&&['play','pause','tree','controls','world','inventory','chest','mergeReward'].includes(screen));
 }
 function updateHud() {
-  const h = game.hero, region = game.treeVisit?{name:'Tree of Eris'}:game.arenaScene?{name:`${BOSSES[game.regionId].name} Arena`}:boardAt(game.regionId,h.x);
-  updateBossHud(game,game.started&&['play','pause','tree','controls','world','inventory','chest'].includes(screen));
+  const h = game.hero, region = game.treeVisit?{name:'Tree of Eris'}:game.arenaScene?{name:game.arenaScene.legendary?LEGENDARY[game.arenaScene.legendary].arena:`${BOSSES[game.regionId].name} Arena`}:boardAt(game.regionId,h.x);
+  updateBossHud(game,game.started&&['play','pause','tree','controls','world','inventory','chest','mergeReward'].includes(screen));
   if(game.arenaScene&&!renderer.bossArt.ready)$('boss-cue').textContent=renderer.bossArt.errors.length?'Approved art could not load. Reload to retry.':'Loading approved boss artwork…';
   $('world-region').textContent=game.treeVisit?'PEACEFUL SANCTUARY':game.getRegion().name.toUpperCase();$('world-clock').hidden=game.regionId<3;$('world-clock').textContent=formatClock(game.clock());
   $('root-count').textContent=game.healthRoots;$('health-root').querySelector('kbd').textContent=input.controls.keys.heal[0].replace('Key','').replace('Digit','');$('health-root').disabled=screen!=='play'||h.dead||game.healthRoots===0||h.hp>=h.maxHp;
@@ -196,23 +233,24 @@ function updateHud() {
   if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nregion ${game.regionId} · roots ${game.healthRoots} · gear ${game.inventory.items.length}/7 · clock ${game.clock().phase}\npowers ${game.powers.data.equipped.join(',')} · points ${game.powers.data.points} · combat ${game.inCombat()}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}${game.arenaScene?`\nboss ${game.arenaScene.boss.hp.toFixed(0)}/${game.arenaScene.boss.maxHp} · phase ${game.arenaScene.boss.phase} · waves ${game.bossEncounter?.waves||0} · helpers ${game.enemies.filter(e=>e.summoned&&e.state!=='dead').length} · cleared ${game.arenaScene.cleared}`:''}`;
 }
 function updatePowers(){
+  const merge=game.mergeAbility();$('power-bar').classList.toggle('has-merge',!!merge);
   for(const [i,b] of [...document.querySelectorAll('.power-button')].entries()){
-    const id=game.powers.data.equipped[i],def=POWERS[id],active=id&&!!game.powers.active[id],cooldown=id&&(game.powers.cooldowns[id]||0)>0;
-    b.querySelector('b').textContent=def?.icon||'+';b.querySelector('span').textContent=def?.name||'Empty slot';b.querySelector('kbd').textContent=input.controls.keys[`power${i}`][0].replace('Digit','').replace('Key','');
-    b.classList.toggle('cooldown',!!cooldown);b.classList.toggle('active',!!active);b.classList.toggle('flight-locked',!!(game.powers.flying&&def?.offensive&&id!=='fireball'));b.disabled=!id||screen!=='play'||game.hero.dead;
-    b.setAttribute('aria-label',`${def?.name||`Power slot ${i+1}`}${cooldown?' · recovering':active?(id==='flight'?' · flying, press to cancel':' · active'):' · ready'}`);b.setAttribute('aria-pressed',String(!!active));
+    const special=i===3,id=special?merge?.id:game.powers.data.equipped[i],def=special?merge:POWERS[id],active=id&&(special?game.mergeEffects.some(e=>e.id===id&&!e.ended):!!game.powers.active[id]),cooldown=id&&(special?(game.mergeCooldowns[id]||0)>0:(game.powers.cooldowns[id]||0)>0),disrupted=!special&&id===game.disruptedPower;
+    b.hidden=special&&!merge;b.querySelector('b').textContent=disrupted?'⊘':def?.icon||'+';b.querySelector('span').textContent=def?.name||'Empty slot';b.querySelector('kbd').textContent=input.controls.keys[`power${i}`][0].replace('Digit','').replace('Key','');
+    b.classList.toggle('cooldown',!!cooldown);b.classList.toggle('active',!!active);b.classList.toggle('disrupted',!!disrupted);b.classList.toggle('flight-locked',!!(game.powers.flying&&def?.offensive&&id!=='fireball'));b.disabled=!id||screen!=='play'||game.hero.dead||!!disrupted||!!criticalPending;
+    b.setAttribute('aria-label',`${def?.name||`Power slot ${i+1}`}${disrupted?' · disrupted until boss reaches half health':cooldown?' · recovering':active?(id==='flight'?' · flying, press to cancel':' · active'):' · ready'}${special?' · protected fourth power':''}`);b.setAttribute('aria-pressed',String(!!active));
   }
-  $('power-context').textContent=game.powers.flying?'FLIGHT · steer ↑ ↓ · press Flight to land':game.inCombat()?'IN COMBAT':game.powers.data.points?`${game.powers.data.points} Power Points · visit the Tree of Eris`:'Learn powers at the Tree of Eris';
+  $('power-context').textContent=game.disruptedPower?'ONE POWER DISRUPTED · restored at half boss HP':game.powers.flying?'FLIGHT · steer ↑ ↓ · press Flight to land':game.inCombat()?'IN COMBAT':game.powers.data.points?`${game.powers.data.points} Power Points · visit the Tree of Eris`:'Learn powers at the Tree of Eris';
 }
 $('manual-save').onclick=()=>{const result=persist();say(result.ok?'Hero saved on this browser.':result.error||'Save unavailable.');};
 $('chest-close').onclick=resume;
-$('open-map').onclick=()=>{setScreen('world');journeyMenu.map();$('map-title').focus();};$('map-close').onclick=showPause;
+$('open-map').onclick=()=>{setScreen('world');journeyMenu.map();legendaryMenu.map();$('map-title').focus();};$('map-close').onclick=showPause;
 $('open-inventory').onclick=()=>{setScreen('inventory');journeyMenu.inventory();$('inventory-title').focus();};$('inventory-close').onclick=showPause;
 $('tree-from-pause').onclick=()=>openTree();$('close-tree').onclick=returnAdventure;
 $('open-controls').onclick=()=>{setScreen('controls');controlMenu.render();$('settings-title').focus();};$('close-controls').onclick=showPause;
 $('creator-form').addEventListener('submit',e=>{e.preventDefault();begin();});
 $('cancel-look').onclick=cancelCreator;
-$('pause').onclick=()=>{if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='tree')returnAdventure();else if(screen==='creator'&&editing)cancelCreator();else if(['controls','world','inventory','chest'].includes(screen))showPause();};
+$('pause').onclick=()=>{if(criticalPending||screen==='mergeReward')return;if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='tree')returnAdventure();else if(screen==='creator'&&editing)cancelCreator();else if(['controls','world','inventory','chest','mergeReward'].includes(screen))showPause();};
 $('resume').onclick=resume;$('edit-look').onclick=()=>openTree('appearance');
 $('return-camp').onclick=()=>{if(game.returnCheckpoint()){handleEvents();persist();resume();}else say('Leave combat before returning to your checkpoint.');};
 $('choose-hero').onclick=openRoster;$('back-to-patrol').onclick=resume;
@@ -232,13 +270,14 @@ window.addEventListener('pagehide',persist);
 window.addEventListener('storage',e=>{if(testPrefix||e.key!==PROFILE_KEY)return;if(game.started)persist();else{store.load();renderRoster();}});
 // Keyboard focus stays in the active panel. Tabs also support arrow-key navigation.
 document.addEventListener('keydown',e=>{
-  if(e.key!=='Tab'||screen==='play')return;
-  const panel=$({creator:'creator',roster:'roster',delete:'delete-dialog',pause:'pause-menu',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu'}[screen]);
+  if(e.key!=='Tab'||screen==='play'&&!criticalPending)return;
+  const panel=criticalPending?$('permanent-save'):$({creator:'creator',roster:'roster',delete:'delete-dialog',pause:'pause-menu',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',mergeReward:'merge-reward'}[screen]);
   const nodes=[...panel.querySelectorAll('a[href],button,input,select')].filter(n=>!n.disabled&&n.tabIndex!==-1&&n.getClientRects().length);
   if(!nodes.length)return;
   if(e.shiftKey&&(document.activeElement===nodes[0]||!panel.contains(document.activeElement))){e.preventDefault();nodes.at(-1).focus();}
   if(!e.shiftKey&&(document.activeElement===nodes.at(-1)||!panel.contains(document.activeElement))){e.preventDefault();nodes[0].focus();}
 });
+installLegendaryQA(()=>game,()=>{handleEvents();updateHud();},renderer.bossArt,input,{failSave:()=>{fixtureSaveFailures=1;}});
 installBossQA(()=>game,()=>{handleEvents();updateHud();});
 renderRoster();setScreen('roster');
 let last=performance.now(),accumulator=0,measurement=null;
@@ -249,10 +288,11 @@ function frame(now){
   const wallElapsed=Math.max(0,(now-last)/1000),elapsed=Math.min(.1,wallElapsed);last=now;if(wallElapsed>0)fps=fps*.95+.05/wallElapsed;
   if(game.started&&!game.arenaScene)renderer.bossArt.prepare(game.regionId);
   const waitingForArt=game.arenaScene&&!renderer.bossArt.ready;
-  if(screen==='play'&&!waitingForArt){
+  if(screen==='play'&&!waitingForArt&&!criticalPending){
     accumulator+=elapsed;while(accumulator>=STEP){game.step(STEP,input.sample());accumulator-=STEP;}
-    handleEvents();if(screen==='play'&&game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();}saveAge+=elapsed;if(saveAge>5){persist();saveAge=0;}
+    handleEvents();if(!criticalPending&&screen==='play'&&game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();}saveAge+=elapsed;if(saveAge>5){persist();saveAge=0;}
   }else accumulator=0;
+  legendaryMusic.update(audioContext,game.arenaScene?.legendary,soundEnabled&&screen==='play'&&!game.arenaScene?.cleared&&!criticalPending&&!document.hidden);
   const drawStart=performance.now();if(!game.treeVisit)renderer.draw(game,screen==='play'?accumulator/STEP:1,elapsed);
   const cost=performance.now()-drawStart;drawMs=drawMs*.95+cost*.05;
   if(measurement&&(screen!=='play'||waitingForArt)){measurement=null;$('performance-result').textContent='Sample cancelled: keep gameplay active.';}

@@ -44,7 +44,8 @@ export class JourneyMenu {
       const actions=el('div',undefined,'equipment-actions');
       if(pending){const compare=el('button','Compare & replace','secondary');compare.onclick=()=>this.confirm(item.uid,true);actions.append(compare);}
       else{
-        const wear=el('button',equipped?'Unequip':'Equip','secondary');wear.disabled=!g.canSave()||g.hero.level<(def.level||1);wear.onclick=()=>{if(this.commit(()=>g.equipItem(item.uid)))this.inventory();};
+        const wear=el('button',equipped?'Unequip':'Equip','secondary');wear.disabled=!g.canSave()||g.hero.level<(def.level||1)||!g.treeVisit&&(def.rarity==='legendary'||itemDefinition(g.inventory.items.find(i=>i.uid===(g.inventory.equipped[def.part]||g.inventory.equipped[{mask:'helmet',helmet:'mask',suit:'chest',chest:'suit'}[def.part]])))?.rarity==='legendary');wear.onclick=()=>{if(this.commit(()=>g.equipItem(item.uid)))this.inventory();};
+        if(def.rarity==='legendary')body.append(el('p','Equip or change this piece at the Tree of Eris.'));
         const discard=el('button','Discard','text-button');discard.disabled=!g.canSave();discard.onclick=()=>this.confirm(item.uid,false);actions.append(wear,discard);
       }
       const preview=el('button','Preview','secondary');preview.onclick=()=>this.preview(item);actions.append(preview);card.append(actions);list.append(card);

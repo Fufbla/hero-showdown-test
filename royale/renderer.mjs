@@ -1,3 +1,4 @@
+import { drawLegendarySky, drawLegendaryWorld, drawMergeWorld } from './legendary-art.mjs';
 import { BossArt } from './boss-art.mjs';
 import { drawArena } from './boss-ui.mjs';
 import { drawNewMonster, regionSky, worldLandmarks } from './world-art.mjs';
@@ -50,7 +51,7 @@ export class Renderer {
     if(s.oneWay){path(c,[[s.x+10,s.y+18],[s.x+s.w-8,s.y+18],[s.x+s.w-26,s.y+49],[s.x+45,s.y+57]],'#a48e64',null);line(c,[[s.x+2,s.y+1],[s.x+s.w-2,s.y+1]],'#4b9c70',9);for(let x=s.x+10;x<s.x+s.w-5;x+=23)path(c,[[x-5,s.y],[x-4,s.y-9],[x,s.y-2],[x+5,s.y-12],[x+6,s.y]],'#3e946b',null);}
     else for(let x=s.x+22;x<s.x+s.w;x+=65){line(c,[[x,s.y+43],[x+16,s.y+41]],'#b8935d',2);oval(c,x+18,s.y+24,2,1.2,'#fff1bf');}
   }
-  enemy(e,t,alpha){if(e.boss&&e.type.startsWith('boss-')){this.bossArt.draw(this.c,e,{time:t,alpha});return;}if(e.state==='dead')return;const c=this.c,x=lerp(e.prevX,e.x,alpha),y=lerp(e.prevY,e.y,alpha);const bob=Math.sin(t*7+e.id)*1.5;const info=TYPES[e.type];
+  enemy(e,t,alpha){if(e.boss&&e.type.startsWith('boss-')){this.bossArt.draw(this.c,e,{time:t,alpha});return;}if(e.state==='dead')return;if(e.legendaryHelper){this.bossArt.step(e,t,0);this.bossArt.draw(this.c,e,{time:t,alpha});const x=lerp(e.prevX,e.x,alpha),y=lerp(e.prevY,e.y,alpha);round(this.c,x-25,y-e.h-13,50,5,3,'#203329');round(this.c,x-24,y-e.h-12,48*e.hp/e.maxHp,3,2,'#b8e887');return;}const c=this.c,x=lerp(e.prevX,e.x,alpha),y=lerp(e.prevY,e.y,alpha);const bob=Math.sin(t*7+e.id)*1.5;const info=TYPES[e.type];
     oval(c,x,y+1,e.w*.56,5,'#274e4a26');c.save();c.translate(x,y);if(e.lifted){c.translate(0,-e.h/2);c.rotate(t*7+e.id);c.translate(0,e.h/2);}c.scale(e.face,1);c.globalAlpha=e.protection>0?.65:1;
     const fill=e.flash>0?'#fff3cf':info.color;
     if(info.region>1){drawNewMonster(c,e,info,t,this.night&&!e.boss&&!e.legendary);}
@@ -75,7 +76,7 @@ export class Renderer {
     if(Math.abs(this.camera-target)>this.width)this.camera=target;
     const baseY=Math.max(0,600-this.height*.82),targetY=clamp(h.y-this.height*.58,0,baseY);
     this.cameraY=lerp(this.cameraY,targetY,1-Math.exp(-dt*8));
-    c.setTransform(this.dpr*this.scale,0,0,this.dpr*this.scale,0,0);c.save();c.scale(1,this.height/720);if(game.regionId===1)this.sky(t);else regionSky(c,game.getRegion(),this.width,this.camera,t,this.night);c.restore();
+    c.setTransform(this.dpr*this.scale,0,0,this.dpr*this.scale,0,0);c.save();c.scale(1,this.height/720);if(game.arenaScene?.legendary)drawLegendarySky(c,game,this.width,this.camera);else if(game.regionId===1)this.sky(t);else regionSky(c,game.getRegion(),this.width,this.camera,t,this.night);c.restore();
     c.save();c.translate(-this.camera,-this.cameraY);
     if(!game.arenaScene&&game.regionId===1)for(const x of [40,330,1350,1860,2720,2990,3980,4550,5430,6080]){if(x>this.camera-150&&x<this.camera+this.width+150)this.palm(x,600,.7+(x%3)*.11,t);}
     if(!game.arenaScene&&game.regionId===1&&5750>this.camera-100&&5750<this.camera+this.width+100)this.lighthouse(5750,600,.9);
@@ -87,10 +88,10 @@ export class Renderer {
       path(c,[[camp.x+20,camp.y],[camp.x+44,camp.y-45],[camp.x+75,camp.y]],'#e7d2a4',OUTLINE,2);path(c,[[camp.x+34,camp.y],[camp.x+44,camp.y-31],[camp.x+53,camp.y]],'#5b8673',null);
       if(game.nearCamp()===i){round(c,camp.x-85,camp.y-157,170,24,12,'#153b40e6');c.fillStyle='#fff1cd';c.font='11px system-ui';c.textAlign='center';c.fillText('E / REST · heal & set checkpoint',camp.x,camp.y-141);}
     }
-    if(!game.arenaScene){drawEris(c,t);worldLandmarks(c,game,this.camera,this.width);}else drawArena(c,game);
+    if(!game.arenaScene){drawEris(c,t);worldLandmarks(c,game,this.camera,this.width);}else{drawArena(c,game);if(game.arenaScene.legendary)drawLegendaryWorld(c,game);}
     for(const shot of game.enemyShots){oval(c,shot.x,shot.y,7,5,shot.color,'#283b43',2);line(c,[[shot.x-shot.vx*.025,shot.y-shot.vy*.025],[shot.x,shot.y]],'#eadcac',2);}
     for(const e of game.enemies)if(e.x>this.camera-90&&e.x<this.camera+this.width+90)this.enemy(e,t,alpha);
-    drawPowerWorld(c,game);
+    drawPowerWorld(c,game);drawMergeWorld(c,game);
     const pos=globalThis.HealthiaMotionCore?.renderPosition({x:h.prevX,y:h.prevY,face:h.prevFace},{x:h.x,y:h.y,face:h.face},alpha,h.dead)||{x:lerp(h.prevX,h.x,alpha),y:lerp(h.prevY,h.y,alpha)};
     let visualHero=h;
     if(h.dead&&!h.grounded){

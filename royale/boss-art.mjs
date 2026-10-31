@@ -4,6 +4,12 @@ import * as RigModule from '../assets/scorpion-rig/rig-core.js';
 import * as BushModule from '../assets/animation/bushman-animation-atlas.js';
 import * as WasteModule from '../assets/animation/wastelander-atlas.js';
 import * as VenomModule from '../assets/animation/venomis-thornbear-atlas.js';
+import * as LightningModule from '../assets/animation/lightening-spree-atlas.js';
+import * as AirModule from '../assets/animation/air-pollution-atlas.js';
+import * as DogModule from '../assets/animation/styrodog-atlas.js';
+import * as SonicModule from '../assets/animation/sonic-tusk-atlas.js';
+import * as StyroModule from '../assets/animation/styro-atlas.js';
+import { LEGENDARY } from './legendary-data.mjs';
 import * as FighterModule from '../assets/villain-motion/fighter-atlas.js';
 
 const Shore=ShoreModule.default||globalThis.HealthiaShoreBoss;
@@ -11,6 +17,7 @@ const Rig=RigModule.default||globalThis.HealthiaScorpionRigCore;
 const Bush=BushModule.default||globalThis.HealthiaBushmanAtlas;
 const Waste=WasteModule.default||globalThis.HealthiaWastelanderAtlas;
 const Venom=VenomModule.default||globalThis.HealthiaVenomisThornbearAtlas;
+const Lightning=LightningModule.default||globalThis.HealthiaLighteningSpreeAtlas, Air=AirModule.default||globalThis.HealthiaAirPollutionAtlas, Dog=DogModule.default||globalThis.HealthiaStyrodogAtlas, Sonic=SonicModule.default||globalThis.HealthiaSonicTuskAtlas, Styro=StyroModule.default||globalThis.HealthiaStyroAtlas;
 const Fighter=FighterModule.default||globalThis.HealthiaVillainAtlas;
 const clamp=(n,a=0,b=1)=>Math.max(a,Math.min(b,n)),mix=(a,b,q)=>a+(b-a)*q;
 const ease=q=>{q=clamp(q);return q*q*(3-2*q);};
@@ -19,6 +26,7 @@ const progress=b=>clamp(b.age/Math.max(.001,b.attack?.[b.state==='windup'?'warni
 const choose=(frames,q)=>frames[Math.min(frames.length-1,Math.floor(clamp(q)*frames.length))];
 
 export const BOSS_ART=Object.freeze({
+  ...Object.fromEntries(Object.entries(LEGENDARY).map(([id,d])=>[id,{name:d.name,temporary:false}])),
   1:{name:'Trash Monster',temporary:true},
   2:{name:'Bushman',temporary:false},
   3:{name:'Wastelander',temporary:false},
@@ -28,6 +36,7 @@ export const BOSS_ART=Object.freeze({
   7:{name:'Ultimate Pollution Boss',temporary:true},
 });
 export const BOSS_ART_DEPENDENCIES=Object.freeze([
+  'assets/animation/lightening-spree-atlas.js','assets/animation/lightening-spree-poses.png','assets/animation/air-pollution-atlas.js','assets/animation/air-pollution-poses.png','assets/animation/styrodog-atlas.js','assets/animation/styrodog-presence.png','assets/animation/styrodog-attacks.png','assets/animation/sonic-tusk-atlas.js','assets/animation/sonic-tusk-presence.png','assets/animation/sonic-tusk-attacks.png','assets/animation/sonic-tusk-walk.png','assets/animation/styro-atlas.js','assets/animation/styro-presence.png','assets/animation/styro-attacks.png',
   'assets/shore/boss-core.js','assets/shore/boss-parts.png','assets/scorpion-rig/rig-core.js',
   'assets/animation/bushman-animation-atlas.js','assets/animation/bushman-presence.png','assets/animation/bushman-walk.png','assets/animation/bushman-reactions.png','assets/animation/bushman-attacks.png',
   'assets/animation/wastelander-atlas.js','assets/animation/wastelander-presence.png','assets/animation/wastelander-attacks.png','assets/animation/wastelander-swing.png',
@@ -37,7 +46,8 @@ export const BOSS_ART_DEPENDENCIES=Object.freeze([
 
 // Pose selection has no simulation side effects or independent attack timer.
 export function bossArtPose(b,time=0){
-  const region=b.region??b.regionId??Number(String(b.type).split('-')[1]),kind=b.attack?.kind||'',p=progress(b),stage=phaseIndex(b);
+  if(b.legendaryId||b.helperTheme)return legendaryArtPose(b,time);
+  const region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1])),kind=b.attack?.kind||'',p=progress(b),stage=phaseIndex(b);
   const moving=Math.abs((b.x||0)-(b.prevX??b.x??0))>.01||Math.abs(b.vx||0)>3;
   const walking=Math.floor(((time*1.4)%1+1)%1*8),idle=Math.floor(((time/2.4)%1+1)%1*4);
   if(region===1||region===7)return {region,temporary:true,state:b.state,kind};
@@ -70,6 +80,21 @@ export function bossArtPose(b,time=0){
   return {region,temporary:true,state:b.state,kind};
 }
 
+export function legendaryArtPose(b,time=0){
+  const id=b.legendaryId||b.helperTheme,p=progress(b),stage=phaseIndex(b),kind=b.attack?.kind||'',walking=Math.floor(time*9)%8,moving=Math.abs(b.x-(b.prevX??b.x))>.01;
+  if(['wastelander','venomis','atomdust'].includes(id)){
+    const region={wastelander:3,venomis:5,atomdust:6}[id],translated=kind.includes('shot')||kind.includes('fan')?'poison':kind.includes('punch')?'punch':kind.includes('toxic')?'toxic':kind.includes('ground')?'hazard':kind.includes('blast')?'blast':'vines';
+    const pose=bossArtPose({...b,legendaryId:null,helperTheme:null,region,attack:b.attack?{...b.attack,kind:translated}:null,state:b.legendaryHelper?'idle':b.state},time);return {...pose,region:id};
+  }
+  const idle=b.state==='idle'||b.legendaryHelper,dead=b.state==='dead';let frame;
+  if(id==='lightning')frame=dead?14:idle?Math.floor(time*2)%3:choose((kind==='crystalBeam'?[[4,5],[6,7],[5,0]]:[[8,9],[10,11],[12,13]])[stage],p);
+  if(id==='air')frame=dead?14:idle?moving?3+Math.floor(time*5)%4:Math.floor(time*2)%3:choose((kind==='pollutionClaw'?[[7],[8,9],[7,0]]:kind==='smogTornado'?[[12],[13],[12,0]]:[[10],[11],[10,0]])[stage],p);
+  if(id==='styrodog')frame=dead?14:idle?moving?walking:8+Math.floor(time*2)%4:choose((kind==='leap'?[[22,23],[24,25],[26,27]]:kind==='beastCharge'?[[28,29],[30,31],[29,8]]:[[16,17],[18,19],[20,21]])[stage],p);
+  if(id==='sonic')frame=dead?14:idle?moving?walking:8+Math.floor(time*2)%4:choose((kind==='tuskStrike'||kind==='tuskCharge'||kind==='tuskCombo'?[[22,23],[24,25],[26,27]]:kind==='sonicOverlap'?[[28],[29,30],[31,8]]:[[16,17],[18,19],[20,21]])[stage],p);
+  if(id==='styro')frame=dead?14:idle?moving?walking:8+Math.floor(time*2)%4:choose((kind==='styroWall'?[[28],[29,30],[31,8]]:kind==='machineTrap'||kind==='machinery'?[[24],[25,26],[27,8]]:[[16,17],[18,19,20,21],[22,23]])[stage],p);
+  return {region:id,sheet:id,frame};
+}
+
 // Native front-facing claw/stinger coordinates feed the already-approved articulated rig.
 // The Story controller is a pose provider only: its step/strike/damage methods are never called.
 export function scorpionPoseModel(b,time=0,heroX=b.attack?.targetX??b.x){
@@ -89,8 +114,8 @@ export function scorpionPoseModel(b,time=0,heroX=b.attack?.targetX??b.x){
 }
 
 function specs(profile,key,accept=()=>true){
-  return profile.sheets.map(sheet=>({file:`assets/animation/${sheet.file}`,frames:sheet.frames.flatMap((f,i)=>{
-    const id=f.id??sheet.first+i;if(!accept(id))return [];
+  return (profile.sheets||[{...profile,first:0}]).map(sheet=>({file:`assets/animation/${sheet.file}`,frames:sheet.frames.flatMap((f,i)=>{
+    const id=f.id??(sheet.first||0)+i;if(!accept(id))return [];
     const [x,y,w,h,ax,ay]=Array.isArray(f)?f:f.crop;
     return [{key:`${key}:${id}`,crop:[x,y,w,h],anchor:[ax-x,ay-y],referenceHeight:f.referenceHeight||sheet.referenceHeight,mask:sheet.masks?.[i],facing:-1}];
   })})).filter(s=>s.frames.length);
@@ -99,6 +124,7 @@ function fighterSpecs(id,key=id){
   const a=Fighter[id];return {file:`assets/villain-motion/${a.file}`,frames:a.frames.map((f,i)=>({...f,key:`${key}:${i}`,referenceHeight:a.referenceHeight}))};
 }
 const plans={2:()=>specs(Bush,'bushman'),3:()=>[...specs(Waste,'wastelander'),fighterSpecs('wastelander','wastelander-combat')],5:()=>specs(Venom,'venomis',id=>id>=32),6:()=>['atomdust','atomdust_punch','atomdust_walk'].map(id=>fighterSpecs(id))};
+Object.assign(plans,{lightning:()=>specs(Lightning,'lightning'),air:()=>specs(Air,'air'),styrodog:()=>specs(Dog,'styrodog'),sonic:()=>specs(Sonic,'sonic'),styro:()=>specs(Styro,'styro'),wastelander:plans[3],venomis:plans[5],atomdust:plans[6]});
 const assetURL=path=>new URL(`../${path}`,import.meta.url).href;
 const imageFor=path=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error(`Could not load ${path}`));image.src=assetURL(path);});
 function polygon(c,points){points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();}
@@ -212,13 +238,13 @@ export class BossArt{
     }
     return this.inspect(b);
   }
-  inspect(b){const v=this.visuals.get(b),region=b.region??b.regionId??Number(String(b.type).split('-')[1]);return {name:BOSS_ART[region]?.name,temporary:!!BOSS_ART[region]?.temporary,loaded:!!this.regions.get(region)?.ready,selection:v?.selection,pose:v?.pose,error:this.regions.get(region)?.error||null};}
+  inspect(b){const v=this.visuals.get(b),region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1]));return {name:BOSS_ART[region]?.name,temporary:!!BOSS_ART[region]?.temporary,loaded:!!this.regions.get(region)?.ready,selection:v?.selection,pose:v?.pose,error:this.regions.get(region)?.error||null};}
   draw(c,b,{time=0,alpha=1}={}){
     const v=this.visuals.get(b);if(!v)return;
     const p=v.selection,entry=this.regions.get(p.region),x=mix(b.prevX??b.x,b.x,alpha),y=mix(b.prevY??b.y,b.y,alpha),dead=b.state==='dead';
     if(dead&&b.age>=1.25)return;
     c.save();c.translate(x,y);
-    if(dead)c.globalAlpha*=Math.max(0,1-b.age*.8);
+    if(dead){if(b.legendary){c.translate(0,Math.min(1,b.age/.6)*12);c.rotate(-Math.min(1,b.age/.6)*.8);}else c.globalAlpha*=Math.max(0,1-b.age*.8);}
     if(p.temporary)drawTemporary(c,b,time);
     else if(entry?.ready){
       if(p.region===4){const s=(b.h||165)/393;c.scale(s,s);c.translate(-640,-573);drawScorpion(c,entry.textures,v.pose);}

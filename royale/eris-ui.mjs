@@ -35,7 +35,7 @@ export class ErisMenu{
     this.panel=panel;this.confirm=null;
     for(const n of document.querySelectorAll('[data-eris-panel]'))n.hidden=n.dataset.erisPanel!==panel;
     for(const b of document.querySelectorAll('[data-eris]'))b.setAttribute('aria-pressed',String(b.dataset.eris===panel));
-    this.update();if(panel==='powers')this.powerMenu.open();if(panel==='wardrobe')this.wardrobe();if(panel==='roots')this.roots();
+    this.update();if(panel==='merge')this.mergeMenu?.tree();if(panel==='powers')this.powerMenu.open();if(panel==='wardrobe')this.wardrobe();if(panel==='roots')this.roots();
     if(panel==='home')drawEquipmentPreview($('eris-hero'),this.getGame());
   }
   update(){const g=this.getGame();$('eris-coins').textContent=g.hero.coins.toLocaleString();$('tree-points').textContent=g.powers.data.points;$('eris-capacity').textContent=`${g.inventory.items.length}/7 equipment`;$('eris-clock').textContent=`Adventure clock · ${formatClock(g.clock())}`;const r=g.sanctuary?.returnLocation;$('eris-return').textContent=r?`Return to ${g.getRegion().name} · board ${r.board+1}`:'Your adventure is waiting.';}

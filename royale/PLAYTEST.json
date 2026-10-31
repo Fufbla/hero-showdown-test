@@ -1,20 +1,23 @@
 {
   "source_repository": "https://github.com/Fufbla/hero-showdown-test",
   "source_branch": "feature/showdown-royale",
-  "base_commit": "3310c269b6b33a702235e68632dbe60b9ccd65ef",
+  "base_commit": "7e19386f7e2d9b8fd3936bda755d27ae6a1dccc0",
   "entry": "royale/index.html",
   "private_playtest_project_id": "appgprj_6ae50514724081918db148465cc8eeeb",
   "private_playtest_url": "https://healthia-showdown-royale-phase1.gladcreek512.chatgpt.site",
   "deployment_scope": "Royale plus unchanged motion-core and the approved assets enumerated in royale/boss-art.mjs",
   "save_key": "healthia.royale.profiles.v2",
-  "phase": 6,
+  "phase": 7,
   "legacy_save_key": "healthia.royale.phase1.v1",
   "saving": "Three browser-local slots; saves only after five seconds out of combat; no cloud/account saving",
-  "snapshot_version": 6,
+  "snapshot_version": 7,
   "combat_lab": "royale/tests/powers.html",
   "world_practice": "royale/tests/world.html",
   "boss_practice": "royale/tests/bosses.html",
   "boss_browser_checks": "royale/tests/phase5-browser.html",
   "eris_practice": "royale/tests/eris.html",
-  "eris_browser_checks": "royale/tests/phase6-browser.html"
+  "eris_browser_checks": "royale/tests/phase6-browser.html",
+  "legendary_practice": "royale/tests/legendary.html",
+  "legendary_browser_checks": "royale/tests/phase7-browser.html",
+  "permanent_progress_database": "healthia.royale.permanent.v1"
 }

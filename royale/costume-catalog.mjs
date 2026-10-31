@@ -4,7 +4,7 @@ export const COSTUME_WEIGHTS = Object.freeze({helmet: .33, chest: .33, boots: .3
 export const STAT_KEYS = ['strength','damage','defense','moveSpeed','attackSpeed','fireball','roots','whirlwind'];
 export const STAT_LABELS = {strength:'Physical strength',damage:'Physical damage',defense:'Damage reduction',moveSpeed:'Running speed',attackSpeed:'Attack speed',fireball:'Fireball damage',roots:'Root damage per tick',whirlwind:'Wind damage per tick'};
 export const PERCENT_STATS = new Set(['defense','moveSpeed','attackSpeed']);
-export const LEGENDARY_POLICY = Object.freeze({enabled:false,rarity:'legendary',glow:'#65ff7a',sellable:false,requiredPieces:3,fourthSlot:3,cooldownMultiplier:.5,discardIsPermanent:true,reearnable:false});
+export const LEGENDARY_POLICY = Object.freeze({enabled:true,rarity:'legendary',glow:'#65ff7a',sellable:false,requiredPieces:3,fourthSlot:3,cooldownMultiplier:.5,discardIsPermanent:true,reearnable:false});
 const rows = [
   ['shore', 'Shore Guardian', 1, 1, '#368a89','#edc77d','wave'],
   ['beacon', 'Beacon Knight', 10, 1, '#365d87','#f0d8a0','shield'],

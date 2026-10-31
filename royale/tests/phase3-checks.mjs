@@ -45,7 +45,7 @@ button.onclick=async()=>{
     d.querySelector('[data-map="power0"]').click();tap('KeyQ');check('keyboard remap persisted',JSON.parse(sessionStorage.getItem(prefix+CONTROL_KEY)).keys.power0[0]==='KeyQ');
     for(const id of ['size','left','right','rise']){const slider=el(`touch-${id}`);slider.scrollIntoView({block:'nearest'});check(`${id} layout adjustment reachable`,inside(slider));slider.value=slider.max;slider.dispatchEvent(new w.Event('input',{bubbles:true}));}
     el('touch-rise').focus();tap('Escape');check('Escape closes settings even with a field focused',!el('pause-menu').hidden&&el('controls-menu').hidden);el('resume').click();await advance(.2);
-    check('maximum touch layout stays on screen',[el('stick'),...d.querySelectorAll('.action-buttons button,.power-button')].every(inside));
+    check('maximum touch layout stays on screen',[el('stick'),...d.querySelectorAll('.action-buttons button,.power-button:not([hidden])')].every(inside));
     tap('KeyQ');await advance(.12);check('remapped ability darkens on cooldown',d.querySelector('[data-control="power0"]').classList.contains('cooldown'));
     check('no numerical cooldown countdown',d.querySelector('[data-control="power0"] span').textContent==='Super Strength');
     el('pause').click();check('combat blocks swapping and Tree spending',el('slot-0').disabled&&el('tree-from-pause').disabled);el('resume').click();await advance(5.3);el('pause').click();check('loadout unlocks outside combat',!el('slot-0').disabled);

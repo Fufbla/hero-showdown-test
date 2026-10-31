@@ -1,3 +1,4 @@
+import { MERGE_CATALOG } from './legendary-data.mjs';
 import { COSTUME_CATALOG, COSTUME_PARTS, STAT_KEYS, costumeDrop } from './costume-catalog.mjs';
 import { LOOT } from './progression.mjs';
 import { STARTER_OUTFIT } from './appearance.mjs';
@@ -5,12 +6,12 @@ export const LEGACY_PARTS=['mask','suit','gloves','boots','belt','cape','emblem'
 export const EQUIPMENT_PARTS=[...new Set([...COSTUME_PARTS,...LEGACY_PARTS])];
 export const EQUIPMENT_NAMES={helmet:'Helmet',chest:'Chest piece',mask:'Mask',suit:'Suit',gloves:'Gauntlets',boots:'Boots',belt:'Belt',cape:'Cape',emblem:'Emblem'};
 const themes=[null,['Shore','#327f86','#f0bd70'],['Briar','#60743e','#ddb380'],['Foundry','#657c8c','#da8a58'],['Cavern','#796196','#bbd484'],['Wild','#936381','#e4c883'],['Aether','#52649b','#bcafe1'],['Vanguard','#b96354','#f4c777']];
-export const GLOW=Object.freeze({ordinary:null,rare:'#ffffff',legendary:'#65ff7a'}); // Legendary rendering contract only; no Legendary catalog.
+export const GLOW=Object.freeze({ordinary:null,rare:'#ffffff',legendary:'#65ff7a'});
 const legacyCatalog=Object.fromEntries(themes.flatMap((theme,region)=>!theme?[]:['ordinary',...(region>=4?['rare']:[])].flatMap(rarity=>LEGACY_PARTS.map((part,i)=>{
   const id=`r${region}-${rarity}-${part}`,rare=rarity==='rare',factor=rare?1.6:1;
   return [id,{id,region,rarity,part,legacy:true,level:1,catalogValue:100*region*(rare?2:1),sellable:true,name:`${rare?'Radiant ':''}${theme[0]} ${EQUIPMENT_NAMES[part]}`,color:theme[1],accent:theme[2],stats:{strength:Math.round(region*(i===2?6:2)*factor),damage:Math.round(region*(i===3?7:3)*factor),attackSpeed:(i===4||i===6)?Number((region*.005*factor).toFixed(3)):0}}];
 }))));
-export const EQUIPMENT=Object.freeze({...legacyCatalog,...COSTUME_CATALOG});
+export const EQUIPMENT=Object.freeze({...legacyCatalog,...COSTUME_CATALOG,...MERGE_CATALOG});
 export function createEquipment(region,rarity,index=0,serial=1){
   const part=LEGACY_PARTS[Math.max(0,Math.min(6,Math.floor(index)))],catalogId=`r${region}-${rarity}-${part}`;
   return EQUIPMENT[catalogId]?{uid:`drop-${serial}`,catalogId}:null;

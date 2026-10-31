@@ -1,3 +1,4 @@
+import { legendaryDominates } from './legendary-state.mjs';
 import { decodeSave, SAVE_KEY } from './core.mjs';
 import { CAMPS, regionAt } from './world.mjs';
 export const PROFILE_KEY='healthia.royale.profiles.v2';
@@ -51,7 +52,7 @@ export class LocalHeroStore{
     if(expectedId!==undefined&&(current?.id??null)!==expectedId)return {ok:false,error:'This hero slot changed. Select it again before saving.'};
     if(current){
       const old=current.snapshot;
-      if(state.economy.revision<old.economy.revision||state.inventory.nextId<old.inventory.nextId||Object.keys(old.inventory.retired).some(uid=>!state.inventory.retired[uid])||state.level<old.level||Object.keys(old.powers.levels).some(id=>state.powers.levels[id]<old.powers.levels[id]))return {ok:false,error:'This snapshot predates permanent progress. Reload the latest hero before saving.'};
+      if(!legendaryDominates(state.legendary,old.legendary)||state.economy.revision<old.economy.revision||state.inventory.nextId<old.inventory.nextId||Object.keys(old.inventory.retired).some(uid=>!state.inventory.retired[uid])||state.level<old.level||Object.keys(old.powers.levels).some(id=>state.powers.levels[id]<old.powers.levels[id]))return {ok:false,error:'This snapshot predates permanent progress. Reload the latest hero before saving.'};
     }
     const next=copy(this.data),now=this.now();
     next.slots[index]={id:current?.id||this.id(),createdAt:current?.createdAt||now,updatedAt:now,lastRegion:String(region).slice(0,100),snapshot:state};next.activeSlot=index;next.legacyImported=true;
