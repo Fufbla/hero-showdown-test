@@ -10,13 +10,13 @@ The supplied `001sprites(1).zip` has 21 **opaque RGB reference strips**, roughly
 
 Use a manually selected intact reference pose per monster, preserving its existing colored pixels. Remove the baked background; do not generate new designs or invent missing anatomy. Cache display-sized motion poses driven by existing animation state and distance traveled. All five states (idle, movement, attack, hit, defeat) get **provisional procedural motion from one source pose**, not artist-authored limb animation. The original procedural artwork remains a loading/error fallback.
 
-The supplied art does not support a claim of finished production sprite animations. All 21 monsters still need high-resolution transparent, consistently designed and aligned artist-approved idle, locomotion, attack, hit and defeat sequences. Cave Scorpion, Acid Beetle, Thorn Beast and Energy Phantom particularly need complete large poses: intact smaller reference poses must be used provisionally. No AI-created artwork is used.
+The supplied art does not support a claim of finished production sprite animations. All 21 monsters still need high-resolution transparent, consistently designed and aligned artist-approved idle, locomotion, attack, hit and defeat sequences. The complete original roster has now supplied larger poses for Cave Scorpion, Acid Beetle, Thorn Beast, Shadow Wisp, Energy Phantom and Dark Sentinel. These remain small concept drawings, not high-resolution animation masters. No AI-created artwork is used.
 
 This change is isolated to Royale artwork, rendering and review/test utilities. No gameplay balance, save schema, regular AI, powers, bosses, hero artwork, Versus Mode or Story Mode changes are planned.
 
 ## Implemented
 
-- 21 separately named RGBA PNGs in `assets/monsters/poses/`, all derived from supplied pixels; original strips and their README are retained in `source/`.
+- 21 separately named RGBA PNGs in `assets/monsters/poses/`, all derived from supplied pixels; original strips and their README are retained in `source/`, alongside the unchanged complete approved roster as `source/approved-roster-original.png`.
 - Reproducible extraction script, SHA-256 source records, audited crop rectangles, fixed foot anchors, source orientation and eye locations. Source RGB is retained; alpha is reconstructed from the baked background.
 - 28 cached visual poses per monster: idle (4), movement (8), windup (3), strike (4), recovery (2), hit (2), defeat (5). These are **procedurally deformed versions of one pose**, not 28 authored drawings. Defeat also uses the existing continuous collapse/fade. Movement phase follows traveled distance; paused simulation freezes motion.
 - Grounded animations share the simulation's feet baseline. Flying species retain existing movement. Rooted enemies do not play a walking cycle. Hit visuals do not create hit stun or interrupt AI.
@@ -33,9 +33,9 @@ All entries below have a transparent provisional pose and the five requested mot
 | Coastal Beginnings | Bottle Critter (`bottle.png`), Trash Slime (`slime.png`), Sand Crawler (`crawler.png`) | High-resolution alpha masters and authored leg/body/action cycles; compression and edge cleanup. |
 | Polluted Forest | Thorn Sprout (`sprout.png`), Toxic Mushroom (`mushroom.png`), Bark Crawler (`bark.png`) | Confirm consistent anatomy across reference poses; authored attack and locomotion cycles. |
 | Industrial Wasteland | Scrap Crawler (`scrap.png`), Sludge Beast (`sludge.png`), Rust Drone (`drone.png`) | Authored mechanical gait, sludge deformation, rotor/attack frames and metallic alpha edges. |
-| Toxic Underground | Cave Scorpion (`scorpion.png`), Acid Beetle (`beetle.png`), Venom Crawler (`venomCrawler.png`) | Scorpion and Beetle use smaller intact poses because large poses are clipped. Full-size complete anatomy, leg cycles and clean negative spaces are needed. |
-| Mutated Territories | Thorn Beast (`thornBeast.png`), Mutant Stalker (`stalker.png`), Poison Spitter (`spitter.png`) | Thorn Beast uses a smaller intact pose. Confirm the inconsistent quadruped/upright proportions in the source; supply approved complete cycles and acid/spit release poses. |
-| Dark Energy Realm | Shadow Wisp (`wisp.png`), Energy Phantom (`phantom.png`), Dark Sentinel (`sentinel.png`) | Smaller intact poses avoid clipping. Supply high-resolution alpha effects and explicit hover/walk/attack cycles; faint source matte fringes remain. |
+| Toxic Underground | Cave Scorpion (`scorpion.png`), Acid Beetle (`beetle.png`), Venom Crawler (`venomCrawler.png`) | Large Scorpion and Beetle poses recovered from the complete roster. Authored leg cycles and clean negative spaces are still needed. |
+| Mutated Territories | Thorn Beast (`thornBeast.png`), Mutant Stalker (`stalker.png`), Poison Spitter (`spitter.png`) | Thorn Beast now uses the large quadruped source design, replacing the inconsistent upright thumbnail. Supply consistent quadruped cycles and acid/spit release poses. |
+| Dark Energy Realm | Shadow Wisp (`wisp.png`), Energy Phantom (`phantom.png`), Dark Sentinel (`sentinel.png`) | All three now use larger poses recovered from the complete roster. Supply high-resolution alpha effects and explicit hover/walk/attack cycles; faint source matte fringes remain. |
 | Final Showdown | Apocalypse Mutant (`apocalypse.png`), Corrupted Guardian (`guardian.png`), Pollution Titan (`titan.png`) | Complete authored heavy movement, attack, hit and collapse sequences; clean neutral highlights and hollow areas from original alpha masters. |
 
 ### Artwork handoff needed
@@ -85,4 +85,31 @@ The samples use the actual Game and Renderer, 24 board monsters, powers active, 
 | Region 7 | 390 × 720 | 1.37 | 0.98 | 2.85 | 52.80 | 7.40 |
 | Region 1 | 1300 × 540 | 1.37 | 0.98 | 3.35 | 52.50 | 8.20 |
 
-Browser: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36. Source PNG transfers total approximately 650 KiB; only the three current-region images are prefetched. All 21 decoded poses together use about 1 MiB. Full raw measurements and per-region assertions are in `tests/evidence/monster-sprites/final-browser-results.json`.
+Browser: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36. The initial integration source PNG transfers totaled approximately 650 KiB; only the three current-region images are prefetched. The recovery update below supersedes that asset-size figure. Full raw measurements and per-region assertions are in `tests/evidence/monster-sprites/final-browser-results.json`.
+
+## Source recovery follow-up — 2026-10-31
+
+The original `Hero Showdown Royale Monster Sprite Sheet.png` (1536 × 1024) contains the same approved designs as the ZIP strips, with complete large poses that were clipped during strip preparation. Six source poses are now recovered from this original; the other 15 PNGs are byte-identical to `7294ebb`. The different dark-background roster was inspected but not used: it changes character designs and does not resolve the verified-frame requirement.
+
+| Monster | Previous PNG | Recovered PNG |
+| --- | --- | --- |
+| Cave Scorpion | 64 × 67 | 146 × 112 |
+| Acid Beetle | 84 × 86 | 154 × 85 |
+| Thorn Beast | 68 × 77 | 144 × 105 |
+| Shadow Wisp | 84 × 97 | 109 × 99 |
+| Energy Phantom | 71 × 89 | 132 × 93 |
+| Dark Sentinel | 69 × 96 | 123 × 106 |
+
+Sizes include transparent padding. Crop coordinates and SHA-256 provenance are retained in the extraction manifest; RGB pixels remain from the approved source. Captions are excluded, and night-eye coordinates were re-audited. Foot anchors, display heights and atlas cell sizes are unchanged. No renderer, AI, attack, physics, progression or save code changed in this follow-up.
+
+Current pose transfers total 738,228 bytes; all 21 decoded source poses require 1,189,260 RGBA bytes. The unchanged six-atlas cache remains bounded at 20,643,840 bytes. The full original roster is retained for provenance but is never loaded by gameplay.
+
+Revalidated: **622/622 Node tests**, **13,601 browser sprite assertions across all seven regions**, **7,200 differential movement/collision/attack steps**, the artwork-only scope guard and all **353 local import references**. Browser assertions cover all 28 cached poses, day/night eye changes, frame bounds, fixed feet, unchanged rendering state and every species attacking while wounded on the highest platform. Detailed results are in `tests/evidence/monster-sprites/resume-node-tests.txt` and `resume-browser-results.json`.
+
+All 21 still need artist-authored idle, movement, attack, hit and defeat sequences, clean alpha masters and physical-device review. Recovering larger source poses does not complete those missing animation assets.
+
+The Region 6 follow-up benchmark measured 1.53 displayed FPS at 1300 × 540 and 1.37 FPS at 390 × 720 in the cloud Chrome browser (10-second samples; 1% low 0.98 FPS). Mean simulation-plus-draw time was 3.67 ms and 2.62 ms respectively; image loading was 11.5 ms / 52.3 ms and atlas construction 7.6 ms / 7.1 ms. Only 1.05–1.18 seconds of simulation elapsed during each sample. This is not evidence of sustained 60 FPS or physical mobile-device performance. Texture cache use was unchanged at 10,321,920 bytes for the three species.
+
+Source verification also confirmed all visible cutout RGB values exactly match their approved source pixels, four-pixel transparent borders remain intact, and all 15 unaffected pose PNGs remain byte-identical. Screenshot `recovered-region6.jpg` shows the recovered reference designs and day/night eye treatment in the review page. Physical iPhone/Android/controller testing remains outstanding.
+
+Focused browser observation: reviewed Region 4 and Region 6 night-eye placement; played a disposable Region 6 hero at Platform 4 in a 390-pixel-wide iframe using the actual touch Punch and Jump buttons. The UI reported a punch, one jump/fall and enemy contact damage; Wisp and Sentinel sprites were visible on different elevations. This was browser interaction, not physical touchscreen testing. See `recovered-platform-playtest.jpg`.

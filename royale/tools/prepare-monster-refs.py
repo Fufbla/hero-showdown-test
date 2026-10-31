@@ -36,9 +36,21 @@ ROWS=[
  ('guardian',7,'Corrupted_Guardian',(40,27,195,156),1,'amble',[[.47,.26],[.56,.26]]),
  ('titan',7,'Pollution_Titan',(96,32,228,156),1,'amble',[[.47,.15],[.56,.15]])
 ]
-manifest={ 'source':'001sprites(1).zip; user-approved concept roster', 'status':'provisional single-pose cutouts; procedural animation, not verified frame atlas', 'version':1,'sprites':{} }
+# The complete approved roster recovers large poses clipped by the ZIP strips.
+# Do not use the different dark-background roster or tiny putative frame previews.
+# Six rectangles include complete extremities on the original 1536 x 1024 image.
+RECOVERED={
+ 'scorpion':(8,488,160,596),
+ 'beetle':(8,623,162,705),
+ 'thornBeast':(538,494,679,597),
+ 'wisp':(1049,493,1175,588),
+ 'phantom':(1047,613,1177,704),
+ 'sentinel':(1049,727,1177,825),
+}
+manifest={ 'source':'001sprites(1).zip and its approved original Hero Showdown Royale Monster Sprite Sheet.png', 'status':'provisional single-pose cutouts; procedural animation, not verified frame atlas', 'version':2,'sprites':{} }
 for key,region,name,rect,face,motion,eyes in ROWS:
- src=next(SOURCE.glob(f'0{region}_*/{name}.png'))
+ src=SOURCE/'approved-roster-original.png' if key in RECOVERED else next(SOURCE.glob(f'0{region}_*/{name}.png'))
+ rect=RECOVERED.get(key,rect)
  im=Image.open(src).convert('RGB').crop(rect)
  a=np.asarray(im).astype(np.int16)
  chroma=a.max(2)-a.min(2)
@@ -76,12 +88,12 @@ for key,region,name,rect,face,motion,eyes in ROWS:
  'bottle':[(44,51)],'slime':[(93,38),(115,39)],'crawler':[(98,48)],
  'sprout':[(65,36),(89,40)],'mushroom':[(73,58),(89,60)],'bark':[(83,40),(98,44)],
  'scrap':[(93,42)],'sludge':[(83,32),(108,34)],'drone':[(76,50)],
- 'scorpion':[(26,35)],'beetle':[(34,55)],'venomCrawler':[(96,40)],
- 'thornBeast':[(48,29)],'stalker':[(82,20),(88,22)],'spitter':[(66,15)],
- 'wisp':[(29,54),(46,55)],'phantom':[(33,20),(39,21)],'sentinel':[(31.5,19),(43,20)],
+ 'scorpion':[(52,63)],'beetle':[(49,46)],'venomCrawler':[(96,40)],
+ 'thornBeast':[(106,49)],'stalker':[(82,20),(88,22)],'spitter':[(66,15)],
+ 'wisp':[(40,55),(62,56)],'phantom':[(58,24),(67,24)],'sentinel':[(59,26),(67,25)],
  'apocalypse':[(60,26),(67,23)],'guardian':[(74,36),(83,33)],'titan':[(64,20),(75,20)]}
  adjusted_eyes=[[x/out.width,y/out.height] for x,y in eye_pixels[key]]
- manifest['sprites'][key]={'name':name.replace('_',' '),'region':region,'source':str(src.relative_to(ROOT/'assets/monsters')),'sourceSHA256':hashlib.sha256(src.read_bytes()).hexdigest(),'crop':rect,'trim':box,'file':f'poses/{key}.png','width':out.width,'height':out.height,'anchor':[out.width/2,out.height-pad],'sourceFacing':face,'motion':motion,'eyes':adjusted_eyes,'smallPose':key in ['scorpion','beetle','thornBeast','phantom','wisp','sentinel'],'status':'provisional'}
+ manifest['sprites'][key]={'name':name.replace('_',' '),'region':region,'source':str(src.relative_to(ROOT/'assets/monsters')),'sourceSHA256':hashlib.sha256(src.read_bytes()).hexdigest(),'crop':rect,'trim':box,'file':f'poses/{key}.png','width':out.width,'height':out.height,'anchor':[out.width/2,out.height-pad],'sourceFacing':face,'motion':motion,'eyes':adjusted_eyes,'smallPose':False,'recoveredMainPose':key in RECOVERED,'status':'provisional'}
 (ROOT/'assets/monsters/manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 # Small browser manifest; extraction audit retains the full source provenance.
 catalog={key:{k:v for k,v in meta.items() if k in ['name','region','file','width','height','anchor','sourceFacing','motion','eyes','smallPose']} for key,meta in manifest['sprites'].items()}

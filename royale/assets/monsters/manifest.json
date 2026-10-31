@@ -1,7 +1,7 @@
 {
-  "source": "001sprites(1).zip; user-approved concept roster",
+  "source": "001sprites(1).zip and its approved original Hero Showdown Royale Monster Sprite Sheet.png",
   "status": "provisional single-pose cutouts; procedural animation, not verified frame atlas",
-  "version": 1,
+  "version": 2,
   "sprites": {
     "bottle": {
       "name": "Bottle Critter",
@@ -36,6 +36,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "slime": {
@@ -75,6 +76,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "crawler": {
@@ -110,6 +112,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "sprout": {
@@ -149,6 +152,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "mushroom": {
@@ -188,6 +192,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "bark": {
@@ -227,6 +232,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "scrap": {
@@ -262,6 +268,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "sludge": {
@@ -301,6 +308,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "drone": {
@@ -336,76 +344,79 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "scorpion": {
       "name": "Cave Scorpion",
       "region": 4,
-      "source": "source/04_Toxic_Underground/Cave_Scorpion.png",
-      "sourceSHA256": "14b9a772028fc08d90f847bd0aa0350007eea1caee587e8f454cc78f826d1890",
+      "source": "source/approved-roster-original.png",
+      "sourceSHA256": "544bd39db857a293a4c5768c04ac9bac825322174aa30a103a74c71e8f20a629",
       "crop": [
-        389,
-        31,
-        449,
-        102
+        8,
+        488,
+        160,
+        596
       ],
       "trim": [
+        6,
         0,
-        2,
-        56,
-        61
+        144,
+        104
       ],
       "file": "poses/scorpion.png",
-      "width": 64,
-      "height": 67,
+      "width": 146,
+      "height": 112,
       "anchor": [
-        32.0,
-        63
+        73.0,
+        108
       ],
       "sourceFacing": -1,
       "motion": "scuttle",
       "eyes": [
         [
-          0.40625,
-          0.5223880597014925
+          0.3561643835616438,
+          0.5625
         ]
       ],
-      "smallPose": true,
+      "smallPose": false,
+      "recoveredMainPose": true,
       "status": "provisional"
     },
     "beetle": {
       "name": "Acid Beetle",
       "region": 4,
-      "source": "source/04_Toxic_Underground/Acid_Beetle.png",
-      "sourceSHA256": "ed05970b45e002ae0981c182c7818a1ab8d98be95cbb2c750d6dd3ca0321f631",
+      "source": "source/approved-roster-original.png",
+      "sourceSHA256": "544bd39db857a293a4c5768c04ac9bac825322174aa30a103a74c71e8f20a629",
       "crop": [
-        170,
-        36,
-        252,
-        116
+        8,
+        623,
+        162,
+        705
       ],
       "trim": [
+        6,
         2,
-        2,
-        78,
-        80
+        152,
+        79
       ],
       "file": "poses/beetle.png",
-      "width": 84,
-      "height": 86,
+      "width": 154,
+      "height": 85,
       "anchor": [
-        42.0,
-        82
+        77.0,
+        81
       ],
       "sourceFacing": -1,
       "motion": "scuttle",
       "eyes": [
         [
-          0.40476190476190477,
-          0.6395348837209303
+          0.3181818181818182,
+          0.5411764705882353
         ]
       ],
-      "smallPose": true,
+      "smallPose": false,
+      "recoveredMainPose": true,
       "status": "provisional"
     },
     "venomCrawler": {
@@ -441,41 +452,43 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "thornBeast": {
       "name": "Thorn Beast",
       "region": 5,
-      "source": "source/05_Mutated_Territories/Thorn_Beast.png",
-      "sourceSHA256": "4563609308265d0dfbfbfa8b279590c26dbc8b4f5992e204fadd878b8df901b9",
+      "source": "source/approved-roster-original.png",
+      "sourceSHA256": "544bd39db857a293a4c5768c04ac9bac825322174aa30a103a74c71e8f20a629",
       "crop": [
-        300,
-        18,
-        393,
-        109
+        538,
+        494,
+        679,
+        597
       ],
       "trim": [
-        28,
-        19,
-        88,
-        88
+        3,
+        0,
+        139,
+        97
       ],
       "file": "poses/thornBeast.png",
-      "width": 68,
-      "height": 77,
+      "width": 144,
+      "height": 105,
       "anchor": [
-        34.0,
-        73
+        72.0,
+        101
       ],
       "sourceFacing": 1,
       "motion": "amble",
       "eyes": [
         [
-          0.7058823529411765,
-          0.37662337662337664
+          0.7361111111111112,
+          0.4666666666666667
         ]
       ],
-      "smallPose": true,
+      "smallPose": false,
+      "recoveredMainPose": true,
       "status": "provisional"
     },
     "stalker": {
@@ -515,6 +528,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "spitter": {
@@ -550,123 +564,127 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "wisp": {
       "name": "Shadow Wisp",
       "region": 6,
-      "source": "source/06_Dark_Energy_Realm/Shadow_Wisp.png",
-      "sourceSHA256": "d5dadfad678975f71dda75f92602617b771f3bbd144f17b4131f8cc3840ee7a2",
+      "source": "source/approved-roster-original.png",
+      "sourceSHA256": "544bd39db857a293a4c5768c04ac9bac825322174aa30a103a74c71e8f20a629",
       "crop": [
-        145,
-        20,
-        226,
-        110
+        1049,
+        493,
+        1175,
+        588
       ],
       "trim": [
-        3,
-        1,
-        79,
-        90
+        7,
+        0,
+        108,
+        91
       ],
       "file": "poses/wisp.png",
-      "width": 84,
-      "height": 97,
+      "width": 109,
+      "height": 99,
       "anchor": [
-        42.0,
-        93
+        54.5,
+        95
       ],
       "sourceFacing": 1,
       "motion": "hover",
       "eyes": [
         [
-          0.34523809523809523,
-          0.5567010309278351
+          0.3669724770642202,
+          0.5555555555555556
         ],
         [
-          0.5476190476190477,
-          0.5670103092783505
+          0.5688073394495413,
+          0.5656565656565656
         ]
       ],
-      "smallPose": true,
+      "smallPose": false,
+      "recoveredMainPose": true,
       "status": "provisional"
     },
     "phantom": {
       "name": "Energy Phantom",
       "region": 6,
-      "source": "source/06_Dark_Energy_Realm/Energy_Phantom.png",
-      "sourceSHA256": "9c0f9943edd2d8e98a926fec4a3946aaf57d98adec1f8576196165a0bb090a68",
+      "source": "source/approved-roster-original.png",
+      "sourceSHA256": "544bd39db857a293a4c5768c04ac9bac825322174aa30a103a74c71e8f20a629",
       "crop": [
-        302,
-        25,
-        367,
-        117
+        1047,
+        613,
+        1177,
+        704
       ],
       "trim": [
+        3,
         0,
-        10,
-        63,
-        91
+        127,
+        85
       ],
       "file": "poses/phantom.png",
-      "width": 71,
-      "height": 89,
+      "width": 132,
+      "height": 93,
       "anchor": [
-        35.5,
-        85
+        66.0,
+        89
       ],
       "sourceFacing": 1,
       "motion": "hover",
       "eyes": [
         [
-          0.4647887323943662,
-          0.2247191011235955
+          0.4393939393939394,
+          0.25806451612903225
         ],
         [
-          0.5492957746478874,
-          0.23595505617977527
+          0.5075757575757576,
+          0.25806451612903225
         ]
       ],
-      "smallPose": true,
+      "smallPose": false,
+      "recoveredMainPose": true,
       "status": "provisional"
     },
     "sentinel": {
       "name": "Dark Sentinel",
       "region": 6,
-      "source": "source/06_Dark_Energy_Realm/Dark_Sentinel.png",
-      "sourceSHA256": "b5a083ed233815b0346a86b929252c1fbec712ae6175d0272c32718c524bf94f",
+      "source": "source/approved-roster-original.png",
+      "sourceSHA256": "544bd39db857a293a4c5768c04ac9bac825322174aa30a103a74c71e8f20a629",
       "crop": [
-        237,
-        30,
-        301,
-        124
+        1049,
+        727,
+        1177,
+        825
       ],
       "trim": [
+        9,
         0,
-        6,
-        61,
-        94
+        124,
+        98
       ],
       "file": "poses/sentinel.png",
-      "width": 69,
-      "height": 96,
+      "width": 123,
+      "height": 106,
       "anchor": [
-        34.5,
-        92
+        61.5,
+        102
       ],
       "sourceFacing": 1,
       "motion": "amble",
       "eyes": [
         [
-          0.45652173913043476,
-          0.19791666666666666
+          0.4796747967479675,
+          0.24528301886792453
         ],
         [
-          0.6231884057971014,
-          0.20833333333333334
+          0.5447154471544715,
+          0.2358490566037736
         ]
       ],
-      "smallPose": true,
+      "smallPose": false,
+      "recoveredMainPose": true,
       "status": "provisional"
     },
     "apocalypse": {
@@ -706,6 +724,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "guardian": {
@@ -745,6 +764,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     },
     "titan": {
@@ -784,6 +804,7 @@
         ]
       ],
       "smallPose": false,
+      "recoveredMainPose": false,
       "status": "provisional"
     }
   }

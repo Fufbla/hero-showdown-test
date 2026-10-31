@@ -204,41 +204,41 @@ export const MONSTER_SPRITES=Object.freeze({
     "name": "Cave Scorpion",
     "region": 4,
     "file": "poses/scorpion.png",
-    "width": 64,
-    "height": 67,
+    "width": 146,
+    "height": 112,
     "anchor": [
-      32.0,
-      63
+      73.0,
+      108
     ],
     "sourceFacing": -1,
     "motion": "scuttle",
     "eyes": [
       [
-        0.40625,
-        0.5223880597014925
+        0.3561643835616438,
+        0.5625
       ]
     ],
-    "smallPose": true
+    "smallPose": false
   },
   "beetle": {
     "name": "Acid Beetle",
     "region": 4,
     "file": "poses/beetle.png",
-    "width": 84,
-    "height": 86,
+    "width": 154,
+    "height": 85,
     "anchor": [
-      42.0,
-      82
+      77.0,
+      81
     ],
     "sourceFacing": -1,
     "motion": "scuttle",
     "eyes": [
       [
-        0.40476190476190477,
-        0.6395348837209303
+        0.3181818181818182,
+        0.5411764705882353
       ]
     ],
-    "smallPose": true
+    "smallPose": false
   },
   "venomCrawler": {
     "name": "Venom Crawler",
@@ -264,21 +264,21 @@ export const MONSTER_SPRITES=Object.freeze({
     "name": "Thorn Beast",
     "region": 5,
     "file": "poses/thornBeast.png",
-    "width": 68,
-    "height": 77,
+    "width": 144,
+    "height": 105,
     "anchor": [
-      34.0,
-      73
+      72.0,
+      101
     ],
     "sourceFacing": 1,
     "motion": "amble",
     "eyes": [
       [
-        0.7058823529411765,
-        0.37662337662337664
+        0.7361111111111112,
+        0.4666666666666667
       ]
     ],
-    "smallPose": true
+    "smallPose": false
   },
   "stalker": {
     "name": "Mutant Stalker",
@@ -328,73 +328,73 @@ export const MONSTER_SPRITES=Object.freeze({
     "name": "Shadow Wisp",
     "region": 6,
     "file": "poses/wisp.png",
-    "width": 84,
-    "height": 97,
+    "width": 109,
+    "height": 99,
     "anchor": [
-      42.0,
-      93
+      54.5,
+      95
     ],
     "sourceFacing": 1,
     "motion": "hover",
     "eyes": [
       [
-        0.34523809523809523,
-        0.5567010309278351
+        0.3669724770642202,
+        0.5555555555555556
       ],
       [
-        0.5476190476190477,
-        0.5670103092783505
+        0.5688073394495413,
+        0.5656565656565656
       ]
     ],
-    "smallPose": true
+    "smallPose": false
   },
   "phantom": {
     "name": "Energy Phantom",
     "region": 6,
     "file": "poses/phantom.png",
-    "width": 71,
-    "height": 89,
+    "width": 132,
+    "height": 93,
     "anchor": [
-      35.5,
-      85
+      66.0,
+      89
     ],
     "sourceFacing": 1,
     "motion": "hover",
     "eyes": [
       [
-        0.4647887323943662,
-        0.2247191011235955
+        0.4393939393939394,
+        0.25806451612903225
       ],
       [
-        0.5492957746478874,
-        0.23595505617977527
+        0.5075757575757576,
+        0.25806451612903225
       ]
     ],
-    "smallPose": true
+    "smallPose": false
   },
   "sentinel": {
     "name": "Dark Sentinel",
     "region": 6,
     "file": "poses/sentinel.png",
-    "width": 69,
-    "height": 96,
+    "width": 123,
+    "height": 106,
     "anchor": [
-      34.5,
-      92
+      61.5,
+      102
     ],
     "sourceFacing": 1,
     "motion": "amble",
     "eyes": [
       [
-        0.45652173913043476,
-        0.19791666666666666
+        0.4796747967479675,
+        0.24528301886792453
       ],
       [
-        0.6231884057971014,
-        0.20833333333333334
+        0.5447154471544715,
+        0.2358490566037736
       ]
     ],
-    "smallPose": true
+    "smallPose": false
   },
   "apocalypse": {
     "name": "Apocalypse Mutant",
