@@ -1,6 +1,6 @@
-# Latest review: Phase 8
+# Latest review: Phase 9
 
-See [PHASE8.md](PHASE8.md) for open portals, account architecture, tests and deployment blockers. **Cloud accounts are not operational yet.** The earlier phase notes below remain historical.
+See [PHASE9.md](PHASE9.md) for multi-level exploration, persistent wounded-monster AI, graphics, controls and the review gallery. [Validation and limitations](PHASE9-VALIDATION.md) distinguish automated checks, browser review and real-device testing. **Cloud accounts remain unconfigured; Phase 9 does not change the unfinished authentication backend.** All earlier phase notes below are historical; current saving remains manual, with durable irreversible transactions. Regional boss victories do not gate normal travel.
 
 # Hero Showdown Royale — Phase 7
 

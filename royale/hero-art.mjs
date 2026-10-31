@@ -5,7 +5,18 @@ const TAU=Math.PI*2,INK='#18383e';
 function oval(c,x,y,rx,ry,color,stroke=null,w=1.5){c.beginPath();c.ellipse(x,y,Math.max(.1,rx),Math.max(.1,ry),0,0,TAU);c.fillStyle=color;c.fill();if(stroke){c.strokeStyle=stroke;c.lineWidth=w;c.stroke();}}
 function path(c,points,color,stroke=INK,w=1.5){c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.fillStyle=color;c.fill();if(stroke){c.strokeStyle=stroke;c.lineWidth=w;c.stroke();}}
 function line(c,pts,color,w=1){c.beginPath();pts.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.strokeStyle=color;c.lineWidth=w;c.lineCap='round';c.lineJoin='round';c.stroke();}
-function limb(c,pts,color,w){line(c,pts,INK,w+2.4);line(c,pts,color,w);}
+function limb(c,pts,color,w){
+  // Overlapping tapered segments share the exact IK joint; the cel shadow defines volume.
+  for(let i=1;i<pts.length;i++){
+    const a=pts[i-1],b=pts[i],dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy)||1,nx=-dy/len,ny=dx/len;
+    const wa=w*(i===1?.57:.49),wb=w*(i===1?.45:.36);
+    const mx=a[0]+dx*.38,my=a[1]+dy*.38,volume=w*(i===1?.66:.52);
+    c.beginPath();c.moveTo(a[0]+nx*wa,a[1]+ny*wa);c.quadraticCurveTo(mx+nx*volume,my+ny*volume,b[0]+nx*wb,b[1]+ny*wb);c.quadraticCurveTo(b[0]+dx/len*wb*.55,b[1]+dy/len*wb*.55,b[0]-nx*wb,b[1]-ny*wb);c.quadraticCurveTo(mx-nx*volume*.85,my-ny*volume*.85,a[0]-nx*wa,a[1]-ny*wa);c.closePath();c.fillStyle=color;c.fill();c.strokeStyle=INK;c.lineWidth=1.5;c.stroke();
+    oval(c,...a,wa*.85,wa*.85,color);oval(c,...b,wb*.88,wb*.88,color);
+    line(c,[[a[0]-nx*wa*.6,a[1]-ny*wa*.6],[b[0]-nx*wb*.55,b[1]-ny*wb*.55]],'#071f3445',Math.max(1,w*.2));
+    line(c,[[a[0]+nx*wa*.48,a[1]+ny*wa*.48],[b[0]+nx*wb*.42,b[1]+ny*wb*.42]],'#ffffff3b',Math.max(.8,w*.12));
+  }
+}
 function emblem(c,x,y,kind,color){
   c.save();c.translate(x,y);
   if(kind==='bolt')path(c,[[1,-9],[-7,2],[-1,2],[-4,9],[8,-3],[2,-3],[5,-9]],color,null);
@@ -22,7 +33,9 @@ function drawCape(c,p,color){
     const width=(p.front?p.d.shoulder*.65:6)+i*.75;
     const floor=p.grounded?-2:Infinity;left.push([x-Math.cos(a)*width,Math.min(floor,y-Math.sin(a)*width)]);right.push([x+Math.cos(a)*width,Math.min(floor,y+Math.sin(a)*width)]);});
   path(c,[...left,...right.reverse()],color,INK,1.8);
-  line(c,p.cape,'#ffffff25',1.8);
+  line(c,p.cape,'#ffffff35',1.8);
+  for(const f of[-.55,.55])line(c,p.cape.map(([x,y],i)=>[x+f*((p.front?p.d.shoulder*.65:6)+i*.75),y]),f<0?'#091e3540':'#ffffff20',2);
+  line(c,[left.at(-1),right[0]],'#ffffff45',1);
   line(c,left.slice(1),'#00000015',2);
 }
 function hair(c,l,hx,hy,back=false,time=0){
@@ -51,12 +64,15 @@ function head(c,l,p,back,time,palette){
   oval(c,-12,1,2.5,4,l.skin,INK,1);oval(c,12,1,2.5,4,l.skin,INK,1);
   if(l.face==='angular')path(c,[[-rx,-8],[-8,-14],[8,-14],[rx,-8],[rx,7],[6,14],[-6,14],[-rx,7]],l.skin);
   else oval(c,0,0,rx,l.presentation==='female'?15:14.5,l.skin,INK,1.7);
+  // A fixed upper-left key light is shared by faces, costume panels and limbs.
+  path(c,[[2,-12],[rx-1,-7],[rx-2,7],[5,13],[1,10],[6,4],[5,-5]],'#452f3333',null);
+  line(c,[[-8,5],[-5,6]],'#ffe8c54d',2);
   if(!back){
     const eyeY=-1,eyeH=l.eyeShape==='round'?2.7:l.eyeShape==='wide'?1.8:2.1,eyeW=l.eyeShape==='wide'?3.6:3;
     // A slim starter mask leaves eye color and facial features readable.
     path(c,[[-12,-5],[-5,-6],[0,-3],[5,-6],[12,-5],[12,4],[5,5],[0,2],[-5,5],[-12,4]],palette.suit,null);
     for(const side of[-1,1]){const x=side*5.8;oval(c,x,eyeY,eyeW,eyeH,'#fff5db');oval(c,x+.4,eyeY,1.65,eyeH,l.eyes);oval(c,x+.6,eyeY,.7,1.1,'#192b32');oval(c,x+.1,eyeY-.6,.45,.45,'#fff');
-      line(c,[[x-3,eyeY-4+(l.brows==='soft'?.8:0)],[x,eyeY-4.6],[x+3,eyeY-4]],l.hairColor,l.brows==='bold'?1.9:1.1);
+      line(c,[[x-3,eyeY-4+(l.brows==='soft'?.8:0)],[x,eyeY-4.6+(p.extension>.4?1:0)],[x+3,eyeY-4]],l.hairColor,l.brows==='bold'?1.9:1.1);
       if(l.presentation==='female')line(c,[[x+side*2.5,eyeY-1.4],[x+side*4,eyeY-2.5]],INK,1);
     }
     const nose=l.nose==='small'?1.5:l.nose==='broad'?3.4:2.2;
@@ -68,6 +84,7 @@ function head(c,l,p,back,time,palette){
     if(l.facialHair==='beard'){path(c,[[-11,6],[-7,10],[0,11],[7,10],[11,6],[9,13],[0,17],[-9,13]],l.hairColor,null);line(c,[[-3,9],[3,9]],'#e8b793',1);}
   }
   hair(c,{...l,trim:palette.trim},0,0,back,time);
+  if(l.hair!=='none')line(c,[[-8,-12],[-3,-15],[5,-14]],'#ffffff30',1.3);
   c.restore();
 }
 export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
@@ -77,15 +94,22 @@ export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
   if(pieces.chest){palette.trim=pieces.chest.accent;palette.emblemColor=pieces.chest.accent;look.emblem=pieces.chest.emblem||look.emblem;}
   const gloves=()=>h.steel?palette.trim:pieces.gloves?.color||palette.trim,boots=()=>h.steel?palette.trim:pieces.boots?.color||palette.trim;
   if(h.steel){look.skin='#aebec2';Object.assign(palette,{suit:'#819ba4',trim:'#d6e2df',emblemColor:'#f0e7c3'});}
-  const p=poseFor(look,h,time,view),d=p.d,[hx,hy]=p.hip,[sx,sy]=p.shoulder;
+  const p=poseFor(look,h,time,view);if(options.cloth)p.cape=options.cloth.advance(p,h,time,options.dt||0);const d=p.d,[hx,hy]=p.hip,[sx,sy]=p.shoulder;
   c.save();c.translate(x,y);c.scale(scale*(view==='game'?(h.attack?.face||h.face||1):1),scale);c.rotate(p.rotation);c.globalAlpha*=p.opacity;
   if(h.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;
   if(look.cape&&!back)drawCape(c,p,palette.capeColor);
   const leg=i=>{const pts=p.legs[i],foot=pts[2];limb(c,pts,palette.suit,d.thick+1);limb(c,[pts[1],[foot[0],foot[1]-3]],boots(),d.thick*.85);const dir=p.front&&i===1?-1:1;path(c,[[-d.thick*.55,-5],[d.thick*.5,-4],[d.thick*.9+4,2],[d.thick*.9+4,5],[-d.thick*.55,5]].map(([x,y])=>[foot[0]+x*dir,foot[1]+y]),boots(),INK,1.2);};
-  const arm=i=>{const pts=p.arms[i],hand=pts[2],elbow=pts[1];limb(c,pts,palette.suit,d.thick*.84);limb(c,[[hand[0]+(elbow[0]-hand[0])*.34,hand[1]+(elbow[1]-hand[1])*.34],hand],gloves(),d.thick*.9);oval(c,...hand,4.5+d.thick*.1,4.8,gloves(),INK,1.4);};
+  const arm=i=>{const pts=p.arms[i],hand=pts[2],elbow=pts[1];limb(c,pts,palette.suit,d.thick*.84);limb(c,[[hand[0]+(elbow[0]-hand[0])*.34,hand[1]+(elbow[1]-hand[1])*.34],hand],gloves(),d.thick*.9);c.save();c.translate(...hand);c.rotate(Math.atan2(hand[1]-elbow[1],hand[0]-elbow[0]));
+    const size=4.5+d.thick*.1;path(c,[[-3,-size*.7],[2,-size],[6,-size*.5],[6,size*.55],[1,size],[-4,size*.55]],gloves(),INK,1.2);
+    for(const y of[-2,0,2])line(c,[[3,y],[5,y]],'#19343d80',.7);oval(c,-1,size*.65,2.8,2,gloves(),INK,.7);c.restore();};
   leg(1);arm(1);
-  path(c,[[sx-d.shoulder,sy],[sx+d.shoulder,sy],[hx+d.hip*d.waist,hy-10],[hx+d.hip,hy],[hx-d.hip,hy],[hx-d.hip*d.waist,hy-10]],palette.suit,INK,2);
+  c.beginPath();c.moveTo(sx-d.shoulder,sy+3);c.quadraticCurveTo(sx-d.shoulder-1,sy-2,sx-5,sy);c.lineTo(sx+5,sy);c.quadraticCurveTo(sx+d.shoulder+1,sy-2,sx+d.shoulder,sy+3);c.quadraticCurveTo(sx+d.shoulder*.8,sy+15,hx+d.hip*d.waist,hy-10);c.lineTo(hx+d.hip,hy);c.quadraticCurveTo(hx,hy+3,hx-d.hip,hy);c.lineTo(hx-d.hip*d.waist,hy-10);c.quadraticCurveTo(sx-d.shoulder*.8,sy+15,sx-d.shoulder,sy+3);c.closePath();c.fillStyle=palette.suit;c.fill();c.strokeStyle=INK;c.lineWidth=2;c.stroke();
   path(c,[[sx+1,sy+2],[sx+d.shoulder-3,sy+3],[hx+d.hip*d.waist-2,hy-10],[hx+2,hy-6]],'#ffffff14',null);
+  path(c,[[sx-d.shoulder+2,sy+2],[sx-3,sy+5],[hx-2,hy-6],[hx-d.hip+2,hy-4]],'#09263e3b',null);
+  line(c,[[sx-d.shoulder*.65,sy+3],[sx-2,sy+7],[sx+d.shoulder*.64,sy+3]],'#ffffff48',1.2);
+  line(c,[[hx-d.hip*.68,hy-10],[sx-d.shoulder*.65,sy+12]],palette.trim,1);
+  line(c,[[hx+d.hip*.68,hy-10],[sx+d.shoulder*.65,sy+12]],palette.trim,1);
+  if(h.steel){line(c,[[sx-d.shoulder+3,sy+7],[sx+d.shoulder-3,sy+14]],'#f9ffffbb',3);line(c,[[hx-d.hip+3,hy-13],[hx+d.hip-3,hy-9]],'#e4f9ff99',2);}
   if(look.muscle>.2){line(c,[[sx-d.shoulder*.7,sy+8],[sx-2,sy+10],[sx+d.shoulder*.7,sy+8]],'#102e3544',look.muscle*1.2);line(c,[[hx,hy-7],[hx,sy+16]],'#102e3533',1);}
   line(c,[[hx-d.hip,hy-1],[hx+d.hip,hy-1]],h.steel?palette.trim:pieces.belt?.color||palette.trim,4.5);
   if(!back){oval(c,hx,hy-1,3,3,palette.emblemColor,INK,1);emblem(c,sx,sy+d.torso*.42,look.emblem,palette.emblemColor);}

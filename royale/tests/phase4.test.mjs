@@ -49,7 +49,7 @@ test('Tree is safely accessible remotely and leaves the exact previous location 
 });
 for(const r of WORLD_REGIONS){
   test(`Region ${r.id}: three species, connected low path, three camps and board respawns`,()=>{
-    const g=regional(r.id);assert.equal(new Set(regionSpawns(r.id).map(s=>s[0])).size,3);assert.equal(g.camps.length,3);assert.ok(g.enemies.length<=18);
+    const g=regional(r.id);assert.equal(new Set(regionSpawns(r.id).map(s=>s[0])).size,3);assert.equal(g.camps.length,3);assert.ok(g.enemies.length<=24);
     const floor=regionSurfaces(r.id).filter(s=>!s.oneWay&&s.y>=600).sort((a,b)=>a.x-b.x);let edge=0;for(const s of floor){assert.ok(s.x<=edge,`gap before ${s.id}`);edge=Math.max(edge,s.x+s.w);}assert.ok(edge>=6160);
     const e=g.enemies[0];e.state='dead';e.hp=0;e.respawn=18;g.world.visits[`${r.id}:0`]=1;g.enterBoard(1);g.hero.x=2000;g.enterBoard(0);assert.equal(e.respawn,0);g.stepEnemy(e,STEP);assert.equal(e.hp,e.maxHp);
   });
@@ -141,7 +141,7 @@ test('invalid future, inventory overflow, duplicate gear and inconsistent world 
   const data=new Map([[PROFILE_KEY,JSON.stringify({version:2,slots:[{id:'old',snapshot:variants[1]},null,null]})]]),storage={getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v)},before=data.get(PROFILE_KEY),store=new LocalHeroStore(storage);assert.equal(store.writable,false);assert.equal(data.get(PROFILE_KEY),before);
 });
 test('safe airborne saves remain valid above upper platforms, across every region',()=>{
-  for(const region of WORLD_REGIONS){const g=regional(region.id);g.enemies=[];g.hero.x=2400;g.hero.y=g.surfaces.find(s=>s.id==='p6').y;
+  for(const region of WORLD_REGIONS){const g=regional(region.id);g.enemies=[];g.hero.x=3520;g.hero.y=g.surfaces.find(s=>s.id==='climb-1-4').y;
     for(let i=0;i<900;i++){g.step(STEP,{move:Math.floor(i/120)%2?-1:1,jump:i%70===0||i%70===18});if(i%10===0&&!g.hero.dead){const save=decodeSave(g.save());assert.ok(save,`${region.name} invalid airborne save at ${g.hero.x}, ${g.hero.y}`);assert.equal(save.world.location.y,g.hero.y);}}
   }
 });

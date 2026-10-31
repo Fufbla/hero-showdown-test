@@ -33,3 +33,17 @@ body:not(.game-view) .controls-footer{display:none}body:not(.game-view) .toast{t
 #app{height:var(--visible-height,100dvh)}.keyboard-open .creator-art{display:none}
 @media(max-height:600px) and (max-width:700px){.creator-art{height:110px;padding:8px 12px;grid-template-rows:auto auto auto;gap:4px}.creator-art h1{display:none}.creator-art #preview-name{grid-row:1}.creator-art .view-toggle{grid-row:2}.creator-art .pose-field{grid-row:3}.preview-wrap{height:110px;width:112px}.creator-fields{min-height:50px}.creator-actions{padding:9px 14px}.hero-halo{width:80px;height:80px}}
 @media(max-height:360px) and (max-width:700px){.creator-art{display:none}}
+/* Phase 9: consistent comic-panel ink, soft key light, and readable touch targets. */
+.topbar{background:linear-gradient(105deg,#102e39,#1b4245);border-bottom:1px solid #b9cf9c33}
+.roster-card,.pause-card,.settings-card{box-shadow:0 22px 70px #06162180,inset 0 1px #e8dfb633;border-color:#9fc3a54d}
+.hero-slot{background:linear-gradient(155deg,#2c575a,#173b43);box-shadow:inset 0 1px #d7dfb233,0 4px 0 #0d2730}
+.hero-slot canvas{background:radial-gradient(ellipse at 50% 62%,#b7d8a324,transparent 65%)}
+.hero-hud{background:linear-gradient(130deg,#12323cf5,#214b4af0);box-shadow:0 4px 16px #10273533;border:1px solid #d5dfac4d}
+.level-seal{box-shadow:inset 0 0 18px #d1e0a921;border-color:#c6d3a1aa}
+.hp-track,.xp-track{box-shadow:inset 0 2px 3px #122d3666}
+.power-button{box-shadow:inset 0 1px #e5e5bf33,0 3px 0 #102e37;transition:background-color .12s}
+.power-button.cooldown{box-shadow:inset 0 2px 4px #08192180}
+.primary{box-shadow:inset 0 1px #fff5d4a0,0 3px 0 #8b9366}
+.secondary{box-shadow:inset 0 1px #dbe7be22}
+button:focus-visible,a:focus-visible{outline:3px solid #f1d494;outline-offset:3px}
+@media(hover:hover){.hero-slot:hover{border-color:#c6dbad99}.secondary:hover{background-color:#376557}}

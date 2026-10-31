@@ -6,6 +6,10 @@ export const REGIONS = [
   { x: 1940, name: 'Driftwood Rise', note: 'Take the high road, or follow the shore.' },
   { x: 4020, name: 'Lighthouse Point', note: 'Every hero starts somewhere.' },
 ];
+export const VERTICAL_TIERS = Object.freeze([480, 320, 160, 0]);
+// Three staggered climbing circuits. Rises <=160 fit the approved double jump.
+export const VERTICAL_ROUTES = [0,1940,4020].map((base,board)=>
+  VERTICAL_TIERS.map((y,tier)=>({id:`climb-${board}-${tier+1}`,x:base+[430,780,1110,1440][tier],y,w:tier===3?340:330,h:28,kind:tier%2?'wood':'grass',oneWay:true,tier:tier+1,board})));
 export const SURFACES = [
   { id: 'sand-a', x: 0, y: 600, w: 1390, h: 320, kind: 'sand' },
   { id: 'sand-b', x: 1540, y: 600, w: 1170, h: 320, kind: 'sand' },
@@ -29,13 +33,18 @@ export const SURFACES = [
   { id: 'p12', x: 4720, y: 365, w: 300, h: 26, kind: 'wood', oneWay: true },
   { id: 'p13', x: 5120, y: 470, w: 240, h: 28, kind: 'grass', oneWay: true },
 ];
+// Side branches create alternate crossings and descending loops, not vertical stacks.
+SURFACES.push(...VERTICAL_ROUTES.flat(), ...[0,1940,4020].flatMap((base,board)=>[
+  {id:`branch-${board}-2`,x:base+1200,y:320,w:290,h:28,kind:'wood',oneWay:true,tier:2,board},
+  {id:`branch-${board}-3`,x:base+1770,y:160,w:260,h:28,kind:'grass',oneWay:true,tier:3,board},
+]));
 export const CAMPS = [{ x: 160, y: 600, name: 'Shore camp' }, { x: 2340, y: 600, name: 'Driftwood camp' }, { x: 4370, y: 600, name: 'Lighthouse camp' }];
 const COAST_TYPES = {
   bottle: { name: 'Bottle Critter', hp: 34, damage: 5, speed: 43, xp: 14, coins: 1, w: 34, h: 49, color: '#65d9c6' },
   slime: { name: 'Trash Slime', hp: 48, damage: 6, speed: 32, xp: 20, coins: 1, w: 53, h: 36, color: '#b1ce67' },
   crawler: { name: 'Sand Crawler', hp: 60, damage: 7, speed: 54, xp: 26, coins: 1, w: 49, h: 32, color: '#efaa66' },
 };
-export const SPAWNS = [
+const LEGACY_SPAWNS = [
   ['bottle', 600, 'sand-a'], ['bottle', 940, 'sand-a'], ['slime', 1230, 'sand-a'],
   ['bottle', 850, 'p2'], ['slime', 1700, 'sand-b'], ['crawler', 2010, 'sand-b'],
   ['bottle', 2460, 'sand-b'], ['slime', 2430, 'p6'], ['crawler', 3100, 'sand-c'],
@@ -43,6 +52,16 @@ export const SPAWNS = [
   ['crawler', 4620, 'sand-d'], ['slime', 4990, 'sand-d'], ['bottle', 5350, 'sand-d'],
   ['crawler', 5570, 'sand-d'], ['bottle', 4880, 'p12'],
 ];
+// Keep the first 17 monster identities stable for old saves; relocate their homes.
+const homes=[
+ [600,'sand-a'],[900,'climb-0-2'],[1240,'climb-0-3'],[1580,'climb-0-4'],
+ [1700,'sand-b'],[2500,'climb-1-1'],[2870,'climb-1-2'],[3170,'climb-1-3'],
+ [3520,'climb-1-4'],[3500,'sand-c'],[3890,'sand-c'],[3810,'branch-1-3'],
+ [4620,'sand-d'],[4580,'climb-2-1'],[4920,'climb-2-2'],[5250,'climb-2-3'],[5590,'climb-2-4'],
+ [570,'climb-0-1'],[1370,'branch-0-2'],[1900,'branch-0-3'],
+ [3300,'branch-1-2'],[5360,'branch-2-2'],[5910,'branch-2-3'],[5670,'sand-d'],
+];
+export const SPAWNS=homes.map(([x,surface],i)=>[LEGACY_SPAWNS[i]?.[0]||['crawler','slime','bottle'][i%3],x,surface]);
 export const regionAt = x => [...REGIONS].reverse().find(r => x >= r.x) || REGIONS[0];
 
 // Region IDs are stable save identifiers. Board boundaries remain physical, visible paths.
@@ -83,18 +102,17 @@ export const regionDefinition=id=>WORLD_REGIONS.find(r=>r.id===id)||WORLD_REGION
 export const boardIndex=x=>x>=4020?2:x>=1940?1:0;
 export const boardAt=(region,x)=>({index:boardIndex(x),name:regionDefinition(region).boards[boardIndex(x)]});
 export function regionSurfaces(id){
-  if(id===1)return SURFACES;
-  const region=regionDefinition(id),offsets=[0,-20,25,-35,15,0];
-  const result=SURFACES.map((s,i)=>({...s,kind:s.kind==='wood'?(id===2||id===5?'wood':'metal'):region.theme,y:s.oneWay?s.y+offsets[(i+id)%6]:s.y}));
-  // Optional higher routes: lower paths stay connected, including forgiving gap floors.
-  result.push({id:'high-a',x:1160,y:275-(id%3)*20,w:210,h:26,kind:region.theme,oneWay:true},{id:'high-b',x:3870,y:300+(id%2)*25,w:200,h:26,kind:region.theme,oneWay:true});
-  if(id===4)result.push({id:'cave-roof',x:3040,y:110,w:750,h:40,kind:'cave'});
+  const region=regionDefinition(id);
+  // Retain legacy definitions for migration/tools, but replace their crowded
+  // one-tier layout with the reachable circuits. Saved airborne positions remain valid.
+  const result=SURFACES.filter(s=>!/^p\d+$/.test(s.id)).map(s=>({...s,kind:id===1?s.kind:s.kind==='wood'?(id===2||id===5?'wood':'metal'):region.theme}));
+  if(id===4)result.push({id:'cave-roof',x:3040,y:-220,w:750,h:40,kind:'cave'});
   return result;
 }
 export const regionCamps=id=>CAMPS.map((c,i)=>({...c,name:id===1?c.name:`${regionDefinition(id).boards[i]} camp`}));
 export function regionSpawns(id){
   if(id===1)return SPAWNS;
   const types=regionDefinition(id).types;
-  return SPAWNS.map(([_,x,surface],i)=>[types[(i+Math.floor(x/1900))%3],x,surface]);
+  return SPAWNS.map(([_,x,surface],i)=>[types[(i+Math.floor((LEGACY_SPAWNS[i]?.[1]??x)/1900))%3],x,surface]);
 }
 export const GATES=Object.freeze({back:44,arena:5840,forward:6070});

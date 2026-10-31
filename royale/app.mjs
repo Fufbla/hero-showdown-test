@@ -1,3 +1,4 @@
+import {installVerticalQA} from './vertical-qa.mjs';
 import {clockSynchronized} from './shared-clock.mjs';
 import {CloudAPI, CloudHeroStore} from './cloud-client.mjs';
 import {AccountMenu} from './account-ui.mjs';
@@ -26,7 +27,7 @@ import { previewHero, animationState } from './hero-rig.mjs';
 import { STARTER_OUTFIT } from './appearance.mjs';
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search);
 if(params.has('touch'))document.body.classList.add('force-touch');
-if(params.get('testSession')?.startsWith('world-practice-'))document.body.classList.add('practice-world');
+if(/^(world|vertical)-practice-/.test(params.get('testSession')||''))document.body.classList.add('practice-world');
 function sizeVisibleViewport(){
   const viewport=window.visualViewport;
   if(viewport&&viewport.scale===1){document.documentElement.style.setProperty('--visible-height',`${viewport.height}px`);document.body.classList.toggle('keyboard-open',innerWidth<=700&&viewport.height<innerHeight*.78);}
@@ -153,7 +154,7 @@ function startPatrol(continued){
   game.legendaryStorageReady=!!ledger&&store.writable;
   game.onBossVisualStep=(boss,time,dt,x)=>renderer.bossArt.step(boss,time,dt,x);
   if(game.arenaScene)renderer.bossArt.step(game.arenaScene.boss,game.time,0,game.hero.x);
-  game.started=true;regionName='';lastHud='';saveAge=0;renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.cameraY=0;renderer.particles=[];
+  game.started=true;regionName='';lastHud='';saveAge=0;renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.cameraY=0;renderer.clearParticles();
   setScreen('play');persist();updateHud();if(game.pendingMergeReward())showMergeReward();else if(game.treeVisit){setScreen('tree');erisMenu.open();}else if(game.inventory.pending.length){setScreen('inventory');journeyMenu.inventory();}say(continued?'Welcome back, hero. Your patrol continues.':'Welcome to the coast! Move right to find your first Bottle Critter.',4);
 }
 async function begin(){
@@ -189,7 +190,7 @@ function handleEvents() {
     if(event.type==='tree')openTree();
     if(event.type==='boss-entry'&&event.snapshot)persistSnapshot(event.snapshot);
     if(event.type==='arena'&&game.arenaScene)renderer.bossArt.step(game.arenaScene.boss,game.time,0,game.hero.x);
-    if(event.type==='arena'||event.type==='arena-exit'){renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.particles=[];regionName='';lastHud='';}
+    if(event.type==='arena'||event.type==='arena-exit'){renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.clearParticles();regionName='';lastHud='';}
     if(event.type==='arena-exit'&&event.reason==='retreat')say('You retreated. The encounter has reset; earned XP is kept.',4);
     if(event.type==='boss-phase')say(`Phase ${event.phase} · watch for new attack patterns.`,3);
     if(event.type==='boss-wave')say(`Reinforcement wave ${event.wave} of 3 · three helpers.`,3);
@@ -197,7 +198,7 @@ function handleEvents() {
     if(event.type==='boss-victory'){persist();tone('level');say(`${event.name} defeated! +${event.coins} coins · +${event.xp} XP.${event.first?' First-victory treasure is ready.':''}`,7);}
     if(event.type==='chest-preview')showChest();
     if(event.type==='gate')say(event.message,6);
-    if(event.type==='region'){regionName='';lastHud='';renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.particles=[];say(`${event.name} · a new path ahead.`);}
+    if(event.type==='region'){regionName='';lastHud='';renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.clearParticles();say(`${event.name} · a new path ahead.`);}
     if(event.type==='equipment'&&event.pending&&game.canSave()){setScreen('inventory');journeyMenu.inventory();$('inventory-title').focus();}
     renderer.event(event.type === 'level' ? { ...event, x: game.hero.x, y: game.hero.y - 45 } : event); tone(event.type);
     if (event.type === 'level') say(`Level ${event.level}! Health restored · +1 Power Point.`, 4);
@@ -298,20 +299,21 @@ if(cloudApi){cloudApi.auth.onAuthStateChange((event,session)=>{if(store.cloud&&(
 else $('account-open').hidden=true;
 renderRoster();setScreen('roster');
 if(cloudApi){void(async()=>{try{await cloudApi.configure();const{data}=await cloudApi.auth.getSession();if(data.session){if(game.started||screen!=='roster'){say('Account connected. Open Account to switch to cloud heroes.',6);}else await useCloud();}if(params.has('accountRecovery'))await accountMenu.open('reset');}catch(e){$('storage-warning').hidden=false;$('storage-warning').textContent=e.message;}})();setInterval(()=>void cloudApi.configure().catch(()=>{}),60000);}
-let last=performance.now(),accumulator=0,measurement=null;
+installVerticalQA(()=>game,input,renderer,()=>{handleEvents();updateHud();});
+let last=performance.now(),accumulator=0,measurement=null,backgroundSignature='';
 $('measure-performance').onclick=()=>{if(screen==='pause')resume();if(screen!=='play'){$('performance-result').textContent='Start gameplay before measuring.';return;}measurement={start:performance.now(),frames:0,draw:0,max:0,intervals:[]};$('performance-result').textContent='Measuring 30 seconds of visible gameplay…';};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&measurement){measurement=null;$('performance-result').textContent='Sample cancelled: keep the game visible.';}});
 function frame(now){
   input.pollGamepad();
   const wallElapsed=Math.max(0,(now-last)/1000),elapsed=Math.min(.1,wallElapsed);last=now;if(wallElapsed>0)fps=fps*.95+.05/wallElapsed;
-  if(game.started&&!game.arenaScene)renderer.bossArt.prepare(game.regionId);
+  if(game.started&&!game.arenaScene&&game.hero.x>5600)renderer.bossArt.prepare(game.regionId);
   const waitingForArt=game.arenaScene&&!renderer.bossArt.ready;
   if(screen==='play'&&!waitingForArt&&!criticalPending){
     accumulator+=elapsed;while(accumulator>=STEP){game.step(STEP,input.sample());accumulator-=STEP;}
     handleEvents();if(!criticalPending&&screen==='play'&&game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();}saveAge+=elapsed;if(saveAge>5){persist();saveAge=0;}
   }else accumulator=0;
   legendaryMusic.update(audioContext,game.arenaScene?.legendary,soundEnabled&&screen==='play'&&!game.arenaScene?.cleared&&!criticalPending&&!document.hidden);
-  const drawStart=performance.now();if(!game.treeVisit)renderer.draw(game,screen==='play'?accumulator/STEP:1,elapsed);
+  const drawStart=performance.now(),signature=`${screen}:${renderer.canvas.width}:${renderer.canvas.height}:${game.regionId}:${game.clock().night}`;if(!game.treeVisit&&(screen==='play'||signature!==backgroundSignature))renderer.draw(game,screen==='play'?accumulator/STEP:1,elapsed);backgroundSignature=signature;
   const cost=performance.now()-drawStart;drawMs=drawMs*.95+cost*.05;
   if(measurement&&(screen!=='play'||waitingForArt)){measurement=null;$('performance-result').textContent='Sample cancelled: keep gameplay active.';}
   if(measurement){const m=measurement;m.frames++;m.draw+=cost;m.max=Math.max(m.max,cost);m.intervals.push(wallElapsed*1000);if(now-m.start>=30000){const seconds=(now-m.start)/1000,sorted=m.intervals.sort((a,b)=>a-b);$('performance-result').textContent=`${seconds.toFixed(1)}s · ${(m.frames/seconds).toFixed(1)} rendered FPS · draw avg ${(m.draw/m.frames).toFixed(2)}ms / max ${m.max.toFixed(2)}ms · p95 frame ${sorted[Math.floor(sorted.length*.95)].toFixed(1)}ms · Region ${game.regionId} · ${innerWidth}×${innerHeight}. This browser only.`;measurement=null;}}

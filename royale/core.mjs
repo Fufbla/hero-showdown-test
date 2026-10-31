@@ -116,10 +116,12 @@ export class Game {
     if(e.state==='dead'||e.protection>0||!Number.isFinite(amount)||amount<=0)return false;
     if(e.legendary&&e.state==='active'&&e.attack?.shape==='barrier')amount*=.5;
     this.markCombat();e.provoked=true;e.hp=Math.max(0,e.hp-amount);e.flash=.12;
-    if(stagger&&!isBoss(e)){e.stagger=.26;e.state='recover';e.age=0;}
-    if(knock&&!e.rooted&&!e.lifted&&!isBoss(e))e.x=clamp(e.x+face*knock,e.surface.x+e.w/2,e.surface.x+e.surface.w-e.w/2);
+    // Visual flinch never resets an attack or recovery timer. Brief pauses have a refractory window.
+    if(!isBoss(e))e.desperate=e.hp>0&&e.hp<=e.maxHp*.5;
+    if(stagger&&!isBoss(e)&&(e.flinchGuard||0)<=0){e.stagger=Math.max(e.stagger||0,.045);e.flinchGuard=.55;}
+    if(knock&&(this.hero.attack?.power==='strength'||kind.startsWith('merge:'))&&!e.rooted&&!e.lifted&&!isBoss(e))e.x=clamp(e.x+face*knock,e.surface.x+e.w/2,e.surface.x+e.surface.w-e.w/2);
     this.emit('hit',{x:e.x,y:e.y-e.h/2,kind});
-    if(isBoss(e)&&e.type.startsWith('boss-')){this.bossDamaged(e);}else if(e.hp<=0){e.state='dead';e.respawn=e.summoned?0:this.respawnDelay(e);e.rooted=false;e.lifted=false;this.reward(e);}
+    if(isBoss(e)&&e.type.startsWith('boss-')){this.bossDamaged(e);}else if(e.hp<=0){e.state='dead';e.deadAge=0;e.respawn=e.summoned?0:this.respawnDelay(e);e.rooted=false;e.lifted=false;this.reward(e);}
     return true;
   }
   moveEnemyAir(e,nx,ny){
@@ -164,7 +166,7 @@ export class Game {
     // Sweep the feet vertically; choose the first surface crossed, independent of array order.
     let floor = Infinity, ceiling = -Infinity;
     for (const s of this.surfaces) {
-      if (h.x + h.w / 2 <= s.x || h.x - h.w / 2 >= s.x + s.w) continue;
+      if (h.x + h.w / 2 <= s.x || h.x - h.w / 2 >= s.x + s.w || (s.oneWay&&h.dropThrough?.id===s.id)) continue;
       if (h.vy >= 0 && oldY <= s.y + .01 && h.y >= s.y) floor = Math.min(floor, s.y);
       if (!s.oneWay && h.vy < 0 && oldY - h.h >= s.y + s.h && h.y - h.h <= s.y + s.h) ceiling = Math.max(ceiling, s.y + s.h);
     }
@@ -177,7 +179,7 @@ export class Game {
     const h = this.hero;
     if (Object.hasOwn(TYPES,source.type)&&!isBoss(source)&&this.isSafeCamp())return false;
     if (h.invulnerable > 0 || h.dead || !Number.isFinite(amount) || amount<=0) return false;
-    const incoming=this.powers.incoming(amount,source);if(incoming===null)return false;this.markCombat();
+    const incoming=this.powers.incoming(amount,source);if(incoming===null){if(h.agile)h.dodgeAge=0;return false;}this.markCombat();
     h.hp = Math.max(0, h.hp - incoming); h.invulnerable = 1.05; h.hurtAge = 0;
     if(!this.powers.active.steel){h.stun=.16;h.vx = (h.x >= fromX ? 1 : -1) * 210;h.attack=null;h.attackBuffer=null;}
     this.emit('hurt');
@@ -221,12 +223,15 @@ export class Game {
     const h = this.hero;
     h.prevX = h.x; h.prevY = h.y; h.prevFace = h.face;
     if (h.dead) { h.defeatAge += dt; this.deathTimer -= dt; if (this.deathTimer <= 0) this.respawn(); return; }
-    h.jumpAge += dt; h.hurtAge += dt; h.respawnAge += dt;h.castAge=(h.castAge??100)+dt;
+    h.dodgeAge=(h.dodgeAge??100)+dt;h.jumpAge += dt; h.hurtAge += dt; h.respawnAge += dt;h.castAge=(h.castAge??100)+dt;
     for(let i=0;i<4;i++)if(input.powers?.[i])this.powers.activateSlot(i);
     h.invulnerable = Math.max(0, h.invulnerable - dt); h.stun = Math.max(0, h.stun - dt); h.landing = Math.max(0, h.landing - dt);
     h.coyote = Math.max(0, h.coyote - dt); h.jumpBuffer = Math.max(0, h.jumpBuffer - dt);
     if (!h.grounded && h.coyote <= 0 && h.jumps === 0) h.jumps = 1;
-    if (input.jump&&!this.powers.flying) h.jumpBuffer = .13;
+    if(h.dropThrough){h.dropThrough.time-=dt;if(h.dropThrough.time<=0)h.dropThrough=null;}
+    const support=input.jump&&input.vertical>.5&&h.grounded&&!this.powers.flying&&this.surfaces.find(s=>s.oneWay&&Math.abs(s.y-h.y)<.1&&h.x+h.w/2>s.x&&h.x-h.w/2<s.x+s.w);
+    if(support){h.dropThrough={id:support.id,time:.24};h.y+=2;h.vy=60;h.grounded=false;h.jumps=1;h.coyote=0;h.jumpBuffer=0;}
+    else if (input.jump&&!this.powers.flying) h.jumpBuffer = .13;
     if (!this.powers.flying && h.jumpBuffer > 0 && h.jumps < 2 && h.stun <= 0) {
       h.vy = h.jumps === 0 ? -565 : -520; h.jumps++; h.jumpAge = 0; h.grounded = false; h.coyote = 0; h.jumpBuffer = 0;
       this.emit('jump', { x: h.x, y: h.y, double: h.jumps === 2 });
@@ -236,7 +241,7 @@ export class Game {
       h.vx = approach(h.vx, axis * (input.run ? 315*(1+this.powers.speed) : 185), (axis ? 2100 : 2500) * dt);
       if (Math.abs(axis) > .08) h.face = axis > 0 ? 1 : -1;
     }
-    if(this.powers.flying){h.vy=approach(h.vy,(input.vertical?clamp(Number(input.vertical),-1,1):this.powers.active.flight.age<.35?-1:0)*BALANCE.flightSpeed,1200*dt);if(h.y<120){h.y=120;h.vy=Math.max(0,h.vy);}}
+    if(this.powers.flying){h.vy=approach(h.vy,(input.vertical?clamp(Number(input.vertical),-1,1):this.powers.active.flight.age<.35?-1:0)*BALANCE.flightSpeed,1200*dt);if(h.y<(this.arenaScene?120:-360)){h.y=this.arenaScene?120:-360;h.vy=Math.max(0,h.vy);}}
     this.applyMergeMovement();this.moveHero(dt);
     if (h.y > DEATH_Y) { this.defeat(); return; }
     if(input.heal)this.useHealthRoot();
@@ -265,48 +270,30 @@ export class Game {
   }
   stepEnemy(e, dt) {
     if(isBoss(e)&&e.type.startsWith('boss-')){if(e.legendary)stepLegendaryBoss(this,e,dt);else stepBoss(this,e,dt);this.onBossVisualStep?.(e,this.time,dt,this.hero.x);return;}
+    if(e.state==='dead')e.deadAge=(e.deadAge||0)+dt;
     if(e.summoned&&e.state==='dead')return;
     if(!e.lifted){e.prevX = e.x; e.prevY = e.y;}
     if (e.state === 'dead') {
       e.respawn -= dt;
       if (e.respawn <= 0 && (Math.abs(this.hero.x - e.spawnX) > RESPAWN.safeDistance || Math.abs(this.hero.y - e.spawnSurface.y) > 160)) {
-        e.provoked=false;e.rewarded=false;e.pouncing=false;e.airVx=0;e.surface=e.spawnSurface||e.surface;e.x = e.prevX = e.spawnX;e.y=e.prevY=e.surface.y-(e.flying?50:0);e.airborne=false;e.lifted=false;e.rooted=false;e.vy=0; e.hp = e.maxHp; e.state = 'patrol'; e.age = 0; e.protection = 1; this.emit('spawn', { x: e.x, y: e.y });
+        e.desperate=false;e.deadAge=0;e.flinchGuard=0;e.provoked=false;e.rewarded=false;e.pouncing=false;e.airVx=0;e.surface=e.spawnSurface||e.surface;e.x = e.prevX = e.spawnX;e.y=e.prevY=e.surface.y-(e.flying?50:0);e.airborne=false;e.lifted=false;e.rooted=false;e.vy=0; e.hp = e.maxHp; e.state = 'patrol'; e.age = 0; e.protection = 1; this.emit('spawn', { x: e.x, y: e.y });
       }
       return;
     }
+    e.flinchGuard=Math.max(0,(e.flinchGuard||0)-dt);e.desperate=e.hp<=e.maxHp*.5;
     e.age += dt; e.flash = Math.max(0, e.flash - dt); e.protection = Math.max(0, e.protection - dt); e.stagger = Math.max(0, e.stagger - dt);
     if(e.lifted)return;
     if(e.airborne){
-      const oldY=e.y;if(e.pouncing){this.moveEnemyAir(e,e.x+(e.airVx||0)*dt,e.y);if(!e.hit&&Math.abs(this.hero.x-e.x)<65&&Math.abs(this.hero.y-e.y)<65){e.hit=true;this.hurt(this.monsterDamage(e),e.x,e);}}e.vy=Math.min(900,(e.vy||0)+1480*dt);e.y+=e.vy*dt;
+      const oldY=e.y;if(e.pouncing){this.moveEnemyAir(e,clamp(e.x+(e.airVx||0)*dt,e.surface.x+e.w/2+5,e.surface.x+e.surface.w-e.w/2-5),e.y);if(!e.hit&&Math.abs(this.hero.x-e.x)<65&&Math.abs(this.hero.y-e.y)<65){e.hit=true;this.hurt(this.monsterDamage(e),e.x,e);}}e.vy=Math.min(900,(e.vy||0)+1480*dt);e.y+=e.vy*dt;
       const floors=this.surfaces.filter(s=>e.x+e.w/2>s.x&&e.x-e.w/2<s.x+s.w&&oldY<=s.y+.01&&e.y>=s.y).sort((a,b)=>a.y-b.y);
       if(floors.length){e.surface=floors[0];e.y=e.surface.y;e.vy=0;e.airborne=false;e.pouncing=false;e.state='recover';e.age=0;}
       else if(e.y>DEATH_Y){e.y=e.surface.y;e.x=e.spawnX;e.airborne=false;e.vy=0;}
       return;
     }
     if((e.rooted&&!isBoss(e))||e.stagger > 0 || e.protection > 0) return;
-    if(TYPES[e.type].region>1){advancedEnemy(this,e,dt);return;}
-    const movementScale=e.rooted?.5:1;
-    const h = this.hero, d = h.x - e.x, nearHeight = Math.abs(h.y - e.y) < 62;
-    const peaceful=TYPES[e.type].peaceful&&h.level<=3&&!e.provoked;
-    const withinLeash = !h.dead&&!peaceful&&!this.isSafeCamp()&&Math.abs(h.x - e.spawnX) < 225;
-    const info = TYPES[e.type], left = Math.max(e.surface.x + e.w / 2 + 5, e.spawnX - 150), right = Math.min(e.surface.x + e.surface.w - e.w / 2 - 5, e.spawnX + 150);
-    if (e.state === 'patrol') {
-      if (nearHeight && withinLeash && Math.abs(d) < 65) { e.face = Math.sign(d) || e.face; e.state = 'warn'; e.age = 0; }
-      else {
-        if (nearHeight && withinLeash && Math.abs(d) < 185) e.face = Math.sign(d) || e.face;
-        if (e.x <= left) e.face = 1; if (e.x >= right) e.face = -1;
-        if(e.x<left)e.x=Math.min(left,e.x+info.speed*movementScale*dt);else if(e.x>right)e.x=Math.max(right,e.x-info.speed*movementScale*dt);else e.x=clamp(e.x+e.face*info.speed*movementScale*dt,left,right);
-      }
-    } else if (e.state === 'warn' && e.age >= (e.type==='crawler'?.55:.7)) { e.state = 'strike'; e.age = 0; e.hit = false;if(e.type==='slime'){e.airborne=true;e.pouncing=true;e.vy=-180;e.airVx=e.face*95;} }
-    else if (e.state === 'strike') {
-      e.x = clamp(e.x + e.face * (e.type==='crawler'?155:105) * movementScale * dt, left, right);
-      if (!e.hit && e.age >= .06) {
-        e.hit = true;
-        if (nearHeight && Math.abs(h.x - e.x) < 76 && (h.x - e.x) * e.face > -15) this.hurt(this.monsterDamage(e), e.x, e);
-      }
-      if (e.age >= .24) { e.state = 'recover'; e.age = 0; }
-    } else if (e.state === 'recover' && e.age >= 1.1) { e.state = 'patrol'; e.age = 0; }
+    const oldX=e.x;advancedEnemy(this,e,dt);e.walkCycle=(e.walkCycle||0)+Math.abs(e.x-oldX)/34;
   }
+
   save() {
     if(!this.canSave())return null;
     const h=this.hero;

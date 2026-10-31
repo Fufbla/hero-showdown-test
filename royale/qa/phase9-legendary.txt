@@ -1,0 +1,922 @@
+PASS · 920 Phase 7 browser assertions · eight bosses × five viewports. Synthetic input; no physical-device claim.
+
+PASS · 390×844 · lightning: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 390×844 · air: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 390×844 · styrodog: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 390×844 · sonic: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 390×844 · styro: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 390×844 · wastelander: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 390×844 · venomis: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 390×844 · atomdust: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 844×390 · lightning: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 844×390 · air: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 844×390 · styrodog: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 844×390 · sonic: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 844×390 · styro: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 844×390 · wastelander: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 844×390 · venomis: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 844×390 · atomdust: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 320×568 · lightning: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 320×568 · air: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 320×568 · styrodog: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 320×568 · sonic: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 320×568 · styro: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 320×568 · wastelander: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 320×568 · venomis: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 320×568 · atomdust: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 768×1024 · lightning: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 768×1024 · air: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 768×1024 · styrodog: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 768×1024 · sonic: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 768×1024 · styro: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 768×1024 · wastelander: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 768×1024 · venomis: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 768×1024 · atomdust: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 1280×800 · lightning: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 1280×800 · air: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 1280×800 · styrodog: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 1280×800 · sonic: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 1280×800 · styro: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 1280×800 · wastelander: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 1280×800 · venomis: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward
+PASS · 1280×800 · atomdust: approved artwork loads; 3× final HP
+PASS · boss HUD, health and XP visible
+PASS · one normal power locked; fourth hidden
+PASS · boss encounter blocks every world/Legendary travel button
+PASS · half health restores disruption immediately
+PASS · phase 3 summons exactly three helpers
+PASS · boss alone does not complete arena
+PASS · durable full-suit reward pauses gameplay
+PASS · helpers award no coins or items; reward freezes simulation
+PASS · reward keeps health / XP visible
+PASS · full custom hero back preview differs
+PASS · confirmation precedes ownership
+PASS · three owned pieces, stable unique IDs, claim stored once
+PASS · cleared arena has no boss or helper interaction
+PASS · Eris full suit activation persists
+PASS · fourth button visible, protected and usable
+PASS · fourth key reaches its unique ability
+PASS · fourth cooldown is independently bounded by half normal
+PASS · mixed preview shows exact bonus comparison
+PASS · incomplete suit locks the fourth ability
+PASS · reload retains transformation and permanent victory
+PASS · cleared arena remains reachable
+PASS · revisit shows remains; no rematch or duplicate reward

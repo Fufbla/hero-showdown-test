@@ -16,6 +16,9 @@ export function drawMergeCostume(c,p,pieces,back,steel){
    }
   }
   if(part==='chest'){
+   // Fixed colored armor seams and specular edging, following the same body rig.
+   line(c,[[sx-d.shoulder+3,sy+3],[sx,sy+8],[sx+d.shoulder-3,sy+3]],'#ffffff55',1.2);
+   for(const side of[-1,1])line(c,[[sx+side*d.shoulder*.68,sy+13],[hx+side*d.hip*.7,hy-4]],accent,1.5);
    for(const s of[-1,1]){
     const px=sx+s*d.shoulder;
     if(id==='lightning')poly(c,[[px-s*5,sy+2],[px+s*7,sy-10],[px+s*10,sy+9]],s===1?'#d7b5b0':'#b1ccde');

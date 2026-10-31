@@ -4,7 +4,7 @@ import {WORLD_REGIONS} from '../world.mjs';
 import {bossVictory,CLOCK} from '../progression.mjs';
 import {createEquipment} from '../equipment.mjs';
 import {PROFILE_KEY} from '../saves.mjs';
-const $=id=>document.getElementById(id),frame=$('practice-game'),session=`world-practice-${Date.now()}`,prefix=`royale-test-${session}:`;
+const $=id=>document.getElementById(id),frame=$('practice-game'),session=`vertical-practice-${Date.now()}`,prefix=`royale-test-${session}:`;
 for(const region of WORLD_REGIONS){const o=document.createElement('option');o.value=region.id;o.textContent=`${region.id} · ${region.name}`;$('practice-region').append(o);}
 async function load(loot=false){
   const id=Number($('practice-region').value),g=new Game({look:{name:'World Explorer',suit:'#315b7c',trim:'#e6c879',capeColor:'#725455',emblem:'bolt'}});
@@ -15,6 +15,7 @@ async function load(loot=false){
   g.powers.data.points=budget;g.powers.data.equipped=['strength','fireball','steel'];
   const clock=$('practice-clock').value;g.world.clockReference=Date.now()-(clock==='night'?CLOCK.day+60000:clock==='sunset'?CLOCK.day-5000:clock==='sunrise'?CLOCK.day+CLOCK.night-5000:0);
   const place=$('practice-place').value;g.hero.x=g.hero.prevX=place==='wild'?515:place==='gate'?5840:160;
+  if(place.startsWith('tier')){const s=g.surfaces.find(s=>s.id===`climb-0-${place.slice(4)}`);g.hero.x=g.hero.prevX=s.x+40;g.hero.y=g.hero.prevY=s.y;}
   if(loot){for(let i=0;i<7;i++)g.inventory.items.push(createEquipment(id,id>=4?'rare':'ordinary',i,i+1));g.inventory.nextId=9;g.inventory.pending=[createEquipment(id,id>=4?'rare':'ordinary',0,8)];}
   const snapshot=JSON.parse(g.save());sessionStorage.setItem(prefix+PROFILE_KEY,JSON.stringify({version:2,revision:0,activeSlot:0,legacyImported:true,slots:[{id:'practice-only',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),lastRegion:region.name,snapshot},null,null]}));
   await new Promise(resolve=>{frame.onload=resolve;frame.src=`../?qa=1&touch=1&testSession=${session}`;});

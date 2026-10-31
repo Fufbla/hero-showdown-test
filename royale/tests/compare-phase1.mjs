@@ -12,7 +12,9 @@ try{
   for(const file of['core.mjs','world.mjs'])writeFileSync(join(dir,file),execFileSync('git',['show',`${base}:royale/${file}`],{cwd:root}));
   const {Game:Phase1}=await import(pathToFileURL(join(dir,'core.mjs')));
   const actual=new Game(),expected=new Phase1();actual.enemies=[];expected.enemies=[];
-  const snapshot=g=>{const hero={...g.hero};hero.missingHealth=hero.dead?0:hero.maxHp-hero.hp;delete hero.hp;delete hero.maxHp;for(const key of['jumpAge','hurtAge','defeatAge','respawnAge','castAge','flying','steel','agile'])delete hero[key];const enemies=g.enemies.map(e=>{const result={...e};for(const key of ['rooted','lifted','airborne','vy'])delete result[key];return result;});return{hero,enemies,time:g.time,checkpoint:g.checkpoint,kills:g.kills,species:g.species,reachedEnd:g.reachedEnd,deathTimer:g.deathTimer};};
+  // Compare physics on identical Phase 1 terrain. Phase 9's new routes have their own reachability suite.
+  const {SURFACES}=await import(pathToFileURL(join(dir,'world.mjs')));actual.surfaces=SURFACES;
+  const snapshot=g=>{const hero={...g.hero};hero.missingHealth=hero.dead?0:hero.maxHp-hero.hp;delete hero.hp;delete hero.maxHp;for(const key of['jumpAge','hurtAge','defeatAge','respawnAge','castAge','dodgeAge','flying','steel','agile'])delete hero[key];const enemies=g.enemies.map(e=>{const result={...e};for(const key of ['rooted','lifted','airborne','vy'])delete result[key];return result;});return{hero,enemies,time:g.time,checkpoint:g.checkpoint,kills:g.kills,species:g.species,reachedEnd:g.reachedEnd,deathTimer:g.deathTimer};};
   for(let i=0;i<7200;i++){
     const input={move:Math.floor(i/900)%2?-1:1,run:i%120>30,jump:i%49===0||i%49===12,punchHeld:i%120<70,kickHeld:i%120>=70,interact:false};
     if(i===1800){actual.hurt(1000,0);expected.hurt(1000,0);}if(i===3600){actual.respawn();expected.respawn();}

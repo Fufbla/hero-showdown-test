@@ -15,14 +15,14 @@ export function drawEris(c,time){
 export function drawPowerWorld(c,game){
   const time=game.time;
   for(const e of game.enemies){if(!e.rooted||e.state==='dead')continue;
-    for(let i=0;i<4;i++){const x=e.x+(i-1.5)*11;line(c,[[x-8,e.y+2],[x+Math.sin(i)*8,e.y-13],[x-5,e.y-e.h*.7],[x+5,e.y-e.h*.8]],'#446b3d',6);line(c,[[x-8,e.y+1],[x+Math.sin(i)*8-1,e.y-13],[x-6,e.y-e.h*.7]],'#9da96c',2);}
+    for(let i=0;i<4;i++){const x=e.x+(i-1.5)*(10+Math.sin(time*6)*1.5);line(c,[[x-8,e.y+2],[x+Math.sin(i)*8,e.y-13],[x-5,e.y-e.h*.7],[x+5,e.y-e.h*.8]],'#446b3d',6);line(c,[[x-8,e.y+1],[x+Math.sin(i)*8-1,e.y-13],[x-6,e.y-e.h*.7]],'#9da96c',2);}
   }
   const wind=game.powers.active.whirlwind;
-  if(wind){c.save();c.globalAlpha=.55;
+  if(wind){c.save();c.globalAlpha=.48;
     for(let i=0;i<11;i++){const y=wind.y-i*13,rx=18+i*4;c.beginPath();c.ellipse(wind.x+Math.sin(time*5+i*.3)*5,y,rx,7+i*.5,0,time*7+i,time*7+i+Math.PI*1.6);c.strokeStyle=i%2?'#ecf4d7':'#66b2a1';c.lineWidth=4;c.stroke();}c.restore();
   }
   for(const p of game.powers.projectiles){const direction=Math.sign(p.vx);c.save();c.translate(p.x,p.y);c.scale(direction,1);
-    c.beginPath();c.moveTo(-27,0);c.quadraticCurveTo(-12,-14,2,-9);c.quadraticCurveTo(15,0,2,9);c.quadraticCurveTo(-12,14,-27,0);c.fillStyle='#e48042';c.fill();ellipse(c,0,0,8,7,'#ffd77d');ellipse(c,2,-1,4,4,'#fff2bf');c.restore();
+    c.beginPath();c.moveTo(-27,0);c.quadraticCurveTo(-12,-14,2,-9);c.quadraticCurveTo(15,0,2,9);c.quadraticCurveTo(-12,14,-27,0);c.fillStyle='#e48042';c.fill();line(c,[[-25,0],[-12,-4],[-5,-7]],'#fff0b5',1.5);line(c,[[-31,4],[-20,3]],'#eab165',1.2);ellipse(c,0,0,8,7,'#ffd77d');ellipse(c,2,-1,4,4,'#fff2bf');c.restore();
   }
 }
 export function drawPowerHero(c,game,pos,pose){

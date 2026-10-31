@@ -6,7 +6,7 @@ const clamp = (v, a=0, b=1) => Math.max(a, Math.min(b, v));
 const mix = (a,b,t) => a+(b-a)*t;
 const smooth = t => { t=clamp(t); return t*t*(3-2*t); };
 export const CAPE_LENGTH = 48;
-export const PREVIEW_POSES = ['idle','walk','run','jump','double-jump','fall','land','punch','kick','air-punch','air-kick','hurt','defeat','respawn'];
+export const PREVIEW_POSES = ['idle','walk','run','jump','double-jump','fall','land','punch','kick','air-punch','air-kick','hurt','defeat','respawn','flight','steel','roots','whirlwind','strength','superKick','fireball','agility','speed'];
 
 // Two bones of fixed length, with a shared elbow/knee. Targets never stretch a limb.
 export function twoBone(root, target, upper, lower, bend=1) {
@@ -43,6 +43,12 @@ export function previewHero(pose,time) {
   if(pose==='hurt'){h.stun=.16;h.hurtAge=time%.6;}
   if(pose==='defeat'){h.dead=true;h.defeatAge=time%2;}
   if(pose==='respawn')h.respawnAge=time%1.2;
+  if(pose==='flight'){h.flying=true;h.grounded=false;h.vx=190;h.vy=-60;}
+  if(pose==='steel')h.steel=true;
+  if(pose==='strength'||pose==='superKick'){const kind=pose==='strength'?'punch':'kick';h.attack={kind,power:pose,age:time%ATTACKS[kind].duration,face:1,comboIndex:Math.floor(time/.39),stats:{level:20}};}
+  if(['roots','whirlwind','fireball'].includes(pose))h.castAge=time%.25;
+  if(pose==='agility'){h.agile=true;h.dodgeAge=time%.75;}
+  if(pose==='speed'){h.vx=315*1.6;h.cycle=time*h.vx/52;}
   return h;
 }
 // Cosmetic skeleton only. No position here is used by collision or combat.
@@ -87,6 +93,7 @@ export function poseFor(raw,h,time,view='game') {
     }
   }
   if(state==='hurt'){lean=-7*(1-clamp((h.hurtAge||0)/.3));handA=[8,hipY-9];handB=[-10,hipY-7];}
+  if((h.dodgeAge??100)<.24){const evade=Math.sin(h.dodgeAge/.24*PI);lean-=8*evade;handA=[mix(handA[0],12,evade),mix(handA[1],hipY-d.torso,evade)];handB=[mix(handB[0],-12,evade),mix(handB[1],hipY-d.torso+2,evade)];}
   let rotation=0,opacity=1;
   if(h.dead){const f=smooth((h.defeatAge||0)/.65);hipY=mix(hipY,-18,f);lean=-11*f;a=[mix(a[0],21,f),-5];b=[mix(b[0],-23,f),-5];handA=[14,hipY+9];handB=[-20,hipY+8];rotation=-.1*f;opacity=1-.55*smooth(((h.defeatAge||0)-1)/.5);}
   if(state==='respawn'){const f=1-smooth(h.respawnAge/.6);hipY+=12*f;lean=-4*f;opacity=1-f*.6;}

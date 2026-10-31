@@ -130,7 +130,7 @@ const imageFor=path=>new Promise((resolve,reject)=>{const image=new Image();imag
 function polygon(c,points){points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();}
 function cacheFrame(image,f){
   const [x,y,w,h]=f.crop;if(x<0||y<0||x+w>image.naturalWidth||y+h>image.naturalHeight)throw Error(`Invalid approved crop ${f.key}`);
-  const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const c=canvas.getContext('2d');
+  const canvas=document.createElement('canvas'),rasterScale=Math.min(1,460/Math.max(w,h));canvas.width=Math.ceil(w*rasterScale);canvas.height=Math.ceil(h*rasterScale);const c=canvas.getContext('2d');c.scale(rasterScale,rasterScale);
   if(f.clipRuns){c.beginPath();for(let i=0;i<f.clipRuns.length;i+=3)c.rect(f.clipRuns[i],f.clipRuns[i+1],f.clipRuns[i+2],1);c.clip();}
   else if(f.mask?.length){c.beginPath();polygon(c,f.mask);c.clip();}
   c.drawImage(image,x,y,w,h,0,0,w,h);
@@ -190,12 +190,13 @@ function drawTemporary(c,b,time){
   c.fillStyle=ink;c.fillRect(-w*.1,-h*.77+bob,w*.2,5);c.restore();
 }
 
+const cacheRegion=id=>({wastelander:3,venomis:5,atomdust:6})[id]||id;
 export class BossArt{
   constructor({loadImages=typeof Image!=='undefined'}={}){this.loadImages=loadImages;this.regions=new Map();this.visuals=new WeakMap();this.errors=[];this.currentRegion=0;this.whenLoaded=Promise.resolve(true);}
   get ready(){return !!this.regions.get(this.currentRegion)?.ready;}
   prepare(region){
-    this.currentRegion=region;if(this.regions.has(region)){this.whenLoaded=this.regions.get(region).promise;return this.whenLoaded;}
-    const entry={ready:BOSS_ART[region]?.temporary||false,frames:new Map(),textures:null};this.regions.set(region,entry);
+    region=cacheRegion(region);this.currentRegion=region;if(this.regions.has(region)){const entry=this.regions.get(region);this.regions.delete(region);this.regions.set(region,entry);this.whenLoaded=entry.promise;return this.whenLoaded;}
+    const entry={ready:BOSS_ART[region]?.temporary||false,frames:new Map(),textures:null};this.regions.set(region,entry);while(this.regions.size>3)this.regions.delete(this.regions.keys().next().value);
     if(entry.ready||!this.loadImages){entry.promise=Promise.resolve(entry.ready);this.whenLoaded=entry.promise;return entry.promise;}
     entry.promise=(async()=>{try{
       if(region===4)entry.textures=scorpionTextures(await imageFor('assets/shore/boss-parts.png'));
@@ -205,7 +206,7 @@ export class BossArt{
   }
   step(b,time,dt,heroX=b.x){
     const selection=bossArtPose(b,time),region=selection.region;this.prepare(region);
-    let v=this.visuals.get(b);if(!v){v={selection,lastX:b.x,lastY:b.y,pose:null};this.visuals.set(b,v);}v.selection=selection;v.time=time;
+    let v=this.visuals.get(b);if(!v){v={selection,lastX:b.x,lastY:b.y,pose:null};this.visuals.set(b,v);}if(v.selection?.sheet!==selection.sheet||v.selection?.frame!==selection.frame){v.previous=v.selection;v.transition=time;}v.selection=selection;v.time=time;
     if(region===4){
       const model=scorpionPoseModel(b,time,heroX),scale=(b.h||165)/393,dx=(b.x-v.lastX)/scale;
       if(!v.rig||Math.abs(dx)>150||Math.abs(b.y-v.lastY)>100)v.rig=new Rig.Rig(model);
@@ -238,17 +239,17 @@ export class BossArt{
     }
     return this.inspect(b);
   }
-  inspect(b){const v=this.visuals.get(b),region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1]));return {name:BOSS_ART[region]?.name,temporary:!!BOSS_ART[region]?.temporary,loaded:!!this.regions.get(region)?.ready,selection:v?.selection,pose:v?.pose,error:this.regions.get(region)?.error||null};}
+  inspect(b){const v=this.visuals.get(b),region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1]));return {name:BOSS_ART[region]?.name,temporary:!!BOSS_ART[region]?.temporary,loaded:!!this.regions.get(cacheRegion(region))?.ready,selection:v?.selection,pose:v?.pose,error:this.regions.get(cacheRegion(region))?.error||null};}
   draw(c,b,{time=0,alpha=1}={}){
     const v=this.visuals.get(b);if(!v)return;
-    const p=v.selection,entry=this.regions.get(p.region),x=mix(b.prevX??b.x,b.x,alpha),y=mix(b.prevY??b.y,b.y,alpha),dead=b.state==='dead';
+    const p=v.selection,entry=this.regions.get(cacheRegion(p.region)),x=mix(b.prevX??b.x,b.x,alpha),y=mix(b.prevY??b.y,b.y,alpha),dead=b.state==='dead';
     if(dead&&b.age>=1.25)return;
     c.save();c.translate(x,y);
     if(dead){if(b.legendary){c.translate(0,Math.min(1,b.age/.6)*12);c.rotate(-Math.min(1,b.age/.6)*.8);}else c.globalAlpha*=Math.max(0,1-b.age*.8);}
     if(p.temporary)drawTemporary(c,b,time);
     else if(entry?.ready){
       if(p.region===4){const s=(b.h||165)/393;c.scale(s,s);c.translate(-640,-573);drawScorpion(c,entry.textures,v.pose);}
-      else{const f=entry.frames.get(`${p.sheet}:${p.frame}`);if(f){const scale=(b.h||170)*(p.region===3?1.15:p.region===6?1.18:1.07)/f.referenceHeight;c.scale((b.face||-1)/(f.facing||-1)*scale,scale);if(dead)c.rotate(-.15*ease(b.age/.6));c.drawImage(f.canvas,-f.anchor[0],-f.anchor[1]);}}
+      else{const f=entry.frames.get(`${p.sheet}:${p.frame}`);if(f){const scale=(b.h||170)*(p.region===3?1.15:p.region===6?1.18:1.07)/f.referenceHeight;c.scale((b.face||-1)/(f.facing||-1)*scale,scale);if(dead)c.rotate(-.15*ease(b.age/.6));const blend=dead?1:Math.min(1,(time-(v.transition??-1))/.035),old=entry.frames.get(`${v.previous?.sheet}:${v.previous?.frame}`);if(old&&blend<1){c.save();c.globalAlpha*=1-blend;c.drawImage(old.canvas,-old.anchor[0],-old.anchor[1],old.crop[2],old.crop[3]);c.restore();}c.globalAlpha*=old?blend:1;c.drawImage(f.canvas,-f.anchor[0],-f.anchor[1],f.crop[2],f.crop[3]);}}
     }
     c.restore();
     if(p.temporary||!entry?.ready){
