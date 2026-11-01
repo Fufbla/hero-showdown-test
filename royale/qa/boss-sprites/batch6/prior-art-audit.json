@@ -1,0 +1,266 @@
+{
+  "base": "deb9cec7315aff8e2606e1be51db1f999b245a60",
+  "verifiedPriorFiles": 65,
+  "files": [
+    {
+      "path": "royale/assets/boss-sprites/atlas-data.mjs",
+      "blob": "5ad25d3be4e988166304979e43c84cc039e1bedf"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlas-manifest.json",
+      "blob": "b2aee6de33d91647dd172ae1de616b610169836b"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/legendary-air.png",
+      "blob": "9b78ef9a4237b0cef845ca93dcd536ead120247c"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/legendary-lightning.png",
+      "blob": "3775acbd13294abc9d96fd02074226a8483ac818"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/legendary-sonic.png",
+      "blob": "1dcaf5897cf499e05b4086447b865deaea6db4e0"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/legendary-styro.png",
+      "blob": "347a8eecbf3cd16e88dc2a449e4801370da2dede"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/legendary-styrodog.png",
+      "blob": "2e80b051852cff70d49b084d126225a95e05c0c8"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/legendary-wastelander.png",
+      "blob": "2c6955dfe2ac6d876f3774e3b3ecb07f2edf01db"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/regional-atomdust.png",
+      "blob": "a0e5d34b6abc609905ae94542ac42d95be4a2948"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/regional-bushman.png",
+      "blob": "883fbb5f3b039c1d713a68e9bbd7010a33b15fb2"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/regional-giant-scorpion-parts.png",
+      "blob": "954beacce38cb87ea4682702f9eaea39546c0836"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/regional-giant-scorpion.png",
+      "blob": "f232cca42c7cd6a48e59ec1102d2ee2de645a591"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/regional-trash-monster.png",
+      "blob": "869f1664222af5b4d1ca15e44017c5f76d4fa9a8"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/regional-ultimate-pollution.png",
+      "blob": "45c44da1c0dedca6ed716c6dbc5e7739086be767"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/regional-venomis.png",
+      "blob": "747a5fe92dc1657bd099e2da7b891f383c904720"
+    },
+    {
+      "path": "royale/assets/boss-sprites/atlases/regional-wastelander.png",
+      "blob": "1b9b8e1d3ddc5cc91e5b221c2793f342152d5f54"
+    },
+    {
+      "path": "royale/assets/boss-sprites/batch2-atlas-data.mjs",
+      "blob": "9b493b0b398bd0e14040b3a19cebc9dcd37b0bf0"
+    },
+    {
+      "path": "royale/assets/boss-sprites/batch2-atlas-manifest.json",
+      "blob": "b6c57acfd56d6ef3761676c712e6ebf75a0a23a4"
+    },
+    {
+      "path": "royale/assets/boss-sprites/batch3-atlas-data.mjs",
+      "blob": "2b6165bc44f38473ed0a2252247edcf5240b3b01"
+    },
+    {
+      "path": "royale/assets/boss-sprites/batch3-atlas-manifest.json",
+      "blob": "4a571ceb363748fb746a0db9d0d853ef9b8d427e"
+    },
+    {
+      "path": "royale/assets/boss-sprites/batch4-atlas-data.mjs",
+      "blob": "e62a3e41588d55ee7f8280ac5605ea119a4482c0"
+    },
+    {
+      "path": "royale/assets/boss-sprites/batch4-atlas-manifest.json",
+      "blob": "bc77dfda3d6c24e3fcf7a7a863649e656c963556"
+    },
+    {
+      "path": "royale/assets/boss-sprites/batch5-atlas-data.mjs",
+      "blob": "8607992615c330372350750f12fd2a5cb769df1f"
+    },
+    {
+      "path": "royale/assets/boss-sprites/batch5-atlas-manifest.json",
+      "blob": "c3def9063da3a70abd77994ce137325a57e3a416"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/01_Trash_Monster.png",
+      "blob": "90816fff1598d38b16c307207a8759300fc14496"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/02_Bushman.png",
+      "blob": "e2f368edc50d7191e2ff00b6734bf891db322e05"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/03_Wastelander.png",
+      "blob": "d7fa5b437b4e8676657c46bd780c1b9635c7b53b"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/04_Giant_Scorpion.png",
+      "blob": "5fecbab7436b376c23a426d3111b6b89a20b9157"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/05_Venomis.png",
+      "blob": "d2fe72e54e7effdb1a3557a0119e4f5bf5be2015"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/06_AtomDust.png",
+      "blob": "db263c00c0abd64d16c05d09f78332b9142051c7"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/07_Ultimate_Pollution_Boss.png",
+      "blob": "bbb12086e5bc2e353cbe656e1f0e44680c481d2d"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/MANIFEST.json",
+      "blob": "238ec43e2bb448c4cae86388bb32bc87e634991a"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/legendary/01_Lightning_Spree.png",
+      "blob": "29bd393b1c77664901bf6da5c9e9436aba93b642"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/legendary/02_Air_Pollution_Monster.png",
+      "blob": "3625a0aafa2a1488f8d6b5d0bc167c353ee01b4c"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/legendary/03_Styrodog.png",
+      "blob": "66a8f4a637845b306d612dfb8118e0f1b2122991"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/legendary/04_Sonic_Tusk.png",
+      "blob": "6a557b15f18d06e7e9c3f7a4460e2fb3a70e49b9"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/legendary/05_Dr_Styro.png",
+      "blob": "3acb1235733581f31319cdeae32b8914bfe0422e"
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/legendary/06_Wastelander.png",
+      "blob": "c87c046692d23c2c0c0de668c000480b220aa9f7"
+    },
+    {
+      "path": "royale/assets/boss-sprites/scorpion-atlas-manifest.json",
+      "blob": "1d063a0a3fa8e634bb444a69ae4bb7544ab9b69c"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch2/regional-atomdust.png",
+      "blob": "6880e867bb85d93a7ed4586a27a5cf7f7141bc14"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch2/regional-venomis.png",
+      "blob": "7d8fc1e47aa5326430debae3901ba1cc7bd6c193"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch2/scorpion-parts.png",
+      "blob": "954beacce38cb87ea4682702f9eaea39546c0836"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch3/cataclysm-hit-defeat.png",
+      "blob": "cdb308ee12945d4a18e8f85589caba05fc82c381"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch3/movement-punch.png",
+      "blob": "4b2bf23055de34bffcf3f11345c199c9353b4c0a"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch3/pollution-environment-slam.png",
+      "blob": "f82509b8f9d4433b91da13be368cf57f79e0b70e"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch4/air-1.png",
+      "blob": "f81561ef463044406fa1388596408d278de141db"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch4/air-2.png",
+      "blob": "52b8d05f20db2293001230baef7c646070052560"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch4/lightning-1.png",
+      "blob": "47b32e29d529fe32f4de72cb65930112155f6547"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch4/lightning-2.png",
+      "blob": "4467cf9d1904e9e6aeb923099359190ad9666a1c"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch4/lightning-3.png",
+      "blob": "cebc73019b26eb1e15a458f7bf1de3216999e8f4"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch4/styrodog-1.png",
+      "blob": "0acf2a17bd0f0eba4eb693c4027302deaa0bce70"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch4/styrodog-2.png",
+      "blob": "348b52ecf664243b1fe1bf7278f8970df59238d3"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch4/styrodog-3.png",
+      "blob": "1a7cba52b078d2b83cfac008a841a1a0c03fb5c6"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch5/sonic-1.png",
+      "blob": "c2c2cb09bf8979f57887e3c0e64861321436fc8f"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch5/sonic-2.png",
+      "blob": "db20d9ace79edcf35497f1a7bd5d423b01fae519"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch5/sonic-3.png",
+      "blob": "f78903f19797a80be65016dc57d164c5e99f0cb4"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch5/styro-1.png",
+      "blob": "34d863fc8a22f424d6621f6f1b6e1c0785fb0508"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch5/styro-2.png",
+      "blob": "874f5c3b0ec9f27cb4e377fd0029e1d70f6cbd68"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch5/styro-3.png",
+      "blob": "72d6222472ce1407e85107ed1c6d85735a46b0e3"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch5/wastelander-1.png",
+      "blob": "90b7948da9bd6ac6bcca841dda9bc81d4399a293"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch5/wastelander-2.png",
+      "blob": "6d03421a206edbadc58de469e44792967c636378"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch5/wastelander-3.png",
+      "blob": "b95a92b8956c31d952460f13e6a37e1b7b370cbb"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/regional-bushman.png",
+      "blob": "95a58b9d076648429b5a946f9b1e80c4e0ad0665"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/regional-trash-monster.png",
+      "blob": "ac2b133618879bce1dff5ddfca0b151b42f8fdac"
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/regional-wastelander.png",
+      "blob": "a2124315e29eab7e035b04d8572026181a73d130"
+    }
+  ]
+}

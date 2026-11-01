@@ -1,7 +1,8 @@
 // Royale-only presentation. The combat simulation remains the sole timing authority.
 import {BATCH4_SPRITE_ATLASES as BATCH4} from './assets/boss-sprites/batch4-atlas-data.mjs';
 import {BATCH5_SPRITE_ATLASES as BATCH5} from './assets/boss-sprites/batch5-atlas-data.mjs';
-const DATA={...BATCH4,bosses:{...BATCH4.bosses,...BATCH5.bosses}};
+import {BATCH6_SPRITE_ATLASES as BATCH6} from './assets/boss-sprites/batch6-atlas-data.mjs';
+const DATA={...BATCH4,bosses:{...BATCH4.bosses,...BATCH5.bosses,...BATCH6.bosses}};
 export const LEGENDARY_SPRITE_DATA=DATA;
 const clamp=n=>Math.max(0,Math.min(1,n));
 const mix=(a,b,t)=>a+(b-a)*t;

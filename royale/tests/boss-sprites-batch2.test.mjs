@@ -59,7 +59,7 @@ for(const region of [5,6]){
 
 test('Batch 2 new regional artwork cannot intercept Legendary identities or helpers',()=>{
  for(const [region,id] of [[5,'venomis'],[6,'atomdust']])for(const extra of [{legendary:true,legendaryId:id},{legendaryHelper:true,helperTheme:id}]){
-  const b={...make(region),...extra};assert.equal(usesBossSprites(b),false);const pose=bossArtPose(b,3);assert.equal(pose.region,id);assert.equal(pose.redesigned,undefined);assert.ok(pose.sheet.startsWith(id));
+  const b={...make(region),...extra};assert.equal(usesBossSprites(b),false);const pose=bossArtPose(b,3);assert.equal(pose.region,id);assert.equal(pose.redesigned,extra.legendaryHelper?undefined:true);assert.equal(pose.sheet,extra.legendaryHelper?id:`legendary-sprites-${id}`);
  }
 });
 test('old and new atlas sizes decode through the same bounded image cache',async()=>{

@@ -1,3 +1,29 @@
+# Royale boss sprites — Batch 6 / all 15 integrated
+
+Verified base: **deb9cec7315aff8e2606e1be51db1f999b245a60** on `feature/royale-boss-sprites`. Baseline: 687 automated tests passed. All 65 previously tracked boss asset files match the base byte-for-byte, preserving all 13 prior integrations.
+
+Legendary Venomis and Legendary AtomDust now use separate approved-design atlases with 44 and 40 distinct RGBA poses. Venomis retains its multiheaded green/purple serpent silhouette; AtomDust uses the orange-core armored design. Regional Venomis (Mutant Stalker) and regional AtomDust (Energy Phantom) are unchanged. Four 512-pixel cells per row share anchor `[224,480]`; Venomis uses the grounded coil base. New source sheets, exact generation prompts, approved references, packing rectangles and hashes are included under `assets/boss-sprites/` and `qa/boss-sprites/batch6/`.
+
+Only the profile composition in `legendary-sprites.mjs` changes at runtime. The existing timing, transition blend, two-atlas cache, facing, scale and phase effects are reused. No gameplay, attack, reward, save, power, skeletal-remains or regular-monster code changes. An old Batch 2 routing assertion is updated to verify the new Legendary sheets and unchanged helper routes; preservation guards explicitly permit that test-only change.
+
+## Review and validation
+
+Serve the repository root and open `royale/tests/boss-sprites-all.html` for all 15 actual game renderers and links to playable regional/Legendary practice. Compact overview fits all 15 on one desktop screen. The review releases decoded atlas caches between cards. `boss-sprites-batch6.html` demonstrates every new animation, both facings, three phases and elevated/ground anchors, with transparent atlas downloads. Practice uses disposable test saves.
+
+Full automated suite: **698 passed, 0 failed, 0 skipped**. Run `node --test royale/tests/*.test.mjs`. New focused tests cover all authored frames, timing, immutable combat state, collapse, cache bounds and all 15 redesigned identities. Native contact sheets were visually inspected; initial row-boundary clipping was corrected before final validation. **2,606 browser assertions passed**: 336 final-batch pose draws, 598 all-15 renderer checks, 920 Legendary matrix checks, 725 regional matrix checks, and 27 storage/reward edge checks. Browser evidence and performance measurements are stored separately under `qa/boss-sprites/batch6/`.
+
+Measured 30-second cloud gameplay: venomis 1.11 FPS (4.12 ms average whole-game draw), atomdust 1.32 FPS (2.55 ms average whole-game draw). Frame scheduling was much slower than drawing; its cause was not established. These are cloud-browser measurements, not physical-device benchmarks.
+
+## Limits and protected scope
+
+All 15 bosses have redesigned presentation routes; none of the two new bosses uses a static-pose fallback for missing states. These are compact four-pose sequences, not dense hand-drawn animation. Fine scales, small secondary serpent heads and armor details vary across generated poses; those details remain candidates for manual art cleanup. No physical-device testing or sustained 60 FPS certification is claimed. Native draw cost is not total game FPS. Four native renderer runs (600 draws each) averaged 0.16–0.19 ms per boss draw.
+
+Original boss names, HP, damage, cooldowns, warnings, phases, waves, rewards, level gating, disruption/restoration, fourth abilities, complete Merge suits, permanent defeats and save progression remain unchanged. All seven regional bosses and the six earlier Legendary bosses remain intact. The 21-monster project, Story and Versus are untouched. No merge and no main or Royale branch changes are included. Batch 6 ends this integration work pending final approval.
+
+---
+
+# Archived Batch 5 implementation notes
+
 # Royale boss sprites — Batch 5
 
 Sonic Tusk, Dr. Styro and Legendary Wastelander now use their approved detailed comic designs. Verified base: **ec0566750e1ff7bf665fa490b7d1e031cc2ca124** on `feature/royale-boss-sprites`. No newer remote commit was present at the initial inspection. Baseline: 672 passing automated tests.

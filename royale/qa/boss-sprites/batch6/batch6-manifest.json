@@ -1,0 +1,101 @@
+{
+  "baseCommit": "deb9cec7315aff8e2606e1be51db1f999b245a60",
+  "branch": "feature/royale-boss-sprites",
+  "added": [
+    "royale/assets/boss-sprites/atlases/legendary-atomdust.png",
+    "royale/assets/boss-sprites/atlases/legendary-venomis.png",
+    "royale/assets/boss-sprites/batch6-atlas-data.mjs",
+    "royale/assets/boss-sprites/batch6-atlas-manifest.json",
+    "royale/assets/boss-sprites/references/legendary/07_Venomis.png",
+    "royale/assets/boss-sprites/references/legendary/08_AtomDust.png",
+    "royale/assets/boss-sprites/source/batch6/atomdust-1.png",
+    "royale/assets/boss-sprites/source/batch6/atomdust-2.png",
+    "royale/assets/boss-sprites/source/batch6/atomdust-3.png",
+    "royale/assets/boss-sprites/source/batch6/venomis-1.png",
+    "royale/assets/boss-sprites/source/batch6/venomis-2.png",
+    "royale/assets/boss-sprites/source/batch6/venomis-3.png",
+    "royale/qa/boss-sprites/batch6/REVIEW.md",
+    "royale/qa/boss-sprites/batch6/all15-browser-checks.json",
+    "royale/qa/boss-sprites/batch6/all15-browser-gallery.jpg",
+    "royale/qa/boss-sprites/batch6/all15-gallery-top.jpg",
+    "royale/qa/boss-sprites/batch6/artwork-provenance.json",
+    "royale/qa/boss-sprites/batch6/atomdust-browser-game.jpg",
+    "royale/qa/boss-sprites/batch6/atomdust-browser-mobile.jpg",
+    "royale/qa/boss-sprites/batch6/atomdust-browser-performance.json",
+    "royale/qa/boss-sprites/batch6/atomdust-contact-sheet.png",
+    "royale/qa/boss-sprites/batch6/atomdust-desktop.png",
+    "royale/qa/boss-sprites/batch6/atomdust-mobile-sized.png",
+    "royale/qa/boss-sprites/batch6/automated-tests.txt",
+    "royale/qa/boss-sprites/batch6/baseline-tests.txt",
+    "royale/qa/boss-sprites/batch6/batch6-manifest.json",
+    "royale/qa/boss-sprites/batch6/browser-render-checks.json",
+    "royale/qa/boss-sprites/batch6/legendary-browser-durability.txt",
+    "royale/qa/boss-sprites/batch6/legendary-browser-matrix.txt",
+    "royale/qa/boss-sprites/batch6/legendary-browser-save-edges.txt",
+    "royale/qa/boss-sprites/batch6/preservation-audit.json",
+    "royale/qa/boss-sprites/batch6/prior-art-audit.json",
+    "royale/qa/boss-sprites/batch6/raster-performance.json",
+    "royale/qa/boss-sprites/batch6/regional-browser-matrix.txt",
+    "royale/qa/boss-sprites/batch6/staged-automated-tests.txt",
+    "royale/qa/boss-sprites/batch6/venomis-browser-game.jpg",
+    "royale/qa/boss-sprites/batch6/venomis-browser-mobile.jpg",
+    "royale/qa/boss-sprites/batch6/venomis-browser-performance.json",
+    "royale/qa/boss-sprites/batch6/venomis-contact-sheet.png",
+    "royale/qa/boss-sprites/batch6/venomis-desktop.png",
+    "royale/qa/boss-sprites/batch6/venomis-mobile-sized.png",
+    "royale/tests/boss-sprites-all.html",
+    "royale/tests/boss-sprites-all.mjs",
+    "royale/tests/boss-sprites-batch6-review.mjs",
+    "royale/tests/boss-sprites-batch6.html",
+    "royale/tests/boss-sprites-batch6.test.mjs",
+    "royale/tools/pack-boss-sprites-batch6.mjs",
+    "royale/tools/review-boss-sprites-batch6.mjs"
+  ],
+  "modified": [
+    "royale/BOSS-SPRITES.md",
+    "royale/legendary-sprites.mjs",
+    "royale/tests/boss-sprites-batch2.test.mjs",
+    "royale/tests/boss-sprites-batch4.test.mjs",
+    "royale/tests/boss-sprites-batch5.test.mjs"
+  ],
+  "deleted": [],
+  "automatedTests": {
+    "baselinePassed": 687,
+    "finalPassed": 698,
+    "failed": 0,
+    "skipped": 0
+  },
+  "browserChecks": {
+    "newPoseDraws": 336,
+    "all15States": 598,
+    "legendaryMatrix": 920,
+    "durability": 10,
+    "rewardSaveEdges": 17,
+    "regionalMatrix": 725,
+    "total": 2606
+  },
+  "manualVisualReview": [
+    "All 84 new poses inspected in native contact sheets",
+    "All 15 actual renderer presentations inspected in browser gallery",
+    "Both new bosses inspected in their arenas at desktop and mobile sizes"
+  ],
+  "limitations": [
+    "Four poses per sequence; fine scales, small secondary heads and armor details vary",
+    "Cloud gameplay measured Venomis 1.11 FPS and AtomDust 1.32 FPS; sustained 60 FPS unverified",
+    "No physical-device or unassisted-victory testing"
+  ],
+  "protected": [
+    "All 13 previous integrations and 65 prior boss asset files unchanged",
+    "21 regular-monster project untouched",
+    "Gameplay, saves, Story and Versus unchanged",
+    "No branch merges"
+  ],
+  "sourceSheets": 6,
+  "newDistinctPoses": {
+    "venomis": 44,
+    "atomdust": 40
+  },
+  "runtimeChanges": [
+    "royale/legendary-sprites.mjs: add Batch 6 profile map only"
+  ]
+}
