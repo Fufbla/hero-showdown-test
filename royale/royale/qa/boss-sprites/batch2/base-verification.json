@@ -1,0 +1,314 @@
+{
+  "branch": "feature/royale-boss-sprites",
+  "baseCommit": "f140ba3083090a6959f3d8951d2bcc063fa5385d",
+  "remoteTreeSha": "fa99b02467888568e1d99db30658f05073d710f6",
+  "verifiedAt": "2026-11-01",
+  "batch1Files": 50,
+  "allMatch": true,
+  "missing": [],
+  "different": [],
+  "verification": "Read remote GitHub branch/tree; compare all 50 Batch 1 archive files using Git blob SHA1, then independently clone exact branch head. Baseline: 637 tests passed.",
+  "recovery": "Existing Batch 1 source sheets, packed atlases, integration and review checkpoints recovered and verified. No completed Batch 2 redesigned animation checkpoint was available. Reused approved references and existing eight-leg IK rig; generated only missing Batch 2 artwork.",
+  "files": [
+    {
+      "file": "royale/BOSS-SPRITES.md",
+      "expectedGitBlobSha": "67a1fbf1961c07a11f1d246968fdf968be80e81f",
+      "remoteGitBlobSha": "67a1fbf1961c07a11f1d246968fdf968be80e81f",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/atlas-data.mjs",
+      "expectedGitBlobSha": "5ad25d3be4e988166304979e43c84cc039e1bedf",
+      "remoteGitBlobSha": "5ad25d3be4e988166304979e43c84cc039e1bedf",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/atlas-manifest.json",
+      "expectedGitBlobSha": "b2aee6de33d91647dd172ae1de616b610169836b",
+      "remoteGitBlobSha": "b2aee6de33d91647dd172ae1de616b610169836b",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/atlases/regional-bushman.png",
+      "expectedGitBlobSha": "883fbb5f3b039c1d713a68e9bbd7010a33b15fb2",
+      "remoteGitBlobSha": "883fbb5f3b039c1d713a68e9bbd7010a33b15fb2",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/atlases/regional-trash-monster.png",
+      "expectedGitBlobSha": "869f1664222af5b4d1ca15e44017c5f76d4fa9a8",
+      "remoteGitBlobSha": "869f1664222af5b4d1ca15e44017c5f76d4fa9a8",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/atlases/regional-wastelander.png",
+      "expectedGitBlobSha": "1b9b8e1d3ddc5cc91e5b221c2793f342152d5f54",
+      "remoteGitBlobSha": "1b9b8e1d3ddc5cc91e5b221c2793f342152d5f54",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/references/01_Trash_Monster.png",
+      "expectedGitBlobSha": "90816fff1598d38b16c307207a8759300fc14496",
+      "remoteGitBlobSha": "90816fff1598d38b16c307207a8759300fc14496",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/references/02_Bushman.png",
+      "expectedGitBlobSha": "e2f368edc50d7191e2ff00b6734bf891db322e05",
+      "remoteGitBlobSha": "e2f368edc50d7191e2ff00b6734bf891db322e05",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/references/03_Wastelander.png",
+      "expectedGitBlobSha": "d7fa5b437b4e8676657c46bd780c1b9635c7b53b",
+      "remoteGitBlobSha": "d7fa5b437b4e8676657c46bd780c1b9635c7b53b",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/references/MANIFEST.json",
+      "expectedGitBlobSha": "238ec43e2bb448c4cae86388bb32bc87e634991a",
+      "remoteGitBlobSha": "238ec43e2bb448c4cae86388bb32bc87e634991a",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/source/regional-bushman.png",
+      "expectedGitBlobSha": "95a58b9d076648429b5a946f9b1e80c4e0ad0665",
+      "remoteGitBlobSha": "95a58b9d076648429b5a946f9b1e80c4e0ad0665",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/source/regional-trash-monster.png",
+      "expectedGitBlobSha": "ac2b133618879bce1dff5ddfca0b151b42f8fdac",
+      "remoteGitBlobSha": "ac2b133618879bce1dff5ddfca0b151b42f8fdac",
+      "matches": true
+    },
+    {
+      "file": "royale/assets/boss-sprites/source/regional-wastelander.png",
+      "expectedGitBlobSha": "a2124315e29eab7e035b04d8572026181a73d130",
+      "remoteGitBlobSha": "a2124315e29eab7e035b04d8572026181a73d130",
+      "matches": true
+    },
+    {
+      "file": "royale/boss-sprites.mjs",
+      "expectedGitBlobSha": "8bc6df908774d6e80ee0f266148277b5abe792c0",
+      "remoteGitBlobSha": "8bc6df908774d6e80ee0f266148277b5abe792c0",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/VALIDATION.md",
+      "expectedGitBlobSha": "8e30c5d5fcd2825db3f29ad79ca5abc6fd8e4677",
+      "remoteGitBlobSha": "8e30c5d5fcd2825db3f29ad79ca5abc6fd8e4677",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/automated-tests.txt",
+      "expectedGitBlobSha": "95e8355af1501c2798882c02a75732bca041e97b",
+      "remoteGitBlobSha": "95e8355af1501c2798882c02a75732bca041e97b",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/baseline-tests.txt",
+      "expectedGitBlobSha": "88e81b4b747b29b8a3ee1df4ed9ad3f9e58829ed",
+      "remoteGitBlobSha": "88e81b4b747b29b8a3ee1df4ed9ad3f9e58829ed",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-attack-alignment.jpg",
+      "expectedGitBlobSha": "5963781a2d5e1814be647f42efea72f5336820b5",
+      "remoteGitBlobSha": "5963781a2d5e1814be647f42efea72f5336820b5",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-bushman-performance.json",
+      "expectedGitBlobSha": "bd0a49d7d58bb5be73d03a7de1a6d4c013be0909",
+      "remoteGitBlobSha": "bd0a49d7d58bb5be73d03a7de1a6d4c013be0909",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-bushman-review.jpg",
+      "expectedGitBlobSha": "5216c175aec7ae4b720987ea9dedcff192675587",
+      "remoteGitBlobSha": "5216c175aec7ae4b720987ea9dedcff192675587",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-game-performance.json",
+      "expectedGitBlobSha": "5d5544eee47352417a4bbd5c743b8384c7540b3a",
+      "remoteGitBlobSha": "5d5544eee47352417a4bbd5c743b8384c7540b3a",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-gameplay-tests.txt",
+      "expectedGitBlobSha": "2d37558bc3ad89579822c793bbaba5f6fc07dc9f",
+      "remoteGitBlobSha": "2d37558bc3ad89579822c793bbaba5f6fc07dc9f",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-playable-encounter.jpg",
+      "expectedGitBlobSha": "a71c726902232f4c7c602abf6b585ae1fd64132e",
+      "remoteGitBlobSha": "a71c726902232f4c7c602abf6b585ae1fd64132e",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-preview-performance.json",
+      "expectedGitBlobSha": "20a2ef5d3a2c2ed793bb86b908ab001dafd09109",
+      "remoteGitBlobSha": "20a2ef5d3a2c2ed793bb86b908ab001dafd09109",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-renderer-tests.json",
+      "expectedGitBlobSha": "5238717feaeb5aa7551d99e666a37ba8ab6ab149",
+      "remoteGitBlobSha": "5238717feaeb5aa7551d99e666a37ba8ab6ab149",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-trash-review.jpg",
+      "expectedGitBlobSha": "a85e0f6392be7f6c32414cf0e6833c1a489df411",
+      "remoteGitBlobSha": "a85e0f6392be7f6c32414cf0e6833c1a489df411",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-wastelander-performance.json",
+      "expectedGitBlobSha": "a410023864a8f716f5ec1fdd0c71df819136eb8b",
+      "remoteGitBlobSha": "a410023864a8f716f5ec1fdd0c71df819136eb8b",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/browser-wastelander-review.jpg",
+      "expectedGitBlobSha": "0ba4a90e671a1c0e66369be0ac173687f44486a5",
+      "remoteGitBlobSha": "0ba4a90e671a1c0e66369be0ac173687f44486a5",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/focused-tests.txt",
+      "expectedGitBlobSha": "db9d357ddf6aa5bf5cb72999742fdef271283d30",
+      "remoteGitBlobSha": "db9d357ddf6aa5bf5cb72999742fdef271283d30",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/raster-performance.json",
+      "expectedGitBlobSha": "6baf4e725750562e72dade7610e87aef8eeaaaf4",
+      "remoteGitBlobSha": "6baf4e725750562e72dade7610e87aef8eeaaaf4",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/regional-1-contact-sheet.png",
+      "expectedGitBlobSha": "f9763919120498d5c53d64f35764869ade7fd63d",
+      "remoteGitBlobSha": "f9763919120498d5c53d64f35764869ade7fd63d",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/regional-1-desktop.png",
+      "expectedGitBlobSha": "ebd810147ff14c9ffa0ece465672d8a1597f0732",
+      "remoteGitBlobSha": "ebd810147ff14c9ffa0ece465672d8a1597f0732",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/regional-1-mobile-sized.png",
+      "expectedGitBlobSha": "b048dd55737fea490c185838c9672ccfa01854a8",
+      "remoteGitBlobSha": "b048dd55737fea490c185838c9672ccfa01854a8",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/regional-2-contact-sheet.png",
+      "expectedGitBlobSha": "100c88426f9f23613481a358c22a63b3da58f496",
+      "remoteGitBlobSha": "100c88426f9f23613481a358c22a63b3da58f496",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/regional-2-desktop.png",
+      "expectedGitBlobSha": "4ff4a40c8d75f8390985023546d497098e6799db",
+      "remoteGitBlobSha": "4ff4a40c8d75f8390985023546d497098e6799db",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/regional-2-mobile-sized.png",
+      "expectedGitBlobSha": "5b40803f9147a436d5ac4de2c57a24980ce2512b",
+      "remoteGitBlobSha": "5b40803f9147a436d5ac4de2c57a24980ce2512b",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/regional-3-contact-sheet.png",
+      "expectedGitBlobSha": "7650a78952b7aded90fe3e84f369c4b49e2f9c70",
+      "remoteGitBlobSha": "7650a78952b7aded90fe3e84f369c4b49e2f9c70",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/regional-3-desktop.png",
+      "expectedGitBlobSha": "fe9b169d93c147112f9e65f4235d83ae74a5b378",
+      "remoteGitBlobSha": "fe9b169d93c147112f9e65f4235d83ae74a5b378",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/regional-3-mobile-sized.png",
+      "expectedGitBlobSha": "fc47a6e9de4f30036174ab7f4621ed50f0010452",
+      "remoteGitBlobSha": "fc47a6e9de4f30036174ab7f4621ed50f0010452",
+      "matches": true
+    },
+    {
+      "file": "royale/qa/boss-sprites/test-summary.json",
+      "expectedGitBlobSha": "9f411c317e44adfd399c43bcd80b2f24f830adaa",
+      "remoteGitBlobSha": "9f411c317e44adfd399c43bcd80b2f24f830adaa",
+      "matches": true
+    },
+    {
+      "file": "royale/tests/boss-sprites-review.mjs",
+      "expectedGitBlobSha": "ccd6f3e2b8cc89e92ec0cc353f1fed9261e4560b",
+      "remoteGitBlobSha": "ccd6f3e2b8cc89e92ec0cc353f1fed9261e4560b",
+      "matches": true
+    },
+    {
+      "file": "royale/tests/boss-sprites.html",
+      "expectedGitBlobSha": "9c9a23d3c31c184ea06a1576ecfd443c91c5b68c",
+      "remoteGitBlobSha": "9c9a23d3c31c184ea06a1576ecfd443c91c5b68c",
+      "matches": true
+    },
+    {
+      "file": "royale/tests/boss-sprites.test.mjs",
+      "expectedGitBlobSha": "d73b980ca404aeca9152c4dbce9475c51a8e258e",
+      "remoteGitBlobSha": "d73b980ca404aeca9152c4dbce9475c51a8e258e",
+      "matches": true
+    },
+    {
+      "file": "royale/tools/pack-boss-sprites.mjs",
+      "expectedGitBlobSha": "748747d2b938ebd3eab1102e4f9ce9e9c4696f85",
+      "remoteGitBlobSha": "748747d2b938ebd3eab1102e4f9ce9e9c4696f85",
+      "matches": true
+    },
+    {
+      "file": "royale/tools/review-boss-sprites.mjs",
+      "expectedGitBlobSha": "936db726f01cd5471bbfef545eaa0f1e4f216452",
+      "remoteGitBlobSha": "936db726f01cd5471bbfef545eaa0f1e4f216452",
+      "matches": true
+    },
+    {
+      "file": "royale/boss-art.mjs",
+      "expectedGitBlobSha": "6dc5e25f611b43986bbc86e36b30e2281ea30135",
+      "remoteGitBlobSha": "6dc5e25f611b43986bbc86e36b30e2281ea30135",
+      "matches": true
+    },
+    {
+      "file": "royale/boss-ui.mjs",
+      "expectedGitBlobSha": "f8909f05fc28ed5ff2833df26605d954b0daabe8",
+      "remoteGitBlobSha": "f8909f05fc28ed5ff2833df26605d954b0daabe8",
+      "matches": true
+    },
+    {
+      "file": "royale/tests/boss-art.test.mjs",
+      "expectedGitBlobSha": "b62d2d66fd7c5a2edd96fb0a7ca89b64f1bbc94e",
+      "remoteGitBlobSha": "b62d2d66fd7c5a2edd96fb0a7ca89b64f1bbc94e",
+      "matches": true
+    },
+    {
+      "file": "royale/tests/bosses.html",
+      "expectedGitBlobSha": "bfa81ca1dac9e9d858a82cd810525306971d4591",
+      "remoteGitBlobSha": "bfa81ca1dac9e9d858a82cd810525306971d4591",
+      "matches": true
+    },
+    {
+      "file": "royale/tests/phase5-checks.mjs",
+      "expectedGitBlobSha": "6d31a35a580431fba32fc5ed3c778e824335b15b",
+      "remoteGitBlobSha": "6d31a35a580431fba32fc5ed3c778e824335b15b",
+      "matches": true
+    }
+  ]
+}

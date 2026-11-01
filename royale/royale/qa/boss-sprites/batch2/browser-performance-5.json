@@ -1,0 +1,8 @@
+{
+  "boss": "Venomis",
+  "frames": 15,
+  "meanFrameMs": 697.6199999999992,
+  "p95FrameMs": 1016.5,
+  "averageFPS": 1.4334451420544152,
+  "scope": "Browser animation preview, not full-game or physical-device performance"
+}
