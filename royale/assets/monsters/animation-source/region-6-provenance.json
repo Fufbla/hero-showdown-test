@@ -1,0 +1,11 @@
+{
+  "generator": "built-in image_gen",
+  "referenceFiles": [
+    "poses/wisp.png",
+    "poses/phantom.png",
+    "poses/sentinel.png"
+  ],
+  "specification": "Thirty separately drawn comic poses per approved design: six idle, six movement, six anticipation/strike/recovery, six hit and six collapse. Connected purple flame motion for Shadow Wisp; articulated armor and casting poses for Energy Phantom and Dark Sentinel. Transparent backgrounds, constant body scale, no detached projectiles or new weapons.",
+  "packaging": "Complete source silhouettes packed into aligned 320x256 cells. Original masters retained unchanged.",
+  "review": "User animation approval and physical-device tests pending."
+}
