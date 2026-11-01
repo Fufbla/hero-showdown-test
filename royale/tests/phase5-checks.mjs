@@ -1,9 +1,11 @@
 import { BOSSES } from '../boss-data.mjs';
-import { BossArt } from '../boss-art.mjs';
+import { BossArt, BOSS_ART } from '../boss-art.mjs';
 import { makeBoss, arenaSurfaces } from '../bosses.mjs';
 import { PROFILE_KEY } from '../saves.mjs';
 import { saveBossFixture, fixtureCommand } from './boss-fixture.mjs';
 const $=id=>document.getElementById(id),frame=$('boss-frame'),report=$('report'),archive=$('suite-log'),run=$('run-boss-checks');
+const spriteBatch=new URLSearchParams(location.search).get('spriteBatch')==='1',regions=spriteBatch?[1,2,3]:[1,2,3,4,5,6,7];
+if(spriteBatch)run.textContent='Run Batch 1 bosses at five sizes';
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const until=async fn=>{const end=Date.now()+120000;while(!fn()){if(Date.now()>end)throw Error('Browser UI timed out');await wait(40);}};
 run.onclick=async()=>{
@@ -11,13 +13,13 @@ run.onclick=async()=>{
   const check=(name,ok)=>{const line=`${ok?'PASS':'FAIL'} · ${name}\n`;archive.textContent+=line;report.textContent=archive.textContent.slice(-3600);if(!ok)throw Error(name);passed++;};
   try{
     const art=new BossArt(),canvas=document.createElement('canvas');canvas.width=620;canvas.height=440;const c=canvas.getContext('2d',{willReadFrequently:true}),hashes=[];
-    for(let region=1;region<=7;region++){
+    for(const region of regions){
       art.prepare(region);await art.whenLoaded;const b=makeBoss(region,arenaSurfaces()[0]);b.x=310;b.y=420;art.step(b,0,1/60,b.x-100);c.clearRect(0,0,620,440);art.draw(c,b,{time:0,alpha:1});
       const pixels=c.getImageData(0,0,620,440).data;let ink=0,hash=2166136261;for(let i=0;i<pixels.length;i+=4){if(pixels[i+3])ink++;hash=Math.imul(hash^pixels[i],16777619);}
-      hashes.push(hash);check(`${BOSSES[region].name}: artwork loads, renders and labels temporary art correctly`,art.ready&&art.errors.length===0&&ink>100&&art.inspect(b).temporary===(BOSSES[region].art==='temporary'));
+      hashes.push(hash);check(`${BOSSES[region].name}: artwork loads, renders and labels temporary art correctly`,art.ready&&art.errors.length===0&&ink>100&&art.inspect(b).temporary===BOSS_ART[region].temporary);
     }
-    check('all seven bosses render distinct silhouettes',new Set(hashes).size===7);
-    for(const [width,height] of [[390,844],[844,390],[320,568],[768,1024],[1280,800]])for(let region=1;region<=7;region++){
+    check(`all ${regions.length} bosses render distinct silhouettes`,new Set(hashes).size===regions.length);
+    for(const [width,height] of [[390,844],[844,390],[320,568],[768,1024],[1280,800]])for(const region of regions){
       const label=`${width}×${height} · ${BOSSES[region].name}`,session=`boss-checks-${Date.now()}-${region}`,key=`royale-test-${session}:${PROFILE_KEY}`;
       report.textContent=`Running ${label}…`;frame.style.width=width+'px';frame.style.height=height+'px';saveBossFixture(session,region,['brawler','ranged','control'][(region-1)%3],region>2);
       let d,w,el;
@@ -28,6 +30,7 @@ run.onclick=async()=>{
       const command=(action,value)=>fixtureCommand(frame,action,value);
       await new Promise(r=>{frame.onload=r;frame.src=`../?qa=1&touch=1&testSession=${session}`;});await attach();
       check(`${label}: immediate full-HP boss and recommended-level hero`,Number(el('boss-health').getAttribute('aria-valuenow'))===BOSSES[region].hp&&el('level').textContent===String(BOSSES[region].level));
+      check(`${label}: HUD artwork status follows the active presentation`,el('boss-art-note').textContent===(BOSS_ART[region].temporary?'TEMPORARY BOSS ART':''));
       check(`${label}: boss bar, HP and XP fit without overlap`,inside(el('boss-hud'))&&inside(el('hp-text'))&&inside(el('xp-text'))&&el('boss-hud').getBoundingClientRect().top>=el('xp-text').getBoundingClientRect().bottom);
       check(`${label}: three power buttons and touch controls fit`,d.querySelectorAll('.power-button:not([hidden])').length===3&&[...d.querySelectorAll('.power-button:not([hidden])')].every(inside)&&inside(el('stick'))&&inside(d.querySelector('[data-control="jump"]')));
       el('pause').click();check(`${label}: saving, Tree and checkpoint escape blocked`,el('manual-save').disabled&&el('tree-from-pause').disabled&&el('return-camp').disabled);
@@ -54,7 +57,7 @@ run.onclick=async()=>{
       await command('retreat');check(`${label}: walking exit returns to exploration`,!(await command('status')).boss);
       archive.textContent+=`DONE · ${label}\n`;
     }
-    report.textContent=`COMPLETE · ${passed} Phase 5 browser assertions passed. Seven bosses × five viewports. Synthetic browser checks, not physical devices. Full log below.`;
+    report.textContent=`COMPLETE · ${passed} Phase 5 browser assertions passed. ${regions.length} bosses × five viewports. Synthetic browser checks, not physical devices. Full log below.`;
   }catch(error){report.textContent+=`\nSTOPPED · ${error.message}\n${frame.contentDocument?.getElementById('diagnostics')?.textContent||''}`;archive.textContent+=report.textContent;}
   finally{run.disabled=false;}
 };

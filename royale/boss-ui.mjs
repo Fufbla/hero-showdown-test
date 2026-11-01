@@ -1,6 +1,7 @@
 import { LEGENDARY } from './legendary-data.mjs';
 import { BOSSES, ARENA } from './boss-data.mjs';
 import { itemDefinition } from './equipment.mjs';
+import { usesBossSprites } from './boss-sprites.mjs';
 const $=id=>document.getElementById(id);
 const node=(tag,text,className='')=>{const n=document.createElement(tag);n.textContent=text;n.className=className;return n;};
 export function updateBossHud(game,visible){
@@ -10,7 +11,7 @@ export function updateBossHud(game,visible){
   bar.dataset.phase=b.phase;$('boss-health-fill').style.width=`${100*b.hp/b.maxHp}%`;
   $('boss-health').setAttribute('aria-valuenow',String(Math.ceil(b.hp)));$('boss-health').setAttribute('aria-valuemax',String(b.maxHp));
   const wave=game.bossEncounter?.waveWarning>0?'Reinforcements incoming · three helpers':b.state==='windup'?b.attack.label:b.state==='recover'?'Recovery window · strike now':scene.cleared?'First victories unlock the next region. Exit left to return.':b.hp<=0?'Finish the helpers to confirm victory.':'Move left through the exit to retreat at any time.';
-  $('boss-cue').textContent=wave;$('boss-art-note').textContent=def.art==='temporary'?'TEMPORARY BOSS ART':'';
+  $('boss-cue').textContent=wave;$('boss-art-note').textContent=def.art==='temporary'&&!usesBossSprites(b)?'TEMPORARY BOSS ART':'';
 }
 export function openChestMenu(game,onClaim){
   const chest=game.availableChest(),contents=$('chest-contents'),owned=$('chest-owned');contents.replaceChildren();owned.replaceChildren();

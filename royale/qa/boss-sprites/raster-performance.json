@@ -1,0 +1,62 @@
+[
+  {
+    "region": 1,
+    "name": "desktop",
+    "width": 1280,
+    "height": 720,
+    "frames": 600,
+    "mean_ms": 0.16367263666666437,
+    "p95_ms": 1.0865589999999656,
+    "scope": "Headless raster boss renderer only; no browser FPS or physical-device claim"
+  },
+  {
+    "region": 1,
+    "name": "mobile-sized",
+    "width": 390,
+    "height": 844,
+    "frames": 600,
+    "mean_ms": 0.11499431500000128,
+    "p95_ms": 0.9732019999999011,
+    "scope": "Headless raster boss renderer only; no browser FPS or physical-device claim"
+  },
+  {
+    "region": 2,
+    "name": "desktop",
+    "width": 1280,
+    "height": 720,
+    "frames": 600,
+    "mean_ms": 0.14377244166666703,
+    "p95_ms": 1.1254659999999603,
+    "scope": "Headless raster boss renderer only; no browser FPS or physical-device claim"
+  },
+  {
+    "region": 2,
+    "name": "mobile-sized",
+    "width": 390,
+    "height": 844,
+    "frames": 600,
+    "mean_ms": 0.11326840833333411,
+    "p95_ms": 0.9394919999999729,
+    "scope": "Headless raster boss renderer only; no browser FPS or physical-device claim"
+  },
+  {
+    "region": 3,
+    "name": "desktop",
+    "width": 1280,
+    "height": 720,
+    "frames": 600,
+    "mean_ms": 0.09478990166667169,
+    "p95_ms": 0.7907030000001214,
+    "scope": "Headless raster boss renderer only; no browser FPS or physical-device claim"
+  },
+  {
+    "region": 3,
+    "name": "mobile-sized",
+    "width": 390,
+    "height": 844,
+    "frames": 600,
+    "mean_ms": 0.11010133500000166,
+    "p95_ms": 0.9148470000000088,
+    "scope": "Headless raster boss renderer only; no browser FPS or physical-device claim"
+  }
+]

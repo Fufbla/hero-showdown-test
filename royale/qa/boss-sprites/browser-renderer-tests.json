@@ -1,0 +1,6 @@
+{
+  "checks": 75,
+  "failures": [],
+  "passed": true,
+  "scope": "Browser image decoding, actual canvas draws, state isolation and contact timing"
+}

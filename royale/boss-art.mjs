@@ -11,6 +11,7 @@ import * as SonicModule from '../assets/animation/sonic-tusk-atlas.js';
 import * as StyroModule from '../assets/animation/styro-atlas.js';
 import { LEGENDARY } from './legendary-data.mjs';
 import * as FighterModule from '../assets/villain-motion/fighter-atlas.js';
+import {BossSprites,BOSS_SPRITE_DATA,bossSpritePose,isBossSpriteRegion,usesBossSprites} from './boss-sprites.mjs';
 
 const Shore=ShoreModule.default||globalThis.HealthiaShoreBoss;
 const Rig=RigModule.default||globalThis.HealthiaScorpionRigCore;
@@ -27,7 +28,7 @@ const choose=(frames,q)=>frames[Math.min(frames.length-1,Math.floor(clamp(q)*fra
 
 export const BOSS_ART=Object.freeze({
   ...Object.fromEntries(Object.entries(LEGENDARY).map(([id,d])=>[id,{name:d.name,temporary:false}])),
-  1:{name:'Trash Monster',temporary:true},
+  1:{name:'Trash Monster',temporary:false},
   2:{name:'Bushman',temporary:false},
   3:{name:'Wastelander',temporary:false},
   4:{name:'Giant Scorpion',temporary:false},
@@ -36,6 +37,7 @@ export const BOSS_ART=Object.freeze({
   7:{name:'Ultimate Pollution Boss',temporary:true},
 });
 export const BOSS_ART_DEPENDENCIES=Object.freeze([
+  ...Object.values(BOSS_SPRITE_DATA.bosses).map(b=>b.file),
   'assets/animation/lightening-spree-atlas.js','assets/animation/lightening-spree-poses.png','assets/animation/air-pollution-atlas.js','assets/animation/air-pollution-poses.png','assets/animation/styrodog-atlas.js','assets/animation/styrodog-presence.png','assets/animation/styrodog-attacks.png','assets/animation/sonic-tusk-atlas.js','assets/animation/sonic-tusk-presence.png','assets/animation/sonic-tusk-attacks.png','assets/animation/sonic-tusk-walk.png','assets/animation/styro-atlas.js','assets/animation/styro-presence.png','assets/animation/styro-attacks.png',
   'assets/shore/boss-core.js','assets/shore/boss-parts.png','assets/scorpion-rig/rig-core.js',
   'assets/animation/bushman-animation-atlas.js','assets/animation/bushman-presence.png','assets/animation/bushman-walk.png','assets/animation/bushman-reactions.png','assets/animation/bushman-attacks.png',
@@ -45,8 +47,9 @@ export const BOSS_ART_DEPENDENCIES=Object.freeze([
 ]);
 
 // Pose selection has no simulation side effects or independent attack timer.
-export function bossArtPose(b,time=0){
+export function bossArtPose(b,time=0,{legacy=false}={}){
   if(b.legendaryId||b.helperTheme)return legendaryArtPose(b,time);
+  if(!legacy&&usesBossSprites(b))return bossSpritePose(b,time);
   const region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1])),kind=b.attack?.kind||'',p=progress(b),stage=phaseIndex(b);
   const moving=Math.abs((b.x||0)-(b.prevX??b.x??0))>.01||Math.abs(b.vx||0)>3;
   const walking=Math.floor(((time*1.4)%1+1)%1*8),idle=Math.floor(((time/2.4)%1+1)%1*4);
@@ -84,7 +87,7 @@ export function legendaryArtPose(b,time=0){
   const id=b.legendaryId||b.helperTheme,p=progress(b),stage=phaseIndex(b),kind=b.attack?.kind||'',walking=Math.floor(time*9)%8,moving=Math.abs(b.x-(b.prevX??b.x))>.01;
   if(['wastelander','venomis','atomdust'].includes(id)){
     const region={wastelander:3,venomis:5,atomdust:6}[id],translated=kind.includes('shot')||kind.includes('fan')?'poison':kind.includes('punch')?'punch':kind.includes('toxic')?'toxic':kind.includes('ground')?'hazard':kind.includes('blast')?'blast':'vines';
-    const pose=bossArtPose({...b,legendaryId:null,helperTheme:null,region,attack:b.attack?{...b.attack,kind:translated}:null,state:b.legendaryHelper?'idle':b.state},time);return {...pose,region:id};
+    const pose=bossArtPose({...b,legendaryId:null,helperTheme:null,region,attack:b.attack?{...b.attack,kind:translated}:null,state:b.legendaryHelper?'idle':b.state},time,{legacy:true});return {...pose,region:id};
   }
   const idle=b.state==='idle'||b.legendaryHelper,dead=b.state==='dead';let frame;
   if(id==='lightning')frame=dead?14:idle?Math.floor(time*2)%3:choose((kind==='crystalBeam'?[[4,5],[6,7],[5,0]]:[[8,9],[10,11],[12,13]])[stage],p);
@@ -192,9 +195,10 @@ function drawTemporary(c,b,time){
 
 const cacheRegion=id=>({wastelander:3,venomis:5,atomdust:6})[id]||id;
 export class BossArt{
-  constructor({loadImages=typeof Image!=='undefined'}={}){this.loadImages=loadImages;this.regions=new Map();this.visuals=new WeakMap();this.errors=[];this.currentRegion=0;this.whenLoaded=Promise.resolve(true);}
-  get ready(){return !!this.regions.get(this.currentRegion)?.ready;}
+  constructor({loadImages=typeof Image!=='undefined',spriteImageLoader,spriteCanvasFactory}={}){this.loadImages=loadImages;this.sprites=new BossSprites({loadImages,imageLoader:spriteImageLoader,canvasFactory:spriteCanvasFactory});this.regions=new Map();this.visuals=new WeakMap();this.errors=[];this.currentRegion=0;this.whenLoaded=Promise.resolve(true);this.spriteActive=false;}
+  get ready(){return this.spriteActive?this.sprites.ready:!!this.regions.get(this.currentRegion)?.ready;}
   prepare(region){
+    this.spriteActive=isBossSpriteRegion(region);if(this.spriteActive){this.currentRegion=region;this.whenLoaded=this.sprites.prepare(region);return this.whenLoaded;}
     region=cacheRegion(region);this.currentRegion=region;if(this.regions.has(region)){const entry=this.regions.get(region);this.regions.delete(region);this.regions.set(region,entry);this.whenLoaded=entry.promise;return this.whenLoaded;}
     const entry={ready:BOSS_ART[region]?.temporary||false,frames:new Map(),textures:null};this.regions.set(region,entry);while(this.regions.size>3)this.regions.delete(this.regions.keys().next().value);
     if(entry.ready||!this.loadImages){entry.promise=Promise.resolve(entry.ready);this.whenLoaded=entry.promise;return entry.promise;}
@@ -205,6 +209,7 @@ export class BossArt{
     }catch(error){this.errors.push(error.message);entry.error=error.message;return false;}})();this.whenLoaded=entry.promise;return entry.promise;
   }
   step(b,time,dt,heroX=b.x){
+    if(usesBossSprites(b)){this.prepare(b.region??b.regionId);return this.sprites.step(b,time);}
     const selection=bossArtPose(b,time),region=selection.region;this.prepare(region);
     let v=this.visuals.get(b);if(!v){v={selection,lastX:b.x,lastY:b.y,pose:null};this.visuals.set(b,v);}if(v.selection?.sheet!==selection.sheet||v.selection?.frame!==selection.frame){v.previous=v.selection;v.transition=time;}v.selection=selection;v.time=time;
     if(region===4){
@@ -239,8 +244,9 @@ export class BossArt{
     }
     return this.inspect(b);
   }
-  inspect(b){const v=this.visuals.get(b),region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1]));return {name:BOSS_ART[region]?.name,temporary:!!BOSS_ART[region]?.temporary,loaded:!!this.regions.get(cacheRegion(region))?.ready,selection:v?.selection,pose:v?.pose,error:this.regions.get(cacheRegion(region))?.error||null};}
+  inspect(b){if(usesBossSprites(b))return this.sprites.inspect(b);const v=this.visuals.get(b),region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1]));return {name:BOSS_ART[region]?.name,temporary:!!BOSS_ART[region]?.temporary,loaded:!!this.regions.get(cacheRegion(region))?.ready,selection:v?.selection,pose:v?.pose,error:this.regions.get(cacheRegion(region))?.error||null};}
   draw(c,b,{time=0,alpha=1}={}){
+    if(usesBossSprites(b)){this.sprites.draw(c,b,{time,alpha});return;}
     const v=this.visuals.get(b);if(!v)return;
     const p=v.selection,entry=this.regions.get(cacheRegion(p.region)),x=mix(b.prevX??b.x,b.x,alpha),y=mix(b.prevY??b.y,b.y,alpha),dead=b.state==='dead';
     if(dead&&b.age>=1.25)return;
