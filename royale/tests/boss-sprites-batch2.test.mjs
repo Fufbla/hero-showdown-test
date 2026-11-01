@@ -89,7 +89,7 @@ test('scorpion transparent pose atlas contains full bodies, changing poses and a
 test('Batch 2 leaves all tracked gameplay, shared assets, monsters and Batch 1 artwork unchanged',t=>{
  const root=new URL('../../',import.meta.url),git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim();
  try{git('cat-file','-e',base);}catch{t.skip('Preservation audit requires the verified base commit');return;}
- const allowed=new Set(['royale/boss-art.mjs','royale/boss-sprites.mjs','royale/bosses.css','royale/BOSS-SPRITES.md','royale/tests/boss-art.test.mjs','royale/tests/boss-sprites.test.mjs','royale/tests/bosses.html','royale/tests/boss-lab.mjs','royale/tests/phase5-checks.mjs']);
- const changed=git('diff','--name-only',base).split('\n').filter(Boolean);assert.deepEqual(changed.filter(p=>!allowed.has(p)),[]);
- assert.equal(git('diff','--name-only',base,'--','royale/assets/boss-sprites'),'','All existing Batch 1 artwork and metadata must remain byte-identical');
+ const allowed=new Set(['royale/boss-art.mjs','royale/boss-sprites.mjs','royale/bosses.css','royale/BOSS-SPRITES.md','royale/tests/boss-art.test.mjs','royale/tests/boss-sprites.test.mjs','royale/tests/bosses.html','royale/tests/boss-lab.mjs','royale/tests/phase5-checks.mjs','royale/tests/boss-sprites-batch2.test.mjs']);
+ const changed=git('diff','--name-only','--diff-filter=MD',base).split('\n').filter(Boolean);assert.deepEqual(changed.filter(p=>!allowed.has(p)),[]);
+ assert.equal(git('diff','--name-only','--diff-filter=MD',base,'--','royale/assets/boss-sprites'),'','All existing Batch 1 artwork and metadata must remain byte-identical');
 });

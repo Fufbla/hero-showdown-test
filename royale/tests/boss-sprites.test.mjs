@@ -60,7 +60,7 @@ test('regional replacement cannot intercept Legendary bosses or their reinforcem
  for(const b of [{...make(3),legendary:true,legendaryId:'wastelander'},{...make(3),legendaryHelper:true,helperTheme:'wastelander'}]){assert.equal(usesBossSprites(b),false);const p=bossArtPose(b,2);assert.equal(p.redesigned,undefined);assert.equal(p.region,'wastelander');assert.equal(p.sheet,'wastelander');}
  // Preserve the existing case-sensitive mapping of the real Legendary move name.
  assert.equal(legendaryArtPose({...make(3),legendaryId:'wastelander',state:'active',attack:{kind:'legendPunch',warning:1,duration:1,recovery:1}},0).sheet,'wastelander');
- for(const region of [4,7])assert.equal(usesBossSprites(make(region)),false);
+ for(const region of [4])assert.equal(usesBossSprites(make(region)),false);
 });
 test('atlas loading is cached, bounded, and rejects broken images without retry loops',async()=>{
  let loads=0;const sprites=new BossSprites({loadImages:true,imageLoader:async()=>{loads++;return {width:D.cell*4,height:D.cell*8};}});

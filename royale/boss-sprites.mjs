@@ -1,13 +1,14 @@
 // Royale-only presentation. The combat simulation remains the sole timing authority.
 import {BOSS_SPRITE_ATLASES as BASE} from './assets/boss-sprites/atlas-data.mjs';
 import {BATCH2_SPRITE_ATLASES as BATCH2} from './assets/boss-sprites/batch2-atlas-data.mjs';
-const DATA={...BASE,bosses:{...BASE.bosses,...BATCH2.bosses}};
+import {BATCH3_SPRITE_ATLASES as BATCH3} from './assets/boss-sprites/batch3-atlas-data.mjs';
+const DATA={...BASE,bosses:{...BASE.bosses,...BATCH2.bosses,...BATCH3.bosses}};
 export const BOSS_SPRITE_DATA=DATA;
 const clamp=n=>Math.max(0,Math.min(1,n));
 const mix=(a,b,t)=>a+(b-a)*t;
 export const isBossSpriteRegion=id=>typeof id==='number'&&Object.hasOwn(DATA.bosses,id);
 export function usesBossSprites(b){return !b.legendary&&!b.legendaryId&&!b.legendaryHelper&&!b.helperTheme&&isBossSpriteRegion(b.region??b.regionId);}
-const rows={1:{swipe:2,throw:3,slam:4},2:{swipe:2,branch:2,vine:3,thorns:4,roots:5},3:{punch:2,toxic:3,slam:4,shockwave:4,hazard:5},5:{vine:2,vineCombo:2,thorns:3,poison:4,roots:5},6:{blast:2,expansion:3,debris:4,atomic:5}};
+const rows={1:{swipe:2,throw:3,slam:4},2:{swipe:2,branch:2,vine:3,thorns:4,roots:5},3:{punch:2,toxic:3,slam:4,shockwave:4,hazard:5},5:{vine:2,vineCombo:2,thorns:3,poison:4,roots:5},6:{blast:2,expansion:3,debris:4,atomic:5},7:{punch:2,pollution:3,environment:4,slam:5,cataclysm:6}};
 export function bossSpritePose(b,time=0){
  const region=b.region??b.regionId,profile=DATA.bosses[region];if(!profile)return null;
  const moving=Math.abs((b.x||0)-(b.prevX??b.x??0))>.01||Math.abs(b.vx||0)>3;
@@ -31,12 +32,12 @@ export class BossSprites{
   this.currentRegion=region;let entry=this.cache.get(region);
   if(entry){this.cache.delete(region);this.cache.set(region,entry);this.whenLoaded=entry.promise;return entry.promise;}
   entry={ready:false,image:null,error:null};this.cache.set(region,entry);
-  // A single image is reused for all 32 frames. Keep at most two decoded atlases.
+  // A single image is reused for all of a boss’s frames. Keep at most two decoded atlases.
   while(this.cache.size>2)this.cache.delete(this.cache.keys().next().value);
   entry.promise=!this.loadImages?Promise.resolve(false):(async()=>{try{
    const profile=DATA.bosses[region];if(!profile)throw Error(`Unknown boss sprite region ${region}`);
    const im=await this.imageLoader(new URL(`../${profile.file}`,import.meta.url));
-   if((im.naturalWidth||im.width)!==(profile.cell||DATA.cell)*DATA.columns||(im.naturalHeight||im.height)!==(profile.cell||DATA.cell)*DATA.rows)throw Error(`Invalid atlas dimensions for ${profile.name}`);
+   if((im.naturalWidth||im.width)!==(profile.cell||DATA.cell)*DATA.columns||(im.naturalHeight||im.height)!==(profile.cell||DATA.cell)*(profile.rows||DATA.rows))throw Error(`Invalid atlas dimensions for ${profile.name}`);
    entry.image=im;entry.ready=true;return true;
   }catch(error){entry.error=error.message;return false;}})();this.whenLoaded=entry.promise;return entry.promise;
  }

@@ -35,7 +35,7 @@ export const BOSS_ART=Object.freeze({
   4:{name:'Giant Scorpion',temporary:false},
   5:{name:'Venomis',temporary:false},
   6:{name:'AtomDust',temporary:false},
-  7:{name:'Ultimate Pollution Boss',temporary:true},
+  7:{name:'Ultimate Pollution Boss',temporary:false},
 });
 export const BOSS_ART_DEPENDENCIES=Object.freeze([
   SCORPION_SKIN,

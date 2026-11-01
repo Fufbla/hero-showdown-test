@@ -4,8 +4,8 @@ import { makeBoss, arenaSurfaces } from '../bosses.mjs';
 import { PROFILE_KEY } from '../saves.mjs';
 import { saveBossFixture, fixtureCommand } from './boss-fixture.mjs';
 const $=id=>document.getElementById(id),frame=$('boss-frame'),report=$('report'),archive=$('suite-log'),run=$('run-boss-checks');
-const spriteBatch=new URLSearchParams(location.search).get('spriteBatch'),regions=spriteBatch==='1'?[1,2,3]:spriteBatch==='2'?[4,5,6]:[1,2,3,4,5,6,7];
-if(['1','2'].includes(spriteBatch))run.textContent=`Run Batch ${spriteBatch} bosses at five sizes`;
+const spriteBatch=new URLSearchParams(location.search).get('spriteBatch'),regions=spriteBatch==='1'?[1,2,3]:spriteBatch==='2'?[4,5,6]:spriteBatch==='3'?[7]:[1,2,3,4,5,6,7];
+if(['1','2','3'].includes(spriteBatch))run.textContent=`Run Batch ${spriteBatch} bosses at five sizes`;
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const until=async fn=>{const end=Date.now()+120000;while(!fn()){if(Date.now()>end)throw Error('Browser UI timed out');await wait(40);}};
 run.onclick=async()=>{

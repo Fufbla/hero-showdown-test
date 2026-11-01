@@ -30,12 +30,12 @@ test('all regional attack states select existing approved frames; Venomis never 
       b.prevX=b.x-(walking?1:0);const p=bossArtPose(b,q*13.7);
       assert.equal(p.region,region);
       if(BOSS_SPRITE_DATA.bosses[region]){assert.equal(p.redesigned,true);assert.ok(BOSS_SPRITE_DATA.bosses[region].frames[p.frame]);continue;}
-      if(region===7){assert.equal(p.temporary,true);continue;}
+
       if(region===4){assert.equal(p.rig,true);continue;}
       assert.ok(sources[p.sheet]?.has(p.frame),`${region}/${kind}/${state}/${q}: missing ${p.sheet}:${p.frame}`);
     }
   }
-  assert.deepEqual(Object.keys(BOSS_ART).filter(k=>BOSS_ART[k].temporary),['7']);
+  assert.deepEqual(Object.keys(BOSS_ART).filter(k=>BOSS_ART[k].temporary),[]);
 });
 
 test('approved crops, anchors, isolation clips and runtime dependencies are available',()=>{
