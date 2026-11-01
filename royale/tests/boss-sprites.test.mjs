@@ -57,9 +57,9 @@ for(const region of [1,2,3]){
  });
 }
 test('regional replacement cannot intercept Legendary bosses or their reinforcements',()=>{
- for(const b of [{...make(3),legendary:true,legendaryId:'wastelander'},{...make(3),legendaryHelper:true,helperTheme:'wastelander'}]){assert.equal(usesBossSprites(b),false);const p=bossArtPose(b,2);assert.equal(p.redesigned,undefined);assert.equal(p.region,'wastelander');assert.equal(p.sheet,'wastelander');}
- // Preserve the existing case-sensitive mapping of the real Legendary move name.
- assert.equal(legendaryArtPose({...make(3),legendaryId:'wastelander',state:'active',attack:{kind:'legendPunch',warning:1,duration:1,recovery:1}},0).sheet,'wastelander');
+ for(const b of [{...make(3),legendary:true,legendaryId:'wastelander'},{...make(3),legendaryHelper:true,helperTheme:'wastelander'}]){assert.equal(usesBossSprites(b),false);const p=bossArtPose(b,2);assert.equal(p.redesigned,b.legendaryHelper?undefined:true);assert.equal(p.region,'wastelander');assert.equal(p.sheet,b.legendaryHelper?'wastelander':'legendary-sprites-wastelander');}
+ // The Legendary encounter uses its own authored row; helpers retain their legacy route.
+ assert.equal(legendaryArtPose({...make(3),legendaryId:'wastelander',state:'active',attack:{kind:'legendPunch',warning:1,duration:1,recovery:1}},0).state,'legendPunch');
  for(const region of [4])assert.equal(usesBossSprites(make(region)),false);
 });
 test('atlas loading is cached, bounded, and rejects broken images without retry loops',async()=>{

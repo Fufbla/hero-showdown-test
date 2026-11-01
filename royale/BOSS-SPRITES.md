@@ -1,4 +1,36 @@
-# Royale boss sprites — Batch 4
+# Royale boss sprites — Batch 5
+
+Sonic Tusk, Dr. Styro and Legendary Wastelander now use their approved detailed comic designs. Verified base: **ec0566750e1ff7bf665fa490b7d1e031cc2ca124** on `feature/royale-boss-sprites`. No newer remote commit was present at the initial inspection. Baseline: 672 passing automated tests.
+
+## Assets and playback
+
+Each new RGBA atlas has 40 distinct poses in ten rows: idle, walking, all six existing attacks, hit, collapse. Four columns of 512-pixel cells use the same `[224,480]` foot anchor and reference height 224 as Batch 4. The atlases are `legendary-sonic.png`, `legendary-styro.png` and `legendary-wastelander.png`. Exact source sheets, reference cards, prompts, frame rectangles and hashes are included. These are full-body animation poses, not miniature concept crops.
+
+Only the data composition at the top of `legendary-sprites.mjs` changes in runtime code. Batch 4 profiles are retained verbatim; the new profiles join that map. Its existing timing, cache, blending, facing, scale and phase presentation remain unchanged. Active contact follows the simulation immediately. No gameplay renderer, attack definition or simulation module changes. Wastelander's slam and shockwave anchors use the boot line rather than the lower edge of their glow.
+
+Legendary Wastelander uses string identity `wastelander` and its own outlaw atlas. Regional Wastelander remains region `3`, using the untouched Sludge Beast assets. Reinforcements retain their previous presentation route. The regression test now checks these exact separate routes instead of assuming Legendary Wastelander must always use legacy artwork.
+
+Batch 4 review tools and tests explicitly read their own three-profile manifest so adding later bosses does not create invalid Batch 4 download links or regenerate prior review assets. Existing preservation guards allow those documented presentation/test changes while continuing to protect all existing art and gameplay files.
+
+## Review and testing
+
+Serve the repository root and open `royale/tests/boss-sprites-batch5.html`. It demonstrates every sequence, phase, facing and elevated/ground anchor; transparent atlases and complete pose sheets are linked. Playable Legendary practice uses isolated test saves. `royale/qa/boss-sprites/batch5/` contains automated results, browser results, screenshots, provenance and measured performance.
+
+Run `node --test royale/tests/*.test.mjs`. Batch 5 adds 15 focused tests, including immutable combat state, all phase attack timings, distinct RGBA poses, collapse, cache bounds and regional/Legendary Wastelander isolation. Repack only Batch 5 with `node royale/tools/pack-boss-sprites-batch5.mjs`; native review uses `node royale/tools/review-boss-sprites-batch5.mjs`. Development tools require pngjs/sharp and @napi-rs/canvas; the game gains no package dependency.
+
+Full automated suite: **687 passed, 0 failed, 0 skipped** (baseline 672). Browser checks: 480 new sprite draws, 448 Batch 4 regression draws, 920 Legendary combat/viewport assertions, 10 IndexedDB durability checks 17 reward/save edge checks and 725 regional-boss assertions passed (**2,600 browser assertions total**). Screenshots separately document visual inspection in all three arenas at desktop and landscape-phone sizes; native contact sheets show all 120 poses. These checks use disposable fixtures, not player saves or unassisted victories.
+
+Measured 30-second cloud gameplay: Sonic Tusk desktop **1.14 FPS**, Dr. Styro landscape-phone **1.14 FPS**, Legendary Wastelander landscape-phone **1.41 FPS**. See exact JSON values; whole-game drawing averaged 2.22–4.57 ms, while frame scheduling was much slower. Cause is unestablished. Native boss-only drawing averaged 0.13–0.17 ms across six viewport/boss runs; this is not browser FPS. Sustained 60 FPS remains unverified.
+
+## Scope and limitations
+
+All ten previously completed bosses retain byte-identical artwork. All original names, combat values, phase thresholds, warnings, waves, entry requirements, disruption/restoration, fourth abilities, permanent defeats, skeletal remains, rewards and saves are preserved. The 21 regular monsters, Story and Versus are unchanged. No merges or changes to main or the Royale branch are part of this work.
+
+These are compact four-pose sequences with short non-contact blends; fine generated armor/chain details can vary. No physical-device testing is claimed. Browser frame-rate measurements and native raster costs are separate; neither should be used to claim sustained 60 FPS without the reported evidence. No Batch 6 work has begun.
+
+---
+
+# Archived Batch 4 implementation notes
 
 Lightning Spree, Air Pollution Monster and Styrodog use their approved Legendary designs. Base: **7316438e5c1eb21a07f862b6adc24615d0d6d6a5**, verified against the remote boss branch. All 137 prior batch package files match that commit. Development remains isolated to `feature/royale-boss-sprites`; no merge is part of this batch.
 

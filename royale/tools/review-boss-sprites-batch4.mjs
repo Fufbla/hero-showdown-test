@@ -3,7 +3,7 @@ import {createRequire} from 'node:module';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {BossArt} from '../boss-art.mjs';
-import {LEGENDARY_SPRITE_DATA as D} from '../legendary-sprites.mjs';
+import {BATCH4_SPRITE_ATLASES as D} from '../assets/boss-sprites/batch4-atlas-data.mjs';
 import {makeLegendary} from '../legendary-bosses.mjs';
 import {LEGENDARY_ATTACKS} from '../legendary-data.mjs';
 import {arenaSurfaces} from '../bosses.mjs';

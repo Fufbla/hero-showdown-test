@@ -1,0 +1,6 @@
+{
+  "checks": 448,
+  "passed": true,
+  "failures": [],
+  "scope": "Actual browser RGBA decoding and canvas rendering; all authored states, both facings, elevated/ground anchors, three visual phases; frozen simulation"
+}

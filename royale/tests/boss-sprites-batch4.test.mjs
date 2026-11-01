@@ -5,10 +5,11 @@ import {createHash} from 'node:crypto';
 import {inflateSync} from 'node:zlib';
 import {execFileSync} from 'node:child_process';
 import {BossArt,legendaryArtPose} from '../boss-art.mjs';
-import {LegendarySprites,LEGENDARY_SPRITE_DATA as D,legendarySpritePose,usesLegendarySprites} from '../legendary-sprites.mjs';
+import {LegendarySprites,legendarySpritePose,usesLegendarySprites} from '../legendary-sprites.mjs';
 import {LEGENDARY,LEGENDARY_ATTACKS} from '../legendary-data.mjs';
 import {makeLegendary} from '../legendary-bosses.mjs';
 import {arenaSurfaces} from '../bosses.mjs';
+import {BATCH4_SPRITE_ATLASES as D} from '../assets/boss-sprites/batch4-atlas-data.mjs';
 const make=id=>makeLegendary(id,arenaSurfaces()[0]);
 function pixels(bytes){
  assert.equal(bytes.readUInt8(24),8);assert.equal(bytes.readUInt8(25),6,'RGBA transparency required');
@@ -52,6 +53,6 @@ test('Styrodog impact starts at its existing 98% landing tick',()=>{const b=make
 test('Legendary atlases validate dimensions and bound decoded cache',async()=>{const s=new LegendarySprites({imageLoader:async u=>{const p=Object.values(D.bosses).find(p=>u.pathname.endsWith(p.file));return {width:2048,height:512*p.rows};},loadImages:true});for(const id of Object.keys(D.bosses))assert.equal(await s.prepare(id),true);assert.equal(s.cache.size,2);const wrong=new LegendarySprites({loadImages:true,imageLoader:async()=>({width:512,height:512})});assert.equal(await wrong.prepare('lightning'),false);});
 test('Batch 4 preserves all tracked files except presentation router and documentation',t=>{
  const root=new URL('../../',import.meta.url),git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim(),base='7316438e5c1eb21a07f862b6adc24615d0d6d6a5';try{git('cat-file','-e',base);}catch{t.skip('Requires verified Batch 3 history');return;}
- const allowed=new Set(['royale/boss-art.mjs','royale/BOSS-SPRITES.md']);assert.deepEqual(git('diff','--name-only','--diff-filter=MD',base).split('\n').filter(p=>p&&!allowed.has(p)),[]);
+ const allowed=new Set(['royale/boss-art.mjs','royale/BOSS-SPRITES.md','royale/legendary-sprites.mjs','royale/tests/boss-sprites.test.mjs','royale/tests/boss-sprites-batch4.test.mjs','royale/tests/boss-sprites-batch4-review.mjs','royale/tools/review-boss-sprites-batch4.mjs']);assert.deepEqual(git('diff','--name-only','--diff-filter=MD',base).split('\n').filter(p=>p&&!allowed.has(p)),[]);
  assert.equal(git('diff','--name-only','--diff-filter=MD',base,'--','royale/assets/boss-sprites'),'');
 });
