@@ -5,11 +5,11 @@ Source art is retained unchanged. One acquisition scale is used for all states.
 import argparse,hashlib,json,importlib.util
 from pathlib import Path
 import numpy as np
-from PIL import Image
+from PIL import Image,ImageOps
 from scipy.ndimage import label,find_objects
 ROOT=Path(__file__).resolve().parents[1]; ASSETS=ROOT/'assets/monsters'
 STATES=('idle','move','attack','hit','defeat')
-NAMES={'sprout':('Thorn Sprout',2,65),'mushroom':('Toxic Mushroom',2,62),'bark':('Bark Crawler',2,43),'scrap':('Scrap Crawler',3,46),'sludge':('Sludge Beast',3,62),'drone':('Rust Drone',3,52)}
+NAMES={'sprout':('Thorn Sprout',2,65),'mushroom':('Toxic Mushroom',2,62),'bark':('Bark Crawler',2,43),'scrap':('Scrap Crawler',3,46),'sludge':('Sludge Beast',3,62),'drone':('Rust Drone',3,52),'scorpion':('Cave Scorpion',4,74),'beetle':('Acid Beetle',4,46),'venomCrawler':('Venom Crawler',4,53)}
 def package(kind):
  name,region,height=NAMES[kind];source=ASSETS/'animation-source'/f'{kind}.png';im=Image.open(source).convert('RGBA');a=np.asarray(im)
  assert a[:,:,3].min()==0 and a[:,:,3].max()>240,'True alpha source required'
@@ -18,6 +18,11 @@ def package(kind):
  counts=[5,5,6,6,6] if kind=='drone' else [6]*5
  rows=module.parts(source,5,skip_rows=(2,) if attack.exists() else (),columns=counts)
  if attack.exists():rows[2]=sum(module.parts(attack,2,columns=3),[])
+ if kind=='beetle':rows=[[ImageOps.mirror(pose) for pose in row] for row in rows]
+ if kind=='scorpion':
+  for row in range(5):
+   for col in range(len(rows[row])):
+    if row*6+col in list(range(12))+[16,17,18,20,21,22,23]:rows[row][col]=ImageOps.mirror(rows[row][col])
  poses=sum(rows,[]);states=[(state,i) for state,row in zip(STATES,rows) for i in range(len(row))]
  attack_start=sum(counts[:2]);attack_end=attack_start+counts[2]
  attack_ratio=poses[0].height/poses[attack_start].height if attack.exists() else 1
@@ -32,13 +37,18 @@ def package(kind):
   assert x>2 and x+sized.width<318 and y>2 and y+sized.height<254
   frame=Image.new('RGBA',(320,256));frame.alpha_composite(sized,(x,y));file=f'{state}-{idx:02}.png';frame.save(out/file,optimize=True);atlas.alpha_composite(frame,(f%6*320,f//6*256))
   r,g,b=[ar[:,:,i].astype(float) for i in range(3)];yellow=(r>145)&(g>110)&(b<r*.55)&(alpha>128)&(np.indices(alpha.shape)[0]<pose.height*.65)
+  if kind=='beetle':yellow=(r>210)&(g>210)&(b>150)&(abs(r-g)<25)&(abs(g-b)<35)&(alpha>128)
+  if kind=='scorpion':yellow=(r>170)&(g>60)&(b<r*.55)&(alpha>128)
   if kind=='sludge':yellow=(r>190)&(g>190)&(b>150)&(alpha>128)&(np.indices(alpha.shape)[0]<pose.height*.45)
   labs,n=label(yellow);spots=[]
   for i,sl in enumerate(find_objects(labs),1):
    yy,xx=np.where(labs==i)
    if len(xx)>2:spots.append((len(xx),float(xx.mean()),float(yy.mean())))
+  if kind in ('scorpion','beetle','venomCrawler'):
+   tx,ty={'scorpion':(.65,.65),'beetle':(.72,.45),'venomCrawler':(.65,.45)}[kind]
+   spots=sorted(spots,key=lambda q:(q[1]/pose.width-tx)**2+(q[2]/pose.height-ty)**2)[:1]
   eyes=[[round(x+ex*frame_scale,2),round(y+ey*frame_scale,2)] for _,ex,ey in sorted(spots,reverse=True)[:1 if kind in ('scrap','drone') else 2]]
-  if not eyes:eyes=[[round(x+pose.width*.6*frame_scale,2),round(y+pose.height*.4*frame_scale,2)]]
+  if not eyes and kind not in ('scorpion','beetle','venomCrawler'):eyes=[[round(x+pose.width*.6*frame_scale,2),round(y+pose.height*.4*frame_scale,2)]]
   frames.append({'state':state,'index':idx,'file':file,'anchor':[160,240],'eyes':eyes,'sha256':hashlib.sha256((out/file).read_bytes()).hexdigest()})
  atlas.save(out/'atlas.png',optimize=True)
  meta={'name':name,'region':region,'frameCount':len(poses),'clips':{state:{'start':sum(counts[:i]),'count':counts[i]} for i,state in enumerate(STATES)},'cellWidth':320,'cellHeight':256,'columns':6,'rows':5,'anchor':[160,240],'referenceHeight':128,'sourceFacing':1,'file':f'animations/{kind}/atlas.png','frames':frames,'sources':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (source,attack) if p.exists()},'provenance':'Separately AI-drawn poses guided by approved reference; source alpha preserved.'}
