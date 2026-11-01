@@ -8,17 +8,19 @@ const phase=n=>((n%1)+1)%1;
 // Read the simulation's clocks. Rendering never starts attacks, moves feet,
 // changes hitboxes, applies knockback, or writes enemy state.
 export function animationFrame(e,t=0){
- if(e.state==='dead')return 24+Math.min(5,Math.floor(clamp((e.deadAge||0)/.55)*6));
- if(e.flash>0)return 18+Math.min(5,Math.floor(clamp(1-e.flash/.12)*6));
+ const clips=MONSTER_ANIMATIONS[e.type]?.clips||{idle:{start:0,count:6},move:{start:6,count:6},attack:{start:12,count:6},hit:{start:18,count:6},defeat:{start:24,count:6}};
+ const frame=(state,u)=>clips[state].start+Math.min(clips[state].count-1,Math.floor(clamp(u)*clips[state].count));
+ if(e.state==='dead')return frame('defeat',(e.deadAge||0)/.55);
+ if(e.flash>0)return frame('hit',1-e.flash/.12);
  const region=TYPES[e.type]?.region||1;
  if(e.state==='warn'){
   const duration=region===1?(e.type==='crawler'?.55:.7):Math.max(.38,.8-region*.045);
-  return 12+Math.min(1,Math.floor(clamp((e.age||0)/duration)*2));
+  return frame('attack',Math.min(1-1e-9,clamp((e.age||0)/duration))/3);
  }
- if(e.state==='strike')return 14+Math.min(1,Math.floor(clamp((e.age||0)/(region===1?.24:.28))*2));
- if(e.state==='recover'&&(e.age||0)<.24)return 16+Math.min(1,Math.floor((e.age||0)/.12));
- if(!e.rooted&&!e.lifted&&(e.state==='patrol'||e.state==='chase'||e.state==='desperation'||e.airborne||e.pouncing))return 6+Math.floor(phase(e.walkCycle??t*.8)*6);
- return Math.floor(phase(t*.65+(e.id||0)*.137)*6);
+ if(e.state==='strike')return frame('attack',(1+Math.min(1-1e-9,clamp((e.age||0)/(region===1?.24:.28))))/3);
+ if(e.state==='recover'&&(e.age||0)<.24)return frame('attack',(2+(e.age||0)/.24)/3);
+ if(!e.rooted&&!e.lifted&&(e.state==='patrol'||e.state==='chase'||e.state==='desperation'||e.airborne||e.pouncing))return frame('move',phase(e.walkCycle??t*.8));
+ return frame('idle',phase(t*.65+(e.id||0)*.137));
 }
 
 export class AnimatedMonsterAtlas extends ReferenceMonsterAtlas{
@@ -61,7 +63,7 @@ export class AnimatedMonsterAtlas extends ReferenceMonsterAtlas{
    const x=f%columns*w,y=Math.floor(f/columns)*h,dx=x+w/2-meta.anchor[0]*scale,dy=y+baseline-meta.anchor[1]*scale;
    c.save();c.beginPath();c.rect(x,y,w,h);c.clip();
    c.drawImage(image,f%meta.columns*meta.cellWidth,Math.floor(f/meta.columns)*meta.cellHeight,meta.cellWidth,meta.cellHeight,dx,dy,dw,dh);
-   if(night&&f<24){c.fillStyle='#fff12c';c.shadowColor='#ffe100';c.shadowBlur=2;for(const [ex,ey] of meta.eyes[f]){c.beginPath();c.ellipse(dx+ex*scale,dy+ey*scale,Math.max(.65,scale*1.8),Math.max(.8,scale*2.2),0,0,Math.PI*2);c.fill();}}
+   if(night&&f<(meta.clips?.defeat.start??24)){c.fillStyle='#fff12c';c.shadowColor='#ffe100';c.shadowBlur=2;for(const [ex,ey] of meta.eyes[f]){c.beginPath();c.ellipse(dx+ex*scale,dy+ey*scale,Math.max(.65,scale*1.8),Math.max(.8,scale*2.2),0,0,Math.PI*2);c.fill();}}
    c.restore();
   }
   this.entries.set(key,canvas);while(this.entries.size>this.limit){const oldest=this.entries.keys().next().value,removed=this.entries.get(oldest);this.entries.delete(oldest);removed.width=removed.height=1;}

@@ -12,8 +12,8 @@ for(const [type,meta] of Object.entries(MONSTER_ANIMATIONS)){
   assert.equal(meta.name,TYPES[type].name);assert.equal(meta.region,TYPES[type].region);
   const manifest=JSON.parse(readFileSync(new URL(`../assets/monsters/animations/${type}/manifest.json`,import.meta.url)));
   for(const state of ['idle','move','attack','hit','defeat']){
-   const frames=manifest.frames.filter(f=>f.state===state);assert.equal(frames.length,6);
-   assert.equal(new Set(frames.map(f=>f.sha256)).size,6,'six separately drawn poses, not duplicates');
+   const frames=manifest.frames.filter(f=>f.state===state);assert.equal(frames.length,meta.clips?.[state].count??6);
+   assert.equal(new Set(frames.map(f=>f.sha256)).size,frames.length,'separately drawn poses, not duplicates');
    for(const frame of frames){const png=readFileSync(new URL(`../assets/monsters/animations/${type}/${frame.file}`,import.meta.url));assert.equal(png[25],6);assert.equal(png.readUInt32BE(16),meta.cellWidth);assert.equal(png.readUInt32BE(20),meta.cellHeight);assert.deepEqual(frame.anchor,meta.anchor);assert.equal(createHash('sha256').update(png).digest('hex'),frame.sha256);}
   }
  });
@@ -51,4 +51,13 @@ test('Drawn attack frames follow real telegraph, strike and recovery clocks',()=
 test('PNG loading failure retains a playable fallback and destroy prevents late loads',async()=>{
  let calls=0;const a=new AnimatedMonsterAtlas({loadImages:false,fallback:{entries:new Map(),draw:()=>calls++}});
  assert.equal(await a.preload(1),false);a.draw({},Object.freeze({type:'bottle'}),0);assert.equal(calls,1);a.destroy();assert.equal(await a.load('bottle'),false);
+});
+
+test('Variable drone clips retain state boundaries and six timed attack poses',()=>{
+ const m=MONSTER_ANIMATIONS.drone;assert.equal(m.frameCount,28);
+ for(const state of ['idle','move','attack','hit','defeat'])assert.ok(m.clips[state].count>=5);
+ assert.equal(animationFrame({type:'drone',state:'warn',age:99}),11);
+ assert.equal(animationFrame({type:'drone',state:'strike',age:99}),13);
+ assert.equal(animationFrame({type:'drone',state:'dead',deadAge:99}),27);
+ for(let i=0;i<5;i++)assert.equal(animationFrame({type:'drone',state:'chase',walkCycle:(i+.1)/5}),5+i);
 });

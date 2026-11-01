@@ -41,8 +41,9 @@ def parts(path, rows, skip_rows=(), columns=6):
         found[row].append((x0, Image.fromarray(crop)))
     for row, entries in enumerate(found):
         entries.sort(key=lambda e:e[0])
-        if row not in skip_rows and len(entries) != columns:
-            raise ValueError(f'{path.name}: row {row+1} has {len(entries)} complete poses, expected {columns}')
+        expected = columns[row] if isinstance(columns, (list, tuple)) else columns
+        if row not in skip_rows and len(entries) != expected:
+            raise ValueError(f'{path.name}: row {row+1} has {len(entries)} complete poses, expected {expected}')
     return [[im for _,im in row] for row in found]
 
 def measure(im, kind):

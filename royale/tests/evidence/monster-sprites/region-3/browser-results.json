@@ -1,0 +1,23 @@
+{
+  "regions": [
+    {
+      "region": 1,
+      "checks": 2003,
+      "passed": true,
+      "ms": 157.8
+    },
+    {
+      "region": 2,
+      "checks": 2003,
+      "passed": true,
+      "ms": 120.5
+    },
+    {
+      "region": 3,
+      "checks": 1935,
+      "passed": true,
+      "ms": 179.7
+    }
+  ],
+  "physicalDevices": "not tested"
+}

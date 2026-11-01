@@ -31,7 +31,7 @@ for(const type of types){
   const a=atlas.atlas(type,night),c=a.getContext('2d'),{w,h,columns,baseline}=atlas.cellFor(type);
   for(let f=0;f<meta.frameCount;f++){const data=c.getImageData(f%columns*w,Math.floor(f/columns)*h,w,h).data,b=bounds(data,w,h);check(b.count>100,`${type}: rendered frame ${f}`);check(b.x0>0&&b.x1<w-1&&b.y0>0&&b.y1<h-1,`${type}: rendered bounds ${f}`);check(Math.abs(b.y1-baseline)<3,`${type}: rendered feet ${f}`);hashes.push(createHash('sha256').update(data).digest('hex'));}
  }
- check(new Set(hashes.slice(0,30)).size===30,`${type}: distinct raster frames`);check(hashes[0]!==hashes[30],`${type}: night eyes preserved`);
+ check(new Set(hashes.slice(0,meta.frameCount)).size===meta.frameCount,`${type}: distinct raster frames`);check(hashes[0]!==hashes[meta.frameCount],`${type}: night eyes preserved`);
 }
 const samples=[{state:'idle'},{state:'chase',walkCycle:.4},{state:'strike',age:.14},{state:'idle',flash:.07},{state:'dead',deadAge:.32}];
 const gallery=createCanvas(1200,710),gc=gallery.getContext('2d');gc.fillStyle='#edf1e8';gc.fillRect(0,0,1200,710);gc.fillStyle='#17393b';gc.font='bold 24px sans-serif';gc.fillText(`Region ${region} — actual game sprites`,28,38);
@@ -53,5 +53,5 @@ for(const [label,w,h] of [['desktop',1280,720],['mobile',390,844]]){
  writeFileSync(out+label+'-platforms.png',canvas.toBuffer('image/png'));
 }
 check(atlas.entries.size<=6,'bounded atlas cache');
-const result={region,monsters:types,frames:90,assertions,passed:true,textureBytes:atlas.textureBytes,viewports:[[1280,720],[390,844]],renderer:'@napi-rs/canvas using actual MonsterAtlas and Renderer.enemy',browser:'Not run by this raster test; see separate browser evidence.',physicalDevices:'Not tested'};
+const result={region,monsters:types,frames:types.reduce((n,t)=>n+MONSTER_ANIMATIONS[t].frameCount,0),assertions,passed:true,textureBytes:atlas.textureBytes,viewports:[[1280,720],[390,844]],renderer:'@napi-rs/canvas using actual MonsterAtlas and Renderer.enemy',browser:'Not run by this raster test; see separate browser evidence.',physicalDevices:'Not tested'};
 writeFileSync(out+'raster-results.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));atlas.destroy();
