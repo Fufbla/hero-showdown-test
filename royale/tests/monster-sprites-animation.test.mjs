@@ -61,3 +61,9 @@ test('Variable drone clips retain state boundaries and six timed attack poses',(
  assert.equal(animationFrame({type:'drone',state:'dead',deadAge:99}),27);
  for(let i=0;i<5;i++)assert.equal(animationFrame({type:'drone',state:'chase',walkCycle:(i+.1)/5}),5+i);
 });
+
+test('All 21 regular monsters have a complete animation catalog, three per region',()=>{
+ assert.deepEqual(Object.keys(MONSTER_ANIMATIONS).sort(),Object.keys(TYPES).sort());
+ assert.equal(Object.keys(MONSTER_ANIMATIONS).length,21);
+ for(let region=1;region<=7;region++)assert.equal(Object.values(MONSTER_ANIMATIONS).filter(m=>m.region===region).length,3);
+});

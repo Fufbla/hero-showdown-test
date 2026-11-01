@@ -56,6 +56,6 @@ Historical design and implementation notes: [early validation](VALIDATION.md), [
 
 ## Approved monster-reference review build
 
-The 21 regular monsters now use transparent cutouts of the supplied comic-book concept art, with cached, aligned procedural idle/move/attack/hit/defeat motion. These are provisional single-pose animations, **not verified authored frame atlases**. See [asset audit, completed/remaining list and test results](MONSTER-SPRITES.md) and the [interactive sprite review](tests/monster-sprites.html). Monster AI, stats, attacks, rewards, desperation, physics and saves are unchanged.
+All 21 regular monsters now have 28–30 distinct transparent PNG frames each (628 total), with cached, aligned idle, movement, attack, hit and defeat animations. New AI-drawn poses follow the supplied comic-book designs and await user visual sign-off. See [asset audit, completed/remaining list and test results](MONSTER-SPRITES.md) and the [interactive sprite review](tests/monster-sprites.html). Monster AI, stats, attacks, rewards, desperation, physics and saves are unchanged.
 
 Six larger original poses have since been recovered for the Region 4, 5 and 6 monsters that previously used tiny fallback poses. See the source recovery table in `MONSTER-SPRITES.md`; authored animation sequences remain outstanding.

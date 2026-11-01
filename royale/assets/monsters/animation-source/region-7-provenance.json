@@ -1,0 +1,12 @@
+{
+  "generator": "built-in image_gen",
+  "referenceFiles": [
+    "poses/apocalypse.png",
+    "poses/guardian.png",
+    "poses/titan.png"
+  ],
+  "specification": "Thirty separately drawn poses per approved regular monster: six idle, six movement, six attack, six hit and six collapse. Apocalypse Mutant has purple muscle, skull face and molten fist; Corrupted Guardian preserves bronze armor and claws; Pollution Titan preserves green reactor and heavy metal armor.",
+  "attackCorrection": "guardian-attack.png replaces the original sheet attack row with six anticipation/volley/recovery poses matching the existing ranged combat. The unused original slam row is not packed. No gameplay change.",
+  "packaging": "Complete silhouettes, true alpha, constant acquisition scale, 320x256 cells with foot anchor [160,240]. All source masters retained unchanged.",
+  "review": "User approval of the newly generated animation poses and physical-device tests pending."
+}

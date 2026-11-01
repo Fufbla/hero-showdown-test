@@ -1,0 +1,191 @@
+{
+  "baseCommit": "838d0ccaa41eb7c2ca616619f8c8c0f806ca1cdf",
+  "region7Parent": "acbf14dc9688da093ce8ed5b03113985acf3573f",
+  "nodeTests": {
+    "passed": 752,
+    "failed": 0
+  },
+  "rasterChecks": 6658,
+  "frames": 628,
+  "regions": [
+    {
+      "region": 1,
+      "monsters": [
+        "bottle",
+        "crawler",
+        "slime"
+      ],
+      "frames": 90,
+      "assertions": 954,
+      "passed": true,
+      "textureBytes": 22118400,
+      "viewports": [
+        [
+          1280,
+          720
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "renderer": "@napi-rs/canvas using actual MonsterAtlas and Renderer.enemy",
+      "browser": "Not run by this raster test; see separate browser evidence.",
+      "physicalDevices": "Not tested"
+    },
+    {
+      "region": 2,
+      "monsters": [
+        "bark",
+        "mushroom",
+        "sprout"
+      ],
+      "frames": 90,
+      "assertions": 954,
+      "passed": true,
+      "textureBytes": 22118400,
+      "viewports": [
+        [
+          1280,
+          720
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "renderer": "@napi-rs/canvas using actual MonsterAtlas and Renderer.enemy",
+      "browser": "Not run by this raster test; see separate browser evidence.",
+      "physicalDevices": "Not tested"
+    },
+    {
+      "region": 3,
+      "monsters": [
+        "drone",
+        "scrap",
+        "sludge"
+      ],
+      "frames": 88,
+      "assertions": 934,
+      "passed": true,
+      "textureBytes": 22118400,
+      "viewports": [
+        [
+          1280,
+          720
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "renderer": "@napi-rs/canvas using actual MonsterAtlas and Renderer.enemy",
+      "browser": "Not run by this raster test; see separate browser evidence.",
+      "physicalDevices": "Not tested"
+    },
+    {
+      "region": 4,
+      "monsters": [
+        "beetle",
+        "scorpion",
+        "venomCrawler"
+      ],
+      "frames": 90,
+      "assertions": 954,
+      "passed": true,
+      "textureBytes": 22118400,
+      "viewports": [
+        [
+          1280,
+          720
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "renderer": "@napi-rs/canvas using actual MonsterAtlas and Renderer.enemy",
+      "browser": "Not run by this raster test; see separate browser evidence.",
+      "physicalDevices": "Not tested"
+    },
+    {
+      "region": 5,
+      "monsters": [
+        "spitter",
+        "stalker",
+        "thornBeast"
+      ],
+      "frames": 90,
+      "assertions": 954,
+      "passed": true,
+      "textureBytes": 22118400,
+      "viewports": [
+        [
+          1280,
+          720
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "renderer": "@napi-rs/canvas using actual MonsterAtlas and Renderer.enemy",
+      "browser": "Not run by this raster test; see separate browser evidence.",
+      "physicalDevices": "Not tested"
+    },
+    {
+      "region": 6,
+      "monsters": [
+        "phantom",
+        "sentinel",
+        "wisp"
+      ],
+      "frames": 90,
+      "assertions": 954,
+      "passed": true,
+      "textureBytes": 22118400,
+      "viewports": [
+        [
+          1280,
+          720
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "renderer": "@napi-rs/canvas using actual MonsterAtlas and Renderer.enemy",
+      "browser": "Not run by this raster test; see separate browser evidence.",
+      "physicalDevices": "Not tested"
+    },
+    {
+      "region": 7,
+      "monsters": [
+        "apocalypse",
+        "guardian",
+        "titan"
+      ],
+      "frames": 90,
+      "assertions": 954,
+      "passed": true,
+      "textureBytes": 22118400,
+      "viewports": [
+        [
+          1280,
+          720
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "renderer": "@napi-rs/canvas using actual MonsterAtlas and Renderer.enemy",
+      "browser": "Not run by this raster test; see separate browser evidence.",
+      "physicalDevices": "Not tested"
+    }
+  ],
+  "browserChecks": 13833,
+  "differentialSteps": 7200,
+  "protectedSourceGuard": "passed",
+  "physicalDevices": "not tested"
+}

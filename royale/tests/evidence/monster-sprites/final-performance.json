@@ -1,0 +1,19 @@
+{
+  "region": 7,
+  "viewport": [
+    390,
+    720
+  ],
+  "assetLoadMs": 51.400000002235174,
+  "atlasBuildMs": 4.799999997019768,
+  "simulationSeconds": 1.0666666666666678,
+  "samples": 14,
+  "seconds": 10.247699999999996,
+  "averageFPS": 1.3661602115596676,
+  "onePercentLowFPS": 0.9837678307919331,
+  "meanStepAndDrawMs": 2.3800000004470347,
+  "p95StepAndDrawMs": 11.599999997764826,
+  "cacheTextureBytes": 11059200,
+  "errors": [],
+  "scope": "One cloud Chrome phone-sized sample, not a physical-device or sustained 60 FPS validation."
+}

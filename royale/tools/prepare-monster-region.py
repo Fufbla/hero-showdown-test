@@ -9,7 +9,7 @@ from PIL import Image,ImageOps
 from scipy.ndimage import label,find_objects
 ROOT=Path(__file__).resolve().parents[1]; ASSETS=ROOT/'assets/monsters'
 STATES=('idle','move','attack','hit','defeat')
-NAMES={'sprout':('Thorn Sprout',2,65),'mushroom':('Toxic Mushroom',2,62),'bark':('Bark Crawler',2,43),'scrap':('Scrap Crawler',3,46),'sludge':('Sludge Beast',3,62),'drone':('Rust Drone',3,52),'scorpion':('Cave Scorpion',4,74),'beetle':('Acid Beetle',4,46),'venomCrawler':('Venom Crawler',4,53),'thornBeast':('Thorn Beast',5,84),'stalker':('Mutant Stalker',5,96),'spitter':('Poison Spitter',5,61),'wisp':('Shadow Wisp',6,61),'phantom':('Energy Phantom',6,83),'sentinel':('Dark Sentinel',6,110)}
+NAMES={'sprout':('Thorn Sprout',2,65),'mushroom':('Toxic Mushroom',2,62),'bark':('Bark Crawler',2,43),'scrap':('Scrap Crawler',3,46),'sludge':('Sludge Beast',3,62),'drone':('Rust Drone',3,52),'scorpion':('Cave Scorpion',4,74),'beetle':('Acid Beetle',4,46),'venomCrawler':('Venom Crawler',4,53),'thornBeast':('Thorn Beast',5,84),'stalker':('Mutant Stalker',5,96),'spitter':('Poison Spitter',5,61),'wisp':('Shadow Wisp',6,61),'phantom':('Energy Phantom',6,83),'sentinel':('Dark Sentinel',6,110),'apocalypse':('Apocalypse Mutant',7,100),'guardian':('Corrupted Guardian',7,105),'titan':('Pollution Titan',7,120)}
 def package(kind):
  name,region,height=NAMES[kind];source=ASSETS/'animation-source'/f'{kind}.png';im=Image.open(source).convert('RGBA');a=np.asarray(im)
  assert a[:,:,3].min()==0 and a[:,:,3].max()>240,'True alpha source required'
@@ -37,6 +37,9 @@ def package(kind):
   assert x>2 and x+sized.width<318 and y>2 and y+sized.height<254
   frame=Image.new('RGBA',(320,256));frame.alpha_composite(sized,(x,y));file=f'{state}-{idx:02}.png';frame.save(out/file,optimize=True);atlas.alpha_composite(frame,(f%6*320,f//6*256))
   r,g,b=[ar[:,:,i].astype(float) for i in range(3)];yellow=(r>145)&(g>110)&(b<r*.55)&(alpha>128)&(np.indices(alpha.shape)[0]<pose.height*.65)
+  if kind=='apocalypse':yellow=(r>180)&(g>50)&(g<180)&(b<80)&(alpha>128)&(np.indices(alpha.shape)[0]<pose.height*.3)
+  if kind=='guardian':yellow=(r>180)&(g>100)&(b<100)&(alpha>128)&(np.indices(alpha.shape)[0]<pose.height*.4)
+  if kind=='titan':yellow=(g>200)&(r>90)&(b<150)&(alpha>128)&(np.indices(alpha.shape)[0]<pose.height*.3)
   if kind=='wisp':yellow=(r>145)&(g>110)&(b<r*.55)&(alpha>128)
   if kind in ('phantom','sentinel'):yellow=(r>170)&(b>170)&(g>40)&(g<150)&(alpha>128)&(np.indices(alpha.shape)[0]<pose.height*.35)
   if kind=='beetle':yellow=(r>210)&(g>210)&(b>150)&(abs(r-g)<25)&(abs(g-b)<35)&(alpha>128)
@@ -46,11 +49,11 @@ def package(kind):
   for i,sl in enumerate(find_objects(labs),1):
    yy,xx=np.where(labs==i)
    if len(xx)>2:spots.append((len(xx),float(xx.mean()),float(yy.mean())))
-  if kind in ('scorpion','beetle','venomCrawler','thornBeast','stalker','spitter','phantom','sentinel'):
-   tx,ty={'scorpion':(.65,.65),'beetle':(.72,.45),'venomCrawler':(.65,.45),'thornBeast':(.8,.35),'stalker':(.7,.2),'spitter':(.65,.15),'phantom':(.6,.18),'sentinel':(.6,.18)}[kind]
+  if kind in ('scorpion','beetle','venomCrawler','thornBeast','stalker','spitter','phantom','sentinel','apocalypse','guardian','titan'):
+   tx,ty={'scorpion':(.65,.65),'beetle':(.72,.45),'venomCrawler':(.65,.45),'thornBeast':(.8,.35),'stalker':(.7,.2),'spitter':(.65,.15),'phantom':(.6,.18),'sentinel':(.6,.18),'apocalypse':(.7,.12),'guardian':(.6,.28),'titan':(.6,.17)}[kind]
    spots=sorted(spots,key=lambda q:(q[1]/pose.width-tx)**2+(q[2]/pose.height-ty)**2)[:2 if kind in ('phantom','sentinel') else 1]
   eyes=[[round(x+ex*frame_scale,2),round(y+ey*frame_scale,2)] for _,ex,ey in sorted(spots,reverse=True)[:1 if kind in ('scrap','drone') else 2]]
-  if not eyes and kind not in ('scorpion','beetle','venomCrawler','thornBeast','stalker','spitter','phantom','sentinel'):eyes=[[round(x+pose.width*.6*frame_scale,2),round(y+pose.height*.4*frame_scale,2)]]
+  if not eyes and kind not in ('scorpion','beetle','venomCrawler','thornBeast','stalker','spitter','phantom','sentinel','apocalypse','guardian','titan'):eyes=[[round(x+pose.width*.6*frame_scale,2),round(y+pose.height*.4*frame_scale,2)]]
   frames.append({'state':state,'index':idx,'file':file,'anchor':[160,240],'eyes':eyes,'sha256':hashlib.sha256((out/file).read_bytes()).hexdigest()})
  atlas.save(out/'atlas.png',optimize=True)
  meta={'name':name,'region':region,'frameCount':len(poses),'clips':{state:{'start':sum(counts[:i]),'count':counts[i]} for i,state in enumerate(STATES)},'cellWidth':320,'cellHeight':256,'columns':6,'rows':5,'anchor':[160,240],'referenceHeight':128,'sourceFacing':1,'file':f'animations/{kind}/atlas.png','frames':frames,'sources':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (source,attack) if p.exists()},'provenance':'Separately AI-drawn poses guided by approved reference; source alpha preserved.'}
