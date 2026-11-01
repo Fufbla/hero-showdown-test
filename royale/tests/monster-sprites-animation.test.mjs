@@ -31,7 +31,9 @@ for(const [type,meta] of Object.entries(MONSTER_ANIMATIONS)){
    if(!e.flying&&!e.airborne&&!e.pouncing&&!e.lifted)assert.equal(e.y,e.surface.y,'art does not move the simulation feet');
    const snapshot=JSON.stringify(e);animationFrame(e,g.time);assert.equal(JSON.stringify(e),snapshot);
   }
-  assert.ok(approaches,'continues to approach below half health');assert.ok(attacks,'continues to attack below half health');
+  const ranged=['spore','bolt','acid','spit','orb','pulse','volley'].includes(TYPES[type].behavior);
+  if(!ranged)assert.ok(approaches,'melee enemy continues to approach below half health');
+  else assert.ok(attacks,'ranged enemy keeps firing from its existing attack range');assert.ok(attacks,'continues to attack below half health');
  });
 }
 test('Drawn attack frames follow real telegraph, strike and recovery clocks',()=>{

@@ -1,0 +1,22 @@
+{
+  "regions": [
+    {
+      "region": 2,
+      "checks": 2003,
+      "passed": true,
+      "ms": 223.8,
+      "textureBytes": 22118400,
+      "errors": []
+    },
+    {
+      "region": 1,
+      "checks": 2003,
+      "passed": true,
+      "ms": 117.7,
+      "textureBytes": 22118400,
+      "errors": []
+    }
+  ],
+  "source": "Observed browser review results, 2026-11-01",
+  "physicalDevices": "not tested"
+}

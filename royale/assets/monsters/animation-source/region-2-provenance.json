@@ -1,0 +1,12 @@
+{
+  "generator": "built-in image_gen",
+  "referenceFiles": [
+    "poses/sprout.png",
+    "poses/mushroom.png",
+    "poses/bark.png"
+  ],
+  "mainSheetSpecification": "Thirty separately drawn right-facing poses in six columns and five rows: idle, move, attack, hit, defeat. Preserve approved anatomy, color, comic outlines; transparent alpha; fixed scale; no labels or scenery.",
+  "replacementAttackSpecification": "Six full-body poses in three columns and two rows: ready, windup, strike, follow-through, recovery, ready. Wide transparent gutters; no projectiles or disconnected effects.",
+  "packaging": "Use non-overlapping connected components from rows 1,2,4,5 of main sheets; use all six poses from replacement attack strips. Preserve source alpha and one scale per acquisition.",
+  "review": "Generated poses follow approved designs; separate user animation approval pending."
+}

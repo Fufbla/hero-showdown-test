@@ -2,7 +2,9 @@
 
 Verified remote base: `838d0ccaa41eb7c2ca616619f8c8c0f806ca1cdf`.
 
-Region 1 (Bottle Critter, Trash Slime, Sand Crawler) now has six separately drawn frames for each of idle, movement, attack, hit and defeat: **90 transparent PNG frames**, three production atlases, source masters and reproducible packaging. The original approved ZIP reference strips remain byte-identical. New poses are AI-drawn from those designs; they have not received a separate artist/user approval. Regions 2–7 still use the existing provisional single-pose motion and are unfinished.
+Region 1 (Bottle Critter, Trash Slime, Sand Crawler) now has six separately drawn frames for each of idle, movement, attack, hit and defeat: **90 transparent PNG frames**, three production atlases, source masters and reproducible packaging. The original approved ZIP reference strips remain byte-identical. New poses are AI-drawn from those designs; they have not received a separate artist/user approval. Regions 3–7 still use the existing provisional single-pose motion and are unfinished.
+
+Region 2 (Thorn Sprout, Toxic Mushroom, Bark Crawler) adds another 90 separate transparent frames. Replacement six-pose attack strips avoid overlaps and missing poses in the first generated sheets. Original approved cutouts and Region 1 art remain unchanged. Validation: **660/660 Node tests**, **954 raster assertions**, **4,006 browser assertions across Regions 1–2**, and the protected-source guard pass. See `tests/evidence/monster-sprites/region-2/` for desktop/mobile-sized renders and browser evidence. Physical devices are not tested. The ranged-monster test now correctly accepts attacking at existing range instead of requiring melee pursuit.
 
 The runtime reads existing combat clocks, uses the existing display heights, and anchors every frame at the enemy’s feet. Authored defeat frames replace the previous additional procedural collapse only for loaded new animations. Loading failures retain playable original art. Large source atlases are released when changing regions; the display atlas cache remains capped at six.
 
