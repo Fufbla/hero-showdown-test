@@ -12,6 +12,7 @@ import * as StyroModule from '../assets/animation/styro-atlas.js';
 import { LEGENDARY } from './legendary-data.mjs';
 import * as FighterModule from '../assets/villain-motion/fighter-atlas.js';
 import {BossSprites,BOSS_SPRITE_DATA,bossSpritePose,isBossSpriteRegion,usesBossSprites} from './boss-sprites.mjs';
+import {LegendarySprites,LEGENDARY_SPRITE_DATA,legendarySpritePose,isLegendarySpriteId,usesLegendarySprites} from './legendary-sprites.mjs';
 import {SCORPION_SKIN,scorpionPresentationPose} from './scorpion-sprites.mjs';
 
 const Shore=ShoreModule.default||globalThis.HealthiaShoreBoss;
@@ -39,6 +40,7 @@ export const BOSS_ART=Object.freeze({
 });
 export const BOSS_ART_DEPENDENCIES=Object.freeze([
   SCORPION_SKIN,
+  ...Object.values(LEGENDARY_SPRITE_DATA.bosses).map(b=>b.file),
   ...Object.values(BOSS_SPRITE_DATA.bosses).map(b=>b.file),
   'assets/animation/lightening-spree-atlas.js','assets/animation/lightening-spree-poses.png','assets/animation/air-pollution-atlas.js','assets/animation/air-pollution-poses.png','assets/animation/styrodog-atlas.js','assets/animation/styrodog-presence.png','assets/animation/styrodog-attacks.png','assets/animation/sonic-tusk-atlas.js','assets/animation/sonic-tusk-presence.png','assets/animation/sonic-tusk-attacks.png','assets/animation/sonic-tusk-walk.png','assets/animation/styro-atlas.js','assets/animation/styro-presence.png','assets/animation/styro-attacks.png',
   'assets/shore/boss-core.js','assets/shore/boss-parts.png','assets/scorpion-rig/rig-core.js',
@@ -86,6 +88,7 @@ export function bossArtPose(b,time=0,{legacy=false}={}){
 }
 
 export function legendaryArtPose(b,time=0){
+  if(usesLegendarySprites(b))return legendarySpritePose(b,time);
   const id=b.legendaryId||b.helperTheme,p=progress(b),stage=phaseIndex(b),kind=b.attack?.kind||'',walking=Math.floor(time*9)%8,moving=Math.abs(b.x-(b.prevX??b.x))>.01;
   if(['wastelander','venomis','atomdust'].includes(id)){
     const region={wastelander:3,venomis:5,atomdust:6}[id],translated=kind.includes('shot')||kind.includes('fan')?'poison':kind.includes('punch')?'punch':kind.includes('toxic')?'toxic':kind.includes('ground')?'hazard':kind.includes('blast')?'blast':'vines';
@@ -198,9 +201,10 @@ function drawTemporary(c,b,time){
 
 const cacheRegion=id=>({wastelander:3,venomis:5,atomdust:6})[id]||id;
 export class BossArt{
-  constructor({loadImages=typeof Image!=='undefined',spriteImageLoader,spriteCanvasFactory,scorpionImageLoader=imageFor,scorpionCanvasFactory}={}){this.loadImages=loadImages;this.scorpionImageLoader=scorpionImageLoader;this.scorpionCanvasFactory=scorpionCanvasFactory;this.sprites=new BossSprites({loadImages,imageLoader:spriteImageLoader,canvasFactory:spriteCanvasFactory});this.regions=new Map();this.visuals=new WeakMap();this.errors=[];this.currentRegion=0;this.whenLoaded=Promise.resolve(true);this.spriteActive=false;}
-  get ready(){return this.spriteActive?this.sprites.ready:!!this.regions.get(this.currentRegion)?.ready;}
-  prepare(region){
+  constructor({loadImages=typeof Image!=='undefined',spriteImageLoader,spriteCanvasFactory,scorpionImageLoader=imageFor,scorpionCanvasFactory}={}){this.loadImages=loadImages;this.scorpionImageLoader=scorpionImageLoader;this.scorpionCanvasFactory=scorpionCanvasFactory;this.sprites=new BossSprites({loadImages,imageLoader:spriteImageLoader,canvasFactory:spriteCanvasFactory});this.legendarySprites=new LegendarySprites({loadImages,imageLoader:spriteImageLoader,canvasFactory:spriteCanvasFactory});this.legendarySpriteActive=false;this.regions=new Map();this.visuals=new WeakMap();this.errors=[];this.currentRegion=0;this.whenLoaded=Promise.resolve(true);this.spriteActive=false;}
+  get ready(){return this.legendarySpriteActive?this.legendarySprites.ready:this.spriteActive?this.sprites.ready:!!this.regions.get(this.currentRegion)?.ready;}
+  prepare(region,{legacy=false}={}){
+    this.legendarySpriteActive=!legacy&&isLegendarySpriteId(region);if(this.legendarySpriteActive){this.spriteActive=false;this.currentRegion=region;this.whenLoaded=this.legendarySprites.prepare(region);return this.whenLoaded;}
     this.spriteActive=isBossSpriteRegion(region);if(this.spriteActive){this.currentRegion=region;this.whenLoaded=this.sprites.prepare(region);return this.whenLoaded;}
     region=cacheRegion(region);this.currentRegion=region;if(this.regions.has(region)){const entry=this.regions.get(region);this.regions.delete(region);this.regions.set(region,entry);this.whenLoaded=entry.promise;return this.whenLoaded;}
     const entry={ready:BOSS_ART[region]?.temporary||false,frames:new Map(),textures:null};this.regions.set(region,entry);while(this.regions.size>3)this.regions.delete(this.regions.keys().next().value);
@@ -212,8 +216,9 @@ export class BossArt{
     }catch(error){this.errors.push(error.message);entry.error=error.message;return false;}})();this.whenLoaded=entry.promise;return entry.promise;
   }
   step(b,time,dt,heroX=b.x){
+    if(usesLegendarySprites(b)){this.prepare(b.legendaryId);return this.legendarySprites.step(b,time);}
     if(usesBossSprites(b)){this.prepare(b.region??b.regionId);return this.sprites.step(b,time);}
-    const selection=bossArtPose(b,time),region=selection.region;this.prepare(region);
+    const selection=bossArtPose(b,time),region=selection.region;this.prepare(region,{legacy:!!b.legendaryHelper||!!b.helperTheme});
     let v=this.visuals.get(b);if(!v){v={selection,lastX:b.x,lastY:b.y,pose:null};this.visuals.set(b,v);}if(v.selection?.sheet!==selection.sheet||v.selection?.frame!==selection.frame){v.previous=v.selection;v.transition=time;}v.selection=selection;v.time=time;
     if(region===4){
       const model=scorpionPoseModel(b,time,heroX),scale=(b.h||165)/393,dx=(b.x-v.lastX)/scale;
@@ -247,8 +252,9 @@ export class BossArt{
     }
     return this.inspect(b);
   }
-  inspect(b){if(usesBossSprites(b))return this.sprites.inspect(b);const v=this.visuals.get(b),region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1]));return {name:BOSS_ART[region]?.name,redesigned:region===4,design:region===4?'Venom Crawler':undefined,temporary:!!BOSS_ART[region]?.temporary,loaded:!!this.regions.get(cacheRegion(region))?.ready,selection:v?.selection,pose:v?.pose,error:this.regions.get(cacheRegion(region))?.error||null};}
+  inspect(b){if(usesLegendarySprites(b))return this.legendarySprites.inspect(b);if(usesBossSprites(b))return this.sprites.inspect(b);const v=this.visuals.get(b),region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1]));return {name:BOSS_ART[region]?.name,redesigned:region===4,design:region===4?'Venom Crawler':undefined,temporary:!!BOSS_ART[region]?.temporary,loaded:!!this.regions.get(cacheRegion(region))?.ready,selection:v?.selection,pose:v?.pose,error:this.regions.get(cacheRegion(region))?.error||null};}
   draw(c,b,{time=0,alpha=1}={}){
+    if(usesLegendarySprites(b)){this.legendarySprites.draw(c,b,{time,alpha});return;}
     if(usesBossSprites(b)){this.sprites.draw(c,b,{time,alpha});return;}
     const v=this.visuals.get(b);if(!v)return;
     const p=v.selection,entry=this.regions.get(cacheRegion(p.region)),x=mix(b.prevX??b.x,b.x,alpha),y=mix(b.prevY??b.y,b.y,alpha),dead=b.state==='dead';

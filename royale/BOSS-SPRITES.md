@@ -1,6 +1,36 @@
-# Royale boss sprites — Batch 3
+# Royale boss sprites — Batch 4
 
-Manual-upload patch for `feature/royale-boss-sprites`, based on verified commit **24f29cb3fcac896983d4a17b998d0256b42369a9**. No Batch 3 commit or push was performed. Wait for the user's upload confirmation before Legendary work.
+Lightning Spree, Air Pollution Monster and Styrodog use their approved Legendary designs. Base: **7316438e5c1eb21a07f862b6adc24615d0d6d6a5**, verified against the remote boss branch. All 137 prior batch package files match that commit. Development remains isolated to `feature/royale-boss-sprites`; no merge is part of this batch.
+
+## Artwork and integration
+
+The three transparent RGBA atlases contain 36, 36 and 40 distinct full-body poses respectively. Each uses four columns, 512-pixel cells, foot anchor `[224,480]` and reference height 224. Idle, movement, each existing attack, hit and collapse have their own sequences; Styrodog also has a landing-impact row. Exact source sheets, approved references, generation prompts, source rectangles and SHA-256 hashes are included. These are newly authored animation poses, not cropped miniature concept poses.
+
+`legendary-sprites.mjs` adapts presentation to the existing simulation. `boss-art.mjs` routes only these three Legendary IDs to it; helpers, seven regional bosses and the remaining five Legendary bosses retain their prior paths. This is the only shared presentation change to consider during later monster/boss integration. No shared world renderer or regular-monster module changed.
+
+One decoded PNG is reused for all states of a boss, with a two-atlas cache. Non-contact transitions blend over 45 ms on a reusable transparent canvas. Active attacks bypass blending so their contact pose is immediate. Styrodog's leap reaches its impact pose at the existing 98% landing tick. All poses use the entity's interpolated world position, facing and original height. Three-phase particles read existing phase state without creating gameplay timers or damage. Lightning's single yellow ground-warning area remains in the untouched combat renderer.
+
+## Review and validation
+
+Serve the repository root and open `royale/tests/boss-sprites-batch4.html` for every animation, phase, facing, elevated surface, hitbox overlay and atlas download. Its playable-practice link opens the existing isolated Level-99 Legendary test heroes. These fixtures do not use adventure save slots. Open `royale/qa/boss-sprites/batch4/` for test logs, screenshots, all-pose contact sheets, source provenance and measured performance.
+
+Run `node --test royale/tests/*.test.mjs` from the repository root. Baseline: 657 passing tests. Batch 4 adds 15 targeted tests for distinct alpha frames, padding/alignment, collapse, timing, immutable combat state, helper routing, cache bounds and protected files. The browser review validates all 112 poses in both facings at ground/elevated origins (448 actual canvas draws). Existing Phase 7 browser tests cover all eight Legendary bosses at five viewport sizes, level gating, 50% restoration, protected fourth power, waves, permanent defeat, reward claims, revisits/remains and save compatibility.
+
+Repack only Batch 4 with `node royale/tools/pack-boss-sprites-batch4.mjs`; native review uses `node royale/tools/review-boss-sprites-batch4.mjs`. These development tools require pngjs/sharp and @napi-rs/canvas respectively. They do not rebuild regional art. Runtime has no added package dependency.
+
+Measured cloud gameplay (30-second runs): Lightning Spree desktop, 1.32 FPS; Air Pollution Monster landscape-phone size, 1.17 FPS; Styrodog landscape-phone size, 1.33 FPS. Average whole-game draw cost was 2.42–3.41 ms. Frame scheduling was much slower than drawing; the cause was not established. Sustained 60 FPS remains unverified. See raw JSON reports; these are not physical-device benchmarks.
+
+## Limits and protected scope
+
+Four poses per sequence plus short blends are a compact animation treatment, not dense hand-drawn animation. Fine armor/smoke detail can vary across generated poses. The source sheets include rejected overlapping rows; the manifest selects replacement sheets for Lightning's idle/walk and Styrodog's claw/lunge. Raster timing measures only the boss renderer, not total game FPS. Browser performance is reported separately; no physical-device testing is claimed.
+
+All original names, HP, damage, cooldowns, attacks, hitboxes, thresholds, waves, rewards, progression, saves, disruption, fourth abilities and skeletal remains code are unchanged. All seven regional boss assets and the 21 regular monsters remain byte-identical. No Story, Versus, main, or Royale branch changes are included. No Batch 5 work has begun.
+
+---
+
+# Archived Batch 3 implementation notes
+
+Batch 3 was subsequently verified on `feature/royale-boss-sprites` at **7316438e5c1eb21a07f862b6adc24615d0d6d6a5**. The notes below describe its original package.
 
 ## Completed regional appearances
 

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "lightning",
+    "viewport": [
+      1280,
+      720
+    ],
+    "frames": 600,
+    "meanMs": 0.16420502833333217,
+    "p95Ms": 1.4288189999999759,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "lightning",
+    "viewport": [
+      390,
+      844
+    ],
+    "frames": 600,
+    "meanMs": 0.15684435500000365,
+    "p95Ms": 1.4176829999998972,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "air",
+    "viewport": [
+      1280,
+      720
+    ],
+    "frames": 600,
+    "meanMs": 0.3313490116666624,
+    "p95Ms": 1.867515999999796,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "air",
+    "viewport": [
+      390,
+      844
+    ],
+    "frames": 600,
+    "meanMs": 0.25539599499999666,
+    "p95Ms": 1.6429039999998167,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "styrodog",
+    "viewport": [
+      1280,
+      720
+    ],
+    "frames": 600,
+    "meanMs": 0.14897954499999894,
+    "p95Ms": 1.2590680000002976,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "styrodog",
+    "viewport": [
+      390,
+      844
+    ],
+    "frames": 600,
+    "meanMs": 0.15884997666665487,
+    "p95Ms": 1.3557510000000548,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  }
+]

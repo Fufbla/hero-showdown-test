@@ -1,0 +1,59 @@
+{
+  "baseCommit": "7316438e5c1eb21a07f862b6adc24615d0d6d6a5",
+  "branch": "feature/royale-boss-sprites",
+  "bosses": [
+    "Lightning Spree",
+    "Air Pollution Monster",
+    "Styrodog"
+  ],
+  "authoredPoses": 112,
+  "baseline": {
+    "passed": 657,
+    "failed": 0,
+    "skipped": 0
+  },
+  "finalAutomatedTests": {
+    "passed": 672,
+    "failed": 0,
+    "skipped": 0,
+    "newFocusedTests": 15
+  },
+  "browserAutomated": {
+    "allPoseGroundElevatedFacingChecks": 448,
+    "legendaryProgressionMatrix": 920,
+    "durability": 10,
+    "saveAndRewardEdges": 17,
+    "regionalMatrix": 725,
+    "failedFinalChecks": 0,
+    "initialAttempt": "Regional matrix initially timed out during a reload while other browser tabs were active. Preserved initial log. Foreground rerun completed 725 assertions without failures."
+  },
+  "manualVisualReview": {
+    "reviewed": [
+      "Three complete pose sheets",
+      "All three bosses in desktop arenas",
+      "All three bosses in landscape-phone-sized arenas",
+      "Lightning single yellow ground warning",
+      "Body proportions, grounded origins, collapse silhouettes and effect separation"
+    ],
+    "physicalDeviceTesting": false,
+    "unassistedVictories": false
+  },
+  "preservation": {
+    "unchangedExistingFiles": 805,
+    "modifiedExistingFiles": [
+      "royale/boss-art.mjs",
+      "royale/BOSS-SPRITES.md"
+    ],
+    "regionalBosses": 7,
+    "regularMonsters": 21,
+    "gameplayUnchanged": true,
+    "mainStoryVersusUnchanged": true,
+    "priorBatchPackageFilesMatched": 137
+  },
+  "limitations": [
+    "Four poses per sequence with short non-contact blends; fine generated armor/smoke details may vary.",
+    "Sustained 60 FPS is not verified: measured cloud browser runs were 1.17\u20131.33 FPS; whole-game draw time averaged 2.42\u20133.41 ms. Cause of slow frame scheduling not established.",
+    "No physical desktop or mobile device testing; synthetic browser fixtures and native raster review used."
+  ],
+  "nextBatch": "Not started; await user approval."
+}
