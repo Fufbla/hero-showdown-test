@@ -12,6 +12,7 @@ import * as StyroModule from '../assets/animation/styro-atlas.js';
 import { LEGENDARY } from './legendary-data.mjs';
 import * as FighterModule from '../assets/villain-motion/fighter-atlas.js';
 import {BossSprites,BOSS_SPRITE_DATA,bossSpritePose,isBossSpriteRegion,usesBossSprites} from './boss-sprites.mjs';
+import {SCORPION_SKIN,scorpionPresentationPose} from './scorpion-sprites.mjs';
 
 const Shore=ShoreModule.default||globalThis.HealthiaShoreBoss;
 const Rig=RigModule.default||globalThis.HealthiaScorpionRigCore;
@@ -37,6 +38,7 @@ export const BOSS_ART=Object.freeze({
   7:{name:'Ultimate Pollution Boss',temporary:true},
 });
 export const BOSS_ART_DEPENDENCIES=Object.freeze([
+  SCORPION_SKIN,
   ...Object.values(BOSS_SPRITE_DATA.bosses).map(b=>b.file),
   'assets/animation/lightening-spree-atlas.js','assets/animation/lightening-spree-poses.png','assets/animation/air-pollution-atlas.js','assets/animation/air-pollution-poses.png','assets/animation/styrodog-atlas.js','assets/animation/styrodog-presence.png','assets/animation/styrodog-attacks.png','assets/animation/sonic-tusk-atlas.js','assets/animation/sonic-tusk-presence.png','assets/animation/sonic-tusk-attacks.png','assets/animation/sonic-tusk-walk.png','assets/animation/styro-atlas.js','assets/animation/styro-presence.png','assets/animation/styro-attacks.png',
   'assets/shore/boss-core.js','assets/shore/boss-parts.png','assets/scorpion-rig/rig-core.js',
@@ -106,6 +108,7 @@ export function scorpionPoseModel(b,time=0,heroX=b.attack?.targetX??b.x){
   m.state=native[b.state]||'intro';m.time=time;m.age=progress(b)*(Shore.DURATIONS[m.state]||1);
   m.side=b.attack?.side===-1?-1:b.attack?.side===1?1:(b.face===1?-1:1);
   m.hp=b.hp;m.maxHp=b.maxHp;m.flash=b.flash||0;m.locked=true;
+  if(b.state==='idle'&&b.flash>0){m.state='stunned';m.age=clamp((.12-b.flash)/.12)*.6;}
   const scale=(b.h||165)/393;
   m.targetX=clamp(640+((b.attack?.targetX??heroX)-b.x)/scale,110,1170);
   m.clawReturnAngle=-m.side*Shore.CLAWS[m.side===1?0:1].limit;
@@ -141,14 +144,14 @@ function cacheFrame(image,f){
 }
 
 const rects=[[24,70,591,438],[625,44,380,473],[1080,44,432,470],[157,528,240,443],[629,552,282,394],[938,800,571,180]];
-const bodyPolygon=[[321,76],[373,112],[421,139],[442,164],[477,151],[510,176],[513,211],[494,239],[456,256],[433,283],[419,307],[429,341],[415,375],[373,416],[322,448],[273,429],[236,400],[212,367],[210,329],[205,290],[190,260],[158,245],[130,220],[126,174],[146,151],[191,157],[216,171],[254,132],[286,115]];
+const bodyPolygon=[[321,38],[373,112],[421,139],[442,164],[477,151],[510,176],[513,211],[494,239],[456,256],[433,283],[419,307],[429,341],[415,375],[373,416],[322,448],[273,429],[236,400],[212,367],[210,329],[205,290],[190,260],[158,245],[130,220],[126,174],[146,151],[191,157],[216,171],[254,132],[286,115]];
 const leftJaw=[[884,280],[911,308],[909,350],[899,386],[868,420],[835,450],[794,472],[741,495],[695,508],[720,486],[743,450],[770,412],[793,367],[810,335],[840,310]];
 const rightJaw=[[1235,280],[1203,313],[1207,360],[1229,399],[1262,435],[1302,464],[1361,491],[1438,507],[1399,480],[1353,443],[1311,397],[1290,356],[1272,323]];
 const jawCuts=[[[824,335],[911,337],...leftJaw.slice(3,14)],[[1207,350],...rightJaw.slice(3),[1272,350]]];
 const forearmCuts=[[[625,44],[1005,44],[1005,265],[955,265],[920,240],[890,220],[855,205],[625,205]],[[1080,44],[1512,44],[1512,205],[1270,205],[1240,220],[1205,240],[1155,265],[1080,265]]];
-function scorpionTextures(image){
-  const cache=(rect,points,cut)=>{const [x,y,w,h]=rect,canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const c=canvas.getContext('2d');c.translate(-x,-y);c.beginPath();polygon(c,points||[[x,y],[x+w,y],[x+w,y+h],[x,y+h]]);if(cut)for(const p of typeof cut[0][0]==='number'?[cut]:cut)polygon(c,p);c.clip(cut?'evenodd':'nonzero');c.drawImage(image,0,0);return {canvas,x,y,w,h};};
-  return {image,body:cache([123,73,394,380],bodyPolygon),
+function scorpionTextures(image,canvasFactory=()=>document.createElement('canvas')){
+  const cache=(rect,points,cut)=>{const [x,y,w,h]=rect,canvas=canvasFactory(w,h);canvas.width=w;canvas.height=h;const c=canvas.getContext('2d');c.translate(-x,-y);c.beginPath();polygon(c,points||[[x,y],[x+w,y],[x+w,y+h],[x,y+h]]);if(cut)for(const p of typeof cut[0][0]==='number'?[cut]:cut)polygon(c,p);c.clip(cut?'evenodd':'nonzero');c.drawImage(image,0,0);return {canvas,x,y,w,h};};
+  return {image,body:cache([115,30,414,424],bodyPolygon),
     legs:Rig.legs.map(def=>{const sections=Rig.sections(def.source,def.widths),p=[...sections.map(s=>[s[0].x,s[0].y]),...sections.slice().reverse().map(s=>[s[1].x,s[1].y])],xs=p.map(p=>p[0]),ys=p.map(p=>p[1]),x=Math.floor(Math.min(...xs))-2,y=Math.floor(Math.min(...ys))-2;return cache([x,y,Math.ceil(Math.max(...xs))-x+2,Math.ceil(Math.max(...ys))-y+2],p);}),
     plate:cache([177,674,208,170]),claws:[cache(rects[1],null,[jawCuts[0],forearmCuts[0]]),cache(rects[2],null,[jawCuts[1],forearmCuts[1]])],
     forearms:forearmCuts.map((p,i)=>cache(rects[i+1],p.map(([x,y],j)=>[x,y+(j>1?32:0)]))),jaws:[cache(rects[1],leftJaw),cache(rects[2],rightJaw)]};
@@ -161,7 +164,7 @@ function triangle(c,texture,a,b,d,A,B,D){
 }
 function plate(c,t,a,b,width){const dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy);if(L<.3)return;c.save();c.translate((a.x+b.x)/2,(a.y+b.y)/2);c.rotate(Math.atan2(dy,dx)-Math.PI/2);c.drawImage(t.plate.canvas,-width/2,-(L+15)/2,width,L+15);c.restore();}
 function drawScorpion(c,t,p){
-  ellipse(c,640,573,290,26,'#080e1838');
+  ellipse(c,640,573,290,26,p.defeated?'#080e1838':p.phase===3?'#b845d838':p.phase===2?'#99dc4930':'#080e1838');
   const segments=p.tail.slice(1).map((b,i)=>({a:p.tail[i],b,i,z:(p.tail[i].z+b.z)/2})).sort((a,b)=>b.z-a.z);
   for(const s of segments)plate(c,t,s.a,s.b,50-s.i*1.2);
   for(let j=0;j<8;j++){
@@ -195,7 +198,7 @@ function drawTemporary(c,b,time){
 
 const cacheRegion=id=>({wastelander:3,venomis:5,atomdust:6})[id]||id;
 export class BossArt{
-  constructor({loadImages=typeof Image!=='undefined',spriteImageLoader,spriteCanvasFactory}={}){this.loadImages=loadImages;this.sprites=new BossSprites({loadImages,imageLoader:spriteImageLoader,canvasFactory:spriteCanvasFactory});this.regions=new Map();this.visuals=new WeakMap();this.errors=[];this.currentRegion=0;this.whenLoaded=Promise.resolve(true);this.spriteActive=false;}
+  constructor({loadImages=typeof Image!=='undefined',spriteImageLoader,spriteCanvasFactory,scorpionImageLoader=imageFor,scorpionCanvasFactory}={}){this.loadImages=loadImages;this.scorpionImageLoader=scorpionImageLoader;this.scorpionCanvasFactory=scorpionCanvasFactory;this.sprites=new BossSprites({loadImages,imageLoader:spriteImageLoader,canvasFactory:spriteCanvasFactory});this.regions=new Map();this.visuals=new WeakMap();this.errors=[];this.currentRegion=0;this.whenLoaded=Promise.resolve(true);this.spriteActive=false;}
   get ready(){return this.spriteActive?this.sprites.ready:!!this.regions.get(this.currentRegion)?.ready;}
   prepare(region){
     this.spriteActive=isBossSpriteRegion(region);if(this.spriteActive){this.currentRegion=region;this.whenLoaded=this.sprites.prepare(region);return this.whenLoaded;}
@@ -203,7 +206,7 @@ export class BossArt{
     const entry={ready:BOSS_ART[region]?.temporary||false,frames:new Map(),textures:null};this.regions.set(region,entry);while(this.regions.size>3)this.regions.delete(this.regions.keys().next().value);
     if(entry.ready||!this.loadImages){entry.promise=Promise.resolve(entry.ready);this.whenLoaded=entry.promise;return entry.promise;}
     entry.promise=(async()=>{try{
-      if(region===4)entry.textures=scorpionTextures(await imageFor('assets/shore/boss-parts.png'));
+      if(region===4)entry.textures=scorpionTextures(await this.scorpionImageLoader(SCORPION_SKIN),this.scorpionCanvasFactory);
       else for(const sheet of plans[region]?.()||[]){const im=await imageFor(sheet.file);for(const frame of sheet.frames)entry.frames.set(frame.key,cacheFrame(im,frame));}
       entry.ready=true;return true;
     }catch(error){this.errors.push(error.message);entry.error=error.message;return false;}})();this.whenLoaded=entry.promise;return entry.promise;
@@ -240,18 +243,18 @@ export class BossArt{
           if(swinging>=4)f.lastCycle=serial;else swinging++;
         }
       }
-      v.pose=v.rig.advance(model);v.model=model;v.lastX=b.x;v.lastY=b.y;
+      const underlying=b.state==='dead'?(v.deathStartPose||(v.deathStartPose=v.rig.advance(model))):v.rig.advance(model);if(b.state!=='dead')v.deathStartPose=null;v.pose=scorpionPresentationPose(underlying,b,Rig);v.model=model;v.lastX=b.x;v.lastY=b.y;
     }
     return this.inspect(b);
   }
-  inspect(b){if(usesBossSprites(b))return this.sprites.inspect(b);const v=this.visuals.get(b),region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1]));return {name:BOSS_ART[region]?.name,temporary:!!BOSS_ART[region]?.temporary,loaded:!!this.regions.get(cacheRegion(region))?.ready,selection:v?.selection,pose:v?.pose,error:this.regions.get(cacheRegion(region))?.error||null};}
+  inspect(b){if(usesBossSprites(b))return this.sprites.inspect(b);const v=this.visuals.get(b),region=b.legendaryId||b.helperTheme||(b.region??b.regionId??Number(String(b.type).split('-')[1]));return {name:BOSS_ART[region]?.name,redesigned:region===4,design:region===4?'Venom Crawler':undefined,temporary:!!BOSS_ART[region]?.temporary,loaded:!!this.regions.get(cacheRegion(region))?.ready,selection:v?.selection,pose:v?.pose,error:this.regions.get(cacheRegion(region))?.error||null};}
   draw(c,b,{time=0,alpha=1}={}){
     if(usesBossSprites(b)){this.sprites.draw(c,b,{time,alpha});return;}
     const v=this.visuals.get(b);if(!v)return;
     const p=v.selection,entry=this.regions.get(cacheRegion(p.region)),x=mix(b.prevX??b.x,b.x,alpha),y=mix(b.prevY??b.y,b.y,alpha),dead=b.state==='dead';
     if(dead&&b.age>=1.25)return;
     c.save();c.translate(x,y);
-    if(dead){if(b.legendary){c.translate(0,Math.min(1,b.age/.6)*12);c.rotate(-Math.min(1,b.age/.6)*.8);}else c.globalAlpha*=Math.max(0,1-b.age*.8);}
+    if(dead){if(b.legendary){c.translate(0,Math.min(1,b.age/.6)*12);c.rotate(-Math.min(1,b.age/.6)*.8);}else c.globalAlpha*=p.region===4?1-clamp((b.age-.95)/.3):Math.max(0,1-b.age*.8);}
     if(p.temporary)drawTemporary(c,b,time);
     else if(entry?.ready){
       if(p.region===4){const s=(b.h||165)/393;c.scale(s,s);c.translate(-640,-573);drawScorpion(c,entry.textures,v.pose);}

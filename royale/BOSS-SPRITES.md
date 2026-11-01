@@ -1,47 +1,53 @@
-# Boss sprites — manual upload Batch 1
+# Boss sprites — manual upload Batch 2
 
-Target branch: `feature/royale-boss-sprites`. The user uploads this batch manually. Do not push, merge into Royale/main, or begin the next batch until the user confirms the upload.
+Target branch: `feature/royale-boss-sprites`. This package is for manual upload. Do not push, merge, or start Batch 3 until the user confirms this upload.
 
-## Starting point and recovery
+## Verified base and recovery
 
-Verified remote base: `838d0ccaa41eb7c2ca616619f8c8c0f806ca1cdf`. Both the Royale and boss branches pointed here when inspected on 2026-10-31. Main was `b11a1d8103f10e38d63788496660b99d4a8d9e6e`.
+Batch 2 starts at **`f140ba3083090a6959f3d8951d2bcc063fa5385d`** (`Add files via upload`, inspected 2026-11-01). All 50 files in the previous Batch 1 ZIP exactly match the remote Git tree by Git blob SHA. There are no missing or mismatched Batch 1 files. The unchanged base passes 637 tests. Details: `qa/boss-sprites/batch2/base-verification.json`.
 
-The local-only checkpoint `d6b667ef3a8a8a6af7637ac4290c8b0dd3e8dbc9` contained three full animation source sheets, reference panels, and the baseline audit. Those files were recovered unchanged; this batch did not regenerate them. The downloadable patch includes the checkpoint files as additions relative to the verified remote base. The local checkpoint is not claimed to exist on GitHub.
+Batch 1 artwork checkpoints were recovered and retained. No completed Batch 2 redesigned animation checkpoint was available. The approved references and existing scorpion rig were reused; only missing Batch 2 artwork was generated. Earlier local-only commits are not assumed to exist remotely.
 
-The supplied `002sprites(1).zip` contains the fifteen approved concept designs. Its artwork is reference material, not a ready-made animation atlas. The recovered source sheets were generated separately from those references during the earlier session. They are not crops of the miniature concept poses.
+## Included appearances
 
-## Included bosses
+The game continues to show the original boss names.
 
-| Original game name | Approved appearance | Animation rows, four distinct frames per row |
-| --- | --- | --- |
-| Trash Monster | Trash Monster | idle, walk, swipe, throw, slam, hit, defeat, phase surge |
-| Bushman | Thorn Beast | idle, walk, branch sweep, vine strike, thorns, roots, hit, defeat |
-| Wastelander (regional) | Sludge Beast | idle, walk, punch, toxic shot, slam/shockwave, ground hazard, hit, defeat |
+| Batch | Game name | Approved appearance | Presentation |
+| --- | --- | --- | --- |
+| 1, preserved | Trash Monster | Trash Monster | Existing 32-pose atlas |
+| 1, preserved | Bushman | Thorn Beast | Existing 32-pose atlas |
+| 1, preserved | Wastelander, regional | Sludge Beast | Existing 32-pose atlas |
+| 2 | Giant Scorpion | Venom Crawler | New transparent component atlas on the continuous eight-leg rig |
+| 2 | Venomis, regional | Mutant Stalker | New 32-pose transparent atlas |
+| 2 | AtomDust, regional | Energy Phantom | New 32-pose transparent atlas |
 
-Each transparent RGBA atlas has 32 different frames in a 4 × 8 grid. Cells are 416 × 416; atlases are 1664 × 3328. Frames share the foot origin `[176,384]` and a 192-unit reference height. The packer isolates whole source poses, removes neighboring fragments, preserves alpha, and does not stretch collapse poses. The source sheets remain available for future art corrections.
+Venomis rows: idle, movement, thorn strike/combo, thorn volley, poison, rising thorns, hit, collapse. AtomDust rows: idle, movement, energy blast, expansion/shockwave, debris, atomic surge, hit, collapse. Each row contains four distinct newly authored poses. They are not crops of concept thumbnails. Detached projectiles and area effects still come from the existing combat renderer.
 
-`boss-sprites.mjs` handles these three regional bosses only. It reads the existing state, phase, velocity, hit flash and attack timers. Windup poses precede contact; the contact pose appears at the existing active damage tick. Phase effects are cosmetic. A short offscreen crossfade smooths non-contact pose changes. Image caching keeps at most two decoded new atlases. No frame allocates a new image.
+Batch 2 pose atlases are 2048 × 4096, with 512-pixel cells. Venomis and AtomDust use anchor `[208,480]` and reference height 192. Giant Scorpion's exported inspection atlas uses anchor `[256,480]` and the existing 165-unit body height. Its runtime uses the component atlas and continuous IK, so it can aim at the actual frozen attack target. The exported 32 scorpion samples are not a replacement for that targeting rig. Batch 1 retains its original 416-pixel cells, anchors, artwork, and playback timings.
 
-## Review and test
-
-Serve the repository root over HTTP, for example `python3 -m http.server 8000`, then open:
-
-- `http://localhost:8000/royale/tests/boss-sprites.html` — animation, phase, facing, hitbox, single-step and measurement controls, plus atlas/contact-sheet downloads.
-- `http://localhost:8000/royale/tests/bosses.html` — playable encounters using the existing boss practice fixtures.
-- `http://localhost:8000/royale/tests/phase5-browser.html?spriteBatch=1` — gameplay and layout checks for this batch at five viewport sizes.
-
-The review is an addition to the existing repository, not a standalone replacement game. Do not open its HTML with a `file://` URL.
-
-Automated tests: `node --test royale/tests/*.test.mjs`.
-
-Optional artwork tooling: `node royale/tools/pack-boss-sprites.mjs` (requires `pngjs` and `sharp`) and `node royale/tools/review-boss-sprites.mjs` (requires `@napi-rs/canvas`). These are offline authoring dependencies, not game runtime dependencies. The tools also use the installed Work runtime when present. The uploaded PNGs are ready to use without running either tool.
-
-See `qa/boss-sprites/VALIDATION.md` for automated results, visual observations, measured performance, and outstanding review. The three browser previews measured 1.44–1.74 FPS in this cloud session, so sustained 60 FPS is **not verified**. Native raster timings are not browser FPS. No physical desktop, phone or tablet was tested.
+Scorpion anatomy retains eight independent three-segment leg chains, planted feet, moving abdomen, two articulated claws, ten tail links, and the connected stinger. Its component source follows the existing UV layout; the rig reuses a source leg pair to draw the fourth pair, as before. New Royale-only hit and collapse poses do not change the shared Story rig. Collapse keeps feet planted while the abdomen and tail settle.
 
 ## Integration boundaries
 
-Changes to existing runtime files are confined to the boss presentation adapter and its artwork-status HUD label. `boss-art.mjs` dispatches regional bosses 1–3 to the new renderer; explicit legacy routing preserves the Legendary Wastelander and its helpers. This adapter change must be accounted for when the boss branch is eventually integrated with the monster branch. No shared world-renderer change was needed.
+JavaScript runtime edits are limited to `boss-art.mjs`, `boss-sprites.mjs`, and the new `scorpion-sprites.mjs`. The new atlas metadata extends the existing cache and allows per-profile cell sizes. At most two pose atlases are decoded; canvas blend buffers and scorpion component masks are reused. The short non-contact crossfade from Batch 1 remains. Attack contact never waits for a blend.
 
-The original names, HP, damage, cooldowns, phase thresholds, helper limits, attack patterns, rewards, chests, rematches, Legendary permanence/remains, Villain Merge, fourth power, hero abilities and save format remain unchanged. Existing shared art, regular-monster artwork/integration, main, Story and Versus files are untouched. No branch was merged or uploaded by this batch.
+All simulation files remain byte-identical to the verified base: HP, damage, cooldowns, attack patterns and timing, phase thresholds, reinforcement limits, hitboxes, rewards, first-win chests, rematches, progression and saves. Scorpion contact still lands at 65% of its existing active interval; Venomis and AtomDust contact frames begin at their existing active tick. Phase effects only read current phase state.
 
-The remaining twelve bosses retain their existing appearances. Their redesigned artwork and animations are not completed by this package. Giant Scorpion anatomy/rig changes are not part of this batch. Further work waits for the user's upload confirmation.
+Legendary names route through their existing artwork and combat. Permanent defeat, remains, Villain Merge and fourth-power rules are unchanged and remain covered by the existing tests. No regular-monster artwork, animation or integration code changed. The boss-only stylesheet also places the status panel beside the hero/status panels in short landscape layouts to keep warnings and artwork visible. No shared world renderer, Story, Versus or root game files changed. Main and Royale branches were not written or merged.
+
+For eventual branch integration, reconcile the boss presentation adapter and boss-HUD stylesheet changes if the separate monster branch also touches those adapters. No shared renderer change is required by this batch.
+
+## Review locally
+
+From the complete repository root, run `python3 -m http.server 8000`, then open:
+
+- `http://localhost:8000/royale/tests/boss-sprites-batch2.html`: all states, phases, facing, pause/step, body hitbox, eight-leg overlay and atlas downloads.
+- `http://localhost:8000/royale/tests/bosses.html?region=4`: playable practice encounters with disposable heroes and viewport controls.
+- `http://localhost:8000/royale/tests/phase5-browser.html?spriteBatch=2`: three bosses at five viewport sizes.
+- `http://localhost:8000/royale/tests/boss-sprites.html`: preserved Batch 1 animation review.
+
+These files extend the existing game. The upload ZIP is a patch, not a standalone repository. Serve through HTTP rather than opening HTML as local files.
+
+Automated suite: `node --test royale/tests/*.test.mjs`. Run `npm ci` inside `royale` first if dependencies are absent. Optional authoring tools: `node royale/tools/pack-boss-sprites-batch2.mjs` (`pngjs`, `sharp`) and `node royale/tools/review-boss-sprites-batch2.mjs` (`@napi-rs/canvas`). They use the installed Work runtime as a fallback. Uploaded PNGs do not require these tooling dependencies at runtime.
+
+See `qa/boss-sprites/batch2/VALIDATION.md` for measured results and limitations. Batch 2 is ready for visual review and manual upload; sustained 60 FPS and physical-device behavior are not certified. The remaining nine redesigned bosses, including all eight Legendary redesigns, are outside this package. Batch 3 waits for upload confirmation.

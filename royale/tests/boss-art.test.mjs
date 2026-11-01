@@ -29,11 +29,10 @@ test('all regional attack states select existing approved frames; Venomis never 
     for(const walking of [false,true]){
       b.prevX=b.x-(walking?1:0);const p=bossArtPose(b,q*13.7);
       assert.equal(p.region,region);
-      if(region<=3){assert.equal(p.redesigned,true);assert.ok(BOSS_SPRITE_DATA.bosses[region].frames[p.frame]);continue;}
+      if(BOSS_SPRITE_DATA.bosses[region]){assert.equal(p.redesigned,true);assert.ok(BOSS_SPRITE_DATA.bosses[region].frames[p.frame]);continue;}
       if(region===7){assert.equal(p.temporary,true);continue;}
       if(region===4){assert.equal(p.rig,true);continue;}
       assert.ok(sources[p.sheet]?.has(p.frame),`${region}/${kind}/${state}/${q}: missing ${p.sheet}:${p.frame}`);
-      if(region===5)assert.ok(p.frame>=32&&p.frame<=47,'solo Venomis must retain her approved scientist design');
     }
   }
   assert.deepEqual(Object.keys(BOSS_ART).filter(k=>BOSS_ART[k].temporary),['7']);

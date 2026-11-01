@@ -4,8 +4,8 @@ import { makeBoss, arenaSurfaces } from '../bosses.mjs';
 import { PROFILE_KEY } from '../saves.mjs';
 import { saveBossFixture, fixtureCommand } from './boss-fixture.mjs';
 const $=id=>document.getElementById(id),frame=$('boss-frame'),report=$('report'),archive=$('suite-log'),run=$('run-boss-checks');
-const spriteBatch=new URLSearchParams(location.search).get('spriteBatch')==='1',regions=spriteBatch?[1,2,3]:[1,2,3,4,5,6,7];
-if(spriteBatch)run.textContent='Run Batch 1 bosses at five sizes';
+const spriteBatch=new URLSearchParams(location.search).get('spriteBatch'),regions=spriteBatch==='1'?[1,2,3]:spriteBatch==='2'?[4,5,6]:[1,2,3,4,5,6,7];
+if(['1','2'].includes(spriteBatch))run.textContent=`Run Batch ${spriteBatch} bosses at five sizes`;
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const until=async fn=>{const end=Date.now()+120000;while(!fn()){if(Date.now()>end)throw Error('Browser UI timed out');await wait(40);}};
 run.onclick=async()=>{
@@ -26,12 +26,13 @@ run.onclick=async()=>{
       const data=()=>JSON.parse(sessionStorage.getItem(key)).slots[0].snapshot;
       const attach=async()=>{d=frame.contentDocument;w=frame.contentWindow;el=id=>d.getElementById(id);await until(()=>d.querySelector('[data-action="continue"]'));d.querySelector('[data-action="continue"]').click();frame.focus();await until(()=>!el('boss-hud').hidden&&!el('boss-cue').textContent.includes('Loading'));};
       const inside=n=>{const r=n.getBoundingClientRect();return r.width>0&&r.height>0&&r.left>=-1&&r.right<=w.innerWidth+1&&r.top>=-1&&r.bottom<=w.innerHeight+1;};
+      const separate=(a,b)=>{const x=a.getBoundingClientRect(),y=b.getBoundingClientRect();return x.right<=y.left||y.right<=x.left||x.bottom<=y.top||y.bottom<=x.top;};
       const tap=code=>{for(const type of ['keydown','keyup'])d.body.dispatchEvent(new w.KeyboardEvent(type,{code,key:code,bubbles:true,cancelable:true}));};
       const command=(action,value)=>fixtureCommand(frame,action,value);
       await new Promise(r=>{frame.onload=r;frame.src=`../?qa=1&touch=1&testSession=${session}`;});await attach();
       check(`${label}: immediate full-HP boss and recommended-level hero`,Number(el('boss-health').getAttribute('aria-valuenow'))===BOSSES[region].hp&&el('level').textContent===String(BOSSES[region].level));
       check(`${label}: HUD artwork status follows the active presentation`,el('boss-art-note').textContent===(BOSS_ART[region].temporary?'TEMPORARY BOSS ART':''));
-      check(`${label}: boss bar, HP and XP fit without overlap`,inside(el('boss-hud'))&&inside(el('hp-text'))&&inside(el('xp-text'))&&el('boss-hud').getBoundingClientRect().top>=el('xp-text').getBoundingClientRect().bottom);
+      check(`${label}: boss bar, HP and XP fit without overlap`,inside(el('boss-hud'))&&inside(el('hp-text'))&&inside(el('xp-text'))&&separate(el('boss-hud'),el('hp-text'))&&separate(el('boss-hud'),el('xp-text')));
       check(`${label}: three power buttons and touch controls fit`,d.querySelectorAll('.power-button:not([hidden])').length===3&&[...d.querySelectorAll('.power-button:not([hidden])')].every(inside)&&inside(el('stick'))&&inside(d.querySelector('[data-control="jump"]')));
       el('pause').click();check(`${label}: saving, Tree and checkpoint escape blocked`,el('manual-save').disabled&&el('tree-from-pause').disabled&&el('return-camp').disabled);
       el('open-map').click();check(`${label}: all pause map travel blocked`,[...d.querySelectorAll('[data-travel]')].every(n=>n.disabled));el('map-close').click();el('resume').click();
