@@ -1,3 +1,32 @@
+# Regular monster animation integration — current status
+
+Verified remote base: `838d0ccaa41eb7c2ca616619f8c8c0f806ca1cdf`.
+
+Region 1 (Bottle Critter, Trash Slime, Sand Crawler) now has six separately drawn frames for each of idle, movement, attack, hit and defeat: **90 transparent PNG frames**, three production atlases, source masters and reproducible packaging. The original approved ZIP reference strips remain byte-identical. New poses are AI-drawn from those designs; they have not received a separate artist/user approval. Regions 2–7 still use the existing provisional single-pose motion and are unfinished.
+
+The runtime reads existing combat clocks, uses the existing display heights, and anchors every frame at the enemy’s feet. Authored defeat frames replace the previous additional procedural collapse only for loaded new animations. Loading failures retain playable original art. Large source atlases are released when changing regions; the display atlas cache remains capped at six.
+
+Region 1 validation: **642/642 Node tests**, **954 raster assertions**, **7,200 differential movement/collision/basic-attack steps**, and the protected-source scope check pass. Tests cover all four elevated tiers plus ordinary ground combat outside safe camps, approaching and attacking below 50% HP, unchanged attack damage, transparent margins, uncut silhouettes, unique frames, fixed ground anchors, night-eye rendering, and draw purity. Existing tests also cover XP, coins, equipment and Health Root drops, night bonuses, bosses, powers and saves. All protected gameplay files remain byte-identical to the working baseline.
+
+Actual runtime raster evidence: `tests/evidence/monster-sprites/region-1/`. Desktop 1280×720 and phone-sized 390×844 canvas renders were inspected. Recovered and revalidated on 2026-11-01: **2,003 browser assertions passed**; observed animation playback and captured `region-1/browser.jpg`. Physical iPhone/Android testing remains pending. Raster checks do not establish physical-device frame rate or fully verify temporal smoothness.
+
+The seven-region browser regression passed **13,637 assertions** after recovery. A 10.50-second Region 1 desktop sample measured **1.52 displayed FPS**, 0.98 FPS 1% low, and 5.48 ms mean simulation-plus-draw time. This cloud measurement does not establish sustained 60 FPS. Raw results: `tests/evidence/monster-sprites/region-1/all-regions-browser.json`.
+
+Run:
+
+```sh
+node --test royale/tests/*.test.mjs
+node royale/tests/monster-sprites-raster.mjs 1
+node royale/tests/compare-phase1.mjs
+node royale/tests/verify-monster-sprites.mjs
+```
+
+The raster runner needs `@napi-rs/canvas` (or the Work runtime dependency directory). The gallery at `tests/monster-sprites.html` uses the actual game atlas and provides a disposable platform practice scene.
+
+The following audit is historical and describes the previous reference-pose integration, which remains the fallback for unfinished regions.
+
+---
+
 # Approved monster-reference integration
 
 ## Audit before editing (baseline b3251ae)

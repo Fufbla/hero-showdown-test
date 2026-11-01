@@ -1,5 +1,5 @@
 import {MonsterAtlas,MONSTER_HEIGHT} from '../monster-art.mjs';
-import {SPRITE_CLIPS,SPRITE_CELL} from '../monster-sprites.mjs';
+import {MONSTER_ANIMATIONS} from '../monster-animation-catalog.mjs';
 import {MONSTER_SPRITES} from '../monster-sprite-catalog.mjs';
 import {WORLD_REGIONS,TYPES} from '../world.mjs';
 import {Game,STEP} from '../core.mjs';
@@ -10,7 +10,7 @@ let cards=[],types=[],time=.3,animating=false,request=0;
 for(const r of WORLD_REGIONS){const o=document.createElement('option');o.value=r.id;o.textContent=`${r.id}. ${r.name}`;$('region').append(o);}
 const typeRegion=()=>Number($('region').value),night=()=>typeRegion()>2&&$('night').checked;
 const entity=(type,clip,t)=>({type,id:0,face:1,state:clip==='idle'?'idle':clip==='move'?'chase':clip==='attack'?(t%1<.5?'warn':t%1<.78?'strike':'recover'):clip==='defeat'?'dead':'idle',age:clip==='attack'?(t%1<.5?t%1*1.3:t%1<.78?t%1-.5:t%1-.78):0,walkCycle:t*.8,flash:clip==='hit'?.12*(1-t%1):0,deadAge:clip==='defeat'?t%1*.55:0,hp:50,maxHp:100,desperate:true});
-function sprite(c,e,t,scale=1){c.save();c.scale(scale,scale);if(e.state==='dead'){const f=e.deadAge/.55;c.globalAlpha=1-f;c.scale(1+f*.15,1-f*.8);c.rotate(-f*.25);}atlas.draw(c,e,t,night());c.restore();}
+function sprite(c,e,t,scale=1){c.save();c.scale(scale,scale);if(e.state==='dead'){const f=e.deadAge/.55;c.globalAlpha=1-f;if(!atlas.hasAnimation(e.type)){c.scale(1+f*.15,1-f*.8);c.rotate(-f*.25);}}atlas.draw(c,e,t,night());c.restore();}
 function render(t){
  const chosen=$('motion').value;for(const [i,{canvas,c}]of cards.entries()){
   c.clearRect(0,0,canvas.width,canvas.height);const clip=chosen==='cycle'?['idle','move','attack','hit','defeat'][Math.floor(t/2)%5]:chosen;
@@ -23,8 +23,8 @@ function filmstrip(){fc.fillStyle='#f1eddd';fc.fillRect(0,0,1260,600);fc.textAli
   const x=126+j*252,y=170+i*195;fc.strokeStyle='#9bafa8';fc.beginPath();fc.moveTo(x-100,y+.5);fc.lineTo(x+100,y+.5);fc.stroke();fc.save();fc.translate(x,y);sprite(fc,entity(type,clip,clip==='attack'?.66:.28),.28,Math.min(1.7,112/MONSTER_HEIGHT[type]));fc.restore();fc.fillStyle='#173641';fc.font='13px system-ui';fc.fillText(TYPES[type].name,x,y+22);
  }
 }
-async function select(){animating=false;$('animate').textContent='Animate poses';types=Object.keys(TYPES).filter(k=>TYPES[k].region===typeRegion());$('gallery').replaceChildren();cards=types.map(type=>{const f=document.createElement('figure'),canvas=document.createElement('canvas'),caption=document.createElement('figcaption');canvas.width=420;canvas.height=280;canvas.className='art';canvas.setAttribute('aria-label',TYPES[type].name);caption.textContent=TYPES[type].name;const small=document.createElement('small');small.textContent=`${MONSTER_SPRITES[type].width} × ${MONSTER_SPRITES[type].height} source-derived PNG · provisional motion`;caption.append(small);f.append(canvas,caption);$('gallery').append(f);return {canvas,c:canvas.getContext('2d')};});
- $('status').textContent='Loading selected region…';const ok=await atlas.preload(typeRegion());render(time);filmstrip();$('status').textContent=ok?'Reference assets loaded. Transparent poses and motion are ready to review.':'This region still uses the original artwork, or an asset failed to load.';
+async function select(){animating=false;$('animate').textContent='Animate poses';types=Object.keys(TYPES).filter(k=>TYPES[k].region===typeRegion());$('gallery').replaceChildren();cards=types.map(type=>{const f=document.createElement('figure'),canvas=document.createElement('canvas'),caption=document.createElement('figcaption');canvas.width=420;canvas.height=280;canvas.className='art';canvas.setAttribute('aria-label',TYPES[type].name);caption.textContent=TYPES[type].name;const small=document.createElement('small');small.textContent=MONSTER_ANIMATIONS[type]?'30 transparent PNG frames · five drawn animation states':`${MONSTER_SPRITES[type].width} × ${MONSTER_SPRITES[type].height} source-derived PNG · provisional motion`;caption.append(small);f.append(canvas,caption);$('gallery').append(f);return {canvas,c:canvas.getContext('2d')};});
+ $('status').textContent='Loading selected region…';const ok=await atlas.preload(typeRegion());render(time);filmstrip();$('status').textContent=ok?'Region assets loaded. Captions identify completed frame animation and provisional motion.':'This region still uses the original artwork, or an asset failed to load.';
 }
 $('region').onchange=select;$('motion').onchange=()=>render(time);$('night').onchange=()=>{render(time);filmstrip();};
 $('animate').onclick=()=>{animating=!animating;$('animate').textContent=animating?'Freeze poses':'Animate poses';if(animating)requestAnimationFrame(loop);};function loop(now){if(!animating)return;time=now/1000;render(time);requestAnimationFrame(loop);}
@@ -33,15 +33,15 @@ $('download-sheet').onclick=()=>film.toBlob(b=>download(b,`Region-${typeRegion()
 $('download-results').onclick=()=>download(JSON.stringify(results,null,2),'monster-sprite-results.json','application/json');
 $('checks').onclick=async()=>{let checks=0;const check=(ok,label)=>{if(!ok)throw Error(label);checks++;},start=performance.now();$('checks').disabled=true;try{
  check(await atlas.preload(typeRegion()),'all region assets loaded');
- for(const type of types){const snapshots=[];for(const n of [false,true]){
-  const canvas=atlas.atlas(type,n),{w,h,columns,baseline}=SPRITE_CELL;check(!!canvas,type+' new atlas exists');
-  const c=canvas.getContext('2d',{willReadFrequently:true});for(let f=0;f<28;f++){
+ for(const type of types){const snapshots=[],frameCount=MONSTER_ANIMATIONS[type]?.frameCount||28;for(const n of [false,true]){
+  const canvas=atlas.atlas(type,n),{w,h,columns,baseline}=atlas.cellFor(type);check(!!canvas,type+' new atlas exists');
+  const c=canvas.getContext('2d',{willReadFrequently:true});for(let f=0;f<frameCount;f++){
    const data=c.getImageData(f%columns*w,Math.floor(f/columns)*h,w,h).data;let count=0,minX=w,maxX=0,minY=h,maxY=0,hash=2166136261;
    for(let i=0;i<data.length;i+=4){hash=Math.imul(hash^data[i],16777619)>>>0;if(data[i+3]>20){count++;const x=i/4%w,y=Math.floor(i/4/w);minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);}}
    check(count>100,type+' nonempty frame '+f);check(minX>0&&maxX<w-1&&minY>0&&maxY<h-1,type+' frame not clipped '+f);if(MONSTER_SPRITES[type].motion!=='hover')check(Math.abs(maxY-baseline)<4,type+' feet anchored '+f);snapshots.push(hash);
   }
  }
- check(new Set(snapshots.slice(0,28)).size>=10,type+' distinct visual states');check(snapshots[0]!==snapshots[28],type+' yellow night eyes');
+ check(new Set(snapshots.slice(0,frameCount)).size>=10,type+' distinct visual states');check(snapshots[0]!==snapshots[frameCount],type+' yellow night eyes');
  const g=new Game({random:()=>.99});g.travel(typeRegion());g.hero.level=99;g.hero.invulnerable=999;const s=g.surfaces.find(s=>s.id==='climb-0-4'),e=g.makeEnemy(type,s.x+70,s.id,100);g.enemies=[e];e.protection=0;g.hero.x=s.x+200;g.hero.y=s.y;const before={x:e.x,y:e.y,damage:g.monsterDamage(e)};
  g.damageEnemy(e,e.maxHp*.5,{stagger:false});check(e.desperate&&e.x===before.x&&e.y===before.y,type+' threshold has no displacement');check(g.monsterDamage(e)===before.damage,type+' desperation damage unchanged');let attacks=false;const purityContext=document.createElement('canvas').getContext('2d');
  for(let i=0;i<480;i++){g.step(STEP,{});attacks ||= e.state==='strike'||e.pouncing||g.enemyShots.length>0;const original=JSON.stringify(e);atlas.draw(purityContext,e,g.time,false);check(JSON.stringify(e)===original,type+' rendering does not mutate simulation');}

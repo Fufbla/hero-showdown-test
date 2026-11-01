@@ -1,4 +1,4 @@
-import {ReferenceMonsterAtlas} from './monster-sprites.mjs';
+import {AnimatedMonsterAtlas} from './monster-animations.mjs';
 import {drawNewMonster} from './world-art.mjs';
 import {TYPES} from './world.mjs';
 const INK='#243741',TAU=Math.PI*2;
@@ -55,6 +55,6 @@ class ProceduralMonsterAtlas{
 }
 
 // Keep original artwork as a bounded loading/error fallback.
-export class MonsterAtlas extends ReferenceMonsterAtlas{
+export class MonsterAtlas extends AnimatedMonsterAtlas{
  constructor(options={}){super({fallback:new ProceduralMonsterAtlas(),heights:MONSTER_HEIGHT,...options});}
 }

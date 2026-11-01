@@ -43,7 +43,7 @@ export class Renderer {
     const c=this.c,x=lerp(e.prevX,e.x,alpha),y=lerp(e.prevY,e.y,alpha),height=MONSTER_HEIGHT[e.type]||e.h;
     oval(c,x,y+1,e.w*.56,4,'#152b4438');c.save();c.translate(x,y);c.scale(e.face,1);
     if(e.lifted){c.translate(0,-e.h/2);c.rotate(t*7+e.id);c.translate(0,e.h/2);}
-    if(dead){c.globalAlpha=1-fade;c.scale(1+fade*.15,1-fade*.8);c.rotate(-fade*.25);}
+    if(dead){c.globalAlpha=1-fade;if(!this.monsterAtlas.hasAnimation(e.type)){c.scale(1+fade*.15,1-fade*.8);c.rotate(-fade*.25);}}
     else if(e.protection>0)c.globalAlpha=.65;
     if(e.flash>0)c.translate(-Math.sin(e.flash/.12*Math.PI)*2,0);
     this.monsterAtlas.draw(c,e,t,this.night);c.restore();if(dead)return;

@@ -1,0 +1,82 @@
+{
+  "regions": [
+    {
+      "region": 1,
+      "checks": 2003,
+      "passed": true,
+      "ms": 138.59999999776483,
+      "textureBytes": 22118400,
+      "errors": []
+    },
+    {
+      "region": 2,
+      "checks": 1967,
+      "passed": true,
+      "ms": 102.5,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 3,
+      "checks": 1911,
+      "passed": true,
+      "ms": 130.30000000074506,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 4,
+      "checks": 1967,
+      "passed": true,
+      "ms": 92.10000000149012,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 5,
+      "checks": 1967,
+      "passed": true,
+      "ms": 100.69999999925494,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 6,
+      "checks": 1855,
+      "passed": true,
+      "ms": 138.29999999701977,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 7,
+      "checks": 1967,
+      "passed": true,
+      "ms": 115,
+      "textureBytes": 20643840,
+      "errors": []
+    }
+  ],
+  "benchmarks": [
+    {
+      "region": 1,
+      "viewport": [
+        1300,
+        540
+      ],
+      "assetLoadMs": 9.5,
+      "atlasBuildMs": 12.700000002980232,
+      "simulationSeconds": 1.2500000000000004,
+      "samples": 16,
+      "seconds": 10.497800000000003,
+      "averageFPS": 1.5241288650955434,
+      "onePercentLowFPS": 0.9837678307919331,
+      "meanStepAndDrawMs": 5.476470588103814,
+      "p95StepAndDrawMs": 40.399999998509884,
+      "cacheTextureBytes": 11059200,
+      "errors": []
+    }
+  ],
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "scope": "Cloud browser; no physical device claims"
+}

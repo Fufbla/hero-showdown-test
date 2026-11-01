@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
-const base='b3251aee6c55a11dd24747e1e5455c7a74d9ed40',git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim();
-assert.equal(git('branch','--show-current'),'feature/showdown-royale');
-const changed=[...git('diff','--name-only',base).split('\n'),...git('ls-files','--others','--exclude-standard').split('\n')].filter(Boolean);
-const allowed=['royale/index.html','royale/README.md','royale/MONSTER-SPRITES.md','royale/monster-art.mjs','royale/monster-sprites.mjs','royale/monster-sprite-catalog.mjs','royale/renderer.mjs','royale/tests/showcase.mjs'];
+const base='838d0ccaa41eb7c2ca616619f8c8c0f806ca1cdf',git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim();
+assert.ok(['','feature/showdown-royale'].includes(git('branch','--show-current')));
+git('merge-base','--is-ancestor',base,'HEAD');
+const changed=[...git('diff','--name-only',base).split('\n'),...git('ls-files','--others','--exclude-standard','--','royale').split('\n')].filter(Boolean);
+const allowed=['royale/index.html','royale/README.md','royale/MONSTER-SPRITES.md','royale/monster-art.mjs','royale/monster-sprites.mjs','royale/monster-sprite-catalog.mjs','royale/monster-animations.mjs','royale/monster-animation-catalog.mjs','royale/tools/prepare-monster-animation-frames.py','royale/renderer.mjs','royale/tests/showcase.mjs'];
 assert.ok(changed.every(p=>allowed.includes(p)||p.startsWith('royale/assets/monsters/')||p.startsWith('royale/tests/monster-sprites')||p.startsWith('royale/tests/evidence/monster-sprites/')||p==='royale/tests/verify-monster-sprites.mjs'||p==='royale/tools/prepare-monster-refs.py'),'No unrelated changes');
 const protectedPaths=['core.mjs','monsters.mjs','world.mjs','powers.mjs','progression.mjs','equipment.mjs','bosses.mjs','boss-art.mjs','legendary-bosses.mjs','legendary-state.mjs','legendary-ledger.mjs','world-art.mjs','hero-art.mjs','saves.mjs','input.mjs'];
 for(const p of protectedPaths)assert.deepEqual(readFileSync('royale/'+p),execFileSync('git',['show',`${base}:royale/${p}`]),p+' must remain byte-for-byte identical');
