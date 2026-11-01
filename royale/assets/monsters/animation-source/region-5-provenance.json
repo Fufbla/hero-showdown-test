@@ -1,0 +1,11 @@
+{
+  "generator": "built-in image_gen",
+  "referenceFiles": [
+    "poses/thornBeast.png",
+    "poses/stalker.png",
+    "poses/spitter.png"
+  ],
+  "specification": "Thirty separately drawn right-facing comic poses per approved design. Six idle, six articulated locomotion, six compact anticipation/strike/recovery, six hit and six collapse. Thorn Beast stays quadruped; Mutant Stalker preserves hunched stance, clawed arms and tail; Poison Spitter retains its coiled serpent body. No detached projectiles or new weapons. True alpha with constant body scale.",
+  "packaging": "Connected complete source silhouettes packed into aligned 320x256 cells. Original masters retained unchanged.",
+  "review": "User animation approval and physical-device tests pending."
+}

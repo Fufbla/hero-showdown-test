@@ -16,6 +16,7 @@ globalThis.document={createElement:tag=>{assert.equal(tag,'canvas');return creat
 const atlas=new MonsterAtlas({loadImages:false}),region=Number(process.argv[2]||1),types=Object.keys(MONSTER_ANIMATIONS).filter(k=>MONSTER_ANIMATIONS[k].region===region);
 assert.equal(types.length,3,'complete region required');
 const out=fileURLToPath(new URL(`./evidence/monster-sprites/region-${region}/`,import.meta.url));mkdirSync(out,{recursive:true});
+const displayWidths={};
 let assertions=0;const check=(ok,msg)=>{assert.ok(ok,msg);assertions++;};
 const bounds=(data,w,h)=>{let x0=w,y0=h,x1=-1,y1=-1,count=0;for(let y=0;y<h;y++)for(let x=0;x<w;x++){if(data[(y*w+x)*4+3]>20){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);count++;}}return {x0,y0,x1,y1,count};};
 for(const type of types){
@@ -29,7 +30,7 @@ for(const type of types){
  const hashes=[];
  for(const night of [false,true]){
   const a=atlas.atlas(type,night),c=a.getContext('2d'),{w,h,columns,baseline}=atlas.cellFor(type);
-  for(let f=0;f<meta.frameCount;f++){const data=c.getImageData(f%columns*w,Math.floor(f/columns)*h,w,h).data,b=bounds(data,w,h);check(b.count>100,`${type}: rendered frame ${f}`);check(b.x0>0&&b.x1<w-1&&b.y0>0&&b.y1<h-1,`${type}: rendered bounds ${f}`);check(Math.abs(b.y1-baseline)<3,`${type}: rendered feet ${f}`);hashes.push(createHash('sha256').update(data).digest('hex'));}
+  for(let f=0;f<meta.frameCount;f++){const data=c.getImageData(f%columns*w,Math.floor(f/columns)*h,w,h).data,b=bounds(data,w,h);displayWidths[type]=Math.max(displayWidths[type]||0,b.x1-b.x0+1);check(b.count>100,`${type}: rendered frame ${f}`);check(b.x0>0&&b.x1<w-1&&b.y0>0&&b.y1<h-1,`${type}: rendered bounds ${f}`);check(Math.abs(b.y1-baseline)<3,`${type}: rendered feet ${f}`);hashes.push(createHash('sha256').update(data).digest('hex'));}
  }
  check(new Set(hashes.slice(0,meta.frameCount)).size===meta.frameCount,`${type}: distinct raster frames`);check(hashes[0]!==hashes[meta.frameCount],`${type}: night eyes preserved`);
 }
@@ -37,7 +38,7 @@ const samples=[{state:'idle'},{state:'chase',walkCycle:.4},{state:'strike',age:.
 const gallery=createCanvas(1200,710),gc=gallery.getContext('2d');gc.fillStyle='#edf1e8';gc.fillRect(0,0,1200,710);gc.fillStyle='#17393b';gc.font='bold 24px sans-serif';gc.fillText(`Region ${region} — actual game sprites`,28,38);
 ['Idle','Movement','Attack','Hit','Defeat'].forEach((name,i)=>{gc.font='16px sans-serif';gc.fillText(name,i*240+85,76);});
 for(const [i,type]of types.entries())for(const [j,sample]of samples.entries()){
- const x=j*240+120,y=244+i*210;gc.strokeStyle='#a1b3aa';gc.beginPath();gc.moveTo(x-95,y);gc.lineTo(x+95,y);gc.stroke();gc.save();gc.translate(x,y);gc.scale(1.9,1.9);const e=Object.freeze({type,id:0,...sample});const before=JSON.stringify(e);atlas.draw(gc,e,.3,false);check(JSON.stringify(e)===before,'renderer purity');gc.restore();gc.fillStyle='#17393b';gc.font='14px sans-serif';gc.textAlign='center';gc.fillText(MONSTER_ANIMATIONS[type].name,x,y+25);gc.textAlign='start';
+ const x=j*240+120,y=244+i*210;gc.strokeStyle='#a1b3aa';gc.beginPath();gc.moveTo(x-95,y);gc.lineTo(x+95,y);gc.stroke();gc.save();gc.translate(x,y);const scale=Math.min(1.9,218/displayWidths[type]);gc.scale(scale,scale);const e=Object.freeze({type,id:0,...sample});const before=JSON.stringify(e);atlas.draw(gc,e,.3,false);check(JSON.stringify(e)===before,'renderer purity');gc.restore();gc.fillStyle='#17393b';gc.font='14px sans-serif';gc.textAlign='center';gc.fillText(MONSTER_ANIMATIONS[type].name,x,y+25);gc.textAlign='start';
 }
 writeFileSync(out+'gallery.png',gallery.toBuffer('image/png'));
 // Use Renderer.enemy itself on all four elevated levels, in both viewports.
