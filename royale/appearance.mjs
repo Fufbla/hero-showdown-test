@@ -1,12 +1,13 @@
+import {HAIR_CATALOG} from './hair-catalog.mjs';
 // Appearance is presentation only. Physics and combat never read these values.
 export const APPEARANCE_VERSION = 2;
 export const EMBLEMS = ['leaf', 'bolt', 'shield', 'star', 'wave', 'sun'];
-export const HAIR_STYLES = ['curls', 'locs', 'short', 'waves', 'ponytail', 'braids', 'none'];
+export const HAIR_STYLES = ['curls', 'locs', 'short', 'waves', 'ponytail', 'braids', 'none',...HAIR_CATALOG.map(h=>h.id)];
 export const DEFAULT_LOOK = Object.freeze({
   version: APPEARANCE_VERSION, name: 'Coast Guardian', presentation: 'male', age: 'young',
   skin: '#a96943', eyes: '#65452e', hair: 'curls', hairColor: '#2c2630',
   face: 'oval', eyeShape: 'almond', brows: 'soft', nose: 'straight', mouth: 'smile', facialHair: 'none',
-  build: 'balanced', height: 1, shoulders: 1, muscle: .35, torso: 1, arms: 1, legs: 1,
+  build: 'balanced', waist:1,hips:1,chest:1,jaw:1, height: 1, shoulders: 1, muscle: .35, torso: 1, arms: 1, legs: 1,
   suit: '#247e69', trim: '#ffe0a0', emblemColor: '#ffe0a0', emblem: 'leaf', capeColor: '#194e4c', cape: true,
 });
 export const LOOK_OPTIONS = Object.freeze({
@@ -15,7 +16,7 @@ export const LOOK_OPTIONS = Object.freeze({
   brows: ['soft', 'straight', 'bold'], nose: ['small', 'straight', 'broad'], mouth: ['neutral', 'smile', 'full'],
   facialHair: ['none', 'stubble', 'beard'], emblem: EMBLEMS,
 });
-export const LOOK_RANGES = Object.freeze({height:[.88,1.12],shoulders:[.8,1.2],muscle:[0,1],torso:[.85,1.15],arms:[.85,1.15],legs:[.85,1.15]});
+export const LOOK_RANGES = Object.freeze({waist:[.8,1.2],hips:[.85,1.15],chest:[.85,1.15],jaw:[.85,1.15],height:[.88,1.12],shoulders:[.8,1.2],muscle:[0,1],torso:[.85,1.15],arms:[.85,1.15],legs:[.85,1.15]});
 export const COLOR_FIELDS = ['skin','eyes','hairColor','suit','trim','emblemColor','capeColor'];
 export const validColor = value => typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value);
 export function validateName(value) {

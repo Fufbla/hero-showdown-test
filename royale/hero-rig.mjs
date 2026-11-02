@@ -19,8 +19,8 @@ export function twoBone(root, target, upper, lower, bend=1) {
 export function dimensions(raw) {
   const l=sanitizeLook(raw), build={slender:[12,10,6],balanced:[15,12,7.5],strong:[18,13,9],full:[18,17,10]}[l.build];
   return {leg:44*l.height*l.legs,torso:30*l.height*l.torso,arm:49*l.height*l.arms,
-    shoulder:(build[0]+l.muscle*2)*l.shoulders,hip:build[1],thick:build[2]+l.muscle*2,
-    head:l.age==='teen'?1.04:l.age==='older'?.96:1,waist:l.presentation==='female'?.73:.88};
+    shoulder:(build[0]+l.muscle*2)*l.shoulders,hip:build[1]*l.hips,thick:build[2]+l.muscle*2,
+    head:l.age==='teen'?1.04:l.age==='older'?.96:1,waist:(l.presentation==='female'?.73:.88)*l.waist};
 }
 export function animationState(h) {
   if(h.dead) return 'defeat';

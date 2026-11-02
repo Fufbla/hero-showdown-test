@@ -1,3 +1,5 @@
+import {hairDefinition} from './hair-catalog.mjs';
+import {drawDetailedHair,hairMotion} from './hair-art.mjs';
 import { drawMergeCostume } from './merge-costume-art.mjs';
 import { sanitizeLook, costumePalette } from './appearance.mjs';
 import { poseFor } from './hero-rig.mjs';
@@ -48,7 +50,8 @@ function drawCape(c,p,color){
   line(c,left.slice(1),'#00000015',2);
 }
 function hair(c,l,hx,hy,back=false,time=0){
-  if(l.hair==='none')return;const color=l.hairColor,wind=l.wind||0;
+  if(l.hair==='none'||l.helmet)return;
+  if(drawDetailedHair(c,l,back,time))return;const color=l.hairColor,wind=l.wind||0;
   c.save();c.translate(hx,hy);const ink=tone(color,.35),paint=finish(c,color,0,-17,28,31);
   const strand=(x,y,ex,ey,width,index=0)=>{
     c.beginPath();c.moveTo(x,y);c.bezierCurveTo(x-2,y+6,ex+wind,ey-7,ex+wind*.6,ey);c.strokeStyle=ink;c.lineWidth=width+1.2;c.lineCap='round';c.stroke();c.strokeStyle=paint;c.lineWidth=width;c.stroke();
@@ -76,8 +79,9 @@ function hair(c,l,hx,hy,back=false,time=0){
   c.restore();
 }
 function head(c,l,p,back,time,palette){
-  const [hx,hy]=p.head,headScale=p.d.head,rx=l.face==='round'?14:l.face==='angular'?12.8:12;
+  const [hx,hy]=p.head,headScale=p.d.head,rx=(l.face==='round'?14:l.face==='angular'?12.8:12)*l.jaw;
   c.save();c.translate(hx,hy);c.rotate(p.headTilt||0);c.scale(headScale,headScale);
+  drawDetailedHair(c,{...l,trim:palette.trim},back,time,'rear');
   // Ponytails sit behind the skull, while the fringe is drawn after the face.
   if(l.hair==='ponytail'&&!back)limb(c,[[-11,-8],[-20,7],[-17+Math.sin(time*3)*2,23]],l.hairColor,7);
   oval(c,-12,1,2.5,4,l.skin,INK,1);oval(c,12,1,2.5,4,l.skin,INK,1);
@@ -108,7 +112,7 @@ function head(c,l,p,back,time,palette){
     if(l.facialHair==='beard'){path(c,[[-11,6],[-7,10],[0,11],[7,10],[11,6],[9,13],[0,17],[-9,13]],l.hairColor,null);line(c,[[-3,9],[3,9]],'#e8b793',1);}
   }
   hair(c,{...l,trim:palette.trim,wind:p.hairWind||0},0,0,back,time);
-  if(l.hair!=='none')line(c,[[-8,-12],[-3,-15],[5,-14]],'#ffffff30',1.3);
+  if(l.hair!=='none'&&!hairDefinition(l.hair))line(c,[[-8,-12],[-3,-15],[5,-14]],'#ffffff30',1.3);
   c.restore();
 }
 export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
@@ -118,7 +122,7 @@ export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
   if(pieces.chest){palette.trim=pieces.chest.accent;palette.emblemColor=pieces.chest.accent;look.emblem=pieces.chest.emblem||look.emblem;}
   const gloves=()=>h.steel?palette.trim:pieces.gloves?.color||palette.trim,boots=()=>h.steel?palette.trim:pieces.boots?.color||palette.trim;
   if(h.steel){look.skin='#aebec2';Object.assign(palette,{suit:'#819ba4',trim:'#d6e2df',emblemColor:'#f0e7c3'});}
-  const p=poseFor(look,h,time,view);p.turn=turnMotion(options.artState||options.cloth,h,time);if(options.cloth)p.cape=options.cloth.advance(p,h,time,options.dt||0);const d=p.d,[hx,hy]=p.hip,[sx,sy]=p.shoulder;
+  const p=poseFor(look,h,time,view);look.hairMotion=hairMotion(options.artState||options.cloth,h,time,look.hair,options.dt);look.helmet=!!pieces.helmet;p.turn=turnMotion(options.artState||options.cloth,h,time);if(options.cloth)p.cape=options.cloth.advance(p,h,time,options.dt||0);const d=p.d,[hx,hy]=p.hip,[sx,sy]=p.shoulder;
   c.save();c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';c.translate(x,y);c.scale(scale*(view==='game'?(h.attack?.face||h.face||1):1),scale);c.rotate(p.rotation);c.scale(1-p.turn*.1,1);c.globalAlpha*=p.opacity;
   if(h.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;
   if(look.cape&&!back)drawCape(c,p,palette.capeColor);
@@ -142,7 +146,7 @@ export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
     const size=4.5+d.thick*.1;if(!paintHeroPart(c,'fist',gloves(),-size,-5,size*2,12))oval(c,0,1,size,size,gloves(),INK,1.2);c.restore();
   };
   leg(1);arm(p.alternate?0:1);
-  c.beginPath();c.moveTo(sx-d.shoulder,sy+3);c.quadraticCurveTo(sx-d.shoulder-1,sy-2,sx-5,sy);c.lineTo(sx+5,sy);c.quadraticCurveTo(sx+d.shoulder+1,sy-2,sx+d.shoulder,sy+3);c.quadraticCurveTo(sx+d.shoulder*.8,sy+15,hx+d.hip*d.waist,hy-10);c.lineTo(hx+d.hip,hy);c.quadraticCurveTo(hx,hy+3,hx-d.hip,hy);c.lineTo(hx-d.hip*d.waist,hy-10);c.quadraticCurveTo(sx-d.shoulder*.8,sy+15,sx-d.shoulder,sy+3);c.closePath();c.fillStyle=palette.suit;c.fill();c.save();c.clip();paintHeroTorso(c,p,palette.suit,look.presentation,back);c.restore();c.strokeStyle=INK;c.lineWidth=1.25;c.stroke();
+  c.beginPath();c.moveTo(sx-d.shoulder,sy+3);c.quadraticCurveTo(sx-d.shoulder-1,sy-2,sx-5,sy);c.lineTo(sx+5,sy);c.quadraticCurveTo(sx+d.shoulder+1,sy-2,sx+d.shoulder,sy+3);c.quadraticCurveTo(sx+d.shoulder*.8*look.chest,sy+15,hx+d.hip*d.waist,hy-10);c.lineTo(hx+d.hip,hy);c.quadraticCurveTo(hx,hy+3,hx-d.hip,hy);c.lineTo(hx-d.hip*d.waist,hy-10);c.quadraticCurveTo(sx-d.shoulder*.8*look.chest,sy+15,sx-d.shoulder,sy+3);c.closePath();c.fillStyle=palette.suit;c.fill();c.save();c.clip();paintHeroTorso(c,p,palette.suit,look.presentation,back);c.restore();c.strokeStyle=INK;c.lineWidth=1.25;c.stroke();
   path(c,[[sx+1,sy+2],[sx+d.shoulder-3,sy+3],[hx+d.hip*d.waist-2,hy-10],[hx+2,hy-6]],'#ffffff14',null);
   path(c,[[sx-d.shoulder+2,sy+2],[sx-3,sy+5],[hx-2,hy-6],[hx-d.hip+2,hy-4]],'#09263e3b',null);
   line(c,[[sx-d.shoulder*.65,sy+3],[sx-2,sy+7],[sx+d.shoulder*.64,sy+3]],'#ffffff48',1.2);

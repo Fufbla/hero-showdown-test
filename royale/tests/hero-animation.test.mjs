@@ -22,7 +22,7 @@ test('before-and-after fixture is the actual approved baseline with only import 
  for(const kind of ['art','rig']){let original=git('show',`${HERO_BASE}:royale/hero-${kind}.mjs`).replaceAll("from './","from '../");if(kind==='art')original=original.replace("from '../hero-rig.mjs'","from './hero-before-rig.mjs'");const fixture=readFileSync(new URL(`./hero-before-${kind}.mjs`,import.meta.url),'utf8').split('\n').slice(1).join('\n');assert.equal(fixture,original);}
 });
 for(const build of LOOK_OPTIONS.build)test(`hero ${build}: all existing dimension sliders retain their original values and scale`,()=>{
- for(let bits=0;bits<64;bits++){const l={build};Object.entries(LOOK_RANGES).forEach(([key,range],i)=>l[key]=range[(bits>>i)&1]);assert.deepEqual(dimensions(l),originalDimensions(l));}
+ for(let bits=0;bits<64;bits++){const l={build};Object.entries(LOOK_RANGES).forEach(([key,range],i)=>l[key]=range[(bits>>i)&1]);assert.deepEqual(dimensions({...l,waist:1,hips:1}),originalDimensions(l));}
 });
 test('planted feet cancel actual world travel through walk and run stance phases',()=>{
  for(const build of LOOK_OPTIONS.build)for(const speed of [185,315])for(let t=.01;t<.8;t+=.007){

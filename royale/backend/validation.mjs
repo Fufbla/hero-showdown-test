@@ -200,10 +200,58 @@ function bossVictory(world, region) {
   return { ok: true, first, coins: first ? 100 : 10 };
 }
 
+// hair-catalog.mjs
+var make = (id, name, category, texture, length, volume, shape, part = 0) => ({ id, name, category, texture, length, volume, shape, part });
+var HAIR_CATALOG = Object.freeze([
+  make("short-locs", "Short locs", "Locs & braids", "loc", 9, 1, "loose"),
+  make("medium-locs", "Medium locs", "Locs & braids", "loc", 23, 1.05, "loose"),
+  make("long-locs", "Long locs", "Locs & braids", "loc", 40, 1.1, "loose"),
+  make("high-loc-bun", "High loc bun", "Locs & braids", "loc", 13, 1.2, "bun"),
+  make("half-up-locs", "Half-up locs", "Locs & braids", "loc", 31, 1.05, "half"),
+  make("two-strand-twists", "Two-strand twists", "Locs & braids", "twist", 20, 0.9, "loose"),
+  make("box-braids", "Box braids", "Locs & braids", "braid", 37, 1.1, "loose"),
+  make("knotless-braids", "Knotless braids", "Locs & braids", "braid", 43, 0.8, "loose", 1),
+  make("cornrows", "Cornrows", "Locs & braids", "braid", 0, 0.7, "rows"),
+  make("braided-ponytail", "Braided ponytail", "Locs & braids", "braid", 36, 1, "high-tail"),
+  make("bantu-knots", "Bantu knots", "Locs & braids", "coil", 0, 1.15, "knots"),
+  make("braided-updo", "Braided updo", "Locs & braids", "braid", 0, 1.1, "crown"),
+  make("short-afro", "Short afro", "Curls & coils", "coil", 0, 1.05, "round"),
+  make("medium-afro", "Medium afro", "Curls & coils", "coil", 4, 1.35, "round"),
+  make("large-afro", "Large rounded afro", "Curls & coils", "coil", 8, 1.7, "round"),
+  make("afro-puff", "Afro puff", "Curls & coils", "coil", 7, 1.4, "bun"),
+  make("double-puffs", "Double puffs", "Curls & coils", "coil", 6, 1.3, "double"),
+  make("tapered-natural", "Tapered natural cut", "Curls & coils", "coil", 0, 1.1, "taper"),
+  make("tight-curls", "Short tight curls", "Curls & coils", "curl", 2, 0.95, "round"),
+  make("shoulder-curls", "Shoulder-length curls", "Curls & coils", "curl", 25, 1.2, "loose"),
+  make("long-curls", "Long curls", "Curls & coils", "curl", 40, 1.15, "loose"),
+  make("curly-ponytail", "Curly ponytail", "Curls & coils", "curl", 33, 1.25, "high-tail"),
+  make("short-straight", "Short straight cut", "Straight & wavy", "straight", 0, 0.8, "crop"),
+  make("bob", "Bob", "Straight & wavy", "straight", 17, 1, "bob"),
+  make("layered-bob", "Layered bob", "Straight & wavy", "straight", 22, 1.15, "bob", 1),
+  make("shoulder-straight", "Shoulder-length straight", "Straight & wavy", "straight", 28, 1, "loose"),
+  make("long-straight", "Long straight hair", "Straight & wavy", "straight", 44, 0.9, "loose"),
+  make("long-wavy", "Long wavy hair", "Straight & wavy", "wave", 42, 1.2, "loose"),
+  make("side-waves", "Side-parted waves", "Straight & wavy", "wave", 20, 1.1, "loose", 1),
+  make("high-ponytail", "High ponytail", "Straight & wavy", "straight", 38, 1, "high-tail"),
+  make("low-ponytail", "Low ponytail", "Straight & wavy", "straight", 30, 0.9, "low-tail"),
+  make("half-up", "Half-up hairstyle", "Straight & wavy", "wave", 32, 1, "half"),
+  make("buzz", "Buzz cut", "Short & styled", "straight", 0, 0.35, "buzz"),
+  make("fade", "Fade", "Short & styled", "coil", 0, 0.65, "fade"),
+  make("high-top", "High-top fade", "Short & styled", "coil", 0, 1.4, "flat"),
+  make("taper-fade", "Taper fade", "Short & styled", "straight", 0, 0.8, "taper"),
+  make("textured-crop", "Textured crop", "Short & styled", "straight", 2, 1, "crop"),
+  make("curly-fade", "Curly fade", "Short & styled", "curl", 0, 1.1, "fade"),
+  make("side-part", "Side part", "Short & styled", "straight", 0, 0.95, "sweep", 1),
+  make("pompadour", "Pompadour", "Short & styled", "wave", 0, 1.6, "sweep"),
+  make("undercut", "Undercut", "Short & styled", "straight", 5, 1.2, "sweep", -1),
+  make("spiky", "Short spiky hair", "Short & styled", "straight", 0, 1.25, "spikes")
+].map(Object.freeze));
+var HAIR_CATEGORIES = [...new Set(HAIR_CATALOG.map((h) => h.category))];
+
 // appearance.mjs
 var APPEARANCE_VERSION = 2;
 var EMBLEMS = ["leaf", "bolt", "shield", "star", "wave", "sun"];
-var HAIR_STYLES = ["curls", "locs", "short", "waves", "ponytail", "braids", "none"];
+var HAIR_STYLES = ["curls", "locs", "short", "waves", "ponytail", "braids", "none", ...HAIR_CATALOG.map((h) => h.id)];
 var DEFAULT_LOOK = Object.freeze({
   version: APPEARANCE_VERSION,
   name: "Coast Guardian",
@@ -220,6 +268,10 @@ var DEFAULT_LOOK = Object.freeze({
   mouth: "smile",
   facialHair: "none",
   build: "balanced",
+  waist: 1,
+  hips: 1,
+  chest: 1,
+  jaw: 1,
   height: 1,
   shoulders: 1,
   muscle: 0.35,
@@ -246,7 +298,7 @@ var LOOK_OPTIONS = Object.freeze({
   facialHair: ["none", "stubble", "beard"],
   emblem: EMBLEMS
 });
-var LOOK_RANGES = Object.freeze({ height: [0.88, 1.12], shoulders: [0.8, 1.2], muscle: [0, 1], torso: [0.85, 1.15], arms: [0.85, 1.15], legs: [0.85, 1.15] });
+var LOOK_RANGES = Object.freeze({ waist: [0.8, 1.2], hips: [0.85, 1.15], chest: [0.85, 1.15], jaw: [0.85, 1.15], height: [0.88, 1.12], shoulders: [0.8, 1.2], muscle: [0, 1], torso: [0.85, 1.15], arms: [0.85, 1.15], legs: [0.85, 1.15] });
 var COLOR_FIELDS = ["skin", "eyes", "hairColor", "suit", "trim", "emblemColor", "capeColor"];
 var validColor = (value) => typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value);
 function validateName(value) {
@@ -1694,7 +1746,7 @@ var mergeEntitlement = (id) => id ? { id, ability: `merge:${id}`, completePieces
 
 // eris.mjs
 var APPEARANCE_PRICES = Object.freeze({ hair: 100, eyes: 100, skin: 150, face: 200, body: 300, age: 300, makeover: 750 });
-var GROUPS = { hair: ["hair", "hairColor"], eyes: ["eyes"], skin: ["skin"], face: ["face", "eyeShape", "brows", "nose", "mouth", "facialHair"], body: ["presentation", "height", "build", "shoulders", "muscle", "torso", "arms", "legs"], age: ["age"] };
+var GROUPS = { hair: ["hair", "hairColor"], eyes: ["eyes"], skin: ["skin"], face: ["face", "eyeShape", "brows", "nose", "mouth", "facialHair", "jaw"], body: ["presentation", "height", "build", "shoulders", "muscle", "torso", "arms", "legs", "waist", "hips", "chest"], age: ["age"] };
 var emptyEconomy = () => ({ revision: 0, purchased: 0, sold: 0, discarded: 0, coinsSpent: 0, coinsSold: 0, recent: [] });
 function normalizeEconomy(raw) {
   if (raw == null) return emptyEconomy();

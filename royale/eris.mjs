@@ -3,7 +3,7 @@ import { itemDefinition } from './equipment.mjs';
 import { sanitizeLook } from './appearance.mjs';
 import { boardIndex } from './world.mjs';
 export const APPEARANCE_PRICES=Object.freeze({hair:100,eyes:100,skin:150,face:200,body:300,age:300,makeover:750});
-const GROUPS={hair:['hair','hairColor'],eyes:['eyes'],skin:['skin'],face:['face','eyeShape','brows','nose','mouth','facialHair'],body:['presentation','height','build','shoulders','muscle','torso','arms','legs'],age:['age']};
+const GROUPS={hair:['hair','hairColor'],eyes:['eyes'],skin:['skin'],face:['face','eyeShape','brows','nose','mouth','facialHair','jaw'],body:['presentation','height','build','shoulders','muscle','torso','arms','legs','waist','hips','chest'],age:['age']};
 export const emptyEconomy=()=>({revision:0,purchased:0,sold:0,discarded:0,coinsSpent:0,coinsSold:0,recent:[]});
 export function normalizeEconomy(raw){
   if(raw==null)return emptyEconomy();
