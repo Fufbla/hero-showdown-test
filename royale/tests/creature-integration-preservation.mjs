@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
+import {assertHeroPresentationOnly,isHeroPresentationFile} from './hero-preservation.mjs';
 
 export const MONSTER_COMMIT='b8b39dbedd92b89a298e13062abbc545453ff163';
 export const BOSS_COMMIT='a5ada842f517e5ab64ad3214eacfb5a6c48806b3';
 const root=new URL('../../',import.meta.url);
 const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8',maxBuffer:32*1024*1024}).trim();
 const lines=s=>s.split('\n').filter(Boolean);
-// Only test/review deliverables may differ from the approved merge. No runtime
-// adapter, artwork, gameplay, stats, save, Story or Versus exception is allowed.
+// Creature/runtime protections remain exact. The separately authorized hero
+// presentation stage is checked against the verified integration commit below.
 const reviewFiles=new Set([
  'royale/tests/boss-sprites.test.mjs',
  ...[2,3,4,5,6].map(n=>`royale/tests/boss-sprites-batch${n}.test.mjs`),
@@ -16,9 +17,10 @@ const reviewFiles=new Set([
  'royale/tests/creature-review.html','royale/tests/creature-review.mjs',
  'royale/tests/creature-review-render.mjs','royale/CREATURE-INTEGRATION.md',
 ]);
-export const isReviewFile=p=>reviewFiles.has(p)||p.startsWith('royale/qa/creature-integration/');
+export const isReviewFile=p=>reviewFiles.has(p)||p.startsWith('royale/qa/creature-integration/')||isHeroPresentationFile(p);
 let expectedTree;
 export function assertApprovedIntegration(historicalBossBase=BOSS_COMMIT){
+ assertHeroPresentationOnly();
  // Missing source history is a failure, never a skip or a substituted baseline.
  for(const ref of [MONSTER_COMMIT,BOSS_COMMIT,historicalBossBase])
   assert.equal(git('cat-file','-t',ref),'commit',`Required approved history: ${ref}`);

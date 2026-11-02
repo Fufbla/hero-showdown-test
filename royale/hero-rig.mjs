@@ -62,12 +62,12 @@ export function poseFor(raw,h,time,view='game') {
     // Half of each cycle plants the foot: its world-space velocity cancels travel.
     return p<.5?[mix(stride,-stride,p*2),-5]:[mix(-stride,stride,smooth((p-.5)*2)),-5-Math.sin((p-.5)*TAU)*mix(9,19,run)];
   }
-  let a=foot(0),b=foot(.5),hipX=0,hipY=-d.leg*.89-5,lean=run*5*motion;
+  let a=foot(0),b=foot(.5),hipX=Math.sin(time*1.3)*.6*(1-motion),hipY=-d.leg*.89-5,lean=run*6*motion;
   a=[mix(front?d.hip*.64:10,a[0],motion),mix(-5,a[1],motion)];
   b=[mix(front?-d.hip*.64:-10,b[0],motion),mix(-5,b[1],motion)];
-  hipY+=Math.cos(phase*TAU*2)*1.1*motion;
-  let handA=[d.shoulder+15,hipY-d.torso*.45],handB=[-d.shoulder-15,hipY-d.torso*.43];
-  if(motion){handA[0]-=Math.sin(phase*TAU)*stride*.8;handB[0]+=Math.sin(phase*TAU)*stride*.8;handA[1]+=4;handB[1]+=4;}
+  hipY+=Math.cos(phase*TAU*2)*mix(.8,1.8,run)*motion;
+  let handA=[d.shoulder+7,hipY-9],handB=[-d.shoulder-4,hipY-7];
+  if(motion){const swing=Math.sin(phase*TAU)*stride*mix(.85,1.25,run);handA=[d.shoulder*.65-swing,hipY-d.torso+d.arm*.8-Math.abs(swing)*.18];handB=[-d.shoulder*.45+swing,hipY-d.torso+d.arm*.82-Math.abs(swing)*.18];}
   if(!h.grounded){
     const tuck=h.jumps===2?Math.sin(clamp((h.jumpAge||0)/.4)*PI)*10:0;
     const lift=smooth((h.jumpAge??100)/.09);a=[mix(a[0],15,lift),mix(a[1],-16-tuck,lift)];b=[mix(b[0],-14,lift),mix(b[1],-9-tuck*.4,lift)];hipY=-d.leg*.89-5;
@@ -78,17 +78,24 @@ export function poseFor(raw,h,time,view='game') {
   if((h.castAge??100)<.25){const extend=Math.sin(clamp(h.castAge/.25)*PI);handA=[mix(handA[0],43,extend),mix(handA[1],-48,extend)];}
   const landing=clamp((h.landing||0)/.13);
   hipY+=Math.sin(landing*PI*.75)*7;
-  let extension=0;
+  let extension=0,twist=0,alternate=false;
   if(h.attack){
     const def=ATTACKS[h.attack.kind],t=h.attack.age;
-    extension=t<def.startup?smooth(t/def.startup):t<def.startup+def.active?1:1-smooth((t-def.startup-def.active)/(def.duration-def.startup-def.active));
+    const recovery=(t-def.startup-def.active)/(def.duration-def.startup-def.active),startup=t/def.startup;
+    extension=t<def.startup?smooth((startup-.35)/.65):t<def.startup+def.active?1:1-smooth(recovery/.7);
     if(h.attack.kind==='punch'){
-      lean=mix(lean,3,extension);handA=[mix(handA[0],54,extension),mix(handA[1],-54,extension)];handB=[mix(handB[0],-d.shoulder-10,extension),mix(handB[1],hipY-15,extension)];
+      alternate=h.attack.power!=='strength'&&Number.isFinite(h.attack.id)&&h.attack.id%2===0;
+      const wind=t<def.startup?Math.sin(Math.min(1,startup)*PI):0;
+      twist=(alternate?-1:1)*extension;lean=mix(lean,alternate?7:5,extension)-wind*2;hipX+=extension*(alternate?3:1.5);
+      handA=[mix(handA[0]-wind*8,54,extension),mix(handA[1]-wind*5,-54,extension)];handB=[mix(handB[0],hipX-9,extension),mix(handB[1],hipY-d.torso+9,extension)];
     } else {
       const kickHipY=-d.leg*.87-5;
       const reach=Math.sqrt(Math.max(1,(d.leg-.2)**2-(-39-kickHipY)**2));
       hipX=Math.max(0,56-d.hip*.42-reach)*extension;hipY=mix(hipY,kickHipY,extension);lean=mix(lean,-5,extension);
-      a=[mix(a[0],56,extension),mix(a[1],-39,extension)];b=[mix(b[0],hipX-d.hip*.42,extension),b[1]];
+      const chamber=t<def.startup?smooth(startup/.45):t<def.startup+def.active?1:1-smooth((recovery-.6)/.4);
+      const chamberX=hipX+9,chamberY=kickHipY+8;
+      a=[mix(mix(a[0],chamberX,chamber),56,extension),mix(mix(a[1],chamberY,chamber),-39,extension)];b=[mix(b[0],hipX-d.hip*.42,Math.max(extension,chamber*.7)),b[1]];
+      twist=(h.attack.power==='superKick'&&h.attack.comboIndex%2?-1:1)*extension*.8;
       handA=[mix(handA[0],hipX+d.shoulder+(h.attack.power==='superKick'&&h.attack.comboIndex%2?-2:4),extension),mix(handA[1],hipY-d.torso-6,extension)];handB=[mix(handB[0],hipX-d.shoulder-4,extension),mix(handB[1],hipY-d.torso-2,extension)];
     }
   }
@@ -107,10 +114,10 @@ export function poseFor(raw,h,time,view='game') {
   let sx=hipX+lean;
   if(h.attack?.kind==='punch'){
     const vertical=-54-(shoulderY+4),horizontal=Math.sqrt(Math.max(1,(d.arm-.15)**2-vertical**2));
-    sx=mix(sx,Math.max(sx,54-horizontal-d.shoulder*.82),extension);
+    sx=mix(sx,Math.max(sx,54-horizontal-d.shoulder*(alternate?.45:.82)),extension);
   }
-  const arms=[twoBone([sx+d.shoulder*.82,shoulderY+4],handA,d.arm*.48,d.arm*.52,1),twoBone([sx-d.shoulder*.82,shoulderY+4],handB,d.arm*.48,d.arm*.52,-1)];
-  const legs=[twoBone([hipX+d.hip*.42,hipY],a,d.leg*.5,d.leg*.5,-1),twoBone([hipX-d.hip*.42,hipY],b,d.leg*.5,d.leg*.5,1)];
+  const arms=[twoBone([sx+d.shoulder*(alternate?.45:.82),shoulderY+4],handA,d.arm*.48,d.arm*.52,1),twoBone([sx-d.shoulder*(alternate?.45:.82),shoulderY+4],handB,d.arm*.48,d.arm*.52,-1)];
+  const legs=[twoBone([hipX+d.hip*.42,hipY],a,d.leg*.5,d.leg*.5,-1),twoBone([hipX-d.hip*.42,hipY],b,d.leg*.5,d.leg*.5,front?1:-1)];
   const cape=[[sx-(front?0:d.shoulder*.65),shoulderY+1]];
   for(let i=1;i<=8;i++){
     const wind=front?.05:-.2-Math.min(.85,Math.abs(h.vx||0)/350);
@@ -121,5 +128,8 @@ export function poseFor(raw,h,time,view='game') {
     if(h.grounded&&last[1]+Math.cos(angle)*len>-4)angle=-Math.acos(clamp((-4-last[1])/len,-1,1));
     cape.push([last[0]+Math.sin(angle)*len,last[1]+Math.cos(angle)*len]);
   }
-  return {d,state,grounded:h.grounded,arms,legs,hip:[hipX,hipY],shoulder:[sx,shoulderY],head:[sx,shoulderY-20*d.head],cape,rotation,opacity,extension,front};
+  const footAngles=[0,.5].map(offset=>{const f=(phase+offset)%1;return !h.grounded?.13:h.attack?.kind==='kick'?0:f<.5?0:-Math.sin((f-.5)*TAU)*.18*motion;});
+  return {d,state,grounded:h.grounded,arms,legs,hip:[hipX,hipY],shoulder:[sx,shoulderY],head:[sx,shoulderY-20*d.head],cape,rotation,opacity,extension,front,twist,alternate,footAngles,
+    headTilt:state==='hurt'?-.11:Math.sin(time*1.3)*.012*(1-motion)+run*.025,
+    hairWind:-Math.min(5,Math.abs(h.vx||0)/70)+Math.sin(time*3.6)*.35+(!h.grounded?Math.max(-2,Math.min(2,(h.vy||0)/200)):0)};
 }

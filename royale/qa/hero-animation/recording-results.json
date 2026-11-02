@@ -1,0 +1,26 @@
+{
+  "videoFPS": 30,
+  "simulationHz": 60,
+  "scope": "Offline deterministic native capture; no real-time FPS claim",
+  "creatures": 36,
+  "frames": 540,
+  "meanTwoStepsAndDrawMs": 5.433887748148293,
+  "p95TwoStepsAndDrawMs": 9.318463000003248,
+  "scenes": [
+    {
+      "scene": "Coastal battle",
+      "maxEnemies": 24,
+      "maxEffects": 4
+    },
+    {
+      "scene": "Elevated platform",
+      "maxEnemies": 24,
+      "maxEffects": 4
+    },
+    {
+      "scene": "Lightning Spree",
+      "maxEnemies": 1,
+      "maxEffects": 1
+    }
+  ]
+}

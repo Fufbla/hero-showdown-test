@@ -1,0 +1,30 @@
+{
+  "hero": "Night Current",
+  "region": 1,
+  "viewport": [
+    390,
+    844
+  ],
+  "scope": "Cloud browser sample; no physical-device claim",
+  "visibility": [
+    "visible"
+  ],
+  "focused": true,
+  "seconds": 12.313900000000002,
+  "samples": 16,
+  "averageFPS": 1.2993446430456637,
+  "onePercentLowFPS": 0.9837678307919331,
+  "meanStepAndDrawMs": 7.641176469185773,
+  "p95StepAndDrawMs": 49.5,
+  "assetPreparationMs": 55.69999999552965,
+  "simulationSeconds": 1.3,
+  "maxEnemies": 24,
+  "maxEffects": 5,
+  "creatureErrors": [],
+  "heroMaterials": {
+    "ready": true,
+    "error": null,
+    "cacheEntries": 36,
+    "source": "/royale/assets/hero/ink-materials.png"
+  }
+}

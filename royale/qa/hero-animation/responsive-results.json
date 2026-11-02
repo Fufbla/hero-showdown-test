@@ -1,0 +1,107 @@
+{
+  "passed": true,
+  "checks": 1375,
+  "groups": [
+    {
+      "viewport": "portrait",
+      "suite": "Input",
+      "checks": 18
+    },
+    {
+      "viewport": "portrait",
+      "suite": "Creator",
+      "checks": 140
+    },
+    {
+      "viewport": "portrait",
+      "suite": "Powers",
+      "checks": 65
+    },
+    {
+      "viewport": "portrait",
+      "suite": "World",
+      "checks": 52
+    },
+    {
+      "viewport": "landscape",
+      "suite": "Input",
+      "checks": 18
+    },
+    {
+      "viewport": "landscape",
+      "suite": "Creator",
+      "checks": 140
+    },
+    {
+      "viewport": "landscape",
+      "suite": "Powers",
+      "checks": 65
+    },
+    {
+      "viewport": "landscape",
+      "suite": "World",
+      "checks": 52
+    },
+    {
+      "viewport": "small",
+      "suite": "Input",
+      "checks": 18
+    },
+    {
+      "viewport": "small",
+      "suite": "Creator",
+      "checks": 140
+    },
+    {
+      "viewport": "small",
+      "suite": "Powers",
+      "checks": 65
+    },
+    {
+      "viewport": "small",
+      "suite": "World",
+      "checks": 52
+    },
+    {
+      "viewport": "tablet",
+      "suite": "Input",
+      "checks": 18
+    },
+    {
+      "viewport": "tablet",
+      "suite": "Creator",
+      "checks": 140
+    },
+    {
+      "viewport": "tablet",
+      "suite": "Powers",
+      "checks": 65
+    },
+    {
+      "viewport": "tablet",
+      "suite": "World",
+      "checks": 52
+    },
+    {
+      "viewport": "desktop",
+      "suite": "Input",
+      "checks": 18
+    },
+    {
+      "viewport": "desktop",
+      "suite": "Creator",
+      "checks": 140
+    },
+    {
+      "viewport": "desktop",
+      "suite": "Powers",
+      "checks": 65
+    },
+    {
+      "viewport": "desktop",
+      "suite": "World",
+      "checks": 52
+    }
+  ],
+  "physicalDevices": "Not tested"
+}
