@@ -66,12 +66,13 @@ export function poseFor(raw,h,time,view='game') {
   a=[mix(front?d.hip*.64:10,a[0],motion),mix(-5,a[1],motion)];
   b=[mix(front?-d.hip*.64:-10,b[0],motion),mix(-5,b[1],motion)];
   hipY+=Math.cos(phase*TAU*2)*mix(.8,1.8,run)*motion;
-  let handA=[d.shoulder+7,hipY-9],handB=[-d.shoulder-4,hipY-7];
-  if(motion){const swing=Math.sin(phase*TAU)*stride*mix(.85,1.25,run);handA=[d.shoulder*.65-swing,hipY-d.torso+d.arm*.8-Math.abs(swing)*.18];handB=[-d.shoulder*.45+swing,hipY-d.torso+d.arm*.82-Math.abs(swing)*.18];}
+  const guardY=hipY-d.torso+7;
+ let handA=[d.shoulder+9,guardY],handB=[-d.shoulder+10,guardY+4];
+  if(motion){const swing=a[0]*mix(.85,1.25,run);handA=[d.shoulder*.65-swing,hipY-d.torso+d.arm*.8-Math.abs(swing)*.18];handB=[-d.shoulder*.45+swing,hipY-d.torso+d.arm*.82-Math.abs(swing)*.18];}
   if(!h.grounded){
     const tuck=h.jumps===2?Math.sin(clamp((h.jumpAge||0)/.4)*PI)*10:0;
     const lift=smooth((h.jumpAge??100)/.09);a=[mix(a[0],15,lift),mix(a[1],-16-tuck,lift)];b=[mix(b[0],-14,lift),mix(b[1],-9-tuck*.4,lift)];hipY=-d.leg*.89-5;
-    handA=[d.shoulder+8,hipY-d.torso*.65];handB=[-d.shoulder-8,hipY-d.torso*.5];lean=3;
+    handA=[d.shoulder+10,hipY-d.torso+8];handB=[-d.shoulder+8,hipY-d.torso+12];lean=3;
     if(h.vy>0){a[1]=mix(a[1],-7,clamp(h.vy/400));b[1]=-4;handA[0]+=4;handB[0]-=3;}
   }
   if(h.flying){a=[10,-12];b=[-11,-8];lean=4;handA=[d.shoulder+9,hipY-d.torso*.8];handB=[-d.shoulder-6,hipY-d.torso*.4];}
@@ -114,9 +115,9 @@ export function poseFor(raw,h,time,view='game') {
   let sx=hipX+lean;
   if(h.attack?.kind==='punch'){
     const vertical=-54-(shoulderY+4),horizontal=Math.sqrt(Math.max(1,(d.arm-.15)**2-vertical**2));
-    sx=mix(sx,Math.max(sx,54-horizontal-d.shoulder*(alternate?.45:.82)),extension);
+    sx=mix(sx,Math.max(sx,54-horizontal-d.shoulder*(.92)),extension);
   }
-  const arms=[twoBone([sx+d.shoulder*(alternate?.45:.82),shoulderY+4],handA,d.arm*.48,d.arm*.52,1),twoBone([sx-d.shoulder*(alternate?.45:.82),shoulderY+4],handB,d.arm*.48,d.arm*.52,-1)];
+  const arms=[twoBone([sx+d.shoulder*(.92),shoulderY+4],handA,d.arm*.48,d.arm*.52,1),twoBone([sx-d.shoulder*(.92),shoulderY+4],handB,d.arm*.48,d.arm*.52,front?-1:1)];
   const legs=[twoBone([hipX+d.hip*.42,hipY],a,d.leg*.5,d.leg*.5,-1),twoBone([hipX-d.hip*.42,hipY],b,d.leg*.5,d.leg*.5,front?1:-1)];
   const cape=[[sx-(front?0:d.shoulder*.65),shoulderY+1]];
   for(let i=1;i<=8;i++){

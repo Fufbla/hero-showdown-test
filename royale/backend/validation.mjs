@@ -1,9 +1,3 @@
-// shared-clock.mjs
-var sync = null;
-function sharedNow() {
-  return sync ? sync.serverTime + Math.max(0, performance.now() - sync.receivedAt) : Date.now();
-}
-
 // boss-data.mjs
 var ARENA = Object.freeze({ left: 180, right: 1800, heroX: 420, bossX: 1180, floor: 600, chestX: 1060, waveDelay: 12, waveWarning: 2, waveLimit: 3, helpersPerWave: 3 });
 var BOSS_MOVEMENT = Object.freeze({
@@ -352,6 +346,233 @@ function rollEquipment(region, random, serial) {
   return rarity ? costumeDrop(region, rarity, Math.floor(random() * 3), serial) : null;
 }
 
+// world.mjs
+var WORLD_WIDTH = 6160;
+var DEATH_Y = 890;
+var REGIONS = [
+  { x: 0, name: "Sunwash Strand", note: "A small beginning. A bigger adventure." },
+  { x: 1940, name: "Driftwood Rise", note: "Take the high road, or follow the shore." },
+  { x: 4020, name: "Lighthouse Point", note: "Every hero starts somewhere." }
+];
+var VERTICAL_TIERS = Object.freeze([480, 320, 160, 0]);
+var VERTICAL_ROUTES = [0, 1940, 4020].map((base, board) => VERTICAL_TIERS.map((y, tier2) => ({ id: `climb-${board}-${tier2 + 1}`, x: base + [430, 780, 1110, 1440][tier2], y, w: tier2 === 3 ? 340 : 330, h: 28, kind: tier2 % 2 ? "wood" : "grass", oneWay: true, tier: tier2 + 1, board })));
+var SURFACES = [
+  { id: "sand-a", x: 0, y: 600, w: 1390, h: 320, kind: "sand" },
+  { id: "sand-b", x: 1540, y: 600, w: 1170, h: 320, kind: "sand" },
+  { id: "sand-c", x: 2860, y: 600, w: 1260, h: 320, kind: "sand" },
+  { id: "sand-d", x: 4270, y: 600, w: 1890, h: 320, kind: "sand" },
+  // Low, connected tide-pool routes make missed jumps forgiving.
+  { id: "pool-a", x: 1380, y: 664, w: 170, h: 256, kind: "rock" },
+  { id: "pool-b", x: 2700, y: 664, w: 170, h: 256, kind: "rock" },
+  { id: "pool-c", x: 4110, y: 664, w: 170, h: 256, kind: "rock" },
+  { id: "p1", x: 420, y: 480, w: 230, h: 28, kind: "grass", oneWay: true },
+  { id: "p2", x: 740, y: 370, w: 250, h: 28, kind: "grass", oneWay: true },
+  { id: "p3", x: 1080, y: 455, w: 220, h: 24, kind: "wood", oneWay: true },
+  { id: "p4", x: 1580, y: 470, w: 230, h: 28, kind: "grass", oneWay: true },
+  { id: "p5", x: 1890, y: 355, w: 260, h: 26, kind: "wood", oneWay: true },
+  { id: "p6", x: 2250, y: 265, w: 330, h: 30, kind: "grass", oneWay: true },
+  { id: "p7", x: 2600, y: 445, w: 290, h: 24, kind: "wood", oneWay: true },
+  { id: "p8", x: 3030, y: 480, w: 230, h: 28, kind: "grass", oneWay: true },
+  { id: "p9", x: 3340, y: 355, w: 260, h: 28, kind: "grass", oneWay: true },
+  { id: "p10", x: 3690, y: 445, w: 260, h: 24, kind: "wood", oneWay: true },
+  { id: "p11", x: 4380, y: 480, w: 240, h: 28, kind: "grass", oneWay: true },
+  { id: "p12", x: 4720, y: 365, w: 300, h: 26, kind: "wood", oneWay: true },
+  { id: "p13", x: 5120, y: 470, w: 240, h: 28, kind: "grass", oneWay: true }
+];
+SURFACES.push(...VERTICAL_ROUTES.flat(), ...[0, 1940, 4020].flatMap((base, board) => [
+  { id: `branch-${board}-2`, x: base + 1200, y: 320, w: 290, h: 28, kind: "wood", oneWay: true, tier: 2, board },
+  { id: `branch-${board}-3`, x: base + 1770, y: 160, w: 260, h: 28, kind: "grass", oneWay: true, tier: 3, board }
+]));
+var CAMPS = [{ x: 160, y: 600, name: "Shore camp" }, { x: 2340, y: 600, name: "Driftwood camp" }, { x: 4370, y: 600, name: "Lighthouse camp" }];
+var COAST_TYPES = {
+  bottle: { name: "Bottle Critter", hp: 34, damage: 5, speed: 43, xp: 14, coins: 1, w: 34, h: 49, color: "#65d9c6" },
+  slime: { name: "Trash Slime", hp: 48, damage: 6, speed: 32, xp: 20, coins: 1, w: 53, h: 36, color: "#b1ce67" },
+  crawler: { name: "Sand Crawler", hp: 60, damage: 7, speed: 54, xp: 26, coins: 1, w: 49, h: 32, color: "#efaa66" }
+};
+var LEGACY_SPAWNS = [
+  ["bottle", 600, "sand-a"],
+  ["bottle", 940, "sand-a"],
+  ["slime", 1230, "sand-a"],
+  ["bottle", 850, "p2"],
+  ["slime", 1700, "sand-b"],
+  ["crawler", 2010, "sand-b"],
+  ["bottle", 2460, "sand-b"],
+  ["slime", 2430, "p6"],
+  ["crawler", 3100, "sand-c"],
+  ["slime", 3500, "sand-c"],
+  ["bottle", 3890, "sand-c"],
+  ["bottle", 3470, "p9"],
+  ["crawler", 4620, "sand-d"],
+  ["slime", 4990, "sand-d"],
+  ["bottle", 5350, "sand-d"],
+  ["crawler", 5570, "sand-d"],
+  ["bottle", 4880, "p12"]
+];
+var homes = [
+  [600, "sand-a"],
+  [900, "climb-0-2"],
+  [1240, "climb-0-3"],
+  [1580, "climb-0-4"],
+  [1700, "sand-b"],
+  [2500, "climb-1-1"],
+  [2870, "climb-1-2"],
+  [3170, "climb-1-3"],
+  [3520, "climb-1-4"],
+  [3500, "sand-c"],
+  [3890, "sand-c"],
+  [3810, "branch-1-3"],
+  [4620, "sand-d"],
+  [4580, "climb-2-1"],
+  [4920, "climb-2-2"],
+  [5250, "climb-2-3"],
+  [5590, "climb-2-4"],
+  [570, "climb-0-1"],
+  [1370, "branch-0-2"],
+  [1900, "branch-0-3"],
+  [3300, "branch-1-2"],
+  [5360, "branch-2-2"],
+  [5910, "branch-2-3"],
+  [5670, "sand-d"]
+];
+var SPAWNS = homes.map(([x, surface], i) => [LEGACY_SPAWNS[i]?.[0] || ["crawler", "slime", "bottle"][i % 3], x, surface]);
+var WORLD_REGIONS = [
+  { id: 1, name: "Coastal Beginnings", levels: [1, 10], boss: "Trash Monster", theme: "coast", sky: ["#83c0c9", "#f6e3ad"], ground: "#c9aa6e", edge: "#f2dba0", accent: "#328b73", boards: REGIONS.map((b) => b.name), types: ["bottle", "slime", "crawler"] },
+  { id: 2, name: "Polluted Forest", levels: [11, 20], boss: "Bushman", theme: "forest", sky: ["#5f9290", "#d4dbab"], ground: "#6c6650", edge: "#a6bc72", accent: "#48795c", boards: ["Briar Approach", "Sporewood Canopy", "Hollow Clearing"], types: ["sprout", "mushroom", "bark"] },
+  { id: 3, name: "Industrial Wasteland", levels: [21, 35], boss: "Wastelander", theme: "factory", sky: ["#76818d", "#ddbb9b"], ground: "#5f7480", edge: "#e7bd76", accent: "#9d6850", boards: ["Scrapline Yard", "Furnace Walk", "Foundry Threshold"], types: ["scrap", "sludge", "drone"] },
+  { id: 4, name: "Toxic Underground", levels: [36, 50], boss: "Giant Scorpion", theme: "cave", sky: ["#38445c", "#8b9f86"], ground: "#66637c", edge: "#c3b8d5", accent: "#b1ce67", boards: ["Violet Descent", "Acid Galleries", "Scorpion Vault"], types: ["scorpion", "beetle", "venomCrawler"] },
+  { id: 5, name: "Mutated Territories", levels: [51, 65], boss: "Venomis", theme: "mutant", sky: ["#9b83a7", "#d4bf9e"], ground: "#80627f", edge: "#deb0b0", accent: "#b5ce73", boards: ["Overgrowth Verge", "Twisted Wilds", "Venomis Approach"], types: ["thornBeast", "stalker", "spitter"] },
+  { id: 6, name: "Dark Energy Realm", levels: [66, 80], boss: "AtomDust", theme: "energy", sky: ["#3c486d", "#8e8cb1"], ground: "#545e88", edge: "#c8c4eb", accent: "#81b5cf", boards: ["Fractured Horizon", "Echo Causeway", "AtomDust Seal"], types: ["wisp", "phantom", "sentinel"] },
+  { id: 7, name: "Final Showdown", levels: [81, 99], boss: "Ultimate Pollution Boss", theme: "final", sky: ["#8c666f", "#d5ad8a"], ground: "#705e65", edge: "#e2c2aa", accent: "#cc9773", boards: ["Last City Outskirts", "Broken Boulevard", "Final Gate"], types: ["apocalypse", "guardian", "titan"] }
+];
+var lineup = [
+  ["sprout", "Thorn Sprout", 2, 11, 120, 10, 49, 90, 37, 52, "#8baf65", "lunge", "common"],
+  ["mushroom", "Toxic Mushroom", 2, 15, 180, 14, 24, 125, 51, 48, "#bf8fbc", "spore", "common"],
+  ["bark", "Bark Crawler", 2, 20, 250, 18, 65, 175, 57, 34, "#a88960", "skitter", "strong"],
+  ["scrap", "Scrap Crawler", 3, 21, 300, 20, 78, 200, 53, 36, "#b4bdba", "skitter", "common"],
+  ["sludge", "Sludge Beast", 3, 28, 420, 28, 38, 280, 65, 55, "#95a85a", "slam", "strong"],
+  ["drone", "Rust Drone", 3, 35, 550, 35, 68, 360, 53, 45, "#c58756", "bolt", "strong"],
+  ["scorpion", "Cave Scorpion", 4, 36, 650, 40, 80, 410, 58, 40, "#b49aca", "sting", "common"],
+  ["beetle", "Acid Beetle", 4, 43, 820, 50, 57, 520, 51, 36, "#adc86d", "acid", "common"],
+  ["venomCrawler", "Venom Crawler", 4, 50, 1e3, 60, 104, 650, 61, 32, "#a0b7bb", "pounce", "strong"],
+  ["thornBeast", "Thorn Beast", 5, 51, 1200, 65, 75, 720, 70, 58, "#b19d65", "slam", "common"],
+  ["stalker", "Mutant Stalker", 5, 58, 1550, 78, 118, 880, 46, 72, "#b18ea9", "pounce", "strong"],
+  ["spitter", "Poison Spitter", 5, 65, 1900, 90, 57, 1040, 60, 51, "#a7c879", "spit", "strong"],
+  ["wisp", "Shadow Wisp", 6, 66, 2200, 100, 95, 1160, 38, 47, "#9896cf", "orb", "common"],
+  ["phantom", "Energy Phantom", 6, 73, 2850, 120, 110, 1400, 49, 67, "#91bccc", "phase", "strong"],
+  ["sentinel", "Dark Sentinel", 6, 80, 3500, 140, 66, 1650, 62, 81, "#858fae", "pulse", "elite"],
+  ["apocalypse", "Apocalypse Mutant", 7, 81, 4e3, 150, 125, 1800, 59, 66, "#c88b91", "pounce", "common"],
+  ["guardian", "Corrupted Guardian", 7, 90, 5500, 185, 89, 2250, 66, 83, "#afa2b5", "volley", "strong"],
+  ["titan", "Pollution Titan", 7, 99, 7e3, 220, 49, 2800, 81, 95, "#b4a584", "quake", "elite"]
+];
+var TYPES = {
+  ...Object.fromEntries(Object.entries(COAST_TYPES).map(([id, info], i) => [id, { ...info, region: 1, level: [1, 4, 8][i], behavior: ["lunge", "hop", "skitter"][i], rank: "common", peaceful: i < 2 }])),
+  ...Object.fromEntries(lineup.map(([id, name, region, level, hp, damage, speed, xp, w, h, color, behavior, rank]) => [id, { name, region, level, hp, damage, speed, xp, w, h, color, behavior, rank, coins: 1, flying: ["drone", "wisp", "phantom"].includes(id) }]))
+};
+var regionDefinition = (id) => WORLD_REGIONS.find((r) => r.id === id) || WORLD_REGIONS[0];
+var boardIndex = (x) => x >= 4020 ? 2 : x >= 1940 ? 1 : 0;
+function regionSurfaces(id) {
+  const region = regionDefinition(id);
+  const result = SURFACES.filter((s) => !/^p\d+$/.test(s.id)).map((s) => ({ ...s, kind: id === 1 ? s.kind : s.kind === "wood" ? id === 2 || id === 5 ? "wood" : "metal" : region.theme }));
+  if (id === 4) result.push({ id: "cave-roof", x: 3040, y: -220, w: 750, h: 40, kind: "cave" });
+  return result;
+}
+var regionCamps = (id) => CAMPS.map((c, i) => ({ ...c, name: id === 1 ? c.name : `${regionDefinition(id).boards[i]} camp` }));
+function regionSpawns(id) {
+  if (id === 1) return SPAWNS;
+  const types = regionDefinition(id).types;
+  return SPAWNS.map(([_, x, surface], i) => [types[(i + Math.floor((LEGACY_SPAWNS[i]?.[1] ?? x) / 1900)) % 3], x, surface]);
+}
+var GATES = Object.freeze({ back: 44, arena: 5840, forward: 6070 });
+
+// world-loot.mjs
+function normalizeLoot(raw = []) {
+  if (!Array.isArray(raw) || raw.length > 2048) return null;
+  const ids = /* @__PURE__ */ new Set(), itemIds = /* @__PURE__ */ new Set();
+  return raw.every((o) => o && /^loot-\d+$/.test(o.id) && Number.isSafeInteger(Number(o.id.slice(5))) && !ids.has(o.id) && ids.add(o.id) && Number.isInteger(o.region) && o.region >= 1 && o.region <= 7 && Number.isFinite(o.x) && o.x >= 0 && o.x <= 6200 && Number.isFinite(o.y) && o.y >= -500 && o.y <= 1e3 && ["root", "equipment"].includes(o.kind) && (o.kind === "root" || itemDefinition(o.item) && /^drop-\d+$/.test(o.item.uid) && !itemIds.has(o.item.uid) && itemIds.add(o.item.uid))) ? raw.map((o) => ({ id: o.id, region: o.region, x: o.x, y: o.y, vy: 0, kind: o.kind, item: o.kind === "equipment" ? { uid: o.item.uid, catalogId: o.item.catalogId } : null })) : null;
+}
+function spawnLoot(g, e, kind, item = null) {
+  const x = Math.max(16, Math.min(6144, e.x)), y = e.y - 12;
+  g.loot.push({ id: `loot-${g.inventory.nextId++}`, region: g.regionId, x, y, vy: 0, kind, item });
+}
+function stepLoot(g, dt) {
+  if (g.portalPickupGuard && Math.hypot(g.hero.x - g.portalPickupGuard.x, g.hero.y - g.portalPickupGuard.y) >= 90) g.portalPickupGuard = null;
+  if (g.arenaScene) return;
+  for (const o of g.loot) {
+    if (o.region !== g.regionId) continue;
+    const below = g.surfaces.filter((s) => o.x >= s.x && o.x <= s.x + s.w && s.y >= o.y - 1).sort((a2, b) => a2.y - b.y)[0];
+    if (!below) {
+      const safe = g.camps[0];
+      o.x = safe.x;
+      o.y = safe.y;
+      continue;
+    }
+    o.vy = Math.min(700, o.vy + 1200 * dt);
+    o.y = Math.min(below.y, o.y + o.vy * dt);
+    if (o.y === below.y) o.vy = 0;
+  }
+}
+function nearbyInteractions(g) {
+  const h = g.hero;
+  if (h.dead) return [];
+  const result = [], add = (id, kind, x, y, label, extra = {}) => {
+    const distance = Math.hypot(h.x - x, h.y - y);
+    if (["portal", "passage"].includes(kind) && !g.canTravel() || kind === "camp" && !g.canSave()) return;
+    if (["portal", "passage"].includes(kind) && g.portalPickupGuard?.region === g.regionId && Math.hypot(h.x - g.portalPickupGuard.x, h.y - g.portalPickupGuard.y) < 90) return;
+    if (distance <= 90) result.push({ id, kind, x, y, label, distance, ...extra });
+  };
+  if (g.arenaScene) {
+    if (g.availableChest()) add("chest", "chest", 1060, h.y, "View treasure");
+    return result;
+  }
+  for (const o of g.loot) if (o.region === g.regionId) add(o.id, "loot", o.x, o.y, `Pick Up \xB7 ${o.kind === "root" ? "Health Root" : itemDefinition(o.item).name}`, { loot: o });
+  g.camps.forEach((c, i) => {
+    add(`camp-${i}`, "camp", c.x, c.y, "Rest", { index: i });
+    add(`portal-${i}`, "portal", c.x + 90, c.y, "Enter Portal \xB7 World Map");
+  });
+  if (g.regionId > 1) add("back", "passage", GATES.back, 600, "Enter Portal \xB7 Previous region");
+  if (g.regionId < 7) add("forward", "passage", GATES.forward, 600, "Enter Portal \xB7 Next region");
+  add("arena", "passage", GATES.arena, 600, `Enter Arena \xB7 ${g.getRegion().boss}`);
+  return result.sort((a2, b) => a2.distance - b.distance || a2.id.localeCompare(b.id));
+}
+function selectedInteraction(g) {
+  const list = nearbyInteractions(g);
+  return list.find((t) => t.id === g.interactionTarget) || list[0];
+}
+function pickupLoot(g, id, replaceUid = null, confirmed = false) {
+  const o = g.loot.find((o2) => o2.id === id);
+  if (!o || g.arenaScene || g.hero.dead || o.region !== g.regionId || Math.hypot(g.hero.x - o.x, g.hero.y - o.y) > 90) return false;
+  if (o.kind === "root") {
+    if (g.healthRoots >= 4) {
+      g.emit("loot-full", { message: "Health Roots full \xB7 use one or leave this orb." });
+      return false;
+    }
+    g.healthRoots++;
+    g.recordEconomy("reward");
+  } else {
+    if (g.inventory.items.length >= 7) {
+      if (!confirmed || !replaceUid || !g.canSave()) {
+        g.emit("loot-full", { id, message: "Equipment full \xB7 compare items or leave this orb." });
+        return false;
+      }
+      const old = g.inventory.items.find((i) => i.uid === replaceUid);
+      if (!old || itemDefinition(old).rarity === "legendary") return false;
+      if (!g.discardItem(replaceUid, true)) return false;
+    }
+    g.inventory.items.push(o.item);
+    g.recordEconomy("reward");
+  }
+  g.portalPickupGuard = { region: g.regionId, x: g.hero.x, y: g.hero.y };
+  g.loot.splice(g.loot.indexOf(o), 1);
+  g.emit("loot-picked", { message: o.kind === "root" ? "Health Root collected" : itemDefinition(o.item).name + " collected" });
+  return true;
+}
+
+// shared-clock.mjs
+var sync = null;
+function sharedNow() {
+  return sync ? sync.serverTime + Math.max(0, performance.now() - sync.receivedAt) : Date.now();
+}
+
 // boss-state.mjs
 function initialBossProgress(victories = []) {
   return { records: Object.fromEntries(victories.map((id) => [id, { wins: 1, chest: { state: "legacy", coins: 0, roots: 0, items: [] } }])) };
@@ -404,7 +625,7 @@ function overlap(a2, b) {
   return a2.x < b.x + b.w && a2.x + a2.w > b.x && a2.y < b.y + b.h && a2.y + a2.h > b.y;
 }
 function fire(g, b) {
-  const a2 = b.attack, h = g.hero, damage = b.damage * a2.damage, shot = (x, y, vx, vy = 0, color = "#e6cc83") => g.enemyShots.push({ x, y, vx, vy, life: 5, source: b, damage, color, bossShot: true });
+  const a2 = b.attack, h = g.hero, damage = b.damage * a2.damage, shot = (x, y, vx, vy = 0, color = "#e6cc83") => g.spawnEnemyShot({ x, y, vx, vy, life: 5, source: b, damage, color, bossShot: true });
   if (a2.shape === "projectile") {
     const x = b.x + b.face * (b.w * 0.5 + 10), y = b.y - 70, angle = Math.atan2(h.y - 48 - y, h.x - x), speed = a2.speed * (b.phase === 1 ? 1 : 1.12);
     for (let i = 0; i < a2.count; i++) {
@@ -487,7 +708,7 @@ var bossMethods = {
     const h = this.hero;
     this.arenaScene = { region: this.regionId, cleared: mode === "cleared", returnLocation: { x: h.x, y: h.y, face: h.face }, surfaces: this.surfaces, enemies: this.enemies, camps: this.camps };
     this.powers.cancelEffects();
-    this.enemyShots = [];
+    this.clearEnemyShots();
     this.surfaces = arenaSurfaces();
     this.camps = [];
     Object.assign(h, { x: ARENA.heroX, prevX: ARENA.heroX, y: ARENA.floor, prevY: ARENA.floor, vx: 0, vy: 0, grounded: true, jumps: 0, jumpBuffer: 0, coyote: 0.1, attack: null, attackBuffer: null, face: 1, invulnerable: 1.2 });
@@ -510,7 +731,7 @@ var bossMethods = {
     this.legendaryHazards = [];
     this.disruptedPower = null;
     this.pendingLegendaryVictory = null;
-    this.enemyShots = [];
+    this.clearEnemyShots();
     this.hero.attack = null;
     this.hero.attackBuffer = null;
     this.surfaces = scene.surfaces;
@@ -533,7 +754,7 @@ var bossMethods = {
       b.age = 0;
       b.attack = null;
       b.rooted = false;
-      this.enemyShots = this.enemyShots.filter((p) => p.source !== b);
+      this.removeEnemyShots(b);
       this.emit("boss-down");
     }
   },
@@ -591,7 +812,7 @@ var bossMethods = {
     this.legendaryHazards = [];
     this.disruptedPower = null;
     this.pendingLegendaryVictory = null;
-    this.enemyShots = [];
+    this.clearEnemyShots();
     this.hero.attack = null;
     this.hero.attackBuffer = null;
     this.combatTimer = 0;
@@ -638,7 +859,7 @@ function legendaryZones(b, a2) {
 function fireLegendary(g, b) {
   const a2 = b.attack, h = g.hero, damage = b.damage * a2.damage;
   const shot = (x, y, vx, vy = 0, extra = {}) => {
-    if (g.enemyShots.length < 40) g.enemyShots.push({ x, y, vx, vy, life: 5, source: b, damage, color: a2.color || LEGENDARY[b.legendaryId].colors[1], bossShot: true, ...extra });
+    if (g.enemyShots.length < 40) g.spawnEnemyShot({ x, y, vx, vy, life: 5, source: b, damage, color: a2.color || LEGENDARY[b.legendaryId].colors[1], bossShot: true, ...extra });
   };
   if (a2.shape === "projectile" || a2.shape === "bounce") {
     const x = b.x + b.face * (b.w / 2 + 12), y = b.y - 75, angle = Math.atan2(h.y - 45 - y, h.x - x);
@@ -742,7 +963,7 @@ var legendaryMethods = {
     this.arenaScene = { legendary: id, region: this.regionId, cleared: mode === "cleared", returnLocation: { x: h.x, y: h.y, face: h.face }, surfaces: this.surfaces, enemies: this.enemies, camps: this.camps };
     this.powers.cancelEffects();
     this.cancelMergeEffects();
-    this.enemyShots = [];
+    this.clearEnemyShots();
     this.legendaryHazards = [];
     this.surfaces = arenaSurfaces();
     this.camps = [];
@@ -819,7 +1040,7 @@ var legendaryMethods = {
     this.disruptedPower = null;
     this.powers.cancelEffects();
     this.cancelMergeEffects();
-    this.enemyShots = [];
+    this.clearEnemyShots();
     this.legendaryHazards = [];
     this.hero.attack = null;
     this.hero.attackBuffer = null;
@@ -887,6 +1108,49 @@ var legendaryMethods = {
     return true;
   }
 };
+
+// projectiles.mjs
+var ProjectilePool = class {
+  constructor(limit = 64) {
+    this.limit = limit;
+    this.free = [];
+    this.created = 0;
+    this.members = /* @__PURE__ */ new WeakSet();
+  }
+  acquire(values) {
+    let p = this.free.pop();
+    if (!p) {
+      if (this.created >= this.limit) return null;
+      p = { hits: /* @__PURE__ */ new Set() };
+      this.members.add(p);
+      this.created++;
+    }
+    p.hits.clear();
+    Object.assign(p, { _free: false, x: 0, y: 0, vx: 0, vy: 0, life: 0, source: null, damage: void 0, color: null, bossShot: false, bounce: 0, gravity: 0, pierce: 0 }, values);
+    return p;
+  }
+  release(p) {
+    if (!p || !this.members.has(p) || p._free) return;
+    p._free = true;
+    p.life = 0;
+    p.source = null;
+    p.hits.clear();
+    this.free.push(p);
+  }
+};
+function compactProjectiles(list, pool, keep = (p) => p.life > 0) {
+  let write = 0;
+  for (let i = 0; i < list.length; i++) {
+    const p = list[i];
+    if (keep(p)) list[write++] = p;
+    else pool?.release(p);
+  }
+  list.length = write;
+}
+function clearProjectiles(list, pool) {
+  for (const p of list) pool?.release(p);
+  list.length = 0;
+}
 
 // powers.mjs
 var ACTIVE_SLOTS = 3;
@@ -963,20 +1227,24 @@ function normalizePowers(raw, heroLevel, { strict = false } = {}) {
   });
   return { levels, equipped, points: earned - spent, recovery: Object.fromEntries(POWER_IDS.map((id) => [id, clamp3(Number(raw?.recovery?.[id]) || 0, 0, 120)])) };
 }
-function attackRate(level, equipment = {}) {
-  return 1 + Math.min(0.5, (level ? powerStats("speed", level).attackBonus : 0) + equipmentStats(equipment).attackSpeed);
-}
 var isBoss = (e) => e?.boss === true || e?.legendary === true;
 var box = (e) => ({ x: e.x - e.w / 2, y: e.y - e.h, w: e.w, h: e.h });
 var EPS = 1e-8;
 function segmentHit(x, y, nx, ny, rect, r = 0) {
   let lo = 0, hi = 1;
-  for (const [origin, delta, min, max] of [[x, nx - x, rect.x - r, rect.x + rect.w + r], [y, ny - y, rect.y - r, rect.y + rect.h + r]]) {
-    if (Math.abs(delta) < EPS) {
-      if (origin < min || origin > max) return null;
-      continue;
-    }
-    const a2 = (min - origin) / delta, b = (max - origin) / delta;
+  const dx = nx - x, dy = ny - y;
+  if (Math.abs(dx) < EPS) {
+    if (x < rect.x - r || x > rect.x + rect.w + r) return null;
+  } else {
+    const a2 = (rect.x - r - x) / dx, b = (rect.x + rect.w + r - x) / dx;
+    lo = Math.max(lo, Math.min(a2, b));
+    hi = Math.min(hi, Math.max(a2, b));
+    if (lo > hi) return null;
+  }
+  if (Math.abs(dy) < EPS) {
+    if (y < rect.y - r || y > rect.y + rect.h + r) return null;
+  } else {
+    const a2 = (rect.y - r - y) / dy, b = (rect.y + rect.h + r - y) / dy;
     lo = Math.max(lo, Math.min(a2, b));
     hi = Math.min(hi, Math.max(a2, b));
     if (lo > hi) return null;
@@ -990,6 +1258,7 @@ var PowerSystem = class {
     this.cooldowns = { ...data.recovery };
     this.active = {};
     this.projectiles = [];
+    this.projectilePool = new ProjectilePool(12);
     this.bursts = [];
     this.mergeEntitlement = null;
   }
@@ -1000,10 +1269,10 @@ var PowerSystem = class {
     return !!this.active.flight;
   }
   get speed() {
-    return Math.min(0.6, (this.data.levels.speed ? this.stats("speed").runBonus : 0) + equipmentStats(this.game.equipment).moveSpeed);
+    return Math.min(0.6, (this.data.levels.speed ? scale(this.data.levels.speed, 0.05, 0.6) : 0) + this.game.equipment.moveSpeed);
   }
   get attackRate() {
-    return attackRate(this.data.levels.speed, this.game.equipment);
+    return 1 + Math.min(0.5, (this.data.levels.speed ? scale(this.data.levels.speed, 0.03, 0.5) : 0) + this.game.equipment.attackSpeed);
   }
   ready(id) {
     return this.game.disruptedPower !== id && POWER_IDS.includes(id) && !!this.data.levels[id] && !POWERS[id]?.passive && !this.active[id] && (this.cooldowns[id] || 0) <= EPS;
@@ -1105,8 +1374,8 @@ var PowerSystem = class {
   }
   cancelEffects() {
     for (const id of Object.keys(this.active)) this.end(id);
-    this.bursts = [];
-    this.projectiles = [];
+    this.bursts.length = 0;
+    clearProjectiles(this.projectiles, this.projectilePool);
   }
   incoming(amount, source = {}) {
     const g = this.game;
@@ -1169,15 +1438,17 @@ var PowerSystem = class {
     for (const burst of this.bursts) {
       burst.next -= dt;
       while (burst.left > 0 && burst.next <= EPS) {
-        this.projectiles.push({ x: h.x + burst.face * 22, y: h.y - 45, vx: burst.face * BALANCE.fireballSpeed, life: BALANCE.fireballLife, damage: burst.damage, pierce: burst.pierce, hits: /* @__PURE__ */ new Set() });
+        const p = this.projectilePool.acquire({ x: h.x + burst.face * 22, y: h.y - 45, vx: burst.face * BALANCE.fireballSpeed, life: BALANCE.fireballLife, damage: burst.damage, pierce: burst.pierce });
+        if (p) this.projectiles.push(p);
         burst.left--;
         burst.next += BALANCE.burstInterval;
       }
     }
-    this.bursts = this.bursts.filter((b) => b.left > 0);
+    compactProjectiles(this.bursts, null, (b) => b.left > 0);
     for (const p of this.projectiles) {
       const nx = p.x + p.vx * dt, contacts = [];
-      for (const wall of g.surfaces.filter((s) => !s.oneWay)) {
+      for (const wall of g.surfaces) {
+        if (wall.oneWay) continue;
         const t = segmentHit(p.x, p.y, nx, p.y, wall, 6);
         if (t !== null) contacts.push({ t, wall: true });
       }
@@ -1202,7 +1473,7 @@ var PowerSystem = class {
       p.x = nx;
       p.life -= dt;
     }
-    this.projectiles = this.projectiles.filter((p) => p.life > 0);
+    compactProjectiles(this.projectiles, this.projectilePool);
     this.sync();
   }
   snapshot() {
@@ -1419,113 +1690,6 @@ function normalizeLegendaryArena(raw, legendary, level) {
 }
 var mergeEntitlement = (id) => id ? { id, ability: `merge:${id}`, completePieces: 3, level: 20, cooldownMultiplier: 0.5, cooldown: MERGE_POWERS[id].cooldown * 0.5 } : null;
 
-// world.mjs
-var WORLD_WIDTH = 6160;
-var DEATH_Y = 890;
-var REGIONS = [
-  { x: 0, name: "Sunwash Strand", note: "A small beginning. A bigger adventure." },
-  { x: 1940, name: "Driftwood Rise", note: "Take the high road, or follow the shore." },
-  { x: 4020, name: "Lighthouse Point", note: "Every hero starts somewhere." }
-];
-var SURFACES = [
-  { id: "sand-a", x: 0, y: 600, w: 1390, h: 320, kind: "sand" },
-  { id: "sand-b", x: 1540, y: 600, w: 1170, h: 320, kind: "sand" },
-  { id: "sand-c", x: 2860, y: 600, w: 1260, h: 320, kind: "sand" },
-  { id: "sand-d", x: 4270, y: 600, w: 1890, h: 320, kind: "sand" },
-  // Low, connected tide-pool routes make missed jumps forgiving.
-  { id: "pool-a", x: 1380, y: 664, w: 170, h: 256, kind: "rock" },
-  { id: "pool-b", x: 2700, y: 664, w: 170, h: 256, kind: "rock" },
-  { id: "pool-c", x: 4110, y: 664, w: 170, h: 256, kind: "rock" },
-  { id: "p1", x: 420, y: 480, w: 230, h: 28, kind: "grass", oneWay: true },
-  { id: "p2", x: 740, y: 370, w: 250, h: 28, kind: "grass", oneWay: true },
-  { id: "p3", x: 1080, y: 455, w: 220, h: 24, kind: "wood", oneWay: true },
-  { id: "p4", x: 1580, y: 470, w: 230, h: 28, kind: "grass", oneWay: true },
-  { id: "p5", x: 1890, y: 355, w: 260, h: 26, kind: "wood", oneWay: true },
-  { id: "p6", x: 2250, y: 265, w: 330, h: 30, kind: "grass", oneWay: true },
-  { id: "p7", x: 2600, y: 445, w: 290, h: 24, kind: "wood", oneWay: true },
-  { id: "p8", x: 3030, y: 480, w: 230, h: 28, kind: "grass", oneWay: true },
-  { id: "p9", x: 3340, y: 355, w: 260, h: 28, kind: "grass", oneWay: true },
-  { id: "p10", x: 3690, y: 445, w: 260, h: 24, kind: "wood", oneWay: true },
-  { id: "p11", x: 4380, y: 480, w: 240, h: 28, kind: "grass", oneWay: true },
-  { id: "p12", x: 4720, y: 365, w: 300, h: 26, kind: "wood", oneWay: true },
-  { id: "p13", x: 5120, y: 470, w: 240, h: 28, kind: "grass", oneWay: true }
-];
-var CAMPS = [{ x: 160, y: 600, name: "Shore camp" }, { x: 2340, y: 600, name: "Driftwood camp" }, { x: 4370, y: 600, name: "Lighthouse camp" }];
-var COAST_TYPES = {
-  bottle: { name: "Bottle Critter", hp: 34, damage: 5, speed: 43, xp: 14, coins: 1, w: 34, h: 49, color: "#65d9c6" },
-  slime: { name: "Trash Slime", hp: 48, damage: 6, speed: 32, xp: 20, coins: 1, w: 53, h: 36, color: "#b1ce67" },
-  crawler: { name: "Sand Crawler", hp: 60, damage: 7, speed: 54, xp: 26, coins: 1, w: 49, h: 32, color: "#efaa66" }
-};
-var SPAWNS = [
-  ["bottle", 600, "sand-a"],
-  ["bottle", 940, "sand-a"],
-  ["slime", 1230, "sand-a"],
-  ["bottle", 850, "p2"],
-  ["slime", 1700, "sand-b"],
-  ["crawler", 2010, "sand-b"],
-  ["bottle", 2460, "sand-b"],
-  ["slime", 2430, "p6"],
-  ["crawler", 3100, "sand-c"],
-  ["slime", 3500, "sand-c"],
-  ["bottle", 3890, "sand-c"],
-  ["bottle", 3470, "p9"],
-  ["crawler", 4620, "sand-d"],
-  ["slime", 4990, "sand-d"],
-  ["bottle", 5350, "sand-d"],
-  ["crawler", 5570, "sand-d"],
-  ["bottle", 4880, "p12"]
-];
-var WORLD_REGIONS = [
-  { id: 1, name: "Coastal Beginnings", levels: [1, 10], boss: "Trash Monster", theme: "coast", sky: ["#83c0c9", "#f6e3ad"], ground: "#c9aa6e", edge: "#f2dba0", accent: "#328b73", boards: REGIONS.map((b) => b.name), types: ["bottle", "slime", "crawler"] },
-  { id: 2, name: "Polluted Forest", levels: [11, 20], boss: "Bushman", theme: "forest", sky: ["#5f9290", "#d4dbab"], ground: "#6c6650", edge: "#a6bc72", accent: "#48795c", boards: ["Briar Approach", "Sporewood Canopy", "Hollow Clearing"], types: ["sprout", "mushroom", "bark"] },
-  { id: 3, name: "Industrial Wasteland", levels: [21, 35], boss: "Wastelander", theme: "factory", sky: ["#76818d", "#ddbb9b"], ground: "#5f7480", edge: "#e7bd76", accent: "#9d6850", boards: ["Scrapline Yard", "Furnace Walk", "Foundry Threshold"], types: ["scrap", "sludge", "drone"] },
-  { id: 4, name: "Toxic Underground", levels: [36, 50], boss: "Giant Scorpion", theme: "cave", sky: ["#38445c", "#8b9f86"], ground: "#66637c", edge: "#c3b8d5", accent: "#b1ce67", boards: ["Violet Descent", "Acid Galleries", "Scorpion Vault"], types: ["scorpion", "beetle", "venomCrawler"] },
-  { id: 5, name: "Mutated Territories", levels: [51, 65], boss: "Venomis", theme: "mutant", sky: ["#9b83a7", "#d4bf9e"], ground: "#80627f", edge: "#deb0b0", accent: "#b5ce73", boards: ["Overgrowth Verge", "Twisted Wilds", "Venomis Approach"], types: ["thornBeast", "stalker", "spitter"] },
-  { id: 6, name: "Dark Energy Realm", levels: [66, 80], boss: "AtomDust", theme: "energy", sky: ["#3c486d", "#8e8cb1"], ground: "#545e88", edge: "#c8c4eb", accent: "#81b5cf", boards: ["Fractured Horizon", "Echo Causeway", "AtomDust Seal"], types: ["wisp", "phantom", "sentinel"] },
-  { id: 7, name: "Final Showdown", levels: [81, 99], boss: "Ultimate Pollution Boss", theme: "final", sky: ["#8c666f", "#d5ad8a"], ground: "#705e65", edge: "#e2c2aa", accent: "#cc9773", boards: ["Last City Outskirts", "Broken Boulevard", "Final Gate"], types: ["apocalypse", "guardian", "titan"] }
-];
-var lineup = [
-  ["sprout", "Thorn Sprout", 2, 11, 120, 10, 49, 90, 37, 52, "#8baf65", "lunge", "common"],
-  ["mushroom", "Toxic Mushroom", 2, 15, 180, 14, 24, 125, 51, 48, "#bf8fbc", "spore", "common"],
-  ["bark", "Bark Crawler", 2, 20, 250, 18, 65, 175, 57, 34, "#a88960", "skitter", "strong"],
-  ["scrap", "Scrap Crawler", 3, 21, 300, 20, 78, 200, 53, 36, "#b4bdba", "skitter", "common"],
-  ["sludge", "Sludge Beast", 3, 28, 420, 28, 38, 280, 65, 55, "#95a85a", "slam", "strong"],
-  ["drone", "Rust Drone", 3, 35, 550, 35, 68, 360, 53, 45, "#c58756", "bolt", "strong"],
-  ["scorpion", "Cave Scorpion", 4, 36, 650, 40, 80, 410, 58, 40, "#b49aca", "sting", "common"],
-  ["beetle", "Acid Beetle", 4, 43, 820, 50, 57, 520, 51, 36, "#adc86d", "acid", "common"],
-  ["venomCrawler", "Venom Crawler", 4, 50, 1e3, 60, 104, 650, 61, 32, "#a0b7bb", "pounce", "strong"],
-  ["thornBeast", "Thorn Beast", 5, 51, 1200, 65, 75, 720, 70, 58, "#b19d65", "slam", "common"],
-  ["stalker", "Mutant Stalker", 5, 58, 1550, 78, 118, 880, 46, 72, "#b18ea9", "pounce", "strong"],
-  ["spitter", "Poison Spitter", 5, 65, 1900, 90, 57, 1040, 60, 51, "#a7c879", "spit", "strong"],
-  ["wisp", "Shadow Wisp", 6, 66, 2200, 100, 95, 1160, 38, 47, "#9896cf", "orb", "common"],
-  ["phantom", "Energy Phantom", 6, 73, 2850, 120, 110, 1400, 49, 67, "#91bccc", "phase", "strong"],
-  ["sentinel", "Dark Sentinel", 6, 80, 3500, 140, 66, 1650, 62, 81, "#858fae", "pulse", "elite"],
-  ["apocalypse", "Apocalypse Mutant", 7, 81, 4e3, 150, 125, 1800, 59, 66, "#c88b91", "pounce", "common"],
-  ["guardian", "Corrupted Guardian", 7, 90, 5500, 185, 89, 2250, 66, 83, "#afa2b5", "volley", "strong"],
-  ["titan", "Pollution Titan", 7, 99, 7e3, 220, 49, 2800, 81, 95, "#b4a584", "quake", "elite"]
-];
-var TYPES = {
-  ...Object.fromEntries(Object.entries(COAST_TYPES).map(([id, info], i) => [id, { ...info, region: 1, level: [1, 4, 8][i], behavior: ["lunge", "hop", "skitter"][i], rank: "common", peaceful: i < 2 }])),
-  ...Object.fromEntries(lineup.map(([id, name, region, level, hp, damage, speed, xp, w, h, color, behavior, rank]) => [id, { name, region, level, hp, damage, speed, xp, w, h, color, behavior, rank, coins: 1, flying: ["drone", "wisp", "phantom"].includes(id) }]))
-};
-var regionDefinition = (id) => WORLD_REGIONS.find((r) => r.id === id) || WORLD_REGIONS[0];
-var boardIndex = (x) => x >= 4020 ? 2 : x >= 1940 ? 1 : 0;
-function regionSurfaces(id) {
-  if (id === 1) return SURFACES;
-  const region = regionDefinition(id), offsets = [0, -20, 25, -35, 15, 0];
-  const result = SURFACES.map((s, i) => ({ ...s, kind: s.kind === "wood" ? id === 2 || id === 5 ? "wood" : "metal" : region.theme, y: s.oneWay ? s.y + offsets[(i + id) % 6] : s.y }));
-  result.push({ id: "high-a", x: 1160, y: 275 - id % 3 * 20, w: 210, h: 26, kind: region.theme, oneWay: true }, { id: "high-b", x: 3870, y: 300 + id % 2 * 25, w: 200, h: 26, kind: region.theme, oneWay: true });
-  if (id === 4) result.push({ id: "cave-roof", x: 3040, y: 110, w: 750, h: 40, kind: "cave" });
-  return result;
-}
-var regionCamps = (id) => CAMPS.map((c, i) => ({ ...c, name: id === 1 ? c.name : `${regionDefinition(id).boards[i]} camp` }));
-function regionSpawns(id) {
-  if (id === 1) return SPAWNS;
-  const types = regionDefinition(id).types;
-  return SPAWNS.map(([_, x, surface], i) => [types[(i + Math.floor(x / 1900)) % 3], x, surface]);
-}
-var GATES = Object.freeze({ back: 44, arena: 5840, forward: 6070 });
-
 // eris.mjs
 var APPEARANCE_PRICES = Object.freeze({ hair: 100, eyes: 100, skin: 150, face: 200, body: 300, age: 300, makeover: 750 });
 var GROUPS = { hair: ["hair", "hairColor"], eyes: ["eyes"], skin: ["skin"], face: ["face", "eyeShape", "brows", "nose", "mouth", "facialHair"], body: ["presentation", "height", "build", "shoulders", "muscle", "torso", "arms", "legs"], age: ["age"] };
@@ -1720,6 +1884,7 @@ function normalizeWorld(raw, checkpoint = 0, now = Date.now()) {
 
 // journey.mjs
 function initializeJourney(g, save, now) {
+  g.loot = structuredClone(save?.loot || []);
   g.now = now;
   g.world = structuredClone(save?.world || initialWorld(now()));
   g.regionId = g.world.region;
@@ -1727,11 +1892,23 @@ function initializeJourney(g, save, now) {
   g.healthRoots = save?.healthRoots || 0;
   g.inventory = structuredClone(save?.inventory || emptyInventory());
   g.enemyShots = [];
+  g.enemyShotPool = new ProjectilePool(64);
   g.treeVisit = false;
   g.bossEncounter = null;
   g.board = 0;
 }
 var journeyMethods = {
+  spawnEnemyShot(values) {
+    const p = this.enemyShotPool.acquire(values);
+    if (p) this.enemyShots.push(p);
+    return p;
+  },
+  clearEnemyShots() {
+    clearProjectiles(this.enemyShots, this.enemyShotPool);
+  },
+  removeEnemyShots(source) {
+    compactProjectiles(this.enemyShots, this.enemyShotPool, (p) => p.source !== source);
+  },
   nearPortal() {
     return !this.arenaScene && !this.treeVisit && this.camps.some((c) => Math.abs(this.hero.x - (c.x + 90)) <= 90 && Math.abs(this.hero.y - c.y) < 100);
   },
@@ -1750,7 +1927,16 @@ var journeyMethods = {
     this.equipment = equipmentStats(Object.fromEntries(Object.keys(earned).map((k) => [k, earned[k] + (base?.[k] || 0)])));
   },
   visualOutfit() {
-    return equipmentOutfit(this.inventory, this.outfit);
+    const e = this.inventory.equipped;
+    if (this._outfitInventory !== this.inventory || this._outfitHelmet !== e.helmet || this._outfitChest !== e.chest || this._outfitBoots !== e.boots || this._outfitBase !== this.outfit) {
+      this._outfitInventory = this.inventory;
+      this._outfitHelmet = e.helmet;
+      this._outfitChest = e.chest;
+      this._outfitBoots = e.boots;
+      this._outfitBase = this.outfit;
+      this._visualOutfit = equipmentOutfit(this.inventory, this.outfit);
+    }
+    return this._visualOutfit;
   },
   canSave() {
     return !this.hero.dead && !this.inCombat();
@@ -1845,7 +2031,7 @@ var journeyMethods = {
     if (h.level === 99) h.xp = 0;
   },
   reward(e) {
-    if (e.rewarded) return;
+    if (e.rewarded || !Number.isFinite(e.hp) || e.hp > 0 || e.state !== "dead") return;
     e.rewarded = true;
     const h = this.hero, info = TYPES[e.type];
     if (!info) return;
@@ -1857,15 +2043,14 @@ var journeyMethods = {
     this.gainXP(xp);
     let root = false, item = null;
     if (regular && !summoned) {
-      if (this.random() < LOOT.rootChance && this.healthRoots < LOOT.rootLimit) {
-        this.healthRoots++;
+      if (this.random() < LOOT.rootChance) {
+        spawnLoot(this, e, "root");
         root = true;
       }
       item = rollEquipment(info.region, this.random, this.inventory.nextId);
       if (item) {
         this.inventory.nextId++;
-        this.inventory.pending.push(item);
-        this.emit("equipment", { item, pending: this.inventory.pending.length > 0 });
+        spawnLoot(this, e, "equipment", item);
       }
     }
     this.emit("reward", { x: e.x, y: e.y - 24, xp, coins, root, item: !!item, enemy: info.name });
@@ -1876,7 +2061,7 @@ var journeyMethods = {
     this.powers.cancelEffects();
     this.hero.attack = null;
     this.hero.attackBuffer = null;
-    this.enemyShots = [];
+    this.clearEnemyShots();
     this.regionId = id;
     this.world.region = id;
     this.camps = regionCamps(id);
@@ -1943,82 +2128,109 @@ var journeyMethods = {
 var clamp4 = (n, a2, b) => Math.max(a2, Math.min(b, n));
 var ranged = /* @__PURE__ */ new Set(["spore", "bolt", "acid", "spit", "orb", "pulse", "volley"]);
 function advancedEnemy(g, e, dt) {
-  const info = TYPES[e.type], h = g.hero, d = h.x - e.x, scale2 = e.rooted ? 0.5 : 1;
-  const range = ranged.has(info.behavior) ? 310 : info.behavior === "quake" ? 125 : 85;
-  const left = Math.max(e.surface.x + e.w / 2 + 5, e.spawnX - 220), right = Math.min(e.surface.x + e.surface.w - e.w / 2 - 5, e.spawnX + 220);
-  const engaged = !h.dead && !g.isSafeCamp() && Math.abs(h.x - e.spawnX) < 400 && Math.abs(h.y - e.y) < (e.flying ? 180 : 95);
+  const info = TYPES[e.type], h = g.hero, d = h.x - e.x, coast = info.region === 1;
+  const range = ranged.has(info.behavior) ? 310 : info.behavior === "quake" ? 125 : coast ? 65 : 85;
+  const desperate = e.desperate = e.hp <= e.maxHp * 0.5;
+  const peaceful = info.peaceful && h.level <= 3 && !e.provoked && !desperate;
+  const leash = desperate ? Infinity : coast ? 225 : 400;
+  const engaged = !h.dead && !peaceful && !g.isSafeCamp() && Math.abs(h.x - e.spawnX) < leash && Math.abs(h.y - e.y) < (e.flying ? 240 : coast ? 62 : 95);
+  const wander = coast ? 150 : 220;
+  const left = Math.max(e.surface.x + e.w / 2 + 5, engaged ? 0 : e.spawnX - wander), right = Math.min(e.surface.x + e.surface.w - e.w / 2 - 5, engaged ? Infinity : e.spawnX + wander);
   if (e.flying) {
-    const targetY = e.surface.y - 50 - Math.sin(g.time * (info.behavior === "phase" ? 3 : 1.8) + e.id) * 18;
+    const targetY = engaged ? h.y - 45 : e.surface.y - 50 - Math.sin(g.time * (info.behavior === "phase" ? 3 : 1.8) + e.id) * 18;
     g.moveEnemyAir(e, e.x, e.y + clamp4(targetY - e.y, -110 * dt, 110 * dt));
   }
   const move = (speed) => {
-    const nx = clamp4(e.x + e.face * speed * scale2 * dt, left, right);
+    const nx = clamp4(e.x + e.face * speed * (e.rooted ? 0.5 : 1) * dt, left, right);
     if (e.flying) g.moveEnemyAir(e, nx, e.y);
     else e.x = nx;
   };
-  if (e.state === "patrol") {
-    if (engaged && Math.abs(d) < range) {
+  if (["patrol", "chase", "desperation", "idle"].includes(e.state)) {
+    if (engaged) {
       e.face = Math.sign(d) || e.face;
-      e.state = "warn";
-      e.age = 0;
-      return;
+      e.state = desperate ? "desperation" : "chase";
+      if (Math.abs(d) < range) {
+        e.state = "warn";
+        e.age = 0;
+        return;
+      }
+    } else {
+      e.state = "patrol";
+      if (e.x <= left) e.face = 1;
+      else if (e.x >= right) e.face = -1;
     }
-    if (engaged) e.face = Math.sign(d) || e.face;
-    if (e.x <= left) e.face = 1;
-    if (e.x >= right) e.face = -1;
     move(info.speed * (info.behavior === "phase" ? 1 + Math.sin(g.time * 3) * 0.35 : 1));
-  } else if (e.state === "warn" && e.age >= Math.max(0.38, 0.8 - info.region * 0.045)) {
+  } else if (e.state === "warn" && e.age >= (coast ? e.type === "crawler" ? 0.55 : 0.7 : Math.max(0.38, 0.8 - info.region * 0.045))) {
     e.state = "strike";
     e.age = 0;
     e.hit = false;
-    if (info.behavior === "pounce") {
+    if (info.behavior === "pounce" || info.behavior === "hop") {
       e.airborne = true;
-      e.vy = -260;
-      e.airVx = e.face * info.speed * 1.8;
+      e.vy = coast ? -180 : -260;
+      e.airVx = e.face * (coast ? 95 : info.speed * 1.8);
       e.pouncing = true;
     }
   } else if (e.state === "strike") {
-    if (!ranged.has(info.behavior)) move(info.speed * (info.behavior === "skitter" ? 2.1 : info.behavior === "lunge" ? 2 : 1.25));
-    if (!e.hit && e.age >= 0.08) {
+    if (!ranged.has(info.behavior)) move(coast ? e.type === "crawler" ? 155 : 105 : info.speed * (info.behavior === "skitter" ? 2.1 : info.behavior === "lunge" ? 2 : 1.25));
+    if (!e.hit && e.age >= (coast ? 0.06 : 0.08)) {
       e.hit = true;
       if (ranged.has(info.behavior)) {
         const count = info.behavior === "volley" ? 3 : info.behavior === "pulse" ? 2 : 1;
         const x = e.x + e.face * (e.w / 2 + 8), y = e.y - e.h * 0.55, angle = Math.atan2(h.y - h.h * 0.5 - y, h.x - x), speed = 175 + info.region * 18;
         for (let i = 0; i < count; i++) if (g.enemyShots.length < 32) {
           const a2 = angle + (i - (count - 1) / 2) * 0.16;
-          g.enemyShots.push({ x, y, vx: Math.cos(a2) * speed, vy: Math.sin(a2) * speed, life: 2.6, source: e, color: info.color });
+          g.spawnEnemyShot({ x, y, vx: Math.cos(a2) * speed, vy: Math.sin(a2) * speed, life: 2.6, source: e, color: info.color });
         }
-      } else if (Math.abs(h.y - e.y) < (info.behavior === "slam" ? 85 : 65) && Math.abs(h.x - e.x) < range && (h.x - e.x) * e.face > -20) g.hurt(g.monsterDamage(e), e.x, e);
+      } else if (Math.abs(h.y - e.y) < (info.behavior === "slam" ? 85 : 65) && Math.abs(h.x - e.x) < (coast ? 76 : range) && (h.x - e.x) * e.face > -20) g.hurt(g.monsterDamage(e), e.x, e);
     }
-    if (e.age > 0.28) {
+    if (e.age > (coast ? 0.24 : 0.28)) {
       e.state = "recover";
       e.age = 0;
     }
-  } else if (e.state === "recover" && e.age > Math.max(0.65, 1.25 - info.region * 0.06)) {
-    e.state = "patrol";
-    e.age = 0;
+  } else if (e.state === "recover") {
+    if (engaged) {
+      e.face = Math.sign(d) || e.face;
+      if (Math.abs(d) > range) move(info.speed * 0.55);
+    }
+    if (e.age >= (coast ? 1.1 : Math.max(0.65, 1.25 - info.region * 0.06))) {
+      e.state = engaged ? desperate ? "desperation" : "chase" : "patrol";
+      e.age = 0;
+    }
   }
 }
 function stepEnemyProjectiles(g, dt) {
+  if (!g.enemyShots.length) return;
+  const h = g.heroBox();
   for (const p of g.enemyShots) {
     if (p.gravity) p.vy += p.gravity * dt;
-    const nx = p.x + p.vx * dt, ny = p.y + p.vy * dt, h = g.heroBox();
-    const hit = segmentHit(p.x, p.y, nx, ny, h, 5), wall = g.surfaces.filter((s) => !s.oneWay).map((s) => segmentHit(p.x, p.y, nx, ny, s, 5)).filter((t) => t !== null).sort((a2, b) => a2 - b)[0];
-    if (hit !== null && (wall === void 0 || hit < wall)) {
+    const nx = p.x + p.vx * dt, ny = p.y + p.vy * dt;
+    const hit = segmentHit(p.x, p.y, nx, ny, h, 5);
+    let wall = null, surface = null;
+    for (const s of g.surfaces) {
+      if (s.oneWay) continue;
+      const t = segmentHit(p.x, p.y, nx, ny, s, 5);
+      if (t !== null && (wall === null || t < wall)) {
+        wall = t;
+        surface = s;
+      }
+    }
+    let bounced = false;
+    if (hit !== null && (wall === null || hit < wall)) {
       g.hurt(p.damage ?? g.monsterDamage(p.source), p.x, p.source);
       p.life = 0;
-    } else if (wall !== void 0) {
-      if (p.bounce > 0 && p.vy > 0 && p.y < 595) {
+    } else if (wall !== null) {
+      if (p.bounce > 0 && p.vy > 0 && p.y <= surface.y - 5) {
         p.bounce--;
         p.vy = -Math.max(180, Math.abs(p.vy) * 0.7);
-        p.y = 589;
+        p.y = surface.y - 6;
+        bounced = true;
       } else p.life = 0;
     }
     p.x = nx;
-    if (!(wall !== void 0 && p.bounce >= 0 && p.vy < 0)) p.y = ny;
+    if (!bounced) p.y = ny;
     p.life -= dt;
   }
-  g.enemyShots = g.enemyShots.filter((p) => p.life > 0);
+  compactProjectiles(g.enemyShots, g.enemyShotPool);
 }
 
 // core.mjs
@@ -2054,8 +2266,15 @@ function decodeSave(text) {
     if (arena === false) return null;
     const economy = normalizeEconomy(data.version >= 6 ? data.economy : null), sanctuary = normalizeSanctuary(data.version >= 6 ? data.sanctuary : null, world, arena);
     if (!economy || sanctuary === false) return null;
+    const loot = normalizeLoot(data.loot);
+    if (!loot) return null;
+    const owned = new Set([...inventory.items, ...inventory.pending].map((i) => i.uid));
+    if (loot.some((o) => o.item && (owned.has(o.item.uid) || inventory.retired[o.item.uid]))) return null;
+    inventory.nextId = Math.max(inventory.nextId, ...loot.flatMap((o) => [Number(o.id.slice(5)) + 1, o.item ? Number(o.item.uid.slice(5)) + 1 : 0]));
+    if (inventory.nextId >= 1e9) return null;
     return {
       version: 8,
+      loot,
       legendary,
       economy,
       sanctuary,
@@ -2257,17 +2476,18 @@ var Game = class {
     e.provoked = true;
     e.hp = Math.max(0, e.hp - amount);
     e.flash = 0.12;
-    if (stagger && !isBoss(e)) {
-      e.stagger = 0.26;
-      e.state = "recover";
-      e.age = 0;
+    if (!isBoss(e)) e.desperate = e.hp > 0 && e.hp <= e.maxHp * 0.5;
+    if (stagger && !isBoss(e) && (e.flinchGuard || 0) <= 0) {
+      e.stagger = Math.max(e.stagger || 0, 0.045);
+      e.flinchGuard = 0.55;
     }
-    if (knock && !e.rooted && !e.lifted && !isBoss(e)) e.x = clamp5(e.x + face * knock, e.surface.x + e.w / 2, e.surface.x + e.surface.w - e.w / 2);
+    if (knock && (this.hero.attack?.power === "strength" || kind.startsWith("merge:")) && !e.rooted && !e.lifted && !isBoss(e)) e.x = clamp5(e.x + face * knock, e.surface.x + e.w / 2, e.surface.x + e.surface.w - e.w / 2);
     this.emit("hit", { x: e.x, y: e.y - e.h / 2, kind });
     if (isBoss(e) && e.type.startsWith("boss-")) {
       this.bossDamaged(e);
     } else if (e.hp <= 0) {
       e.state = "dead";
+      e.deadAge = 0;
       e.respawn = e.summoned ? 0 : this.respawnDelay(e);
       e.rooted = false;
       e.lifted = false;
@@ -2333,7 +2553,7 @@ var Game = class {
     h.grounded = false;
     let floor2 = Infinity, ceiling = -Infinity;
     for (const s of this.surfaces) {
-      if (h.x + h.w / 2 <= s.x || h.x - h.w / 2 >= s.x + s.w) continue;
+      if (h.x + h.w / 2 <= s.x || h.x - h.w / 2 >= s.x + s.w || s.oneWay && h.dropThrough?.id === s.id) continue;
       if (h.vy >= 0 && oldY <= s.y + 0.01 && h.y >= s.y) floor2 = Math.min(floor2, s.y);
       if (!s.oneWay && h.vy < 0 && oldY - h.h >= s.y + s.h && h.y - h.h <= s.y + s.h) ceiling = Math.max(ceiling, s.y + s.h);
     }
@@ -2357,7 +2577,10 @@ var Game = class {
     if (Object.hasOwn(TYPES, source.type) && !isBoss(source) && this.isSafeCamp()) return false;
     if (h.invulnerable > 0 || h.dead || !Number.isFinite(amount) || amount <= 0) return false;
     const incoming = this.powers.incoming(amount, source);
-    if (incoming === null) return false;
+    if (incoming === null) {
+      if (h.agile) h.dodgeAge = 0;
+      return false;
+    }
     this.markCombat();
     h.hp = Math.max(0, h.hp - incoming);
     h.invulnerable = 1.05;
@@ -2395,7 +2618,7 @@ var Game = class {
     if (cp.region !== this.regionId) this.loadRegion(cp.region);
     const camp = regionCamps(cp.region)[cp.index];
     this.checkpoint = cp.index;
-    this.enemyShots = [];
+    this.clearEnemyShots();
     this.combatTimer = 0;
     this.powers.cancelEffects();
     this.cancelMergeEffects();
@@ -2431,6 +2654,20 @@ var Game = class {
     return this.camps.findIndex((c) => Math.abs(c.x - this.hero.x) < 90 && Math.abs(c.y - this.hero.y) < 40);
   }
   interact() {
+    const target = selectedInteraction(this);
+    if (!target) return;
+    if (target?.kind === "loot") {
+      pickupLoot(this, target.id);
+      return;
+    }
+    if (target?.kind === "portal") {
+      if (this.canTravel()) this.emit("world-portal");
+      return;
+    }
+    if (target?.kind === "passage") {
+      this.usePassage();
+      return;
+    }
     if (this.arenaScene) {
       if (this.availableChest() && Math.abs(this.hero.x - 1060) < 140) this.emit("chest-preview");
       return;
@@ -2452,6 +2689,7 @@ var Game = class {
   step(dt = STEP, input = {}) {
     if (this.paused || !Number.isFinite(dt) || dt <= 0) return;
     dt = Math.min(dt, STEP);
+    stepLoot(this, dt);
     this.time += dt;
     this.combatTimer = Math.max(0, this.combatTimer - dt);
     this.powers.step(dt);
@@ -2466,6 +2704,7 @@ var Game = class {
       if (this.deathTimer <= 0) this.respawn();
       return;
     }
+    h.dodgeAge = (h.dodgeAge ?? 100) + dt;
     h.jumpAge += dt;
     h.hurtAge += dt;
     h.respawnAge += dt;
@@ -2477,7 +2716,20 @@ var Game = class {
     h.coyote = Math.max(0, h.coyote - dt);
     h.jumpBuffer = Math.max(0, h.jumpBuffer - dt);
     if (!h.grounded && h.coyote <= 0 && h.jumps === 0) h.jumps = 1;
-    if (input.jump && !this.powers.flying) h.jumpBuffer = 0.13;
+    if (h.dropThrough) {
+      h.dropThrough.time -= dt;
+      if (h.dropThrough.time <= 0) h.dropThrough = null;
+    }
+    const support = input.jump && input.vertical > 0.5 && h.grounded && !this.powers.flying && this.surfaces.find((s) => s.oneWay && Math.abs(s.y - h.y) < 0.1 && h.x + h.w / 2 > s.x && h.x - h.w / 2 < s.x + s.w);
+    if (support) {
+      h.dropThrough = { id: support.id, time: 0.24 };
+      h.y += 2;
+      h.vy = 60;
+      h.grounded = false;
+      h.jumps = 1;
+      h.coyote = 0;
+      h.jumpBuffer = 0;
+    } else if (input.jump && !this.powers.flying) h.jumpBuffer = 0.13;
     if (!this.powers.flying && h.jumpBuffer > 0 && h.jumps < 2 && h.stun <= 0) {
       h.vy = h.jumps === 0 ? -565 : -520;
       h.jumps++;
@@ -2494,8 +2746,8 @@ var Game = class {
     }
     if (this.powers.flying) {
       h.vy = approach(h.vy, (input.vertical ? clamp5(Number(input.vertical), -1, 1) : this.powers.active.flight.age < 0.35 ? -1 : 0) * BALANCE.flightSpeed, 1200 * dt);
-      if (h.y < 120) {
-        h.y = 120;
+      if (h.y < (this.arenaScene ? 120 : -360)) {
+        h.y = this.arenaScene ? 120 : -360;
         h.vy = Math.max(0, h.vy);
       }
     }
@@ -2506,6 +2758,12 @@ var Game = class {
       return;
     }
     if (input.heal) this.useHealthRoot();
+    if (input.nextTarget) {
+      const previous = selectedInteraction(this)?.id;
+      this.portalPickupGuard = null;
+      const list = nearbyInteractions(this), i = list.findIndex((t) => t.id === previous);
+      this.interactionTarget = list[(i + 1) % list.length]?.id;
+    }
     if (input.interact) this.interact();
     if (input.tree && this.nearTree() && !this.inCombat()) this.emit("tree");
     if (h.attackBuffer) {
@@ -2549,6 +2807,7 @@ var Game = class {
       this.onBossVisualStep?.(e, this.time, dt, this.hero.x);
       return;
     }
+    if (e.state === "dead") e.deadAge = (e.deadAge || 0) + dt;
     if (e.summoned && e.state === "dead") return;
     if (!e.lifted) {
       e.prevX = e.x;
@@ -2557,6 +2816,9 @@ var Game = class {
     if (e.state === "dead") {
       e.respawn -= dt;
       if (e.respawn <= 0 && (Math.abs(this.hero.x - e.spawnX) > RESPAWN.safeDistance || Math.abs(this.hero.y - e.spawnSurface.y) > 160)) {
+        e.desperate = false;
+        e.deadAge = 0;
+        e.flinchGuard = 0;
         e.provoked = false;
         e.rewarded = false;
         e.pouncing = false;
@@ -2576,6 +2838,8 @@ var Game = class {
       }
       return;
     }
+    e.flinchGuard = Math.max(0, (e.flinchGuard || 0) - dt);
+    e.desperate = e.hp <= e.maxHp * 0.5;
     e.age += dt;
     e.flash = Math.max(0, e.flash - dt);
     e.protection = Math.max(0, e.protection - dt);
@@ -2584,7 +2848,7 @@ var Game = class {
     if (e.airborne) {
       const oldY = e.y;
       if (e.pouncing) {
-        this.moveEnemyAir(e, e.x + (e.airVx || 0) * dt, e.y);
+        this.moveEnemyAir(e, clamp5(e.x + (e.airVx || 0) * dt, e.surface.x + e.w / 2 + 5, e.surface.x + e.surface.w - e.w / 2 - 5), e.y);
         if (!e.hit && Math.abs(this.hero.x - e.x) < 65 && Math.abs(this.hero.y - e.y) < 65) {
           e.hit = true;
           this.hurt(this.monsterDamage(e), e.x, e);
@@ -2610,52 +2874,9 @@ var Game = class {
       return;
     }
     if (e.rooted && !isBoss(e) || e.stagger > 0 || e.protection > 0) return;
-    if (TYPES[e.type].region > 1) {
-      advancedEnemy(this, e, dt);
-      return;
-    }
-    const movementScale = e.rooted ? 0.5 : 1;
-    const h = this.hero, d = h.x - e.x, nearHeight = Math.abs(h.y - e.y) < 62;
-    const peaceful = TYPES[e.type].peaceful && h.level <= 3 && !e.provoked;
-    const withinLeash = !h.dead && !peaceful && !this.isSafeCamp() && Math.abs(h.x - e.spawnX) < 225;
-    const info = TYPES[e.type], left = Math.max(e.surface.x + e.w / 2 + 5, e.spawnX - 150), right = Math.min(e.surface.x + e.surface.w - e.w / 2 - 5, e.spawnX + 150);
-    if (e.state === "patrol") {
-      if (nearHeight && withinLeash && Math.abs(d) < 65) {
-        e.face = Math.sign(d) || e.face;
-        e.state = "warn";
-        e.age = 0;
-      } else {
-        if (nearHeight && withinLeash && Math.abs(d) < 185) e.face = Math.sign(d) || e.face;
-        if (e.x <= left) e.face = 1;
-        if (e.x >= right) e.face = -1;
-        if (e.x < left) e.x = Math.min(left, e.x + info.speed * movementScale * dt);
-        else if (e.x > right) e.x = Math.max(right, e.x - info.speed * movementScale * dt);
-        else e.x = clamp5(e.x + e.face * info.speed * movementScale * dt, left, right);
-      }
-    } else if (e.state === "warn" && e.age >= (e.type === "crawler" ? 0.55 : 0.7)) {
-      e.state = "strike";
-      e.age = 0;
-      e.hit = false;
-      if (e.type === "slime") {
-        e.airborne = true;
-        e.pouncing = true;
-        e.vy = -180;
-        e.airVx = e.face * 95;
-      }
-    } else if (e.state === "strike") {
-      e.x = clamp5(e.x + e.face * (e.type === "crawler" ? 155 : 105) * movementScale * dt, left, right);
-      if (!e.hit && e.age >= 0.06) {
-        e.hit = true;
-        if (nearHeight && Math.abs(h.x - e.x) < 76 && (h.x - e.x) * e.face > -15) this.hurt(this.monsterDamage(e), e.x, e);
-      }
-      if (e.age >= 0.24) {
-        e.state = "recover";
-        e.age = 0;
-      }
-    } else if (e.state === "recover" && e.age >= 1.1) {
-      e.state = "patrol";
-      e.age = 0;
-    }
+    const oldX = e.x;
+    advancedEnemy(this, e, dt);
+    e.walkCycle = (e.walkCycle || 0) + Math.abs(e.x - oldX) / 34;
   }
   save() {
     if (!this.canSave()) return null;
@@ -2666,7 +2887,7 @@ var Game = class {
     for (const region of this.world.bossVictories) if (!this.bossProgress.records[region]) this.bossProgress.records[region] = initialBossProgress([region]).records[region];
     const world = { ...this.world, region: this.regionId, location, monsters: (this.arenaScene?.enemies || this.enemies).filter((e) => !isBoss(e) && !e.summoned).map((e) => ({ id: e.id, type: e.type, hp: e.hp, respawn: Math.max(0, e.respawn) })) };
     const legendary = { ...this.legendary, recovery: this.mergeSnapshot() };
-    return JSON.stringify({ version: 8, legendary, economy: this.economy, sanctuary: this.sanctuary, bossProgress: this.bossProgress, arena: this.pendingBossEntry || (this.arenaScene?.cleared ? this.arenaScene.legendary ? { legendary: this.arenaScene.legendary, mode: "cleared" } : { region: this.regionId, mode: "cleared" } : null), powers: this.powers.snapshot(), look: this.look, outfit: this.outfit, level: h.level, xp: h.xp, coins: h.coins, checkpoint: this.checkpoint, kills: this.kills, species: [...this.species], reachedEnd: this.reachedEnd, healthRoots: this.healthRoots, inventory: this.inventory, world });
+    return JSON.stringify({ version: 8, loot: this.loot, legendary, economy: this.economy, sanctuary: this.sanctuary, bossProgress: this.bossProgress, arena: this.pendingBossEntry || (this.arenaScene?.cleared ? this.arenaScene.legendary ? { legendary: this.arenaScene.legendary, mode: "cleared" } : { region: this.regionId, mode: "cleared" } : null), powers: this.powers.snapshot(), look: this.look, outfit: this.outfit, level: h.level, xp: h.xp, coins: h.coins, checkpoint: this.checkpoint, kills: this.kills, species: [...this.species], reachedEnd: this.reachedEnd, healthRoots: this.healthRoots, inventory: this.inventory, world });
   }
 };
 Object.assign(Game.prototype, journeyMethods, bossMethods, erisMethods, legendaryMethods, mergeMethods);

@@ -1,3 +1,4 @@
+import {itemIcon} from './item-art.mjs';
 import { COSTUME_CATALOG, COSTUME_SETS, COSTUME_PARTS, STAT_KEYS, STAT_LABELS, formatStat, resaleValue } from './costume-catalog.mjs';
 import { EQUIPMENT_NAMES, itemDefinition, equipmentBonuses, equipmentOutfit } from './equipment.mjs';
 import { equipmentStats, powerStats } from './powers.mjs';
@@ -52,7 +53,7 @@ export class ErisMenu{
     this.selected=entries.find(e=>key(e)===key(this.selected||{}))||entries[0]||null;
     for(const e of entries){
       const locked=g.hero.level<e.level,card=button('',()=>{this.selected=e;this.wardrobe();},'shop-item');card.dataset.catalog=key(e);card.setAttribute('aria-pressed',String(key(e)===key(this.selected||{})));
-      const icon=el('span',e.setId&&!e.uid&&!e.catalogId?'✦':e.part==='helmet'?'◉':e.part==='boots'?'⌁':'⬡','shop-icon');icon.style.setProperty('--item-color',e.color);icon.style.color=e.accent;
+      const icon=itemIcon(e);
       const text=el('span');text.append(el('b',e.name),el('small',`${locked?'LOCKED · ':''}LEVEL ${e.level||1} · ${(e.rarity||'ordinary').toUpperCase()}${e.legacy?' · LEGACY':''}`),el('small',this.mode==='owned'?(Object.values(g.inventory.equipped).includes(e.uid)?'Equipped':'In wardrobe'):`${e.price===null?'Not sellable':e.price+' coins'}${e.setId&&!e.catalogId&&!e.uid?' · 3 pieces':''}`));card.append(icon,text);list.append(card);
     }
     if(!entries.length)list.append(el('p','Your starter suit is always available. Buy or earn equipment to fill your wardrobe.','empty-equipment'));
@@ -91,7 +92,7 @@ export class ErisMenu{
     const status=el('p'),yes=button(kind==='sell'?'Confirm sale':'Confirm discard',()=>{const r=this.transaction(()=>kind==='sell'?g.sellItem(uid,{confirmed:true,revision}):revision===g.economy.revision&&g.discardItem(uid,true));if(r.ok){this.selected=null;this.wardrobe();this.say(kind==='sell'?'Equipment sold. Coins credited once.':'Equipment permanently discarded.');}else status.textContent=r.error;},'primary danger'),no=button('Keep equipment',()=>{s.hidden=true;});yes.id=kind==='sell'?'confirm-sale':'confirm-shop-discard';no.id='cancel-shop-action';s.append(status,yes,no);s.scrollIntoView({block:'nearest'});no.focus();
   }
   roots(){
-    const g=this.getGame(),s=$('root-shop');s.replaceChildren();s.append(el('div','RESTOCK FOR THE ROAD','eyebrow'),el('h3','Health Roots'),el('p',`${g.healthRoots}/4 carried · ${4-g.healthRoots} spaces available. Each restores 25% maximum HP, with no cooldown. Separate from equipment.`));
+    const g=this.getGame(),s=$('root-shop');s.replaceChildren();s.append(itemIcon({part:'root',name:'Health Root'}));s.append(el('div','RESTOCK FOR THE ROAD','eyebrow'),el('h3','Health Roots'),el('p',`${g.healthRoots}/4 carried · ${4-g.healthRoots} spaces available. Each restores 25% maximum HP, with no cooldown. Separate from equipment.`));
     const label=el('label','Quantity','field'),quantity=el('input');quantity.id='root-quantity';quantity.type='number';quantity.min=1;quantity.max=Math.max(1,4-g.healthRoots);quantity.value=1;quantity.inputMode='numeric';label.append(quantity);s.append(label);
     const price=el('p'),review=button('Review Health Root purchase',()=>{const count=Number(quantity.value),q=g.rootPreview(count);if(!q.ok)return;confirm.hidden=false;note.textContent=`Buy ${count} Health Roots for ${q.cost} coins? You will carry ${g.healthRoots+count}/4.`;pending=q;},'primary');review.id='buy-root';
     const confirm=el('div',undefined,'upgrade-confirm');confirm.hidden=true;const note=el('p');let pending=null;

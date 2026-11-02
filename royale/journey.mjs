@@ -1,3 +1,4 @@
+import {spawnLoot} from './world-loot.mjs';
 import { matchingMerge, mergeEntitlement } from './legendary-state.mjs';
 import { WORLD_REGIONS, TYPES, regionDefinition, regionCamps, regionSpawns, regionSurfaces, boardIndex, GATES } from './world.mjs';
 import { LOOT, RESPAWN, worldClock, monsterXP, xpForLevel, maximumHP } from './progression.mjs';
@@ -7,7 +8,7 @@ import { equipmentStats, isBoss } from './powers.mjs';
 import {ProjectilePool,clearProjectiles,compactProjectiles} from './projectiles.mjs';
 
 export function initializeJourney(g,save,now){
-  g.now=now;g.world=structuredClone(save?.world||initialWorld(now()));g.regionId=g.world.region;
+  g.loot=structuredClone(save?.loot||[]);g.now=now;g.world=structuredClone(save?.world||initialWorld(now()));g.regionId=g.world.region;
   g.camps=regionCamps(g.regionId);g.healthRoots=save?.healthRoots||0;g.inventory=structuredClone(save?.inventory||emptyInventory());
   g.enemyShots=[];g.enemyShotPool=new ProjectilePool(64);g.treeVisit=false;g.bossEncounter=null;g.board=0;
 }
@@ -66,20 +67,19 @@ export const journeyMethods={
     if(h.level===99)h.xp=0;
   },
   reward(e){
-    if(e.rewarded)return;e.rewarded=true;
+    if(e.rewarded||!Number.isFinite(e.hp)||e.hp>0||e.state!=='dead')return;e.rewarded=true;
     const h=this.hero,info=TYPES[e.type];if(!info)return;
     this.kills++;this.species.add(e.type);this.world.kills[e.type]=(this.world.kills[e.type]||0)+1;
     const xp=monsterXP(info.xp,h.level,e.level||info.level),summoned=e.summoned===true,regular=!isBoss(e),coins=regular&&!summoned?(this.clock().night?2:1):0;
     h.coins=Math.min(999999,h.coins+coins);this.gainXP(xp);
     let root=false,item=null;
     if(regular&&!summoned){
-      if(this.random()<LOOT.rootChance&&this.healthRoots<LOOT.rootLimit){this.healthRoots++;root=true;}
+      if(this.random()<LOOT.rootChance){spawnLoot(this,e,'root');root=true;}
       item=rollEquipment(info.region,this.random,this.inventory.nextId);
       if(item){
         this.inventory.nextId++;
         // Reveal every item before the player accepts it, even when capacity remains.
-        this.inventory.pending.push(item);
-        this.emit('equipment',{item,pending:this.inventory.pending.length>0});
+        spawnLoot(this,e,'equipment',item);
       }
     }
     this.emit('reward',{x:e.x,y:e.y-24,xp,coins,root,item:!!item,enemy:info.name});

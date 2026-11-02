@@ -132,9 +132,9 @@ export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
     if(!paintHeroPart(c,'boot',boots(),-width*.5,-10,width*1.5+5,15))path(c,[[-width*.5,-5],[width*.5,-4],[width+4,2],[width+4,5],[-width*.5,5]],boots(),INK,1.2);
     c.restore();
   };
-  const arm=i=>{
+  const arm=(i,foreOnly=false)=>{
     const pts=p.arms[i],hand=pts[2],elbow=pts[1],width=d.thick*.95;
-    if(!paintHeroBone(c,'upperArm',palette.suit,pts[0],elbow,width*1.45))limb(c,[pts[0],elbow],palette.suit,width);
+    if(!foreOnly&&!paintHeroBone(c,'upperArm',palette.suit,pts[0],elbow,width*1.45))limb(c,[pts[0],elbow],palette.suit,width);
     if(!paintHeroBone(c,'forearm',palette.suit,elbow,hand,width*1.2))limb(c,[elbow,hand],palette.suit,width);
     const cuff=[hand[0]+(elbow[0]-hand[0])*.45,hand[1]+(elbow[1]-hand[1])*.45];
     paintHeroBone(c,'gauntlet',gloves(),cuff,hand,width*1.12);
@@ -152,7 +152,7 @@ export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
   if(look.muscle>.2){line(c,[[sx-d.shoulder*.7,sy+8],[sx-2,sy+10],[sx+d.shoulder*.7,sy+8]],'#102e3544',look.muscle*1.2);line(c,[[hx,hy-7],[hx,sy+16]],'#102e3533',1);}
   line(c,[[hx-d.hip,hy-1],[hx+d.hip,hy-1]],finish(c,h.steel?palette.trim:pieces.belt?.color||palette.trim,hx,hy-3,d.hip*2,5),4.5);
   if(!back){oval(c,hx,hy-1,3,3,palette.emblemColor,INK,1);emblem(c,sx+(p.twist||0)*2,sy+d.torso*.42,look.emblem,palette.emblemColor);}
-  leg(0);arm(p.alternate?1:0);
+  leg(0);arm(p.alternate?0:1,true);arm(p.alternate?1:0);
   path(c,[[sx-4.5,sy+2],[sx-3.6,sy-9],[sx+3.6,sy-9],[sx+4.5,sy+2]],finish(c,look.skin,sx,sy-9,9,11),INK,.7);line(c,[[sx-2.8,sy-7],[sx-1,sy+1]],'#fff0d450',.65);
   if(look.cape&&back)drawCape(c,p,palette.capeColor);
   // Cape collar, always attached to the shoulders.

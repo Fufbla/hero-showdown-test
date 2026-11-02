@@ -1,3 +1,5 @@
+import {drawEquipmentPreview} from './eris-ui.mjs';
+import {selectedInteraction,nearbyInteractions} from './world-loot.mjs';
 import {FrameMetrics,performanceLabel} from './performance.mjs';
 import {text as hudText,html as hudHTML,attr as hudAttr} from './hud-dom.mjs';
 import {shouldWriteAdventure} from './save-policy.mjs';
@@ -166,7 +168,7 @@ async function begin(){
   else{activeSlot=creatorSlot;activeId=null;game=new Game({look});if(store.cloud){$('begin').disabled=true;try{await store.create(activeSlot,game.save());activeId=store.slot(activeSlot).id;}catch(e){say(e.message,8);return;}finally{$('begin').disabled=false;}}startPatrol(false);}
 }
 function pause(){if(!game.started||screen!=='play')return;showPause();persist();}
-function showPause(){$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero','manual-save'])$(id).disabled=!game.canSave();$('return-camp').disabled=!game.canTravel();$('safe-save-note').textContent=game.canSave()?(store.cloud?'Manual cloud saving is available.':'Saving is available · browser-local only.'):'Saving is locked. Resume and spend five seconds without attacking or taking damage.';$('resume').focus();}
+function showPause(){pausePanel('home');$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero','manual-save'])$(id).disabled=!game.canSave();$('return-camp').disabled=!game.canTravel();$('safe-save-note').textContent=game.canSave()?(store.cloud?'Manual cloud saving is available.':'Saving is available · browser-local only.'):'Saving is locked. Resume and spend five seconds without attacking or taking damage.';$('resume').focus();}
 function openTree(panel='home'){if(typeof panel!=='string')panel='home';if(!game.visitTree()){say('Leave combat for five seconds before visiting the Tree.');return;}setScreen('tree');persist();erisMenu.open(panel);$('tree-title').focus();}
 function returnAdventure(){if(!game.treeVisit)return;game.leaveTree();persist();resume();}
 function showChest(){if(!game.availableChest()||!game.canSave())return;setScreen('chest');openChestMenu(game,()=>{if(transaction(()=>game.claimChest()).ok){setScreen('inventory');journeyMenu.inventory();say('Coins and Roots collected. Choose which equipment to keep.');}});$('chest-title').focus();}
@@ -178,6 +180,9 @@ function handleEvents() {
   for (const event of events) {
     if(event.type==='legendary-clear-ready'){const revision=game.legendary.revision;if(game.prepareLegendaryVictory())startCritical(revision,game.save());}
     if(event.type==='tree')openTree();
+    if(event.type==='world-portal')openWorld();
+    if(event.type==='loot-picked')say(event.message);
+    if(event.type==='loot-full'){say(event.message);if(event.id&&game.canSave()){journeyMenu.groundReward=event.id;setScreen('inventory');journeyMenu.inventory();}}
     // Entering a boss is not a manual save. Reload restores the last saved scene.
     if(event.type==='arena'&&game.arenaScene)renderer.bossArt.step(game.arenaScene.boss,game.time,0,game.hero.x);
     if(event.type==='arena'||event.type==='arena-exit'){renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.clearParticles();regionName='';lastHud='';}
@@ -220,16 +225,19 @@ function updateHud() {
     $('mission-count').textContent = cleared ? (game.reachedEnd ? '✓' : '→') : `${Math.min(6, game.kills)}/6`;
   }
   $('account-open').disabled=!!cloudApi?.writing||!!criticalPending||screen==='mergeReward'||game.started&&!game.canSave();
-  $('world-portal').hidden=screen!=='play'||!game.nearPortal()||!game.canTravel();
+  $('world-portal').hidden=true;
   $('visit-tree').hidden=screen!=='play'||!game.nearTree()||game.inCombat();
   updatePowers();
   if(screen==='world')journeyMenu.updateClock();
   if(screen==='controls')hudText($('controller-status'),input.gamepadLabel);
-  $('rest').hidden = screen !== 'play' || !game.canSave() || h.dead || (game.nearCamp()<0&&Math.abs(h.x-5840)>110&&h.x<5995&&!(game.regionId>1&&h.x<110));
-  if(game.arenaScene)$('rest').hidden=screen!=='play'||!game.availableChest()||Math.abs(h.x-ARENA.chestX)>140;
-  hudHTML($('rest'),game.arenaScene?'✦ VIEW TREASURE <kbd>E</kbd>':game.nearCamp()>=0?'✦ REST <kbd>E</kbd>':'→ PASSAGE <kbd>E</kbd>');
+  const target=selectedInteraction(game);
+  $('rest').hidden=screen!=='play'||!target;
+  $('cycle-interaction').textContent=`Next target · ${input.controls.keys.nextTarget[0].replace('Key','')}`;
+  $('cycle-interaction').hidden=screen!=='play'||nearbyInteractions(game).length<2&&!(game.portalPickupGuard?.region===game.regionId&&game.nearPortal());
+  $('rest').textContent=target?`${target.label} · ${input.controls.keys.interact[0].replace('Key','')}`:'';
   $('death').hidden = !h.dead || screen !== 'play'; $('diagnostics').hidden = !params.has('qa');
   if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nregion ${game.regionId} · roots ${game.healthRoots} · gear ${game.inventory.items.length}/7 · clock ${game.clock().phase}\npowers ${game.powers.data.equipped.join(',')} · points ${game.powers.data.points} · combat ${game.inCombat()}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}${game.arenaScene?`\nboss ${game.arenaScene.boss.hp.toFixed(0)}/${game.arenaScene.boss.maxHp} · phase ${game.arenaScene.boss.phase} · waves ${game.bossEncounter?.waves||0} · helpers ${game.enemies.filter(e=>e.summoned&&e.state!=='dead').length} · cleared ${game.arenaScene.cleared}`:''}`;
+
 }
 function updatePowers(){
   const merge=game.mergeAbility();$('power-bar').classList.toggle('has-merge',!!merge);
@@ -245,7 +253,7 @@ $('manual-save').onclick=async()=>{if(!game.canSave()||criticalPending)return;co
 $('chest-close').onclick=resume;
 function openWorld(){setScreen('world');journeyMenu.map();legendaryMenu.map();$('map-title').focus();}
 $('open-map').onclick=openWorld;$('world-portal').onclick=()=>{if(game.canTravel()&&game.nearPortal())openWorld();};$('map-close').onclick=showPause;
-$('open-inventory').onclick=()=>{setScreen('inventory');journeyMenu.inventory();$('inventory-title').focus();};$('inventory-close').onclick=showPause;
+$('open-inventory').onclick=()=>{journeyMenu.groundReward=null;setScreen('inventory');journeyMenu.inventory();$('inventory-title').focus();};$('inventory-close').onclick=()=>{journeyMenu.groundReward=null;showPause();};
 $('tree-from-pause').onclick=()=>openTree();$('close-tree').onclick=returnAdventure;
 $('open-controls').onclick=()=>{setScreen('controls');controlMenu.render();$('settings-title').focus();};$('close-controls').onclick=showPause;
 $('creator-form').addEventListener('submit',e=>{e.preventDefault();begin();});
@@ -329,3 +337,11 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+
+function pausePanel(panel){
+ $('pause-primary').hidden=panel!=='home';$('pause-hero').hidden=panel!=='hero';$('pause-powers').hidden=panel!=='powers';$('pause-back').hidden=panel==='home';
+ if(panel==='hero'){drawEquipmentPreview($('pause-hero-preview'),game);const h=game.hero;$('pause-hero-stats').textContent=`${game.look.name} · Level ${h.level} · HP ${Math.ceil(h.hp)}/${h.maxHp} · XP ${h.xp}/${xpForLevel(h.level)} · Strength ${10+2*(h.level-1)} · ${game.getRegion().name}`;}
+}
+$('open-my-hero').onclick=()=>pausePanel('hero');$('open-loadout').onclick=()=>pausePanel('powers');$('pause-back').onclick=()=>pausePanel('home');
+
+const brightness=$('display-brightness');brightness.value=storage.getItem('healthia.royale.brightness')||100;const setBrightness=()=>{$('game').style.filter=`brightness(${Number(brightness.value)/100})`;try{storage.setItem('healthia.royale.brightness',brightness.value);}catch{}};brightness.oninput=setBrightness;setBrightness();

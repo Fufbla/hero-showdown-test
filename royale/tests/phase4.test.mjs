@@ -1,3 +1,4 @@
+import {pickupLoot} from '../world-loot.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Game,STEP,decodeSave,xpForLevel} from '../core.mjs';
@@ -27,7 +28,7 @@ test('all 98 levels grant exactly one point, +15 HP, immediate refill even in bo
 test('low-level farming tapers to zero, never negative; coin and drop rules are unaffected',()=>{
   assert.deepEqual([3,4,7,11,16].map(gap=>monsterXP(100,21+gap,21)),[100,75,35,10,0]);
   assert.equal(monsterXP(100,1,99),100);assert.equal(monsterXP(-2,99,1),0);
-  const g=empty();g.hero.level=20;for(let i=0;i<10000;i++)g.reward({type:'bottle',x:0,y:0});assert.equal(g.hero.level,20);assert.equal(g.hero.xp,0);assert.equal(g.hero.coins,10000);
+  const g=empty();g.hero.level=20;for(let i=0;i<10000;i++)g.reward({hp:0,state:'dead',x:g.hero.x,y:g.hero.y,type:'bottle',x:0,y:0});assert.equal(g.hero.level,20);assert.equal(g.hero.xp,0);assert.equal(g.hero.coins,10000);
 });
 test('defeat deducts 10% of next cost once, preserves all non-XP progression and full-health respawn',()=>{
   const g=regional(3);g.hero.level=30;g.hero.maxHp=535;g.hero.xp=2000;g.hero.coins=234;g.healthRoots=4;g.inventory.items.push(createEquipment(3,'ordinary',0));g.powers.data.levels.steel=20;g.powers.data.points=9;
@@ -55,7 +56,7 @@ for(const r of WORLD_REGIONS){
   });
   test(`Region ${r.id}: reward rates, night invariants, rare restrictions`,()=>{
     const types=r.types,results=[];
-    for(const type of types){let now=WORLD_CLOCK_REFERENCE;const g=regional(r.id,{now:()=>now});g.hero.level=TYPES[type].level;const e=enemy(g,type);const hp=e.maxHp,day=g.monsterDamage(e);g.reward(e);assert.equal(g.hero.coins,1);now=WORLD_CLOCK_REFERENCE+CLOCK.day;const next=enemy(g,type);g.reward(next);assert.equal(g.hero.coins,r.id<3?2:3);assert.equal(next.maxHp,hp);assert.equal(g.monsterDamage(next),day*(r.id<3?1:2));results.push(next.type);}
+    for(const type of types){let now=WORLD_CLOCK_REFERENCE;const g=regional(r.id,{now:()=>now});g.hero.level=TYPES[type].level;const e=enemy(g,type);const hp=e.maxHp,day=g.monsterDamage(e);e.hp=0;e.state='dead';g.reward(e);assert.equal(g.hero.coins,1);now=WORLD_CLOCK_REFERENCE+CLOCK.day;const next=enemy(g,type);next.hp=0;next.state='dead';g.reward(next);assert.equal(g.hero.coins,r.id<3?2:3);assert.equal(next.maxHp,hp);assert.equal(g.monsterDamage(next),day*(r.id<3?1:2));results.push(next.type);}
     let rare=0,ordinary=0;for(let i=0;i<10000;i++){let draws=0;const item=rollEquipment(r.id,()=>draws++===0?(i+.5)/10000:.4,i+1);if(item?.catalogId.includes('-rare-'))rare++;else if(item)ordinary++;}
     assert.equal(rare,Math.round(LOOT.rareChance[r.id]*10000));assert.equal(ordinary,1200);
   });
@@ -77,26 +78,27 @@ test('peaceful early critters only attack after provocation; later heroes trigge
   for(const level of [1,2,3,4]){const g=empty(),e=enemy(g,'bottle',1045);g.hero.x=1000;g.hero.level=level;g.hero.invulnerable=0;tick(g,100);assert.equal(g.hero.hp<100,level===4);if(level<=3){g.damageEnemy(e,1);g.hero.x=e.x-40;tick(g,150);assert.ok(e.provoked);assert.ok(g.hero.hp<100);}}
 });
 test('Health Roots: exact ten-percent drop boundary, max four, instant repeated healing in combat',()=>{
-  let first=0;const g=empty({random:()=>first++%2===0?.099:.99});for(let i=0;i<20;i++)g.reward({type:'bottle',x:0,y:600});assert.equal(g.healthRoots,4);
+  let first=0;const g=empty({random:()=>first++%2===0?.099:.99});for(let i=0;i<20;i++)g.reward({hp:0,state:'dead',x:g.hero.x,y:g.hero.y,type:'bottle',x:0,y:600});assert.equal(g.healthRoots,0);g.hero.x=0;for(const o of [...g.loot])pickupLoot(g,o.id);assert.equal(g.healthRoots,4);assert.equal(g.loot.length,16);
   g.hero.hp=1;g.markCombat();for(let i=0;i<4;i++)assert.ok(g.useHealthRoot());assert.equal(g.hero.hp,g.hero.maxHp);assert.equal(g.healthRoots,0);assert.equal(g.useHealthRoot(),false);
   g.healthRoots=1;assert.equal(g.useHealthRoot(),false);g.hero.hp=1;g.bossEncounter={};assert.ok(g.useHealthRoot());assert.equal(g.hero.hp,1+g.hero.maxHp*.25);
-  const misses=empty({random:()=>.10});misses.reward({type:'bottle'});assert.equal(misses.healthRoots,0);
+  const misses=empty({random:()=>.10});misses.reward({hp:0,state:'dead',type:'bottle'});assert.equal(misses.healthRoots,0);
 });
 test('Health Root rate over stratified 10,000 outcomes is 10%; capacity never exceeds four',()=>{
-  const g=empty();let drops=0;for(let i=0;i<10000;i++){g.healthRoots=0;let n=0;g.random=()=>n++===0?(i+.5)/10000:.99;g.reward({type:'bottle'});drops+=g.healthRoots;}assert.equal(drops,1000);
+  const g=empty();let drops=0;for(let i=0;i<10000;i++){g.healthRoots=0;let n=0;g.random=()=>n++===0?(i+.5)/10000:.99;g.reward({hp:0,state:'dead',x:g.hero.x,y:g.hero.y,type:'bottle'});drops+=g.loot.filter(o=>o.kind==='root').length;g.loot=[];assert.equal(g.healthRoots,0);}assert.equal(drops,1000);
 });
 test('Root purchases require Tree, safety, 50 coins and inventory room; death preserves unused roots',()=>{
   const g=empty();g.hero.coins=200;assert.equal(g.buyHealthRoot(),false);g.visitTree();for(let i=0;i<4;i++)assert.ok(g.buyHealthRoot());assert.equal(g.hero.coins,0);assert.equal(g.buyHealthRoot(),false);g.healthRoots=3;g.hero.coins=49;assert.equal(g.buyHealthRoot(),false);g.hero.coins=100;g.markCombat();assert.equal(g.buyHealthRoot(),false);g.defeat();g.respawn();assert.equal(g.healthRoots,3);
 });
 test('summons award XP only, never coins, Health Roots or equipment even with guaranteed rolls',()=>{
-  const g=empty({random:()=>0});g.reward({type:'bottle',summoned:true});assert.equal(g.hero.xp,14);assert.equal(g.hero.coins,0);assert.equal(g.healthRoots,0);assert.equal(g.inventory.items.length,0);
+  const g=empty({random:()=>0});g.reward({hp:0,state:'dead',x:g.hero.x,y:g.hero.y,type:'bottle',summoned:true});assert.equal(g.hero.xp,14);assert.equal(g.hero.coins,0);assert.equal(g.healthRoots,0);assert.equal(g.inventory.items.length,0);
 });
 test('seven-slot equipment cap includes worn items; full drops require confirmed replacement or discard',()=>{
   const g=regional(4,{random:()=>0});g.paused=true;
-  g.hero.level=50;for(let i=0;i<9;i++)g.reward({type:'scorpion'});assert.equal(g.inventory.items.length,0);for(let i=0;i<7;i++)assert.ok(g.acceptReward());assert.equal(g.inventory.items.length,7);assert.equal(g.inventory.pending.length,2);
+  g.hero.level=50;for(let i=0;i<9;i++)g.reward({hp:0,state:'dead',type:'scorpion',x:g.hero.x,y:g.hero.y});assert.equal(g.inventory.items.length,0);
+  const orbs=g.loot.filter(o=>o.kind==='equipment');for(let i=0;i<7;i++)assert.ok(pickupLoot(g,orbs[i].id));assert.equal(g.inventory.items.length,7);
   assert.ok(g.equipItem(g.inventory.items[0].uid));const equipped=g.inventory.items[0].uid;
-  assert.equal(g.resolveReward(equipped),false);assert.equal(g.inventory.items.length,7);assert.ok(g.resolveReward(equipped,true));assert.equal(g.inventory.items.length,7);assert.equal(Object.values(g.inventory.equipped).includes(equipped),false);
-  assert.equal(g.resolveReward(null),false);assert.ok(g.resolveReward(null,true));assert.equal(g.inventory.pending.length,0);assert.equal(g.discardItem(g.inventory.items[0].uid),false);assert.ok(g.discardItem(g.inventory.items[0].uid,true));assert.equal(g.inventory.items.length,6);
+  assert.equal(pickupLoot(g,orbs[7].id,equipped),false);assert.equal(g.inventory.items.length,7);assert.ok(pickupLoot(g,orbs[7].id,equipped,true));assert.equal(g.inventory.items.length,7);assert.equal(Object.values(g.inventory.equipped).includes(equipped),false);
+  assert.equal(pickupLoot(g,orbs[8].id),false);assert.ok(g.loot.includes(orbs[8]));assert.equal(g.discardItem(g.inventory.items[0].uid),false);assert.ok(g.discardItem(g.inventory.items[0].uid,true));assert.equal(g.inventory.items.length,6);
 });
 test('fixed equipment stats survive save; worn part swaps do not expand inventory; Speed remains capped',()=>{
   const g=regional(7);g.hero.level=99;g.powers.data.levels.speed=20;g.inventory.items=[createEquipment(7,'rare',4,1),createEquipment(7,'ordinary',4,2)];g.inventory.nextId=3;g.paused=true;

@@ -68,7 +68,7 @@ test('a defeated enemy rewards once, respawns later, and avoids spawning on the 
   g.hero.x=800;ticks(g,2);assert.equal(e.state,'patrol');assert.equal(e.hp,e.maxHp);assert.ok(e.protection>0);
 });
 test('level ups restore health, carry remaining XP, and enforce the 99-level cap', () => {
-  const {g,e}=duel();g.hero.hp=25;g.hero.xp=45;g.reward(e);assert.equal(g.hero.level,2);assert.equal(g.hero.xp,9);assert.equal(g.hero.hp,115);
+  const {g,e}=duel();g.hero.hp=25;g.hero.xp=45;e.hp=0;e.state='dead';g.reward(e);assert.equal(g.hero.level,2);assert.equal(g.hero.xp,9);assert.equal(g.hero.hp,115);
   g.gainXP(100000000);assert.equal(g.hero.level,LEVEL_CAP);assert.equal(g.hero.xp,0);
 });
 test('enemies telegraph before hitting and respect invulnerability', () => {

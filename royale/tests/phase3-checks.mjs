@@ -43,7 +43,9 @@ button.onclick=async()=>{
     el('manual-save').click();check('three slots save and omit passive Speed',[...el('slot-0').options].every(o=>o.value!=='speed')&&data().powers.equipped.join(',')==='strength,fireball,flight');
     select(el('slot-1'),'strength');el('manual-save').click();check('equipped choices swap without duplicates',data().powers.equipped.join(',')==='fireball,strength,flight');select(el('slot-0'),'strength');
     el('open-controls').click();check('control settings open with visible vitals',!el('controls-menu').hidden&&inside(el('hp-text'))&&inside(el('close-controls')));
+    el('mapping-list').closest('details').querySelector('summary').click();
     d.querySelector('[data-map="power0"]').click();tap('KeyQ');check('keyboard remap persisted',JSON.parse(sessionStorage.getItem(prefix+CONTROL_KEY)).keys.power0[0]==='KeyQ');
+    el('touch-settings').closest('details').querySelector('summary').click();
     for(const id of ['size','left','right','rise']){const slider=el(`touch-${id}`);slider.scrollIntoView({block:'nearest'});check(`${id} layout adjustment reachable`,inside(slider));slider.value=slider.max;slider.dispatchEvent(new w.Event('input',{bubbles:true}));}
     el('touch-rise').focus();tap('Escape');check('Escape closes settings even with a field focused',!el('pause-menu').hidden&&el('controls-menu').hidden);el('resume').click();await advance(.2);
     check('maximum touch layout stays on screen',[el('stick'),...d.querySelectorAll('.action-buttons button,.power-button:not([hidden])')].every(inside));

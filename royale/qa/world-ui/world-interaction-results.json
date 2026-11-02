@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "assertions": 56,
+  "regions": 7,
+  "scope": "Browser engine interaction / save checks; physical controller untested"
+}

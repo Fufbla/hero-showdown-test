@@ -121,8 +121,8 @@ test('legacy saves credit earned points without changing look, XP, coins or chec
   }
 });
 test('level ups award points in combat, refill to 100+15/level, stop at 99',()=>{
-  const g=new Game();g.hero.xp=49;g.hero.hp=1;g.markCombat();g.reward({type:'bottle',x:1,y:600});assert.equal(g.hero.level,2);assert.equal(g.hero.hp,115);assert.equal(g.powers.data.points,1);assert.ok(g.inCombat());
-  g.hero.level=98;g.hero.hp=1;g.hero.xp=xpForLevel(98)-1;g.reward({type:'titan',x:1,y:600});assert.equal(g.hero.level,99);assert.equal(g.hero.hp,1570);assert.equal(g.hero.xp,0);const p=g.powers.data.points;g.reward({type:'bottle',x:1,y:600});assert.equal(g.powers.data.points,p);
+  const g=new Game();g.hero.xp=49;g.hero.hp=1;g.markCombat();g.reward({hp:0,state:'dead',x:g.hero.x,y:g.hero.y,type:'bottle',x:1,y:600});assert.equal(g.hero.level,2);assert.equal(g.hero.hp,115);assert.equal(g.powers.data.points,1);assert.ok(g.inCombat());
+  g.hero.level=98;g.hero.hp=1;g.hero.xp=xpForLevel(98)-1;g.reward({hp:0,state:'dead',x:g.hero.x,y:g.hero.y,type:'titan',x:1,y:600});assert.equal(g.hero.level,99);assert.equal(g.hero.hp,1570);assert.equal(g.hero.xp,0);const p=g.powers.data.points;g.reward({hp:0,state:'dead',x:g.hero.x,y:g.hero.y,type:'bottle',x:1,y:600});assert.equal(g.powers.data.points,p);
 });
 test('Tree upgrades: location, combat, balance, one/multiple levels, cap, no redistribution',()=>{
   const g=setup('speed',1);g.powers.data.levels.speed=0;g.powers.data.points=98;assert.equal(g.upgradePower('strength',3).ok,false);

@@ -1,3 +1,4 @@
+import {pickupLoot} from '../world-loot.mjs';
 import {WORLD_CLOCK_REFERENCE} from '../world-state.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -79,7 +80,7 @@ test('bulk Roots enforce price, capacity, integer quantity, no negative balance;
  const g=camp(20);g.hero.coins=150;assert.equal(g.rootPreview(4).ok,false);assert.equal(g.buyHealthRoot(0),false);assert.equal(g.buyHealthRoot(1.5),false);assert.ok(g.buyHealthRoot(3));assert.equal(g.hero.coins,0);assert.equal(g.healthRoots,3);g.hero.coins=200;assert.equal(g.buyHealthRoot(2),false);assert.ok(g.buyHealthRoot(1));assert.equal(g.healthRoots,4);g.hero.hp=1;for(let i=0;i<4;i++)assert.ok(g.useHealthRoot());assert.equal(g.hero.hp,g.hero.maxHp);assert.equal(g.inventory.items.length,0);
 });
 test('regular drops always preview before acceptance; all inventory references remain unique',()=>{
- const g=camp(99);g.leaveTree();g.random=()=>0;g.reward({type:'bottle'});assert.equal(g.inventory.items.length,0);assert.equal(g.inventory.pending.length,1);assert.ok(g.acceptReward());assert.equal(g.inventory.items.length,1);const bad=structuredClone(g.inventory);bad.items.push(bad.items[0]);assert.equal(normalizeInventory(bad),null);
+ const g=camp(99);g.leaveTree();g.random=()=>0;g.reward({hp:0,state:'dead',x:g.hero.x,y:g.hero.y,type:'bottle'});assert.equal(g.inventory.items.length,0);assert.equal(g.inventory.pending.length,0);assert.equal(g.loot.filter(o=>o.kind==='equipment').length,1);assert.ok(pickupLoot(g,g.loot.find(o=>o.kind==='equipment').id));assert.equal(g.inventory.items.length,1);const bad=structuredClone(g.inventory);bad.items.push(bad.items[0]);assert.equal(normalizeInventory(bad),null);
 });
 test('permanent progress rejects stale snapshots within one tab and optimistic conflicts across tabs',()=>{
  const memory=storage(),g=camp(50),store=new LocalHeroStore(memory);assert.ok(store.writeSlot(0,g.save()).ok);const stale=JSON.parse(g.save());const q=buy(g,set()),uid=q.items[0].uid;g.discardItem(uid,true);g.upgradePower('strength',1);assert.ok(store.writeSlot(0,g.save()).ok);assert.equal(store.writeSlot(0,stale).ok,false);assert.equal(store.slot(0).snapshot.inventory.retired[uid],'discarded');const other=new LocalHeroStore(memory);buy(g,item());assert.ok(store.writeSlot(0,g.save()).ok);assert.equal(other.writeSlot(0,other.slot(0).snapshot).ok,false);

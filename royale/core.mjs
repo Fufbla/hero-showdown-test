@@ -1,3 +1,4 @@
+import {normalizeLoot,nearbyInteractions,stepLoot,selectedInteraction,pickupLoot} from './world-loot.mjs';
 import {sharedNow} from './shared-clock.mjs';
 import { legendaryMethods, stepLegendaryBoss } from './legendary-bosses.mjs';
 import { mergeMethods } from './merge-powers.mjs';
@@ -45,7 +46,12 @@ export function decodeSave(text) {
     const arena=legendaryArena===undefined?normalizeArena(data.version>=5?data.arena:null,world,bossProgress):legendaryArena;if(arena===false)return null;
     const economy=normalizeEconomy(data.version>=6?data.economy:null),sanctuary=normalizeSanctuary(data.version>=6?data.sanctuary:null,world,arena);
     if(!economy||sanctuary===false)return null;
-    return { version: 8, legendary, economy, sanctuary, bossProgress, arena, powers, world, inventory, healthRoots:data.version>=4?data.healthRoots:0, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
+    const loot=normalizeLoot(data.loot);if(!loot)return null;
+    const owned=new Set([...inventory.items,...inventory.pending].map(i=>i.uid));
+    if(loot.some(o=>o.item&&(owned.has(o.item.uid)||inventory.retired[o.item.uid])))return null;
+    inventory.nextId=Math.max(inventory.nextId,...loot.flatMap(o=>[Number(o.id.slice(5))+1,o.item?Number(o.item.uid.slice(5))+1:0]));
+    if(inventory.nextId>=1e9)return null;
+    return { version: 8, loot, legendary, economy, sanctuary, bossProgress, arena, powers, world, inventory, healthRoots:data.version>=4?data.healthRoots:0, look: sanitizeLook(data.look), outfit: sanitizeOutfit(data.outfit), level,
       xp: level===99?0:integer(data.xp, xpForLevel(level) - 1), coins: integer(data.coins, 999999),
       checkpoint: integer(data.checkpoint, CAMPS.length - 1), kills: integer(data.kills, 999999),
       species: [...new Set((Array.isArray(data.species) ? data.species : []).filter(t => Object.hasOwn(TYPES,t)))],
@@ -208,6 +214,11 @@ export class Game {
   isSafeCamp(){return !this.bossEncounter&&this.camps.some(c=>Math.abs(c.x-this.hero.x)<180&&Math.abs(c.y-this.hero.y)<100);}
   nearCamp() { return this.camps.findIndex(c => Math.abs(c.x - this.hero.x) < 90 && Math.abs(c.y - this.hero.y) < 40); }
   interact() {
+    const target=selectedInteraction(this);
+    if(!target)return;
+    if(target?.kind==='loot'){pickupLoot(this,target.id);return;}
+    if(target?.kind==='portal'){if(this.canTravel())this.emit('world-portal');return;}
+    if(target?.kind==='passage'){this.usePassage();return;}
     if(this.arenaScene){if(this.availableChest()&&Math.abs(this.hero.x-1060)<140)this.emit('chest-preview');return;}
     const i = this.nearCamp();
     if (i < 0) {this.usePassage();return;}
@@ -218,7 +229,7 @@ export class Game {
   }
   step(dt = STEP, input = {}) {
     if (this.paused || !Number.isFinite(dt) || dt <= 0) return;
-    dt = Math.min(dt, STEP); this.time += dt;this.combatTimer=Math.max(0,this.combatTimer-dt);
+    dt = Math.min(dt, STEP);stepLoot(this,dt); this.time += dt;this.combatTimer=Math.max(0,this.combatTimer-dt);
     this.powers.step(dt);this.stepMerge(dt);
     const h = this.hero;
     h.prevX = h.x; h.prevY = h.y; h.prevFace = h.face;
@@ -245,6 +256,7 @@ export class Game {
     this.applyMergeMovement();this.moveHero(dt);
     if (h.y > DEATH_Y) { this.defeat(); return; }
     if(input.heal)this.useHealthRoot();
+    if(input.nextTarget){const previous=selectedInteraction(this)?.id;this.portalPickupGuard=null;const list=nearbyInteractions(this),i=list.findIndex(t=>t.id===previous);this.interactionTarget=list[(i+1)%list.length]?.id;}
     if (input.interact) this.interact();
     if(input.tree&&this.nearTree()&&!this.inCombat())this.emit('tree');
     if (h.attackBuffer) { h.attackBuffer.life -= dt; if (h.attackBuffer.life <= 0) h.attackBuffer = null; }
@@ -303,7 +315,7 @@ export class Game {
     for(const region of this.world.bossVictories)if(!this.bossProgress.records[region])this.bossProgress.records[region]=initialBossProgress([region]).records[region];
     const world={...this.world,region:this.regionId,location,monsters:(this.arenaScene?.enemies||this.enemies).filter(e=>!isBoss(e)&&!e.summoned).map(e=>({id:e.id,type:e.type,hp:e.hp,respawn:Math.max(0,e.respawn)}))};
     const legendary={...this.legendary,recovery:this.mergeSnapshot()};
-    return JSON.stringify({version:8,legendary,economy:this.economy,sanctuary:this.sanctuary,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?(this.arenaScene.legendary?{legendary:this.arenaScene.legendary,mode:'cleared'}:{region:this.regionId,mode:'cleared'}):null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
+    return JSON.stringify({version:8,loot:this.loot,legendary,economy:this.economy,sanctuary:this.sanctuary,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?(this.arenaScene.legendary?{legendary:this.arenaScene.legendary,mode:'cleared'}:{region:this.regionId,mode:'cleared'}):null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
   }
 }
 Object.assign(Game.prototype,journeyMethods,bossMethods,erisMethods,legendaryMethods,mergeMethods);

@@ -1,3 +1,5 @@
+import {itemIcon} from './item-art.mjs';
+import {pickupLoot} from './world-loot.mjs';
 import { drawEquipmentPreview, statComparison } from './eris-ui.mjs';
 import { STAT_KEYS, STAT_LABELS, formatStat } from './costume-catalog.mjs';
 import { WORLD_REGIONS } from './world.mjs';
@@ -35,13 +37,13 @@ export class JourneyMenu {
     $('inventory-summary').textContent=`${g.inventory.items.length} / 7 carried · Equipped and unequipped items share this limit. ${g.healthRoots} / 4 Health Roots stored separately.`;
     const list=$('equipment-list');list.replaceChildren();
     if(!g.inventory.items.length)list.append(el('p','Your starter suit is always yours. Regular monsters may drop fixed-color costume equipment.','empty-equipment'));
-    const pending=g.inventory.pending[0],reward=$('pending-reward');reward.replaceChildren();reward.hidden=!pending;
-    if(pending){const def=itemDefinition(pending);reward.append(el('div',g.inventory.items.length>=7?'INVENTORY FULL · CHOOSE YOUR REWARD':'CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`${def.rarity==='rare'?'Constant white glow.':'No glow.'} Choose a carried item below to compare and replace, or discard this reward.`));
-      if(g.inventory.items.length<7){const keep=el('button','Keep this equipment','primary');keep.id='accept-reward';keep.disabled=!g.canSave();keep.onclick=()=>{if(this.commit(()=>g.acceptReward()))this.inventory();};reward.append(keep);}
-      const decline=el('button','Discard new reward','secondary');decline.id='discard-reward';decline.onclick=()=>this.confirm(null,true);reward.append(decline);}
+    const ground=g.loot.find(o=>o.id===this.groundReward),pending=ground?.item||g.inventory.pending[0],reward=$('pending-reward');reward.replaceChildren();reward.hidden=!pending;
+    if(pending){const def=itemDefinition(pending);reward.append(el('div',g.inventory.items.length>=7?'INVENTORY FULL · CHOOSE YOUR REWARD':'CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`${def.rarity==='rare'?'Constant white glow.':'No glow.'} Choose a carried item below to compare and replace, or leave this item.`));
+      if(g.inventory.items.length<7){const keep=el('button','Keep this equipment','primary');keep.id='accept-reward';keep.disabled=!g.canSave();keep.onclick=()=>{if(this.commit(()=>ground?pickupLoot(g,ground.id):g.acceptReward()))this.inventory();};reward.append(keep);}
+      const decline=el('button',ground?'Leave orb on the ground':'Discard new reward','secondary');decline.id='discard-reward';decline.onclick=()=>{if(ground){this.groundReward=null;this.resume();}else this.confirm(null,true);};reward.append(decline);}
     for(const item of g.inventory.items){
       const def=itemDefinition(item),equipped=g.inventory.equipped[def.part]===item.uid,card=el('article',undefined,`equipment-card ${def.rarity}`);card.dataset.item=item.uid;
-      const symbol=el('div',['◉','⬡','✧','⌁','═','⚑','✦'][EQUIPMENT_PARTS.indexOf(def.part)],'equipment-symbol');symbol.style.color=def.color;card.append(symbol);
+      card.append(itemIcon(def));
       const body=el('div');body.append(el('small',`${def.rarity.toUpperCase()} · ${EQUIPMENT_NAMES[def.part]}${equipped?' · EQUIPPED':''}`),el('h3',def.name),el('p',statsText(def)));card.append(body);
       const actions=el('div',undefined,'equipment-actions');
       if(pending){const compare=el('button','Compare & replace','secondary');compare.onclick=()=>this.confirm(item.uid,true);actions.append(compare);}
@@ -52,16 +54,16 @@ export class JourneyMenu {
       }
       const preview=el('button','Preview','secondary');preview.onclick=()=>this.preview(item);actions.append(preview);card.append(actions);list.append(card);
     }
-    $('inventory-close').textContent=pending?'Keep reward pending · back':'Back to pause';
+    $('inventory-close').textContent=ground?'Leave orb · back':pending?'Keep reward pending · back':'Back to pause';
   }
   confirm(uid,pending){
     const g=this.getGame(),section=$('equipment-confirm');section.replaceChildren();section.hidden=false;
-    const old=g.inventory.items.find(i=>i.uid===uid),incoming=g.inventory.pending[0],oldDef=itemDefinition(old),newDef=itemDefinition(incoming);
+    const old=g.inventory.items.find(i=>i.uid===uid),incoming=g.loot.find(o=>o.id===this.groundReward)?.item||g.inventory.pending[0],oldDef=itemDefinition(old),newDef=itemDefinition(incoming);
     section.append(el('h3',uid&&pending?'Replace this equipment?':'Discard this equipment?'));
     if(uid&&pending){const table=el('table'),head=el('tr');head.append(el('th','Stat'),el('th',oldDef.name),el('th',newDef.name));table.append(head);for(const key of STAT_KEYS){const row=el('tr');row.append(el('th',key),el('td',String(oldDef.stats[key])),el('td',String(newDef.stats[key])));table.append(row);}section.append(table);}
     section.append(el('p',`${(uid?oldDef:newDef).rarity==='rare'?'RARE EQUIPMENT. ':''}${(uid?oldDef:newDef).rarity==='legendary'?'LEGENDARY: cannot be earned again. ':''}${uid?oldDef.name:newDef.name} will be permanently discarded. Discarded equipment cannot be recovered.`));
     const yes=el('button',uid&&pending?'Confirm replacement':'Confirm discard','primary danger'),no=el('button','Keep equipment','secondary');yes.id='confirm-equipment';no.id='cancel-equipment';
-    const revision=g.economy.revision,incomingId=incoming?.uid;yes.disabled=!g.canSave();yes.onclick=()=>{const ok=this.commit(()=>revision===g.economy.revision&&(!pending||g.inventory.pending[0]?.uid===incomingId)&&(pending?g.resolveReward(uid,true):g.discardItem(uid,true)));if(ok){this.inventory();this.say('Equipment selection updated.');}};
+    const revision=g.economy.revision,incomingId=incoming?.uid;yes.disabled=!g.canSave()||!!this.groundReward&&oldDef?.rarity==='legendary';yes.onclick=()=>{const ok=this.commit(()=>revision===g.economy.revision&&(!pending||this.groundReward||g.inventory.pending[0]?.uid===incomingId)&&(this.groundReward?pickupLoot(g,this.groundReward,uid,true):pending?g.resolveReward(uid,true):g.discardItem(uid,true)));if(ok){this.inventory();this.say('Equipment selection updated.');}};
     no.onclick=()=>{section.hidden=true;};section.append(yes,no);section.scrollIntoView({block:'nearest'});no.focus();
   }
 }
