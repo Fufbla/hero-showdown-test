@@ -1,3 +1,4 @@
+import {paintLandscape,paintTerrain,animateLandscape} from './environment-detail.mjs';
 // Local canvas textures preserve the comic linework without new shared assets.
 const TAU=Math.PI*2,INK='#1b3542';
 function shape(c,p,fill,stroke=null,w=2){c.beginPath();p.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.fillStyle=fill;c.fill();if(stroke){c.strokeStyle=stroke;c.lineWidth=w;c.stroke();}}
@@ -34,6 +35,7 @@ function backdrop(theme,night,near){
    const y2=210+(i+9)%3*125;shape(c,[[x-53,y2],[x+50,y2-16],[x+25,y2+48],[x-10,y2+92]],base);shape(c,[[x-25,y2-4],[x-15,y2-110],[x+15,y2-138],[x+20,y2-12]],'#879fc570');line(c,[[x+2,y2-125],[x+5,y2+38]],'#b0e6eb70',2);
   }
  }
+ paintLandscape(c,theme,near,night);
  return canvas;
 }
 export class EnvironmentArt{
@@ -49,6 +51,7 @@ export class EnvironmentArt{
   if(region.id===1){const seaY=355-cameraY*.26;const sea=c.createLinearGradient(0,seaY,0,height);sea.addColorStop(0,'#338d9f');sea.addColorStop(1,'#9ed2b2');c.fillStyle=sea;c.fillRect(0,seaY,width,height-seaY);for(let row=0;row<9;row++){const y=seaY+row*30;for(let x=-130;x<width+140;x+=165){const xx=x-cameraX*.12%165+Math.sin(time*.6+row)*13;line(c,[[xx,y],[xx+35,y-2],[xx+76,y]],'#e0f2d54a',1.5);}}}
   const layers=this.scene(region,night);for(let n=0;n<2;n++){const factor=n?.32:.12,offset=(cameraX*factor)%TILE,dy=-cameraY*factor;for(let x=-offset-TILE;x<width;x+=TILE)c.drawImage(layers[n],x,dy);}
   if(region.id!==1){const haze=c.createLinearGradient(0,height*.65,0,height);haze.addColorStop(0,'#d9ddb000');haze.addColorStop(1,night?'#b7d2a414':'#d6d6aa2b');c.fillStyle=haze;c.fillRect(0,height*.65,width,height*.35);}
+  animateLandscape(c,region,width,height,cameraX,cameraY,time);
  }
  surface(c,s,region){
   const key=`${region.id}:${s.kind}:${s.w}:${s.h}:${!!s.oneWay}`;let tile=this.terrain.get(key);
@@ -67,6 +70,7 @@ export class EnvironmentArt{
     if(s.oneWay&&['coast','forest','mutant'].includes(region.theme))for(let x=10;x<w-5;x+=22)shape(t,[[x-4,top],[x-7,top-6],[x,top-3],[x+4,top-11],[x+7,top]],region.accent);
     if(s.oneWay&&region.theme==='energy'){line(t,[[5,top+2],[w,top+2]],'#a9edf0',3);for(const x of[26,w-27])shape(t,[[x,top+25],[x+8,top+37],[x,top+52],[x-7,top+37]],'#aac5ea');}
    }
+   paintTerrain(t,s,region);
    this.terrain.set(key,tile);while(this.terrain.size>48)this.terrain.delete(this.terrain.keys().next().value);
   }
   c.drawImage(tile,s.x-3,s.y-12);
