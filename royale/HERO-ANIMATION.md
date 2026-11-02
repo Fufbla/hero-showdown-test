@@ -18,7 +18,7 @@ The supplied 512 × 1108 gameplay recording was inspected for proportions and re
 
 [20-second animation close-up](qa/hero-animation/animation-closeup.mp4) · [18-second gameplay capture](qa/hero-animation/gameplay-desktop.mp4) · [Eight custom heroes](qa/hero-animation/customization-gallery.png) · [All action poses](qa/hero-animation/animation-poses.png) · [Equipment examples](qa/hero-animation/equipment-gallery.png)
 
-The videos are deterministic captures of the actual renderer. The gameplay clip runs the unchanged simulation at 60 fixed steps per second and exports 30 video frames per second. It includes regular enemies, powers, elevated platforms and Lightning Spree. The staged QA hero is invulnerable; this is not an unassisted combat or device-performance recording.
+The videos are deterministic captures of the actual renderer. The gameplay clip runs the unchanged simulation at 60 fixed steps per second and exports 30 video frames per second. It includes regular enemies, powers, elevated platforms and Lightning Spree. The recorder installs the same boss visual-step callback as the app and rejects missing boss animation selections. The staged QA hero is invulnerable; this is not an unassisted combat or device-performance recording.
 
 ## Presentation changes
 
@@ -67,7 +67,7 @@ Sampled hero and creature states were visible, unclipped, finite and did not mut
 
 Both cloud samples reported visible/focused pages and no sprite errors. Only 1.47 and 1.30 simulation seconds advanced; browser frame delivery was much slower than drawing, and the cause was not established. These are limited cloud measurements, not representative physical-device results or cold internet load times. **Sustained 60 FPS is not verified.**
 
-Separate native software-raster measurements: hero-only mean draw cost 0.30–0.77 ms across eight appearances (180 draws each); full gameplay capture with two simulation steps per draw averaged 5.43 ms, with 9.32 ms p95 across 540 frames. These costs are not browser FPS.
+Separate native software-raster measurements: hero-only mean draw cost 0.30–0.77 ms across eight appearances (180 draws each); full gameplay capture with two simulation steps per draw averaged 5.15 ms, with 7.79 ms p95 across 540 frames. These costs are not browser FPS.
 
 No physical iPhone, Android or controller hardware was tested. Safari/Firefox, long-session performance and cold-network loading remain unverified. Existing rare equipment and Villain Merge overlays retain their approved vector shapes and glows, so some equipment is visually simpler than the new painted base suit. Fine facial detail is intentionally small at the preserved gameplay scale. Modular 2D parts do not provide full 3D perspective rotation; the default facing changes immediately with a subtle squash. Original compact creature animation limitations remain unchanged. Final artistic and motion approval belongs to the user.
 
