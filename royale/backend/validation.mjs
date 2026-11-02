@@ -488,13 +488,15 @@ var GATES = Object.freeze({ back: 44, arena: 5840, forward: 6070 });
 function normalizeLoot(raw = []) {
   if (!Array.isArray(raw) || raw.length > 2048) return null;
   const ids = /* @__PURE__ */ new Set(), itemIds = /* @__PURE__ */ new Set();
-  return raw.every((o) => o && /^loot-\d+$/.test(o.id) && Number.isSafeInteger(Number(o.id.slice(5))) && !ids.has(o.id) && ids.add(o.id) && Number.isInteger(o.region) && o.region >= 1 && o.region <= 7 && Number.isFinite(o.x) && o.x >= 0 && o.x <= 6200 && Number.isFinite(o.y) && o.y >= -500 && o.y <= 1e3 && ["root", "equipment"].includes(o.kind) && (o.kind === "root" || itemDefinition(o.item) && /^drop-\d+$/.test(o.item.uid) && !itemIds.has(o.item.uid) && itemIds.add(o.item.uid))) ? raw.map((o) => ({ id: o.id, region: o.region, x: o.x, y: o.y, vy: 0, kind: o.kind, item: o.kind === "equipment" ? { uid: o.item.uid, catalogId: o.item.catalogId } : null })) : null;
+  return raw.every((o) => o && /^loot-\d+$/.test(o.id) && Number.isSafeInteger(Number(o.id.slice(5))) && !ids.has(o.id) && ids.add(o.id) && Number.isInteger(o.region) && o.region >= 1 && o.region <= 7 && Number.isFinite(o.x) && o.x >= 0 && o.x <= 6200 && Number.isFinite(o.y) && o.y >= -500 && o.y <= 1e3 && ["root", "equipment"].includes(o.kind) && (o.kind === "root" || itemDefinition(o.item) && /^drop-\d+$/.test(o.item.uid) && !itemIds.has(o.item.uid) && itemIds.add(o.item.uid))) ? raw.map((o) => ({ id: o.id, region: o.region, x: o.x, y: o.y, vy: 0, kind: o.kind, item: o.kind === "equipment" ? { uid: o.item.uid, catalogId: o.item.catalogId } : null, ...Number.isFinite(o.remaining) && o.remaining >= 0 ? { remaining: o.remaining } : {} })) : null;
 }
 function spawnLoot(g, e, kind, item = null) {
   const x = Math.max(16, Math.min(6144, e.x)), y = e.y - 12;
-  g.loot.push({ id: `loot-${g.inventory.nextId++}`, region: g.regionId, x, y, vy: 0, kind, item });
+  g.loot.push({ id: `loot-${g.inventory.nextId++}`, region: g.regionId, x, y, vy: 0, kind, item, ...Number.isFinite(g.lootLifetime) ? { remaining: g.lootLifetime } : {} });
 }
 function stepLoot(g, dt) {
+  for (const o of g.loot) if (Number.isFinite(o.remaining)) o.remaining -= dt;
+  g.loot = g.loot.filter((o) => !Number.isFinite(o.remaining) || o.remaining > 0);
   if (g.portalPickupGuard && Math.hypot(g.hero.x - g.portalPickupGuard.x, g.hero.y - g.portalPickupGuard.y) >= 90) g.portalPickupGuard = null;
   if (g.arenaScene) return;
   for (const o of g.loot) {
@@ -534,8 +536,8 @@ function nearbyInteractions(g) {
   add("arena", "passage", GATES.arena, 600, `Enter Arena \xB7 ${g.getRegion().boss}`);
   return result.sort((a2, b) => a2.distance - b.distance || a2.id.localeCompare(b.id));
 }
-function selectedInteraction(g) {
-  const list = nearbyInteractions(g);
+function selectedInteraction(g, kind = null) {
+  const list = nearbyInteractions(g).filter((t) => !kind || kind === "loot" && t.kind === "loot" || kind === "travel" && t.kind !== "loot");
   return list.find((t) => t.id === g.interactionTarget) || list[0];
 }
 function pickupLoot(g, id, replaceUid = null, confirmed = false) {
@@ -2654,12 +2656,12 @@ var Game = class {
     return this.camps.findIndex((c) => Math.abs(c.x - this.hero.x) < 90 && Math.abs(c.y - this.hero.y) < 40);
   }
   interact() {
-    const target = selectedInteraction(this);
+    const target = selectedInteraction(this, "loot");
+    if (target) pickupLoot(this, target.id);
+  }
+  enterPortal() {
+    const target = selectedInteraction(this, "travel");
     if (!target) return;
-    if (target?.kind === "loot") {
-      pickupLoot(this, target.id);
-      return;
-    }
     if (target?.kind === "portal") {
       if (this.canTravel()) this.emit("world-portal");
       return;
@@ -2765,6 +2767,7 @@ var Game = class {
       this.interactionTarget = list[(i + 1) % list.length]?.id;
     }
     if (input.interact) this.interact();
+    else if (input.portal) this.enterPortal();
     if (input.tree && this.nearTree() && !this.inCombat()) this.emit("tree");
     if (h.attackBuffer) {
       h.attackBuffer.life -= dt;

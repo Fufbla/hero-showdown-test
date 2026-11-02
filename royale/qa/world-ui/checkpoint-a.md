@@ -1,0 +1,5 @@
+# Checkpoint A — strict interactions
+Base: 11e0c97d2e928b0a4f4ce8331920fa59db489a7e.
+928 automated tests passed. E now selects only loot; Up Arrow handles portals, exits, camp and chest interaction; Space is the sole default jump key. Mobile travel and pickup buttons are independent. Controller portal button 12 and pickup button 3 are independent; Flight uses the analog stick or W/S. Saved legacy shared defaults migrate, duplicate input assignments are resolved, and controller actions can be unassigned.
+Existing seven-region portal art, loot physics, four elevated tiers, inventory limits and defeat-only drops are preserved. Loot lifetime is configurable through configureLootLifetime; the default remains persistent, with no automatic expiry. Optional remaining lifetime round-trips through saves.
+The prior camp tests now exercise the explicit portal/context action; pickup tests continue verifying no travel. Browser visual validation remains for the combined checkpoint review. No physical-device testing performed.

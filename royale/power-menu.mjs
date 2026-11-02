@@ -85,8 +85,8 @@ export class ControlMenu {
       const row=node('div',undefined,'mapping-row');row.append(node('span',name));
       const key=node('button',this.input.controls.keys[id].map(x=>x.replace('Key','').replace('Digit','')).join(' / '),'secondary');key.dataset.map=id;key.setAttribute('aria-label',`Rebind ${name}`);
       key.onclick=()=>{this.capture=id;$('mapping-note').textContent=`Press a new key for ${name}. Esc cancels.`;key.textContent='Press a key…';};row.append(key);
-      const pad=node('select');pad.setAttribute('aria-label',`${name} controller button`);for(let i=0;i<=16;i++){const o=node('option',`Button ${i}`);o.value=i;pad.append(o);}pad.value=this.input.controls.pad[id];
-      pad.onchange=()=>{const n=Number(pad.value),old=this.input.controls.pad[id],other=Object.keys(this.input.controls.pad).find(a=>a!==id&&this.input.controls.pad[a]===n);if(other)this.input.controls.pad[other]=old;this.input.controls.pad[id]=n;this.save();this.render();};row.append(pad);$('mapping-list').append(row);
+      const pad=node('select');pad.setAttribute('aria-label',`${name} controller button`);for(let i=-1;i<=16;i++){const o=node('option',i<0?'Unassigned':`Button ${i}`);o.value=i;pad.append(o);}pad.value=this.input.controls.pad[id];
+      pad.onchange=()=>{const n=Number(pad.value),old=this.input.controls.pad[id],other=Object.keys(this.input.controls.pad).find(a=>n>=0&&a!==id&&this.input.controls.pad[a]===n);if(other)this.input.controls.pad[other]=old;this.input.controls.pad[id]=n;this.save();this.render();};row.append(pad);$('mapping-list').append(row);
     }
     $('touch-settings').replaceChildren();
     for(const [id,title,min,max] of [['stickSize','Joystick size',76,106],['size','Button size',44,64],['left','Move stick inward',0,24],['right','Move actions inward',0,24],['rise','Raise touch controls',0,20]]){

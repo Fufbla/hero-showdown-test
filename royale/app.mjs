@@ -225,12 +225,14 @@ function updateHud() {
     $('mission-count').textContent = cleared ? (game.reachedEnd ? '✓' : '→') : `${Math.min(6, game.kills)}/6`;
   }
   $('account-open').disabled=!!cloudApi?.writing||!!criticalPending||screen==='mergeReward'||game.started&&!game.canSave();
-  $('world-portal').hidden=true;
+  const travelTarget=selectedInteraction(game,'travel');
+  $('world-portal').hidden=screen!=='play'||!travelTarget;
+  $('world-portal').textContent=travelTarget?`↑ ${travelTarget.label} · ${input.controls.keys.portal[0]?.replace('Arrow','')}`:'';
   $('visit-tree').hidden=screen!=='play'||!game.nearTree()||game.inCombat();
   updatePowers();
   if(screen==='world')journeyMenu.updateClock();
   if(screen==='controls')hudText($('controller-status'),input.gamepadLabel);
-  const target=selectedInteraction(game);
+  const target=selectedInteraction(game,'loot');
   $('rest').hidden=screen!=='play'||!target;
   $('cycle-interaction').textContent=`Next target · ${input.controls.keys.nextTarget[0].replace('Key','')}`;
   $('cycle-interaction').hidden=screen!=='play'||nearbyInteractions(game).length<2&&!(game.portalPickupGuard?.region===game.regionId&&game.nearPortal());
@@ -252,7 +254,7 @@ function updatePowers(){
 $('manual-save').onclick=async()=>{if(!game.canSave()||criticalPending)return;const b=$('manual-save');b.disabled=true;try{const result=store.cloud?await store.commit(activeSlot,game.save()):persist({manual:true});say(result.ok?(store.cloud?'Game saved to your account.':'Hero saved on this browser.'):result.error||'Save unavailable.');}catch(e){say(e.message,9);}finally{b.disabled=!game.canSave();}};
 $('chest-close').onclick=resume;
 function openWorld(){setScreen('world');journeyMenu.map();legendaryMenu.map();$('map-title').focus();}
-$('open-map').onclick=openWorld;$('world-portal').onclick=()=>{if(game.canTravel()&&game.nearPortal())openWorld();};$('map-close').onclick=showPause;
+$('open-map').onclick=openWorld;$('map-close').onclick=showPause;
 $('open-inventory').onclick=()=>{journeyMenu.groundReward=null;setScreen('inventory');journeyMenu.inventory();$('inventory-title').focus();};$('inventory-close').onclick=()=>{journeyMenu.groundReward=null;showPause();};
 $('tree-from-pause').onclick=()=>openTree();$('close-tree').onclick=returnAdventure;
 $('open-controls').onclick=()=>{setScreen('controls');controlMenu.render();$('settings-title').focus();};$('close-controls').onclick=showPause;

@@ -32,7 +32,7 @@ test('low-level farming tapers to zero, never negative; coin and drop rules are 
 });
 test('defeat deducts 10% of next cost once, preserves all non-XP progression and full-health respawn',()=>{
   const g=regional(3);g.hero.level=30;g.hero.maxHp=535;g.hero.xp=2000;g.hero.coins=234;g.healthRoots=4;g.inventory.items.push(createEquipment(3,'ordinary',0));g.powers.data.levels.steel=20;g.powers.data.points=9;
-  g.hero.x=4370;g.interact();const gear=JSON.stringify(g.inventory),points=g.powers.data.points;g.defeat();const xp=2000-Math.floor(xpForLevel(30)*.1);assert.equal(g.hero.xp,xp);g.defeat();assert.equal(g.hero.xp,xp);tick(g,100);
+  g.hero.x=4370;g.enterPortal();const gear=JSON.stringify(g.inventory),points=g.powers.data.points;g.defeat();const xp=2000-Math.floor(xpForLevel(30)*.1);assert.equal(g.hero.xp,xp);g.defeat();assert.equal(g.hero.xp,xp);tick(g,100);
   assert.equal(g.hero.x,4370);assert.equal(g.hero.hp,535);assert.equal(g.hero.level,30);assert.equal(g.hero.coins,234);assert.equal(g.healthRoots,4);assert.equal(JSON.stringify(g.inventory),gear);assert.equal(g.powers.data.points,points);
 });
 test('death cannot go below zero or remove levels; Level 99 has no ordinary penalty',()=>{

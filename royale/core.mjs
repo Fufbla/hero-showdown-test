@@ -214,9 +214,12 @@ export class Game {
   isSafeCamp(){return !this.bossEncounter&&this.camps.some(c=>Math.abs(c.x-this.hero.x)<180&&Math.abs(c.y-this.hero.y)<100);}
   nearCamp() { return this.camps.findIndex(c => Math.abs(c.x - this.hero.x) < 90 && Math.abs(c.y - this.hero.y) < 40); }
   interact() {
-    const target=selectedInteraction(this);
+    const target=selectedInteraction(this,'loot');
+    if(target)pickupLoot(this,target.id);
+  }
+  enterPortal() {
+    const target=selectedInteraction(this,'travel');
     if(!target)return;
-    if(target?.kind==='loot'){pickupLoot(this,target.id);return;}
     if(target?.kind==='portal'){if(this.canTravel())this.emit('world-portal');return;}
     if(target?.kind==='passage'){this.usePassage();return;}
     if(this.arenaScene){if(this.availableChest()&&Math.abs(this.hero.x-1060)<140)this.emit('chest-preview');return;}
@@ -258,6 +261,7 @@ export class Game {
     if(input.heal)this.useHealthRoot();
     if(input.nextTarget){const previous=selectedInteraction(this)?.id;this.portalPickupGuard=null;const list=nearbyInteractions(this),i=list.findIndex(t=>t.id===previous);this.interactionTarget=list[(i+1)%list.length]?.id;}
     if (input.interact) this.interact();
+    else if(input.portal)this.enterPortal();
     if(input.tree&&this.nearTree()&&!this.inCombat())this.emit('tree');
     if (h.attackBuffer) { h.attackBuffer.life -= dt; if (h.attackBuffer.life <= 0) h.attackBuffer = null; }
     if (input.punch&&!this.powers.flying&&!this.powers.active.superKick) h.attackBuffer = { kind: 'punch', life: .18 };

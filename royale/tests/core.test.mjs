@@ -88,8 +88,8 @@ test('death and returning to a checkpoint preserve progression and clear input b
   ticks(g,100);assert.equal(g.hero.dead,false);assert.equal(g.hero.x,CAMPS[1].x);assert.equal(g.hero.hp,100);assert.equal(g.hero.coins,23);assert.equal(g.hero.xp,12);assert.equal(g.hero.jumpBuffer,0);
 });
 test('camp interaction heals, updates checkpoint, and ignores distant input', () => {
-  const g=empty();g.hero.x=2340;g.hero.hp=50;g.step(STEP,{interact:true});assert.equal(g.checkpoint,1);assert.equal(g.hero.hp,100);
-  g.hero.x=3000;g.hero.hp=50;g.step(STEP,{interact:true});assert.equal(g.hero.hp,50);
+  const g=empty();g.hero.x=2340;g.hero.hp=50;g.step(STEP,{portal:true});assert.equal(g.checkpoint,1);assert.equal(g.hero.hp,100);
+  g.hero.x=3000;g.hero.hp=50;g.step(STEP,{portal:true});assert.equal(g.hero.hp,50);
 });
 test('all appearance presets preserve movement, attack timing, and hitboxes', () => {
   const outcomes=[];for(const build of ['slender','balanced','strong','full']){const g=empty();g.look=sanitizeLook({build,height:1.12,legs:.85,cape:false});ticks(g,60,{move:1,punchHeld:true});outcomes.push([g.hero.x,g.attackSerial,g.hero.w,g.hero.h]);}assert.ok(outcomes.every(x=>JSON.stringify(x)===JSON.stringify(outcomes[0])));

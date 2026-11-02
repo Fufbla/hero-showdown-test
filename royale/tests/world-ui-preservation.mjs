@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
 export const WORLD_BASE='2bd6c6546cf41ee774763b8ed7ba3be88540c8fc';
-const files=new Set(['assets/items/comic-equipment.png','assets/items/PROMPT.md','app.mjs','controls.mjs','core.mjs','eris-ui.mjs','index.html','input.mjs','journey-menu.mjs','journey.mjs','world-art.mjs','world-loot.mjs','portal-art.mjs','item-art.mjs','world-ui.css','backend/validation.mjs','tests/world-ui-preservation.mjs','tests/world-ui-loot.test.mjs','tests/world-ui-review.html','tests/world-ui-review.mjs','tests/core.test.mjs','tests/phase3.test.mjs','tests/phase3-checks.mjs','tests/phase4.test.mjs','tests/phase6.test.mjs','WORLD-UI-LOOT.md'].map(p=>'royale/'+p));
+const files=new Set(['assets/items/comic-equipment.png','assets/items/PROMPT.md','app.mjs','power-menu.mjs','controls.mjs','core.mjs','eris-ui.mjs','index.html','input.mjs','journey-menu.mjs','journey.mjs','world-art.mjs','world-loot.mjs','portal-art.mjs','item-art.mjs','world-ui.css','backend/validation.mjs','tests/world-ui-preservation.mjs','tests/world-ui-loot.test.mjs','tests/overhaul-controls.test.mjs','tests/world-ui-review.html','tests/world-ui-review.mjs','tests/core.test.mjs','tests/phase3.test.mjs','tests/phase3-checks.mjs','tests/phase4.test.mjs','tests/phase6.test.mjs','WORLD-UI-LOOT.md'].map(p=>'royale/'+p));
 export const isWorldUIFile=p=>files.has(p)||p.startsWith('royale/qa/world-ui/');
 export function assertWorldPreserved(){
  const root=new URL('../../',import.meta.url),git=(...a)=>execFileSync('git',a,{cwd:root,encoding:'utf8'}).trim();

@@ -7,3 +7,5 @@
 .settings-card details{border-top:1px solid #688a8e55;padding:10px 0}.settings-card summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}.settings-card details[open] summary{color:#eed7a4}
 
 .equipment-card>div>p{display:none}.equipment-card{display:grid;grid-template-columns:48px 1fr;align-items:center}.equipment-card .item-art{width:48px;height:48px}.equipment-actions{grid-column:1/-1;display:flex}.equipment-card small{font-size:10px}.equipment-actions button{flex:1;font-size:12px;padding:8px}@media(max-width:480px){.equipment-list{grid-template-columns:repeat(2,minmax(0,1fr))}.equipment-card{grid-template-columns:1fr;padding:9px!important}.equipment-card h3{font-size:13px;overflow-wrap:anywhere}.equipment-card .item-art{width:60px;height:60px}.equipment-actions{flex-direction:column}.equipment-preview{grid-column:1/-1}}
+
+#world-portal{left:12px;right:auto;bottom:65px;max-width:calc(100% - 24px);min-height:44px;font-size:12px}#rest{bottom:12px}

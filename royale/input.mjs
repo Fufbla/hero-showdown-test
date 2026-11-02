@@ -67,8 +67,8 @@ export class Input {
     const held = action => {if(this.padHeld.has(action)||this.controls.keys[action]?.some(k=>this.keys.has(k)))return true;for(const value of this.pointers.values())if(value===action)return true;return false;};
     const left = held('left'), right = held('right');
     const result = { move: this.axis || this.padX || Number(right) - Number(left), run: Math.abs(this.axis) > .72 || Math.abs(this.padX)> .72 || held('run'),
-      vertical:this.vertical||this.padY||(held('down')?1:held('up')||held('jump')?-1:0),powers:[0,1,2,3].map(i=>this.edges.has(`power${i}`)),heal:this.edges.has('heal'),tree:this.edges.has('tree'),
-      nextTarget:this.edges.has('nextTarget'),jump: this.edges.has('jump'), punch: this.edges.has('punch'), kick: this.edges.has('kick'), interact: this.edges.has('interact'),
+      vertical:this.vertical||this.padY||(held('down')?1:held('up')?-1:0),powers:[0,1,2,3].map(i=>this.edges.has(`power${i}`)),heal:this.edges.has('heal'),tree:this.edges.has('tree'),
+      portal:this.edges.has('portal'),nextTarget:this.edges.has('nextTarget'),jump: this.edges.has('jump'), punch: this.edges.has('punch'), kick: this.edges.has('kick'), interact: this.edges.has('interact'),
       punchHeld: held('punch'), kickHeld: held('kick') };
     this.edges.clear(); return result;
   }
