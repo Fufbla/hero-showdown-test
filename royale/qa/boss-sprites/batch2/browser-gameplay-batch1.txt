@@ -1,0 +1,338 @@
+COMPLETE · 321 Phase 5 browser assertions passed. 3 bosses × five viewports. Synthetic browser checks, not physical devices. Full log below.
+
+PASS · Trash Monster: artwork loads, renders and labels temporary art correctly
+PASS · Bushman: artwork loads, renders and labels temporary art correctly
+PASS · Wastelander: artwork loads, renders and labels temporary art correctly
+PASS · all 3 bosses render distinct silhouettes
+PASS · 390×844 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Trash Monster: HUD artwork status follows the active presentation
+PASS · 390×844 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Trash Monster: three power buttons and touch controls fit
+PASS · 390×844 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Trash Monster: all pause map travel blocked
+PASS · 390×844 · Trash Monster: touch Health Root heals during battle
+PASS · 390×844 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 390×844 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 390×844 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 390×844 · Trash Monster: manually saved victory is persisted with full arena cleared
+PASS · 390×844 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 390×844 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 390×844 · Trash Monster: no rare equipment in early-region chest
+PASS · failed chest persistence rolls back coins, Roots and chest state
+PASS · failed chest persistence preserves all owned items and allows retry
+PASS · 390×844 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 390×844 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 390×844 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Trash Monster: walking exit returns to exploration
+DONE · 390×844 · Trash Monster
+PASS · 390×844 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Bushman: HUD artwork status follows the active presentation
+PASS · 390×844 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Bushman: three power buttons and touch controls fit
+PASS · 390×844 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Bushman: all pause map travel blocked
+PASS · 390×844 · Bushman: touch Health Root heals during battle
+PASS · 390×844 · Bushman: Phase 2 HUD updates immediately
+PASS · 390×844 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Bushman: boss down with helpers does not unlock or reward
+PASS · 390×844 · Bushman: clearing arena awards first victory and unlock
+PASS · 390×844 · Bushman: manually saved victory is persisted with full arena cleared
+PASS · 390×844 · Bushman: chest previews rewards beside seven owned items
+PASS · 390×844 · Bushman: chest controls, HP and XP remain usable
+PASS · 390×844 · Bushman: no rare equipment in early-region chest
+PASS · 390×844 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Bushman: cancel preserves owned and pending equipment
+PASS · 390×844 · Bushman: confirmed replacement enforces seven slots
+PASS · 390×844 · Bushman: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Bushman: walking exit returns to exploration
+DONE · 390×844 · Bushman
+PASS · 390×844 · Wastelander: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Wastelander: HUD artwork status follows the active presentation
+PASS · 390×844 · Wastelander: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Wastelander: three power buttons and touch controls fit
+PASS · 390×844 · Wastelander: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Wastelander: all pause map travel blocked
+PASS · 390×844 · Wastelander: touch Health Root heals during battle
+PASS · 390×844 · Wastelander: Phase 2 HUD updates immediately
+PASS · 390×844 · Wastelander: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Wastelander: boss down with helpers does not unlock or reward
+PASS · 390×844 · Wastelander: clearing arena awards first victory and unlock
+PASS · 390×844 · Wastelander: manually saved victory is persisted with full arena cleared
+PASS · 390×844 · Wastelander: chest previews rewards beside seven owned items
+PASS · 390×844 · Wastelander: chest controls, HP and XP remain usable
+PASS · 390×844 · Wastelander: no rare equipment in early-region chest
+PASS · 390×844 · Wastelander: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Wastelander: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Wastelander: cancel preserves owned and pending equipment
+PASS · 390×844 · Wastelander: confirmed replacement enforces seven slots
+PASS · 390×844 · Wastelander: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Wastelander: walking exit returns to exploration
+DONE · 390×844 · Wastelander
+PASS · 844×390 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Trash Monster: HUD artwork status follows the active presentation
+PASS · 844×390 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Trash Monster: three power buttons and touch controls fit
+PASS · 844×390 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Trash Monster: all pause map travel blocked
+PASS · 844×390 · Trash Monster: touch Health Root heals during battle
+PASS · 844×390 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 844×390 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 844×390 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 844×390 · Trash Monster: manually saved victory is persisted with full arena cleared
+PASS · 844×390 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 844×390 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 844×390 · Trash Monster: no rare equipment in early-region chest
+PASS · 844×390 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 844×390 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 844×390 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Trash Monster: walking exit returns to exploration
+DONE · 844×390 · Trash Monster
+PASS · 844×390 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Bushman: HUD artwork status follows the active presentation
+PASS · 844×390 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Bushman: three power buttons and touch controls fit
+PASS · 844×390 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Bushman: all pause map travel blocked
+PASS · 844×390 · Bushman: touch Health Root heals during battle
+PASS · 844×390 · Bushman: Phase 2 HUD updates immediately
+PASS · 844×390 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Bushman: boss down with helpers does not unlock or reward
+PASS · 844×390 · Bushman: clearing arena awards first victory and unlock
+PASS · 844×390 · Bushman: manually saved victory is persisted with full arena cleared
+PASS · 844×390 · Bushman: chest previews rewards beside seven owned items
+PASS · 844×390 · Bushman: chest controls, HP and XP remain usable
+PASS · 844×390 · Bushman: no rare equipment in early-region chest
+PASS · 844×390 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Bushman: cancel preserves owned and pending equipment
+PASS · 844×390 · Bushman: confirmed replacement enforces seven slots
+PASS · 844×390 · Bushman: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Bushman: walking exit returns to exploration
+DONE · 844×390 · Bushman
+PASS · 844×390 · Wastelander: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Wastelander: HUD artwork status follows the active presentation
+PASS · 844×390 · Wastelander: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Wastelander: three power buttons and touch controls fit
+PASS · 844×390 · Wastelander: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Wastelander: all pause map travel blocked
+PASS · 844×390 · Wastelander: touch Health Root heals during battle
+PASS · 844×390 · Wastelander: Phase 2 HUD updates immediately
+PASS · 844×390 · Wastelander: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Wastelander: boss down with helpers does not unlock or reward
+PASS · 844×390 · Wastelander: clearing arena awards first victory and unlock
+PASS · 844×390 · Wastelander: manually saved victory is persisted with full arena cleared
+PASS · 844×390 · Wastelander: chest previews rewards beside seven owned items
+PASS · 844×390 · Wastelander: chest controls, HP and XP remain usable
+PASS · 844×390 · Wastelander: no rare equipment in early-region chest
+PASS · 844×390 · Wastelander: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Wastelander: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Wastelander: cancel preserves owned and pending equipment
+PASS · 844×390 · Wastelander: confirmed replacement enforces seven slots
+PASS · 844×390 · Wastelander: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Wastelander: walking exit returns to exploration
+DONE · 844×390 · Wastelander
+PASS · 320×568 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Trash Monster: HUD artwork status follows the active presentation
+PASS · 320×568 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Trash Monster: three power buttons and touch controls fit
+PASS · 320×568 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Trash Monster: all pause map travel blocked
+PASS · 320×568 · Trash Monster: touch Health Root heals during battle
+PASS · 320×568 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 320×568 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 320×568 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 320×568 · Trash Monster: manually saved victory is persisted with full arena cleared
+PASS · 320×568 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 320×568 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 320×568 · Trash Monster: no rare equipment in early-region chest
+PASS · 320×568 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 320×568 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 320×568 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Trash Monster: walking exit returns to exploration
+DONE · 320×568 · Trash Monster
+PASS · 320×568 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Bushman: HUD artwork status follows the active presentation
+PASS · 320×568 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Bushman: three power buttons and touch controls fit
+PASS · 320×568 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Bushman: all pause map travel blocked
+PASS · 320×568 · Bushman: touch Health Root heals during battle
+PASS · 320×568 · Bushman: Phase 2 HUD updates immediately
+PASS · 320×568 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Bushman: boss down with helpers does not unlock or reward
+PASS · 320×568 · Bushman: clearing arena awards first victory and unlock
+PASS · 320×568 · Bushman: manually saved victory is persisted with full arena cleared
+PASS · 320×568 · Bushman: chest previews rewards beside seven owned items
+PASS · 320×568 · Bushman: chest controls, HP and XP remain usable
+PASS · 320×568 · Bushman: no rare equipment in early-region chest
+PASS · 320×568 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Bushman: cancel preserves owned and pending equipment
+PASS · 320×568 · Bushman: confirmed replacement enforces seven slots
+PASS · 320×568 · Bushman: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Bushman: walking exit returns to exploration
+DONE · 320×568 · Bushman
+PASS · 320×568 · Wastelander: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Wastelander: HUD artwork status follows the active presentation
+PASS · 320×568 · Wastelander: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Wastelander: three power buttons and touch controls fit
+PASS · 320×568 · Wastelander: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Wastelander: all pause map travel blocked
+PASS · 320×568 · Wastelander: touch Health Root heals during battle
+PASS · 320×568 · Wastelander: Phase 2 HUD updates immediately
+PASS · 320×568 · Wastelander: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Wastelander: boss down with helpers does not unlock or reward
+PASS · 320×568 · Wastelander: clearing arena awards first victory and unlock
+PASS · 320×568 · Wastelander: manually saved victory is persisted with full arena cleared
+PASS · 320×568 · Wastelander: chest previews rewards beside seven owned items
+PASS · 320×568 · Wastelander: chest controls, HP and XP remain usable
+PASS · 320×568 · Wastelander: no rare equipment in early-region chest
+PASS · 320×568 · Wastelander: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Wastelander: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Wastelander: cancel preserves owned and pending equipment
+PASS · 320×568 · Wastelander: confirmed replacement enforces seven slots
+PASS · 320×568 · Wastelander: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Wastelander: walking exit returns to exploration
+DONE · 320×568 · Wastelander
+PASS · 768×1024 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Trash Monster: HUD artwork status follows the active presentation
+PASS · 768×1024 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Trash Monster: three power buttons and touch controls fit
+PASS · 768×1024 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Trash Monster: all pause map travel blocked
+PASS · 768×1024 · Trash Monster: touch Health Root heals during battle
+PASS · 768×1024 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 768×1024 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 768×1024 · Trash Monster: manually saved victory is persisted with full arena cleared
+PASS · 768×1024 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 768×1024 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 768×1024 · Trash Monster: no rare equipment in early-region chest
+PASS · 768×1024 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 768×1024 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 768×1024 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Trash Monster: walking exit returns to exploration
+DONE · 768×1024 · Trash Monster
+PASS · 768×1024 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Bushman: HUD artwork status follows the active presentation
+PASS · 768×1024 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Bushman: three power buttons and touch controls fit
+PASS · 768×1024 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Bushman: all pause map travel blocked
+PASS · 768×1024 · Bushman: touch Health Root heals during battle
+PASS · 768×1024 · Bushman: Phase 2 HUD updates immediately
+PASS · 768×1024 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Bushman: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Bushman: clearing arena awards first victory and unlock
+PASS · 768×1024 · Bushman: manually saved victory is persisted with full arena cleared
+PASS · 768×1024 · Bushman: chest previews rewards beside seven owned items
+PASS · 768×1024 · Bushman: chest controls, HP and XP remain usable
+PASS · 768×1024 · Bushman: no rare equipment in early-region chest
+PASS · 768×1024 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Bushman: cancel preserves owned and pending equipment
+PASS · 768×1024 · Bushman: confirmed replacement enforces seven slots
+PASS · 768×1024 · Bushman: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Bushman: walking exit returns to exploration
+DONE · 768×1024 · Bushman
+PASS · 768×1024 · Wastelander: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Wastelander: HUD artwork status follows the active presentation
+PASS · 768×1024 · Wastelander: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Wastelander: three power buttons and touch controls fit
+PASS · 768×1024 · Wastelander: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Wastelander: all pause map travel blocked
+PASS · 768×1024 · Wastelander: touch Health Root heals during battle
+PASS · 768×1024 · Wastelander: Phase 2 HUD updates immediately
+PASS · 768×1024 · Wastelander: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Wastelander: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Wastelander: clearing arena awards first victory and unlock
+PASS · 768×1024 · Wastelander: manually saved victory is persisted with full arena cleared
+PASS · 768×1024 · Wastelander: chest previews rewards beside seven owned items
+PASS · 768×1024 · Wastelander: chest controls, HP and XP remain usable
+PASS · 768×1024 · Wastelander: no rare equipment in early-region chest
+PASS · 768×1024 · Wastelander: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Wastelander: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Wastelander: cancel preserves owned and pending equipment
+PASS · 768×1024 · Wastelander: confirmed replacement enforces seven slots
+PASS · 768×1024 · Wastelander: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Wastelander: walking exit returns to exploration
+DONE · 768×1024 · Wastelander
+PASS · 1280×800 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Trash Monster: HUD artwork status follows the active presentation
+PASS · 1280×800 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Trash Monster: three power buttons and touch controls fit
+PASS · 1280×800 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Trash Monster: all pause map travel blocked
+PASS · 1280×800 · Trash Monster: touch Health Root heals during battle
+PASS · 1280×800 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 1280×800 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 1280×800 · Trash Monster: manually saved victory is persisted with full arena cleared
+PASS · 1280×800 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 1280×800 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 1280×800 · Trash Monster: no rare equipment in early-region chest
+PASS · 1280×800 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 1280×800 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 1280×800 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Trash Monster: walking exit returns to exploration
+DONE · 1280×800 · Trash Monster
+PASS · 1280×800 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Bushman: HUD artwork status follows the active presentation
+PASS · 1280×800 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Bushman: three power buttons and touch controls fit
+PASS · 1280×800 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Bushman: all pause map travel blocked
+PASS · 1280×800 · Bushman: touch Health Root heals during battle
+PASS · 1280×800 · Bushman: Phase 2 HUD updates immediately
+PASS · 1280×800 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Bushman: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Bushman: clearing arena awards first victory and unlock
+PASS · 1280×800 · Bushman: manually saved victory is persisted with full arena cleared
+PASS · 1280×800 · Bushman: chest previews rewards beside seven owned items
+PASS · 1280×800 · Bushman: chest controls, HP and XP remain usable
+PASS · 1280×800 · Bushman: no rare equipment in early-region chest
+PASS · 1280×800 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Bushman: cancel preserves owned and pending equipment
+PASS · 1280×800 · Bushman: confirmed replacement enforces seven slots
+PASS · 1280×800 · Bushman: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Bushman: walking exit returns to exploration
+DONE · 1280×800 · Bushman
+PASS · 1280×800 · Wastelander: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Wastelander: HUD artwork status follows the active presentation
+PASS · 1280×800 · Wastelander: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Wastelander: three power buttons and touch controls fit
+PASS · 1280×800 · Wastelander: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Wastelander: all pause map travel blocked
+PASS · 1280×800 · Wastelander: touch Health Root heals during battle
+PASS · 1280×800 · Wastelander: Phase 2 HUD updates immediately
+PASS · 1280×800 · Wastelander: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Wastelander: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Wastelander: clearing arena awards first victory and unlock
+PASS · 1280×800 · Wastelander: manually saved victory is persisted with full arena cleared
+PASS · 1280×800 · Wastelander: chest previews rewards beside seven owned items
+PASS · 1280×800 · Wastelander: chest controls, HP and XP remain usable
+PASS · 1280×800 · Wastelander: no rare equipment in early-region chest
+PASS · 1280×800 · Wastelander: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Wastelander: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Wastelander: cancel preserves owned and pending equipment
+PASS · 1280×800 · Wastelander: confirmed replacement enforces seven slots
+PASS · 1280×800 · Wastelander: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Wastelander: walking exit returns to exploration
+DONE · 1280×800 · Wastelander

@@ -1,0 +1,1 @@
+PASS: 7,200 steps match Phase 1 movement, collision, basic attack timing and empty-world events. Phase 4 intentionally changes monster AI, rewards, XP, camp safety and death penalties; these use dedicated tests. All changes stay inside royale/.

@@ -1,0 +1,6 @@
+{
+  "checks": 598,
+  "passed": true,
+  "failures": [],
+  "scope": "All 15 identities, names, movement, hit, defeat, every phase attack and facing through actual renderer"
+}

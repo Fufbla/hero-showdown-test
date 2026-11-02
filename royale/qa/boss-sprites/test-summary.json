@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-31",
+  "base_commit_sha": "838d0ccaa41eb7c2ca616619f8c8c0f806ca1cdf",
+  "baseline": {"passed": 622, "failed": 0, "log": "baseline-tests.txt"},
+  "full_node_suite": {"command": "node --test royale/tests/*.test.mjs", "passed": 637, "failed": 0, "skipped": 0, "log": "automated-tests.txt"},
+  "focused_node_suite": {"passed": 210, "failed": 0, "skipped": 0, "log": "focused-tests.txt", "note": "Subset of the full suite; boss artwork, new sprites, regional and Legendary regression tests"},
+  "browser_renderer": {"checks": 75, "failed": 0, "log": "browser-renderer-tests.json", "scope": "Actual browser image loading, canvas rendering, combat-state isolation and contact timing"},
+  "browser_gameplay": {"assertions": 321, "failed": 0, "log": "browser-gameplay-tests.txt", "bosses": ["Trash Monster", "Bushman", "Wastelander"], "viewports": [[390,844],[844,390],[320,568],[768,1024],[1280,800]], "physical_device": false},
+  "manual_visual_review": {"status": "Contact sheets and browser views inspected; final user visual sign-off pending", "frames_inspected": 96, "browser_screenshots": ["browser-trash-review.jpg", "browser-bushman-review.jpg", "browser-wastelander-review.jpg", "browser-attack-alignment.jpg", "browser-playable-encounter.jpg"], "physical_device": false, "sustained_smoothness_verified": false},
+  "artwork_states": ["idle", "movement", "basic attacks", "special attacks", "hit reaction", "defeat/collapse", "phase effects"],
+  "remaining_redesigned_bosses": 12,
+  "github_upload": "User action pending; no upload performed for this batch"
+}

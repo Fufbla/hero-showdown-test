@@ -1,0 +1,9 @@
+{
+  "baseCommitSha": "24f29cb3fcac896983d4a17b998d0256b42369a9",
+  "branch": "feature/royale-boss-sprites",
+  "verifiedPriorBatchFiles": 106,
+  "allGitBlobHashesMatch": true,
+  "missing": [],
+  "mismatches": [],
+  "previousUploadRepair": "The 63 intact Batch 2 files were moved from royale/royale/ to royale/ in the verified base; no art regenerated."
+}

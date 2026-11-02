@@ -1,0 +1,8 @@
+{
+  "boss": "Trash Monster",
+  "frames": 18,
+  "meanFrameMs": 574.872222222222,
+  "p95FrameMs": 1016.5,
+  "averageFPS": 1.7395169941146347,
+  "scope": "Browser animation preview, not full-game or physical-device performance"
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "venomis",
+    "viewport": [
+      1280,
+      720
+    ],
+    "frames": 600,
+    "meanMs": 0.18507713333333414,
+    "p95Ms": 1.433947000000103,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "venomis",
+    "viewport": [
+      390,
+      844
+    ],
+    "frames": 600,
+    "meanMs": 0.1817526099999956,
+    "p95Ms": 1.5008150000001024,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "atomdust",
+    "viewport": [
+      1280,
+      720
+    ],
+    "frames": 600,
+    "meanMs": 0.19387681166667334,
+    "p95Ms": 1.6633449999999357,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "atomdust",
+    "viewport": [
+      390,
+      844
+    ],
+    "frames": 600,
+    "meanMs": 0.1614840350000016,
+    "p95Ms": 1.4559589999998934,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  }
+]

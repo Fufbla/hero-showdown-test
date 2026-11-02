@@ -1,0 +1,95 @@
+{
+  "sources": {
+    "monsters": "b8b39dbedd92b89a298e13062abbc545453ff163",
+    "bosses": "a5ada842f517e5ab64ad3214eacfb5a6c48806b3",
+    "main_before": "b11a1d8103f10e38d63788496660b99d4a8d9e6e"
+  },
+  "baseline_tests": {
+    "monsters": 752,
+    "bosses": 698
+  },
+  "automated": {
+    "passed": 828,
+    "failed": 0,
+    "skipped": 0
+  },
+  "focused_animation_tests": 238,
+  "browser": {
+    "combined_renderer": 9288,
+    "monsters": 13833,
+    "regional_combat": 725,
+    "legendary_combat": 920,
+    "durable_storage": 10,
+    "save_reward_edges": 17,
+    "total_assertions": 24793
+  },
+  "native_raster": {
+    "combined_renderer": 9288,
+    "monster_frames": 628,
+    "monster_assertions": 6658
+  },
+  "differential_steps": 7200,
+  "physical_devices": "Not tested",
+  "performance": [
+    {
+      "creature": "monster-bottle",
+      "scope": "Cloud browser; no physical-device claim",
+      "viewport": [
+        1300,
+        720
+      ],
+      "assetLoadMs": 55.79999999701977,
+      "seconds": 12.364,
+      "samples": 16,
+      "averageFPS": 1.2940795858945324,
+      "onePercentLowFPS": 0.9836710603974116,
+      "meanStepAndDrawMs": 6.188235294292955,
+      "p95StepAndDrawMs": 76.09999999403954,
+      "simulationSeconds": 1.35,
+      "maxEnemies": 24,
+      "maxEffects": 3,
+      "errors": [],
+      "bossReady": null
+    },
+    {
+      "creature": "regional-4",
+      "scope": "Cloud browser; no physical-device claim",
+      "viewport": [
+        390,
+        844
+      ],
+      "assetLoadMs": 62,
+      "seconds": 12.264,
+      "samples": 16,
+      "averageFPS": 1.304631441617743,
+      "onePercentLowFPS": 0.9837678307919331,
+      "meanStepAndDrawMs": 1.647058823967681,
+      "p95StepAndDrawMs": 12.600000001490116,
+      "simulationSeconds": 1.25,
+      "maxEnemies": 1,
+      "maxEffects": 3,
+      "errors": [],
+      "bossReady": true
+    },
+    {
+      "creature": "legendary-lightning",
+      "scope": "Cloud browser; no physical-device claim",
+      "viewport": [
+        390,
+        844
+      ],
+      "assetLoadMs": 57.70000000298023,
+      "seconds": 12.313899999999995,
+      "samples": 79,
+      "averageFPS": 6.415514175037968,
+      "onePercentLowFPS": 0.9837678307919331,
+      "meanStepAndDrawMs": 1.2899999998509883,
+      "p95StepAndDrawMs": 3.7999999970197678,
+      "simulationSeconds": 2.5666666666666664,
+      "maxEnemies": 1,
+      "maxEffects": 3,
+      "errors": [],
+      "bossReady": true
+    }
+  ]
+}

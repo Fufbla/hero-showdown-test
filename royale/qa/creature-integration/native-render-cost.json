@@ -1,0 +1,221 @@
+{
+  "scope": "Native creature-only draw cost, not browser FPS",
+  "metrics": [
+    {
+      "creature": "monster-apocalypse",
+      "draws": 120,
+      "meanMs": 1.2269008166666329,
+      "p95Ms": 1.9420790000003763
+    },
+    {
+      "creature": "monster-bark",
+      "draws": 120,
+      "meanMs": 1.223985249999911,
+      "p95Ms": 1.6575489999995625
+    },
+    {
+      "creature": "monster-beetle",
+      "draws": 120,
+      "meanMs": 0.24521325833332716,
+      "p95Ms": 0.4125789999998233
+    },
+    {
+      "creature": "monster-bottle",
+      "draws": 120,
+      "meanMs": 0.25035809166668815,
+      "p95Ms": 0.45472199999858276
+    },
+    {
+      "creature": "monster-crawler",
+      "draws": 120,
+      "meanMs": 0.2405659250000402,
+      "p95Ms": 0.3485450000007404
+    },
+    {
+      "creature": "monster-drone",
+      "draws": 120,
+      "meanMs": 0.24055026666668103,
+      "p95Ms": 0.3919289999994362
+    },
+    {
+      "creature": "monster-guardian",
+      "draws": 120,
+      "meanMs": 0.23622969166673707,
+      "p95Ms": 0.350336999999854
+    },
+    {
+      "creature": "monster-mushroom",
+      "draws": 120,
+      "meanMs": 0.2257460499999676,
+      "p95Ms": 0.3281750000005559
+    },
+    {
+      "creature": "monster-phantom",
+      "draws": 120,
+      "meanMs": 0.25334747499990345,
+      "p95Ms": 0.3854589999991731
+    },
+    {
+      "creature": "monster-scorpion",
+      "draws": 120,
+      "meanMs": 0.24945035000008223,
+      "p95Ms": 0.46212300000115647
+    },
+    {
+      "creature": "monster-scrap",
+      "draws": 120,
+      "meanMs": 0.2758550833333326,
+      "p95Ms": 0.447652000000744
+    },
+    {
+      "creature": "monster-sentinel",
+      "draws": 120,
+      "meanMs": 0.250425233333317,
+      "p95Ms": 0.4018840000007913
+    },
+    {
+      "creature": "monster-slime",
+      "draws": 120,
+      "meanMs": 0.25675925833317403,
+      "p95Ms": 0.44286400000055437
+    },
+    {
+      "creature": "monster-sludge",
+      "draws": 120,
+      "meanMs": 0.2497554333332573,
+      "p95Ms": 0.40912399999979243
+    },
+    {
+      "creature": "monster-spitter",
+      "draws": 120,
+      "meanMs": 0.26837350000005245,
+      "p95Ms": 0.5465870000007271
+    },
+    {
+      "creature": "monster-sprout",
+      "draws": 120,
+      "meanMs": 0.23641794166663507,
+      "p95Ms": 0.34084400000028836
+    },
+    {
+      "creature": "monster-stalker",
+      "draws": 120,
+      "meanMs": 0.22844504166675203,
+      "p95Ms": 0.3303780000005645
+    },
+    {
+      "creature": "monster-thornBeast",
+      "draws": 120,
+      "meanMs": 0.24171606666679205,
+      "p95Ms": 0.38775300000088464
+    },
+    {
+      "creature": "monster-titan",
+      "draws": 120,
+      "meanMs": 0.26739364166658863,
+      "p95Ms": 0.4923770000004879
+    },
+    {
+      "creature": "monster-venomCrawler",
+      "draws": 120,
+      "meanMs": 0.2700737500000438,
+      "p95Ms": 0.5210690000003524
+    },
+    {
+      "creature": "monster-wisp",
+      "draws": 120,
+      "meanMs": 0.2715821666666064,
+      "p95Ms": 0.46418500000072527
+    },
+    {
+      "creature": "regional-1",
+      "draws": 120,
+      "meanMs": 0.050694674999992154,
+      "p95Ms": 0.12287099999957718
+    },
+    {
+      "creature": "regional-2",
+      "draws": 120,
+      "meanMs": 0.06080879166655298,
+      "p95Ms": 0.14084799999909592
+    },
+    {
+      "creature": "regional-3",
+      "draws": 120,
+      "meanMs": 0.04566315833344561,
+      "p95Ms": 0.08874099999957252
+    },
+    {
+      "creature": "regional-4",
+      "draws": 120,
+      "meanMs": 127.59744037500015,
+      "p95Ms": 321.421475000001
+    },
+    {
+      "creature": "regional-5",
+      "draws": 120,
+      "meanMs": 0.045917416666543434,
+      "p95Ms": 0.13229599999976926
+    },
+    {
+      "creature": "regional-6",
+      "draws": 120,
+      "meanMs": 0.051512041666622585,
+      "p95Ms": 0.11504000000059023
+    },
+    {
+      "creature": "regional-7",
+      "draws": 120,
+      "meanMs": 0.0505741500002235,
+      "p95Ms": 0.09011299999838229
+    },
+    {
+      "creature": "legendary-lightning",
+      "draws": 120,
+      "meanMs": 0.051760783333338625,
+      "p95Ms": 0.13359800000034738
+    },
+    {
+      "creature": "legendary-air",
+      "draws": 120,
+      "meanMs": 0.049933508333500264,
+      "p95Ms": 0.0835430000006454
+    },
+    {
+      "creature": "legendary-styrodog",
+      "draws": 120,
+      "meanMs": 0.05128668333309179,
+      "p95Ms": 0.13362699999925098
+    },
+    {
+      "creature": "legendary-sonic",
+      "draws": 120,
+      "meanMs": 0.04614722499982236,
+      "p95Ms": 0.0773250000020198
+    },
+    {
+      "creature": "legendary-styro",
+      "draws": 120,
+      "meanMs": 0.04384478333319445,
+      "p95Ms": 0.11114499999894178
+    },
+    {
+      "creature": "legendary-wastelander",
+      "draws": 120,
+      "meanMs": 0.06269304166671645,
+      "p95Ms": 0.1399070000006759
+    },
+    {
+      "creature": "legendary-venomis",
+      "draws": 120,
+      "meanMs": 0.04626550000008744,
+      "p95Ms": 0.08007799999904819
+    },
+    {
+      "creature": "legendary-atomdust",
+      "draws": 120,
+      "meanMs": 0.048648066666616314,
+      "p95Ms": 0.07725399999981164
+    }
+  ]
+}

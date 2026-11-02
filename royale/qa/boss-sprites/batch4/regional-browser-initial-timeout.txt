@@ -1,0 +1,110 @@
+PASS · Trash Monster: artwork loads, renders and labels temporary art correctly
+PASS · Bushman: artwork loads, renders and labels temporary art correctly
+PASS · Wastelander: artwork loads, renders and labels temporary art correctly
+PASS · Giant Scorpion: artwork loads, renders and labels temporary art correctly
+PASS · Venomis: artwork loads, renders and labels temporary art correctly
+PASS · AtomDust: artwork loads, renders and labels temporary art correctly
+PASS · Ultimate Pollution Boss: artwork loads, renders and labels temporary art correctly
+PASS · all 7 bosses render distinct silhouettes
+PASS · 390×844 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Trash Monster: HUD artwork status follows the active presentation
+PASS · 390×844 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Trash Monster: three power buttons and touch controls fit
+PASS · 390×844 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Trash Monster: all pause map travel blocked
+PASS · 390×844 · Trash Monster: touch Health Root heals during battle
+PASS · 390×844 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 390×844 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 390×844 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 390×844 · Trash Monster: manually saved victory is persisted with full arena cleared
+PASS · 390×844 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 390×844 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 390×844 · Trash Monster: no rare equipment in early-region chest
+PASS · failed chest persistence rolls back coins, Roots and chest state
+PASS · failed chest persistence preserves all owned items and allows retry
+PASS · 390×844 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 390×844 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 390×844 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Trash Monster: walking exit returns to exploration
+DONE · 390×844 · Trash Monster
+PASS · 390×844 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Bushman: HUD artwork status follows the active presentation
+PASS · 390×844 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Bushman: three power buttons and touch controls fit
+PASS · 390×844 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Bushman: all pause map travel blocked
+PASS · 390×844 · Bushman: touch Health Root heals during battle
+PASS · 390×844 · Bushman: Phase 2 HUD updates immediately
+PASS · 390×844 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Bushman: boss down with helpers does not unlock or reward
+PASS · 390×844 · Bushman: clearing arena awards first victory and unlock
+PASS · 390×844 · Bushman: manually saved victory is persisted with full arena cleared
+PASS · 390×844 · Bushman: chest previews rewards beside seven owned items
+PASS · 390×844 · Bushman: chest controls, HP and XP remain usable
+PASS · 390×844 · Bushman: no rare equipment in early-region chest
+PASS · 390×844 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Bushman: cancel preserves owned and pending equipment
+PASS · 390×844 · Bushman: confirmed replacement enforces seven slots
+labels temporary art correctly
+PASS · Wastelander: artwork loads, renders and labels temporary art correctly
+PASS · Giant Scorpion: artwork loads, renders and labels temporary art correctly
+PASS · Venomis: artwork loads, renders and labels temporary art correctly
+PASS · AtomDust: artwork loads, renders and labels temporary art correctly
+PASS · Ultimate Pollution Boss: artwork loads, renders and labels temporary art correctly
+PASS · all 7 bosses render distinct silhouettes
+PASS · 390×844 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Trash Monster: HUD artwork status follows the active presentation
+PASS · 390×844 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Trash Monster: three power buttons and touch controls fit
+PASS · 390×844 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Trash Monster: all pause map travel blocked
+PASS · 390×844 · Trash Monster: touch Health Root heals during battle
+PASS · 390×844 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 390×844 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 390×844 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 390×844 · Trash Monster: manually saved victory is persisted with full arena cleared
+PASS · 390×844 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 390×844 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 390×844 · Trash Monster: no rare equipment in early-region chest
+PASS · failed chest persistence rolls back coins, Roots and chest state
+PASS · failed chest persistence preserves all owned items and allows retry
+PASS · 390×844 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 390×844 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 390×844 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Trash Monster: walking exit returns to exploration
+DONE · 390×844 · Trash Monster
+PASS · 390×844 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Bushman: HUD artwork status follows the active presentation
+PASS · 390×844 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Bushman: three power buttons and touch controls fit
+PASS · 390×844 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Bushman: all pause map travel blocked
+PASS · 390×844 · Bushman: touch Health Root heals during battle
+PASS · 390×844 · Bushman: Phase 2 HUD updates immediately
+PASS · 390×844 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Bushman: boss down with helpers does not unlock or reward
+PASS · 390×844 · Bushman: clearing arena awards first victory and unlock
+PASS · 390×844 · Bushman: manually saved victory is persisted with full arena cleared
+PASS · 390×844 · Bushman: chest previews rewards beside seven owned items
+PASS · 390×844 · Bushman: chest controls, HP and XP remain usable
+PASS · 390×844 · Bushman: no rare equipment in early-region chest
+PASS · 390×844 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Bushman: cancel preserves owned and pending equipment
+PASS · 390×844 · Bushman: confirmed replacement enforces seven slots
+
+STOPPED · Browser UI timed out
+FPS 2 · draw 0.02ms · roster · t 0.00
+x 160.0 y 600.0 · idle
+vx 0.0 vy 0.0 · jumps 0
+monsters 24 · kills 0
+region 1 · roots 0 · gear 0/7 · clock Permanent day
+powers ,, · points 0 · combat false
+viewport 390×844 · save ready

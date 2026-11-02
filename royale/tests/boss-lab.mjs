@@ -10,6 +10,9 @@ async function load(){
   const check=()=>{const b=frame.contentDocument.querySelector('[data-action="continue"]');if(b){b.click();frame.contentDocument.getElementById('diagnostics').style.display='none';frame.focus();}else setTimeout(check,40);};check();
 }
 $('reset-boss').onclick=load;
+// Test-page viewport controls only; the game receives its normal resize event.
+$('practice-size').onchange=()=>{const size=$('practice-size').value;if(size==='full'){frame.style.width='';frame.style.height='';frame.style.minHeight='';}else{const [w,h]=size.split('x');frame.style.width=w+'px';frame.style.height=h+'px';frame.style.minHeight='0';}};
+const initial=Number(new URLSearchParams(location.search).get('region'));if(BOSSES[initial])$('practice-boss').value=String(initial);
 for(const button of document.querySelectorAll('[data-fixture]'))button.onclick=async()=>{
   const state=await fixtureCommand(frame,button.dataset.fixture,Number(button.dataset.value));
   $('fixture-result').textContent=`Phase ${state.boss?.phase||'—'} · Boss HP ${Math.ceil(state.boss?.hp||0)} · ${state.helpers} helpers · ${state.waves} waves · ${state.coins} coins · ${state.items}/7 equipment · ${state.chest||'no chest'}${button.dataset.fixture==='full-inventory'&&state.active?' · Clear the arena before filling inventory.':''}`;

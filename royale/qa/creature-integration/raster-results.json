@@ -1,0 +1,190 @@
+{
+  "passed": true,
+  "creatures": 36,
+  "checks": 9288,
+  "details": [
+    {
+      "key": "monster-apocalypse",
+      "name": "Apocalypse Mutant",
+      "draws": 30
+    },
+    {
+      "key": "monster-bark",
+      "name": "Bark Crawler",
+      "draws": 30
+    },
+    {
+      "key": "monster-beetle",
+      "name": "Acid Beetle",
+      "draws": 30
+    },
+    {
+      "key": "monster-bottle",
+      "name": "Bottle Critter",
+      "draws": 30
+    },
+    {
+      "key": "monster-crawler",
+      "name": "Sand Crawler",
+      "draws": 30
+    },
+    {
+      "key": "monster-drone",
+      "name": "Rust Drone",
+      "draws": 30
+    },
+    {
+      "key": "monster-guardian",
+      "name": "Corrupted Guardian",
+      "draws": 30
+    },
+    {
+      "key": "monster-mushroom",
+      "name": "Toxic Mushroom",
+      "draws": 30
+    },
+    {
+      "key": "monster-phantom",
+      "name": "Energy Phantom",
+      "draws": 30
+    },
+    {
+      "key": "monster-scorpion",
+      "name": "Cave Scorpion",
+      "draws": 30
+    },
+    {
+      "key": "monster-scrap",
+      "name": "Scrap Crawler",
+      "draws": 30
+    },
+    {
+      "key": "monster-sentinel",
+      "name": "Dark Sentinel",
+      "draws": 30
+    },
+    {
+      "key": "monster-slime",
+      "name": "Trash Slime",
+      "draws": 30
+    },
+    {
+      "key": "monster-sludge",
+      "name": "Sludge Beast",
+      "draws": 30
+    },
+    {
+      "key": "monster-spitter",
+      "name": "Poison Spitter",
+      "draws": 30
+    },
+    {
+      "key": "monster-sprout",
+      "name": "Thorn Sprout",
+      "draws": 30
+    },
+    {
+      "key": "monster-stalker",
+      "name": "Mutant Stalker",
+      "draws": 30
+    },
+    {
+      "key": "monster-thornBeast",
+      "name": "Thorn Beast",
+      "draws": 30
+    },
+    {
+      "key": "monster-titan",
+      "name": "Pollution Titan",
+      "draws": 30
+    },
+    {
+      "key": "monster-venomCrawler",
+      "name": "Venom Crawler",
+      "draws": 30
+    },
+    {
+      "key": "monster-wisp",
+      "name": "Shadow Wisp",
+      "draws": 30
+    },
+    {
+      "key": "regional-1",
+      "name": "Trash Monster",
+      "draws": 126
+    },
+    {
+      "key": "regional-2",
+      "name": "Bushman",
+      "draws": 162
+    },
+    {
+      "key": "regional-3",
+      "name": "Wastelander",
+      "draws": 162
+    },
+    {
+      "key": "regional-4",
+      "name": "Giant Scorpion",
+      "draws": 144
+    },
+    {
+      "key": "regional-5",
+      "name": "Venomis",
+      "draws": 162
+    },
+    {
+      "key": "regional-6",
+      "name": "AtomDust",
+      "draws": 144
+    },
+    {
+      "key": "regional-7",
+      "name": "Ultimate Pollution Boss",
+      "draws": 162
+    },
+    {
+      "key": "legendary-lightning",
+      "name": "Lightning Spree",
+      "draws": 162
+    },
+    {
+      "key": "legendary-air",
+      "name": "Air Pollution Monster",
+      "draws": 162
+    },
+    {
+      "key": "legendary-styrodog",
+      "name": "Styrodog",
+      "draws": 162
+    },
+    {
+      "key": "legendary-sonic",
+      "name": "Sonic Tusk",
+      "draws": 180
+    },
+    {
+      "key": "legendary-styro",
+      "name": "Dr. Styro",
+      "draws": 180
+    },
+    {
+      "key": "legendary-wastelander",
+      "name": "Wastelander",
+      "draws": 180
+    },
+    {
+      "key": "legendary-venomis",
+      "name": "Venomis",
+      "draws": 198
+    },
+    {
+      "key": "legendary-atomdust",
+      "name": "AtomDust",
+      "draws": 180
+    }
+  ],
+  "scope": "Actual game renderers: transparent pixels, no clipping, immutable combat state, all phase attacks, two facings and three animation samples",
+  "renderer": "@napi-rs/canvas",
+  "physicalDevices": "Not tested"
+}

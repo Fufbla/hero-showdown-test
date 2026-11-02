@@ -1,0 +1,38 @@
+✔ lightning: distinct transparent aligned poses and full collapse (631.329418ms)
+✔ lightning: all phase attack contacts follow combat timing (1.454967ms)
+✔ lightning: immutable simulation and paused playback (2.383288ms)
+✔ lightning: hit, walking, death and helper routing (0.574347ms)
+✔ air: distinct transparent aligned poses and full collapse (477.882042ms)
+✔ air: all phase attack contacts follow combat timing (0.309146ms)
+✔ air: immutable simulation and paused playback (1.601283ms)
+✔ air: hit, walking, death and helper routing (0.204952ms)
+✔ styrodog: distinct transparent aligned poses and full collapse (564.516618ms)
+✔ styrodog: all phase attack contacts follow combat timing (0.518806ms)
+✔ styrodog: immutable simulation and paused playback (4.037869ms)
+✔ styrodog: hit, walking, death and helper routing (0.241276ms)
+✔ Styrodog impact starts at its existing 98% landing tick (0.266923ms)
+✔ Legendary atlases validate dimensions and bound decoded cache (0.589921ms)
+✔ Batch 4 preserves all tracked files except presentation router and documentation (17.159578ms)
+✔ sonic: distinct transparent aligned poses and full collapse (699.245762ms)
+✔ sonic: all phase attack contacts follow combat timing (0.810727ms)
+✔ sonic: immutable simulation and paused playback (2.533899ms)
+✔ sonic: hit, walking, death and helper routing (0.457836ms)
+✔ styro: distinct transparent aligned poses and full collapse (610.170373ms)
+✔ styro: all phase attack contacts follow combat timing (0.820771ms)
+✔ styro: immutable simulation and paused playback (2.06668ms)
+✔ styro: hit, walking, death and helper routing (0.20293ms)
+✔ wastelander: distinct transparent aligned poses and full collapse (527.763619ms)
+✔ wastelander: all phase attack contacts follow combat timing (0.506497ms)
+✔ wastelander: immutable simulation and paused playback (1.643455ms)
+✔ wastelander: hit, walking, death and helper routing (0.56203ms)
+✔ Legendary atlases validate dimensions and bound decoded cache (0.76593ms)
+✔ Batch 5 preserves all tracked files except presentation router and documentation (24.846107ms)
+✔ regional Wastelander and Legendary Wastelander keep separate sprite identities (0.822594ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2068.662558

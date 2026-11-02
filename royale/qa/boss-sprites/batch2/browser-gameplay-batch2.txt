@@ -1,0 +1,321 @@
+COMPLETE · 304 Phase 5 browser assertions passed. 3 bosses × five viewports. Synthetic browser checks, not physical devices. Full log below.
+
+PASS · Giant Scorpion: artwork loads, renders and labels temporary art correctly
+PASS · Venomis: artwork loads, renders and labels temporary art correctly
+PASS · AtomDust: artwork loads, renders and labels temporary art correctly
+PASS · all 3 bosses render distinct silhouettes
+PASS · 390×844 · Giant Scorpion: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Giant Scorpion: HUD artwork status follows the active presentation
+PASS · 390×844 · Giant Scorpion: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Giant Scorpion: three power buttons and touch controls fit
+PASS · 390×844 · Giant Scorpion: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Giant Scorpion: all pause map travel blocked
+PASS · 390×844 · Giant Scorpion: touch Health Root heals during battle
+PASS · 390×844 · Giant Scorpion: Phase 2 HUD updates immediately
+PASS · 390×844 · Giant Scorpion: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Giant Scorpion: boss down with helpers does not unlock or reward
+PASS · 390×844 · Giant Scorpion: clearing arena awards first victory and unlock
+PASS · 390×844 · Giant Scorpion: manually saved victory is persisted with full arena cleared
+PASS · 390×844 · Giant Scorpion: chest previews rewards beside seven owned items
+PASS · 390×844 · Giant Scorpion: chest controls, HP and XP remain usable
+PASS · 390×844 · Giant Scorpion: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Giant Scorpion: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Giant Scorpion: cancel preserves owned and pending equipment
+PASS · 390×844 · Giant Scorpion: confirmed replacement enforces seven slots
+PASS · 390×844 · Giant Scorpion: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Giant Scorpion: walking exit returns to exploration
+DONE · 390×844 · Giant Scorpion
+PASS · 390×844 · Venomis: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Venomis: HUD artwork status follows the active presentation
+PASS · 390×844 · Venomis: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Venomis: three power buttons and touch controls fit
+PASS · 390×844 · Venomis: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Venomis: all pause map travel blocked
+PASS · 390×844 · Venomis: touch Health Root heals during battle
+PASS · 390×844 · Venomis: Phase 2 HUD updates immediately
+PASS · 390×844 · Venomis: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Venomis: boss down with helpers does not unlock or reward
+PASS · 390×844 · Venomis: clearing arena awards first victory and unlock
+PASS · 390×844 · Venomis: manually saved victory is persisted with full arena cleared
+PASS · 390×844 · Venomis: chest previews rewards beside seven owned items
+PASS · 390×844 · Venomis: chest controls, HP and XP remain usable
+PASS · 390×844 · Venomis: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Venomis: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Venomis: cancel preserves owned and pending equipment
+PASS · 390×844 · Venomis: confirmed replacement enforces seven slots
+PASS · 390×844 · Venomis: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Venomis: walking exit returns to exploration
+DONE · 390×844 · Venomis
+PASS · 390×844 · AtomDust: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · AtomDust: HUD artwork status follows the active presentation
+PASS · 390×844 · AtomDust: boss bar, HP and XP fit without overlap
+PASS · 390×844 · AtomDust: three power buttons and touch controls fit
+PASS · 390×844 · AtomDust: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · AtomDust: all pause map travel blocked
+PASS · 390×844 · AtomDust: touch Health Root heals during battle
+PASS · 390×844 · AtomDust: Phase 2 HUD updates immediately
+PASS · 390×844 · AtomDust: Phase 3 wave has exactly three helpers
+PASS · 390×844 · AtomDust: boss down with helpers does not unlock or reward
+PASS · 390×844 · AtomDust: clearing arena awards first victory and unlock
+PASS · 390×844 · AtomDust: manually saved victory is persisted with full arena cleared
+PASS · 390×844 · AtomDust: chest previews rewards beside seven owned items
+PASS · 390×844 · AtomDust: chest controls, HP and XP remain usable
+PASS · 390×844 · AtomDust: equipment waits for choice and never exceeds seven
+PASS · 390×844 · AtomDust: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · AtomDust: cancel preserves owned and pending equipment
+PASS · 390×844 · AtomDust: confirmed replacement enforces seven slots
+PASS · 390×844 · AtomDust: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · AtomDust: walking exit returns to exploration
+DONE · 390×844 · AtomDust
+PASS · 844×390 · Giant Scorpion: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Giant Scorpion: HUD artwork status follows the active presentation
+PASS · 844×390 · Giant Scorpion: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Giant Scorpion: three power buttons and touch controls fit
+PASS · 844×390 · Giant Scorpion: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Giant Scorpion: all pause map travel blocked
+PASS · 844×390 · Giant Scorpion: touch Health Root heals during battle
+PASS · 844×390 · Giant Scorpion: Phase 2 HUD updates immediately
+PASS · 844×390 · Giant Scorpion: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Giant Scorpion: boss down with helpers does not unlock or reward
+PASS · 844×390 · Giant Scorpion: clearing arena awards first victory and unlock
+PASS · 844×390 · Giant Scorpion: manually saved victory is persisted with full arena cleared
+PASS · 844×390 · Giant Scorpion: chest previews rewards beside seven owned items
+PASS · 844×390 · Giant Scorpion: chest controls, HP and XP remain usable
+PASS · 844×390 · Giant Scorpion: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Giant Scorpion: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Giant Scorpion: cancel preserves owned and pending equipment
+PASS · 844×390 · Giant Scorpion: confirmed replacement enforces seven slots
+PASS · 844×390 · Giant Scorpion: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Giant Scorpion: walking exit returns to exploration
+DONE · 844×390 · Giant Scorpion
+PASS · 844×390 · Venomis: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Venomis: HUD artwork status follows the active presentation
+PASS · 844×390 · Venomis: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Venomis: three power buttons and touch controls fit
+PASS · 844×390 · Venomis: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Venomis: all pause map travel blocked
+PASS · 844×390 · Venomis: touch Health Root heals during battle
+PASS · 844×390 · Venomis: Phase 2 HUD updates immediately
+PASS · 844×390 · Venomis: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Venomis: boss down with helpers does not unlock or reward
+PASS · 844×390 · Venomis: clearing arena awards first victory and unlock
+PASS · 844×390 · Venomis: manually saved victory is persisted with full arena cleared
+PASS · 844×390 · Venomis: chest previews rewards beside seven owned items
+PASS · 844×390 · Venomis: chest controls, HP and XP remain usable
+PASS · 844×390 · Venomis: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Venomis: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Venomis: cancel preserves owned and pending equipment
+PASS · 844×390 · Venomis: confirmed replacement enforces seven slots
+PASS · 844×390 · Venomis: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Venomis: walking exit returns to exploration
+DONE · 844×390 · Venomis
+PASS · 844×390 · AtomDust: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · AtomDust: HUD artwork status follows the active presentation
+PASS · 844×390 · AtomDust: boss bar, HP and XP fit without overlap
+PASS · 844×390 · AtomDust: three power buttons and touch controls fit
+PASS · 844×390 · AtomDust: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · AtomDust: all pause map travel blocked
+PASS · 844×390 · AtomDust: touch Health Root heals during battle
+PASS · 844×390 · AtomDust: Phase 2 HUD updates immediately
+PASS · 844×390 · AtomDust: Phase 3 wave has exactly three helpers
+PASS · 844×390 · AtomDust: boss down with helpers does not unlock or reward
+PASS · 844×390 · AtomDust: clearing arena awards first victory and unlock
+PASS · 844×390 · AtomDust: manually saved victory is persisted with full arena cleared
+PASS · 844×390 · AtomDust: chest previews rewards beside seven owned items
+PASS · 844×390 · AtomDust: chest controls, HP and XP remain usable
+PASS · 844×390 · AtomDust: equipment waits for choice and never exceeds seven
+PASS · 844×390 · AtomDust: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · AtomDust: cancel preserves owned and pending equipment
+PASS · 844×390 · AtomDust: confirmed replacement enforces seven slots
+PASS · 844×390 · AtomDust: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · AtomDust: walking exit returns to exploration
+DONE · 844×390 · AtomDust
+PASS · 320×568 · Giant Scorpion: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Giant Scorpion: HUD artwork status follows the active presentation
+PASS · 320×568 · Giant Scorpion: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Giant Scorpion: three power buttons and touch controls fit
+PASS · 320×568 · Giant Scorpion: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Giant Scorpion: all pause map travel blocked
+PASS · 320×568 · Giant Scorpion: touch Health Root heals during battle
+PASS · 320×568 · Giant Scorpion: Phase 2 HUD updates immediately
+PASS · 320×568 · Giant Scorpion: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Giant Scorpion: boss down with helpers does not unlock or reward
+PASS · 320×568 · Giant Scorpion: clearing arena awards first victory and unlock
+PASS · 320×568 · Giant Scorpion: manually saved victory is persisted with full arena cleared
+PASS · 320×568 · Giant Scorpion: chest previews rewards beside seven owned items
+PASS · 320×568 · Giant Scorpion: chest controls, HP and XP remain usable
+PASS · 320×568 · Giant Scorpion: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Giant Scorpion: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Giant Scorpion: cancel preserves owned and pending equipment
+PASS · 320×568 · Giant Scorpion: confirmed replacement enforces seven slots
+PASS · 320×568 · Giant Scorpion: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Giant Scorpion: walking exit returns to exploration
+DONE · 320×568 · Giant Scorpion
+PASS · 320×568 · Venomis: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Venomis: HUD artwork status follows the active presentation
+PASS · 320×568 · Venomis: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Venomis: three power buttons and touch controls fit
+PASS · 320×568 · Venomis: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Venomis: all pause map travel blocked
+PASS · 320×568 · Venomis: touch Health Root heals during battle
+PASS · 320×568 · Venomis: Phase 2 HUD updates immediately
+PASS · 320×568 · Venomis: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Venomis: boss down with helpers does not unlock or reward
+PASS · 320×568 · Venomis: clearing arena awards first victory and unlock
+PASS · 320×568 · Venomis: manually saved victory is persisted with full arena cleared
+PASS · 320×568 · Venomis: chest previews rewards beside seven owned items
+PASS · 320×568 · Venomis: chest controls, HP and XP remain usable
+PASS · 320×568 · Venomis: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Venomis: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Venomis: cancel preserves owned and pending equipment
+PASS · 320×568 · Venomis: confirmed replacement enforces seven slots
+PASS · 320×568 · Venomis: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Venomis: walking exit returns to exploration
+DONE · 320×568 · Venomis
+PASS · 320×568 · AtomDust: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · AtomDust: HUD artwork status follows the active presentation
+PASS · 320×568 · AtomDust: boss bar, HP and XP fit without overlap
+PASS · 320×568 · AtomDust: three power buttons and touch controls fit
+PASS · 320×568 · AtomDust: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · AtomDust: all pause map travel blocked
+PASS · 320×568 · AtomDust: touch Health Root heals during battle
+PASS · 320×568 · AtomDust: Phase 2 HUD updates immediately
+PASS · 320×568 · AtomDust: Phase 3 wave has exactly three helpers
+PASS · 320×568 · AtomDust: boss down with helpers does not unlock or reward
+PASS · 320×568 · AtomDust: clearing arena awards first victory and unlock
+PASS · 320×568 · AtomDust: manually saved victory is persisted with full arena cleared
+PASS · 320×568 · AtomDust: chest previews rewards beside seven owned items
+PASS · 320×568 · AtomDust: chest controls, HP and XP remain usable
+PASS · 320×568 · AtomDust: equipment waits for choice and never exceeds seven
+PASS · 320×568 · AtomDust: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · AtomDust: cancel preserves owned and pending equipment
+PASS · 320×568 · AtomDust: confirmed replacement enforces seven slots
+PASS · 320×568 · AtomDust: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · AtomDust: walking exit returns to exploration
+DONE · 320×568 · AtomDust
+PASS · 768×1024 · Giant Scorpion: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Giant Scorpion: HUD artwork status follows the active presentation
+PASS · 768×1024 · Giant Scorpion: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Giant Scorpion: three power buttons and touch controls fit
+PASS · 768×1024 · Giant Scorpion: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Giant Scorpion: all pause map travel blocked
+PASS · 768×1024 · Giant Scorpion: touch Health Root heals during battle
+PASS · 768×1024 · Giant Scorpion: Phase 2 HUD updates immediately
+PASS · 768×1024 · Giant Scorpion: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Giant Scorpion: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Giant Scorpion: clearing arena awards first victory and unlock
+PASS · 768×1024 · Giant Scorpion: manually saved victory is persisted with full arena cleared
+PASS · 768×1024 · Giant Scorpion: chest previews rewards beside seven owned items
+PASS · 768×1024 · Giant Scorpion: chest controls, HP and XP remain usable
+PASS · 768×1024 · Giant Scorpion: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Giant Scorpion: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Giant Scorpion: cancel preserves owned and pending equipment
+PASS · 768×1024 · Giant Scorpion: confirmed replacement enforces seven slots
+PASS · 768×1024 · Giant Scorpion: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Giant Scorpion: walking exit returns to exploration
+DONE · 768×1024 · Giant Scorpion
+PASS · 768×1024 · Venomis: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Venomis: HUD artwork status follows the active presentation
+PASS · 768×1024 · Venomis: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Venomis: three power buttons and touch controls fit
+PASS · 768×1024 · Venomis: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Venomis: all pause map travel blocked
+PASS · 768×1024 · Venomis: touch Health Root heals during battle
+PASS · 768×1024 · Venomis: Phase 2 HUD updates immediately
+PASS · 768×1024 · Venomis: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Venomis: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Venomis: clearing arena awards first victory and unlock
+PASS · 768×1024 · Venomis: manually saved victory is persisted with full arena cleared
+PASS · 768×1024 · Venomis: chest previews rewards beside seven owned items
+PASS · 768×1024 · Venomis: chest controls, HP and XP remain usable
+PASS · 768×1024 · Venomis: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Venomis: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Venomis: cancel preserves owned and pending equipment
+PASS · 768×1024 · Venomis: confirmed replacement enforces seven slots
+PASS · 768×1024 · Venomis: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Venomis: walking exit returns to exploration
+DONE · 768×1024 · Venomis
+PASS · 768×1024 · AtomDust: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · AtomDust: HUD artwork status follows the active presentation
+PASS · 768×1024 · AtomDust: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · AtomDust: three power buttons and touch controls fit
+PASS · 768×1024 · AtomDust: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · AtomDust: all pause map travel blocked
+PASS · 768×1024 · AtomDust: touch Health Root heals during battle
+PASS · 768×1024 · AtomDust: Phase 2 HUD updates immediately
+PASS · 768×1024 · AtomDust: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · AtomDust: boss down with helpers does not unlock or reward
+PASS · 768×1024 · AtomDust: clearing arena awards first victory and unlock
+PASS · 768×1024 · AtomDust: manually saved victory is persisted with full arena cleared
+PASS · 768×1024 · AtomDust: chest previews rewards beside seven owned items
+PASS · 768×1024 · AtomDust: chest controls, HP and XP remain usable
+PASS · 768×1024 · AtomDust: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · AtomDust: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · AtomDust: cancel preserves owned and pending equipment
+PASS · 768×1024 · AtomDust: confirmed replacement enforces seven slots
+PASS · 768×1024 · AtomDust: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · AtomDust: walking exit returns to exploration
+DONE · 768×1024 · AtomDust
+PASS · 1280×800 · Giant Scorpion: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Giant Scorpion: HUD artwork status follows the active presentation
+PASS · 1280×800 · Giant Scorpion: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Giant Scorpion: three power buttons and touch controls fit
+PASS · 1280×800 · Giant Scorpion: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Giant Scorpion: all pause map travel blocked
+PASS · 1280×800 · Giant Scorpion: touch Health Root heals during battle
+PASS · 1280×800 · Giant Scorpion: Phase 2 HUD updates immediately
+PASS · 1280×800 · Giant Scorpion: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Giant Scorpion: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Giant Scorpion: clearing arena awards first victory and unlock
+PASS · 1280×800 · Giant Scorpion: manually saved victory is persisted with full arena cleared
+PASS · 1280×800 · Giant Scorpion: chest previews rewards beside seven owned items
+PASS · 1280×800 · Giant Scorpion: chest controls, HP and XP remain usable
+PASS · 1280×800 · Giant Scorpion: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Giant Scorpion: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Giant Scorpion: cancel preserves owned and pending equipment
+PASS · 1280×800 · Giant Scorpion: confirmed replacement enforces seven slots
+PASS · 1280×800 · Giant Scorpion: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Giant Scorpion: walking exit returns to exploration
+DONE · 1280×800 · Giant Scorpion
+PASS · 1280×800 · Venomis: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Venomis: HUD artwork status follows the active presentation
+PASS · 1280×800 · Venomis: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Venomis: three power buttons and touch controls fit
+PASS · 1280×800 · Venomis: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Venomis: all pause map travel blocked
+PASS · 1280×800 · Venomis: touch Health Root heals during battle
+PASS · 1280×800 · Venomis: Phase 2 HUD updates immediately
+PASS · 1280×800 · Venomis: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Venomis: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Venomis: clearing arena awards first victory and unlock
+PASS · 1280×800 · Venomis: manually saved victory is persisted with full arena cleared
+PASS · 1280×800 · Venomis: chest previews rewards beside seven owned items
+PASS · 1280×800 · Venomis: chest controls, HP and XP remain usable
+PASS · 1280×800 · Venomis: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Venomis: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Venomis: cancel preserves owned and pending equipment
+PASS · 1280×800 · Venomis: confirmed replacement enforces seven slots
+PASS · 1280×800 · Venomis: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Venomis: walking exit returns to exploration
+DONE · 1280×800 · Venomis
+PASS · 1280×800 · AtomDust: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · AtomDust: HUD artwork status follows the active presentation
+PASS · 1280×800 · AtomDust: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · AtomDust: three power buttons and touch controls fit
+PASS · 1280×800 · AtomDust: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · AtomDust: all pause map travel blocked
+PASS · 1280×800 · AtomDust: touch Health Root heals during battle
+PASS · 1280×800 · AtomDust: Phase 2 HUD updates immediately
+PASS · 1280×800 · AtomDust: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · AtomDust: boss down with helpers does not unlock or reward
+PASS · 1280×800 · AtomDust: clearing arena awards first victory and unlock
+PASS · 1280×800 · AtomDust: manually saved victory is persisted with full arena cleared
+PASS · 1280×800 · AtomDust: chest previews rewards beside seven owned items
+PASS · 1280×800 · AtomDust: chest controls, HP and XP remain usable
+PASS · 1280×800 · AtomDust: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · AtomDust: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · AtomDust: cancel preserves owned and pending equipment
+PASS · 1280×800 · AtomDust: confirmed replacement enforces seven slots
+PASS · 1280×800 · AtomDust: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · AtomDust: walking exit returns to exploration
+DONE · 1280×800 · AtomDust

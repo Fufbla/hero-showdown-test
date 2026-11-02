@@ -1,0 +1,8 @@
+{
+  "boss": "Bushman",
+  "frames": 15,
+  "meanFrameMs": 693.1866666666668,
+  "p95FrameMs": 1016.5,
+  "averageFPS": 1.4426128604127793,
+  "scope": "Browser animation preview, not full-game or physical-device performance"
+}

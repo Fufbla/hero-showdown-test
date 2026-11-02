@@ -1,0 +1,13 @@
+{
+  "base": "7316438e5c1eb21a07f862b6adc24615d0d6d6a5",
+  "unchangedTrackedFileCount": 805,
+  "modifiedTrackedFiles": [
+    "royale/BOSS-SPRITES.md",
+    "royale/boss-art.mjs"
+  ],
+  "deletedFiles": [],
+  "allExistingBossAssetFilesUnchanged": true,
+  "gameplayAndMonsterAndStoryVersusFilesUnchanged": true,
+  "branchScope": "feature/royale-boss-sprites only",
+  "noMerge": true
+}
