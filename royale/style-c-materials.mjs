@@ -25,7 +25,7 @@ export async function prepareStyleCMaterials({imageLoader,canvasFactory}={}){
  pending=(async()=>{
    try {
      const packs={body:prepareStyleCBody,face:prepareStyleCFace,hair:prepareStyleCHair,motion:prepareStyleCMotion,
-       equipment:prepareStyleCEquipment,fireballArmor:prepareFireballArt,steelArmor:prepareSteelArt,rootArmor:prepareRootsArt,strengthArmor:options=>prepareArmorCollection('strength',options),whirlwindArmor:options=>prepareArmorCollection('whirlwind',options),superKickArmor:options=>prepareArmorCollection('superKick',options),turnarounds:prepareTurnarounds,sprites:prepareDefaultSprites};
+       equipment:prepareStyleCEquipment,fireballArmor:prepareFireballArt,steelArmor:prepareSteelArt,rootArmor:prepareRootsArt,strengthArmor:options=>prepareArmorCollection('strength',options),whirlwindArmor:options=>prepareArmorCollection('whirlwind',options),superKickArmor:options=>prepareArmorCollection('superKick',options),speedArmor:options=>prepareArmorCollection('speed',options),turnarounds:prepareTurnarounds,sprites:prepareDefaultSprites};
      const [im,featuresImage,results]=await Promise.all([load(url),load(new URL('./assets/hero/style-c-features.png',import.meta.url)),
        Promise.all(Object.entries(packs).map(async ([name,prepare])=>[name,await prepare(options)]))]);
      const missing=results.filter(([,ok])=>!ok).map(([name])=>name);

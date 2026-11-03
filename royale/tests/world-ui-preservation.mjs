@@ -17,6 +17,11 @@ export function assertWorldPreserved(){
  // Protect all combat code outside the scoped Fireball stat formula and its
  // effective-level input. The dedicated armor suite tests those differences.
  const powers=current('powers.mjs').trimEnd()
+   .replace("const scale = (level,a,b) => a + (b-a)*(level-1)/19;\nconst speedScale = (level,low,cap,bonus=0) => level ? scale(Math.min(POWER_CAP,level+bonus),low,cap) : 0;","const scale = (level,a,b) => a + (b-a)*(level-1)/19;")
+   .replace("runBonus:speedScale(level,.05,.6),attackBonus:speedScale(level,.03,.5)","runBonus:scale(level,.05,.6),attackBonus:scale(level,.03,.5)")
+   .replace("powerStats('speed',level,{equipment}).attackBonus","powerStats('speed',level).attackBonus")
+   .replace("speedScale(this.data.levels.speed,.05,.6,this.game.equipment.speedLevels)","(this.data.levels.speed?scale(this.data.levels.speed,.05,.6):0)")
+   .replace("speedScale(this.data.levels.speed,.03,.5,this.game.equipment.speedLevels)","(this.data.levels.speed?scale(this.data.levels.speed,.03,.5):0)")
    .replace("      if(!target && combo.target!==null && g.enemies.some(e=>e.id===combo.target && e.state!=='dead'))return;\n",'')
    .replace("import {groundedForRoots,releaseInvalidRoots} from './roots-armor.mjs';\n",'')
    .replace('groundedForRoots(e)','(!e.flying&&!e.airborne&&Math.abs(e.y-e.surface.y)<1)')

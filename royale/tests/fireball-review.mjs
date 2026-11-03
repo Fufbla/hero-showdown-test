@@ -1,3 +1,4 @@
+import {SPEED_SUITS,SPEED_PIECES} from '../speed-armor.mjs';
 import {SUPER_KICK_SUITS,SUPER_KICK_PIECES} from '../super-kick-armor.mjs';
 import {WHIRLWIND_SUITS,WHIRLWIND_PIECES} from '../whirlwind-armor.mjs';
 import {STRENGTH_SUITS,STRENGTH_PIECES} from '../strength-armor.mjs';
@@ -18,6 +19,7 @@ const $=id=>document.getElementById(id);
 const collections={
   fireball:{suits:FIREBALL_SUITS,catalog:FIREBALL_PIECES,powerName:'Fireball',color:'red',number:'01'},
   steel:{suits:STEEL_SUITS,catalog:STEEL_PIECES,powerName:'Steel Body',color:'blue',number:'02'},
+  speed:{suits:SPEED_SUITS,catalog:SPEED_PIECES,powerName:'Speed',color:'emerald',number:'07'},
   superKick:{suits:SUPER_KICK_SUITS,catalog:SUPER_KICK_PIECES,powerName:'Super Kick',color:'silver',number:'06'},
   whirlwind:{suits:WHIRLWIND_SUITS,catalog:WHIRLWIND_PIECES,powerName:'Whirlwind',color:'purple',number:'05'},
   strength:{suits:STRENGTH_SUITS,catalog:STRENGTH_PIECES,powerName:'Super Strength',color:'gold',number:'04'},
@@ -63,7 +65,7 @@ function patrol(owned){
  const suit=selected,session=power+'-practice-'+Date.now(),stamp=new Date().toISOString();
  const g=new Game({look:styleCDefault($('sex').value)});g.hero.level=suit.level;g.hero.maxHp=g.hero.hp=100+15*(suit.level-1);
  g.powers.data.levels[power]=Math.min(suit.level-1,20);g.powers.data.points=suit.level-1-g.powers.data.levels[power];
- g.powers.data.equipped=[power,null,null];g.inventory=owned?inventory(suit):emptyInventory();g.hero.coins=suit.price;
+ g.powers.data.equipped=[power==='speed'?null:power,null,null];g.inventory=owned?inventory(suit):emptyInventory();g.hero.coins=suit.price;
  g.refreshEquipment();if(!owned)g.visitTree();
  sessionStorage.setItem('royale-test-'+session+':'+PROFILE_KEY,JSON.stringify({version:2,revision:0,activeSlot:0,legacyImported:true,slots:[{id:session,createdAt:stamp,updatedAt:stamp,lastRegion:'Coastal Beginnings',snapshot:JSON.parse(g.save())},null,null]}));
  location.href='../index.html?qa=1&testSession='+session;

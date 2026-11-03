@@ -576,6 +576,63 @@ function refreshSuperKickEffect(powers) {
   combo.damage = damage;
 }
 
+// speed-armor.mjs
+var designs7 = [
+  ["starter", "Starting Block"],
+  ["relay", "Relay Runner"],
+  ["vector", "Vector Dart"],
+  ["velodrome", "Velodrome"],
+  ["switchback", "Switchback"],
+  ["apex", "Apex Racer"],
+  ["pulse", "Pulse Courier"],
+  ["mach", "Mach Spear"],
+  ["horizon", "Event Horizon"]
+];
+var SPEED_SUITS = Object.freeze(designs7.map(([art, name], i) => {
+  const { level, price } = SUPER_KICK_SUITS[i];
+  return {
+    setId: "speed-" + art,
+    art,
+    name,
+    level,
+    price,
+    speedLevels: i + 1,
+    color: "#07825b",
+    accent: "#84e4ad",
+    rarity: "ordinary"
+  };
+}));
+var labels4 = { helmet: "Helmet", chest: "Chest Armor", boots: "Boots" };
+var SPEED_PIECES = Object.freeze(Object.fromEntries(SPEED_SUITS.flatMap(
+  (suit, i) => COSTUME_PARTS.map((part) => {
+    const id = suit.setId + "-" + part;
+    const { catalogValue } = SUPER_KICK_PIECES[SUPER_KICK_SUITS[i].setId + "-" + part];
+    return [id, {
+      id,
+      setId: suit.setId,
+      setName: suit.name,
+      name: suit.name + " " + labels4[part],
+      art: suit.art,
+      part,
+      level: suit.level,
+      color: suit.color,
+      accent: suit.accent,
+      rarity: suit.rarity,
+      speedLevels: suit.speedLevels,
+      catalogValue,
+      shop: true,
+      sellable: true,
+      stats: {}
+    }];
+  })
+)));
+var WARDROBE_CATALOG7 = Object.freeze({ ...WARDROBE_CATALOG6, ...SPEED_PIECES });
+function matchingSpeedBonus(inventory, level) {
+  const worn = COSTUME_PARTS.map((part) => SPEED_PIECES[inventory.items.find((item) => item.uid === inventory.equipped[part])?.catalogId]);
+  const helmet = worn[0];
+  return helmet && level >= helmet.level && worn.every((item, i) => item?.part === COSTUME_PARTS[i] && item.setId === helmet.setId) ? helmet.speedLevels : 0;
+}
+
 // progression.mjs
 var PROGRESSION = Object.freeze({ cap: 99, base: 50, linear: 28, quadratic: 4, lateStart: 69, lateSpan: 29, lateWeight: 3, defeatFraction: 0.1, combatGrace: 5 });
 function xpForLevel(level, curve = PROGRESSION) {
@@ -748,7 +805,7 @@ var legacyCatalog = Object.fromEntries(themes.flatMap((theme, region) => !theme 
   const id = `r${region}-${rarity}-${part}`, rare = rarity === "rare", factor = rare ? 1.6 : 1;
   return [id, { id, region, rarity, part, legacy: true, level: 1, catalogValue: 100 * region * (rare ? 2 : 1), sellable: true, name: `${rare ? "Radiant " : ""}${theme[0]} ${EQUIPMENT_NAMES[part]}`, color: theme[1], accent: theme[2], stats: { strength: Math.round(region * (i === 2 ? 6 : 2) * factor), damage: Math.round(region * (i === 3 ? 7 : 3) * factor), attackSpeed: i === 4 || i === 6 ? Number((region * 5e-3 * factor).toFixed(3)) : 0 } }];
 }))));
-var EQUIPMENT = Object.freeze({ ...legacyCatalog, ...WARDROBE_CATALOG6, ...MERGE_CATALOG });
+var EQUIPMENT = Object.freeze({ ...legacyCatalog, ...WARDROBE_CATALOG7, ...MERGE_CATALOG });
 var itemDefinition = (item) => EQUIPMENT[item?.catalogId];
 function normalizeInventory(raw = {}) {
   if (!raw || typeof raw !== "object" || !Array.isArray(raw.items) || raw.items.length > 7 || !Array.isArray(raw.pending)) return null;
@@ -1638,6 +1695,7 @@ var clamp3 = (x, a2, b) => Math.max(a2, Math.min(b, x));
 var integer = (x, a2, b) => clamp3(Math.floor(Number(x) || 0), a2, b);
 var tier = (level) => level >= 20 ? 5 : 1 + Math.floor(level / 5);
 var scale = (level, a2, b) => a2 + (b - a2) * (level - 1) / 19;
+var speedScale = (level, low, cap, bonus = 0) => level ? scale(Math.min(POWER_CAP, level + bonus), low, cap) : 0;
 function interpolate(level, anchors) {
   for (let i = 1; i < anchors.length; i++) if (level <= anchors[i][0]) {
     const [a2, x] = anchors[i - 1], [b, y] = anchors[i];
@@ -1649,7 +1707,7 @@ function equipmentStats(raw = {}) {
   return { strength: clamp3(Number(raw.strength) || 0, 0, 1e3), damage: clamp3(Number(raw.damage) || 0, 0, 1e3), attackSpeed: clamp3(Number(raw.attackSpeed) || 0, 0, 0.5), defense: clamp3(Number(raw.defense) || 0, 0, 0.25), moveSpeed: clamp3(Number(raw.moveSpeed) || 0, 0, 0.6), fireball: clamp3(Number(raw.fireball) || 0, 0, 80), roots: clamp3(Number(raw.roots) || 0, 0, 15), whirlwind: clamp3(Number(raw.whirlwind) || 0, 0, 20) };
 }
 function powerStats(id, level, { heroLevel = 1, equipment = {} } = {}) {
-  const armorLevels = level > 0 ? integer({ fireball: equipment.fireballLevels, steel: equipment.steelLevels, roots: equipment.rootsLevels, strength: equipment.strengthLevels, whirlwind: equipment.whirlwindLevels, superKick: equipment.superKickLevels }[id] || 0, 0, 9) : 0;
+  const armorLevels = level > 0 ? integer({ fireball: equipment.fireballLevels, steel: equipment.steelLevels, roots: equipment.rootsLevels, strength: equipment.strengthLevels, whirlwind: equipment.whirlwindLevels, superKick: equipment.superKickLevels, speed: equipment.speedLevels }[id] || 0, 0, 9) : 0;
   level = integer(level, 1, 20) + armorLevels;
   const n = tier(level), eq = equipmentStats(equipment), strength = 10 + 2 * (heroLevel - 1) + eq.strength;
   const base = { level, cooldown: POWERS[id]?.cooldown || 0 };
@@ -1669,7 +1727,7 @@ function powerStats(id, level, { heroLevel = 1, equipment = {} } = {}) {
     case "agility":
       return { ...base, duration: scale(level, 5, 15), dodge: 0.75, legendaryDodge: 0.5 };
     case "speed":
-      return { ...base, runBonus: scale(level, 0.05, 0.6), attackBonus: scale(level, 0.03, 0.5) };
+      return { ...base, runBonus: speedScale(level, 0.05, 0.6), attackBonus: speedScale(level, 0.03, 0.5) };
     case "whirlwind":
       return { ...base, targets: n, duration: n + 1, damage: 10 + 3 * (level - 1) + eq.whirlwind };
     default:
@@ -1730,10 +1788,10 @@ var PowerSystem = class {
     return !!this.active.flight;
   }
   get speed() {
-    return Math.min(0.6, (this.data.levels.speed ? scale(this.data.levels.speed, 0.05, 0.6) : 0) + this.game.equipment.moveSpeed);
+    return Math.min(0.6, speedScale(this.data.levels.speed, 0.05, 0.6, this.game.equipment.speedLevels) + this.game.equipment.moveSpeed);
   }
   get attackRate() {
-    return 1 + Math.min(0.5, (this.data.levels.speed ? scale(this.data.levels.speed, 0.03, 0.5) : 0) + this.game.equipment.attackSpeed);
+    return 1 + Math.min(0.5, speedScale(this.data.levels.speed, 0.03, 0.5, this.game.equipment.speedLevels) + this.game.equipment.attackSpeed);
   }
   ready(id) {
     return this.game.disruptedPower !== id && POWER_IDS.includes(id) && !!this.data.levels[id] && !POWERS[id]?.passive && !this.active[id] && (this.cooldowns[id] || 0) <= EPS;
@@ -2226,7 +2284,7 @@ var erisMethods = {
   },
   costumePreview(selection, discardUids = []) {
     if (!this.shopReady()) return failed("Visit the Tree of Eris safely and resolve pending rewards first.");
-    const definitions = selection?.catalogId ? [WARDROBE_CATALOG6[selection.catalogId]] : Object.values(WARDROBE_CATALOG6).filter((d) => d.setId === selection?.setId && d.shop);
+    const definitions = selection?.catalogId ? [WARDROBE_CATALOG7[selection.catalogId]] : Object.values(WARDROBE_CATALOG7).filter((d) => d.setId === selection?.setId && d.shop);
     if (!definitions.length || definitions.some((d) => !d?.shop) || !selection.catalogId && definitions.length !== 3) return failed("That costume is not sold here.");
     if (definitions.some((d) => d.level > this.hero.level)) return failed(`Requires hero level ${Math.max(...definitions.map((d) => d.level))}.`);
     const cost = definitions.reduce((s, d) => s + d.catalogValue, 0), needed = Math.max(0, this.inventory.items.length + definitions.length - 7);
@@ -2402,6 +2460,8 @@ var journeyMethods = {
     const rootsBonus = matchingRootsBonus(this.inventory, this.hero?.level || 1);
     if (rootsBonus) this.equipment.rootsLevels = rootsBonus;
     if (previousRootsBonus !== rootsBonus) refreshRootsEffect(this.powers);
+    const speedBonus = matchingSpeedBonus(this.inventory, this.hero?.level || 1);
+    if (speedBonus) this.equipment.speedLevels = speedBonus;
     const superKickBonus = matchingSuperKickBonus(this.inventory, this.hero?.level || 1);
     if (superKickBonus) this.equipment.superKickLevels = superKickBonus;
     if (previousSuperKickBonus !== superKickBonus) refreshSuperKickEffect(this.powers);

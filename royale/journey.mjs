@@ -1,3 +1,4 @@
+import {matchingSpeedBonus} from './speed-armor.mjs';
 import {matchingSuperKickBonus,refreshSuperKickEffect} from './super-kick-armor.mjs';
 import {matchingWhirlwindBonus,refreshWhirlwindEffect} from './whirlwind-armor.mjs';
 import {matchingStrengthBonus} from './strength-armor.mjs';
@@ -43,6 +44,8 @@ export const journeyMethods={
     const rootsBonus=matchingRootsBonus(this.inventory,this.hero?.level||1);
     if(rootsBonus)this.equipment.rootsLevels=rootsBonus;
     if(previousRootsBonus!==rootsBonus)refreshRootsEffect(this.powers);
+    const speedBonus=matchingSpeedBonus(this.inventory,this.hero?.level||1);
+    if(speedBonus)this.equipment.speedLevels=speedBonus;
     const superKickBonus=matchingSuperKickBonus(this.inventory,this.hero?.level||1);
     if(superKickBonus)this.equipment.superKickLevels=superKickBonus;
     if(previousSuperKickBonus!==superKickBonus)refreshSuperKickEffect(this.powers);

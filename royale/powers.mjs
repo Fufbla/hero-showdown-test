@@ -29,6 +29,7 @@ const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
 const integer = (x,a,b) => clamp(Math.floor(Number(x)||0),a,b);
 export const tier = level => level >= 20 ? 5 : 1 + Math.floor(level / 5);
 const scale = (level,a,b) => a + (b-a)*(level-1)/19;
+const speedScale = (level,low,cap,bonus=0) => level ? scale(Math.min(POWER_CAP,level+bonus),low,cap) : 0;
 function interpolate(level,anchors) {
   for(let i=1;i<anchors.length;i++) if(level<=anchors[i][0]) {
     const [a,x]=anchors[i-1],[b,y]=anchors[i];return x+(y-x)*(level-a)/(b-a);
@@ -40,7 +41,7 @@ export function equipmentStats(raw={}) {
   return { strength: clamp(Number(raw.strength)||0,0,1000), damage: clamp(Number(raw.damage)||0,0,1000), attackSpeed: clamp(Number(raw.attackSpeed)||0,0,.5), defense:clamp(Number(raw.defense)||0,0,.25),moveSpeed:clamp(Number(raw.moveSpeed)||0,0,.6),fireball:clamp(Number(raw.fireball)||0,0,80),roots:clamp(Number(raw.roots)||0,0,15),whirlwind:clamp(Number(raw.whirlwind)||0,0,20) };
 }
 export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
-  const armorLevels=level>0 ? integer(({fireball:equipment.fireballLevels,steel:equipment.steelLevels,roots:equipment.rootsLevels,strength:equipment.strengthLevels,whirlwind:equipment.whirlwindLevels,superKick:equipment.superKickLevels})[id]||0,0,9) : 0;
+  const armorLevels=level>0 ? integer(({fireball:equipment.fireballLevels,steel:equipment.steelLevels,roots:equipment.rootsLevels,strength:equipment.strengthLevels,whirlwind:equipment.whirlwindLevels,superKick:equipment.superKickLevels,speed:equipment.speedLevels})[id]||0,0,9) : 0;
   level=integer(level,1,20)+armorLevels;const n=tier(level),eq=equipmentStats(equipment),strength=10+2*(heroLevel-1)+eq.strength;
   const base={level,cooldown:POWERS[id]?.cooldown||0};
   switch(id) {
@@ -51,7 +52,7 @@ export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
     case 'steel': return {...base,reduction:interpolate(level,[[1,.2],[5,.3],[10,.45],[15,.6],[20,.75],[29,.84]]),duration:interpolate(level,[[1,3],[5,4],[10,5],[15,6],[20,8],[29,10.25]])};
     case 'roots': return {...base,targets:n,duration:n+1,damage:6+2*(level-1)+eq.roots};
     case 'agility': return {...base,duration:scale(level,5,15),dodge:.75,legendaryDodge:.5};
-    case 'speed': return {...base,runBonus:scale(level,.05,.6),attackBonus:scale(level,.03,.5)};
+    case 'speed': return {...base,runBonus:speedScale(level,.05,.6),attackBonus:speedScale(level,.03,.5)};
     case 'whirlwind': return {...base,targets:n,duration:n+1,damage:10+3*(level-1)+eq.whirlwind};
     default: throw new Error('Unknown power');
   }
@@ -66,7 +67,7 @@ export function normalizePowers(raw,heroLevel,{strict=false}={}) {
   });
   return {levels,equipped,points:earned-spent,recovery:Object.fromEntries(POWER_IDS.map(id=>[id,clamp(Number(raw?.recovery?.[id])||0,0,120)]))};
 }
-export function attackRate(level,equipment={}) {return 1+Math.min(.5,(level?powerStats('speed',level).attackBonus:0)+equipmentStats(equipment).attackSpeed);}
+export function attackRate(level,equipment={}) {return 1+Math.min(.5,(level?powerStats('speed',level,{equipment}).attackBonus:0)+equipmentStats(equipment).attackSpeed);}
 export const isBoss = e => e?.boss === true || e?.legendary === true;
 const box = e => ({x:e.x-e.w/2,y:e.y-e.h,w:e.w,h:e.h});
 const EPS=1e-8;
@@ -87,8 +88,8 @@ export class PowerSystem {
   }
   stats(id) {return powerStats(id,this.data.levels[id],{heroLevel:this.game.hero.level,equipment:this.game.equipment});}
   get flying(){return !!this.active.flight;}
-  get speed(){return Math.min(.6,(this.data.levels.speed?scale(this.data.levels.speed,.05,.6):0)+this.game.equipment.moveSpeed);}
-  get attackRate(){return 1+Math.min(.5,(this.data.levels.speed?scale(this.data.levels.speed,.03,.5):0)+this.game.equipment.attackSpeed);}
+  get speed(){return Math.min(.6,speedScale(this.data.levels.speed,.05,.6,this.game.equipment.speedLevels)+this.game.equipment.moveSpeed);}
+  get attackRate(){return 1+Math.min(.5,speedScale(this.data.levels.speed,.03,.5,this.game.equipment.speedLevels)+this.game.equipment.attackSpeed);}
   ready(id){return this.game.disruptedPower!==id&&POWER_IDS.includes(id)&&!!this.data.levels[id]&&!POWERS[id]?.passive&&!this.active[id]&&(this.cooldowns[id]||0)<=EPS;}
   activateSlot(index){if(index===3&&this.game.legendary?.active)return this.game.activateMerge();const slot=resolveAbilitySlots(this.data,this.mergeEntitlement)[index];return slot?.id?this.activate(slot.id,slot):false;}
   activate(id,slot=null) {
