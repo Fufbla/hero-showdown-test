@@ -278,11 +278,6 @@ function closePowerPicker() {
 $('slot-picker').oncancel = event => { event.preventDefault(); closePowerPicker(); };
 $('picker-close').onclick = closePowerPicker;
 $('edit-hud-powers').onclick = event => openPowerPicker(0, event.currentTarget);
-// Physical inputs share the mapped action queue. Native keyboard/AT button
-// clicks have no pointerdown, so enqueue those here as well.
-powerButtons.forEach((button,i) => button.addEventListener('click', event => {
-  if (!event.detail && screen === 'play' && !button.disabled) input.edges.add(`power${i}`);
-}));
 $('manual-save').onclick=async()=>{if(!game.canSave()||criticalPending||powerUpgrades.busy)return;const b=$('manual-save');b.disabled=true;try{const result=store.cloud?await store.commit(activeSlot,game.save()):persist({manual:true});say(result.ok?(store.cloud?'Game saved to your account.':'Hero saved on this browser.'):result.error||'Save unavailable.');}catch(e){say(e.message,9);}finally{b.disabled=!game.canSave();}};
 $('chest-close').onclick=resume;
 function openWorld(){setScreen('world');journeyMenu.map();legendaryMenu.map();$('map-title').focus();}
@@ -310,8 +305,9 @@ $('confirm-delete').onclick=async()=>{
 };
 $('sound').onclick=async()=>{try{if(soundEnabled){audio.mute();soundEnabled=false;}else{await audio.enable(window.AudioContext||window.webkitAudioContext);soundEnabled=true;tone('camp');}$('sound').setAttribute('aria-pressed',String(soundEnabled));$('sound').setAttribute('aria-label',soundEnabled?'Mute sound':'Enable sound');}catch{say('Audio is unavailable in this browser.');}};
 for(const kind of ['music','effects']){const slider=$('volume-'+kind);slider.value=Math.round(audio.settings[kind]*100);const update=()=>{audio.volume(kind,Number(slider.value)/100);$('volume-'+kind+'-value').textContent=slider.value+'%';};slider.oninput=update;update();}
-document.addEventListener('visibilitychange',()=>{if(document.hidden){if(screen==='play')pause();persist();}});
-window.addEventListener('blur',()=>{if(screen==='play')pause();});
+document.addEventListener('visibilitychange',()=>{
+  if (document.hidden) { audio.update(musicScene(game),false);persist(); }
+});
 window.addEventListener('pagehide',persist);
 window.addEventListener('storage',e=>{if(storagePrefix||store.cloud||e.key!==PROFILE_KEY)return;if(game.started)persist();else{store.load();renderRoster();}});
 // Keyboard focus stays in the active panel. Tabs also support arrow-key navigation.
@@ -363,10 +359,16 @@ void prepareStyleCMaterials().then(ready=>{
 });
 for(const link of document.querySelectorAll('#roster a[href^="tests/"]'))link.hidden=!params.has('qa');
 let last=performance.now(),accumulator=0,measurement=null,backgroundSignature='';
+function resetFrameClock(){last=performance.now();accumulator=0;}
+window.addEventListener('focus',resetFrameClock);
+document.addEventListener('visibilitychange',resetFrameClock);
 function beginMeasurement(duration=30){if(screen==='pause')resume();if(screen!=='play'){$('performance-result').textContent='Start gameplay before measuring.';return;}last=performance.now();measurement=new FrameMetrics(last,{duration,heap:performance.memory?.usedJSHeapSize??null});measurement.gameTime=game.time;$('performance-result').dataset.measurement='';$('performance-result').textContent=`Measuring ${duration} seconds of visible gameplay…`;}
 $('measure-performance').onclick=()=>beginMeasurement();
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&measurement){measurement=null;$('performance-result').textContent='Sample cancelled: keep the game visible.';}});
 function frame(now){
+  if (input.interrupted || document.hidden) {
+    accumulator=0;last=now;requestAnimationFrame(frame);return;
+  }
   input.pollGamepad();
   powerMenu.pollGamepad(screen==='tree'&&erisMenu.panel==='powers');
   const wallElapsed=Math.max(0,(now-last)/1000),elapsed=Math.min(.1,wallElapsed);last=now;if(wallElapsed>0)fps=fps*.95+.05/wallElapsed;

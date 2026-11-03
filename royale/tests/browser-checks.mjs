@@ -41,7 +41,7 @@ document.getElementById('test').onclick=async()=>{
       check('two-finger move plus jump',stats().x>before.x+65&&stats().y<before.y-30);
       pointer(stick,'pointercancel',7,x,y);await advance(.2);const stopped=stats();await advance(.2);check('cancel releases stick',Math.abs(stats().x-stopped.x)<1);
       const kick=d.querySelector('[data-control="kick"]');pointer(kick,'pointerdown',9,0,0);await advance(.1);check('touch attack starts',stats().text.includes('kick'));pointer(kick,'pointerup',9,0,0);
-      pointer(stick,'pointerdown',10,x,y);w.dispatchEvent(new Event('blur'));await wait(200);check('focus loss pauses',!el('pause-menu').hidden);el('resume').click();await advance(.3);const focused=stats();await advance(.2);check('focus loss clears held movement',Math.abs(stats().x-focused.x)<1);
+      pointer(stick,'pointerdown',10,x,y);w.dispatchEvent(new Event('blur'));await wait(200);check('focus loss keeps the patrol screen',el('pause-menu').hidden);w.dispatchEvent(new w.Event('focus'));await advance(.3);const focused=stats();await advance(.2);check('focus loss clears held movement',Math.abs(stats().x-focused.x)<1);
     } finally {targets.forEach((t,i)=>t.setPointerCapture=capture[i]);}
     key('KeyA',true);await advance(2);key('KeyA',false);await advance(5.3);el('pause').click();el('edit-look').click();await wait(100);check('appearance editor opens',!el('creator').hidden);el('cancel-look').click();await wait(100);check('cancel returns to patrol',el('creator').hidden);
     report.textContent+='COMPLETE · all input/layout checks passed.\n'+el('diagnostics').textContent;

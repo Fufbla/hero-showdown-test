@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Royale mobile controls replay</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#102d32;color:#f0eedb;font:16px/1.5 system-ui}
+main{max-width:1250px;padding:20px;margin:auto}h1{margin:0;font:36px Georgia}p{max-width:76ch;color:#c4d4cc}
+button{padding:10px 14px;background:#ebd9a6;color:#182f30;border:0;border-radius:7px;font:inherit}
+section{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-top:16px}.device{max-width:100%;overflow:auto}
+iframe{display:block;width:390px;height:844px;border:0}pre{flex:1;min-width:230px;white-space:pre-wrap;font:14px/1.6 system-ui}
+</style>
+<main><h1>Mobile controls replay</h1><p>Watch a test hero hold the stick while tapping Punch, Kick and Jump on Sunwash Strand. The replay sends synthetic pointer events to the real controls. Each run uses a fresh, isolated hero.</p>
+<button id="run" type="button">Run portrait patrol</button> <button id="wide" type="button">Run landscape patrol</button>
+<section><div class="device"><iframe id="phone" title="Mobile patrol"></iframe></div><pre id="result" aria-live="polite">Choose a patrol to start.</pre></section></main>
+<script type="module" src="mobile-patrol.mjs"></script></html>

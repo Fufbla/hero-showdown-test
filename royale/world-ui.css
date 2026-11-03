@@ -30,3 +30,14 @@
 #hero-art-status { position:absolute; z-index:30; top:8px; left:50%; transform:translateX(-50%);
   max-width:calc(100% - 24px); padding:7px 12px; border-radius:8px; background:#163638; color:#faebbd;
   font:600 12px system-ui,sans-serif; text-align:center; pointer-events:none; }
+
+/* The game owns gestures only on the active patrol and its control strips. */
+.playing :is(#game, #touch-controls, #power-bar, [data-control]),
+.playing :is(#touch-controls, #power-bar, [data-control]) * {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.playing [data-control] > *, .playing #stick > * {pointer-events: none;}

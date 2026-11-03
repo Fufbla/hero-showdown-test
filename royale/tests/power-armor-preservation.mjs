@@ -1,6 +1,9 @@
 // Batch 1 is layered onto the approved Style C commit. The older stage gates
 // import this same narrow list instead of accepting arbitrary Royale changes.
 const changed = new Set([
+  // The post-Batch-8 mobile repair also ships on the Power Armor branch.
+  'app.mjs','input.mjs','world-ui.css','tests/browser-checks.mjs',
+  'tests/mobile-input.test.mjs','tests/mobile-patrol.html','tests/mobile-patrol.mjs',
   'power-armor.mjs','fireball-armor-art.mjs','equipment.mjs','eris.mjs','eris-ui.mjs',
   'index.html','item-art.mjs','journey.mjs','powers.mjs','power-menu.mjs',
   'style-c-equipment.mjs','style-c-materials.mjs','backend/validation.mjs',
