@@ -1,3 +1,4 @@
+import {groundedForRoots,releaseInvalidRoots} from './roots-armor.mjs';
 import { MERGE_POWERS } from './legendary-data.mjs';
 import {ProjectilePool,clearProjectiles,compactProjectiles} from './projectiles.mjs';
 // Phase 3 rules. Values not specified by the design are collected here for balancing.
@@ -39,7 +40,7 @@ export function equipmentStats(raw={}) {
   return { strength: clamp(Number(raw.strength)||0,0,1000), damage: clamp(Number(raw.damage)||0,0,1000), attackSpeed: clamp(Number(raw.attackSpeed)||0,0,.5), defense:clamp(Number(raw.defense)||0,0,.25),moveSpeed:clamp(Number(raw.moveSpeed)||0,0,.6),fireball:clamp(Number(raw.fireball)||0,0,80),roots:clamp(Number(raw.roots)||0,0,15),whirlwind:clamp(Number(raw.whirlwind)||0,0,20) };
 }
 export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
-  const armorLevels=level>0 ? integer(({fireball:equipment.fireballLevels,steel:equipment.steelLevels})[id]||0,0,9) : 0;
+  const armorLevels=level>0 ? integer(({fireball:equipment.fireballLevels,steel:equipment.steelLevels,roots:equipment.rootsLevels})[id]||0,0,9) : 0;
   level=integer(level,1,20)+armorLevels;const n=tier(level),eq=equipmentStats(equipment),strength=10+2*(heroLevel-1)+eq.strength;
   const base={level,cooldown:POWERS[id]?.cooldown||0};
   switch(id) {
@@ -109,7 +110,7 @@ export class PowerSystem {
     if(id==='flight'){for(const effect of this.game.mergeEffects.filter(e=>e.offensive))this.game.endMergeEffect(effect);this.game.mergeShots=[];for(const other of ['roots','whirlwind'])this.end(other);h.attack=null;h.attackBuffer=null;h.jumpBuffer=0;h.grounded=false;h.vy=-170;h.jumpAge=100;h.jumps=1;}
     if(id==='roots'||id==='whirlwind'){
       state.targets=g.enemies.filter(e=>e.state!=='dead'&&e.protection<=0&&Math.abs(e.x-h.x)<=BALANCE.controlRange&&Math.abs(e.y-h.y)<120&&
-        (id!=='roots'||(!e.flying&&!e.airborne&&Math.abs(e.y-e.surface.y)<1))&&(id!=='whirlwind'||!e.rooted||isBoss(e)))
+        (id!=='roots'||groundedForRoots(e))&&(id!=='whirlwind'||!e.rooted||isBoss(e)))
         .sort((a,b)=>Math.abs(a.x-h.x)-Math.abs(b.x-h.x)||a.id-b.id).slice(0,s.targets).map(e=>e.id);
       if(id==='whirlwind'&&state.targets.length)state.x=g.enemies.filter(e=>state.targets.includes(e.id)).reduce((sum,e)=>sum+e.x,0)/state.targets.length;
       for(const e of g.enemies.filter(e=>state.targets.includes(e.id))) {
@@ -162,6 +163,7 @@ export class PowerSystem {
       if(id==='superKick'){
         if(!h.attack&&h.stun<=0){if(a.left>0)this.nextKick(a);else this.end(id);}continue;
       }
+      if(id==='roots')releaseInvalidRoots(g,a);
       const before=a.age;a.age=Math.min(a.duration,a.age+dt);
       if(id==='roots'||id==='whirlwind'){
         for(const e of g.enemies){if(!a.targets.includes(e.id)||e.state==='dead')continue;

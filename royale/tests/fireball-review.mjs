@@ -1,3 +1,4 @@
+import {ROOTS_SUITS,ROOTS_PIECES} from '../roots-armor.mjs';
 import {FIREBALL_SUITS,FIREBALL_PIECES} from '../power-armor.mjs';
 import {COSTUME_PARTS} from '../costume-catalog.mjs';
 import {STEEL_SUITS,STEEL_PIECES} from '../steel-armor.mjs';
@@ -11,18 +12,20 @@ import {inventoryFor} from './style-c-final-fixtures.mjs';
 import {Game} from '../core.mjs';
 import {PROFILE_KEY} from '../saves.mjs';
 const $=id=>document.getElementById(id);
-const steel=new URLSearchParams(location.search).get('collection')==='steel';
-const suits=steel?STEEL_SUITS:FIREBALL_SUITS;
-const catalog=steel?STEEL_PIECES:FIREBALL_PIECES;
-const power=steel?'steel':'fireball';
-const powerName=steel?'Steel Body':'Fireball';
-const bonus=suit=>steel?suit.steelLevels:suit.fireballLevels;
-if(steel){
-  document.documentElement.classList.add('steel');document.title='Steel Body Power Armor · James Clan Comics';
-  document.querySelector('h1').textContent='Steel Body Power Armor';
-  document.querySelector('header small').textContent='JAMES CLAN COMICS  /  ARMORY 02';
-  document.querySelector('header p').textContent='Nine blue defensive suits for the Guardian and Sentinel. Choose a tier to inspect the armor or try it on patrol.';
-}
+const collections={
+  fireball:{suits:FIREBALL_SUITS,catalog:FIREBALL_PIECES,powerName:'Fireball',color:'red',number:'01'},
+  steel:{suits:STEEL_SUITS,catalog:STEEL_PIECES,powerName:'Steel Body',color:'blue',number:'02'},
+  roots:{suits:ROOTS_SUITS,catalog:ROOTS_PIECES,powerName:'Ground Roots',color:'green',number:'03'},
+};
+const requested=new URLSearchParams(location.search).get('collection');
+const power=Object.hasOwn(collections,requested)?requested:'fireball';
+const {suits,catalog,powerName,color,number}=collections[power];
+const bonus=suit=>suit[power+'Levels'];
+document.documentElement.classList.add(power);
+document.title=powerName+' Power Armor · James Clan Comics';
+document.querySelector('h1').textContent=powerName+' Power Armor';
+document.querySelector('header small').textContent='JAMES CLAN COMICS  /  ARMORY '+number;
+document.querySelector('header p').textContent='Nine '+color+' suits for the Guardian and Sentinel. Choose a tier to inspect its armor or start a patrol.';
 let selected=suits[0];
 function parts(s){return COSTUME_PARTS.map(part=>catalog[s.setId+'-'+part]);}
 function inventory(s){return inventoryFor(parts(s).map(d=>d.id));}
@@ -36,7 +39,7 @@ function details(){
  const c=$('parts').getContext('2d');c.clearRect(0,0,680,240);
  parts(suit).forEach((piece,i)=>{c.save();c.translate(20+220*i,10);drawArmorIcon(c,piece,190);c.restore();c.fillStyle='#463d36';c.textAlign='center';c.font='16px system-ui';c.fillText(piece.part+' · '+piece.catalogValue.toLocaleString()+' coins',115+220*i,224);});
  const pair=$('pair').getContext('2d');pair.clearRect(0,0,680,240);figure(pair,160,220,'male',suit,1.70);figure(pair,490,220,'female',suit,1.70);
- $('spec').textContent=suit.price.toLocaleString()+' coins for three pieces. Full matching set grants +'+bonus(suit)+' effective '+powerName+' levels. '+(steel?'Remove any piece to lose the set bonus.':'Helmet and boots each add 1 damage, chest armor adds 2.');
+ $('spec').textContent=suit.price.toLocaleString()+' coins for three pieces. Full matching set grants +'+bonus(suit)+' effective '+powerName+' levels. '+(power!=='fireball'?'Remove any piece to lose the set bonus.':'Helmet and boots each add 1 damage, chest armor adds 2.');
  for(const b of $('tiers').children)b.setAttribute('aria-pressed',b.dataset.id===suit.setId);
 }
 function repaint(){

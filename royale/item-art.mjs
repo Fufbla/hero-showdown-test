@@ -1,4 +1,4 @@
-import {drawArmorIcon, prepareArmorCollection} from './power-armor-art.mjs';
+import {armorCollection,drawArmorIcon, prepareArmorCollection} from './power-armor-art.mjs';
 const atlasURL=new URL('./assets/items/comic-equipment.png',import.meta.url);
 let atlas=null,loading=null;const cache=new Map();
 export function prepareItemArt(options={}){return loading||=(options.imageLoader?options.imageLoader(atlasURL):new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=atlasURL.href;})).then(image=>{atlas=image;cache.clear();return true;}).catch(()=>false);}
@@ -15,7 +15,7 @@ function painted(c,def,size){
 // Catalog colors remain authoritative. Layered ink, enamel and metal highlights
 // are drawn at display resolution; the icon canvas retains transparency.
 export function drawItem(c,def,size=96){
- if((def.fireballLevels || def.steelLevels) && drawArmorIcon(c,def,size))return;
+ if(armorCollection(def) && drawArmorIcon(c,def,size))return;
  if(painted(c,def,size))return;
  c.save();c.scale(size/96,size/96);c.translate(48,48);const color=def.color||'#b88147',accent=def.accent||'#c9e493';
  if(def.rarity==='rare'||def.rarity==='legendary'){c.shadowColor=def.rarity==='rare'?'#fff':'#65ff7a';c.shadowBlur=9;}
@@ -37,4 +37,4 @@ export function drawItem(c,def,size=96){
  else {shape([[-25,-21],[20,-28],[31,0],[18,26],[-18,29],[-31,2]]);shape([[-12,-6],[0,-17],[12,-6],[0,15]],accent);}
  c.shadowBlur=0;c.strokeStyle='#ffffff70';c.lineWidth=1.3;for(let i=0;i<4;i++){c.beginPath();c.moveTo(-17+i*10,-20);c.lineTo(-12+i*10,-17);c.stroke();}c.restore();
 }
-export function itemIcon(def){const canvas=document.createElement('canvas');canvas.width=canvas.height=144;canvas.className='item-art';canvas.setAttribute('role','img');canvas.setAttribute('aria-label',def.name||'Equipment');const draw=()=>{const c=canvas.getContext('2d');c.clearRect(0,0,144,144);drawItem(c,def,144);};draw();if(def.fireballLevels||def.steelLevels)prepareArmorCollection(def.steelLevels?'steel':'fireball').then(ok=>{if(ok)draw();});else if(!atlas)prepareItemArt().then(draw);return canvas;}
+export function itemIcon(def){const canvas=document.createElement('canvas');canvas.width=canvas.height=144;canvas.className='item-art';canvas.setAttribute('role','img');canvas.setAttribute('aria-label',def.name||'Equipment');const draw=()=>{const c=canvas.getContext('2d');c.clearRect(0,0,144,144);drawItem(c,def,144);};draw();if(armorCollection(def))prepareArmorCollection(armorCollection(def)).then(ok=>{if(ok)draw();});else if(!atlas)prepareItemArt().then(draw);return canvas;}

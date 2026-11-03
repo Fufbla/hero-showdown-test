@@ -1,9 +1,10 @@
+import {ROOTS_REGIONS} from './assets/power-armor/roots/regions.mjs';
 import {STEEL_REGIONS} from './assets/power-armor/steel/regions.mjs';
 import {FIREBALL_REGIONS} from './assets/power-armor/fireball/regions.mjs';
 
 const sheets = new Map();
 const pending = new Map();
-const regions = {fireball:FIREBALL_REGIONS, steel:STEEL_REGIONS};
+const regions = {fireball:FIREBALL_REGIONS, steel:STEEL_REGIONS, roots:ROOTS_REGIONS};
 
 function loadImage(url) {
   return new Promise((resolve,reject)=>{
@@ -24,9 +25,17 @@ export function prepareArmorCollection(collection,{imageLoader=loadImage}={}) {
 export const prepareFireballArt=options=>prepareArmorCollection('fireball',options);
 export const prepareSteelArt=options=>prepareArmorCollection('steel',options);
 
+export const prepareRootsArt=options=>prepareArmorCollection('roots',options);
+export function armorCollection(item){
+  if(item.rootsLevels)return 'roots';
+  if(item.steelLevels)return 'steel';
+  if(item.fireballLevels)return 'fireball';
+  return null;
+}
+
 const parts=['helmet','chest','boots'];
 function sprite(item,part,view) {
-  const collection=item.steelLevels?'steel':'fireball';
+  const collection=armorCollection(item);
   const image=sheets.get(collection+'/'+item.art);
   if (!image) return null;
   const rect=regions[collection][item.art][parts.indexOf(part)*3+view];

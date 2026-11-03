@@ -1,4 +1,4 @@
-import {drawArmorPiece} from './power-armor-art.mjs';
+import {armorCollection, drawArmorPiece} from './power-armor-art.mjs';
 import {WEARABLE_REGIONS} from './assets/hero/style-c-accurate/equipment/regions.mjs';
 import {emblem} from './style-c-paint.mjs';
 
@@ -233,7 +233,7 @@ export function drawStyleCEquipment(c, part, item, pose, look, {view='game',side
   if (!a) return false;
   c.save();
   c.imageSmoothingEnabled=true; c.imageSmoothingQuality='high';
-  if (item.fireballLevels || item.steelLevels) {
+  if (armorCollection(item)) {
     const drawn=drawArmorPiece(c,part,item,pose,a,side);
     c.restore();return drawn;
   }

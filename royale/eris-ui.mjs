@@ -1,6 +1,7 @@
 import {STYLE_C_VIEWS} from './style-c-defaults.mjs';
 import {itemIcon} from './item-art.mjs';
-import {STEEL_SUITS, WARDROBE_CATALOG as COSTUME_CATALOG, matchingSteelBonus} from './steel-armor.mjs';
+import {ROOTS_SUITS, WARDROBE_CATALOG as COSTUME_CATALOG, matchingRootsBonus} from './roots-armor.mjs';
+import {STEEL_SUITS, matchingSteelBonus} from './steel-armor.mjs';
 import {FIREBALL_SUITS, matchingFireballBonus} from './power-armor.mjs';
 import { COSTUME_SETS, COSTUME_PARTS, STAT_KEYS, STAT_LABELS, formatStat, resaleValue } from './costume-catalog.mjs';
 import { EQUIPMENT_NAMES, itemDefinition, equipmentBonuses, equipmentOutfit } from './equipment.mjs';
@@ -26,6 +27,7 @@ function withPreview(g,defs){
   return inv;
 }
 function shopEntries(category){
+  if(category==='roots')return ROOTS_SUITS;
   if(category==='steel')return STEEL_SUITS;
   if(category==='fireball')return FIREBALL_SUITS;
   const catalog=Object.values(COSTUME_CATALOG);
@@ -35,7 +37,7 @@ function shopEntries(category){
       const price=catalog.filter(piece=>piece.setId===setId).reduce((sum,piece)=>sum+piece.catalogValue,0);
       return {setId,name:suit.name,level:suit.level,color:suit.color,accent:suit.accent,price};
     });
-    return regional.concat(FIREBALL_SUITS,STEEL_SUITS);
+    return regional.concat(FIREBALL_SUITS,STEEL_SUITS,ROOTS_SUITS);
   }
   return catalog.filter(piece=>piece.shop&&(category==='all'||piece.part===category))
     .map(piece=>({...piece,catalogId:piece.id,price:piece.catalogValue}));
@@ -87,7 +89,12 @@ export class ErisMenu{
     p.append(el('div',`${this.mode==='buy'?'TRY IT ON':'YOUR EQUIPMENT'} · ${defs.length===3?'COMPLETE OUTFIT':EQUIPMENT_NAMES[defs[0].part]}`,'eyebrow'),el('h3',e.name||defs[0].setName));
     p.append(el('p',`Level ${defs[0].level||1} · ${defs[0].rarity} · Fixed colors${defs[0].rarity==='rare'?' · Constant white glow':''}.`));
     p.append(statComparison(appliedEquipment(g,g.inventory),appliedEquipment(g,this.previewInventory,99)));
-    if(defs[0].steelLevels){
+    if(defs[0].rootsLevels){
+      const learned=g.powers.data.levels.roots, bonus=matchingRootsBonus(this.previewInventory,99);
+      const stats=powerStats('roots',learned,{equipment:{...appliedEquipment(g,this.previewInventory,99),rootsLevels:bonus}});
+      p.append(el('p',`Equip the matching helmet, chest and boots for +${defs[0].rootsLevels} effective Ground Roots levels.`,'set-note'));
+      p.append(el('p',learned?`Ground Roots preview · learned ${learned} + armor ${bonus} = level ${stats.level} · ${stats.damage} damage per one-second squeeze for ${stats.duration} s.`:'Learn Ground Roots to use its armor bonus.'));
+    }else if(defs[0].steelLevels){
       const learned=g.powers.data.levels.steel, bonus=matchingSteelBonus(this.previewInventory,99);
       const stats=powerStats('steel',learned,{equipment:{steelLevels:bonus}});
       p.append(el('p',`Equip all three matching pieces for +${defs[0].steelLevels} effective Steel Body levels.`,'set-note'));
