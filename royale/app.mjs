@@ -29,7 +29,8 @@ import { Creator } from './creator.mjs';
 import { previewHero, animationState } from './hero-rig.mjs';
 import { STARTER_OUTFIT } from './appearance.mjs';
 import {styleCDefault} from './style-c-defaults.mjs';
-import {prepareStyleCMaterials} from './style-c-materials.mjs';
+import {bindStyleCGame} from './style-c-live.mjs';
+import {prepareStyleCMaterials,styleCTextureStatus} from './style-c-materials.mjs';
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search);
 if(params.has('touch'))document.body.classList.add('force-touch');
 if(/^(world|vertical)-practice-/.test(params.get('testSession')||''))document.body.classList.add('practice-world');
@@ -162,6 +163,7 @@ function openCreator(index=activeSlot,isEdit=true){
 }
 function cancelCreator(){if(editing){editing=false;setScreen('tree');erisMenu.open('home');}else{renderRoster();setScreen('roster');}}
 function startPatrol(continued){
+  bindStyleCGame(renderer.cloth,game);
   game.legendaryStorageReady=!!ledger&&store.writable;
   game.onBossVisualStep=(boss,time,dt,x)=>renderer.bossArt.step(boss,time,dt,x);
   if(game.arenaScene)renderer.bossArt.step(game.arenaScene.boss,game.time,0,game.hero.x);
@@ -352,7 +354,13 @@ if (practiceHero && store.slot(0)) {
   continueHero(0);
   say('Practice patrol · Use ⇄ to change powers or tap + to fill an empty slot.', 7);
 }
-void prepareStyleCMaterials().then(ready=>{if(screen==='roster')renderRoster();if(!ready)say('Approved hero artwork could not load. Reload to retry.',12);});
+void prepareStyleCMaterials().then(ready=>{
+  const notice=$('hero-art-status');
+  notice.hidden=ready;
+  if(!ready)notice.textContent='Hero artwork could not load. Reload the game to try again.';
+  if(screen==='roster')renderRoster();
+  if(screen==='creator'){creator.draw();creator.refreshHairGallery();}
+});
 for(const link of document.querySelectorAll('#roster a[href^="tests/"]'))link.hidden=!params.has('qa');
 let last=performance.now(),accumulator=0,measurement=null,backgroundSignature='';
 function beginMeasurement(duration=30){if(screen==='pause')resume();if(screen!=='play'){$('performance-result').textContent='Start gameplay before measuring.';return;}last=performance.now();measurement=new FrameMetrics(last,{duration,heap:performance.memory?.usedJSHeapSize??null});measurement.gameTime=game.time;$('performance-result').dataset.measurement='';$('performance-result').textContent=`Measuring ${duration} seconds of visible gameplay…`;}
@@ -363,7 +371,7 @@ function frame(now){
   powerMenu.pollGamepad(screen==='tree'&&erisMenu.panel==='powers');
   const wallElapsed=Math.max(0,(now-last)/1000),elapsed=Math.min(.1,wallElapsed);last=now;if(wallElapsed>0)fps=fps*.95+.05/wallElapsed;
   if(game.started&&!game.arenaScene&&game.hero.x>5600)renderer.bossArt.prepare(game.regionId);
-  const waitingForArt=game.arenaScene&&!renderer.bossArt.ready;
+  const waitingForArt=!styleCTextureStatus().ready||(game.arenaScene&&!renderer.bossArt.ready);
   const simulationStart=performance.now();
   if(screen==='play'&&!waitingForArt&&!criticalPending){
     accumulator+=elapsed;while(accumulator>=STEP){

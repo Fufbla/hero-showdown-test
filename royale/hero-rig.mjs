@@ -6,7 +6,7 @@ const clamp = (v, a=0, b=1) => Math.max(a, Math.min(b, v));
 const mix = (a,b,t) => a+(b-a)*t;
 const smooth = t => { t=clamp(t); return t*t*(3-2*t); };
 export const CAPE_LENGTH = 48;
-export const PREVIEW_POSES = ['idle','walk','run','jump','double-jump','fall','land','punch','kick','air-punch','air-kick','hurt','defeat','respawn','flight','steel','roots','whirlwind','strength','superKick','fireball','agility','speed'];
+export const PREVIEW_POSES = ['idle','walk','run','turn','jump','double-jump','fall','land','punch','kick','air-punch','air-kick','hurt','knockback','defeat','respawn','flight','steel','roots','whirlwind','strength','superKick','fireball','agility','speed'];
 
 // Two bones of fixed length, with a shared elbow/knee. Targets never stretch a limb.
 export function twoBone(root, target, upper, lower, bend=1) {
@@ -41,6 +41,8 @@ export function previewHero(pose,time) {
   if(pose.includes('punch')||pose.includes('kick')){const kind=pose.includes('punch')?'punch':'kick';h.attack={kind,age:time%(ATTACKS[kind].duration+.35),face:1};if(h.attack.age>ATTACKS[kind].duration)h.attack=null;}
   if(pose==='land')h.landing=.13*(1-time%1);
   if(pose==='hurt'){h.stun=.16;h.hurtAge=time%.6;}
+  if(pose==='knockback'){h.stun=.12;h.vx=-155;h.hurtAge=.08+time%.2;}
+  if(pose==='turn'){h.face=Math.floor(time/.6)%2?-1:1;h.turnAge=time%.6;}
   if(pose==='defeat'){h.dead=true;h.defeatAge=time%2;}
   if(pose==='respawn')h.respawnAge=time%1.2;
   if(pose==='flight'){h.flying=true;h.grounded=false;h.vx=190;h.vy=-60;}
@@ -49,6 +51,7 @@ export function previewHero(pose,time) {
   if(['roots','whirlwind','fireball'].includes(pose))h.castAge=time%.25;
   if(pose==='agility'){h.agile=true;h.dodgeAge=time%.75;}
   if(pose==='speed'){h.vx=315*1.6;h.cycle=time*h.vx/52;}
+  if(['turn','knockback','steel','roots','whirlwind','agility','speed'].includes(pose))h.visualClip=pose;
   return h;
 }
 // Cosmetic skeleton only. No position here is used by collision or combat.

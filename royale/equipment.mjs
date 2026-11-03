@@ -43,7 +43,7 @@ export function equipmentBonuses(inventory,level=99){
 export function equipmentOutfit(inventory,fallback=STARTER_OUTFIT){
   const pieces={};for(const [part,uid] of Object.entries(inventory.equipped)){const def=itemDefinition(inventory.items.find(i=>i.uid===uid));if(def)pieces[part]=def;}
   if(pieces.helmet)pieces.mask=pieces.helmet;
-  if(pieces.chest){pieces.suit=pieces.chest;pieces.emblem={...pieces.chest,color:pieces.chest.accent};}
+  if(pieces.chest){pieces.suit=pieces.chest;pieces.emblem??={...pieces.chest,color:pieces.chest.accent};}
   return {...fallback,pieces};
 }
 export function rollEquipment(region,random,serial){

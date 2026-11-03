@@ -1,15 +1,38 @@
 import {STYLE_C_FEATURES} from './assets/hero/style-c-features.mjs';
 import {STYLE_C_PARTS} from './assets/hero/style-c-parts.mjs';
-import {prepareSourceArt} from './style-c-source.mjs';
+import {prepareStyleCBody} from './style-c-body.mjs';
+import {prepareStyleCFace} from './style-c-face.mjs';
+import {prepareStyleCHair} from './style-c-hair.mjs';
+import {prepareStyleCMotion} from './style-c-motion.mjs';
+import {prepareStyleCEquipment} from './style-c-equipment.mjs';
+import {prepareTurnarounds} from './style-c-turnaround.mjs';
+import {prepareDefaultSprites} from './style-c-sprites.mjs';
 const url=new URL('./assets/hero/style-c-parts.png',import.meta.url),cache=new Map();
-let source=null,features=null,pending=null,makeCanvas=null,error=null;
+let source=null, features=null, pending=null, makeCanvas=null, error=null, ready=false;
 export const STYLE_C_TEXTURE_LIMIT=64;
-export const styleCTextureStatus=()=>({ready:!!source,error,entries:cache.size,limit:STYLE_C_TEXTURE_LIMIT});
+export const styleCTextureStatus=()=>({ready,error,entries:cache.size,limit:STYLE_C_TEXTURE_LIMIT});
+export function setStyleCCanvas(factory){if(factory)makeCanvas=factory;}
 export async function prepareStyleCMaterials({imageLoader,canvasFactory}={}){
- if(source)return prepareSourceArt({imageLoader,canvasFactory});if(pending)return pending;
- makeCanvas=canvasFactory||((w,h)=>typeof OffscreenCanvas!=='undefined'?new OffscreenCanvas(w,h):Object.assign(document.createElement('canvas'),{width:w,height:h}));
- const load=imageLoader||(u=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(Error('Style C artwork could not load. Reload to retry.'));im.src=u.href;}));
- pending=(async()=>{try{const [im,featureImage]=await Promise.all([load(url),load(new URL('./assets/hero/style-c-features.png',import.meta.url))]);if(im.width!==STYLE_C_PARTS.width||im.height!==STYLE_C_PARTS.height)throw Error('Style C atlas dimensions do not match');source=im;features=featureImage;return await prepareSourceArt({imageLoader:load,canvasFactory:makeCanvas});}catch(e){error=e.message;return false;}})();return pending;
+ if(ready)return true;
+ if(pending)return pending;
+ makeCanvas=canvasFactory||makeCanvas||((w,h)=>typeof OffscreenCanvas!=='undefined'?
+   new OffscreenCanvas(w,h):Object.assign(document.createElement('canvas'),{width:w,height:h}));
+ const load=imageLoader||(u=>new Promise((resolve,reject)=>{
+   const im=new Image(); im.onload=()=>resolve(im); im.onerror=()=>reject(Error('Could not load '+u.pathname.split('/').at(-1))); im.src=u.href;
+ }));
+ const options={canvasFactory:makeCanvas,imageLoader:load};
+ pending=(async()=>{
+   try {
+     const packs={body:prepareStyleCBody,face:prepareStyleCFace,hair:prepareStyleCHair,motion:prepareStyleCMotion,
+       equipment:prepareStyleCEquipment,turnarounds:prepareTurnarounds,sprites:prepareDefaultSprites};
+     const [im,featuresImage,results]=await Promise.all([load(url),load(new URL('./assets/hero/style-c-features.png',import.meta.url)),
+       Promise.all(Object.entries(packs).map(async ([name,prepare])=>[name,await prepare(options)]))]);
+     const missing=results.filter(([,ok])=>!ok).map(([name])=>name);
+     if(missing.length)throw Error('Could not load hero art: '+missing.join(', '));
+     if(im.width!==STYLE_C_PARTS.width||im.height!==STYLE_C_PARTS.height)throw Error('Unexpected Style C atlas dimensions');
+     source=im;features=featuresImage;ready=true;error=null;return true;
+   }catch(e){error=e.message;pending=null;return false;}
+ })();return pending;
 }
 export function styleCMaterial(part,color){
  if(!source)return null;const key=part+color;if(cache.has(key)){const im=cache.get(key);cache.delete(key);cache.set(key,im);return im;}

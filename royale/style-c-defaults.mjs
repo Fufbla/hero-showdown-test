@@ -5,3 +5,5 @@ export const STYLE_C_DEFAULTS=Object.freeze({
   female:Object.freeze(sanitizeLook({name:'Coast Sentinel',presentation:'female',skin:'#b97343',eyes:'#855024',hair:'curly-ponytail',hairColor:'#382335',suit:'#71328c',trim:'#e2bf60',capeColor:'#7738a0',emblem:'star',emblemColor:'#f1ce64',brows:'bold',mouth:'neutral',build:'balanced'})),
 });
 export const styleCDefault=presentation=>({...STYLE_C_DEFAULTS[presentation==='female'?'female':'male']});
+
+export const STYLE_C_VIEWS = ['front', 'side', 'back', 'left'];

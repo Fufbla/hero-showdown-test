@@ -20,6 +20,7 @@ export const journeyMethods={
   getRegion(){return regionDefinition(this.regionId);},
   clock(){return worldClock(this.world.clockReference,this.now(),this.regionId);},
   refreshEquipment(){
+    this._outfitInventory = null;
     const earned=equipmentBonuses(this.inventory,this.hero?.level||99),base=this.baseEquipment;
     const active=matchingMerge(this.inventory,this.hero?.level||99);if(this.legendary.active!==active)this.cancelMergeEffects();this.legendary.active=active;if(this.powers)this.powers.mergeEntitlement=mergeEntitlement(active);
     this.equipment=equipmentStats(Object.fromEntries(Object.keys(earned).map(k=>[k,earned[k]+(base?.[k]||0)])));

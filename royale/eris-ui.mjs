@@ -1,3 +1,4 @@
+import {STYLE_C_VIEWS} from './style-c-defaults.mjs';
 import {itemIcon} from './item-art.mjs';
 import { COSTUME_CATALOG, COSTUME_SETS, COSTUME_PARTS, STAT_KEYS, STAT_LABELS, formatStat, resaleValue } from './costume-catalog.mjs';
 import { EQUIPMENT_NAMES, itemDefinition, equipmentBonuses, equipmentOutfit } from './equipment.mjs';
@@ -27,7 +28,7 @@ export class ErisMenu{
     Object.assign(this,{getGame,powerMenu,transaction,say,appearance,leave});this.panel='home';this.mode='buy';this.category='sets';this.selected={setId:'shore-ordinary'};this.view='front';this.previewInventory=null;this.confirm=null;
     for(const b of document.querySelectorAll('[data-eris]'))b.onclick=()=>this.open(b.dataset.eris);
     $('eris-appearance').onclick=appearance;$('close-tree').onclick=leave;
-    for(const view of ['front','back'])$(`gear-view-${view}`).onclick=()=>{this.view=view;this.draw();};
+    for(const view of STYLE_C_VIEWS)$(`gear-view-${view}`).onclick=()=>{this.view=view;this.draw();};
     for(const b of document.querySelectorAll('[data-wardrobe]'))b.onclick=()=>{this.mode=b.dataset.wardrobe;this.selected=null;this.wardrobe();};
     $('shop-category').onchange=()=>{this.category=$('shop-category').value;this.selected=null;this.wardrobe();};
   }
@@ -40,7 +41,7 @@ export class ErisMenu{
     if(panel==='home')drawEquipmentPreview($('eris-hero'),this.getGame());
   }
   update(){const g=this.getGame();$('eris-coins').textContent=g.hero.coins.toLocaleString();$('tree-points').textContent=g.powers.data.points;$('eris-capacity').textContent=`${g.inventory.items.length}/7 equipment`;$('eris-clock').textContent=`Adventure clock · ${formatClock(g.clock())}`;const r=g.sanctuary?.returnLocation;$('eris-return').textContent=r?`Return to ${g.getRegion().name} · board ${r.board+1}`:'Your adventure is waiting.';}
-  draw(){const g=this.getGame();drawEquipmentPreview($('gear-preview'),g,this.previewInventory||g.inventory,this.view);for(const v of ['front','back'])$(`gear-view-${v}`).setAttribute('aria-pressed',String(v===this.view));}
+  draw(){const g=this.getGame();drawEquipmentPreview($('gear-preview'),g,this.previewInventory||g.inventory,this.view);for(const v of STYLE_C_VIEWS)$(`gear-view-${v}`).setAttribute('aria-pressed',String(v===this.view));}
   wardrobe(){
     const g=this.getGame();this.update();$('shop-confirm').hidden=true;this.confirm=null;
     $('shop-category-wrap').hidden=this.mode!=='buy';$('wardrobe-note').textContent=this.mode==='buy'?'One central shop. Regular outfits only; rare equipment is earned. Every piece has fixed colors.':this.mode==='sell'?'Resale is 25% of original catalog value, rounded down. Legendary equipment can never be sold.':'Seven total spaces, including worn items. Mix pieces freely. Starter colors remain yours.';

@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "appearanceIds": 49,
+  "illustratedStyles": 48,
+  "uniqueDirectionalPaintings": 144,
+  "validatedSourceRectangles": 144,
+  "presentationDirectionStyleCombinations": 294,
+  "recolorAndAlphaChecks": 288,
+  "continuousShadingChecks": 288,
+  "unobscuredIrisChecks": 392,
+  "longHairMotionChecks": 36,
+  "cache": {
+    "ready": true,
+    "error": null,
+    "styles": 49,
+    "directions": 3,
+    "materials": 32,
+    "limit": 32
+  },
+  "scope": "Front, three-quarter and rear art. Checks both registered faces, alpha, shading, visible iris areas and moving length layers."
+}

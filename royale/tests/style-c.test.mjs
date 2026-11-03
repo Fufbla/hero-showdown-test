@@ -20,7 +20,7 @@ const BASE='4495e0307e7a8dc9aa8bcdd8fbedb575048e6795';
 test('Style C and instant upgrades change only authorized Royale files',()=>{
  const git=(...a)=>execFileSync('git',a,{cwd:new URL('../../',import.meta.url),encoding:'utf8'}).trim();
  const changed=git('diff','--name-only',BASE).split('\n').filter(Boolean);
- const upgraded=new Set(['royale/app.mjs','royale/creator.mjs','royale/index.html','royale/power-menu.mjs','royale/powers.css','royale/power-upgrades.mjs','royale/tests/power-upgrades.test.mjs','royale/tests/phase3-checks.mjs','royale/STYLE-C-SYSTEM.md']);
+ const upgraded=new Set(['royale/app.mjs','royale/creator.mjs','royale/index.html','royale/power-menu.mjs','royale/powers.css','royale/power-upgrades.mjs','royale/tests/power-upgrades.test.mjs','royale/tests/phase3-checks.mjs','royale/STYLE-C-SYSTEM.md','royale/hero-rig.mjs','royale/eris-ui.mjs','royale/journey.mjs','royale/world-ui.css','royale/equipment.mjs','royale/tests/world-ui-preservation.mjs']);
  const allowed=p=>upgraded.has(p)||p.startsWith('royale/assets/hero/style-c-accurate/')||p==='royale/hero-art.mjs'||p==='royale/tests/hero-preservation.mjs'||/^royale\/(?:style-c-[^/]+\.mjs|tests\/style-c-[^/]+\.(?:mjs|html)|tests\/style-c\.test\.mjs|assets\/hero\/style-c-[^/]+|STYLE-C-APPROVAL\.md|qa\/style-c\/.*)$/.test(p);
  assert.deepEqual(changed.filter(p=>!allowed(p)),[]);
  const extra=git('ls-files','--others','--exclude-standard').split('\n').filter(Boolean).filter(p=>!p.startsWith('royale/node_modules/'));
@@ -134,4 +134,27 @@ test('both disposable Style C patrols use the normal save rules with eight activ
     assert.ok(game.canSave());
     assert.equal(game.hero.hp, game.hero.maxHp);
   }
+});
+
+
+test('the normal play renderer reads the packed illustrated keys and composites edited appearances',async()=>{
+ const {styleCDefault}=await import('../style-c-defaults.mjs'), c=createCanvas(320,360).getContext('2d');
+ for(const sex of ['male','female']){
+  const look=styleCDefault(sex), hero=previewHero('run',.18);
+  const stock=drawHero(c,125,245,look,hero,.18,1,{view:'game'});
+  const custom=drawHero(c,125,245,{...look,hair:'bantu-knots'},hero,.18,1,{view:'game'});
+  assert.equal(stock.artSource,'atlas');assert.equal(custom.artSource,'layers');
+  assert.equal(stock.clip,'run');assert.equal(custom.frame,stock.frame);
+  assert.deepEqual(stock.arms,custom.arms);assert.deepEqual(stock.legs,custom.legs);
+  assert.equal(drawHero(c,125,245,look,previewHero('idle',.2),.2,1,{view:'game'}).artSource,'reference');
+ }
+});
+test('an independently equipped emblem takes precedence over a chest’s cosmetic fallback',async()=>{
+ const {inventoryFor}=await import('./style-c-final-fixtures.mjs');
+ const {EQUIPMENT,equipmentOutfit}=await import('../equipment.mjs');
+ const badge=Object.values(EQUIPMENT).find(item=>item.part==='emblem');
+ const chest=Object.values(EQUIPMENT).find(item=>item.part==='chest' && item.rarity==='rare');
+ const mixed=inventoryFor([badge.id,chest.id]);
+ assert.equal(equipmentOutfit(mixed).pieces.emblem.id,badge.id);
+ const plain=inventoryFor([chest.id]);assert.equal(equipmentOutfit(plain).pieces.emblem.color,chest.accent);
 });

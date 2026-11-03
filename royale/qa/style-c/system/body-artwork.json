@@ -1,5 +1,5 @@
 {
-  "source": "../reference.jpeg",
+  "source": "../../../assets/hero/style-c-accurate/reference.jpeg",
   "reference_sha256": "e05d98f5b2b8d01e0bb50cc6feda77eb6556b401e7d6fa98dd828a13200f950b",
   "source_registration": {
     "male": [
@@ -55,5 +55,6 @@
       "file": "torsos.png",
       "sha256": "c35489bec52a61a50e003d968cb9fb96449da4c90a7b1f110383a32b5aa44538"
     }
-  ]
+  ],
+  "texture_directory": "../../../assets/hero/style-c-accurate/body/"
 }

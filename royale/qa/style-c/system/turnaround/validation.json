@@ -1,0 +1,55 @@
+{
+  "runtime": "native Canvas2D",
+  "passed": true,
+  "draws": 954,
+  "groups": {
+    "hairstyles": 294,
+    "motion": 600,
+    "equipment": 60
+  },
+  "coverage": {
+    "male-side": {
+      "hairstyles": 49,
+      "distinctAppearances": 49,
+      "poses": 25,
+      "builds": 4,
+      "completeGearSets": 10
+    },
+    "male-left": {
+      "hairstyles": 49,
+      "distinctAppearances": 49,
+      "poses": 25,
+      "builds": 4,
+      "completeGearSets": 10
+    },
+    "male-back": {
+      "hairstyles": 49,
+      "distinctAppearances": 49,
+      "poses": 25,
+      "builds": 4,
+      "completeGearSets": 10
+    },
+    "female-side": {
+      "hairstyles": 49,
+      "distinctAppearances": 49,
+      "poses": 25,
+      "builds": 4,
+      "completeGearSets": 10
+    },
+    "female-left": {
+      "hairstyles": 49,
+      "distinctAppearances": 49,
+      "poses": 25,
+      "builds": 4,
+      "completeGearSets": 10
+    },
+    "female-back": {
+      "hairstyles": 49,
+      "distinctAppearances": 49,
+      "poses": 25,
+      "builds": 4,
+      "completeGearSets": 10
+    }
+  },
+  "source": "Two reference side and rear stances, mirrored left profiles, painted modular hair/cape-off underlays, normal equipment and motion functions."
+}

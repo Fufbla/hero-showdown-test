@@ -2,10 +2,10 @@ import {HAIR_CATALOG,HAIR_CATEGORIES} from './hair-catalog.mjs';
 import { DEFAULT_LOOK, LOOK_OPTIONS, LOOK_RANGES, COLOR_FIELDS, sanitizeLook, validateName, canRecolorOutfit } from './appearance.mjs';
 import { drawHero } from './hero-art.mjs';
 import { PREVIEW_POSES, previewHero } from './hero-rig.mjs';
-import {styleCDefault} from './style-c-defaults.mjs';
+import {styleCDefault,STYLE_C_VIEWS} from './style-c-defaults.mjs';
 const $=id=>document.getElementById(id);
 const labelFor={waist:'Waist shape',hips:'Hip width',chest:'Chest shape',jaw:'Jaw width',presentation:'Presentation',age:'Age appearance',skin:'Skin tone',eyes:'Eye color',hair:'Hairstyle',hairColor:'Hair color',face:'Face shape',eyeShape:'Eye shape',brows:'Eyebrows',nose:'Nose',mouth:'Mouth',facialHair:'Facial hair',build:'Body build',height:'Height',shoulders:'Shoulder width',muscle:'Muscularity',torso:'Torso proportion',arms:'Arm proportion',legs:'Leg proportion',suit:'Primary suit color',trim:'Secondary suit color',emblemColor:'Emblem color',emblem:'Superhero emblem',capeColor:'Cape color',cape:'Wear a cape'};
-const optionLabel={male:'Male',female:'Female',teen:'Teenager',young:'Young adult',older:'Older adult',none:'None',leaf:'Leaf',bolt:'Lightning bolt',shield:'Shield',star:'Star',wave:'Wave',sun:'Sun'};
+const optionLabel={side:'Right',superKick:'Super Kick',male:'Male',female:'Female',teen:'Teenager',young:'Young adult',older:'Older adult',none:'None',leaf:'Leaf',bolt:'Lightning bolt',shield:'Shield',star:'Star',wave:'Wave',sun:'Sun'};
 export const FIELD_GROUPS={identity:['presentation','age','skin'],face:['hair','hairColor','eyes','face','eyeShape','brows','nose','mouth','facialHair','jaw'],body:['build','height','shoulders','muscle','torso','arms','legs','waist','hips','chest'],suit:['suit','trim','emblem','emblemColor','capeColor','cape']};
 const title=s=>optionLabel[s]||s[0].toUpperCase()+s.slice(1);
 export class Creator{
@@ -24,7 +24,7 @@ export class Creator{
     }
     this.createHairGallery();
     for(const pose of PREVIEW_POSES)$('preview-pose').add(new Option(title(pose).replaceAll('-',' '),pose));
-    for(const view of['front','back'])$(`view-${view}`).onclick=()=>{this.view=view;for(const v of['front','back'])$(`view-${v}`).setAttribute('aria-pressed',String(v===view));this.draw();this.refreshHairGallery();};
+    for(const view of STYLE_C_VIEWS)$(`view-${view}`).onclick=()=>{this.view=view;for(const v of STYLE_C_VIEWS)$(`view-${v}`).setAttribute('aria-pressed',String(v===view));this.draw();this.refreshHairGallery();};
     for(const button of document.querySelectorAll('[data-tab]')){
       button.onclick=()=>this.tab(button.dataset.tab);
       button.onkeydown=e=>{const order=Object.keys(FIELD_GROUPS),index=order.indexOf(button.dataset.tab);if(['ArrowRight','ArrowLeft','Home','End'].includes(e.key)){e.preventDefault();const target=e.key==='Home'?0:e.key==='End'?3:(index+(e.key==='ArrowRight'?1:3))%4;this.tab(order[target]);$(`tab-${order[target]}`).focus();}};
@@ -54,7 +54,7 @@ export class Creator{
   tab(key){for(const name of Object.keys(FIELD_GROUPS)){const selected=key===name;$(`panel-${name}`).hidden=!selected;$(`tab-${name}`).setAttribute('aria-selected',String(selected));$(`tab-${name}`).tabIndex=selected?0:-1;}document.querySelector('.creator-fields').scrollTop=0;}
   fill(value,outfit,newHero=false){
     this.newHero=newHero;
-    this.look=sanitizeLook(value);this.outfit=outfit;this.view='front';$('view-front').setAttribute('aria-pressed','true');$('view-back').setAttribute('aria-pressed','false');$('preview-pose').value='idle';
+    this.look=sanitizeLook(value);this.outfit=outfit;this.view='front';for(const v of STYLE_C_VIEWS)$(`view-${v}`).setAttribute('aria-pressed',String(v===this.view));$('preview-pose').value='idle';
     $('name').value=this.look.name;
     for(const field of Object.values(FIELD_GROUPS).flat()){$(field)[$(field).type==='checkbox'?'checked':'value']=this.look[field];}
     for(const field of['suit','trim','emblemColor','capeColor'])$(field).disabled=!canRecolorOutfit(outfit);

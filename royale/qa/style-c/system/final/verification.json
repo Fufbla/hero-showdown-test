@@ -1,0 +1,454 @@
+{
+  "passed": true,
+  "inputSha256": "51c162612983724413627d544f49b9e9a0b35f126368eb4ebdf6449f1f56bdd3",
+  "coverage": {
+    "presentations": 2,
+    "builds": 4,
+    "hairstyles": 49,
+    "poses": 25,
+    "authoredKeysPerPresentation": 107,
+    "views": 5,
+    "catalogItems": 155,
+    "regionalWardrobes": 18,
+    "mergeAssignments": 729,
+    "wornOutfitRows": 1681,
+    "equipmentPairs": 10668,
+    "rasters": 9800,
+    "assertions": 38655,
+    "enumFields": [
+      "presentation",
+      "age",
+      "build",
+      "hair",
+      "face",
+      "eyeShape",
+      "brows",
+      "nose",
+      "mouth",
+      "facialHair",
+      "emblem"
+    ],
+    "shapeSliders": [
+      "waist",
+      "hips",
+      "chest",
+      "jaw",
+      "height",
+      "shoulders",
+      "muscle",
+      "torso",
+      "arms",
+      "legs"
+    ],
+    "colorFields": [
+      "skin",
+      "eyes",
+      "hairColor",
+      "suit",
+      "trim",
+      "emblemColor",
+      "capeColor"
+    ]
+  },
+  "materials": {
+    "body": {
+      "ready": true,
+      "error": null,
+      "entries": 0,
+      "limit": 32
+    },
+    "hair": {
+      "ready": true,
+      "error": null,
+      "styles": 49,
+      "directions": 3,
+      "materials": 0,
+      "limit": 32
+    },
+    "face": {
+      "entries": 0,
+      "limit": 24,
+      "ready": true
+    },
+    "motion": {
+      "ready": true,
+      "error": null,
+      "angles": 2,
+      "paintedParts": 32,
+      "tintedParts": 0,
+      "tintLimit": 144
+    },
+    "equipment": {
+      "ready": true,
+      "error": null,
+      "sprites": 101,
+      "cached": 0,
+      "cacheLimit": 128
+    },
+    "turnarounds": {
+      "ready": true,
+      "error": null,
+      "views": [
+        "male-side",
+        "male-back",
+        "female-side",
+        "female-back"
+      ],
+      "cachedLayers": 0
+    }
+  },
+  "sheets": {
+    "pages": 4,
+    "expectedPages": 4
+  },
+  "references": {
+    "male": {
+      "opaqueInterior": 46303,
+      "identicalInteriorRgb": 1,
+      "withinTwoRgb": 1,
+      "silhouetteIoU": 0.9894238005166067,
+      "identicalVisibleRgba": 0.9894238005166067,
+      "originalReferenceRgbExact": 0.9998920156361358,
+      "originalReferenceWithinTwoRgb": 1
+    },
+    "female": {
+      "opaqueInterior": 51315,
+      "identicalInteriorRgb": 1,
+      "withinTwoRgb": 1,
+      "silhouetteIoU": 0.9898669696192326,
+      "identicalVisibleRgba": 0.9898669696192326,
+      "originalReferenceRgbExact": 0.9997076878105817,
+      "originalReferenceWithinTwoRgb": 1
+    }
+  },
+  "sampledFrames": {
+    "male": {
+      "idle": {
+        "sampledFrames": 6,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "walk": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "run": {
+        "sampledFrames": 6,
+        "authoredKeys": 6,
+        "distinctAuthoredPictures": 6
+      },
+      "turn": {
+        "sampledFrames": 5,
+        "authoredKeys": 5,
+        "distinctAuthoredPictures": 5
+      },
+      "jump": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "double-jump": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "fall": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "land": {
+        "sampledFrames": 3,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "punch": {
+        "sampledFrames": 7,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "kick": {
+        "sampledFrames": 6,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "air-punch": {
+        "sampledFrames": 5,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "air-kick": {
+        "sampledFrames": 5,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "hurt": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "knockback": {
+        "sampledFrames": 2,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "defeat": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "respawn": {
+        "sampledFrames": 11,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "flight": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "steel": {
+        "sampledFrames": 3,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "roots": {
+        "sampledFrames": 5,
+        "authoredKeys": 5,
+        "distinctAuthoredPictures": 5
+      },
+      "whirlwind": {
+        "sampledFrames": 5,
+        "authoredKeys": 5,
+        "distinctAuthoredPictures": 5
+      },
+      "strength": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "superKick": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "fireball": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "agility": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "speed": {
+        "sampledFrames": 6,
+        "authoredKeys": 6,
+        "distinctAuthoredPictures": 6
+      }
+    },
+    "female": {
+      "idle": {
+        "sampledFrames": 6,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "walk": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "run": {
+        "sampledFrames": 6,
+        "authoredKeys": 6,
+        "distinctAuthoredPictures": 6
+      },
+      "turn": {
+        "sampledFrames": 5,
+        "authoredKeys": 5,
+        "distinctAuthoredPictures": 5
+      },
+      "jump": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "double-jump": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "fall": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "land": {
+        "sampledFrames": 3,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "punch": {
+        "sampledFrames": 7,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "kick": {
+        "sampledFrames": 6,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "air-punch": {
+        "sampledFrames": 5,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "air-kick": {
+        "sampledFrames": 5,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "hurt": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "knockback": {
+        "sampledFrames": 2,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "defeat": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "respawn": {
+        "sampledFrames": 11,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "flight": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "steel": {
+        "sampledFrames": 3,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "roots": {
+        "sampledFrames": 5,
+        "authoredKeys": 5,
+        "distinctAuthoredPictures": 5
+      },
+      "whirlwind": {
+        "sampledFrames": 5,
+        "authoredKeys": 5,
+        "distinctAuthoredPictures": 5
+      },
+      "strength": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "superKick": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "fireball": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "agility": {
+        "sampledFrames": 4,
+        "authoredKeys": 4,
+        "distinctAuthoredPictures": 4
+      },
+      "speed": {
+        "sampledFrames": 6,
+        "authoredKeys": 6,
+        "distinctAuthoredPictures": 6
+      }
+    }
+  },
+  "apparelCoverage": {
+    "rows": 1681,
+    "distinctPairs": 10668,
+    "slots": [
+      "head",
+      "torso",
+      "gloves",
+      "boots",
+      "belt",
+      "cape",
+      "emblem"
+    ],
+    "choicesIncludingEmpty": [
+      38,
+      38,
+      12,
+      38,
+      12,
+      12,
+      12
+    ]
+  },
+  "singlePieceGreenPixels": {
+    "male:merge-lightning-boots": 2212,
+    "female:merge-lightning-boots": 2573,
+    "male:merge-air-boots": 2209,
+    "female:merge-air-boots": 2249,
+    "male:merge-styrodog-boots": 2502,
+    "female:merge-styrodog-boots": 1930,
+    "male:merge-sonic-boots": 1719,
+    "female:merge-sonic-boots": 1824,
+    "male:merge-styro-boots": 2223,
+    "female:merge-styro-boots": 2584,
+    "male:merge-wastelander-boots": 2212,
+    "female:merge-wastelander-boots": 2246,
+    "male:merge-venomis-boots": 2673,
+    "female:merge-venomis-boots": 2032,
+    "male:merge-atomdust-boots": 1726,
+    "female:merge-atomdust-boots": 1830,
+    "male:merge-lightning-chest": 2160,
+    "female:merge-lightning-chest": 2552,
+    "male:merge-air-chest": 2081,
+    "female:merge-air-chest": 2161,
+    "male:merge-styrodog-chest": 2442,
+    "female:merge-styrodog-chest": 1893,
+    "male:merge-sonic-chest": 1629,
+    "female:merge-sonic-chest": 1736,
+    "male:merge-styro-chest": 2169,
+    "female:merge-styro-chest": 2553,
+    "male:merge-wastelander-chest": 2099,
+    "female:merge-wastelander-chest": 2173,
+    "male:merge-venomis-chest": 2672,
+    "female:merge-venomis-chest": 2130,
+    "male:merge-atomdust-chest": 1630,
+    "female:merge-atomdust-chest": 1736,
+    "male:merge-lightning-helmet": 2143,
+    "female:merge-lightning-helmet": 2538,
+    "male:merge-air-helmet": 2053,
+    "female:merge-air-helmet": 2117,
+    "male:merge-styrodog-helmet": 2409,
+    "female:merge-styrodog-helmet": 1886,
+    "male:merge-sonic-helmet": 1602,
+    "female:merge-sonic-helmet": 1721,
+    "male:merge-styro-helmet": 2141,
+    "female:merge-styro-helmet": 2540,
+    "male:merge-wastelander-helmet": 2055,
+    "female:merge-wastelander-helmet": 2120,
+    "male:merge-venomis-helmet": 2537,
+    "female:merge-venomis-helmet": 1981,
+    "male:merge-atomdust-helmet": 1616,
+    "female:merge-atomdust-helmet": 1729
+  },
+  "findings": {},
+  "scope": "Native canvas via the public hero renderer. Discrete values, extremal sliders, representative valid colors, five views, each individual catalog item, all pairs of legal equipment-slot choices, both heroes on all 729 empty/eight-set Merge assignments, save reloads and gameplay guards. The test checks renderer output, not physical-device frame rate or artistic approval."
+}

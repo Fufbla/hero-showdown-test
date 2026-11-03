@@ -16,3 +16,17 @@
 #pause-menu button:focus-visible,.settings-card summary:focus-visible,.hair-gallery button:focus-visible{outline:3px solid #f1d18b;outline-offset:2px}
 #pause-primary button{text-align:left;overflow-wrap:anywhere}
 @media(max-height:500px){#pause-menu .pause-card{max-height:calc(100dvh - 26px);padding:12px 16px}#pause-menu h2{font-size:21px;margin:2px 0 8px}#pause-primary{gap:5px}#pause-primary button{min-height:44px;padding:8px}#safe-save-note{margin:6px 0 0}}
+
+
+/* Four viewing angles share the same space as the preview and wardrobe controls. */
+#creator .view-toggle button, .wardrobe-preview .view-toggle button {
+  min-width:0; min-height:36px; flex:1; padding:3px 8px;
+}
+@media (max-width:700px) {
+  #creator .view-toggle { width:100%; gap:1px; }
+  #creator .view-toggle button { padding:3px 2px; font-size:10px; }
+}
+
+#hero-art-status { position:absolute; z-index:30; top:8px; left:50%; transform:translateX(-50%);
+  max-width:calc(100% - 24px); padding:7px 12px; border-radius:8px; background:#163638; color:#faebbd;
+  font:600 12px system-ui,sans-serif; text-align:center; pointer-events:none; }

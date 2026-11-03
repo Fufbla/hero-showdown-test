@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "scope": "All wearable catalog items on anchors from the forward and turnaround renderers, using a 300 by 300 transparent evaluation tile. Full worn looks are captured separately.",
+  "partsInAtlas": 101,
+  "catalogItems": 155,
+  "selectors": {
+    "presentations": 2,
+    "bodyBuilds": 4,
+    "states": [
+      "idle",
+      "run",
+      "punch",
+      "kick",
+      "flight"
+    ],
+    "views": [
+      "front",
+      "side",
+      "back"
+    ]
+  },
+  "combinations": 18600,
+  "renderedIndividualLimbAndGearSamples": 24360,
+  "protectedPupilSamples": 2960,
+  "opaquePupilOcclusions": 0,
+  "paintedAlphaMinimum": 16,
+  "maximumEdgePixels": 0,
+  "mergeHeadChestBootCombinations": 729,
+  "withGreenAura": 728,
+  "withMatchingFourthAbility": 8
+}
