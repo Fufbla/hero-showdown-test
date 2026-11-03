@@ -1,0 +1,59 @@
+{
+  "source": "../reference.jpeg",
+  "reference_sha256": "e05d98f5b2b8d01e0bb50cc6feda77eb6556b401e7d6fa98dd828a13200f950b",
+  "source_registration": {
+    "male": [
+      435,
+      250,
+      289,
+      345
+    ],
+    "female": [
+      778,
+      250,
+      246,
+      345
+    ]
+  },
+  "production": {
+    "source": "Original approved RGB with an alpha matte. Fringe cleanup affects the outer transparent edge.",
+    "head": "Registered original reference pixels on a close-traced head matte. Used for unaltered jaw and native hair in moving frames.",
+    "cape": "Fully illustrated occluded cape fabric derived from the matching underlay, registered to the original clasp.",
+    "torsos": "Generated transparent neck-to-pelvis armor plates matched to the approved blue/gold and violet/gold outfits. Row 1 includes a gold star and row 2 is emblem-free. The four cells are 240 by 320.",
+    "emblems": "Six isolated illustrated gold badges in 96 by 96 cells. Row 1 contains star, bolt and shield. Row 2 contains leaf, sun and wave."
+  },
+  "textures": [
+    {
+      "file": "emblems.png",
+      "sha256": "9e10caa682f601db6631a4940d870bccd2027894643e5d459499fab3eca9c723"
+    },
+    {
+      "file": "female-cape.png",
+      "sha256": "04522520e5f6a5115c4b6c3a26ed3e71407d8430489b024765c851e8d7a58c76"
+    },
+    {
+      "file": "female-head.png",
+      "sha256": "2d0c262265e1a40d56899c09e15e59a2e00fe61e212a5bb76e4ff5b84494faf7"
+    },
+    {
+      "file": "female-source.png",
+      "sha256": "5d91d4cba8d3a211df5a51207184066e558358cfa623481c681b54bb4aa13676"
+    },
+    {
+      "file": "male-cape.png",
+      "sha256": "3db3a7ed18248079aa1a15d2f28f693728ccf97bed2ad50c56ab1f18d3038c13"
+    },
+    {
+      "file": "male-head.png",
+      "sha256": "66e65cebafbb287d99352b043084d719f60588f039f535ccfab23b7042afb081"
+    },
+    {
+      "file": "male-source.png",
+      "sha256": "c5ccd6abd37a8c8770506792b3393bd77aec1efe309f01b4f03c17d15571e1c2"
+    },
+    {
+      "file": "torsos.png",
+      "sha256": "c35489bec52a61a50e003d968cb9fb96449da4c90a7b1f110383a32b5aa44538"
+    }
+  ]
+}
