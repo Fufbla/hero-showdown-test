@@ -21,7 +21,7 @@ button.onclick=async()=>{
   const data=()=>JSON.parse(sessionStorage.getItem(prefix+PROFILE_KEY)).slots[0].snapshot;
   const inside=n=>{const r=n.getBoundingClientRect();return r.width>0&&r.height>0&&r.left>=-1&&r.right<=w.innerWidth+1&&r.top>=-1&&r.bottom<=w.innerHeight+1;};
   const select=(n,value)=>{n.value=value;n.dispatchEvent(new w.Event('change',{bubbles:true}));};
-  const quantity=value=>{el('upgrade-quantity').value=value;el('upgrade-quantity').dispatchEvent(new w.Event('input',{bubbles:true}));};
+  const spend=async id=>{const arrow=d.querySelector(`[data-upgrade="${id}"]`);arrow.scrollIntoView({block:'nearest'});arrow.click();await until(()=>el('power-list').getAttribute('aria-busy')==='false');};
   try{
     await new Promise(resolve=>{frame.onload=resolve;frame.src=`../?qa=1&touch=1&testSession=${session}`;});await attach();d.querySelector('[data-slot="0"] [data-action="continue"]').click();await advance(.2);
     check('legacy hero retains appearance, level and coins',data().look.name==='Eris Test Hero'&&data().level===99&&data().coins===87);
@@ -32,16 +32,16 @@ button.onclick=async()=>{
     for(const id of POWER_IDS){
       const choice=d.querySelector(`[data-power="${id}"]`);choice.scrollIntoView({block:'nearest',inline:'nearest'});choice.click();
       check(`${POWERS[id].name} preview and choice fit`,inside(d.querySelector(`[data-power="${id}"]`))&&el('power-detail').textContent.includes(POWERS[id].name)&&el('upgrade-preview').querySelectorAll('tbody tr').length>0);
-      quantity(1);el('review-upgrade').scrollIntoView({block:'nearest'});check(`${id} purchase reachable`,inside(el('review-upgrade'))&&!el('review-upgrade').disabled);el('review-upgrade').click();
-      check(`${id} requires confirmation`,!el('upgrade-confirm').hidden&&data().powers.levels[id]===0);
-      el('confirm-upgrade').click();check(`${id} upgrade persists immediately`,data().powers.levels[id]===1);
+      const arrow=d.querySelector(`[data-upgrade="${id}"]`);arrow.scrollIntoView({block:'nearest'});check(`${id} arrow reachable`,inside(arrow)&&!arrow.disabled);
+      await spend(id);check(`${id} one click persists one level`,data().powers.levels[id]===1);
     }
-    check('Speed is passive, all nine upgrades cost one point',el('tree-points').textContent==='89');
-    d.querySelector('[data-power="strength"]').click();quantity(19);check('multi-upgrade shows exact final target tier',el('upgrade-preview').textContent.includes('5')&&!el('review-upgrade').disabled);el('review-upgrade').click();el('cancel-upgrade').click();check('cancel keeps points and level',data().powers.levels.strength===1&&el('tree-points').textContent==='89');
-    el('review-upgrade').click();el('confirm-upgrade').click();check('19-level purchase reaches cap and deducts 19 points',data().powers.levels.strength===20&&el('tree-points').textContent==='70'&&el('review-upgrade').disabled);
-    el('close-tree').click();el('pause').click();select(el('slot-0'),'strength');select(el('slot-1'),'fireball');select(el('slot-2'),'flight');
-    el('manual-save').click();check('three slots save and omit passive Speed',[...el('slot-0').options].every(o=>o.value!=='speed')&&data().powers.equipped.join(',')==='strength,fireball,flight');
-    select(el('slot-1'),'strength');el('manual-save').click();check('equipped choices swap without duplicates',data().powers.equipped.join(',')==='fireball,strength,flight');select(el('slot-0'),'strength');
+    check('no upgrade quantity, confirmation, Save or Apply controls',!el('upgrade-quantity')&&!el('upgrade-confirm')&&!el('confirm-upgrade')&&![...el('power-detail').querySelectorAll('button')].some(b=>/save|apply|confirm|undo|respec/i.test(b.textContent)));
+    check('all nine upgrades cost one point',el('tree-points').textContent==='89');
+    for(let i=0;i<19;i++)await spend('strength');
+    check('one-point clicks reach cap and deduct 19 points',data().powers.levels.strength===20&&el('tree-points').textContent==='70'&&d.querySelector('[data-upgrade="strength"]').disabled);
+    el('loadout-slots').closest('details').open=true;select(el('slot-0'),'strength');select(el('slot-1'),'fireball');select(el('slot-2'),'flight');
+    el('close-tree').click();el('pause').click();el('manual-save').click();check('three slots save and omit passive Speed',[...el('slot-0').options].every(o=>o.value!=='speed')&&data().powers.equipped.join(',')==='strength,fireball,flight');
+    el('open-loadout').click();select(el('slot-1'),'strength');el('close-tree').click();el('pause').click();el('manual-save').click();check('equipped choices swap without duplicates',data().powers.equipped.join(',')==='fireball,strength,flight');el('open-loadout').click();select(el('slot-0'),'strength');el('close-tree').click();el('pause').click();
     el('open-controls').click();check('control settings open with visible vitals',!el('controls-menu').hidden&&inside(el('hp-text'))&&inside(el('close-controls')));
     el('mapping-list').closest('details').querySelector('summary').click();
     d.querySelector('[data-map="power0"]').click();tap('KeyQ');check('keyboard remap persisted',JSON.parse(sessionStorage.getItem(prefix+CONTROL_KEY)).keys.power0[0]==='KeyQ');
@@ -60,6 +60,13 @@ button.onclick=async()=>{
     originalPad=Object.getOwnPropertyDescriptor(w.navigator,'getGamepads');const pad={connected:true,mapping:'standard',axes:[0,0],buttons:Array.from({length:17},()=>({pressed:false}))};padInstalled=true;Object.defineProperty(w.navigator,'getGamepads',{configurable:true,value:()=>[pad]});
     await advance(.8);pad.buttons[0].pressed=true;await advance(.15);pad.buttons[0].pressed=false;check('simulated standard controller jumps',el('diagnostics').textContent.includes('jumps 1'));
     pad.buttons[9].pressed=true;await until(()=>!el('pause-menu').hidden);check('controller pauses',!el('pause-menu').hidden);pad.buttons[9].pressed=false;await new Promise(resolve=>w.requestAnimationFrame(()=>w.requestAnimationFrame(resolve)));pad.buttons[9].pressed=true;await until(()=>el('pause-menu').hidden);check('controller resumes from pause',el('pause-menu').hidden);pad.buttons[9].pressed=false;
+    el('pause').click();el('open-loadout').click();const up=d.querySelector('[data-upgrade="fireball"]');up.focus();const prior=data().powers.levels.fireball,points=data().powers.points;
+    pad.buttons[0].pressed=true;await until(()=>data().powers.levels.fireball===prior+1);await new Promise(resolve=>w.requestAnimationFrame(()=>w.requestAnimationFrame(resolve)));
+    check('controller A spends once while held',data().powers.levels.fireball===prior+1&&data().powers.points===points-1);pad.buttons[0].pressed=false;
+    const arrow=d.querySelector('[data-upgrade="flight"]'),level=data().powers.levels.flight;
+    for(const type of ['pointerdown','pointerup'])arrow.dispatchEvent(new w.PointerEvent(type,{pointerId:57,pointerType:'touch',bubbles:true,cancelable:true}));
+    check('touch pointer sequence does not duplicate the click',data().powers.levels.flight===level);arrow.click();await until(()=>data().powers.levels.flight===level+1);
+    check('one touch click spends exactly once',data().powers.levels.flight===level+1);el('close-tree').click();
     if(originalPad)Object.defineProperty(w.navigator,'getGamepads',originalPad);else delete w.navigator.getGamepads;originalPad=undefined;padInstalled=false;
     el('pause').click();report.textContent+=`COMPLETE · ${count} Phase 3 checks passed at ${w.innerWidth} × ${w.innerHeight}.\nSynthetic pointer/controller inputs; physical devices not tested.\n`;
   }catch(error){report.textContent+=`STOPPED · ${error.message}\n${el?.('diagnostics')?.textContent||''}`;}

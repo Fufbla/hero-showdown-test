@@ -1,11 +1,13 @@
-// New Style C renderer. No old painted body textures or old pose geometry are
-// used here. Its public drawHero signature preserves all existing consumers.
+// Source-pixel Style C front/game renderer; the inferred back view is retained
+// until visual approval. Public anchors preserve the existing power-effect API.
 import {paintStyleCPart,paintStyleCBone,paintStyleCTorso,styleCTextureStatus,styleCMaterial} from './style-c-materials.mjs';
 import {sanitizeLook,costumePalette} from './appearance.mjs';
 import {poseFor} from './style-c-rig.mjs';
 import {hairMotion} from './hair-art.mjs';
 import {drawStyleCHair} from './style-c-hair.mjs';
 import {INK,TAU,tone,poly,curve,line,oval,emblem} from './style-c-paint.mjs';
+import {helmet,mergeChest} from './style-c-equipment.mjs';
+import {drawSourceHero} from './style-c-source.mjs';
 const faces=new Map(),motion=new WeakMap();
 export const STYLE_C_FACE_CACHE_LIMIT=48;
 let canvasFactory=null;
@@ -93,28 +95,6 @@ function cape(c,p,color,back){
  for(const f of[-.55,0,.6]){const strip=chain.map(([x,y],i)=>[x+f*((back?p.d.shoulder*.7:6)+i*1.2),y]);line(c,strip,f<0?tone(color,1.5):tone(color,.58),f===0?3:2);}
  line(c,left,tone(color,1.65),.75);
 }
-function helmet(c,l,p,item,back,steel){
- if(!item)return;const col=steel?'#9aafbf':item.color,accent=steel?'#edf5f8':item.accent||'#d9b774',id=item.mergeId;
- c.save();c.translate(...p.head);c.rotate(p.headTilt);c.scale(p.d.head,p.d.head);
- if(!id){curve(c,[[-19,4],[-21,-14,-12,-23],[0,-28,12,-23],[21,-14,19,4],[14,9],[13,-8],[5,-13,0,-9],[-5,-13,-13,-8],[-14,9]],col,INK,1.2);line(c,[[-16,-12],[-8,-19],[0,-20],[8,-19],[16,-12]],accent,1.9);poly(c,[[-3,-22],[3,-22],[2,-12],[0,-9],[-2,-12]],accent,INK,.6);}
- else for(const s of[-1,1]){
-  if(id==='lightning'||id==='atomdust')poly(c,[[s*16,-7],[s*18,-22],[s*25,-14],[s*21,-12],[s*22,-5]],accent,INK,.9);
-  else if(id==='sonic'||id==='styrodog'){curve(c,[[s*16,-5],[s*24,-11,s*21,-24],[s*17,-19,s*16,-5]],col,INK,1.1);line(c,[[s*19,-9],[s*20,-17]],accent,1.2);}
-  else{oval(c,s*17,-6,4,5,col,INK,1);oval(c,s*17,-6,2.3,3,accent);line(c,[[s*17,-10],[s*14,-17]],accent,1.7);}
- }
- c.restore();
-}
-function mergeChest(c,p,item){
- const id=item?.mergeId;if(!id)return;const [x,y]=p.shoulder,accent=item.accent,col=item.color;
- for(const s of[-1,1]){const xx=x+s*p.d.shoulder;
-  if(id==='lightning'||id==='atomdust')poly(c,[[xx-s*5,y],[xx+s*5,y-8],[xx+s*9,y+8],[xx,y+5]],accent,INK,.85);
-  else if(id==='sonic'){oval(c,xx,y+2,6,5,col,INK,.8);oval(c,xx,y+2,3.6,3,accent,INK,.6);oval(c,xx,y+2,1.8,1.6,col);}
-  else if(id==='styrodog')for(let i=0;i<3;i++)poly(c,[[xx-5+i*4,y],[xx-4+i*4,y-5],[xx-1+i*4,y+3]],accent,INK,.7);
-  else if(id==='venomis')curve(c,[[xx-5,y],[xx+s*10,y-5],[xx+s*3,y+9],[xx-5,y]],accent,INK,.8);
-  else if(id==='wastelander'){oval(c,xx,y+3,6,5,'#34433f',INK,.8);oval(c,xx,y+3,2.5,2.5,accent);}
-  else line(c,[[xx,y-3],[xx+s*6,y+4],[xx,y+10]],accent,3);
- }
-}
 function poseMotion(owner,h,time,p){
  if(!owner)return p;let s=motion.get(owner);if(!s){s={time,face:h.face,turnTime:-10,vx:h.vx||0};motion.set(owner,s);}
  if(s.face!==h.face){s.face=h.face;s.turnTime=time;}
@@ -122,6 +102,11 @@ function poseMotion(owner,h,time,p){
  p.turn=Math.max(0,1-(time-s.turnTime)/.12);s.time=time;return p;
 }
 export function drawHero(c,x,y,raw,h,time,scale=1,options={}){
+ if(options.view!=='back'){
+  const source=drawSourceHero(c,x,y,raw,h,time,scale,options);
+  if(source)return source;
+  return poseFor(raw,h,time,options.view||'game');
+ }
  const l=sanitizeLook(raw),pieces=options.outfit?.pieces||{},palette=costumePalette(l,options.outfit),view=options.view||'game',back=view==='back';
  for(const [part,field]of[['suit','suit'],['cape','capeColor'],['emblem','emblemColor']])if(pieces[part])palette[field]=pieces[part].color;
  if(pieces.chest){palette.suit=pieces.chest.color;palette.trim=pieces.chest.accent;palette.emblemColor=pieces.chest.accent;l.emblem=pieces.chest.emblem||l.emblem;}

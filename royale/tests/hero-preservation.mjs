@@ -13,15 +13,19 @@ const authorized=new Set([
  'royale/tests/hero-review-checks.mjs','royale/tests/hero-before-art.mjs',
  'royale/tests/hero-before-rig.mjs','royale/tests/hero-record.mjs',
  'royale/HERO-ANIMATION.md',
+ 'royale/powers.css','royale/power-upgrades.mjs','royale/tests/power-upgrades.test.mjs',
+ 'royale/style-c-defaults.mjs','royale/style-c-source.mjs','royale/style-c-equipment.mjs',
  'royale/assets/hero/style-c-features.png','royale/assets/hero/style-c-features.mjs',
  'royale/style-c-materials.mjs','royale/assets/hero/style-c-parts.png','royale/assets/hero/style-c-parts.mjs','royale/assets/hero/style-c-prompt.md',
  'royale/style-c-rig.mjs','royale/style-c-paint.mjs','royale/style-c-hair.mjs','royale/style-c-hero.mjs',
  'royale/assets/hero/style-c-reference.jpeg','royale/STYLE-C-APPROVAL.md',
  'royale/tests/style-c-before-art.mjs','royale/tests/style-c.test.mjs',
  'royale/tests/style-c-review.html','royale/tests/style-c-review.mjs','royale/tests/style-c-scenes.mjs',
+ 'royale/tests/style-c-evidence.html','royale/tests/style-c-evidence.mjs',
+ 'royale/tests/style-c-static-evidence.mjs',
  'royale/tests/style-c-raster.mjs','royale/tests/style-c-browser.mjs',
 ]);
-export const isHeroPresentationFile=p=>authorized.has(p)||isWorldUIFile(p)||p.startsWith('royale/qa/hero-animation/')||p.startsWith('royale/qa/style-c/');
+export const isHeroPresentationFile=p=>authorized.has(p)||p.startsWith('royale/assets/hero/style-c-accurate/')||isWorldUIFile(p)||p.startsWith('royale/qa/hero-animation/')||p.startsWith('royale/qa/style-c/');
 export function assertHeroPresentationOnly(){
  assertWorldPreserved();
  const git=(...args)=>execFileSync('git',args,{cwd:new URL('../../',import.meta.url),encoding:'utf8',maxBuffer:32*1024*1024}).trim();

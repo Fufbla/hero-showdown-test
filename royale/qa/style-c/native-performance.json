@@ -2,16 +2,16 @@
   "scope": "Hero-only native canvas raster cost, not browser FPS",
   "renderer": "@napi-rs/canvas",
   "samples": 300,
-  "meanMs": 1.0237678700000112,
-  "p95Ms": 1.4816920000000664,
+  "meanMs": 0.3024614566666719,
+  "p95Ms": 0.5559869999999592,
   "textures": {
     "ready": true,
     "error": null,
-    "entries": 64,
+    "entries": 6,
     "limit": 64
   },
   "faces": {
-    "faceEntries": 10,
+    "faceEntries": 0,
     "faceLimit": 48
   }
 }

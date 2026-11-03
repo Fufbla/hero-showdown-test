@@ -2,6 +2,7 @@ import {HAIR_CATALOG,HAIR_CATEGORIES} from './hair-catalog.mjs';
 import { DEFAULT_LOOK, LOOK_OPTIONS, LOOK_RANGES, COLOR_FIELDS, sanitizeLook, validateName, canRecolorOutfit } from './appearance.mjs';
 import { drawHero } from './hero-art.mjs';
 import { PREVIEW_POSES, previewHero } from './hero-rig.mjs';
+import {styleCDefault} from './style-c-defaults.mjs';
 const $=id=>document.getElementById(id);
 const labelFor={waist:'Waist shape',hips:'Hip width',chest:'Chest shape',jaw:'Jaw width',presentation:'Presentation',age:'Age appearance',skin:'Skin tone',eyes:'Eye color',hair:'Hairstyle',hairColor:'Hair color',face:'Face shape',eyeShape:'Eye shape',brows:'Eyebrows',nose:'Nose',mouth:'Mouth',facialHair:'Facial hair',build:'Body build',height:'Height',shoulders:'Shoulder width',muscle:'Muscularity',torso:'Torso proportion',arms:'Arm proportion',legs:'Leg proportion',suit:'Primary suit color',trim:'Secondary suit color',emblemColor:'Emblem color',emblem:'Superhero emblem',capeColor:'Cape color',cape:'Wear a cape'};
 const optionLabel={male:'Male',female:'Female',teen:'Teenager',young:'Young adult',older:'Older adult',none:'None',leaf:'Leaf',bolt:'Lightning bolt',shield:'Shield',star:'Star',wave:'Wave',sun:'Sun'};
@@ -28,7 +29,13 @@ export class Creator{
       button.onclick=()=>this.tab(button.dataset.tab);
       button.onkeydown=e=>{const order=Object.keys(FIELD_GROUPS),index=order.indexOf(button.dataset.tab);if(['ArrowRight','ArrowLeft','Home','End'].includes(e.key)){e.preventDefault();const target=e.key==='Home'?0:e.key==='End'?3:(index+(e.key==='ArrowRight'?1:3))%4;this.tab(order[target]);$(`tab-${order[target]}`).focus();}};
     }
-    $('creator-form').addEventListener('input',()=>{this.read();this.validate(false);this.draw();this.refreshHairGallery();});
+    $('creator-form').addEventListener('input',event=>{
+      if(this.newHero&&event.target.id==='presentation'){
+        const previous=styleCDefault(this.look.presentation),next=styleCDefault($('presentation').value);
+        for(const key of ['skin','eyes','hair','hairColor','suit','trim','emblemColor','emblem','capeColor','brows','mouth'])if(this.look[key]===previous[key])$(key).value=next[key];
+      }
+      this.read();this.validate(false);this.draw();this.refreshHairGallery();
+    });
     $('preview-pose').addEventListener('change',()=>this.draw());
   }
   createHairGallery(){
@@ -45,7 +52,8 @@ export class Creator{
     for(const style of choices){const b=document.createElement('button');b.type='button';b.setAttribute('aria-pressed',String(style.id===this.look.hair));b.setAttribute('aria-label',style.name);const canvas=document.createElement('canvas');canvas.width=100;canvas.height=110;canvas.setAttribute('aria-hidden','true');const c=canvas.getContext('2d');c.fillStyle='#203641';c.fillRect(0,0,100,110);drawHero(c,50,215,{...this.look,hair:style.id,cape:false},previewHero('idle',0),0,1.7,{view:this.view});const label=document.createElement('span');label.textContent=style.name;b.append(canvas,label);b.onclick=()=>{$('hair').value=style.id;$('hair').dispatchEvent(new Event('input',{bubbles:true}));};grid.append(b);}
   }
   tab(key){for(const name of Object.keys(FIELD_GROUPS)){const selected=key===name;$(`panel-${name}`).hidden=!selected;$(`tab-${name}`).setAttribute('aria-selected',String(selected));$(`tab-${name}`).tabIndex=selected?0:-1;}document.querySelector('.creator-fields').scrollTop=0;}
-  fill(value,outfit){
+  fill(value,outfit,newHero=false){
+    this.newHero=newHero;
     this.look=sanitizeLook(value);this.outfit=outfit;this.view='front';$('view-front').setAttribute('aria-pressed','true');$('view-back').setAttribute('aria-pressed','false');$('preview-pose').value='idle';
     $('name').value=this.look.name;
     for(const field of Object.values(FIELD_GROUPS).flat()){$(field)[$(field).type==='checkbox'?'checked':'value']=this.look[field];}

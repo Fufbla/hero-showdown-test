@@ -1,14 +1,15 @@
 import {STYLE_C_FEATURES} from './assets/hero/style-c-features.mjs';
 import {STYLE_C_PARTS} from './assets/hero/style-c-parts.mjs';
+import {prepareSourceArt} from './style-c-source.mjs';
 const url=new URL('./assets/hero/style-c-parts.png',import.meta.url),cache=new Map();
 let source=null,features=null,pending=null,makeCanvas=null,error=null;
 export const STYLE_C_TEXTURE_LIMIT=64;
 export const styleCTextureStatus=()=>({ready:!!source,error,entries:cache.size,limit:STYLE_C_TEXTURE_LIMIT});
 export async function prepareStyleCMaterials({imageLoader,canvasFactory}={}){
- if(source)return true;if(pending)return pending;
+ if(source)return prepareSourceArt({imageLoader,canvasFactory});if(pending)return pending;
  makeCanvas=canvasFactory||((w,h)=>typeof OffscreenCanvas!=='undefined'?new OffscreenCanvas(w,h):Object.assign(document.createElement('canvas'),{width:w,height:h}));
- const load=imageLoader||(u=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(Error('Style C artwork could not load; vector fallback remains playable.'));im.src=u.href;}));
- pending=(async()=>{try{const [im,featureImage]=await Promise.all([load(url),load(new URL('./assets/hero/style-c-features.png',import.meta.url))]);if(im.width!==STYLE_C_PARTS.width||im.height!==STYLE_C_PARTS.height)throw Error('Style C atlas dimensions do not match');source=im;features=featureImage;return true;}catch(e){error=e.message;return false;}})();return pending;
+ const load=imageLoader||(u=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(Error('Style C artwork could not load. Reload to retry.'));im.src=u.href;}));
+ pending=(async()=>{try{const [im,featureImage]=await Promise.all([load(url),load(new URL('./assets/hero/style-c-features.png',import.meta.url))]);if(im.width!==STYLE_C_PARTS.width||im.height!==STYLE_C_PARTS.height)throw Error('Style C atlas dimensions do not match');source=im;features=featureImage;return await prepareSourceArt({imageLoader:load,canvasFactory:makeCanvas});}catch(e){error=e.message;return false;}})();return pending;
 }
 export function styleCMaterial(part,color){
  if(!source)return null;const key=part+color;if(cache.has(key)){const im=cache.get(key);cache.delete(key);cache.set(key,im);return im;}

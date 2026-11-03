@@ -1,0 +1,61 @@
+Running Phase 3 UI, save and control checks…
+PASS · legacy hero retains appearance, level and coins
+PASS · health uses Phase 3 level growth
+PASS · 98 earned points imported
+PASS · Tree reachable at Shore camp
+PASS · Tree interface and vitals remain visible
+PASS · Super Strength preview and choice fit
+PASS · strength arrow reachable
+PASS · strength one click persists one level
+PASS · Super Kick preview and choice fit
+PASS · superKick arrow reachable
+PASS · superKick one click persists one level
+PASS · Fireball preview and choice fit
+PASS · fireball arrow reachable
+PASS · fireball one click persists one level
+PASS · Flight preview and choice fit
+PASS · flight arrow reachable
+PASS · flight one click persists one level
+PASS · Steel Body preview and choice fit
+PASS · steel arrow reachable
+PASS · steel one click persists one level
+PASS · Ground Roots preview and choice fit
+PASS · roots arrow reachable
+PASS · roots one click persists one level
+PASS · Agility preview and choice fit
+PASS · agility arrow reachable
+PASS · agility one click persists one level
+PASS · Speed preview and choice fit
+PASS · speed arrow reachable
+PASS · speed one click persists one level
+PASS · Whirlwind preview and choice fit
+PASS · whirlwind arrow reachable
+PASS · whirlwind one click persists one level
+PASS · no upgrade quantity, confirmation, Save or Apply controls
+PASS · all nine upgrades cost one point
+PASS · one-point clicks reach cap and deduct 19 points
+PASS · three slots save and omit passive Speed
+PASS · equipped choices swap without duplicates
+PASS · control settings open with visible vitals
+PASS · keyboard remap persisted
+PASS · size layout adjustment reachable
+PASS · left layout adjustment reachable
+PASS · right layout adjustment reachable
+PASS · rise layout adjustment reachable
+PASS · Escape closes settings even with a field focused
+PASS · maximum touch layout stays on screen
+PASS · remapped ability darkens on cooldown
+PASS · no numerical cooldown countdown
+PASS · combat blocks swapping and Tree spending
+PASS · loadout unlocks outside combat
+PASS · reload keeps levels, three powers and controls
+PASS · touch activates Flight
+PASS · touch cancellation ends Flight with full recovery
+PASS · simulated standard controller jumps
+PASS · controller pauses
+PASS · controller resumes from pause
+PASS · controller A spends once while held
+PASS · touch pointer sequence does not duplicate the click
+PASS · one touch click spends exactly once
+COMPLETE · 58 Phase 3 checks passed at 390 × 844.
+Synthetic pointer/controller inputs; physical devices not tested.

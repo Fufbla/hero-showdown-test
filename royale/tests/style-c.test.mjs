@@ -17,10 +17,11 @@ configureStyleC({makeCanvas:createCanvas});
 await prepareStyleCMaterials({canvasFactory:createCanvas,imageLoader:u=>loadImage(fileURLToPath(u))});
 const near=(a,b,t=1e-5)=>assert.ok(Math.abs(a-b)<t,`${a} != ${b}`);
 const BASE='4495e0307e7a8dc9aa8bcdd8fbedb575048e6795';
-test('Style C changes only Royale hero presentation and dedicated approval evidence',()=>{
+test('Style C and instant upgrades change only authorized Royale files',()=>{
  const git=(...a)=>execFileSync('git',a,{cwd:new URL('../../',import.meta.url),encoding:'utf8'}).trim();
  const changed=git('diff','--name-only',BASE).split('\n').filter(Boolean);
- const allowed=p=>p==='royale/hero-art.mjs'||p==='royale/tests/hero-preservation.mjs'||/^royale\/(?:style-c-[^/]+\.mjs|tests\/style-c-[^/]+\.(?:mjs|html)|tests\/style-c\.test\.mjs|assets\/hero\/style-c-[^/]+|STYLE-C-APPROVAL\.md|qa\/style-c\/.*)$/.test(p);
+ const upgraded=new Set(['royale/app.mjs','royale/creator.mjs','royale/index.html','royale/power-menu.mjs','royale/powers.css','royale/power-upgrades.mjs','royale/tests/power-upgrades.test.mjs','royale/tests/phase3-checks.mjs']);
+ const allowed=p=>upgraded.has(p)||p.startsWith('royale/assets/hero/style-c-accurate/')||p==='royale/hero-art.mjs'||p==='royale/tests/hero-preservation.mjs'||/^royale\/(?:style-c-[^/]+\.mjs|tests\/style-c-[^/]+\.(?:mjs|html)|tests\/style-c\.test\.mjs|assets\/hero\/style-c-[^/]+|STYLE-C-APPROVAL\.md|qa\/style-c\/.*)$/.test(p);
  assert.deepEqual(changed.filter(p=>!allowed(p)),[]);
  const extra=git('ls-files','--others','--exclude-standard').split('\n').filter(Boolean).filter(p=>!p.startsWith('royale/node_modules/'));
  assert.deepEqual(extra.filter(p=>!allowed(p)),[]);
@@ -76,4 +77,46 @@ test('new drawing cannot alter movement, attack boxes, rewards, inventory or sav
 test('Style C face and texture caches remain bounded during customization',()=>{
  const c=createCanvas(240,240).getContext('2d');for(let i=0;i<90;i++){const skin='#'+(0x784020+i*70).toString(16);drawHero(c,120,220,{skin,eyes:'#'+(0x354020+i*50).toString(16)},previewHero('idle',i/60),i/60);styleCMaterial('torsoMale',skin);}
  assert.ok(styleCCacheStatus().faceEntries<=styleCCacheStatus().faceLimit);assert.ok(styleCTextureStatus().entries<=styleCTextureStatus().limit);
+});
+
+test('default idle uses uploaded RGB at native reference proportions, including both faces and costumes',async()=>{
+ const {styleCDefault}=await import('../style-c-defaults.mjs');
+ const ref=await loadImage(fileURLToPath(new URL('../assets/hero/style-c-accurate/reference.jpeg',import.meta.url))),original=createCanvas(1536,864);original.getContext('2d').drawImage(ref,0,0);const source=original.getContext('2d').getImageData(0,0,1536,864).data;
+ for(const [sex,x]of [['male',632],['female',940]]){
+  const canvas=createCanvas(1536,864),c=canvas.getContext('2d');drawHero(c,x,590,styleCDefault(sex),previewHero('idle',.2),.2,1/.35,{view:'front'});const pixels=c.getImageData(0,0,1536,864).data;let checked=0,error=0,face=0,costume=0;
+  for(let i=0;i<pixels.length;i+=4)if(pixels[i+3]===255){checked++;for(let k=0;k<3;k++)error=Math.max(error,Math.abs(pixels[i+k]-source[i+k]));const y=Math.floor(i/4/1536);if(y>350&&y<420)face++;if(y>440&&y<580)costume++;}
+  assert.ok(checked>30000,sex+' opaque source pixels');assert.ok(face>4000&&costume>6000);assert.ok(error<=1,sex+' RGB error '+error);
+ }
+});
+test('source rig retains fixed limb lengths, facial scale and actual default attack contact positions',async()=>{
+ const {sourcePose}=await import('../style-c-source.mjs');const {styleCDefault}=await import('../style-c-defaults.mjs');
+ for(const sex of ['male','female'])for(const state of PREVIEW_POSES)for(const t of [.01,.09,.15,.29,.6]){
+  const l=styleCDefault(sex),h=previewHero(state,t),before=JSON.stringify([l,h]),p=sourcePose(l,h,t);
+  for(const kind of ['arms','legs'])for(let i=0;i<2;i++)for(let j=0;j<2;j++)near(Math.hypot(p[kind][i][j+1][0]-p[kind][i][j][0],p[kind][i][j+1][1]-p[kind][i][j][1]),Math.hypot(p.m[kind][i][j+1][0]-p.m[kind][i][j][0],p.m[kind][i][j+1][1]-p.m[kind][i][j][1]));
+  assert.equal(JSON.stringify([l,h]),before);assert.equal(p.unitScale,.35);
+ }
+ for(const sex of ['male','female'])for(const kind of ['punch','kick'])for(let age=ATTACKS[kind].startup+.001;age<ATTACKS[kind].startup+ATTACKS[kind].active;age+=.015){const p=sourcePose(styleCDefault(sex),{...previewHero('idle',0),attack:{kind,age,face:1}},0),point=p[kind==='punch'?'arms':'legs'][0][2];near((point[0]-p.m.origin[0])*.35,kind==='punch'?54:56,.03);near((point[1]-p.m.origin[1])*.35,kind==='punch'?-54:-39,.03);}
+});
+
+
+test('source renderer returns hero-local arm anchors for existing Strength effects',()=>{
+ const c=createCanvas(400,400).getContext('2d');for(const look of STYLE_C_SAMPLES){const h=previewHero('strength',.09),p=drawHero(c,150,300,look,h,.09);near(p.arms[0][2][0],54,.03);near(p.arms[0][2][1],-54,.03);assert.ok(p.arms.flat(2).every(v=>Math.abs(v)<150));}
+});
+
+test('idle eye and facial edits preserve the source body, hands, legs and cape',async()=>{
+ const {styleCDefault}=await import('../style-c-defaults.mjs');
+ for(const sex of ['male','female']){
+  const look=styleCDefault(sex),x=sex==='male'?632:940;
+  const raster=l=>{const canvas=createCanvas(1536,864);drawHero(canvas.getContext('2d'),x,590,l,previewHero('idle',.2),.2,1/.35,{view:'front'});return canvas.getContext('2d').getImageData(0,0,1536,864).data;};
+  const before=raster(look);
+  for(const patch of [{eyes:'#298cbe'},{nose:'broad'},{mouth:'smile'},{brows:'soft'}]){
+   const after=raster({...look,...patch});let faceChanged=0;
+   for(let y=250;y<595;y++)for(let xx=sex==='male'?435:778;xx<(sex==='male'?724:1024);xx++){
+    const i=(y*1536+xx)*4;
+    if(y>=440)for(let k=0;k<4;k++)assert.equal(after[i+k],before[i+k],sex+' body shifted for '+Object.keys(patch)[0]);
+    else if(after[i]!==before[i]||after[i+1]!==before[i+1]||after[i+2]!==before[i+2])faceChanged++;
+   }
+   assert.ok(faceChanged>0,'requested facial selection remains visible');
+  }
+ }
 });

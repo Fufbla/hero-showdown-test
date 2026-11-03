@@ -1,60 +1,59 @@
-# Style C — initial visual approval checkpoint
+# Style C — emergency default-artwork approval checkpoint
 
-Date: 2026-11-02. Base: `4495e0307e7a8dc9aa8bcdd8fbedb575048e6795` on `feature/royale-world-ui-loot`. Isolated delivery branch: `feature/royale-style-c-heroes`.
+Date: November 2, 2026 (America/New_York). Branch: `feature/royale-style-c-heroes`.
 
-This is the appearance and first movement approval checkpoint requested in steps 14–15. The full animation rollout is paused pending the user's visual approval. It is not a claim that every animation is finalized or that the reference match is approved.
+**The default standing designs are ready for visual review. Full animation production remains paused. This is not a claim that all custom hairstyles, rear views or animation poses are finished.**
 
-## Review and play
+## Recovery and scope
 
-Open `tests/style-c-review.html` through a static HTTP server. It provides the supplied reference beside live male/female examples, idle/walk/run/punch/kick controls, frame stepping, all appearance controls, equipment selection, a 49-hairstyle gallery and a playable normal-game iframe at desktop, 390 × 844 and 844 × 390 sizes.
+The initial GitHub head was `3f8418555b6338f62e1a3a7257a569b6c4b30bc8`. It still used geometric face/body construction plus generated part textures, and its upgrades required confirmation. A recovery branch was created before changes: `recovery/style-c-before-correction-20261102`.
 
-“Start practice” creates a disposable level-99 review hero in an isolated session namespace. Its level, powers, coins and equipment are review fixtures, not changes to progression or the normal game. “Play regular adventure” uses the existing hero slots and normal progression. Changing the example does not overwrite a saved player appearance. The hosted review retains browser-local saving; the unfinished authentication backend is not rebuilt.
+The newer review site's source, `f443d8677e4336c1759cef6e722eff7abd2661bc` (version 4), already held the source-pixel hero renderer, default presets and instant one-point upgrades. Those newer changes were missing from GitHub. They were restored without redesigning them, verified by 986 passing tests, and preserved in recovery commit `d731d96` and local branch `recovery/style-c-source-art-20261102`.
 
-Controls remain A/D or arrows to move, Shift to run, Space to jump, J to punch, K to kick, E to pick up and Up to use a portal. The existing touch controls also remain available. Leaving the game iframe can pause it through the existing focus-loss behavior; use Resume Game when returning.
+This correction then keeps the intact standing body when the player changes eye color, nose, mouth, eyebrows or emblem. Previously these changes unnecessarily selected the segmented IK body and could shift joints. The changed feature is now overlaid on the original standing artwork. The new regression compares every body pixel below the face for both presentations.
 
-## What changed
+No new hairstyle or animation frames were generated. No existing source art was discarded. New-character presets use the approved short locs/blue-gold male and high textured ponytail/purple-gold female. Existing customized saves retain their selections; choosing a different hairstyle does not turn that selection into an approved default.
 
-- A replacement layered hero renderer, with new original armor and facial atlases, compact proportions, customizable face features, connected shoulders/elbows/wrists and hips/knees/ankles, cel shading, emblems and capes.
-- A new pose rig for the five review motions, driven by the original movement and attack clocks. Planted stance feet, alternating strides, arm and hip motion, knee chambers, attack contact poses and recovery are presentation only.
-- All 42 current and 7 legacy hairstyle IDs render through the new hair system. Loc, braid, curl and ponytail strands use connected procedural paths and reusable detailed textures. Existing saved options are retained.
-- Regular/rare equipment and all eight Villain Merge appearances fit the rig, retain catalogue colors and preserve the white/green glow behavior. Starter colors remain editable.
-- Bounded texture/face caches and a nonblocking image-load fallback. No generated texture blocks movement, collision, attacks or rendering while it loads.
+## Review
 
-The only pre-existing runtime file changed is `hero-art.mjs`, which now exports the replacement renderer. The old drawing is retained solely as a before-image test fixture. Gameplay, input, camera, collision, attack reach, damage, cooldowns, XP, equipment data, save schema, monster/boss source artwork, audio, world, portals and loot code are unchanged from the base. No files outside `royale/` changed. Main, Story Mode and Versus Mode were not modified.
+Open [the default artwork approval page](tests/style-c-evidence.html) through the existing static server. It shows equal-scale full figures, six close-up categories, and the real game/HUD in desktop and phone-sized frames. Review heroes use a disposable session-storage namespace, not an existing player slot.
 
-## Evidence
-
-| Artifact | Contents |
+| Evidence | Contents |
 | --- | --- |
-| [Before / after](qa/style-c/before-after.png) | Identical appearance examples through the old and new renderer |
-| [Reference comparison](qa/style-c/reference-comparison.png) | User-supplied reference beside the implemented examples |
-| [Idle previews](qa/style-c/idle-previews.png) | Male and female examples |
-| [Movement video](qa/style-c/movement-previews.mp4) | 12 seconds, actual renderer, idle/walk/run/punch/kick; encoded at 30 FPS, not a gameplay performance measurement |
-| [Movement poses](qa/style-c/movement-poses.png) | Key poses for the five review motions |
-| [Desktop gameplay](qa/style-c/gameplay-desktop.jpg) | Browser screenshot beside integrated monsters at the original camera scale; QA overlay visible |
-| [Phone portrait](qa/style-c/gameplay-phone-portrait.jpg) | Actual 390 × 844 game iframe, original camera and controls |
-| [Phone landscape](qa/style-c/gameplay-phone-landscape.jpg) | Actual 844 × 390 game iframe, original camera and controls |
-| [Browser checkpoint](qa/style-c/browser-review.jpg) | Reference and live kick pose in the review page |
-| [Hairstyles](qa/style-c/hairstyles-49.png) | All 49 saved hairstyle IDs |
-| [Equipment](qa/style-c/equipment.png) / [Builds](qa/style-c/body-builds.png) | Fixed-color suit variants and body builds |
-| [Art inventory and generation brief](assets/hero/style-c-prompt.md) | Two original transparent atlases, crop metadata and provenance |
+| [Four-column comparison](qa/style-c/emergency/reference-comparison.png) | Original male / in-game male / original female / in-game female; same source scale and angle |
+| [Close-ups](qa/style-c/emergency/closeups.png) | Faces, hair, torso/armor, arms/hands, legs/boots and capes for both heroes |
+| [Male phone gameplay](qa/style-c/emergency/gameplay-male-portrait.jpg) | Actual game, HUD, camera and integrated monsters at 390 × 844 |
+| [Female phone gameplay](qa/style-c/emergency/gameplay-female-portrait.jpg) | Actual game at 390 × 844 |
+| [Female desktop gameplay](qa/style-c/emergency/gameplay-female-desktop.jpg) | Actual game at 1280 × 720 |
+| [Automated results](qa/style-c/emergency/automated-tests.txt) | 987 passed, zero failed/skipped |
+| [Creature results](qa/style-c/emergency/creatures.json) | All 36 creature renderers, 9,288 checks |
+| [GitHub baseline](qa/style-c/emergency-github-baseline.txt) / [recovered baseline](qa/style-c/emergency-recovered-baseline.txt) | 973 and 986 passing tests respectively |
 
-## Validation
+Generate only the static comparison evidence with `node royale/tests/style-c-static-evidence.mjs`. The public hero renderer produces the in-game columns; these are not image-generated gameplay mockups. Historical files outside `qa/style-c/emergency/` belong to earlier checkpoints.
 
-- Baseline: 941 Royale tests passed. A broader invocation also found 16 pre-existing legacy test files that cannot run from this checkout because they expect missing nested `tests/dist/` or `tests/assets/` paths. Those Story/Versus packaging assumptions were not changed. [Full baseline output](qa/style-c/baseline-tests.txt).
-- Final Royale suite: **973 passed, zero failed/skipped**, including 32 new Style C tests. [Full output](qa/style-c/automated-tests.txt). Tests cover fixed joint lengths, finite poses at slider extremes, planted feet, unchanged active punch/kick contact targets, unique hairstyle rasters, appearance round-trips, fixed equipment colors, bounded caches, immutable game state and the protected-file boundary.
-- Browser canvas checks: **1,775 drawings and 4,911 assertions passed**, covering hairstyles, four builds, two presentations, equipment and 23 pose states. [Results](qa/style-c/browser-checks.json).
-- All **36 creatures** passed **9,288 rendering checks**, including phase attacks, facings, transparent bounds and immutable combat state. This confirms the integrated creature renderers remain usable; it does not mean 36 full battles were manually played. [Results](qa/style-c/creature-results.json).
-- Browser inspection: Linux cloud Chrome 155, desktop game viewport 1226 × 720 plus phone-sized iframes 390 × 844 and 844 × 390. Checked live idle/walk/run selection, punch/kick contact poses, loaded textures, normal-game movement, touch jump/punch/kick, pause/resume and integrated monsters. Phone screenshots are resized browser views, not physical iOS/Android testing. Sampled console warnings were from the cloud browser extension, not the game modules.
+## Source artwork and architecture
 
-## Performance and remaining limits
+The exact approved JPEG is `assets/hero/style-c-accurate/reference.jpeg` (SHA-256 `e05d98f5b2b8d01e0bb50cc6feda77eb6556b401e7d6fa98dd828a13200f950b`). It matches the recovered user upload byte for byte. Original RGB supplies the visible face, hair, skin, costume, gloves, boots and cape. The existing generated `aligned-extraction.png` supplies only the alpha guide. Its generated RGB is not substituted for the approved artwork.
 
-The native hero-only raster sample averaged **1.024 ms**, p95 **1.482 ms**, over 300 draws. This is not browser FPS. [Native sample](qa/style-c/native-performance.json).
+`hero-art.mjs` routes front/game rendering through `style-c-hero.mjs` and `style-c-source.mjs`. The default rest frame uses a single intact source texture at 0.35 world units per source pixel, with uniform scaling. Existing layered body/head/limb/cape paths support the retained customization and provisional motions. `style-c-defaults.mjs`, `creator.mjs`, `appearance.mjs` and `hair-catalog.mjs` preserve preset and saved-feature identifiers. The 49 saved hairstyle IDs remain available.
 
-The 12.397-second cloud browser sample delivered only 16 frame intervals: **1.29 average FPS**, **0.98 FPS one-percent low**, **10.73 ms mean** and **130.40 ms p95** simulation-plus-draw cost. Asset preparation took 20 ms in this already-loaded browser; reported JS heap was 17,984,246 bytes. It included 24 live enemies but advanced only 1.35 simulation seconds because elapsed time is capped by the existing game loop. The sparse frame delivery makes it unsuitable for a physical-device performance prediction. [Raw browser sample](qa/style-c/browser-performance.json).
+## Known visual differences and limitations
 
-No sustained 60 FPS, cold-start loading, audio latency, physical mobile performance or complete browser-matrix claim is made. The provided animation video is an offline renderer export, not a captured 30-FPS gameplay run. Device profiling remains necessary; the cloud sample's frame-delivery bottleneck has not been isolated to a specific cause.
+- Fine alpha fringes and small contour losses remain around hair and boot edges. The native-resolution raster test confirms retained opaque RGB within one rounding unit, not an exact silhouette or a zero-difference image.
+- Each source figure is about 330 pixels high and has one standing viewing angle. Enlarged close-ups reveal the source resolution, not new painted detail.
+- Hidden joints, scalp beneath the default hair, rear views and concealed cape fabric are not specified. Existing generated cape underlay and inferred rear rendering are provisional and are not part of this default-front approval.
+- Custom hair, facial overlays, altered body proportions and equipment remain functional but do not all reach the reference's artwork quality. They have not been presented as finished. The existing non-default hairstyles visible in the supplied creator screenshots are still pending a separate artwork pass after default approval.
+- Existing movement can expose cutout seams, particularly at shoulders, hips and knees. No full animation production or additional motion polish was performed.
+- At actual phone portrait scale, both heroes' silhouettes, hair and costume colors remain distinguishable; fine face and armor detail requires the close-up view. Browser-size checks are not physical iPhone/Android or sustained-FPS certification.
 
-The initial faces, hair silhouettes, armor proportions, cape shape and five motions need subjective approval against the supplied image. Automated uniqueness/visibility checks do not substitute for that approval or exhaustive visual inspection of every customization combination. Aerial combat, flight, double-jump, damage, defeat and respawn have safe compatible poses; their full transition and animation polish is explicitly deferred until approval. No new audio phase or other major development phase is included.
+## Verification and preserved systems
 
-Please review the appearance and idle/walk/run/punch/kick movement before authorizing the full animation rollout.
+`node --test --test-concurrency=2 royale/tests/*.test.mjs`: **987 passed, zero failed or skipped**. Initial missing PGlite was resolved with the repository's locked dependencies before successful baseline runs.
+
+Native creature validation: **36 creatures, 9,288 passing checks**, covering existing monster/boss renderers, states, phase attacks, facings, transparent bounds and immutable combat state. This is not a claim of manually playing 36 complete battles.
+
+Current browser review: cloud Chrome, actual default male and female gameplay at phone portrait size and desktop views; existing HUD and environment retained. Sampled error logs were extension metadata errors, not game-module errors. Actual screenshots are included above.
+
+The correction leaves `core.mjs`, `renderer.mjs`, `camera.mjs`, `appearance.mjs`, save schemas, world, monsters, boss mechanics, equipment catalogs, loot and portal code unchanged. The recovered instant-upgrade implementation and its transaction tests remain unchanged: one activation spends one Power Point for one level, with no Save/Apply/Confirm flow. No gameplay balance, collision geometry or combat reach was changed. No files outside `royale/` were changed in the GitHub repository. No merge into `main`, Story or Versus was performed.
+
+**Approval requested only for the default male and female standing designs shown in the four-column comparison. Animation production stays stopped until explicit approval.**
