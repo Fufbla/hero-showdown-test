@@ -4,6 +4,7 @@ import {prepareStyleCBody} from './style-c-body.mjs';
 import {prepareStyleCFace} from './style-c-face.mjs';
 import {prepareStyleCHair} from './style-c-hair.mjs';
 import {prepareStyleCMotion} from './style-c-motion.mjs';
+import {prepareFireballArt} from './fireball-armor-art.mjs';
 import {prepareStyleCEquipment} from './style-c-equipment.mjs';
 import {prepareTurnarounds} from './style-c-turnaround.mjs';
 import {prepareDefaultSprites} from './style-c-sprites.mjs';
@@ -24,7 +25,7 @@ export async function prepareStyleCMaterials({imageLoader,canvasFactory}={}){
  pending=(async()=>{
    try {
      const packs={body:prepareStyleCBody,face:prepareStyleCFace,hair:prepareStyleCHair,motion:prepareStyleCMotion,
-       equipment:prepareStyleCEquipment,turnarounds:prepareTurnarounds,sprites:prepareDefaultSprites};
+       equipment:prepareStyleCEquipment,fireballArmor:prepareFireballArt,turnarounds:prepareTurnarounds,sprites:prepareDefaultSprites};
      const [im,featuresImage,results]=await Promise.all([load(url),load(new URL('./assets/hero/style-c-features.png',import.meta.url)),
        Promise.all(Object.entries(packs).map(async ([name,prepare])=>[name,await prepare(options)]))]);
      const missing=results.filter(([,ok])=>!ok).map(([name])=>name);

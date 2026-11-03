@@ -1,3 +1,4 @@
+import {isFireballFile} from './power-armor-preservation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
@@ -21,7 +22,7 @@ test('Style C and instant upgrades change only authorized Royale files',()=>{
  const git=(...a)=>execFileSync('git',a,{cwd:new URL('../../',import.meta.url),encoding:'utf8'}).trim();
  const changed=git('diff','--name-only',BASE).split('\n').filter(Boolean);
  const upgraded=new Set(['royale/app.mjs','royale/creator.mjs','royale/index.html','royale/power-menu.mjs','royale/powers.css','royale/power-upgrades.mjs','royale/tests/power-upgrades.test.mjs','royale/tests/phase3-checks.mjs','royale/STYLE-C-SYSTEM.md','royale/hero-rig.mjs','royale/eris-ui.mjs','royale/journey.mjs','royale/world-ui.css','royale/equipment.mjs','royale/tests/world-ui-preservation.mjs']);
- const allowed=p=>upgraded.has(p)||p.startsWith('royale/assets/hero/style-c-accurate/')||p==='royale/hero-art.mjs'||p==='royale/tests/hero-preservation.mjs'||/^royale\/(?:style-c-[^/]+\.mjs|tests\/style-c-[^/]+\.(?:mjs|html)|tests\/style-c\.test\.mjs|assets\/hero\/style-c-[^/]+|STYLE-C-APPROVAL\.md|qa\/style-c\/.*)$/.test(p);
+ const allowed=p=>isFireballFile(p)||upgraded.has(p)||p.startsWith('royale/assets/hero/style-c-accurate/')||p==='royale/hero-art.mjs'||p==='royale/tests/hero-preservation.mjs'||/^royale\/(?:style-c-[^/]+\.mjs|tests\/style-c-[^/]+\.(?:mjs|html)|tests\/style-c\.test\.mjs|assets\/hero\/style-c-[^/]+|STYLE-C-APPROVAL\.md|qa\/style-c\/.*)$/.test(p);
  assert.deepEqual(changed.filter(p=>!allowed(p)),[]);
  const extra=git('ls-files','--others','--exclude-standard').split('\n').filter(Boolean).filter(p=>!p.startsWith('royale/node_modules/'));
  assert.deepEqual(extra.filter(p=>!allowed(p)),[]);

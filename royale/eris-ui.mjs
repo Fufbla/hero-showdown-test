@@ -1,6 +1,7 @@
 import {STYLE_C_VIEWS} from './style-c-defaults.mjs';
 import {itemIcon} from './item-art.mjs';
-import { COSTUME_CATALOG, COSTUME_SETS, COSTUME_PARTS, STAT_KEYS, STAT_LABELS, formatStat, resaleValue } from './costume-catalog.mjs';
+import {FIREBALL_SUITS, WARDROBE_CATALOG as COSTUME_CATALOG, matchingFireballBonus} from './power-armor.mjs';
+import { COSTUME_SETS, COSTUME_PARTS, STAT_KEYS, STAT_LABELS, formatStat, resaleValue } from './costume-catalog.mjs';
 import { EQUIPMENT_NAMES, itemDefinition, equipmentBonuses, equipmentOutfit } from './equipment.mjs';
 import { equipmentStats, powerStats } from './powers.mjs';
 import { drawHero } from './hero-art.mjs';
@@ -44,11 +45,11 @@ export class ErisMenu{
   draw(){const g=this.getGame();drawEquipmentPreview($('gear-preview'),g,this.previewInventory||g.inventory,this.view);for(const v of STYLE_C_VIEWS)$(`gear-view-${v}`).setAttribute('aria-pressed',String(v===this.view));}
   wardrobe(){
     const g=this.getGame();this.update();$('shop-confirm').hidden=true;this.confirm=null;
-    $('shop-category-wrap').hidden=this.mode!=='buy';$('wardrobe-note').textContent=this.mode==='buy'?'One central shop. Regular outfits only; rare equipment is earned. Every piece has fixed colors.':this.mode==='sell'?'Resale is 25% of original catalog value, rounded down. Legendary equipment can never be sold.':'Seven total spaces, including worn items. Mix pieces freely. Starter colors remain yours.';
+    $('shop-category-wrap').hidden=this.mode!=='buy';$('wardrobe-note').textContent=this.mode==='buy'?'Buy outfits or individual pieces here. Select Fireball Power Armor to browse all nine tiers.':this.mode==='sell'?'Resale is 25% of original catalog value, rounded down. Legendary equipment can never be sold.':'Seven total spaces, including worn items. Mix pieces freely. Starter colors remain yours.';
     for(const b of document.querySelectorAll('[data-wardrobe]'))b.setAttribute('aria-pressed',String(b.dataset.wardrobe===this.mode));
     const list=$('shop-items');list.replaceChildren();
     let entries;
-    if(this.mode==='buy')entries=this.category==='sets'?Object.values(COSTUME_SETS).map(s=>({setId:`${s.id}-ordinary`,name:s.name,level:s.level,color:s.color,accent:s.accent,price:Object.values(COSTUME_CATALOG).filter(d=>d.setId===`${s.id}-ordinary`).reduce((n,d)=>n+d.catalogValue,0)})):Object.values(COSTUME_CATALOG).filter(d=>d.shop&&(this.category==='all'||d.part===this.category)).map(d=>({...d,catalogId:d.id,price:d.catalogValue}));
+    if(this.mode==='buy')entries=this.category==='sets'?Object.values(COSTUME_SETS).map(s=>({setId:`${s.id}-ordinary`,name:s.name,level:s.level,color:s.color,accent:s.accent,price:Object.values(COSTUME_CATALOG).filter(d=>d.setId===`${s.id}-ordinary`).reduce((n,d)=>n+d.catalogValue,0)})).concat(FIREBALL_SUITS):this.category==='fireball'?FIREBALL_SUITS:Object.values(COSTUME_CATALOG).filter(d=>d.shop&&(this.category==='all'||d.part===this.category)).map(d=>({...d,catalogId:d.id,price:d.catalogValue}));
     else entries=g.inventory.items.map(i=>({...itemDefinition(i),uid:i.uid,catalogId:i.catalogId,price:resaleValue(itemDefinition(i))}));
     const key=e=>e.uid||e.catalogId||e.setId;
     this.selected=entries.find(e=>key(e)===key(this.selected||{}))||entries[0]||null;
@@ -70,7 +71,11 @@ export class ErisMenu{
     p.append(el('div',`${this.mode==='buy'?'TRY IT ON':'YOUR EQUIPMENT'} · ${defs.length===3?'COMPLETE OUTFIT':EQUIPMENT_NAMES[defs[0].part]}`,'eyebrow'),el('h3',e.name||defs[0].setName));
     p.append(el('p',`Level ${defs[0].level||1} · ${defs[0].rarity} · Fixed colors${defs[0].rarity==='rare'?' · Constant white glow':''}.`));
     p.append(statComparison(appliedEquipment(g,g.inventory),appliedEquipment(g,this.previewInventory,99)));
-    p.append(el('p','Helmet 33% · Chest 33% · Boots 34%. A matching set totals 100%; no second set bonus is added. Running +60% and attack speed +50% caps include powers.','set-note'));
+    if(defs[0].fireballLevels){
+      const level=g.powers.data.levels.fireball, bonus=matchingFireballBonus(this.previewInventory,99);
+      p.append(el('p',`Matching helmet, chest and boots grant +${defs[0].fireballLevels} effective Fireball levels. The helmet and boots each add 1 Fireball damage. Chest armor adds 2.`,'set-note'));
+      p.append(el('p',level?`Fireball preview · learned ${level} + armor ${bonus} = level ${level+bonus}`:'Learn Fireball to use its armor bonus.'));
+    }else p.append(el('p','Helmet 33% · Chest 33% · Boots 34%. A matching set totals 100%; no second set bonus is added. Running +60% and attack speed +50% caps include powers.','set-note'));
     if(this.mode==='buy'){
       const cost=defs.reduce((n,d)=>n+d.catalogValue,0),b=button(`Review purchase · ${cost} coins`,()=>this.reviewBuy(e),'primary');b.id='review-purchase';b.disabled=g.hero.level<defs[0].level||g.hero.coins<cost;p.append(b);
       if(g.hero.level<defs[0].level)p.append(el('p',`Unlocks at hero level ${defs[0].level}. You can inspect and preview it now.`,'shop-warning'));else if(g.hero.coins<cost)p.append(el('p',`You need ${cost-g.hero.coins} more coins.`,'shop-warning'));
@@ -89,7 +94,7 @@ export class ErisMenu{
   }
   reviewAction(kind,uid){
     const g=this.getGame(),item=g.inventory.items.find(i=>i.uid===uid),def=itemDefinition(item),revision=g.economy.revision,s=$('shop-confirm');s.replaceChildren();s.hidden=false;
-    s.append(el('h3',kind==='sell'?'Sell this equipment?':'Permanently discard this equipment?'),el('p',`${def.name} · ${kind==='sell'?`${resaleValue(def)} coins, exactly 25% of catalog value.`:'Cannot be recovered.'}${def.rarity==='rare'?' This is RARE equipment.':''}${def.rarity==='legendary'?' LEGENDARY: permanent loss; cannot be earned again.':''}`));
+    s.append(el('h3',kind==='sell'?'Sell this equipment?':'Permanently discard this equipment?'),el('p',`${def.name} · ${kind==='sell'?`${resaleValue(def)} coins, 25% of catalog value rounded down.`:'Cannot be recovered.'}${def.rarity==='rare'?' This is RARE equipment.':''}${def.rarity==='legendary'?' LEGENDARY: permanent loss; cannot be earned again.':''}`));
     const status=el('p'),yes=button(kind==='sell'?'Confirm sale':'Confirm discard',()=>{const r=this.transaction(()=>kind==='sell'?g.sellItem(uid,{confirmed:true,revision}):revision===g.economy.revision&&g.discardItem(uid,true));if(r.ok){this.selected=null;this.wardrobe();this.say(kind==='sell'?'Equipment sold. Coins credited once.':'Equipment permanently discarded.');}else status.textContent=r.error;},'primary danger'),no=button('Keep equipment',()=>{s.hidden=true;});yes.id=kind==='sell'?'confirm-sale':'confirm-shop-discard';no.id='cancel-shop-action';s.append(status,yes,no);s.scrollIntoView({block:'nearest'});no.focus();
   }
   roots(){

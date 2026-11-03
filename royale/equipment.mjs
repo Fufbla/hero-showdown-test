@@ -1,5 +1,6 @@
 import { MERGE_CATALOG } from './legendary-data.mjs';
-import { COSTUME_CATALOG, COSTUME_PARTS, STAT_KEYS, costumeDrop } from './costume-catalog.mjs';
+import {WARDROBE_CATALOG} from './power-armor.mjs';
+import { COSTUME_PARTS, STAT_KEYS, costumeDrop } from './costume-catalog.mjs';
 import { LOOT } from './progression.mjs';
 import { STARTER_OUTFIT } from './appearance.mjs';
 export const LEGACY_PARTS=['mask','suit','gloves','boots','belt','cape','emblem'];
@@ -11,7 +12,7 @@ const legacyCatalog=Object.fromEntries(themes.flatMap((theme,region)=>!theme?[]:
   const id=`r${region}-${rarity}-${part}`,rare=rarity==='rare',factor=rare?1.6:1;
   return [id,{id,region,rarity,part,legacy:true,level:1,catalogValue:100*region*(rare?2:1),sellable:true,name:`${rare?'Radiant ':''}${theme[0]} ${EQUIPMENT_NAMES[part]}`,color:theme[1],accent:theme[2],stats:{strength:Math.round(region*(i===2?6:2)*factor),damage:Math.round(region*(i===3?7:3)*factor),attackSpeed:(i===4||i===6)?Number((region*.005*factor).toFixed(3)):0}}];
 }))));
-export const EQUIPMENT=Object.freeze({...legacyCatalog,...COSTUME_CATALOG,...MERGE_CATALOG});
+export const EQUIPMENT=Object.freeze({...legacyCatalog,...WARDROBE_CATALOG,...MERGE_CATALOG});
 export function createEquipment(region,rarity,index=0,serial=1){
   const part=LEGACY_PARTS[Math.max(0,Math.min(6,Math.floor(index)))],catalogId=`r${region}-${rarity}-${part}`;
   return EQUIPMENT[catalogId]?{uid:`drop-${serial}`,catalogId}:null;

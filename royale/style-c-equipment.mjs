@@ -1,3 +1,4 @@
+import {drawFireballPiece} from './fireball-armor-art.mjs';
 import {WEARABLE_REGIONS} from './assets/hero/style-c-accurate/equipment/regions.mjs';
 import {emblem} from './style-c-paint.mjs';
 
@@ -232,6 +233,10 @@ export function drawStyleCEquipment(c, part, item, pose, look, {view='game',side
   if (!a) return false;
   c.save();
   c.imageSmoothingEnabled=true; c.imageSmoothingQuality='high';
+  if (item.fireballLevels) {
+    const drawn=drawFireballPiece(c,part,item,pose,a,side);
+    c.restore();return drawn;
+  }
   switch (part) {
     case 'helmet': case 'mask': wearHead(c,part,item,pose,a,steel); break;
     case 'chest': case 'suit': wearChest(c,item,a,steel); break;

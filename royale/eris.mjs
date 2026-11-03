@@ -1,4 +1,5 @@
-import { COSTUME_CATALOG, COSTUME_PARTS, resaleValue } from './costume-catalog.mjs';
+import {WARDROBE_CATALOG as COSTUME_CATALOG} from './power-armor.mjs';
+import { COSTUME_PARTS, resaleValue } from './costume-catalog.mjs';
 import { itemDefinition } from './equipment.mjs';
 import { sanitizeLook } from './appearance.mjs';
 import { boardIndex } from './world.mjs';
