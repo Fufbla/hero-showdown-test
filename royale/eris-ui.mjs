@@ -1,6 +1,7 @@
 import {STYLE_C_VIEWS} from './style-c-defaults.mjs';
 import {itemIcon} from './item-art.mjs';
-import {FIREBALL_SUITS, WARDROBE_CATALOG as COSTUME_CATALOG, matchingFireballBonus} from './power-armor.mjs';
+import {STEEL_SUITS, WARDROBE_CATALOG as COSTUME_CATALOG, matchingSteelBonus} from './steel-armor.mjs';
+import {FIREBALL_SUITS, matchingFireballBonus} from './power-armor.mjs';
 import { COSTUME_SETS, COSTUME_PARTS, STAT_KEYS, STAT_LABELS, formatStat, resaleValue } from './costume-catalog.mjs';
 import { EQUIPMENT_NAMES, itemDefinition, equipmentBonuses, equipmentOutfit } from './equipment.mjs';
 import { equipmentStats, powerStats } from './powers.mjs';
@@ -24,6 +25,21 @@ function withPreview(g,defs){
   for(const [i,d] of defs.entries()){const uid=`preview-${i}`;inv.items.push({uid,catalogId:d.id});inv.equipped[d.part]=uid;if(d.part==='helmet')delete inv.equipped.mask;if(d.part==='chest')delete inv.equipped.suit;}
   return inv;
 }
+function shopEntries(category){
+  if(category==='steel')return STEEL_SUITS;
+  if(category==='fireball')return FIREBALL_SUITS;
+  const catalog=Object.values(COSTUME_CATALOG);
+  if(category==='sets'){
+    const regional=Object.values(COSTUME_SETS).map(suit=>{
+      const setId=suit.id+'-ordinary';
+      const price=catalog.filter(piece=>piece.setId===setId).reduce((sum,piece)=>sum+piece.catalogValue,0);
+      return {setId,name:suit.name,level:suit.level,color:suit.color,accent:suit.accent,price};
+    });
+    return regional.concat(FIREBALL_SUITS,STEEL_SUITS);
+  }
+  return catalog.filter(piece=>piece.shop&&(category==='all'||piece.part===category))
+    .map(piece=>({...piece,catalogId:piece.id,price:piece.catalogValue}));
+}
 export class ErisMenu{
   constructor(getGame,{powerMenu,transaction,say,appearance,leave}){
     Object.assign(this,{getGame,powerMenu,transaction,say,appearance,leave});this.panel='home';this.mode='buy';this.category='sets';this.selected={setId:'shore-ordinary'};this.view='front';this.previewInventory=null;this.confirm=null;
@@ -45,11 +61,11 @@ export class ErisMenu{
   draw(){const g=this.getGame();drawEquipmentPreview($('gear-preview'),g,this.previewInventory||g.inventory,this.view);for(const v of STYLE_C_VIEWS)$(`gear-view-${v}`).setAttribute('aria-pressed',String(v===this.view));}
   wardrobe(){
     const g=this.getGame();this.update();$('shop-confirm').hidden=true;this.confirm=null;
-    $('shop-category-wrap').hidden=this.mode!=='buy';$('wardrobe-note').textContent=this.mode==='buy'?'Buy outfits or individual pieces here. Select Fireball Power Armor to browse all nine tiers.':this.mode==='sell'?'Resale is 25% of original catalog value, rounded down. Legendary equipment can never be sold.':'Seven total spaces, including worn items. Mix pieces freely. Starter colors remain yours.';
+    $('shop-category-wrap').hidden=this.mode!=='buy';$('wardrobe-note').textContent=this.mode==='buy'?'Buy outfits or individual pieces here. Choose a Power Armor collection to browse its nine tiers.':this.mode==='sell'?'Resale is 25% of original catalog value, rounded down. Legendary equipment can never be sold.':'Seven total spaces, including worn items. Mix pieces freely. Starter colors remain yours.';
     for(const b of document.querySelectorAll('[data-wardrobe]'))b.setAttribute('aria-pressed',String(b.dataset.wardrobe===this.mode));
     const list=$('shop-items');list.replaceChildren();
     let entries;
-    if(this.mode==='buy')entries=this.category==='sets'?Object.values(COSTUME_SETS).map(s=>({setId:`${s.id}-ordinary`,name:s.name,level:s.level,color:s.color,accent:s.accent,price:Object.values(COSTUME_CATALOG).filter(d=>d.setId===`${s.id}-ordinary`).reduce((n,d)=>n+d.catalogValue,0)})).concat(FIREBALL_SUITS):this.category==='fireball'?FIREBALL_SUITS:Object.values(COSTUME_CATALOG).filter(d=>d.shop&&(this.category==='all'||d.part===this.category)).map(d=>({...d,catalogId:d.id,price:d.catalogValue}));
+    if(this.mode==='buy')entries=shopEntries(this.category);
     else entries=g.inventory.items.map(i=>({...itemDefinition(i),uid:i.uid,catalogId:i.catalogId,price:resaleValue(itemDefinition(i))}));
     const key=e=>e.uid||e.catalogId||e.setId;
     this.selected=entries.find(e=>key(e)===key(this.selected||{}))||entries[0]||null;
@@ -71,7 +87,12 @@ export class ErisMenu{
     p.append(el('div',`${this.mode==='buy'?'TRY IT ON':'YOUR EQUIPMENT'} · ${defs.length===3?'COMPLETE OUTFIT':EQUIPMENT_NAMES[defs[0].part]}`,'eyebrow'),el('h3',e.name||defs[0].setName));
     p.append(el('p',`Level ${defs[0].level||1} · ${defs[0].rarity} · Fixed colors${defs[0].rarity==='rare'?' · Constant white glow':''}.`));
     p.append(statComparison(appliedEquipment(g,g.inventory),appliedEquipment(g,this.previewInventory,99)));
-    if(defs[0].fireballLevels){
+    if(defs[0].steelLevels){
+      const learned=g.powers.data.levels.steel, bonus=matchingSteelBonus(this.previewInventory,99);
+      const stats=powerStats('steel',learned,{equipment:{steelLevels:bonus}});
+      p.append(el('p',`Equip all three matching pieces for +${defs[0].steelLevels} effective Steel Body levels.`,'set-note'));
+      p.append(el('p',learned?`Steel Body preview · learned ${learned} + armor ${bonus} = level ${stats.level} · ${Number((stats.reduction*100).toFixed(2))}% reduction for ${Number(stats.duration.toFixed(2))} s.`:'Learn Steel Body to use its armor bonus.'));
+    }else if(defs[0].fireballLevels){
       const level=g.powers.data.levels.fireball, bonus=matchingFireballBonus(this.previewInventory,99);
       p.append(el('p',`Matching helmet, chest and boots grant +${defs[0].fireballLevels} effective Fireball levels. The helmet and boots each add 1 Fireball damage. Chest armor adds 2.`,'set-note'));
       p.append(el('p',level?`Fireball preview · learned ${level} + armor ${bonus} = level ${level+bonus}`:'Learn Fireball to use its armor bonus.'));

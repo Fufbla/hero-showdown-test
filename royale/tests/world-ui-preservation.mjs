@@ -19,6 +19,7 @@ export function assertWorldPreserved(){
  const powers=current('powers.mjs').trimEnd()
    .replace(/^  const armorLevels=.*\n/m,'')
    .replace('integer(level,1,20)+armorLevels','integer(level,1,20)')
+   .replace('[20,.75],[29,.84]','[20,.75]').replace('[20,8],[29,10.25]','[20,8]')
    .replace('projectiles:level>=20','projectiles:level===20').replace('pierce:level>=20','pierce:level===20');
  assert.equal(powers,base('powers.mjs'));
  const before=git('show',WORLD_BASE+':royale/core.mjs'),after=readFileSync(new URL('../core.mjs',import.meta.url),'utf8');

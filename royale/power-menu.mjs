@@ -113,7 +113,7 @@ export class PowerMenu {
     const body=node('tbody'),stats=powerStats(id,Math.max(1,level),{heroLevel:g.hero.level,equipment:g.equipment});
     for(const [key,label] of Object.entries(labels)){if(!(key in stats))continue;const row=node('tr');row.append(node('th',label),node('td',level?format(key,stats[key]):'Not learned'));body.append(row);}table.append(body);preview.append(table);
     const status=node('p',this.message|| (level===20?'Maximum level reached.':g.powers.data.points?'↑ spends one Power Point immediately. Upgrades are permanent.':'Earn one Power Point with each hero level.'),'upgrade-status');status.id='upgrade-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');panel.append(status);
-    if(id==='fireball'&&level&&g.equipment.fireballLevels)panel.append(node('p',`Learned level ${level} · Armor +${g.equipment.fireballLevels} · Effective level ${stats.level}`));
+    if(level && stats.level>level)panel.append(node('p',`Learned level ${level} · Armor +${stats.level-level} · Effective level ${stats.level}`));
     if(id==='fireball'&&level&&stats.pierce===2)panel.append(node('p','Piercing: first enemy 100% damage; second enemy 50%.'));
     if(id==='speed')panel.append(node('p','Total attack speed, including equipment, is capped at +50%. No damage increase.'));
     if(def.after)panel.append(node('p','Cooldown begins when the ability finishes.'));

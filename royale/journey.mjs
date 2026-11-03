@@ -1,3 +1,4 @@
+import {matchingSteelBonus, refreshSteelEffect} from './steel-armor.mjs';
 import {matchingFireballBonus} from './power-armor.mjs';
 import {spawnLoot} from './world-loot.mjs';
 import { matchingMerge, mergeEntitlement } from './legendary-state.mjs';
@@ -24,9 +25,13 @@ export const journeyMethods={
     this._outfitInventory = null;
     const earned=equipmentBonuses(this.inventory,this.hero?.level||99),base=this.baseEquipment;
     const active=matchingMerge(this.inventory,this.hero?.level||99);if(this.legendary.active!==active)this.cancelMergeEffects();this.legendary.active=active;if(this.powers)this.powers.mergeEntitlement=mergeEntitlement(active);
+    const previousSteelBonus=this.equipment?.steelLevels||0;
     this.equipment=equipmentStats(Object.fromEntries(Object.keys(earned).map(k=>[k,earned[k]+(base?.[k]||0)])));
     const bonus=matchingFireballBonus(this.inventory,this.hero?.level||1);
     if(bonus)this.equipment.fireballLevels=bonus;
+    const steelBonus=matchingSteelBonus(this.inventory,this.hero?.level||1);
+    if(steelBonus)this.equipment.steelLevels=steelBonus;
+    if(previousSteelBonus!==steelBonus)refreshSteelEffect(this.powers);
   },
   visualOutfit(){const e=this.inventory.equipped;if(this._outfitInventory!==this.inventory||this._outfitHelmet!==e.helmet||this._outfitChest!==e.chest||this._outfitBoots!==e.boots||this._outfitBase!==this.outfit){this._outfitInventory=this.inventory;this._outfitHelmet=e.helmet;this._outfitChest=e.chest;this._outfitBoots=e.boots;this._outfitBase=this.outfit;this._visualOutfit=equipmentOutfit(this.inventory,this.outfit);}return this._visualOutfit;},
   canSave(){return !this.hero.dead&&!this.inCombat();},

@@ -7,6 +7,8 @@ const changed = new Set([
   'tests/world-ui-preservation.mjs','tests/style-c.test.mjs','tests/power-armor-preservation.mjs',
   'tests/fireball-armor.test.mjs','tests/fireball-review.html','tests/fireball-review.mjs',
   'tests/fireball-economy.mjs','FIREBALL-ARMOR.md',
+  'steel-armor.mjs','power-armor-art.mjs','tests/steel-armor.test.mjs','STEEL-ARMOR.md',
 ].map(name=>'royale/'+name));
 export const isFireballFile = path => changed.has(path) ||
+  /^royale\/assets\/power-armor\/steel\/(regions\.mjs|(rivet|breakwater|rail|aegis|boreal|tortoise|lock|citadel|polaris)\.webp)$/.test(path) ||
   /^royale\/assets\/power-armor\/fireball\/(regions\.mjs|(ember|kiln|forge|flare|phoenix|caldera|furnace|corona|supernova)\.webp)$/.test(path);
