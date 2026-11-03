@@ -1,4 +1,4 @@
-import {WARDROBE_CATALOG as COSTUME_CATALOG} from './whirlwind-armor.mjs';
+import {WARDROBE_CATALOG as COSTUME_CATALOG} from './super-kick-armor.mjs';
 import { COSTUME_PARTS, resaleValue } from './costume-catalog.mjs';
 import { itemDefinition } from './equipment.mjs';
 import { sanitizeLook } from './appearance.mjs';

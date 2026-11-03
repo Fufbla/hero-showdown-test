@@ -1,3 +1,4 @@
+import {SUPER_KICK_REGIONS} from './assets/power-armor/superKick/regions.mjs';
 import {WHIRLWIND_REGIONS} from './assets/power-armor/whirlwind/regions.mjs';
 import {STRENGTH_REGIONS} from './assets/power-armor/strength/regions.mjs';
 import {ROOTS_REGIONS} from './assets/power-armor/roots/regions.mjs';
@@ -6,7 +7,7 @@ import {FIREBALL_REGIONS} from './assets/power-armor/fireball/regions.mjs';
 
 const sheets = new Map();
 const pending = new Map();
-const regions = {fireball:FIREBALL_REGIONS, steel:STEEL_REGIONS, roots:ROOTS_REGIONS, strength:STRENGTH_REGIONS, whirlwind:WHIRLWIND_REGIONS};
+const regions = {fireball:FIREBALL_REGIONS, steel:STEEL_REGIONS, roots:ROOTS_REGIONS, strength:STRENGTH_REGIONS, whirlwind:WHIRLWIND_REGIONS, superKick:SUPER_KICK_REGIONS};
 
 function loadImage(url) {
   return new Promise((resolve,reject)=>{
@@ -29,6 +30,7 @@ export const prepareSteelArt=options=>prepareArmorCollection('steel',options);
 
 export const prepareRootsArt=options=>prepareArmorCollection('roots',options);
 export function armorCollection(item){
+  if(item.superKickLevels)return 'superKick';
   if(item.whirlwindLevels)return 'whirlwind';
   if(item.strengthLevels)return 'strength';
   if(item.rootsLevels)return 'roots';

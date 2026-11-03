@@ -1,6 +1,7 @@
 import {STYLE_C_VIEWS} from './style-c-defaults.mjs';
 import {itemIcon} from './item-art.mjs';
-import {WHIRLWIND_SUITS, WARDROBE_CATALOG as COSTUME_CATALOG, matchingWhirlwindBonus} from './whirlwind-armor.mjs';
+import {SUPER_KICK_SUITS, WARDROBE_CATALOG as COSTUME_CATALOG, matchingSuperKickBonus} from './super-kick-armor.mjs';
+import {WHIRLWIND_SUITS, matchingWhirlwindBonus} from './whirlwind-armor.mjs';
 import {STRENGTH_SUITS, matchingStrengthBonus} from './strength-armor.mjs';
 import {ROOTS_SUITS, matchingRootsBonus} from './roots-armor.mjs';
 import {STEEL_SUITS, matchingSteelBonus} from './steel-armor.mjs';
@@ -29,6 +30,7 @@ function withPreview(g,defs){
   return inv;
 }
 function shopEntries(category){
+  if(category==='superKick')return SUPER_KICK_SUITS;
   if(category==='whirlwind')return WHIRLWIND_SUITS;
   if(category==='strength')return STRENGTH_SUITS;
   if(category==='roots')return ROOTS_SUITS;
@@ -41,7 +43,7 @@ function shopEntries(category){
       const price=catalog.filter(piece=>piece.setId===setId).reduce((sum,piece)=>sum+piece.catalogValue,0);
       return {setId,name:suit.name,level:suit.level,color:suit.color,accent:suit.accent,price};
     });
-    return regional.concat(FIREBALL_SUITS,STEEL_SUITS,ROOTS_SUITS,STRENGTH_SUITS,WHIRLWIND_SUITS);
+    return regional.concat(FIREBALL_SUITS,STEEL_SUITS,ROOTS_SUITS,STRENGTH_SUITS,WHIRLWIND_SUITS,SUPER_KICK_SUITS);
   }
   return catalog.filter(piece=>piece.shop&&(category==='all'||piece.part===category))
     .map(piece=>({...piece,catalogId:piece.id,price:piece.catalogValue}));
@@ -93,7 +95,12 @@ export class ErisMenu{
     p.append(el('div',`${this.mode==='buy'?'TRY IT ON':'YOUR EQUIPMENT'} · ${defs.length===3?'COMPLETE OUTFIT':EQUIPMENT_NAMES[defs[0].part]}`,'eyebrow'),el('h3',e.name||defs[0].setName));
     p.append(el('p',`Level ${defs[0].level||1} · ${defs[0].rarity} · Fixed colors${defs[0].rarity==='rare'?' · Constant white glow':''}.`));
     p.append(statComparison(appliedEquipment(g,g.inventory),appliedEquipment(g,this.previewInventory,99)));
-    if(defs[0].whirlwindLevels){
+    if(defs[0].superKickLevels){
+      const learned=g.powers.data.levels.superKick, bonus=matchingSuperKickBonus(this.previewInventory,99);
+      const stats=powerStats('superKick',learned,{heroLevel:g.hero.level,equipment:{...appliedEquipment(g,this.previewInventory,99),superKickLevels:bonus}});
+      p.append(el('p',`Equip the matching helmet, chest and boots for +${defs[0].superKickLevels} effective Super Kick levels.`,'set-note'));
+      p.append(el('p',learned?`Super Kick preview · learned ${learned} + armor ${bonus} = level ${stats.level} · ${stats.kicks} kicks · ${stats.damage} damage per kick.`:'Learn Super Kick to use its armor bonus.'));
+    }else if(defs[0].whirlwindLevels){
       const learned=g.powers.data.levels.whirlwind, bonus=matchingWhirlwindBonus(this.previewInventory,99);
       const stats=powerStats('whirlwind',learned,{equipment:{...appliedEquipment(g,this.previewInventory,99),whirlwindLevels:bonus}});
       p.append(el('p',`Equip the matching helmet, chest and boots for +${defs[0].whirlwindLevels} effective Whirlwind levels.`,'set-note'));

@@ -7,12 +7,14 @@ const changed = new Set([
   'tests/world-ui-preservation.mjs','tests/style-c.test.mjs','tests/power-armor-preservation.mjs',
   'tests/fireball-armor.test.mjs','tests/fireball-review.html','tests/fireball-review.mjs',
   'tests/fireball-economy.mjs','FIREBALL-ARMOR.md',
+  'super-kick-armor.mjs','tests/super-kick-armor.test.mjs','SUPER-KICK-ARMOR.md',
   'whirlwind-armor.mjs','tests/whirlwind-armor.test.mjs','WHIRLWIND-ARMOR.md',
   'strength-armor.mjs','tests/strength-armor.test.mjs','STRENGTH-ARMOR.md',
   'roots-armor.mjs','tests/roots-armor.test.mjs','GROUND-ROOTS-ARMOR.md',
   'steel-armor.mjs','power-armor-art.mjs','tests/steel-armor.test.mjs','STEEL-ARMOR.md',
 ].map(name=>'royale/'+name));
 export const isFireballFile = path => changed.has(path) ||
+  /^royale\/assets\/power-armor\/superKick\/(regions\.mjs|(spar|pivot|crane|koi|mantis|wheel|tiger|pagoda|dragon)\.webp)$/.test(path) ||
   /^royale\/assets\/power-armor\/whirlwind\/(regions\.mjs|(slipstream|crosswind|mistral|venturi|scythe|helix|jetstream|eyewall|tempest)\.webp)$/.test(path) ||
   /^royale\/assets\/power-armor\/strength\/(regions\.mjs|(striker|fulcrum|ram|piston|anvil|fault|flywheel|atlas|colossus)\.webp)$/.test(path) ||
   /^royale\/assets\/power-armor\/roots\/(regions\.mjs|(seed|reed|briar|oak|lattice|mangrove|canopy|heartwood|worldroot)\.webp)$/.test(path) ||

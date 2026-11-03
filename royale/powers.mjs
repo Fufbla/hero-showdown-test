@@ -40,7 +40,7 @@ export function equipmentStats(raw={}) {
   return { strength: clamp(Number(raw.strength)||0,0,1000), damage: clamp(Number(raw.damage)||0,0,1000), attackSpeed: clamp(Number(raw.attackSpeed)||0,0,.5), defense:clamp(Number(raw.defense)||0,0,.25),moveSpeed:clamp(Number(raw.moveSpeed)||0,0,.6),fireball:clamp(Number(raw.fireball)||0,0,80),roots:clamp(Number(raw.roots)||0,0,15),whirlwind:clamp(Number(raw.whirlwind)||0,0,20) };
 }
 export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
-  const armorLevels=level>0 ? integer(({fireball:equipment.fireballLevels,steel:equipment.steelLevels,roots:equipment.rootsLevels,strength:equipment.strengthLevels,whirlwind:equipment.whirlwindLevels})[id]||0,0,9) : 0;
+  const armorLevels=level>0 ? integer(({fireball:equipment.fireballLevels,steel:equipment.steelLevels,roots:equipment.rootsLevels,strength:equipment.strengthLevels,whirlwind:equipment.whirlwindLevels,superKick:equipment.superKickLevels})[id]||0,0,9) : 0;
   level=integer(level,1,20)+armorLevels;const n=tier(level),eq=equipmentStats(equipment),strength=10+2*(heroLevel-1)+eq.strength;
   const base={level,cooldown:POWERS[id]?.cooldown||0};
   switch(id) {
@@ -145,6 +145,7 @@ export class PowerSystem {
       if(attack.targets.size)return;
       const combo=this.active.superKick;if(!combo)return;
       let target=candidates.find(e=>e.id===combo.target);
+      if(!target && combo.target!==null && g.enemies.some(e=>e.id===combo.target && e.state!=='dead'))return;
       if(!target){target=candidates[0];combo.target=target?.id??null;}
       candidates=target?[target]:[];
     }

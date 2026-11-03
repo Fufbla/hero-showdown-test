@@ -1,3 +1,4 @@
+import {SUPER_KICK_SUITS,SUPER_KICK_PIECES} from '../super-kick-armor.mjs';
 import {WHIRLWIND_SUITS,WHIRLWIND_PIECES} from '../whirlwind-armor.mjs';
 import {STRENGTH_SUITS,STRENGTH_PIECES} from '../strength-armor.mjs';
 import {ROOTS_SUITS,ROOTS_PIECES} from '../roots-armor.mjs';
@@ -17,6 +18,7 @@ const $=id=>document.getElementById(id);
 const collections={
   fireball:{suits:FIREBALL_SUITS,catalog:FIREBALL_PIECES,powerName:'Fireball',color:'red',number:'01'},
   steel:{suits:STEEL_SUITS,catalog:STEEL_PIECES,powerName:'Steel Body',color:'blue',number:'02'},
+  superKick:{suits:SUPER_KICK_SUITS,catalog:SUPER_KICK_PIECES,powerName:'Super Kick',color:'silver',number:'06'},
   whirlwind:{suits:WHIRLWIND_SUITS,catalog:WHIRLWIND_PIECES,powerName:'Whirlwind',color:'purple',number:'05'},
   strength:{suits:STRENGTH_SUITS,catalog:STRENGTH_PIECES,powerName:'Super Strength',color:'gold',number:'04'},
   roots:{suits:ROOTS_SUITS,catalog:ROOTS_PIECES,powerName:'Ground Roots',color:'green',number:'03'},

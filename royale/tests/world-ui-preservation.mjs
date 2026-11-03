@@ -17,6 +17,7 @@ export function assertWorldPreserved(){
  // Protect all combat code outside the scoped Fireball stat formula and its
  // effective-level input. The dedicated armor suite tests those differences.
  const powers=current('powers.mjs').trimEnd()
+   .replace("      if(!target && combo.target!==null && g.enemies.some(e=>e.id===combo.target && e.state!=='dead'))return;\n",'')
    .replace("import {groundedForRoots,releaseInvalidRoots} from './roots-armor.mjs';\n",'')
    .replace('groundedForRoots(e)','(!e.flying&&!e.airborne&&Math.abs(e.y-e.surface.y)<1)')
    .replace("      if(id==='roots')releaseInvalidRoots(g,a);\n",'')
