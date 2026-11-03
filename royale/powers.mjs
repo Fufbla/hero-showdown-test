@@ -40,11 +40,11 @@ export function equipmentStats(raw={}) {
   return { strength: clamp(Number(raw.strength)||0,0,1000), damage: clamp(Number(raw.damage)||0,0,1000), attackSpeed: clamp(Number(raw.attackSpeed)||0,0,.5), defense:clamp(Number(raw.defense)||0,0,.25),moveSpeed:clamp(Number(raw.moveSpeed)||0,0,.6),fireball:clamp(Number(raw.fireball)||0,0,80),roots:clamp(Number(raw.roots)||0,0,15),whirlwind:clamp(Number(raw.whirlwind)||0,0,20) };
 }
 export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
-  const armorLevels=level>0 ? integer(({fireball:equipment.fireballLevels,steel:equipment.steelLevels,roots:equipment.rootsLevels})[id]||0,0,9) : 0;
+  const armorLevels=level>0 ? integer(({fireball:equipment.fireballLevels,steel:equipment.steelLevels,roots:equipment.rootsLevels,strength:equipment.strengthLevels})[id]||0,0,9) : 0;
   level=integer(level,1,20)+armorLevels;const n=tier(level),eq=equipmentStats(equipment),strength=10+2*(heroLevel-1)+eq.strength;
   const base={level,cooldown:POWERS[id]?.cooldown||0};
   switch(id) {
-    case 'strength': return {...base,targets:n,damage:45+8*(level-1)+2*strength+eq.damage,bossEffectiveness:scale(level,.25,1),reach:59};
+    case 'strength': return {...base,targets:n,damage:45+8*(level-1)+2*strength+eq.damage,bossEffectiveness:scale(Math.min(level,POWER_CAP),.25,1),reach:59};
     case 'superKick': return {...base,kicks:n+1,damage:16+2*(level-1)+.5*strength+eq.damage,reach:76};
     case 'fireball': return {...base,projectiles:level>=20?3:level>=10?2:1,damage:24+5*(level-1)+eq.fireball,pierce:level>=20?2:1};
     case 'flight': return {...base,duration:level+2,bossHitChance:.5};

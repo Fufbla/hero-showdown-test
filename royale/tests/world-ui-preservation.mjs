@@ -12,7 +12,7 @@ export function assertWorldPreserved(){
  const body=source=>source.replace(/^import .*?;\n/gm,'').trimEnd();
  const current=name=>readFileSync(new URL('../'+name,import.meta.url),'utf8');
  const base=name=>git('show',WORLD_BASE+':royale/'+name);
- assert.equal(body(current('equipment.mjs')).replace('...WARDROBE_CATALOG','...COSTUME_CATALOG').replace('pieces.emblem??={...pieces.chest','pieces.emblem={...pieces.chest'),body(base('equipment.mjs')));
+ assert.equal(body(current('equipment.mjs')).replace("  if(pieces.chest?.strengthLevels && !pieces.gloves)pieces.gloves={...pieces.chest,part:'gloves'};\n",'').replace('...WARDROBE_CATALOG','...COSTUME_CATALOG').replace('pieces.emblem??={...pieces.chest','pieces.emblem={...pieces.chest'),body(base('equipment.mjs')));
  assert.equal(body(current('eris.mjs')).replace(/^const GROUPS=.*$/m,''),body(base('eris.mjs')).replace(/^const GROUPS=.*$/m,''));
  // Protect all combat code outside the scoped Fireball stat formula and its
  // effective-level input. The dedicated armor suite tests those differences.
@@ -22,6 +22,7 @@ export function assertWorldPreserved(){
    .replace("      if(id==='roots')releaseInvalidRoots(g,a);\n",'')
    .replace(/^  const armorLevels=.*\n/m,'')
    .replace('integer(level,1,20)+armorLevels','integer(level,1,20)')
+   .replace('scale(Math.min(level,POWER_CAP),.25,1)','scale(level,.25,1)')
    .replace('[20,.75],[29,.84]','[20,.75]').replace('[20,8],[29,10.25]','[20,8]')
    .replace('projectiles:level>=20','projectiles:level===20').replace('pierce:level>=20','pierce:level===20');
  assert.equal(powers,base('powers.mjs'));

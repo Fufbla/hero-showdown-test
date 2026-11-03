@@ -1,5 +1,5 @@
 import { MERGE_CATALOG } from './legendary-data.mjs';
-import {WARDROBE_CATALOG} from './roots-armor.mjs';
+import {WARDROBE_CATALOG} from './strength-armor.mjs';
 import { COSTUME_PARTS, STAT_KEYS, costumeDrop } from './costume-catalog.mjs';
 import { LOOT } from './progression.mjs';
 import { STARTER_OUTFIT } from './appearance.mjs';
@@ -45,6 +45,7 @@ export function equipmentOutfit(inventory,fallback=STARTER_OUTFIT){
   const pieces={};for(const [part,uid] of Object.entries(inventory.equipped)){const def=itemDefinition(inventory.items.find(i=>i.uid===uid));if(def)pieces[part]=def;}
   if(pieces.helmet)pieces.mask=pieces.helmet;
   if(pieces.chest){pieces.suit=pieces.chest;pieces.emblem??={...pieces.chest,color:pieces.chest.accent};}
+  if(pieces.chest?.strengthLevels && !pieces.gloves)pieces.gloves={...pieces.chest,part:'gloves'};
   return {...fallback,pieces};
 }
 export function rollEquipment(region,random,serial){

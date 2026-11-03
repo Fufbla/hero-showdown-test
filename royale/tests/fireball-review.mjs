@@ -1,3 +1,4 @@
+import {STRENGTH_SUITS,STRENGTH_PIECES} from '../strength-armor.mjs';
 import {ROOTS_SUITS,ROOTS_PIECES} from '../roots-armor.mjs';
 import {FIREBALL_SUITS,FIREBALL_PIECES} from '../power-armor.mjs';
 import {COSTUME_PARTS} from '../costume-catalog.mjs';
@@ -15,6 +16,7 @@ const $=id=>document.getElementById(id);
 const collections={
   fireball:{suits:FIREBALL_SUITS,catalog:FIREBALL_PIECES,powerName:'Fireball',color:'red',number:'01'},
   steel:{suits:STEEL_SUITS,catalog:STEEL_PIECES,powerName:'Steel Body',color:'blue',number:'02'},
+  strength:{suits:STRENGTH_SUITS,catalog:STRENGTH_PIECES,powerName:'Super Strength',color:'gold',number:'04'},
   roots:{suits:ROOTS_SUITS,catalog:ROOTS_PIECES,powerName:'Ground Roots',color:'green',number:'03'},
 };
 const requested=new URLSearchParams(location.search).get('collection');

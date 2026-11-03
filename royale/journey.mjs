@@ -1,3 +1,4 @@
+import {matchingStrengthBonus} from './strength-armor.mjs';
 import {matchingRootsBonus,refreshRootsEffect} from './roots-armor.mjs';
 import {matchingSteelBonus, refreshSteelEffect} from './steel-armor.mjs';
 import {matchingFireballBonus} from './power-armor.mjs';
@@ -26,6 +27,7 @@ export const journeyMethods={
     this._outfitInventory = null;
     const earned=equipmentBonuses(this.inventory,this.hero?.level||99),base=this.baseEquipment;
     const active=matchingMerge(this.inventory,this.hero?.level||99);if(this.legendary.active!==active)this.cancelMergeEffects();this.legendary.active=active;if(this.powers)this.powers.mergeEntitlement=mergeEntitlement(active);
+    const previousStrengthBonus=this.equipment?.strengthLevels||0;
     const previousRootsBonus=this.equipment?.rootsLevels||0;
     const previousSteelBonus=this.equipment?.steelLevels||0;
     this.equipment=equipmentStats(Object.fromEntries(Object.keys(earned).map(k=>[k,earned[k]+(base?.[k]||0)])));
@@ -37,6 +39,11 @@ export const journeyMethods={
     const rootsBonus=matchingRootsBonus(this.inventory,this.hero?.level||1);
     if(rootsBonus)this.equipment.rootsLevels=rootsBonus;
     if(previousRootsBonus!==rootsBonus)refreshRootsEffect(this.powers);
+    const strengthBonus=matchingStrengthBonus(this.inventory,this.hero?.level||1);
+    if(strengthBonus)this.equipment.strengthLevels=strengthBonus;
+    if(previousStrengthBonus!==strengthBonus && this.hero?.attack?.power==='strength'){
+      this.hero.attack.stats=this.powers.stats('strength');
+    }
   },
   visualOutfit(){const e=this.inventory.equipped;if(this._outfitInventory!==this.inventory||this._outfitHelmet!==e.helmet||this._outfitChest!==e.chest||this._outfitBoots!==e.boots||this._outfitBase!==this.outfit){this._outfitInventory=this.inventory;this._outfitHelmet=e.helmet;this._outfitChest=e.chest;this._outfitBoots=e.boots;this._outfitBase=this.outfit;this._visualOutfit=equipmentOutfit(this.inventory,this.outfit);}return this._visualOutfit;},
   canSave(){return !this.hero.dead&&!this.inCombat();},

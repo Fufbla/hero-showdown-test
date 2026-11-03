@@ -1,10 +1,11 @@
+import {STRENGTH_REGIONS} from './assets/power-armor/strength/regions.mjs';
 import {ROOTS_REGIONS} from './assets/power-armor/roots/regions.mjs';
 import {STEEL_REGIONS} from './assets/power-armor/steel/regions.mjs';
 import {FIREBALL_REGIONS} from './assets/power-armor/fireball/regions.mjs';
 
 const sheets = new Map();
 const pending = new Map();
-const regions = {fireball:FIREBALL_REGIONS, steel:STEEL_REGIONS, roots:ROOTS_REGIONS};
+const regions = {fireball:FIREBALL_REGIONS, steel:STEEL_REGIONS, roots:ROOTS_REGIONS, strength:STRENGTH_REGIONS};
 
 function loadImage(url) {
   return new Promise((resolve,reject)=>{
@@ -27,13 +28,14 @@ export const prepareSteelArt=options=>prepareArmorCollection('steel',options);
 
 export const prepareRootsArt=options=>prepareArmorCollection('roots',options);
 export function armorCollection(item){
+  if(item.strengthLevels)return 'strength';
   if(item.rootsLevels)return 'roots';
   if(item.steelLevels)return 'steel';
   if(item.fireballLevels)return 'fireball';
   return null;
 }
 
-const parts=['helmet','chest','boots'];
+const parts=['helmet','chest','boots','gloves'];
 function sprite(item,part,view) {
   const collection=armorCollection(item);
   const image=sheets.get(collection+'/'+item.art);
@@ -64,6 +66,13 @@ export function drawArmorPiece(c,part,item,pose,a,side) {
     c.translate(...a.shoulder); c.rotate(a.torsoAngle);
     const w=a.bodyWidth*(a.profile?1.22:1.19), h=a.length*1.21;
     c.drawImage(s.image,...s.rect,-w*.50,-a.length*.23,w,h);
+  } else if(part==='gloves') {
+    // Extend from the original elbow towards the hand, following the punching arm.
+    const [,elbow,hand]=pose.arms[side],dx=hand[0]-elbow[0],dy=hand[1]-elbow[1];
+    const length=Math.hypot(dx,dy), width=Math.min(length*.87,a.length*.62);
+    c.translate(...elbow);c.rotate(Math.atan2(dy,dx)-Math.PI/2);
+    if(side===1)c.scale(-1,1);
+    c.drawImage(s.image,...s.rect,-width*.5,length*.15,width,length*1.12);
   } else if(part==='boots') {
     const [,knee,ankle]=pose.legs[side],dx=ankle[0]-knee[0],dy=ankle[1]-knee[1];
     const length=Math.hypot(dx,dy), w=Math.min(length*.92,a.length*.70);
