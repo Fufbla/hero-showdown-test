@@ -1,0 +1,235 @@
+{
+  "atlas": "worn.png",
+  "sha256": "c3823a755a32a4da41d95d11581647c9e97c36866607b8cb199a072aed37d711",
+  "artwork": "New illustrated, alpha-isolated wearable sprites commissioned for the Style C playtest. Frame selectors and equipment attachments use real catalog IDs.",
+  "reference": "Original Style C Guardian, plus the supplied Hero Showdown Royale development reference pack.",
+  "medium": "Generated transparent painted game sprites with dark ink, blue enamel and gold fittings. Runtime remaps the enamel and trim separately to the catalog palette and retains the silver highlights and ink.",
+  "assembly": "Crop opaque sprite bounds with a two-pixel margin, preserve alpha and use premultiplied resizing. The far arc of the rear band is occluded by the head. Pack the visible components into the atlas with gutters.",
+  "families": {
+    "regional": [
+      "shore",
+      "beacon",
+      "briar",
+      "foundry",
+      "cavern",
+      "crystal",
+      "wild",
+      "aether",
+      "nova",
+      "vanguard",
+      "horizon"
+    ],
+    "merge": [
+      "lightning",
+      "air",
+      "styrodog",
+      "sonic",
+      "styro",
+      "wastelander",
+      "venomis",
+      "atomdust"
+    ]
+  },
+  "sources": [
+    {
+      "sheet": "Legendary brow bands",
+      "brief": "Nine open 3/4 forehead pieces. Leave the complete face and crown exposed. Each crest and temple silhouette carries the corresponding motif.",
+      "source_sha256": "3113c9b6c8686a1d15410fa9ff241bb4d8e033bc5eb7bc998248d288f16dff06",
+      "source_size": [
+        2022,
+        778
+      ],
+      "regions": [
+        "helmet-classic",
+        "helmet-lightning",
+        "helmet-air",
+        "helmet-styrodog",
+        "helmet-sonic",
+        "helmet-styro",
+        "helmet-wastelander",
+        "helmet-venomis",
+        "helmet-atomdust"
+      ]
+    },
+    {
+      "sheet": "Legendary breastplates",
+      "brief": "Nine short sleeveless breastplates with shoulder caps and an original motif worked into the metal panels.",
+      "source_sha256": "34b0ef529a6df0c7ff9d938f26f4d16290aee420ccbec69041ac17a4ea22efdb",
+      "source_size": [
+        1536,
+        1024
+      ],
+      "regions": [
+        "chest-classic",
+        "chest-lightning",
+        "chest-air",
+        "chest-styrodog",
+        "chest-sonic",
+        "chest-styro",
+        "chest-wastelander",
+        "chest-venomis",
+        "chest-atomdust"
+      ]
+    },
+    {
+      "sheet": "Legendary greaves",
+      "brief": "Nine upright knee-to-ankle greaves, with individually painted kneecaps and no shoe.",
+      "source_sha256": "02f0d7b8104770c8b2402b5bfb80f82bd84792e647a26c3222d3958e82c11295",
+      "source_size": [
+        1216,
+        1293
+      ],
+      "regions": [
+        "shin-classic",
+        "shin-lightning",
+        "shin-air",
+        "shin-styrodog",
+        "shin-sonic",
+        "shin-styro",
+        "shin-wastelander",
+        "shin-venomis",
+        "shin-atomdust"
+      ]
+    },
+    {
+      "sheet": "Regional headwear",
+      "brief": "Twelve regional or legacy open brow bands, each with individually painted catalog-themed mount and temple guards.",
+      "source_sha256": "93a4da8987578c8a47e4b7c38e84be7e7984d89093f8b4f5bcb6319251277285",
+      "source_size": [
+        1536,
+        1024
+      ],
+      "regions": [
+        "helmet-shore",
+        "helmet-beacon",
+        "helmet-briar",
+        "helmet-foundry",
+        "helmet-cavern",
+        "helmet-crystal",
+        "helmet-wild",
+        "helmet-aether",
+        "helmet-nova",
+        "helmet-vanguard",
+        "helmet-horizon",
+        "helmet-legacy"
+      ]
+    },
+    {
+      "sheet": "Regional cuirasses",
+      "brief": "Twelve wearable regional or legacy cuirasses with compact rib and shoulder panels.",
+      "source_sha256": "2bd95b4fe9f70712de5c7bb34c9e56cada8a03d5ef87ac0a3a93019f8c13ac08",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "regions": [
+        "chest-shore",
+        "chest-beacon",
+        "chest-briar",
+        "chest-foundry",
+        "chest-cavern",
+        "chest-crystal",
+        "chest-wild",
+        "chest-aether",
+        "chest-nova",
+        "chest-vanguard",
+        "chest-horizon",
+        "chest-legacy"
+      ]
+    },
+    {
+      "sheet": "Regional greaves",
+      "brief": "Twelve single knee-to-ankle greaves with distinct catalog motifs.",
+      "source_sha256": "fa6f10bcc7e84a12e991d666648dcd36058540ed910c35523e0c1e0f92f54e89",
+      "source_size": [
+        930,
+        1691
+      ],
+      "regions": [
+        "shin-shore",
+        "shin-beacon",
+        "shin-briar",
+        "shin-foundry",
+        "shin-cavern",
+        "shin-crystal",
+        "shin-wild",
+        "shin-aether",
+        "shin-nova",
+        "shin-vanguard",
+        "shin-horizon",
+        "shin-legacy"
+      ]
+    },
+    {
+      "sheet": "Rear and utility hardware",
+      "brief": "Rear browband, rear breastplate, rear calf guard, vambrace, forefoot, heel, front belt, back belt and eye mask.",
+      "source_sha256": "6382c6e1a6dadb596298edb9092f776d5d09e8b83f79591a8e08659e97561865",
+      "source_size": [
+        1261,
+        1247
+      ],
+      "regions": [
+        "back-helmet",
+        "back-chest",
+        "back-shin",
+        "glove",
+        "toe",
+        "heel",
+        "belt",
+        "back-belt",
+        "mask"
+      ]
+    },
+    {
+      "sheet": "Profile and cloth fittings",
+      "brief": "Strict right-facing profile band, breastplate, greave, vambrace, shoe, belt and eye mask. Two small front fasteners supply the cape brooch and chest badge.",
+      "source_sha256": "60f2c872c7934e8f628fea5c3a7a751751bffe8a7e344248d8423486944e2acc",
+      "source_size": [
+        1261,
+        1247
+      ],
+      "regions": [
+        "side-helmet",
+        "side-chest",
+        "side-shin",
+        "side-glove",
+        "side-toe",
+        "side-belt",
+        "side-mask",
+        "clasp",
+        "badge"
+      ]
+    },
+    {
+      "sheet": "Side and rear crests",
+      "brief": "Twenty small independently illustrated armor crests for the eight villain motifs, eleven regions and the legacy motif. Attach to the profile temple and lateral knee or to the rear attachment plate.",
+      "source_sha256": "17446a9a612ab394d9230783aabaa8287645a9852d5016b7ef780a59bd6c0f31",
+      "source_size": [
+        1402,
+        1122
+      ],
+      "regions": [
+        "crest-lightning",
+        "crest-air",
+        "crest-styrodog",
+        "crest-sonic",
+        "crest-styro",
+        "crest-wastelander",
+        "crest-venomis",
+        "crest-atomdust",
+        "crest-shore",
+        "crest-beacon",
+        "crest-briar",
+        "crest-foundry",
+        "crest-cavern",
+        "crest-crystal",
+        "crest-wild",
+        "crest-aether",
+        "crest-nova",
+        "crest-vanguard",
+        "crest-horizon",
+        "crest-legacy"
+      ]
+    }
+  ]
+}
