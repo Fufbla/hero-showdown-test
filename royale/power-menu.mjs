@@ -1,5 +1,6 @@
 import { POWERS, POWER_IDS, powerStats } from './powers.mjs';
 import { CONTROL_NAMES, CONTROL_KEY, normalizeControls } from './controls.mjs';
+import {hudEquipError} from './power-upgrades.mjs';
 const $=id=>document.getElementById(id);
 const node=(tag,text,className)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(className)n.className=className;return n;};
 const labels={targets:'Maximum targets',damage:'Damage per hit',bossEffectiveness:'Boss damage effectiveness',reach:'Combat reach',kicks:'Kicks per combination',projectiles:'Fireballs per cast',pierce:'Enemies per Fireball',duration:'Duration',reduction:'All-damage reduction',dodge:'Regular enemy dodge chance',legendaryDodge:'Legendary Boss dodge chance',runBonus:'Running speed bonus',attackBonus:'Attack speed bonus',bossHitChance:'Boss hit chance during Flight',cooldown:'Cooldown'};
@@ -7,6 +8,52 @@ const percent=new Set(['bossEffectiveness','reduction','dodge','legendaryDodge',
 function format(key,value){return `${Number((value*(percent.has(key)?100:1)).toFixed(4))}${percent.has(key)?'%':['duration','cooldown'].includes(key)?' s':key==='reach'?' units':''}`;}
 export class PowerMenu {
   constructor(getGame,persist,say,upgrades){Object.assign(this,{getGame,persist,say,upgrades});this.selected='strength';this.busy=false;this.message='';this.padPrevious=new Set();}
+  showHudSlot(slot, finish) {
+    const game = this.getGame(), dialog = $('slot-picker');
+    const tabs = $('picker-slots'), list = $('picker-powers'), note = $('picker-note');
+    tabs.replaceChildren(); list.replaceChildren();
+    for (const [i, power] of game.powers.data.equipped.entries()) {
+      const tab = node('button', `Slot ${i + 1}`);
+      tab.title = POWERS[power]?.name || 'Empty';
+      tab.setAttribute('aria-pressed', String(i === slot));
+      tab.onclick = () => this.showHudSlot(i, finish);
+      tabs.append(tab);
+    }
+    const owned = POWER_IDS.filter(id => game.powers.data.levels[id] && !POWERS[id].passive);
+    const current = game.powers.data.equipped[slot];
+    $('picker-title').textContent = `Choose a power for slot ${slot + 1}`;
+    note.textContent = owned.length ? `Currently ${POWERS[current]?.name || 'empty'}. Choose a power to equip and save it.` : 'Earn a Power Point and use ↑ in Superpowers to learn your first active power.';
+    const choose = async id => {
+      if (this.upgrades.busy) return;
+      for (const button of dialog.querySelectorAll('button')) button.disabled = true;
+      note.textContent = 'Saving your loadout…';
+      const result = await this.upgrades.equip(slot, id);
+      if (result.ok) {
+        finish(slot);
+        this.say(id ? `${POWERS[id].name} equipped in slot ${slot + 1}.` : `Slot ${slot + 1} cleared.`);
+      } else {
+        this.showHudSlot(slot, finish);
+        note.textContent = result.error;
+      }
+    };
+    for (const id of owned) {
+      const def = POWERS[id], button = node('button', undefined, 'picker-power');
+      const reason = hudEquipError(game, slot, id);
+      button.append(node('b', def.icon), node('strong', def.name), node('small', reason || `Level ${game.powers.data.levels[id]}`));
+      button.disabled = !!reason;
+      button.onclick = () => choose(id);
+      list.append(button);
+    }
+    if (current) {
+      const clear = node('button', 'Clear this slot', 'picker-clear');
+      clear.disabled = !!hudEquipError(game, slot, null);
+      clear.onclick = () => choose(null);
+      list.append(clear);
+    }
+    $('picker-close').disabled = false;
+    if (!dialog.open) dialog.showModal();
+    (list.querySelector('button:not(:disabled)') || $('picker-close')).focus({preventScroll:true});
+  }
   loadout(){
     const g=this.getGame(),safe=!g.inCombat()&&!g.hero.dead&&!this.busy;
     $('loadout-note').textContent=safe?'Choose three learned powers. Selecting an equipped power swaps its slot.':'Loadout locked until safe.';
@@ -72,8 +119,18 @@ export class PowerMenu {
   }
   pollGamepad(enabled,pad){
     if(pad===undefined){try{pad=[...(navigator.getGamepads?.()||[])].find(p=>p?.connected&&p.mapping==='standard');}catch{}}
-    const held=new Set();if(pad){for(const i of[0,12,13,14,15])if(pad.buttons[i]?.pressed)held.add(i);if(pad.axes[1]<-.6)held.add(12);if(pad.axes[1]>.6)held.add(13);if(pad.axes[0]<-.6)held.add(14);if(pad.axes[0]>.6)held.add(15);}
-    const edges=[...held].filter(i=>!this.padPrevious.has(i));this.padPrevious=held;if(!enabled||this.busy)return;
+    const held=new Set();if(pad){for(const i of[0,1,12,13,14,15])if(pad.buttons[i]?.pressed)held.add(i);if(pad.axes[1]<-.6)held.add(12);if(pad.axes[1]>.6)held.add(13);if(pad.axes[0]<-.6)held.add(14);if(pad.axes[0]>.6)held.add(15);}
+    const edges=[...held].filter(i=>!this.padPrevious.has(i));this.padPrevious=held;
+    if ($('slot-picker')?.open && edges.length && !this.upgrades.busy) {
+      const buttons = [...$('slot-picker').querySelectorAll('button:not(:disabled)')];
+      const current = buttons.indexOf(document.activeElement);
+      const step = edges.some(i => i === 12 || i === 14) ? -1 : edges.some(i => i === 13 || i === 15) ? 1 : 0;
+      if (edges.includes(1)) $('picker-close').click();
+      else if (step) buttons[(current + buttons.length + step) % buttons.length]?.focus();
+      else if (edges.includes(0)) buttons[current]?.click();
+      return;
+    }
+    if(!enabled||this.busy)return;
     const list=$('power-list'),active=document.activeElement,id=active?.dataset?.upgrade||active?.dataset?.power||this.selected;let index=POWER_IDS.indexOf(id),kind=active?.dataset?.power?'power':'upgrade';
     if(edges.includes(12))index=(index+8)%9;if(edges.includes(13))index=(index+1)%9;if(edges.includes(14))kind='power';if(edges.includes(15))kind='upgrade';
     const target=list.querySelector(`[data-${kind}="${POWER_IDS[index]}"]`);if(!target)return;

@@ -18,7 +18,7 @@ const authorized=new Set([
  'royale/assets/hero/style-c-features.png','royale/assets/hero/style-c-features.mjs',
  'royale/style-c-materials.mjs','royale/assets/hero/style-c-parts.png','royale/assets/hero/style-c-parts.mjs','royale/assets/hero/style-c-prompt.md',
  'royale/style-c-rig.mjs','royale/style-c-paint.mjs','royale/style-c-hair.mjs','royale/style-c-hero.mjs',
- 'royale/assets/hero/style-c-reference.jpeg','royale/STYLE-C-APPROVAL.md',
+ 'royale/assets/hero/style-c-reference.jpeg','royale/STYLE-C-APPROVAL.md','royale/STYLE-C-SYSTEM.md',
  'royale/tests/style-c-before-art.mjs','royale/tests/style-c.test.mjs',
  'royale/tests/style-c-review.html','royale/tests/style-c-review.mjs','royale/tests/style-c-scenes.mjs',
  'royale/tests/style-c-evidence.html','royale/tests/style-c-evidence.mjs',

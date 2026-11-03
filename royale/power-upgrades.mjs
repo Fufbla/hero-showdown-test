@@ -1,7 +1,27 @@
 import {decodeSave} from './core.mjs';
-import {POWER_IDS, POWER_CAP} from './powers.mjs';
+import {POWERS, POWER_IDS, POWER_CAP, ACTIVE_SLOTS} from './powers.mjs';
 
 const fail=error=>({ok:false,error});
+
+export function hudEquipError(game, slot, id) {
+  if (!Number.isInteger(slot) || slot < 0 || slot >= ACTIVE_SLOTS) return 'That slot belongs to Villain Merge.';
+  if (game.hero.dead || !game.canSave()) return 'Leave combat before changing powers.';
+  const powers = game.powers, current = powers.data.equipped[slot];
+  if (id !== null) {
+    if (!POWER_IDS.includes(id) || POWERS[id].passive || !powers.data.levels[id]) return 'Choose a learned active power.';
+    const other = powers.data.equipped.indexOf(id);
+    if (other !== -1) return `Equipped in slot ${other + 1}`;
+  } else if (!current) return 'This slot is already empty.';
+  if ([current, id].some(power => power && (powers.active[power] || powers.cooldowns[power] > 0 || game.disruptedPower === power))) {
+    return 'Wait until the power is ready.';
+  }
+  return '';
+}
+
+function savePowerChange(store, index, heroId, region, snapshot) {
+  return store.cloud ? store.commit(index, snapshot) :
+    store.writeSlot(index, snapshot, {expectedId:heroId, region, requireDurable:true});
+}
 // Commit only earned level/XP and the permanent spend. An upgrade is not an
 // implicit manual save of the current position, inventory, coins or loadout.
 export function powerUpgradeSnapshot(game,previous,id){
@@ -26,6 +46,34 @@ export function powerUpgradeSnapshot(game,previous,id){
 
 export class InstantPowerUpgrades{
   constructor(context){this.context=context;this.busy=false;}
+  async equip(slot, id) {
+    if (this.busy) return fail('A power change is being saved.');
+    const {game, store, index, heroId} = this.context();
+    const reason = hudEquipError(game, slot, id);
+    if (reason || !game.paused) return fail(reason || 'Open the slot to choose a power.');
+    const record = store.slot(index);
+    if (!record || record.id !== heroId || !store.writable) return fail(store.message || 'Select a writable hero before equipping.');
+    const snapshot = structuredClone(store.cloud ? store.meta[index]?.snapshot : record.snapshot);
+    if (!snapshot) return fail('The saved hero is unavailable.');
+    const equipped = [...game.powers.data.equipped];
+    equipped[slot] = id;
+    if (equipped.some(power => power && !snapshot.powers.levels[power])) return fail('Reload the latest hero before equipping.');
+    snapshot.powers.equipped = equipped;
+    // A loadout write must never provide a way to reload away a live cooldown.
+    const recovery = game.powers.snapshot().recovery;
+    for (const power of POWER_IDS) snapshot.powers.recovery[power] = Math.max(snapshot.powers.recovery[power] || 0, recovery[power] || 0);
+    this.busy = true;
+    try {
+      const saved = await savePowerChange(store, index, heroId, record.lastRegion, snapshot);
+      if (!saved?.ok) return saved || fail('The loadout could not be saved.');
+      game.equipPower(slot, id);
+      return {ok:true};
+    } catch (error) {
+      return fail('The loadout was not confirmed. ' + error.message);
+    } finally {
+      this.busy = false;
+    }
+  }
   async spend(id){
     if(this.busy)return fail('An upgrade is being saved.');
     const {game,store,index,heroId}=this.context();
@@ -39,8 +87,7 @@ export class InstantPowerUpgrades{
     if(!result.ok)return result;
     this.busy=true;
     try{
-      const saved=store.cloud?await store.commit(index,result.snapshot):
-        store.writeSlot(index,result.snapshot,{expectedId:heroId,region:slot.lastRegion,requireDurable:true});
+      const saved=await savePowerChange(store,index,heroId,slot.lastRegion,result.snapshot);
       if(!saved?.ok)return saved||fail('Upgrade could not be saved.');
       // The live power is changed only after durable storage acknowledges it.
       // Gameplay and navigation stay paused while a remote write is in flight.

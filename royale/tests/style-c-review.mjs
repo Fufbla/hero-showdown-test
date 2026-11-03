@@ -6,6 +6,7 @@ import {runStyleCBrowserChecks} from './style-c-browser.mjs';
 import {LOOK_OPTIONS,LOOK_RANGES,COLOR_FIELDS,sanitizeLook} from '../appearance.mjs';
 import {LEGENDARY} from '../legendary-data.mjs';
 import {Game,STEP} from '../core.mjs';
+import {POWER_IDS, normalizePowers} from '../powers.mjs';
 import {Renderer} from '../renderer.mjs';
 import {PROFILE_KEY} from '../saves.mjs';
 import {legendaryGame,ownMerge} from './legendary-fixture.mjs';
@@ -33,12 +34,17 @@ function practiceGame(){const l=looks[Number($('practice-hero').value)],mode=$('
  if(mode.startsWith('merge:')){ownMerge(g,mode.slice(6));for(const part of g.legendary.defeated[mode.slice(6)].pieces)g.inventory.equipped[part.catalogId.split('-').at(-1)]=part.uid;}
  else{const unique=new Map(Object.values(styleCOutfit(mode).pieces||{}).map(item=>[item.id,item]));for(const item of unique.values()){const uid=`drop-${g.inventory.nextId++}`;g.inventory.items.push({uid,catalogId:item.id});g.inventory.equipped[item.part]=uid;}}
  g.travel(1);g.paused=false;g.combatTimer=0;g.refreshEquipment();g.hero.x=g.hero.prevX=340;g.hero.y=g.hero.prevY=600;
- if(!mode.startsWith('merge:')){for(const id of ['fireball','superKick','steel'])g.powers.data.levels[id]=20;g.powers.data.points=38;g.powers.data.equipped=['fireball','superKick','steel'];}return g;
+ if (!mode.startsWith('merge:')) {
+   const levels = Object.fromEntries(POWER_IDS.map(id => [id, ['fireball','superKick','steel'].includes(id) ? 20 : 1]));
+   g.powers.data = normalizePowers({levels, equipped:['fireball','superKick',null]}, g.hero.level);
+ }
+ return g;
 }
 function resizePractice(){const type=$('viewport').value,f=$('practice-frame');f.style.width=type==='portrait'?'390px':type==='landscape'?'844px':'100%';f.style.height=type==='portrait'?'844px':type==='landscape'?'390px':'720px';}
 $('viewport').onchange=resizePractice;
 async function startPractice(upgrades=false){try{resizePractice();const g=practiceGame();if(upgrades){g.hero.level=9;g.hero.maxHp=g.hero.hp=220;g.hero.xp=0;for(const id of Object.keys(g.powers.data.levels))g.powers.data.levels[id]=0;g.powers.data.levels.fireball=3;g.powers.data.points=5;g.powers.data.equipped=['fireball',null,null];}const session='vertical-practice-style-c-'+Date.now(),stamp=new Date().toISOString();sessionStorage.setItem(`royale-test-${session}:`+PROFILE_KEY,JSON.stringify({version:2,revision:0,activeSlot:0,legacyImported:true,slots:[{id:session,createdAt:stamp,updatedAt:stamp,lastRegion:'Coastal Beginnings',snapshot:JSON.parse(g.save())},null,null]}));const f=$('practice-frame');await new Promise(resolve=>{f.onload=resolve;f.src='../index.html?qa=1&touch=1&testSession='+session;});const style=f.contentDocument.createElement('style');style.textContent='#diagnostics{display:none!important}';f.contentDocument.head.append(style);const start=performance.now();while(!f.contentDocument.querySelector('[data-action="continue"]')&&performance.now()-start<15000)await new Promise(r=>setTimeout(r,50));const button=f.contentDocument.querySelector('[data-action="continue"]');if(!button)throw Error('Practice save did not load');button.click();if(upgrades){const waitStart=performance.now();while(f.contentDocument.getElementById('pause').disabled&&performance.now()-waitStart<10000)await new Promise(r=>setTimeout(r,30));f.contentDocument.getElementById('pause').click();f.contentDocument.getElementById('open-loadout').click();f.contentDocument.querySelector('[data-power=fireball]').click();}$('practice-status').textContent=`${g.look.name} · disposable practice ready · ${$('viewport').selectedOptions[0].textContent}`;f.focus();}catch(e){$('practice-status').textContent='Practice error: '+e.message;}};
 $('start').onclick=()=>startPractice();$('upgrade-demo').onclick=()=>startPractice(true);
+$('start').disabled = $('upgrade-demo').disabled = false;
 $('checks').onclick=async()=>{playing=false;$('play').textContent='Play animation';$('checks').disabled=true;$('checks-result').textContent='Checking 49 hairstyles, body builds and connected equipment…';try{$('checks-result').textContent=JSON.stringify(await runStyleCBrowserChecks(makeCanvas),null,2);}catch(e){$('checks-result').textContent=JSON.stringify({passed:false,error:e.message},null,2);}finally{$('checks').disabled=false;}};
 $('benchmark').onclick=async()=>{playing=false;cancelAnimationFrame(raf);$('benchmark').disabled=true;let renderer;try{
  const g=practiceGame();g.hero.invulnerable=1e9;renderer=new Renderer($('benchmark-canvas'));const begin=performance.now();await Promise.all([prepareStyleCMaterials(),renderer.monsterAtlas.preload(g.regionId)]);const assetPreparationMs=performance.now()-begin,intervals=[],costs=[],visibility=[];let start,lastFrame,acc=0,steps=0,maxEnemies=0;

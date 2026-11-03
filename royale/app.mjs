@@ -40,16 +40,18 @@ function sizeVisibleViewport(){
 window.visualViewport?.addEventListener('resize',sizeVisibleViewport);sizeVisibleViewport();
 // The visible QA harness uses its own session-storage namespace, never real hero slots.
 const testPrefix=params.has('qa')&&params.get('testSession')?`royale-test-${params.get('testSession')}:`:'';
-const storage={getItem:key=>(testPrefix?sessionStorage:localStorage).getItem(testPrefix+key),setItem:(key,value)=>(testPrefix?sessionStorage:localStorage).setItem(testPrefix+key,value)};
+const practiceHero = ['male','female'].includes(params.get('practice')) && !testPrefix ? params.get('practice') : null;
+const storagePrefix = testPrefix || (practiceHero ? `style-c-trial-v1-${practiceHero}:` : '');
+const storage={getItem:key=>(storagePrefix?sessionStorage:localStorage).getItem(storagePrefix+key),setItem:(key,value)=>(storagePrefix?sessionStorage:localStorage).setItem(storagePrefix+key,value)};
 const localStore=new LocalHeroStore(storage);let store=localStore;
 let ledger=null,ledgerError='',criticalPending=null,fixtureSaveFailures=0,fixtureOrdinaryFailures=0;
-try{ledger=await LegendaryLedger.open(window.indexedDB,testPrefix?testPrefix+'permanent':'healthia.royale.permanent.v1');await reconcileLegendaryStore(store,ledger);}catch(error){ledger?.close();ledger=null;ledgerError=error.message||'Permanent storage is unavailable.';}
+try{ledger=await LegendaryLedger.open(window.indexedDB,storagePrefix?storagePrefix+'permanent':'healthia.royale.permanent.v1');await reconcileLegendaryStore(store,ledger);}catch(error){ledger?.close();ledger=null;ledgerError=error.message||'Permanent storage is unavailable.';}
 const localLedger=ledger,localLedgerError=ledgerError;
 const cloudApi=null; // Review build: browser-local persistence; cloud backend unavailable.let cloudStore=null,accountReturn='roster';
 const audio=new GameAudio(storage);
 let game=new Game(),screen='roster',editing=false,activeSlot=store.data.activeSlot,activeId=null,creatorSlot=activeSlot,deleteTarget=null;
 let soundEnabled=false,toastUntil=0,regionName='',lastHud='',fps=60,drawMs=0,qaClock=0;
-const input=new Input(document,()=>{if(criticalPending||powerUpgrades.busy||screen==='mergeReward')return;if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();else if(screen==='account')accountMenu?.hooks.close();else if(screen==='tree')returnAdventure();else if(['controls','world','inventory','chest','mergeReward'].includes(screen))showPause();},loadControls(storage));
+const input=new Input(document,()=>{if(criticalPending||powerUpgrades.busy||screen==='mergeReward')return;if(screen==='powerPicker')closePowerPicker();else if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();else if(screen==='account')accountMenu?.hooks.close();else if(screen==='tree')returnAdventure();else if(['controls','world','inventory','chest','mergeReward'].includes(screen))showPause();},loadControls(storage));
 const journeyMenu=new JourneyMenu(()=>game,persist,say,resume,transaction);
 const powerUpgrades=new InstantPowerUpgrades(()=>({game,store,index:activeSlot,heroId:activeId}));
 const powerMenu=new PowerMenu(()=>game,persist,say,powerUpgrades),controlMenu=new ControlMenu(input,storage,say);
@@ -119,7 +121,7 @@ function setScreen(next){
   if(criticalPending||powerUpgrades.busy)return;
   screen=next;input.enabled=next==='play';input.clear();game.paused=next!=='play';
   for(const [name,id] of Object.entries({account:'account-menu',roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',mergeReward:'merge-reward'}))$(id).hidden=next!==name;
-  const inGame=game.started&&(['play','pause','tree','controls','world','inventory','chest','mergeReward','account'].includes(next)||(next==='creator'&&editing));
+  const inGame=game.started&&(['play','powerPicker','pause','tree','controls','world','inventory','chest','mergeReward','account'].includes(next)||(next==='creator'&&editing));
   $('hud').hidden=!inGame;$('mission').hidden=!inGame;$('pause').disabled=!inGame;
   $('pause').setAttribute('aria-label',next==='play'?'Pause game':'Resume game');$('pause').textContent=next==='play'?'Ⅱ':'▷';
   document.body.classList.toggle('sanctuary-view',game.treeVisit);document.body.classList.toggle('playing',next==='play');document.body.classList.toggle('game-view',inGame);
@@ -248,14 +250,37 @@ function updateHud() {
 }
 function updatePowers(){
   const merge=game.mergeAbility();$('power-bar').classList.toggle('has-merge',!!merge);
+  const canEdit = screen==='play' && game.canSave() && !criticalPending && !powerUpgrades.busy;
+  $('edit-hud-powers').disabled = !canEdit;
   for(const [i,b] of powerButtons.entries()){
     const special=i===3,id=special?merge?.id:game.powers.data.equipped[i],def=special?merge:POWERS[id],active=id&&(special?game.mergeEffects.some(e=>e.id===id&&!e.ended):!!game.powers.active[id]),cooldown=id&&(special?(game.mergeCooldowns[id]||0)>0:(game.powers.cooldowns[id]||0)>0),disrupted=!special&&!!id&&id===game.disruptedPower;
     b.hidden=special&&!merge;hudText(b.querySelector('b'),disrupted?'⊘':def?.icon||'+');hudText(b.querySelector('span'),def?.name||'Empty slot');hudText(b.querySelector('kbd'),input.controls.keys[`power${i}`][0].replace('Digit','').replace('Key',''));
-    b.classList.toggle('cooldown',!!cooldown);b.classList.toggle('active',!!active);b.classList.toggle('disrupted',!!disrupted);b.classList.toggle('flight-locked',!!(game.powers.flying&&def?.offensive&&id!=='fireball'));b.disabled=!id||screen!=='play'||game.hero.dead||!!disrupted||!!criticalPending;
-    hudAttr(b,'aria-label',`${def?.name||`Power slot ${i+1}`}${disrupted?' · disrupted until boss reaches half health':cooldown?' · recovering':active?(id==='flight'?' · flying, press to cancel':' · active'):' · ready'}${special?' · protected fourth power':''}`);hudAttr(b,'aria-pressed',String(!!active));
+    b.classList.toggle('cooldown',!!cooldown);b.classList.toggle('active',!!active);b.classList.toggle('disrupted',!!disrupted);b.classList.toggle('flight-locked',!!(game.powers.flying&&def?.offensive&&id!=='fireball'));b.disabled=screen!=='play'||game.hero.dead||!!disrupted||!!criticalPending||(!id&&(special||!canEdit));
+    hudAttr(b,'aria-label',!id&&!special?`Choose a power for empty slot ${i+1}`:`${def?.name||`Power slot ${i+1}`}${disrupted?' · disrupted until boss reaches half health':cooldown?' · recovering':active?(id==='flight'?' · flying, press to cancel':' · active'):' · ready'}${special?' · protected fourth power':''}`);hudAttr(b,'aria-pressed',String(!!active));
   }
-  hudText($('power-context'),game.disruptedPower?'ONE POWER DISRUPTED · restored at half boss HP':game.powers.flying?'FLIGHT · steer ↑ ↓ · press Flight to land':game.inCombat()?'IN COMBAT':game.powers.data.points?`${game.powers.data.points} Power Points · visit the Tree of Eris`:'Learn powers at the Tree of Eris');
+  hudText($('power-context'),game.disruptedPower?'ONE POWER DISRUPTED · restored at half boss HP':game.powers.flying?'FLIGHT · steer ↑ ↓ · press Flight to land':game.inCombat()?'IN COMBAT':game.powers.data.points?`${game.powers.data.points} Power Points · ↑ in Superpowers`:'Tap + to equip a learned power');
 }
+let pickerReturn = null;
+function openPowerPicker(slot, trigger = powerButtons[slot]) {
+  if (screen !== 'play' || !game.canSave() || criticalPending || powerUpgrades.busy) return;
+  pickerReturn = trigger;
+  setScreen('powerPicker');
+  powerMenu.showHudSlot(slot, closePowerPicker);
+}
+function closePowerPicker() {
+  if (powerUpgrades.busy || screen !== 'powerPicker') return;
+  $('slot-picker').close();
+  resume(); updatePowers();
+  pickerReturn?.focus({preventScroll:true}); pickerReturn = null;
+}
+$('slot-picker').oncancel = event => { event.preventDefault(); closePowerPicker(); };
+$('picker-close').onclick = closePowerPicker;
+$('edit-hud-powers').onclick = event => openPowerPicker(0, event.currentTarget);
+// Physical inputs share the mapped action queue. Native keyboard/AT button
+// clicks have no pointerdown, so enqueue those here as well.
+powerButtons.forEach((button,i) => button.addEventListener('click', event => {
+  if (!event.detail && screen === 'play' && !button.disabled) input.edges.add(`power${i}`);
+}));
 $('manual-save').onclick=async()=>{if(!game.canSave()||criticalPending||powerUpgrades.busy)return;const b=$('manual-save');b.disabled=true;try{const result=store.cloud?await store.commit(activeSlot,game.save()):persist({manual:true});say(result.ok?(store.cloud?'Game saved to your account.':'Hero saved on this browser.'):result.error||'Save unavailable.');}catch(e){say(e.message,9);}finally{b.disabled=!game.canSave();}};
 $('chest-close').onclick=resume;
 function openWorld(){setScreen('world');journeyMenu.map();legendaryMenu.map();$('map-title').focus();}
@@ -286,7 +311,7 @@ for(const kind of ['music','effects']){const slider=$('volume-'+kind);slider.val
 document.addEventListener('visibilitychange',()=>{if(document.hidden){if(screen==='play')pause();persist();}});
 window.addEventListener('blur',()=>{if(screen==='play')pause();});
 window.addEventListener('pagehide',persist);
-window.addEventListener('storage',e=>{if(testPrefix||store.cloud||e.key!==PROFILE_KEY)return;if(game.started)persist();else{store.load();renderRoster();}});
+window.addEventListener('storage',e=>{if(storagePrefix||store.cloud||e.key!==PROFILE_KEY)return;if(game.started)persist();else{store.load();renderRoster();}});
 // Keyboard focus stays in the active panel. Tabs also support arrow-key navigation.
 document.addEventListener('keydown',e=>{
   if(e.key!=='Tab'||screen==='play'&&!criticalPending)return;
@@ -315,7 +340,18 @@ if(testPrefix){
  installBossQA(()=>game,()=>{handleEvents();updateHud();},{failSave:()=>{fixtureOrdinaryFailures=1;}});
  if(/^p10-(checks|benchmark)-/.test(params.get('testSession')||'')){const {installPhase10QA}=await import('./phase10-qa.mjs');phase10QA=installPhase10QA(()=>game,next=>{game=next;startPatrol(true);},input,renderer,()=>{handleEvents();updateHud();},audio,seconds=>beginMeasurement(seconds));}
 }
+if (practiceHero) {
+  if (!store.slot(0) && store.writable) {
+    const {styleCPracticeSnapshot} = await import('./tests/style-c-scenes.mjs');
+    store.writeSlot(0, styleCPracticeSnapshot(practiceHero), {expectedId:null});
+  }
+  document.querySelector('.phase-label').textContent = 'STYLE C PRACTICE';
+}
 renderRoster();setScreen('roster');
+if (practiceHero && store.slot(0)) {
+  continueHero(0);
+  say('Practice patrol · Use ⇄ to change powers or tap + to fill an empty slot.', 7);
+}
 void prepareStyleCMaterials().then(ready=>{if(screen==='roster')renderRoster();if(!ready)say('Approved hero artwork could not load. Reload to retry.',12);});
 for(const link of document.querySelectorAll('#roster a[href^="tests/"]'))link.hidden=!params.has('qa');
 let last=performance.now(),accumulator=0,measurement=null,backgroundSignature='';
@@ -330,7 +366,12 @@ function frame(now){
   const waitingForArt=game.arenaScene&&!renderer.bossArt.ready;
   const simulationStart=performance.now();
   if(screen==='play'&&!waitingForArt&&!criticalPending){
-    accumulator+=elapsed;while(accumulator>=STEP){game.step(STEP,phase10QA?.sample()||input.sample());accumulator-=STEP;}
+    accumulator+=elapsed;while(accumulator>=STEP){
+      const action = phase10QA?.sample() || input.sample();
+      const empty = action.powers?.findIndex((pressed,i) => pressed && i<3 && !game.powers.data.equipped[i]) ?? -1;
+      if (empty!==-1 && game.canSave()) {openPowerPicker(empty);accumulator=0;break;}
+      game.step(STEP,action);accumulator-=STEP;
+    }
     handleEvents();if(!criticalPending&&screen==='play'&&game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();}
   }else accumulator=0;
   const simulationCost=performance.now()-simulationStart;

@@ -74,3 +74,54 @@ test('invalid or forged point counts and combat restrictions cannot bypass progr
   assert.equal(powerUpgradeSnapshot(f.game,before,'fireball').ok,false);assert.equal(powerUpgradeSnapshot(f.game,before,'not-a-power').ok,false);
   assert.ok(decodeSave(JSON.stringify(before)));
 });
+
+test('a learned active power equips from the patrol HUD and survives reload without saving unrelated adventure progress', async () => {
+  const f = fixture();
+  f.game.leaveTree();
+  f.game.paused = true;
+  f.game.hero.coins += 123;
+  const before = f.store.slot(0).snapshot;
+  assert.ok((await f.upgrades.equip(2, 'fireball')).ok);
+  assert.deepEqual(f.game.powers.data.equipped, [null, null, 'fireball']);
+  const after = new LocalHeroStore(f.storage).slot(0).snapshot;
+  assert.deepEqual(after.powers.equipped, f.game.powers.data.equipped);
+  assert.equal(after.coins, before.coins);
+  assert.deepEqual(after.world, before.world);
+  assert.deepEqual(after.powers.levels, before.powers.levels);
+  assert.ok((await f.upgrades.equip(2, null)).ok);
+  assert.deepEqual(f.store.slot(0).snapshot.powers.equipped, [null, null, null]);
+});
+
+test('HUD choices protect combat, cooldowns, passives, ownership, duplicate powers and the Villain Merge slot', async () => {
+  const f = fixture();
+  const equip = (slot, id) => f.upgrades.equip(slot, id);
+  assert.ok((await f.upgrades.spend('speed')).ok);
+  for (const [slot, id] of [[0,'speed'], [0,'whirlwind'], [3,'fireball'], [-1,'fireball']]) assert.equal((await equip(slot,id)).ok, false);
+  f.game.combatTimer = 3;
+  assert.equal((await equip(0, 'fireball')).ok, false);
+  f.game.combatTimer = 0;
+  f.game.powers.cooldowns.fireball = 3;
+  assert.equal((await equip(0, 'fireball')).ok, false);
+  f.game.powers.cooldowns.fireball = 0;
+  assert.ok((await equip(0, 'fireball')).ok);
+  assert.equal((await equip(1, 'fireball')).ok, false);
+  f.game.powers.cooldowns.fireball = 2;
+  assert.equal((await equip(0, null)).ok, false);
+  assert.deepEqual(f.game.powers.data.equipped, ['fireball',null,null]);
+  assert.equal(f.game.powers.cooldowns.fireball, 2);
+});
+
+test('a failed or superseded HUD write keeps the current loadout and a double press saves once', async () => {
+  const f = fixture();
+  const pair = await Promise.all([f.upgrades.equip(1,'fireball'),f.upgrades.equip(2,'fireball')]);
+  assert.equal(pair.filter(r => r.ok).length, 1);
+  const other = new LocalHeroStore(f.storage);
+  assert.ok(other.writeSlot(0,other.slot(0).snapshot,{expectedId:f.context.heroId, requireDurable:true}).ok);
+  assert.equal((await f.upgrades.equip(1,null)).ok, false);
+  assert.deepEqual(f.game.powers.data.equipped, [null,'fireball',null]);
+  assert.deepEqual(new LocalHeroStore(f.storage).slot(0).snapshot.powers.equipped, f.game.powers.data.equipped);
+  const unwriteable = fixture();
+  unwriteable.storage.setItem = () => { throw Error('Full'); };
+  assert.equal((await unwriteable.upgrades.equip(2,'fireball')).ok, false);
+  assert.deepEqual(unwriteable.game.powers.data.equipped, [null,null,null]);
+});

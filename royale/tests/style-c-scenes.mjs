@@ -3,6 +3,15 @@ import {Game,STEP} from '../core.mjs';
 import {Renderer} from '../renderer.mjs';
 import {COSTUME_CATALOG} from '../costume-catalog.mjs';
 import {MERGE_CATALOG} from '../legendary-data.mjs';
+import {POWER_IDS, normalizePowers} from '../powers.mjs';
+import {styleCDefault} from '../style-c-defaults.mjs';
+
+export function styleCPracticeSnapshot(presentation) {
+ const levels = Object.fromEntries(POWER_IDS.map(id => [id, 1]));
+ const level = 15, powers = normalizePowers({levels, equipped:['fireball', 'superKick', null]}, level);
+ const game = new Game({save:{level, powers}, look:styleCDefault(presentation)});
+ return game.save();
+}
 export const STYLE_C_SAMPLES=[
  sanitizeLook({name:'Style C Guardian',presentation:'male',skin:'#b97343',eyes:'#855024',hair:'short-locs',hairColor:'#29212b',suit:'#263778',trim:'#e2bf60',capeColor:'#263399',emblem:'star',emblemColor:'#f1ce64',brows:'bold',mouth:'neutral',build:'balanced'}),
  sanitizeLook({name:'Style C Sentinel',presentation:'female',skin:'#b97343',eyes:'#855024',hair:'curly-ponytail',hairColor:'#382335',suit:'#71328c',trim:'#e2bf60',capeColor:'#7738a0',emblem:'star',emblemColor:'#f1ce64',brows:'bold',mouth:'neutral',build:'balanced'})

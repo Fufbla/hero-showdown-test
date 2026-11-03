@@ -20,7 +20,7 @@ const BASE='4495e0307e7a8dc9aa8bcdd8fbedb575048e6795';
 test('Style C and instant upgrades change only authorized Royale files',()=>{
  const git=(...a)=>execFileSync('git',a,{cwd:new URL('../../',import.meta.url),encoding:'utf8'}).trim();
  const changed=git('diff','--name-only',BASE).split('\n').filter(Boolean);
- const upgraded=new Set(['royale/app.mjs','royale/creator.mjs','royale/index.html','royale/power-menu.mjs','royale/powers.css','royale/power-upgrades.mjs','royale/tests/power-upgrades.test.mjs','royale/tests/phase3-checks.mjs']);
+ const upgraded=new Set(['royale/app.mjs','royale/creator.mjs','royale/index.html','royale/power-menu.mjs','royale/powers.css','royale/power-upgrades.mjs','royale/tests/power-upgrades.test.mjs','royale/tests/phase3-checks.mjs','royale/STYLE-C-SYSTEM.md']);
  const allowed=p=>upgraded.has(p)||p.startsWith('royale/assets/hero/style-c-accurate/')||p==='royale/hero-art.mjs'||p==='royale/tests/hero-preservation.mjs'||/^royale\/(?:style-c-[^/]+\.mjs|tests\/style-c-[^/]+\.(?:mjs|html)|tests\/style-c\.test\.mjs|assets\/hero\/style-c-[^/]+|STYLE-C-APPROVAL\.md|qa\/style-c\/.*)$/.test(p);
  assert.deepEqual(changed.filter(p=>!allowed(p)),[]);
  const extra=git('ls-files','--others','--exclude-standard').split('\n').filter(Boolean).filter(p=>!p.startsWith('royale/node_modules/'));
@@ -119,4 +119,19 @@ test('idle eye and facial edits preserve the source body, hands, legs and cape',
    assert.ok(faceChanged>0,'requested facial selection remains visible');
   }
  }
+});
+
+test('both disposable Style C patrols use the normal save rules with eight active choices, one passive and an empty third slot', async () => {
+  const {styleCPracticeSnapshot} = await import('./style-c-scenes.mjs');
+  for (const presentation of ['male','female']) {
+    const save = decodeSave(styleCPracticeSnapshot(presentation));
+    assert.equal(save.look.presentation, presentation);
+    assert.equal(save.level, 15);
+    assert.equal(save.powers.points, 5);
+    assert.equal(Object.values(save.powers.levels).filter(n => n === 1).length, 9);
+    assert.deepEqual(save.powers.equipped, ['fireball','superKick',null]);
+    const game = new Game({save});
+    assert.ok(game.canSave());
+    assert.equal(game.hero.hp, game.hero.maxHp);
+  }
 });

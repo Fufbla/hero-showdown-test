@@ -23,7 +23,7 @@
       <div class="top-actions"><span class="phase-label"><i></i> PHASE 10 PLAYTEST</span><button id="account-open" class="account-button">Account</button><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
     </header>
     <main id="stage" aria-label="Hero Showdown Royale game">
-      <canvas id="game" aria-label="2D side-scrolling adventure. Use A and D to move, Space to jump, J to punch and K to kick."></canvas>
+      <canvas id="game" aria-label="2D side-scrolling adventure. Use the left and right arrow keys to move, Space to jump, J to punch and K to kick."></canvas>
       <div id="hud" class="hud" hidden>
         <section class="hero-hud" aria-label="Hero status">
           <div class="level-seal"><small>LV</small><b id="level">1</b></div>
@@ -149,11 +149,17 @@
       <noscript><div class="noscript">Enable JavaScript to play Hero Showdown Royale.</div></noscript>
     </main>
     <footer class="controls-footer">
-      <div id="power-bar" class="power-bar" aria-label="Equipped superpowers"><span class="power-bar-label">YOUR POWERS</span><button data-control="power0" class="power-button" aria-label="Power slot 1"><kbd>1</kbd><b>+</b><span>Empty slot</span></button><button data-control="power1" class="power-button" aria-label="Power slot 2"><kbd>2</kbd><b>+</b><span>Empty slot</span></button><button data-control="power2" class="power-button" aria-label="Power slot 3"><kbd>3</kbd><b>+</b><span>Empty slot</span></button><button data-control="power3" class="power-button merge-slot" aria-label="Villain Merge power" hidden><kbd>4</kbd><b>✦</b><span>Villain Merge</span></button><span id="power-context">Learn powers at the Tree of Eris</span></div>
-      <div class="desktop-guide"><span><kbd>A</kbd><kbd>D</kbd> MOVE</span><span><kbd>SHIFT</kbd> RUN</span><span><kbd>SPACE</kbd> DOUBLE JUMP</span><span><kbd>J</kbd> PUNCH</span><span><kbd>K</kbd> KICK</span><span><kbd>ESC</kbd> PAUSE</span><small>EXPLORE. PROTECT. BECOME.</small></div>
+      <div id="power-bar" class="power-bar" aria-label="Equipped superpowers"><button id="edit-hud-powers" class="edit-hud-powers" type="button" aria-label="Change equipped powers" aria-haspopup="dialog" title="Change equipped powers" disabled>⇄ <span>Change</span></button><button data-control="power0" class="power-button" aria-label="Power slot 1"><kbd>1</kbd><b>+</b><span>Empty slot</span></button><button data-control="power1" class="power-button" aria-label="Power slot 2"><kbd>2</kbd><b>+</b><span>Empty slot</span></button><button data-control="power2" class="power-button" aria-label="Power slot 3"><kbd>3</kbd><b>+</b><span>Empty slot</span></button><button data-control="power3" class="power-button merge-slot" aria-label="Villain Merge power" hidden><kbd>4</kbd><b>✦</b><span>Villain Merge</span></button><span id="power-context">Learn powers at the Tree of Eris</span></div>
+      <div class="desktop-guide"><span><kbd>←</kbd><kbd>→</kbd> MOVE</span><span><kbd>SHIFT</kbd> RUN</span><span><kbd>SPACE</kbd> DOUBLE JUMP</span><span><kbd>J</kbd> PUNCH</span><span><kbd>K</kbd> KICK</span><span><kbd>ESC</kbd> PAUSE</span><small>EXPLORE. PROTECT. BECOME.</small></div>
       <div id="touch-controls" class="touch-controls"><div class="stick-wrap"><div id="stick" aria-label="Movement stick: drag left or right, farther to run"><span class="stick-arrows">‹ &nbsp; &nbsp; ›</span><div id="stick-knob"></div></div><small>WALK · RUN</small></div><span class="touch-note">YOUR COAST.<br>YOUR STORY.</span><div class="action-buttons"><button data-control="punch" aria-label="Punch"><b>✧</b><span>PUNCH</span></button><button data-control="kick" aria-label="Kick"><b>⌁</b><span>KICK</span></button><button data-control="jump" class="jump-button" aria-label="Jump"><b>↑</b><span>JUMP</span></button></div></div>
     </footer>
   </div>
+  <dialog id="slot-picker" aria-labelledby="picker-title" aria-describedby="picker-note">
+    <div class="picker-heading"><div><small>SUPERPOWERS</small><h2 id="picker-title">Choose a power</h2></div><button id="picker-close" type="button" aria-label="Close power selection">×</button></div>
+    <div id="picker-slots" role="group" aria-label="Choose a slot"></div>
+    <p id="picker-note" role="status"></p>
+    <div id="picker-powers"></div>
+  </dialog>
   <script src="../assets/animation/motion-core.js"></script>
   <script type="module" src="app.mjs"></script>
 </body>
