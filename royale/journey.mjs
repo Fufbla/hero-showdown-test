@@ -1,3 +1,4 @@
+import {matchingWhirlwindBonus,refreshWhirlwindEffect} from './whirlwind-armor.mjs';
 import {matchingStrengthBonus} from './strength-armor.mjs';
 import {matchingRootsBonus,refreshRootsEffect} from './roots-armor.mjs';
 import {matchingSteelBonus, refreshSteelEffect} from './steel-armor.mjs';
@@ -27,6 +28,7 @@ export const journeyMethods={
     this._outfitInventory = null;
     const earned=equipmentBonuses(this.inventory,this.hero?.level||99),base=this.baseEquipment;
     const active=matchingMerge(this.inventory,this.hero?.level||99);if(this.legendary.active!==active)this.cancelMergeEffects();this.legendary.active=active;if(this.powers)this.powers.mergeEntitlement=mergeEntitlement(active);
+    const previousWhirlwindBonus=this.equipment?.whirlwindLevels||0;
     const previousStrengthBonus=this.equipment?.strengthLevels||0;
     const previousRootsBonus=this.equipment?.rootsLevels||0;
     const previousSteelBonus=this.equipment?.steelLevels||0;
@@ -39,6 +41,9 @@ export const journeyMethods={
     const rootsBonus=matchingRootsBonus(this.inventory,this.hero?.level||1);
     if(rootsBonus)this.equipment.rootsLevels=rootsBonus;
     if(previousRootsBonus!==rootsBonus)refreshRootsEffect(this.powers);
+    const whirlwindBonus=matchingWhirlwindBonus(this.inventory,this.hero?.level||1);
+    if(whirlwindBonus)this.equipment.whirlwindLevels=whirlwindBonus;
+    if(previousWhirlwindBonus!==whirlwindBonus)refreshWhirlwindEffect(this.powers);
     const strengthBonus=matchingStrengthBonus(this.inventory,this.hero?.level||1);
     if(strengthBonus)this.equipment.strengthLevels=strengthBonus;
     if(previousStrengthBonus!==strengthBonus && this.hero?.attack?.power==='strength'){

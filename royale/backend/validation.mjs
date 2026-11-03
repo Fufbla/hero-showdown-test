@@ -435,6 +435,80 @@ function matchingStrengthBonus(inventory, level) {
   return helmet && level >= helmet.level && worn.every((item, i) => item?.part === COSTUME_PARTS[i] && item.setId === helmet.setId) ? helmet.strengthLevels : 0;
 }
 
+// whirlwind-armor.mjs
+var designs5 = [
+  ["slipstream", "Slipstream"],
+  ["crosswind", "Crosswind"],
+  ["mistral", "Mistral Vane"],
+  ["venturi", "Venturi"],
+  ["scythe", "Gale Scythe"],
+  ["helix", "Helix Rider"],
+  ["jetstream", "Jetstream Lance"],
+  ["eyewall", "Eyewall Sentinel"],
+  ["tempest", "Tempest Regent"]
+];
+var WHIRLWIND_SUITS = Object.freeze(designs5.map(([art, name], i) => {
+  const { level, price } = STRENGTH_SUITS[i];
+  return {
+    setId: "whirlwind-" + art,
+    art,
+    name,
+    level,
+    price,
+    whirlwindLevels: i + 1,
+    color: "#7543ac",
+    accent: "#d6aff6",
+    rarity: "ordinary"
+  };
+}));
+var labels2 = { helmet: "Helmet", chest: "Chest Armor", boots: "Boots" };
+var WHIRLWIND_PIECES = Object.freeze(Object.fromEntries(WHIRLWIND_SUITS.flatMap(
+  (suit, i) => COSTUME_PARTS.map((part) => {
+    const id = suit.setId + "-" + part;
+    const { catalogValue } = STRENGTH_PIECES[STRENGTH_SUITS[i].setId + "-" + part];
+    return [id, {
+      id,
+      setId: suit.setId,
+      setName: suit.name,
+      name: suit.name + " " + labels2[part],
+      art: suit.art,
+      part,
+      level: suit.level,
+      color: suit.color,
+      accent: suit.accent,
+      rarity: suit.rarity,
+      whirlwindLevels: suit.whirlwindLevels,
+      catalogValue,
+      shop: true,
+      sellable: true,
+      stats: {}
+    }];
+  })
+)));
+var WARDROBE_CATALOG5 = Object.freeze({ ...WARDROBE_CATALOG4, ...WHIRLWIND_PIECES });
+function matchingWhirlwindBonus(inventory, level) {
+  const worn = COSTUME_PARTS.map((part) => WHIRLWIND_PIECES[inventory.items.find((item) => item.uid === inventory.equipped[part])?.catalogId]);
+  const helmet = worn[0];
+  return helmet && level >= helmet.level && worn.every((item, i) => item?.part === COSTUME_PARTS[i] && item.setId === helmet.setId) ? helmet.whirlwindLevels : 0;
+}
+function refreshWhirlwindEffect(powers) {
+  const effect = powers?.active.whirlwind;
+  if (!effect) return;
+  const { level, damage, duration, targets } = powers.stats("whirlwind");
+  Object.assign(effect, { level, damage, duration });
+  if (effect.age >= duration) {
+    powers.end("whirlwind");
+    return;
+  }
+  const released = effect.targets.splice(targets);
+  for (const enemy of powers.game.enemies) {
+    if (!released.includes(enemy.id) || !enemy.lifted) continue;
+    enemy.lifted = !!enemy.mergeLifted;
+    enemy.airborne = true;
+    enemy.vy = 0;
+  }
+}
+
 // progression.mjs
 var PROGRESSION = Object.freeze({ cap: 99, base: 50, linear: 28, quadratic: 4, lateStart: 69, lateSpan: 29, lateWeight: 3, defeatFraction: 0.1, combatGrace: 5 });
 function xpForLevel(level, curve = PROGRESSION) {
@@ -607,7 +681,7 @@ var legacyCatalog = Object.fromEntries(themes.flatMap((theme, region) => !theme 
   const id = `r${region}-${rarity}-${part}`, rare = rarity === "rare", factor = rare ? 1.6 : 1;
   return [id, { id, region, rarity, part, legacy: true, level: 1, catalogValue: 100 * region * (rare ? 2 : 1), sellable: true, name: `${rare ? "Radiant " : ""}${theme[0]} ${EQUIPMENT_NAMES[part]}`, color: theme[1], accent: theme[2], stats: { strength: Math.round(region * (i === 2 ? 6 : 2) * factor), damage: Math.round(region * (i === 3 ? 7 : 3) * factor), attackSpeed: i === 4 || i === 6 ? Number((region * 5e-3 * factor).toFixed(3)) : 0 } }];
 }))));
-var EQUIPMENT = Object.freeze({ ...legacyCatalog, ...WARDROBE_CATALOG4, ...MERGE_CATALOG });
+var EQUIPMENT = Object.freeze({ ...legacyCatalog, ...WARDROBE_CATALOG5, ...MERGE_CATALOG });
 var itemDefinition = (item) => EQUIPMENT[item?.catalogId];
 function normalizeInventory(raw = {}) {
   if (!raw || typeof raw !== "object" || !Array.isArray(raw.items) || raw.items.length > 7 || !Array.isArray(raw.pending)) return null;
@@ -1508,7 +1582,7 @@ function equipmentStats(raw = {}) {
   return { strength: clamp3(Number(raw.strength) || 0, 0, 1e3), damage: clamp3(Number(raw.damage) || 0, 0, 1e3), attackSpeed: clamp3(Number(raw.attackSpeed) || 0, 0, 0.5), defense: clamp3(Number(raw.defense) || 0, 0, 0.25), moveSpeed: clamp3(Number(raw.moveSpeed) || 0, 0, 0.6), fireball: clamp3(Number(raw.fireball) || 0, 0, 80), roots: clamp3(Number(raw.roots) || 0, 0, 15), whirlwind: clamp3(Number(raw.whirlwind) || 0, 0, 20) };
 }
 function powerStats(id, level, { heroLevel = 1, equipment = {} } = {}) {
-  const armorLevels = level > 0 ? integer({ fireball: equipment.fireballLevels, steel: equipment.steelLevels, roots: equipment.rootsLevels, strength: equipment.strengthLevels }[id] || 0, 0, 9) : 0;
+  const armorLevels = level > 0 ? integer({ fireball: equipment.fireballLevels, steel: equipment.steelLevels, roots: equipment.rootsLevels, strength: equipment.strengthLevels, whirlwind: equipment.whirlwindLevels }[id] || 0, 0, 9) : 0;
   level = integer(level, 1, 20) + armorLevels;
   const n = tier(level), eq = equipmentStats(equipment), strength = 10 + 2 * (heroLevel - 1) + eq.strength;
   const base = { level, cooldown: POWERS[id]?.cooldown || 0 };
@@ -2084,7 +2158,7 @@ var erisMethods = {
   },
   costumePreview(selection, discardUids = []) {
     if (!this.shopReady()) return failed("Visit the Tree of Eris safely and resolve pending rewards first.");
-    const definitions = selection?.catalogId ? [WARDROBE_CATALOG4[selection.catalogId]] : Object.values(WARDROBE_CATALOG4).filter((d) => d.setId === selection?.setId && d.shop);
+    const definitions = selection?.catalogId ? [WARDROBE_CATALOG5[selection.catalogId]] : Object.values(WARDROBE_CATALOG5).filter((d) => d.setId === selection?.setId && d.shop);
     if (!definitions.length || definitions.some((d) => !d?.shop) || !selection.catalogId && definitions.length !== 3) return failed("That costume is not sold here.");
     if (definitions.some((d) => d.level > this.hero.level)) return failed(`Requires hero level ${Math.max(...definitions.map((d) => d.level))}.`);
     const cost = definitions.reduce((s, d) => s + d.catalogValue, 0), needed = Math.max(0, this.inventory.items.length + definitions.length - 7);
@@ -2246,6 +2320,7 @@ var journeyMethods = {
     if (this.legendary.active !== active) this.cancelMergeEffects();
     this.legendary.active = active;
     if (this.powers) this.powers.mergeEntitlement = mergeEntitlement(active);
+    const previousWhirlwindBonus = this.equipment?.whirlwindLevels || 0;
     const previousStrengthBonus = this.equipment?.strengthLevels || 0;
     const previousRootsBonus = this.equipment?.rootsLevels || 0;
     const previousSteelBonus = this.equipment?.steelLevels || 0;
@@ -2258,6 +2333,9 @@ var journeyMethods = {
     const rootsBonus = matchingRootsBonus(this.inventory, this.hero?.level || 1);
     if (rootsBonus) this.equipment.rootsLevels = rootsBonus;
     if (previousRootsBonus !== rootsBonus) refreshRootsEffect(this.powers);
+    const whirlwindBonus = matchingWhirlwindBonus(this.inventory, this.hero?.level || 1);
+    if (whirlwindBonus) this.equipment.whirlwindLevels = whirlwindBonus;
+    if (previousWhirlwindBonus !== whirlwindBonus) refreshWhirlwindEffect(this.powers);
     const strengthBonus = matchingStrengthBonus(this.inventory, this.hero?.level || 1);
     if (strengthBonus) this.equipment.strengthLevels = strengthBonus;
     if (previousStrengthBonus !== strengthBonus && this.hero?.attack?.power === "strength") {
