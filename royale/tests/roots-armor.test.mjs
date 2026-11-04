@@ -1,3 +1,4 @@
+import {assertCleanupSimulation} from './cleanup-preservation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
@@ -40,7 +41,7 @@ function castScene(learned=20){
 }
 
 test('protect both approved armor collections, base hero artwork, creatures and combat geometry',()=>{
- const paths=['royale/power-armor.mjs','royale/steel-armor.mjs','royale/assets/power-armor/fireball','royale/assets/power-armor/steel','royale/assets/hero','royale/assets/monsters','royale/assets/boss-sprites','royale/core.mjs','royale/hero-rig.mjs','royale/style-c-rig.mjs'];
+ assertCleanupSimulation();const paths=['royale/power-armor.mjs','royale/steel-armor.mjs','royale/assets/power-armor/fireball','royale/assets/power-armor/steel','royale/assets/hero','royale/assets/monsters','royale/assets/boss-sprites','royale/hero-rig.mjs','royale/style-c-rig.mjs'];
  assert.equal(execFileSync('git',['diff','--name-only','c00833f530aaf47fda392e746e403b343ea08356','--',...paths],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}),'');
  assert.equal(Object.keys(ROOTS_PIECES).length,27);
 });

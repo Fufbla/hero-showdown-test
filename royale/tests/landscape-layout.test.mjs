@@ -24,6 +24,6 @@ test('all non-presentation game files stay byte-identical to integration baselin
 
 test('renderer changes are restricted to viewport sizing and the rest hint; creature drawing stays exact',()=>{
  const git=(ref)=>execFileSync('git',['show',ref+':royale/renderer.mjs'],{cwd:new URL('../../',import.meta.url),encoding:'utf8'});
- const normalize=s=>s.replace("import {drawBossShot} from './boss-effects.mjs';\n",'').replace('if(drawBossShot(c,shot,t))continue;','').replace("import {stableTouchScale} from './landscape-layout.mjs';\n",'').replace(/  resize\(\)\{[^\n]+\n/,'').replace('E / REST · heal & set checkpoint','REST · heal & set checkpoint');
+ const normalize=s=>s.replace("import {drawBossShot} from './boss-effects.mjs';\n",'').replace('if(drawBossShot(c,shot,t))continue;','').replace("import {stableTouchScale} from './landscape-layout.mjs';\n",'').replace(/  resize\(\)\{[^\n]+\n/,'').split('\n').filter(line=>!line.includes('REST · heal & set checkpoint')).join('\n');
  assert.equal(normalize(readFileSync(new URL('../renderer.mjs',import.meta.url),'utf8')),normalize(git('cc288576d5ac8be67af0cacd750b1d026b24be7b')));
 });

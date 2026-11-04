@@ -74,6 +74,5 @@ export class EnvironmentArt{
    this.terrain.set(key,tile);while(this.terrain.size>48)this.terrain.delete(this.terrain.keys().next().value);
   }
   c.drawImage(tile,s.x-3,s.y-12);
-  if(s.tier){c.save();line(c,[[s.x+18,s.y],[s.x+18,s.y-26]],'#283f47',2);shape(c,[[s.x+18,s.y-26],[s.x+45,s.y-26],[s.x+40,s.y-11],[s.x+18,s.y-11]],region.edge,INK,1);c.fillStyle=INK;c.textAlign='center';c.font='bold 10px system-ui';c.fillText(`${s.tier}`,s.x+29,s.y-15);c.restore();}
  }
 }

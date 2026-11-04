@@ -223,12 +223,18 @@ export class Game {
     if(target?.kind==='portal'){if(this.canTravel())this.emit('world-portal');return;}
     if(target?.kind==='passage'){this.usePassage();return;}
     if(this.arenaScene){if(this.availableChest()&&Math.abs(this.hero.x-1060)<140)this.emit('chest-preview');return;}
-    const i = this.nearCamp();
-    if (i < 0) {this.usePassage();return;}
-    if (!this.canSave()) return;
-    this.checkpoint = i; this.hero.hp = this.hero.maxHp; this.hero.invulnerable = 2;
-    this.world.checkpoint={region:this.regionId,index:i};const key=`${this.regionId}:${i}`;if(!this.world.activated.includes(key))this.world.activated.push(key);
-    this.emit('camp', { name: this.camps[i].name });
+  }
+  activateCheckpoint() {
+    if (this.arenaScene || this.hero.dead || !this.hero.grounded || !this.canSave()) return false;
+    const i=this.nearCamp();
+    if(i<0)return false;
+    const key=`${this.regionId}:${i}`;
+    if(this.world.checkpoint.region===this.regionId && this.world.checkpoint.index===i && this.world.activated.includes(key))return false;
+    this.checkpoint=i;
+    this.world.checkpoint={region:this.regionId,index:i};
+    if(!this.world.activated.includes(key))this.world.activated.push(key);
+    this.emit('camp',{name:this.camps[i].name});
+    return true;
   }
   step(dt = STEP, input = {}) {
     if (this.paused || !Number.isFinite(dt) || dt <= 0) return;
@@ -237,6 +243,7 @@ export class Game {
     const h = this.hero;
     h.prevX = h.x; h.prevY = h.y; h.prevFace = h.face;
     if (h.dead) { h.defeatAge += dt; this.deathTimer -= dt; if (this.deathTimer <= 0) this.respawn(); return; }
+    this.activateCheckpoint();
     h.dodgeAge=(h.dodgeAge??100)+dt;h.jumpAge += dt; h.hurtAge += dt; h.respawnAge += dt;h.castAge=(h.castAge??100)+dt;
     for(let i=0;i<4;i++)if(input.powers?.[i])this.powers.activateSlot(i);
     h.invulnerable = Math.max(0, h.invulnerable - dt); h.stun = Math.max(0, h.stun - dt); h.landing = Math.max(0, h.landing - dt);

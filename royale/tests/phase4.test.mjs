@@ -32,7 +32,7 @@ test('low-level farming tapers to zero, never negative; coin and drop rules are 
 });
 test('defeat deducts 10% of next cost once, preserves all non-XP progression and full-health respawn',()=>{
   const g=regional(3);g.hero.level=30;g.hero.maxHp=535;g.hero.xp=2000;g.hero.coins=234;g.healthRoots=4;g.inventory.items.push(createEquipment(3,'ordinary',0));g.powers.data.levels.steel=20;g.powers.data.points=9;
-  g.hero.x=4370;g.enterPortal();const gear=JSON.stringify(g.inventory),points=g.powers.data.points;g.defeat();const xp=2000-Math.floor(xpForLevel(30)*.1);assert.equal(g.hero.xp,xp);g.defeat();assert.equal(g.hero.xp,xp);tick(g,100);
+  g.hero.x=4370;g.activateCheckpoint();const gear=JSON.stringify(g.inventory),points=g.powers.data.points;g.defeat();const xp=2000-Math.floor(xpForLevel(30)*.1);assert.equal(g.hero.xp,xp);g.defeat();assert.equal(g.hero.xp,xp);tick(g,100);
   assert.equal(g.hero.x,4370);assert.equal(g.hero.hp,535);assert.equal(g.hero.level,30);assert.equal(g.hero.coins,234);assert.equal(g.healthRoots,4);assert.equal(JSON.stringify(g.inventory),gear);assert.equal(g.powers.data.points,points);
 });
 test('death cannot go below zero or remove levels; Level 99 has no ordinary penalty',()=>{
@@ -50,7 +50,7 @@ test('Tree is safely accessible remotely and leaves the exact previous location 
 });
 for(const r of WORLD_REGIONS){
   test(`Region ${r.id}: three species, connected low path, three camps and board respawns`,()=>{
-    const g=regional(r.id);assert.equal(new Set(regionSpawns(r.id).map(s=>s[0])).size,3);assert.equal(g.camps.length,3);assert.ok(g.enemies.length<=24);
+    const g=regional(r.id);assert.equal(new Set(regionSpawns(r.id).map(s=>s[0])).size,3);assert.equal(g.camps.length,3);assert.equal(g.enemies.length,84);
     const floor=regionSurfaces(r.id).filter(s=>!s.oneWay&&s.y>=600).sort((a,b)=>a.x-b.x);let edge=0;for(const s of floor){assert.ok(s.x<=edge,`gap before ${s.id}`);edge=Math.max(edge,s.x+s.w);}assert.ok(edge>=6160);
     const e=g.enemies[0];e.state='dead';e.hp=0;e.respawn=18;g.world.visits[`${r.id}:0`]=1;g.enterBoard(1);g.hero.x=2000;g.enterBoard(0);assert.equal(e.respawn,0);g.stepEnemy(e,STEP);assert.equal(e.hp,e.maxHp);
   });

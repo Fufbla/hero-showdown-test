@@ -120,11 +120,12 @@ function hairMaterial(look,view) {
 export function drawStyleCHair(context,look,motion,time,layer='front',direction='front') {
   if (look.hair==='none') return true;
   const view=direction===true || direction==='back' ? 'back' :
-    direction==='side' || direction==='game' ? 'side' : 'front';
+    direction==='side' || direction==='left' || direction==='right' || direction==='game' ? 'side' : 'front';
   const art=hairMaterial(look,view);
   if (!art) return false;
   if (look.helmet && layer==='front') return true;
   context.save();
+  if(look.headwearCoverage==='tucked'){context.beginPath();context.rect(-200,0,400,400);context.clip();}
   if (layer==='rear') {
     const length=styleCHairDefinition(look.hair)?.length??0;
     // The root stays seated against the scalp as long ends lag during turns.

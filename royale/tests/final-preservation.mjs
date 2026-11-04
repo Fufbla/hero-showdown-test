@@ -1,3 +1,4 @@
+import {CLEANUP_FILES} from './cleanup-preservation.mjs';
 // Scope of the final test-build work. Artwork and simulation have no exceptions.
 export const FINAL_BASE='3fdaee3eeba50a703f6a850b1871facd1de7896e';
 export const FINAL_FILES=new Set([
@@ -10,3 +11,5 @@ export const FINAL_FILES=new Set([
  'tests/landscape-layout.test.mjs',
  'qa/final-mobile/landscape-patrol.jpg',
 ].map(p=>'royale/'+p));
+
+for(const path of CLEANUP_FILES)FINAL_FILES.add(path);

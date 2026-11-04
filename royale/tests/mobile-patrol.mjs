@@ -28,6 +28,12 @@ async function run(w,h){out.textContent='';f.style.width=w+'px';f.style.height=h
  for(const type of ['selectstart','contextmenu','dragstart','dblclick','gesturestart'])check(type+' consumed inside controls',!label.dispatchEvent(new v.Event(type,{bubbles:true,cancelable:true})));
  buttons[0].dispatchEvent(new v.MouseEvent('click',{detail:1,bubbles:true,cancelable:true}));
  check('No compatibility click reached the page',unrelatedClicks===0);
+ for(const selector of ['#stick','#hud','#hero-name','#pause','#sound','[data-control=jump]','[data-control=punch]','[data-control=kick]','[data-control=power0]','[data-control=power1]','[data-control=power2]']){
+  const node=$(selector);if(!node)throw Error('Missing '+selector);
+  for(const type of ['selectstart','contextmenu','dblclick'])check(selector+' blocks '+type,!node.dispatchEvent(new v.Event(type,{bubbles:true,cancelable:true})));
+  check(selector+' CSS blocks selection',v.getComputedStyle(node).userSelect==='none');
+ }
+
  check('No selection or navigation',d.getSelection().toString()===''&&v.location.href===url);
  check('Selection explicitly blocked on nested Punch label',v.getComputedStyle(buttons[0].lastElementChild).userSelect==='none');
  ptr(stick,'pointerdown',1,r.right,y);v.dispatchEvent(new v.Event('blur'));check('Focus loss leaves patrol screen intact',d.body.classList.contains('playing'));v.dispatchEvent(new v.Event('focus'));await advanceUI(f,.2);check('No held action after return',!$('.pressed')&&/vx 0\.0/.test(hero()));$('#pause').click();check('Intentional pause menu opens',!$('#pause-menu').hidden);$('#resume').click();

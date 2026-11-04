@@ -1,3 +1,4 @@
+import {headwearFit} from './headwear-fit.mjs';
 import {FLIGHT_REGIONS} from './assets/power-armor/flight/regions.mjs';
 import {AGILITY_REGIONS} from './assets/power-armor/agility/regions.mjs';
 import {SPEED_REGIONS} from './assets/power-armor/speed/regions.mjs';
@@ -69,9 +70,11 @@ export function drawArmorPiece(c,part,item,pose,a,side) {
   if (!s) return false;
   const [sx,sy,sw,sh]=s.rect;
   if (part==='helmet') {
-    c.translate(...a.face); c.rotate(pose.headTilt||0);
-    const w=a.faceWidth*(a.profile?.95:1.14), h=Math.min(w*sh/sw,a.faceWidth*.84);
-    c.drawImage(s.image,...s.rect,-w*.50,-a.faceWidth*.15-h,w,h);
+    c.translate(...a.face); c.rotate(pose.headTilt||0);c.scale(...(pose.headScale||[1,1]));
+    const fit=headwearFit(item,a.back?'back':a.profile?'side':'front'), w=a.faceWidth*(a.profile?fit.profileWidth:fit.width), h=w*sh/sw;
+    const x=-w*.50+a.faceWidth*fit.center;
+    if(a.profile&&fit.mirrorProfile){c.translate(2*x+w,0);c.scale(-1,1);}
+    c.drawImage(s.image,...s.rect,x,a.faceWidth*fit.bottom-h,w,h);
   } else if(part==='chest') {
     c.translate(...a.shoulder); c.rotate(a.torsoAngle);
     const w=a.bodyWidth*(a.profile?1.22:1.19), h=a.length*1.21;

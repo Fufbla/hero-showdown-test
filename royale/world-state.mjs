@@ -1,4 +1,4 @@
-import { CAMPS, TYPES, regionCamps, regionSurfaces } from './world.mjs';
+import { CAMPS, TYPES, regionCamps, regionSurfaces, regionSpawns } from './world.mjs';
 export const OPEN_REGIONS=Object.freeze([1,2,3,4,5,6,7]);
 export const WORLD_CLOCK_REFERENCE=Date.UTC(2026,0,1);
 export function initialWorld(now=Date.now()){
@@ -24,10 +24,11 @@ export function normalizeWorld(raw,checkpoint=0,now=Date.now()){
     if(regionSurfaces(region).some(s=>!s.oneWay&&l.x+17>s.x&&l.x-17<s.x+s.w&&l.y>s.y+.01&&l.y-88<s.y+s.h))return null;
     location={x:l.x,y:l.y,face:l.face===-1?-1:1,hp:l.hp,vx:Number.isFinite(l.vx)?Math.max(-600,Math.min(600,l.vx)):0,vy:Number.isFinite(l.vy)?Math.max(-900,Math.min(900,l.vy)):0,jumps:Number.isInteger(l.jumps)?Math.max(0,Math.min(2,l.jumps)):1};
   }
-  if(!Array.isArray(raw.monsters)||raw.monsters.length>24)return null;
+  const spawnCount=regionSpawns(region).length;
+  if(!Array.isArray(raw.monsters)||raw.monsters.length>spawnCount)return null;
   const seen=new Set(),monsters=[];
   for(const m of raw.monsters){
-    if(!m||!Number.isInteger(m.id)||m.id<0||m.id>23||seen.has(m.id)||!Object.hasOwn(TYPES,m.type)||TYPES[m.type].region!==region||!Number.isFinite(m.hp)||m.hp<0||m.hp>TYPES[m.type].hp||!Number.isFinite(m.respawn)||m.respawn<0||m.respawn>180)return null;
+    if(!m||!Number.isInteger(m.id)||m.id<0||m.id>=spawnCount||seen.has(m.id)||!Object.hasOwn(TYPES,m.type)||TYPES[m.type].region!==region||!Number.isFinite(m.hp)||m.hp<0||m.hp>TYPES[m.type].hp||!Number.isFinite(m.respawn)||m.respawn<0||m.respawn>180)return null;
     seen.add(m.id);monsters.push({id:m.id,type:m.type,hp:m.hp,respawn:m.respawn});
   }
   return {region,unlocked,bossVictories,clockReference:WORLD_CLOCK_REFERENCE,checkpoint:{...cp},activated:[...new Set(raw.activated)],visits,kills,monsters,location};

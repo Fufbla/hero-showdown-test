@@ -71,3 +71,15 @@
 .landscape-game #creator .creator-actions .primary,.landscape-game #creator .creator-actions .secondary{min-height:44px;padding:6px;font-size:9px;letter-spacing:0}
 .landscape-game #creator .creator-actions .save-note{grid-column:1/-1;font-size:8px;line-height:1.25}
 .landscape-game.game-view .slot-select{min-height:44px}
+
+/* Gameplay surfaces never participate in Safari selection or touch callouts.
+   Dialogs and editable fields retain their own scrolling and selection. */
+.playing :is(#game,.touch-controls,#stick,#power-bar,#hud,#boss-hud,.topbar,.controls-footer,#toast,[data-control]),
+.playing :is(#game,.touch-controls,#stick,#power-bar,#hud,#boss-hud,.topbar,.controls-footer,#toast,[data-control]) * {
+  -webkit-user-select:none; user-select:none; -webkit-touch-callout:none;
+  -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+}
+.playing :is(#game,#stick,[data-control]) { touch-action:none; }
+.playing :is(input,textarea,[contenteditable="true"]) {
+  -webkit-user-select:text; user-select:text; -webkit-touch-callout:default; touch-action:auto;
+}

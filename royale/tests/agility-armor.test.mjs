@@ -1,3 +1,4 @@
+import {assertCleanupSimulation} from './cleanup-preservation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
@@ -34,7 +35,7 @@ function shop(level=99,learned=20){
 }
 const buy=(g,selection)=>g.buyCostume(selection,{confirmed:true,revision:g.economy.revision});
 test('protect all seven approved armor collections, base hero artwork, creatures and combat geometry',()=>{
- const paths=['royale/speed-armor.mjs','royale/assets/power-armor/speed','royale/power-armor.mjs','royale/steel-armor.mjs','royale/roots-armor.mjs','royale/strength-armor.mjs','royale/whirlwind-armor.mjs','royale/super-kick-armor.mjs','royale/assets/power-armor/superKick','royale/assets/power-armor/whirlwind','royale/assets/power-armor/roots','royale/assets/power-armor/strength','royale/assets/power-armor/fireball','royale/assets/power-armor/steel','royale/assets/hero','royale/assets/monsters','royale/assets/boss-sprites','royale/core.mjs','royale/hero-rig.mjs','royale/style-c-rig.mjs'];
+ assertCleanupSimulation();const paths=['royale/speed-armor.mjs','royale/assets/power-armor/speed','royale/power-armor.mjs','royale/steel-armor.mjs','royale/roots-armor.mjs','royale/strength-armor.mjs','royale/whirlwind-armor.mjs','royale/super-kick-armor.mjs','royale/assets/power-armor/superKick','royale/assets/power-armor/whirlwind','royale/assets/power-armor/roots','royale/assets/power-armor/strength','royale/assets/power-armor/fireball','royale/assets/power-armor/steel','royale/assets/hero','royale/assets/monsters','royale/assets/boss-sprites','royale/hero-rig.mjs','royale/style-c-rig.mjs'];
  assert.equal(execFileSync('git',['diff','--name-only','484214414a523dc9ed31d3a837bce292219bf969','--',...paths],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}),'');
  assert.equal(Object.keys(AGILITY_PIECES).length,27);
 });

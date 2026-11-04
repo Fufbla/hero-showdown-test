@@ -148,7 +148,7 @@ function anchors(p,look,view) {
 
 function wearHead(c, part, item, p, a, steel) {
   const {faceWidth:w,profile,back}=a;
-  c.translate(...a.face); c.rotate(p.headTilt||0);
+  c.translate(...a.face); c.rotate(p.headTilt||0);c.scale(...(p.headScale||[1,1]));
   const key=part==='mask' ? (back?'back-helmet':profile?'side-mask':'mask') :
     back?'back-helmet':profile?'side-helmet':'helmet-'+theme(item);
   if (part==='mask' && !back) {
@@ -167,7 +167,7 @@ function wearHead(c, part, item, p, a, steel) {
     // Keep the central crest above the eyebrows. Wings can descend at the temples.
     const tile=WEARABLE_REGIONS[key];
     const height=Math.min(w*.43,Math.max(w*.28,width*tile[3]/tile[2]));
-    stamp(c,key,item,steel,-width*.50,-w*.22-height*.48,width,height);
+    stamp(c,key,item,steel,-width*.50,-w*.34-height*.48,width,height);
   }
 }
 

@@ -111,8 +111,15 @@ export function regionSurfaces(id){
 }
 export const regionCamps=id=>CAMPS.map((c,i)=>({...c,name:id===1?c.name:`${regionDefinition(id).boards[i]} camp`}));
 export function regionSpawns(id){
-  if(id===1)return SPAWNS;
   const types=regionDefinition(id).types;
-  return SPAWNS.map(([_,x,surface],i)=>[types[(i+Math.floor((LEGACY_SPAWNS[i]?.[1]??x)/1900))%3],x,surface]);
+  // Keep all existing IDs and species in their original order for saved defeats.
+  const result=SPAWNS.map(([type,x,surface],i)=>[id===1?type:types[(i+Math.floor((LEGACY_SPAWNS[i]?.[1]??x)/1900))%3],x,surface]);
+  for(const platform of regionSurfaces(id).filter(s=>s.tier===2||s.tier===3)){
+    const residents=result.filter(s=>s[2]===platform.id),count=platform.tier===2?4:8;
+    const type=residents[0][0],margin=TYPES[type].w/2+2;
+    while(residents.length<count){const spawn=[type,0,platform.id];residents.push(spawn);result.push(spawn);}
+    residents.forEach((spawn,i)=>{spawn[1]=platform.x+margin+(platform.w-2*margin)*i/(count-1);});
+  }
+  return result;
 }
 export const GATES=Object.freeze({back:44,arena:5840,forward:6070});

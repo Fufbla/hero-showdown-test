@@ -87,8 +87,8 @@ test('death and returning to a checkpoint preserve progression and clear input b
   const g=empty();g.checkpoint=1;g.hero.coins=23;g.hero.xp=17;g.hero.invulnerable=0;g.hero.hp=1;g.hurt(9,0);assert.equal(g.hero.dead,true);
   ticks(g,100);assert.equal(g.hero.dead,false);assert.equal(g.hero.x,CAMPS[1].x);assert.equal(g.hero.hp,100);assert.equal(g.hero.coins,23);assert.equal(g.hero.xp,12);assert.equal(g.hero.jumpBuffer,0);
 });
-test('camp interaction heals, updates checkpoint, and ignores distant input', () => {
-  const g=empty();g.hero.x=2340;g.hero.hp=50;g.step(STEP,{portal:true});assert.equal(g.checkpoint,1);assert.equal(g.hero.hp,100);
+test('checkpoint proximity activates without healing and ignores distant input', () => {
+  const g=empty();g.hero.x=2340;g.hero.hp=50;g.step(STEP,{});assert.equal(g.checkpoint,1);assert.equal(g.hero.hp,50);
   g.hero.x=3000;g.hero.hp=50;g.step(STEP,{portal:true});assert.equal(g.hero.hp,50);
 });
 test('all appearance presets preserve movement, attack timing, and hitboxes', () => {

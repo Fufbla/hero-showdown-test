@@ -22,9 +22,9 @@ for(const r of WORLD_REGIONS){
    const g=game(r.id);g.enemies=[];
    for(const route of VERTICAL_ROUTES){let previous=null;for(const step of route){const dest=g.surfaces.find(s=>s.id===step.id);assert.ok(climb(g,previous,dest),`${r.id} ${dest.id} from ${previous?.id}: ${g.hero.x},${g.hero.y}`);assert.equal(g.hero.jumps,0);previous=dest;}}
  });
- test(`P9 ${r.name}: 24 stable homes across every elevation and safe bounded patrol`,()=>{
+ test(`P9 ${r.name}: 84 stable homes across every elevation and safe bounded patrol`,()=>{
    const g=game(r.id);g.hero.x=160;g.hero.y=600;
-   assert.equal(g.enemies.length,24);assert.equal(new Set(g.enemies.map(e=>e.id)).size,24);
+   assert.equal(g.enemies.length,84);assert.equal(new Set(g.enemies.map(e=>e.id)).size,84);
    const tiers=new Set(g.enemies.map(e=>e.spawnSurface.y));for(const y of [600,...VERTICAL_TIERS])assert.ok(tiers.has(y),`missing ${y}`);
    for(const e of g.enemies){assert.ok(e.x-e.w/2>=e.surface.x&&e.x+e.w/2<=e.surface.x+e.surface.w);assert.equal(e.y,e.surface.y-(e.flying?50:0));}
    for(let i=0;i<1000;i++)for(const e of g.enemies)g.stepEnemy(e,STEP);

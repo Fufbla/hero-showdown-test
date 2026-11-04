@@ -24,10 +24,10 @@ export function stepLoot(g,dt){
 }
 export function nearbyInteractions(g){
  const h=g.hero;if(h.dead)return [];
- const result=[],add=(id,kind,x,y,label,extra={})=>{const distance=Math.hypot(h.x-x,h.y-y);if(['portal','passage'].includes(kind)&&!g.canTravel()||kind==='camp'&&!g.canSave())return;if(['portal','passage'].includes(kind)&&g.portalPickupGuard?.region===g.regionId&&Math.hypot(h.x-g.portalPickupGuard.x,h.y-g.portalPickupGuard.y)<90)return;if(distance<=90)result.push({id,kind,x,y,label,distance,...extra});};
+ const result=[],add=(id,kind,x,y,label,extra={})=>{const distance=Math.hypot(h.x-x,h.y-y);if(['portal','passage'].includes(kind)&&!g.canTravel())return;if(['portal','passage'].includes(kind)&&g.portalPickupGuard?.region===g.regionId&&Math.hypot(h.x-g.portalPickupGuard.x,h.y-g.portalPickupGuard.y)<90)return;if(distance<=90)result.push({id,kind,x,y,label,distance,...extra});};
  if(g.arenaScene){if(g.availableChest())add('chest','chest',1060,h.y,'View treasure');return result;}
  for(const o of g.loot)if(o.region===g.regionId)add(o.id,'loot',o.x,o.y,`Pick Up · ${o.kind==='root'?'Health Root':itemDefinition(o.item).name}`,{loot:o});
- g.camps.forEach((c,i)=>{add(`camp-${i}`,'camp',c.x,c.y,'Rest',{index:i});add(`portal-${i}`,'portal',c.x+90,c.y,'Enter Portal · World Map');});
+ g.camps.forEach((c,i)=>{add(`portal-${i}`,'portal',c.x+90,c.y,'Enter Portal · World Map');});
  if(g.regionId>1)add('back','passage',GATES.back,600,'Enter Portal · Previous region');
  if(g.regionId<7)add('forward','passage',GATES.forward,600,'Enter Portal · Next region');
  add('arena','passage',GATES.arena,600,`Enter Arena · ${g.getRegion().boss}`);

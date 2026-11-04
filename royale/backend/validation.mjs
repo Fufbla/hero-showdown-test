@@ -1120,9 +1120,21 @@ function regionSurfaces(id) {
 }
 var regionCamps = (id) => CAMPS.map((c, i) => ({ ...c, name: id === 1 ? c.name : `${regionDefinition(id).boards[i]} camp` }));
 function regionSpawns(id) {
-  if (id === 1) return SPAWNS;
   const types = regionDefinition(id).types;
-  return SPAWNS.map(([_, x, surface], i) => [types[(i + Math.floor((LEGACY_SPAWNS[i]?.[1] ?? x) / 1900)) % 3], x, surface]);
+  const result = SPAWNS.map(([type, x, surface], i) => [id === 1 ? type : types[(i + Math.floor((LEGACY_SPAWNS[i]?.[1] ?? x) / 1900)) % 3], x, surface]);
+  for (const platform of regionSurfaces(id).filter((s) => s.tier === 2 || s.tier === 3)) {
+    const residents = result.filter((s) => s[2] === platform.id), count = platform.tier === 2 ? 4 : 8;
+    const type = residents[0][0], margin = TYPES[type].w / 2 + 2;
+    while (residents.length < count) {
+      const spawn = [type, 0, platform.id];
+      residents.push(spawn);
+      result.push(spawn);
+    }
+    residents.forEach((spawn, i) => {
+      spawn[1] = platform.x + margin + (platform.w - 2 * margin) * i / (count - 1);
+    });
+  }
+  return result;
 }
 var GATES = Object.freeze({ back: 44, arena: 5840, forward: 6070 });
 
@@ -1160,7 +1172,7 @@ function nearbyInteractions(g) {
   if (h.dead) return [];
   const result = [], add = (id, kind, x, y, label, extra = {}) => {
     const distance = Math.hypot(h.x - x, h.y - y);
-    if (["portal", "passage"].includes(kind) && !g.canTravel() || kind === "camp" && !g.canSave()) return;
+    if (["portal", "passage"].includes(kind) && !g.canTravel()) return;
     if (["portal", "passage"].includes(kind) && g.portalPickupGuard?.region === g.regionId && Math.hypot(h.x - g.portalPickupGuard.x, h.y - g.portalPickupGuard.y) < 90) return;
     if (distance <= 90) result.push({ id, kind, x, y, label, distance, ...extra });
   };
@@ -1170,7 +1182,6 @@ function nearbyInteractions(g) {
   }
   for (const o of g.loot) if (o.region === g.regionId) add(o.id, "loot", o.x, o.y, `Pick Up \xB7 ${o.kind === "root" ? "Health Root" : itemDefinition(o.item).name}`, { loot: o });
   g.camps.forEach((c, i) => {
-    add(`camp-${i}`, "camp", c.x, c.y, "Rest", { index: i });
     add(`portal-${i}`, "portal", c.x + 90, c.y, "Enter Portal \xB7 World Map");
   });
   if (g.regionId > 1) add("back", "passage", GATES.back, 600, "Enter Portal \xB7 Previous region");
@@ -2521,10 +2532,11 @@ function normalizeWorld(raw, checkpoint = 0, now = Date.now()) {
     if (regionSurfaces(region).some((s) => !s.oneWay && l.x + 17 > s.x && l.x - 17 < s.x + s.w && l.y > s.y + 0.01 && l.y - 88 < s.y + s.h)) return null;
     location = { x: l.x, y: l.y, face: l.face === -1 ? -1 : 1, hp: l.hp, vx: Number.isFinite(l.vx) ? Math.max(-600, Math.min(600, l.vx)) : 0, vy: Number.isFinite(l.vy) ? Math.max(-900, Math.min(900, l.vy)) : 0, jumps: Number.isInteger(l.jumps) ? Math.max(0, Math.min(2, l.jumps)) : 1 };
   }
-  if (!Array.isArray(raw.monsters) || raw.monsters.length > 24) return null;
+  const spawnCount = regionSpawns(region).length;
+  if (!Array.isArray(raw.monsters) || raw.monsters.length > spawnCount) return null;
   const seen = /* @__PURE__ */ new Set(), monsters = [];
   for (const m of raw.monsters) {
-    if (!m || !Number.isInteger(m.id) || m.id < 0 || m.id > 23 || seen.has(m.id) || !Object.hasOwn(TYPES, m.type) || TYPES[m.type].region !== region || !Number.isFinite(m.hp) || m.hp < 0 || m.hp > TYPES[m.type].hp || !Number.isFinite(m.respawn) || m.respawn < 0 || m.respawn > 180) return null;
+    if (!m || !Number.isInteger(m.id) || m.id < 0 || m.id >= spawnCount || seen.has(m.id) || !Object.hasOwn(TYPES, m.type) || TYPES[m.type].region !== region || !Number.isFinite(m.hp) || m.hp < 0 || m.hp > TYPES[m.type].hp || !Number.isFinite(m.respawn) || m.respawn < 0 || m.respawn > 180) return null;
     seen.add(m.id);
     monsters.push({ id: m.id, type: m.type, hp: m.hp, respawn: m.respawn });
   }
@@ -2548,7 +2560,7 @@ function initializeJourney(g, save, now) {
 }
 var journeyMethods = {
   spawnEnemyShot(values) {
-    const p = this.enemyShotPool.acquire(values);
+    const p = this.enemyShotPool.acquire({ ...values, fxKind: values.bossShot ? values.source?.attack?.kind : null });
     if (p) this.enemyShots.push(p);
     return p;
   },
@@ -3356,19 +3368,18 @@ var Game = class {
       if (this.availableChest() && Math.abs(this.hero.x - 1060) < 140) this.emit("chest-preview");
       return;
     }
+  }
+  activateCheckpoint() {
+    if (this.arenaScene || this.hero.dead || !this.hero.grounded || !this.canSave()) return false;
     const i = this.nearCamp();
-    if (i < 0) {
-      this.usePassage();
-      return;
-    }
-    if (!this.canSave()) return;
-    this.checkpoint = i;
-    this.hero.hp = this.hero.maxHp;
-    this.hero.invulnerable = 2;
-    this.world.checkpoint = { region: this.regionId, index: i };
+    if (i < 0) return false;
     const key = `${this.regionId}:${i}`;
+    if (this.world.checkpoint.region === this.regionId && this.world.checkpoint.index === i && this.world.activated.includes(key)) return false;
+    this.checkpoint = i;
+    this.world.checkpoint = { region: this.regionId, index: i };
     if (!this.world.activated.includes(key)) this.world.activated.push(key);
     this.emit("camp", { name: this.camps[i].name });
+    return true;
   }
   step(dt = STEP, input = {}) {
     if (this.paused || !Number.isFinite(dt) || dt <= 0) return;
@@ -3388,6 +3399,7 @@ var Game = class {
       if (this.deathTimer <= 0) this.respawn();
       return;
     }
+    this.activateCheckpoint();
     h.dodgeAge = (h.dodgeAge ?? 100) + dt;
     h.jumpAge += dt;
     h.hurtAge += dt;

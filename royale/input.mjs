@@ -39,10 +39,10 @@ export class Input {
       if (event.cancelable) event.preventDefault();
       event.stopPropagation();
     };
-    const surface = '#game, #touch-controls, #power-bar, [data-control]';
+    const surface = '#game, .touch-controls, #stick, #power-bar, #hud, #boss-hud, .topbar, .controls-footer, #toast, [data-control]';
     for (const name of ['contextmenu','selectstart','dragstart','dblclick','gesturestart','gesturechange']) {
       listen(root,name,event => {
-        if (this.enabled && event.target.closest?.(surface)) consume(event);
+        if (this.enabled && !event.target.closest?.('input,textarea,select,[contenteditable],dialog') && event.target.closest?.(surface)) consume(event);
       });
     }
     const capture = (target,id) => {

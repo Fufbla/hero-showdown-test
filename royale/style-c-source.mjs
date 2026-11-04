@@ -1,3 +1,4 @@
+import {headwearFit} from './headwear-fit.mjs';
 import {sanitizeLook,costumePalette} from './appearance.mjs';
 import {STYLE_C_DEFAULTS} from './style-c-defaults.mjs';
 import {drawStyleCHair} from './style-c-hair.mjs';
@@ -65,8 +66,8 @@ function worldPose(p,width,height,artSource) {
 }
 function drawHairLayer(c,look,p,movement,time,layer,view) {
   const size=look.presentation==='male'?2.55:2.50;
-  c.save();c.translate(...p.faceCenter);c.scale(size*look.jaw,size);
-  drawStyleCHair(c,look,movement,time,layer,view);
+  c.save();c.translate(...p.faceCenter);if(layer==='rear')c.rotate(p.headTilt||0);c.scale(size,size);
+  drawStyleCHair(c,look,movement,time,layer,view==='game'?'front':view);
   c.restore();
 }
 export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
@@ -77,7 +78,8 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   const p=sampleStyleCMotion(fitModel(look),look,h,time,{...options,unit:UNIT});
   const center=STYLE_C_FACE_ANCHORS[look.presentation].center;
   p.faceCenter=[center[0]+p.head[0]-original.head[0],center[1]+p.head[1]-original.head[1]];
-  p.faceWidth=(look.presentation==='male'?90:94)*look.jaw;
+  // Forward face reshaping starts below the eyes; the scalp does not widen with the jaw.
+  p.faceWidth=look.presentation==='male'?90:94;
   const view=options.view||'game', facing=view==='game'?(h.attack?.face||h.face||1):1;
   c.save();c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';c.translate(x,y);c.scale(scale*facing,scale);
   if(!options.bake){
@@ -91,7 +93,8 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
     c.restore();return worldPose(p,width,height,'atlas');
   }
   c.rotate(p.rotation);c.scale(UNIT*width,UNIT*height);c.translate(-original.origin[0],-original.origin[1]);
-  const customHair=look.hair!==base.hair;
+  look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
+  const customHair=look.hair!==base.hair||look.headwearCoverage==='tucked';
   const differentJaw=look.jaw!==base.jaw||look.face!==base.face;
   const bareHead=customHair||differentJaw;
   const faceEdited=styleCFaceChanged(look);

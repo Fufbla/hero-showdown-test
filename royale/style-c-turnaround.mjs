@@ -1,3 +1,4 @@
+import {headwearFit} from './headwear-fit.mjs';
 // Creator turnarounds use the supplied direction board for the neutral silhouettes.
 // The newly illustrated bald, capeless underlays reveal the head and rear armor
 // when a player changes hair, takes off a cape, or wears interchangeable gear.
@@ -167,7 +168,8 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
   const wear=(part,i=0)=>drawStyleCEquipment(c,part,pieces[part],pose,look,{view,side:i,steel:!!h.steel});
   c.save(); c.translate(x,y);c.scale(sizeX*scale*(left?-1:1),sizeY*scale);c.rotate(pose.rotation||0);c.globalAlpha*=pose.opacity;
   if(h.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;
-  const regularHair=look.hair===base.hair;
+  look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
+  const regularHair=look.hair===base.hair&&look.headwearCoverage!=='tucked';
   if (pose.state==='idle'&&neutralShape(look)&&neutralFace(look,base)&&regularHair&&look.cape&&!Object.keys(pieces).length&&look.emblem===base.emblem&&!h.steel) {
     draw('source',[0,0]);c.restore();return report;
   }
@@ -216,6 +218,8 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
     c.restore();
   }
   c.restore();
+  // The overlay follows the exact jaw/age scale used for the head, not torso proportions.
+  pose.faceWidth=m.faceWidth;pose.headScale=[headWidth,headHeight];
   wear('mask');wear('helmet');
   c.restore();
   return report;

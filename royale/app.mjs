@@ -1,3 +1,4 @@
+import {rewardNotice} from './reward-notice.mjs';
 import {installLandscapeLayout} from './landscape-layout.mjs';
 import {drawEquipmentPreview} from './eris-ui.mjs';
 import {selectedInteraction,nearbyInteractions} from './world-loot.mjs';
@@ -208,8 +209,8 @@ function handleEvents() {
     if(event.type==='equipment'&&event.pending&&game.canSave()){setScreen('inventory');journeyMenu.inventory();$('inventory-title').focus();}
     renderer.event(event.type === 'level' ? { ...event, x: game.hero.x, y: game.hero.y - 45 } : event); tone(event.type);
     if (event.type === 'level') say(`Level ${event.level}! Health restored · +1 Power Point.`, 4);
-    if (event.type === 'reward' && !leveled) say(`${event.enemy} · +${event.xp} XP · +${event.coins} coin${event.coins===1?'':'s'}${event.root?' · Health Root':''}${event.item?' · Equipment':''}`, 2.3);
-    if (event.type === 'camp') { persist(); say(`${event.name} set as your checkpoint. Health restored.`); }
+    if (event.type === 'reward' && !leveled) { const notice=rewardNotice(event,game.loot); if(notice)say(notice,2.3); }
+    if (event.type === 'camp') { persist(); say(`${event.name} set as your checkpoint.`); }
     if (event.type === 'respawn') { persist();input.clear(); say(`Back at ${event.name}. Full health restored. Levels, coins and items kept.`); }
     if (event.type === 'destination') { persist(); say('You reached Lighthouse Point! Use the marked arena entrance to challenge Trash Monster.', 6); }
   }
@@ -251,6 +252,7 @@ function updateHud() {
   $('rest').textContent=target?`${target.label} · ${input.controls.keys.interact[0].replace('Key','')}`:'';
   $('death').hidden = !h.dead || screen !== 'play'; $('diagnostics').hidden = !params.has('qa');
   if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nregion ${game.regionId} · roots ${game.healthRoots} · gear ${game.inventory.items.length}/7 · clock ${game.clock().phase}\npowers ${game.powers.data.equipped.join(',')} · points ${game.powers.data.points} · combat ${game.inCombat()}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}${game.arenaScene?`\nboss ${game.arenaScene.boss.hp.toFixed(0)}/${game.arenaScene.boss.maxHp} · phase ${game.arenaScene.boss.phase} · waves ${game.bossEncounter?.waves||0} · helpers ${game.enemies.filter(e=>e.summoned&&e.state!=='dead').length} · cleared ${game.arenaScene.cleared}`:''}`;
+  if(params.has('qa')&&!game.arenaScene)$('diagnostics').textContent+='\nplatforms '+game.surfaces.filter(s=>s.tier===2||s.tier===3).map(s=>s.id+':'+game.enemies.filter(e=>e.spawnSurface?.id===s.id&&e.state!=='dead').length).join(' ');
 
 }
 function updatePowers(){
