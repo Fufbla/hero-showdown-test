@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173d40">
+  <meta name="description" content="Create your Style C hero, equip Power Armor and explore Hero Showdown Royale on mobile or desktop.">
+<title>Hero Showdown Royale · Refined Adventures</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23173d40'/%3E%3Cpath d='M32 8 53 32 32 56 11 32Z' fill='%23e8d298'/%3E%3Cpath d='m24 41 16-20-6 23Z' fill='%232b8067'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="royale.css">
+  <link rel="stylesheet" href="powers.css">
+  <link rel="stylesheet" href="journey.css">
+  <link rel="stylesheet" href="bosses.css">
+  <link rel="stylesheet" href="eris.css">
+  <link rel="stylesheet" href="legendary.css">
+  <link rel="stylesheet" href="accounts.css">
+<link rel="stylesheet" href="world-ui.css">
+<link rel="stylesheet" href="landscape.css">
+<link rel="stylesheet" href="multiplayer/menu.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <a class="brand" href="../index.html" aria-label="Return to Hero Showdown"><span class="brand-mark">✦</span><span><small>JAMES CLAN COMICS</small><strong>HERO SHOWDOWN <em>ROYALE</em></strong></span></a>
+      <div class="top-actions"><span class="phase-label"><i></i> MOBILE PLAYTEST</span><button id="account-open" class="account-button">Account</button><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
+    </header>
+    <main id="stage" aria-label="Hero Showdown Royale game">
+      <canvas id="game" aria-label="2D side-scrolling adventure. Use the left and right arrow keys to move, Space to jump, J to punch and K to kick."></canvas>
+      <div id="hud" class="hud" hidden>
+        <section class="hero-hud" aria-label="Hero status">
+          <div class="level-seal"><small>LV</small><b id="level">1</b></div>
+          <div class="vitals"><strong id="hero-name">Coast Guardian</strong><div class="bar health"><span id="hp-fill"></span><small id="hp-text">100 / 100</small></div><div class="xp-line"><div class="bar xp"><span id="xp-fill"></span></div><small id="xp-text">0 / 50 XP</small></div></div>
+        </section>
+        <div class="region-label"><small id="world-region">COASTAL BEGINNINGS</small><strong id="region">Sunwash Strand</strong></div>
+        <div class="world-status"><span id="world-clock" class="world-clock" hidden></span><button type="button" id="health-root" class="health-root-button" data-control="heal" aria-label="Use Health Root">♧ <b id="root-count">0</b>/4 <kbd>H</kbd></button><div class="coins" aria-label="Coins"><span>◈</span><b id="coins">0</b><small>COINS</small></div></div>
+      </div>
+      <section id="boss-hud" class="boss-hud" aria-label="Boss status" hidden><div class="boss-heading"><strong id="boss-name"></strong><small id="boss-phase"></small></div><div id="boss-health" class="boss-health" role="progressbar" aria-label="Boss health" aria-valuemin="0"><span id="boss-health-fill"></span></div><div id="boss-cue" class="boss-cue"></div><small id="boss-art-note" class="boss-art-note"></small></section>
+      <div id="mission" class="mission" hidden><span class="mission-icon">✧</span><div><small>YOUR FIRST PATROL</small><strong id="mission-title">Meet the coast's troublemakers</strong><span id="mission-progress">Defeat 6 monsters · Discover all 3 types</span></div><b id="mission-count">0/6</b></div>
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      <div id="hero-art-status" role="status">Loading hero artwork…</div>
+      <button type="button" id="cycle-interaction" class="rest-button" data-control="nextTarget" hidden>Next target</button><button type="button" id="world-portal" class="rest-button" data-control="portal" hidden>◎ WORLD PORTAL</button><button type="button" id="rest" class="rest-button" data-control="interact" hidden>Pick Up <kbd>E</kbd></button>
+      <button type="button" id="visit-tree" class="rest-button tree-button" data-control="tree" hidden>♧ TREE OF ERIS <kbd>T</kbd></button>
+      <div id="death" class="death-overlay" hidden role="status"><span>✦</span><h2>Take a breath, hero.</h2><p>Returning to your checkpoint with full health.</p><small>10% of next-level XP is lost. Levels, coins and items are kept.</small></div>
+      <output id="diagnostics" hidden></output><button id="measure-performance" hidden>Measure performance</button><output id="performance-result" hidden></output>
+      <section id="roster" class="overlay" aria-label="Choose your hero">
+        <div class="roster-card" role="dialog" aria-modal="true" aria-labelledby="roster-title">
+          <div class="eyebrow">HERO SHOWDOWN ROYALE · PLAYTEST</div>
+          <h1 id="roster-title" tabindex="-1">My <em>Heroes.</em></h1>
+          <p>Three heroes. Three beginnings. Choose who takes the next step.</p>
+          <div id="hero-slots" class="hero-slots"></div>
+          <p class="storage-note" id="roster-note" role="status">Local heroes stay on this browser. Use Pause → Save Game before leaving.</p>
+          <div class="practice-links"><a class="text-button practice-link" href="tests/monster-sprites.html">Approved monster sprite integration review →</a><a class="text-button practice-link" href="tests/phase10-browser.html">Phase 10 quality &amp; performance review →</a><a class="text-button practice-link" href="tests/showcase.html">Phase 9 art &amp; vertical exploration review →</a><a class="text-button practice-link" href="tests/legendary.html">Practice all eight Legendary bosses →</a><a class="text-button practice-link" href="tests/eris.html">Explore the Tree &amp; Costume Shop →</a><a class="text-button practice-link" href="tests/bosses.html">Practice all seven bosses →</a><a class="text-button practice-link" href="tests/world.html">Explore all seven regions →</a><a class="text-button practice-link" href="tests/powers.html">Practice all nine powers →</a></div>
+          <button id="back-to-patrol" class="secondary" hidden>Return to current patrol</button>
+        </div>
+      </section>
+      <section id="account-menu" class="overlay game-panel" hidden>
+        <div id="account-panel" class="account-card" role="dialog" aria-modal="true" aria-labelledby="account-title">
+          <header><div><div class="eyebrow">HERO SHOWDOWN ROYALE</div><h2 id="account-title" tabindex="-1">Your account. Your heroes.</h2></div><button id="account-close" class="secondary">Back to heroes</button></header>
+          <div class="account-scroll"><p id="account-session"></p><p class="account-warning">Cloud progress saves when you choose Pause → Save Game. Save before switching accounts or leaving. Permanent Legendary events are recorded immediately.</p><div class="account-columns">
+          <section><h3>Sign in or begin again</h3><form id="account-form">
+            <label class="field">Action<select id="account-mode"><option value="login">Sign in</option><option value="signup">Create account</option><option value="reset">Reset password from email link</option></select></label>
+            <label class="field">Method<select id="account-method"><option value="username">Username &amp; passcode</option><option id="account-email-option" value="email" disabled>Email &amp; password</option></select></label>
+            <label id="account-username-field" class="field">Username<input id="account-username" autocomplete="username" maxlength="24" autocapitalize="none" spellcheck="false" placeholder="Your hero account"></label>
+            <label id="account-email-field" class="field" hidden>Email<input id="account-email" type="email" autocomplete="email" maxlength="254"></label>
+            <label class="field">Password or secure passcode<input id="account-passcode" type="password" autocomplete="current-password" maxlength="72" placeholder="Use a long passphrase"></label>
+            <p class="field-note">New passcodes need at least 15 characters, up to 72 UTF-8 bytes. Use a varied passphrase, never a short numeric PIN.</p>
+            <label id="account-confirm-field" class="field" hidden>Confirm passcode<input id="account-confirm" type="password" autocomplete="new-password" maxlength="72"></label>
+            <section id="no-recovery-warning" class="account-warning" hidden><p>This account has no recovery method. If you forget your username or passcode, you may permanently lose access to your superheroes and saved progress.</p><label><input id="acknowledge-recovery" type="checkbox"> I understand and accept this risk.</label></section>
+            <button id="account-submit" class="primary" type="submit">Sign in</button><button id="account-forgot" class="text-button" type="button" hidden>Forgot Password</button>
+          </form><div class="account-providers"><button id="account-google" class="secondary" disabled>Google · configuration required</button><button id="account-apple" class="secondary" disabled>Apple · configuration required</button></div><p id="email-method-note"></p><p class="field-note">Google and Apple recover access through their identity provider. When already signed in, a provider button links that identity to this account.</p></section>
+          <section><h3>Three independent adventures</h3><p>Each account has three hero slots. Coins, equipment, abilities and rewards stay with the hero who earned them.</p><button id="account-cloud" class="primary" hidden>Open my cloud heroes</button><button id="account-local" class="secondary">Play with this browser’s local heroes</button><button id="account-logout" class="text-button" hidden>Sign out</button>
+          <section id="recovery-settings" hidden><h3>Add a recovery email</h3><p id="recovery-note"></p><label class="field">New recovery email<input id="recovery-email" type="email" autocomplete="email"></label><label class="field">Current passcode<input id="recovery-passcode" type="password" autocomplete="current-password"></label><button id="add-recovery" class="secondary" disabled>Send verification email</button></section>
+          <section id="local-migration"></section></section></div><p id="account-status" role="status" aria-live="polite"></p></div>
+        </div>
+      </section>
+      <section id="creator" class="overlay" hidden>
+        <div class="creator-card" role="dialog" aria-modal="true" aria-labelledby="creator-title">
+          <aside class="creator-art">
+            <div class="eyebrow">A HERO ONLY YOU CAN BE</div><h1 id="creator-title" tabindex="-1">Make your <em>mark.</em></h1>
+            <div class="view-toggle" role="group" aria-label="Preview view"><button type="button" id="view-front" aria-pressed="true">Front</button><button type="button" id="view-side" aria-pressed="false">Right</button><button type="button" id="view-back" aria-pressed="false">Back</button><button type="button" id="view-left" aria-pressed="false">Left</button></div>
+            <div class="preview-wrap"><div class="hero-halo"></div><canvas id="hero-preview" width="480" height="480" aria-label="Front view of your superhero"></canvas></div>
+            <strong id="preview-name">Coast Guardian</strong>
+            <label class="pose-field">Preview movement<select id="preview-pose" aria-label="Preview animation"></select></label>
+            <p>Every build. The same heroic potential.</p>
+          </aside>
+          <form id="creator-form" class="creator-form" novalidate>
+            <header class="creator-heading"><div class="eyebrow" id="creator-slot">HERO SLOT 01</div><h2>Your hero, your way.</h2></header>
+            <div class="creator-tabs" role="tablist" aria-label="Customization sections">
+              <button type="button" id="tab-identity" role="tab" aria-controls="panel-identity" aria-selected="true" data-tab="identity">Identity</button>
+              <button type="button" id="tab-face" role="tab" aria-controls="panel-face" aria-selected="false" tabindex="-1" data-tab="face">Face &amp; hair</button>
+              <button type="button" id="tab-body" role="tab" aria-controls="panel-body" aria-selected="false" tabindex="-1" data-tab="body">Body</button>
+              <button type="button" id="tab-suit" role="tab" aria-controls="panel-suit" aria-selected="false" tabindex="-1" data-tab="suit">Starter suit</button>
+            </div>
+            <div class="creator-fields">
+              <section id="panel-identity" role="tabpanel" aria-labelledby="tab-identity">
+                <label class="field">Superhero name<input id="name" name="name" maxlength="44" autocomplete="off" spellcheck="false" aria-describedby="name-help name-error" required></label>
+                <small id="name-help">2–22 characters. Letters, numbers, spaces, apostrophes and hyphens.</small>
+                <p id="name-error" class="field-error" role="alert" hidden></p>
+                <div id="identity-fields" class="field-grid"></div>
+                <p class="creator-hint">Appearance never changes your health, speed, collision size or combat reach.</p>
+              </section>
+              <section id="panel-face" role="tabpanel" aria-labelledby="tab-face" hidden><div id="face-fields" class="field-grid"></div></section>
+              <section id="panel-body" role="tabpanel" aria-labelledby="tab-body" hidden><div id="body-fields" class="field-grid"></div><p class="creator-hint">A shared skeleton adapts to your proportions. All heroes use the same gameplay rules.</p></section>
+              <section id="panel-suit" role="tabpanel" aria-labelledby="tab-suit" hidden><div id="suit-fields" class="field-grid"></div><p id="outfit-note" class="creator-hint">Colors apply to the starter suit only. Earned and purchased equipment keeps its fixed colors. Every cape has the same length.</p></section>
+            </div>
+            <div class="creator-actions"><p id="makeover-cost" class="makeover-cost" role="status" hidden></p><div id="makeover-confirm" class="upgrade-confirm" hidden><p id="makeover-confirm-text"></p><button type="button" id="confirm-makeover" class="primary">Confirm appearance changes</button><button type="button" id="cancel-makeover" class="secondary">Keep previewing</button></div><button type="submit" class="primary" id="begin">BEGIN YOUR ADVENTURE <span>→</span></button><button type="button" id="cancel-look" class="secondary">Back to heroes</button><p class="save-note" id="save-note">Saves automatically after five seconds safely outside combat. No cloud saving.</p></div>
+          </form>
+        </div>
+      </section>
+      <section id="pause-menu" class="overlay" hidden>
+        <div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+          <div class="eyebrow" id="pause-region"></div><h2 id="pause-title">Paused</h2>
+          <nav id="pause-primary" aria-label="Pause menu">
+            <button id="resume" class="primary">Resume Game</button><button id="open-my-hero" class="secondary">My Hero</button>
+            <button id="open-inventory" class="secondary">Inventory &amp; Equipment</button><button id="open-loadout" class="secondary">Superpowers</button>
+            <button id="open-map" class="secondary">World Map</button><button id="tree-from-pause" class="secondary">Tree of Eris</button>
+            <button id="manual-save" class="secondary">Save Game</button><button id="open-controls" class="secondary">Settings</button>
+            <button id="choose-hero" class="text-button">Exit to Main Menu</button>
+          </nav>
+          <section id="pause-hero" hidden><h3>My Hero</h3><canvas id="pause-hero-preview" width="360" height="420"></canvas><p id="pause-hero-stats"></p><button id="edit-look" class="secondary">Appearance services at Eris</button><button id="return-camp" class="secondary">Return to checkpoint · full health</button></section>
+          <section id="pause-powers" class="loadout" hidden><div class="loadout-heading"><strong>Superpowers</strong><span><b id="power-points">0</b> Power Points</span></div><p id="tree-location"></p></section>
+          <button id="pause-back" class="secondary" hidden>Back</button><p id="safe-save-note" class="storage-note"></p>
+
+        </div>
+      </section>
+      <section id="tree-menu" class="overlay game-panel" hidden>
+        <div class="eris-card" role="dialog" aria-modal="true" aria-labelledby="tree-title">
+          <header class="eris-heading"><div><div class="eyebrow">SANCTUARY · NO COMBAT</div><h2 id="tree-title" tabindex="-1">The Tree of <em>Eris</em></h2></div><div class="eris-balances"><span><b id="eris-coins">0</b> ◈</span><span><b id="tree-points">0</b> Power Points</span><small id="eris-capacity">0/7 equipment</small></div><button id="close-tree" class="secondary">Return to Adventure →</button></header>
+          <nav class="eris-nav" aria-label="Sanctuary services"><button data-eris="home" aria-pressed="true">Sanctuary</button><button data-eris="powers">Upgrade Powers</button><button data-eris="wardrobe">Costume Wardrobe</button><button id="eris-appearance">Appearance</button><button data-eris="roots">Health Root Shop</button><button data-eris="merge">Villain Merge</button></nav>
+          <div class="eris-scroll">
+            <section data-eris-panel="home" class="sanctuary-home">
+              <div class="sanctuary-art"><div class="sanctuary-copy"><div class="eyebrow">ROOTED IN POSSIBILITY</div><h3>Every hero<br>needs a place<br>to grow.</h3><p>Rest beneath the ancient branches.<br>Your journey will be waiting.</p></div><canvas id="eris-hero" width="360" height="420" aria-label="Your hero at the Tree of Eris"></canvas><span class="tree-sign">ERIS · THE ANCIENT SANCTUARY</span></div>
+              <div class="sanctuary-services"><div class="eyebrow">MAKE YOUR NEXT CHAPTER</div><button data-eris="powers"><span>ϟ</span><div><b>Upgrade Powers</b><small>Spend your Power Points. Make them count.</small></div><i>↗</i></button><button data-eris="wardrobe"><span>⬡</span><div><b>Costume Wardrobe</b><small>Visit the central shop. Buy, equip &amp; sell.</small></div><i>↗</i></button><button data-eris="appearance"><span>◇</span><div><b>Appearance Customization</b><small>A new look. The same hero.</small></div><i>↗</i></button><button data-eris="roots"><span>♧</span><div><b>Health Root Shop</b><small>A little healing for the road ahead.</small></div><i>↗</i></button><button data-eris="merge"><span>♜</span><div><b>Villain Merge</b><small>Legendary suits. Your identity.</small></div><i>↗</i></button></div>
+            </section>
+            <section data-eris-panel="powers" class="eris-powers" hidden><details class="power-loadout"><summary>Equipped powers</summary><p id="loadout-note"></p><div id="loadout-slots"></div></details><div class="tree-body"><nav id="power-list" aria-label="Choose a superpower"></nav><section id="power-detail" aria-label="Superpower details"></section></div></section>
+            <section data-eris-panel="wardrobe" hidden>
+              <div class="wardrobe-layout"><aside class="wardrobe-preview"><div class="eyebrow">YOUR NEXT LOOK</div><div class="view-toggle" aria-label="Costume preview view"><button id="gear-view-front" aria-pressed="true">Front</button><button type="button" id="gear-view-side" aria-pressed="false">Right</button><button id="gear-view-back" aria-pressed="false">Back</button><button type="button" id="gear-view-left" aria-pressed="false">Left</button></div><canvas id="gear-preview" width="360" height="420"></canvas><p>Preview only. Your equipped items change when you choose Equip.</p><p id="equipped-bonuses"></p></aside><div class="wardrobe-main"><header class="wardrobe-heading"><div><div class="eyebrow">THE CENTRAL COSTUME SHOP</div><h3>Dress for your journey.</h3></div><label id="shop-category-wrap" class="field">Category<select id="shop-category"><option value="flight">Flight Power Armor</option><option value="agility">Agility Power Armor</option><option value="speed">Speed Power Armor</option><option value="superKick">Super Kick Power Armor</option><option value="whirlwind">Whirlwind Power Armor</option><option value="strength">Super Strength Power Armor</option><option value="roots">Ground Roots Power Armor</option><option value="steel">Steel Body Power Armor</option><option value="fireball">Fireball Power Armor</option><option value="sets" selected>Complete outfits</option><option value="helmet">Helmets</option><option value="chest">Chest pieces</option><option value="boots">Boots</option><option value="all">All individual pieces</option></select></label></header><div class="wardrobe-tabs" aria-label="Costume shop section"><button data-wardrobe="buy" aria-pressed="true">Buy</button><button data-wardrobe="owned">Owned · Equip</button><button data-wardrobe="sell">Sell</button></div><p id="wardrobe-note"></p><div class="shop-layout"><div id="shop-items" aria-label="Equipment catalog"></div><section id="shop-detail" aria-label="Equipment details and comparison"></section></div><section id="shop-confirm" class="upgrade-confirm" aria-label="Confirm equipment transaction" hidden></section></div></div>
+            </section>
+            <section data-eris-panel="merge" hidden><div id="merge-sanctuary" class="merge-layout"></div></section>
+            <section data-eris-panel="roots" class="eris-roots" hidden><div class="root-emblem" aria-hidden="true">♧</div><section id="root-shop" aria-label="Buy Health Roots"></section></section>
+          </div><footer class="eris-footer"><span id="eris-return"></span><span id="eris-clock"></span></footer>
+        </div>
+      </section>
+      <section id="controls-menu" class="overlay game-panel" hidden><div class="settings-card" role="dialog" aria-modal="true" aria-labelledby="settings-title"><header><h2 id="settings-title" tabindex="-1">Make yourself comfortable.</h2><button id="close-controls" class="secondary">Back to pause</button></header><p id="controller-status"></p><p id="mapping-note" role="status"></p><details><summary>Keyboard &amp; controller</summary><div class="mapping-heading"><span>Action</span><span>Keyboard</span><span>Controller</span></div><div id="mapping-list"></div></details><details open><summary>Audio</summary><p>Enable sound using the music button. Original looping themes change with the region and encounter.</p><div class="audio-settings"><label class="field">Music <output id="volume-music-value">35%</output><input id="volume-music" type="range" min="0" max="100" value="35" aria-label="Music volume"></label><label class="field">Effects <output id="volume-effects-value">65%</output><input id="volume-effects" type="range" min="0" max="100" value="65" aria-label="Sound effects volume"></label></div></details><details><summary>Mobile controls</summary><p>Sizes and offsets stay within the screen. Drag the stick up or down to steer Flight.</p><div id="touch-settings"></div><button id="reset-controls" class="secondary">Restore default controls</button></details><details><summary>Display</summary><label class="field">Brightness<input id="display-brightness" type="range" min="75" max="125" value="100" aria-label="Display brightness"></label></details></div></section>
+      <section id="world-menu" class="overlay game-panel" hidden><div class="journey-card" role="dialog" aria-modal="true" aria-labelledby="map-title"><header class="journey-heading"><div><div class="eyebrow">SEVEN REGIONS · ONE JOURNEY</div><h2 id="map-title" tabindex="-1">A world worth protecting.</h2></div><button id="map-close" class="secondary">Back to pause</button></header><p id="map-note" class="journey-note"></p><div class="journey-scroll"><div id="region-cards" class="region-cards"></div><header class="legendary-map-heading"><div class="eyebrow">THE LEGENDARY FRONTIER</div><h3>Eight rivals. One chance.</h3><p id="legendary-map-note"></p></header><div id="legendary-cards" class="legendary-cards"></div><p class="storage-note">All seven regular regions are open from the start. Bosses keep their rewards and rematches. Legendary arenas require Level 99.</p></div></div></section>
+      <section id="inventory-menu" class="overlay game-panel" hidden><div class="journey-card" role="dialog" aria-modal="true" aria-labelledby="inventory-title"><header class="journey-heading"><div><div class="eyebrow">YOUR FIELD KIT</div><h2 id="inventory-title" tabindex="-1">Carry what matters.</h2></div><button id="inventory-close" class="secondary">Back to pause</button></header><p id="inventory-summary" class="journey-note"></p><div class="journey-scroll"><section id="pending-reward" class="pending-reward" hidden></section><div id="equipment-list" class="equipment-list"></div><section id="equipment-confirm" class="equipment-confirm" role="group" aria-label="Confirm permanent equipment discard" hidden></section><p class="storage-note">Equipment colors are fixed. Only your starter outfit can be recolored. Rare pieces have a constant white glow.</p></div></div></section>
+      <section id="chest-menu" class="overlay game-panel" hidden><div class="journey-card" role="dialog" aria-modal="true" aria-labelledby="chest-title"><header class="journey-heading"><div><div class="eyebrow">FIRST VICTORY TREASURE</div><h2 id="chest-title" tabindex="-1">Your hard-earned rewards.</h2></div><button id="chest-close" class="secondary">Leave unopened</button></header><p id="chest-summary" class="journey-note"></p><div class="journey-scroll chest-columns"><section id="chest-contents"></section><section id="chest-owned"></section></div><div class="chest-actions"><button id="collect-chest" class="primary">Collect coins &amp; Roots · choose equipment →</button></div></div></section>
+      <section id="merge-reward" class="overlay game-panel" hidden><div class="journey-card merge-reward-card" role="dialog" aria-modal="true" aria-labelledby="merge-reward-title"><header class="journey-heading"><div><div class="eyebrow">LEGENDARY VICTORY · PERMANENTLY RECORDED</div><h2 id="merge-reward-title" tabindex="-1">Villain Merge rewards</h2></div></header><div class="journey-scroll"><div id="merge-reward-body" class="merge-layout"></div></div></div></section>
+      <section id="permanent-save" class="overlay permanent-save" hidden><div class="pause-card" role="alertdialog" aria-modal="true" aria-labelledby="permanent-title"><div class="eyebrow">PROTECTING PERMANENT PROGRESS</div><h2 id="permanent-title">Recording your legacy.</h2><p id="permanent-status" role="status">Saving the complete transaction…</p><button id="permanent-retry" class="primary" hidden>Retry permanent save</button><button id="permanent-reload" class="secondary" hidden>Reload latest hero</button></div></section>
+      <section id="delete-dialog" class="overlay" hidden><div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="delete-title"><div class="eyebrow">DELETE LOCAL HERO</div><h2 id="delete-title">Retire this hero?</h2><p id="delete-description"></p><p>This removes this slot’s hero and progress from this browser. Other slots are kept.</p><button id="cancel-delete" class="secondary">Keep my hero</button><button id="confirm-delete" class="primary danger">Delete this hero</button></div></section>
+      <div id="storage-warning" role="status" hidden></div>
+      <noscript><div class="noscript">Enable JavaScript to play Hero Showdown Royale.</div></noscript>
+    </main>
+    <footer class="controls-footer">
+      <div id="power-bar" class="power-bar" aria-label="Equipped superpowers"><button id="edit-hud-powers" class="edit-hud-powers" type="button" aria-label="Change equipped powers" aria-haspopup="dialog" title="Change equipped powers" disabled>⇄ <span>Change</span></button><button type="button" data-control="power0" class="power-button" aria-label="Power slot 1"><kbd>1</kbd><b>+</b><span>Empty slot</span></button><button type="button" data-control="power1" class="power-button" aria-label="Power slot 2"><kbd>2</kbd><b>+</b><span>Empty slot</span></button><button type="button" data-control="power2" class="power-button" aria-label="Power slot 3"><kbd>3</kbd><b>+</b><span>Empty slot</span></button><button type="button" data-control="power3" class="power-button merge-slot" aria-label="Villain Merge power" hidden><kbd>4</kbd><b>✦</b><span>Villain Merge</span></button><span id="power-context">Learn powers at the Tree of Eris</span></div>
+      <div class="desktop-guide"><span><kbd>←</kbd><kbd>→</kbd> MOVE</span><span><kbd>SHIFT</kbd> RUN</span><span><kbd>SPACE</kbd> DOUBLE JUMP</span><span><kbd>J</kbd> PUNCH</span><span><kbd>K</kbd> KICK</span><span><kbd>ESC</kbd> PAUSE</span><small>EXPLORE. PROTECT. BECOME.</small></div>
+      <div id="touch-controls" class="touch-controls"><div class="stick-wrap"><div id="stick" aria-label="Movement stick: drag left or right, farther to run"><span class="stick-arrows">‹ &nbsp; &nbsp; ›</span><div id="stick-knob"></div></div><small>WALK · RUN</small></div><span class="touch-note">YOUR COAST.<br>YOUR STORY.</span><div class="action-buttons"><button type="button" data-control="punch" aria-label="Punch"><b>✧</b><span>PUNCH</span></button><button type="button" data-control="kick" aria-label="Kick"><b>⌁</b><span>KICK</span></button><button type="button" data-control="jump" class="jump-button" aria-label="Jump"><b>↑</b><span>JUMP</span></button></div></div>
+    </footer>
+  </div>
+  <dialog id="slot-picker" aria-labelledby="picker-title" aria-describedby="picker-note">
+    <div class="picker-heading"><div><small>SUPERPOWERS</small><h2 id="picker-title">Choose a power</h2></div><button id="picker-close" type="button" aria-label="Close power selection">×</button></div>
+    <div id="picker-slots" role="group" aria-label="Choose a slot"></div>
+    <p id="picker-note" role="status"></p>
+    <div id="picker-powers"></div>
+  </dialog>
+  <script src="../assets/animation/motion-core.js"></script>
+  <script>
+    addEventListener('error',event=>{const status=document.getElementById('hero-art-status');if(status&&!status.hidden){status.textContent='Game could not start. '+(event.message||'A required file did not load. Reload to retry.');}});
+    addEventListener('unhandledrejection',event=>{const status=document.getElementById('hero-art-status');if(status&&!status.hidden)status.textContent='Game could not start. '+(event.reason?.message||'Reload to retry.');});
+  </script>
+  <script type="module" src="app.mjs"></script>
+</body>
+</html>

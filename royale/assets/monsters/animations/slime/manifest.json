@@ -1,0 +1,623 @@
+{
+  "name": "Trash Slime",
+  "region": 1,
+  "frameCount": 30,
+  "cellWidth": 320,
+  "cellHeight": 256,
+  "columns": 6,
+  "rows": 5,
+  "anchor": [
+    160.0,
+    240
+  ],
+  "referenceHeight": 128,
+  "sourceFacing": 1,
+  "file": "animations/slime/atlas.png",
+  "frames": [
+    {
+      "state": "idle",
+      "index": 0,
+      "file": "idle-00.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.05,
+          163.92
+        ],
+        [
+          201.36,
+          163.92
+        ]
+      ],
+      "sha256": "a52c5eaa4305ef593d00de90d847a928f8cb0a0340328ccb13dba0aa78ca8fab"
+    },
+    {
+      "state": "idle",
+      "index": 1,
+      "file": "idle-01.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.61,
+          168.04
+        ],
+        [
+          203.1,
+          168.04
+        ]
+      ],
+      "sha256": "6fd8f42cda81b1e614209cf11220ef9ac9118459499aabe8db03a8599e83a6c5"
+    },
+    {
+      "state": "idle",
+      "index": 2,
+      "file": "idle-02.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.25,
+          167.36
+        ],
+        [
+          200.52,
+          167.36
+        ]
+      ],
+      "sha256": "351f460681e77c08ca5fb9156d80d43d5cb3e96bd3c83dc4dd1ea1b87f81343c"
+    },
+    {
+      "state": "idle",
+      "index": 3,
+      "file": "idle-03.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.62,
+          166.68
+        ],
+        [
+          201.34,
+          166.68
+        ]
+      ],
+      "sha256": "55191858fbf98b8a3bece0c256218948a405816a7feeedb036718a5bdddb4df8"
+    },
+    {
+      "state": "idle",
+      "index": 4,
+      "file": "idle-04.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.58,
+          166.32
+        ],
+        [
+          201.15,
+          166.32
+        ]
+      ],
+      "sha256": "83564fb5099473fbc77e91e061547e7225df7b5ec923605ef123f688ba751da2"
+    },
+    {
+      "state": "idle",
+      "index": 5,
+      "file": "idle-05.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.63,
+          169.76
+        ],
+        [
+          201.2,
+          169.76
+        ]
+      ],
+      "sha256": "a461b12111d3b642ed840c39c8d4c6a31b5c2db81482162eba1f615ce83ec36c"
+    },
+    {
+      "state": "move",
+      "index": 0,
+      "file": "move-00.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.65,
+          172.48
+        ],
+        [
+          202.26,
+          172.48
+        ]
+      ],
+      "sha256": "caba49a5a3dabddc3d59398025e2cba524ce00388372f35a3d1b38eaa33198ab"
+    },
+    {
+      "state": "move",
+      "index": 1,
+      "file": "move-01.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          172.41,
+          174.88
+        ],
+        [
+          209.04,
+          174.88
+        ]
+      ],
+      "sha256": "7307d86fd25e9c17427b6e23e2859a6de362b357c063bcd42f4c30eed4447f1c"
+    },
+    {
+      "state": "move",
+      "index": 2,
+      "file": "move-02.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          171.53,
+          174.2
+        ],
+        [
+          205.06,
+          174.2
+        ]
+      ],
+      "sha256": "0ab392672cbb69b3145d53ef27e7da2a8f692e91503bdd4357b1c47dde31204c"
+    },
+    {
+      "state": "move",
+      "index": 3,
+      "file": "move-03.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          171.87,
+          174.88
+        ],
+        [
+          207.17,
+          174.88
+        ]
+      ],
+      "sha256": "a535877b15d0a3e848d4211180595de117e81b970284e98d572da4b4be9e7a1c"
+    },
+    {
+      "state": "move",
+      "index": 4,
+      "file": "move-04.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          171.22,
+          175.92
+        ],
+        [
+          203.56,
+          175.92
+        ]
+      ],
+      "sha256": "30690d4aea53a1ae6716ef2fbde8eb99550453f95bd68e97cc8eea1fc41ce48a"
+    },
+    {
+      "state": "move",
+      "index": 5,
+      "file": "move-05.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          169.83,
+          171.8
+        ],
+        [
+          198.49,
+          171.8
+        ]
+      ],
+      "sha256": "672c531ea12814a130af6fb6530ec0bca3ffa07446295a70ff60f98f3c5777d2"
+    },
+    {
+      "state": "attack",
+      "index": 0,
+      "file": "attack-00.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          171.58,
+          162.92
+        ],
+        [
+          207.31,
+          162.92
+        ]
+      ],
+      "sha256": "a15f4bf8429eff2884da8a2ffdb9554af8226a9cf21af0cb76263604b46782d1"
+    },
+    {
+      "state": "attack",
+      "index": 1,
+      "file": "attack-01.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          171.31,
+          170.86
+        ],
+        [
+          205.33,
+          170.86
+        ]
+      ],
+      "sha256": "79a845c86b3d88436fd0d509ae418f9a584c7cbb56172fb5c64b78f6aa9306ba"
+    },
+    {
+      "state": "attack",
+      "index": 2,
+      "file": "attack-02.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          172.29,
+          167.05
+        ],
+        [
+          209.73,
+          167.05
+        ]
+      ],
+      "sha256": "4a7c7c15050503fc72f23f71ac1f19ed6b30ec59c8f5b930e082b3f2b7ef354e"
+    },
+    {
+      "state": "attack",
+      "index": 3,
+      "file": "attack-03.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          174.08,
+          165.9
+        ],
+        [
+          215.25,
+          165.9
+        ]
+      ],
+      "sha256": "0b6edfb8e237b0acf601403e818b4bd2743b40e56bf5e1c42f0789525c5df780"
+    },
+    {
+      "state": "attack",
+      "index": 4,
+      "file": "attack-04.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          172.78,
+          163.41
+        ],
+        [
+          209.83,
+          163.41
+        ]
+      ],
+      "sha256": "99c6b3797d6afd90774598b1804a82c0292c0709eb8bd64fb0e0eca647f7caad"
+    },
+    {
+      "state": "attack",
+      "index": 5,
+      "file": "attack-05.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          171.47,
+          162.92
+        ],
+        [
+          205.95,
+          162.92
+        ]
+      ],
+      "sha256": "1cd7dc2e076c8b7fce1c3ebff436562e254a5cd15b6800e571825c97a3674bfc"
+    },
+    {
+      "state": "hit",
+      "index": 0,
+      "file": "hit-00.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.07,
+          163.6
+        ],
+        [
+          200.2,
+          163.6
+        ]
+      ],
+      "sha256": "1282436200f407fe05709bef0ab2f11f0490035646ff5098a75f211f7034a830"
+    },
+    {
+      "state": "hit",
+      "index": 1,
+      "file": "hit-01.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          169.76,
+          167.36
+        ],
+        [
+          200.18,
+          167.36
+        ]
+      ],
+      "sha256": "e55996d4e0e6bdcf231496110ebe1cdc0b7e1375e9d7cb3721139d3962b74ac5"
+    },
+    {
+      "state": "hit",
+      "index": 2,
+      "file": "hit-02.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.47,
+          177.64
+        ],
+        [
+          203.11,
+          177.64
+        ]
+      ],
+      "sha256": "18f2e6f9dd2a3651594e162f5fd8196db2189b909a874c6d5ced822555e42660"
+    },
+    {
+      "state": "hit",
+      "index": 3,
+      "file": "hit-03.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          169.75,
+          170.44
+        ],
+        [
+          200.33,
+          170.44
+        ]
+      ],
+      "sha256": "843ee3fa44a3dbef6616e9b76242dbbbb695c4a5e7bb4036ccbf8ed3baa59fbb"
+    },
+    {
+      "state": "hit",
+      "index": 4,
+      "file": "hit-04.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.23,
+          161.52
+        ],
+        [
+          201.4,
+          161.52
+        ]
+      ],
+      "sha256": "dbe22e08f4f8e4b06b921ef720aaced0eb4a559afe7ff010c0baa2b88e84153b"
+    },
+    {
+      "state": "hit",
+      "index": 5,
+      "file": "hit-05.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.3,
+          164.28
+        ],
+        [
+          200.72,
+          164.28
+        ]
+      ],
+      "sha256": "622818db600bc049ed5e3009d95a250d0a6c9dfe1a0857ac3ee9bff246ddf800"
+    },
+    {
+      "state": "defeat",
+      "index": 0,
+      "file": "defeat-00.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.51,
+          161.2
+        ],
+        [
+          201.82,
+          161.2
+        ]
+      ],
+      "sha256": "dc9afc0c60ce64ed351aa224a4edd96bb089cce4b20ceea8741f421bb070dc75"
+    },
+    {
+      "state": "defeat",
+      "index": 1,
+      "file": "defeat-01.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.85,
+          174.2
+        ],
+        [
+          203.63,
+          174.2
+        ]
+      ],
+      "sha256": "cd24a805e729dbbbf171914dff86d2c952fe73d848bfc49a464cbd818c5d10f0"
+    },
+    {
+      "state": "defeat",
+      "index": 2,
+      "file": "defeat-02.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          171.4,
+          186.88
+        ],
+        [
+          204.34,
+          186.88
+        ]
+      ],
+      "sha256": "e7a64924096cd5f2b4563f8fb97a8bca03819ecc0b64dc7b86e8da2096f2dc5d"
+    },
+    {
+      "state": "defeat",
+      "index": 3,
+      "file": "defeat-03.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          171.07,
+          193.04
+        ],
+        [
+          202.97,
+          193.04
+        ]
+      ],
+      "sha256": "f94402b53e2f4bb1e42d42bf3747c20d5a2e1175ecee2b7e17c7f6ecafc4e9f4"
+    },
+    {
+      "state": "defeat",
+      "index": 4,
+      "file": "defeat-04.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          171.14,
+          199.2
+        ],
+        [
+          203.78,
+          199.2
+        ]
+      ],
+      "sha256": "1524a4e33a7c2f55f0fe02c459471b6a044a616f959de076368124c713b3a316"
+    },
+    {
+      "state": "defeat",
+      "index": 5,
+      "file": "defeat-05.png",
+      "anchor": [
+        160.0,
+        240
+      ],
+      "eyes": [
+        [
+          170.4,
+          202.28
+        ],
+        [
+          200.82,
+          202.28
+        ]
+      ],
+      "sha256": "b4394f96f9f024b56df6b887e8f7c8bee84ca33295c0407b7d1d25687ab206b2"
+    }
+  ],
+  "sources": {
+    "slime.png": "62608cdfca177d75132157f0b9dccf8a276fb6beb9122491112198b07ab6f453",
+    "slime-attack.png": "2c674de0434363619481da34b9fee945e1fd2f7e8ed5ce0943ff4dcaa0eec076"
+  },
+  "provenance": "Separate AI-drawn poses guided by the approved design; packaged with source alpha."
+}

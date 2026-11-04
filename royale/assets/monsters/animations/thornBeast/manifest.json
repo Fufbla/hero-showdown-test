@@ -1,0 +1,524 @@
+{
+  "name": "Thorn Beast",
+  "region": 5,
+  "frameCount": 30,
+  "clips": {
+    "idle": {
+      "start": 0,
+      "count": 6
+    },
+    "move": {
+      "start": 6,
+      "count": 6
+    },
+    "attack": {
+      "start": 12,
+      "count": 6
+    },
+    "hit": {
+      "start": 18,
+      "count": 6
+    },
+    "defeat": {
+      "start": 24,
+      "count": 6
+    }
+  },
+  "cellWidth": 320,
+  "cellHeight": 256,
+  "columns": 6,
+  "rows": 5,
+  "anchor": [
+    160,
+    240
+  ],
+  "referenceHeight": 128,
+  "sourceFacing": 1,
+  "file": "animations/thornBeast/atlas.png",
+  "frames": [
+    {
+      "state": "idle",
+      "index": 0,
+      "file": "idle-00.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          223.24,
+          160.33
+        ]
+      ],
+      "sha256": "2ccc552217a4ceaf856dd421a8d6bbbbe3392d6036440ff669786494578b005f"
+    },
+    {
+      "state": "idle",
+      "index": 1,
+      "file": "idle-01.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          203.17,
+          151.49
+        ]
+      ],
+      "sha256": "3ca5d3f12e0f287b8e86b3b0d16d0cd909c51a11396e153e1ca19c3a3bba580b"
+    },
+    {
+      "state": "idle",
+      "index": 2,
+      "file": "idle-02.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          221.51,
+          168.53
+        ]
+      ],
+      "sha256": "7c0699f4152f7b116029b6ef44df40501c25bc44276cac0fa7990b591ec96ea3"
+    },
+    {
+      "state": "idle",
+      "index": 3,
+      "file": "idle-03.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          221.21,
+          155.63
+        ]
+      ],
+      "sha256": "e8872a46f5633d382c428fd48cfd866915ba46f5357eb99572171426b4fee381"
+    },
+    {
+      "state": "idle",
+      "index": 4,
+      "file": "idle-04.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          209.67,
+          149.02
+        ]
+      ],
+      "sha256": "55a6a4725491e06783aba0857782233a128bb065268e0206766f44a7555a818a"
+    },
+    {
+      "state": "idle",
+      "index": 5,
+      "file": "idle-05.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          227.24,
+          156.14
+        ]
+      ],
+      "sha256": "e7fa372ac4f0dbf42492361599112dcc04d9fa64c60b8274ddbfce168abdd595"
+    },
+    {
+      "state": "move",
+      "index": 0,
+      "file": "move-00.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          217.37,
+          147.22
+        ]
+      ],
+      "sha256": "88d01499484b640d42e9c3b8736f35891885d3132aae6857d90c2a9e424aa55b"
+    },
+    {
+      "state": "move",
+      "index": 1,
+      "file": "move-01.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          225.79,
+          157.67
+        ]
+      ],
+      "sha256": "18a73a90257c3f33d1d5989188d4d0a17730972c921b491106c1ec879730facb"
+    },
+    {
+      "state": "move",
+      "index": 2,
+      "file": "move-02.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          214.66,
+          148.25
+        ]
+      ],
+      "sha256": "aa0de525e4b766c39bb7b41076b4acb58f8ab658f1166c7e1f1eb1bc2b5d4bb2"
+    },
+    {
+      "state": "move",
+      "index": 3,
+      "file": "move-03.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          220.48,
+          162.75
+        ]
+      ],
+      "sha256": "6520bc160d8607d7d97a0d86113f77e4b85a7067742ee6a7706dfd9e69fd8066"
+    },
+    {
+      "state": "move",
+      "index": 4,
+      "file": "move-04.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          214.93,
+          146.7
+        ]
+      ],
+      "sha256": "b5ac023c07a6bd13fb6965d70b8d93e2ede0c4f9b29f6801419be9cb03c2ce6b"
+    },
+    {
+      "state": "move",
+      "index": 5,
+      "file": "move-05.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          226.62,
+          157.85
+        ]
+      ],
+      "sha256": "4e0678ea7047e4d307d12933a8dfca5783b5da9ed8b5a356a6c009c793579472"
+    },
+    {
+      "state": "attack",
+      "index": 0,
+      "file": "attack-00.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          213.74,
+          160.39
+        ]
+      ],
+      "sha256": "f9ae22677f054ce2db7fbab261c787a3af33f8ff8d0b0de5b384b82b13e9f9f7"
+    },
+    {
+      "state": "attack",
+      "index": 1,
+      "file": "attack-01.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          205.38,
+          159.7
+        ]
+      ],
+      "sha256": "d5cb321660f4baa945abca85fd02f5608caf45fb5783d5b24207045ff2d944a6"
+    },
+    {
+      "state": "attack",
+      "index": 2,
+      "file": "attack-02.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          202.21,
+          153.38
+        ]
+      ],
+      "sha256": "105c2de4605b1479971704f9ab57b8497cc30dbdb17e471a7f90c2d2f05ce325"
+    },
+    {
+      "state": "attack",
+      "index": 3,
+      "file": "attack-03.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          209.46,
+          145.25
+        ]
+      ],
+      "sha256": "ba46b0d4b4a5a2016c6143ab99eda57171787205ff4e543e77069ebf425f2a6b"
+    },
+    {
+      "state": "attack",
+      "index": 4,
+      "file": "attack-04.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          218.99,
+          148.95
+        ]
+      ],
+      "sha256": "720746d353dfa21895611b84960055e012c5ab464627f803af02ef29145fd5c7"
+    },
+    {
+      "state": "attack",
+      "index": 5,
+      "file": "attack-05.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          209.2,
+          159.84
+        ]
+      ],
+      "sha256": "e9a90e0bb4cddcb2d3e95f37266dcc171173baea6db18740daa22fe20d3b4508"
+    },
+    {
+      "state": "hit",
+      "index": 0,
+      "file": "hit-00.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          212.43,
+          150.83
+        ]
+      ],
+      "sha256": "3d77cb4a078bb1a0e25a679484a6e1171bc3d4143963b067950be7a71dbdcfc2"
+    },
+    {
+      "state": "hit",
+      "index": 1,
+      "file": "hit-01.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          218.39,
+          163.73
+        ]
+      ],
+      "sha256": "ad1b22764121579dc14697b35047acd0123ed63a8d1e4e87022f353a08096bf0"
+    },
+    {
+      "state": "hit",
+      "index": 2,
+      "file": "hit-02.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          218.79,
+          152.58
+        ]
+      ],
+      "sha256": "b98437378ba0eae3fc51646fc789c655108b63d180a2dd22aa5ad5ad53e3dbe0"
+    },
+    {
+      "state": "hit",
+      "index": 3,
+      "file": "hit-03.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          217.23,
+          162.36
+        ]
+      ],
+      "sha256": "25d0744fd6611bbb059349e7ad733f2354bc5617590dc38e54ef402609ae67f8"
+    },
+    {
+      "state": "hit",
+      "index": 4,
+      "file": "hit-04.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          214.77,
+          153.9
+        ]
+      ],
+      "sha256": "94eebe430f0dcd11ef8ef032e07403d137f077d0521d952a9cd57f196a2fe2bd"
+    },
+    {
+      "state": "hit",
+      "index": 5,
+      "file": "hit-05.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          222.69,
+          164.6
+        ]
+      ],
+      "sha256": "4e0da64ce93e22bc7528c1a7a1b3bec1aeaeda436e8d2f5d121a38fb63d3e6e8"
+    },
+    {
+      "state": "defeat",
+      "index": 0,
+      "file": "defeat-00.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          215.53,
+          168.55
+        ]
+      ],
+      "sha256": "c2949d4c00bc47de03a3b58ca896e63314342b3a1d77e6381942cd7d073315b4"
+    },
+    {
+      "state": "defeat",
+      "index": 1,
+      "file": "defeat-01.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          203.83,
+          163.96
+        ]
+      ],
+      "sha256": "eedea0982eddfea8d27857f74ef19e8019334c8c45f485818ad6dedbca30d05d"
+    },
+    {
+      "state": "defeat",
+      "index": 2,
+      "file": "defeat-02.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          212.2,
+          172.51
+        ]
+      ],
+      "sha256": "af9001627b0be2362ae5e9de0dcc544393337881eaa0f6601bd02ef90c09e97a"
+    },
+    {
+      "state": "defeat",
+      "index": 3,
+      "file": "defeat-03.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          219.21,
+          180.52
+        ]
+      ],
+      "sha256": "be5dff501ce88596b1cbf9e01b35c68879de23e3da361e7375b73d5dd28592d0"
+    },
+    {
+      "state": "defeat",
+      "index": 4,
+      "file": "defeat-04.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          214.5,
+          184.03
+        ]
+      ],
+      "sha256": "ee4d8950399df22feb7063f1b4f2c5a45d87755ac3018e9595393dcd23cba27a"
+    },
+    {
+      "state": "defeat",
+      "index": 5,
+      "file": "defeat-05.png",
+      "anchor": [
+        160,
+        240
+      ],
+      "eyes": [
+        [
+          215.63,
+          185.63
+        ]
+      ],
+      "sha256": "13047c0fb28fc9314d632136ebab1dcf143e1e87baae26cec28c1f9136265d34"
+    }
+  ],
+  "sources": {
+    "thornBeast.png": "25c65ea99c2937c9734bc168354f1453bed64baecf92ab9d19341a2e20f1518f"
+  },
+  "provenance": "Separately AI-drawn poses guided by approved reference; source alpha preserved."
+}
