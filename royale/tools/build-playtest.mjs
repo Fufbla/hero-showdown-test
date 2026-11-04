@@ -13,7 +13,7 @@ export async function playtestFiles(root=repositoryRoot){
     for(const item of await readdir(path.join(root,directory),{withFileTypes:true})){
       const relative=directory+'/'+item.name;
       if(item.isDirectory()){
-        if(!['source','sources','node_modules','evidence'].includes(item.name))await walk(relative);
+        if(!['source','sources','animation-source','node_modules','evidence'].includes(item.name))await walk(relative);
       }else if(item.isFile())files.add(relative);
     }
   };
@@ -31,7 +31,7 @@ export async function buildPlaytest(destination){
   if(out===repositoryRoot||out.startsWith(repositoryRoot+path.sep))throw Error('Keep the build outside the source repository.');
   await mkdir(out,{recursive:true});
   const names=await readdir(out);
-  if(names.length&&!names.includes('build-manifest.json'))throw Error('Output must be empty or an existing verified playtest build.');
+  if(names.length)throw Error('Output must be empty. Choose a new folder so an older build cannot leave unused files behind.');
   const files=await playtestFiles(),records=[];
   for(const relative of files){
     const source=path.join(repositoryRoot,relative),target=path.join(out,relative);

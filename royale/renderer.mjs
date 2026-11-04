@@ -68,7 +68,7 @@ export class Renderer {
       line(c,[[camp.x-30,camp.y],[camp.x-30,camp.y-120]],'#547a62',5);
       path(c,[[camp.x-28,camp.y-118],[camp.x+22,camp.y-112],[camp.x+12,camp.y-92],[camp.x-28,camp.y-97]],i===game.world.checkpoint.index&&game.regionId===game.world.checkpoint.region?'#e7cd83':'#56a77c',OUTLINE,1.5);
       path(c,[[camp.x+20,camp.y],[camp.x+44,camp.y-45],[camp.x+75,camp.y]],'#e7d2a4',OUTLINE,2);path(c,[[camp.x+34,camp.y],[camp.x+44,camp.y-31],[camp.x+53,camp.y]],'#5b8673',null);
-      if(game.nearCamp()===i){round(c,camp.x-85,camp.y-157,170,24,12,'#153b40e6');c.fillStyle='#fff1cd';c.font='11px system-ui';c.textAlign='center';c.fillText('E / REST · heal & set checkpoint',camp.x,camp.y-141);}
+      if(game.nearCamp()===i){round(c,camp.x-85,camp.y-157,170,24,12,'#153b40e6');c.fillStyle='#fff1cd';c.font='11px system-ui';c.textAlign='center';c.fillText('REST · heal & set checkpoint',camp.x,camp.y-141);}
     }
     if(!game.arenaScene){if(visible(150,390,260,230))drawEris(c,t);worldLandmarks(c,game,this.camera,this.width);}else{drawArena(c,game);if(game.arenaScene.legendary)drawLegendaryWorld(c,game);}
     for(const shot of game.enemyShots){if(!visible(shot.x-12,shot.y-12,24,24))continue;if(drawBossShot(c,shot,t))continue;oval(c,shot.x,shot.y,7,5,shot.color,'#283b43',2);line(c,[[shot.x-shot.vx*.025,shot.y-shot.vy*.025],[shot.x,shot.y]],'#eadcac',2);}

@@ -16,6 +16,8 @@ Its five existing integration commits were retained. No recovery/rebuild was nee
   largest control setting. The existing compact layout now sizes Jump consistently.
 - Corrected obsolete keyboard inputs in three browser test scripts: Left/Right
   for movement and Up for treasure interaction. Assertions were retained.
+- Removed the obsolete E key from the painted rest hint. The active interaction
+  button continues to display the actual configured key, including Up by default.
 - Added a reproducible `npm test`, a byte-preserving playtest packager, and
   regressions for final preservation, packaged imports and landscape UI flows.
 - Pinned the missing native canvas test dependency; installed the existing locked
@@ -116,6 +118,10 @@ desktop and same-Wi-Fi iPhone launch instructions. `build-manifest.json` records
 the exact source commit, dirty state, byte sizes and SHA-256 hashes of copied files.
 The packager checks every copy and includes all production imports and approved
 runtime assets; it does not regenerate, resize or recompress artwork.
+Unused monster animation authoring sheets are excluded from the download; all
+21 approved runtime animation atlases remain included. A size regression keeps
+the package below the host's 256 MiB expanded limit. Use an empty output folder
+for each build so stale files from an earlier package cannot remain.
 
 For browser reruns, serve the build and open `/royale/tests/mobile.html`,
 `final-mobile.html`, `mobile-patrol.html`, `phase5-browser.html`,
