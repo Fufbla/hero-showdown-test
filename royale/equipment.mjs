@@ -1,5 +1,5 @@
 import { MERGE_CATALOG } from './legendary-data.mjs';
-import {WARDROBE_CATALOG} from './agility-armor.mjs';
+import {WARDROBE_CATALOG} from './flight-armor.mjs';
 import { COSTUME_PARTS, STAT_KEYS, costumeDrop } from './costume-catalog.mjs';
 import { LOOT } from './progression.mjs';
 import { STARTER_OUTFIT } from './appearance.mjs';

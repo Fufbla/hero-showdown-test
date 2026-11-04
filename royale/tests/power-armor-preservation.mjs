@@ -10,6 +10,7 @@ const changed = new Set([
   'tests/world-ui-preservation.mjs','tests/style-c.test.mjs','tests/power-armor-preservation.mjs',
   'tests/fireball-armor.test.mjs','tests/fireball-review.html','tests/fireball-review.mjs',
   'tests/fireball-economy.mjs','FIREBALL-ARMOR.md',
+  'flight-armor.mjs','tests/flight-armor.test.mjs',
   'agility-armor.mjs','tests/agility-armor.test.mjs',
   'speed-armor.mjs','tests/speed-armor.test.mjs',
   'super-kick-armor.mjs','tests/super-kick-armor.test.mjs','SUPER-KICK-ARMOR.md',
@@ -19,6 +20,7 @@ const changed = new Set([
   'steel-armor.mjs','power-armor-art.mjs','tests/steel-armor.test.mjs','STEEL-ARMOR.md',
 ].map(name=>'royale/'+name));
 export const isFireballFile = path => changed.has(path) ||
+  /^royale\/assets\/power-armor\/flight\/(regions\.mjs|(swift|glider|kestrel|stratus|jet|vortex|aurora|zenith|firmament)\.webp)$/.test(path) ||
   /^royale\/assets\/power-armor\/agility\/(regions\.mjs|(flick|rook|kite|orbit|lynx|parallax|shutter|prism|afterimage)\.webp)$/.test(path) ||
   /^royale\/assets\/power-armor\/speed\/(regions\.mjs|(starter|relay|vector|velodrome|switchback|apex|pulse|mach|horizon)\.webp)$/.test(path) ||
   /^royale\/assets\/power-armor\/superKick\/(regions\.mjs|(spar|pivot|crane|koi|mantis|wheel|tiger|pagoda|dragon)\.webp)$/.test(path) ||

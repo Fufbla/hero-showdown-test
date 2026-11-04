@@ -1,3 +1,4 @@
+import {matchingFlightBonus,refreshFlightEffect} from './flight-armor.mjs';
 import {matchingAgilityBonus,refreshAgilityEffect} from './agility-armor.mjs';
 import {matchingSpeedBonus} from './speed-armor.mjs';
 import {matchingSuperKickBonus,refreshSuperKickEffect} from './super-kick-armor.mjs';
@@ -35,6 +36,7 @@ export const journeyMethods={
     const previousWhirlwindBonus=this.equipment?.whirlwindLevels||0;
     const previousStrengthBonus=this.equipment?.strengthLevels||0;
     const previousRootsBonus=this.equipment?.rootsLevels||0;
+    const previousFlightBonus=this.equipment?.flightLevels||0;
     const previousAgilityBonus=this.equipment?.agilityLevels||0;
     const previousSteelBonus=this.equipment?.steelLevels||0;
     this.equipment=equipmentStats(Object.fromEntries(Object.keys(earned).map(k=>[k,earned[k]+(base?.[k]||0)])));
@@ -46,6 +48,9 @@ export const journeyMethods={
     const rootsBonus=matchingRootsBonus(this.inventory,this.hero?.level||1);
     if(rootsBonus)this.equipment.rootsLevels=rootsBonus;
     if(previousRootsBonus!==rootsBonus)refreshRootsEffect(this.powers);
+    const flightBonus=matchingFlightBonus(this.inventory,this.hero?.level||1);
+    if(flightBonus)this.equipment.flightLevels=flightBonus;
+    if(previousFlightBonus!==flightBonus)refreshFlightEffect(this.powers);
     const agilityBonus=matchingAgilityBonus(this.inventory,this.hero?.level||1);
     if(agilityBonus)this.equipment.agilityLevels=agilityBonus;
     if(previousAgilityBonus!==agilityBonus)refreshAgilityEffect(this.powers);

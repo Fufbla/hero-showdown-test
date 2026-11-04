@@ -1,6 +1,7 @@
 import {STYLE_C_VIEWS} from './style-c-defaults.mjs';
 import {itemIcon} from './item-art.mjs';
-import {AGILITY_SUITS, WARDROBE_CATALOG as COSTUME_CATALOG, matchingAgilityBonus} from './agility-armor.mjs';
+import {FLIGHT_SUITS, WARDROBE_CATALOG as COSTUME_CATALOG, matchingFlightBonus} from './flight-armor.mjs';
+import {AGILITY_SUITS, matchingAgilityBonus} from './agility-armor.mjs';
 import {SPEED_SUITS, matchingSpeedBonus} from './speed-armor.mjs';
 import {SUPER_KICK_SUITS, matchingSuperKickBonus} from './super-kick-armor.mjs';
 import {WHIRLWIND_SUITS, matchingWhirlwindBonus} from './whirlwind-armor.mjs';
@@ -32,6 +33,7 @@ function withPreview(g,defs){
   return inv;
 }
 function shopEntries(category){
+  if(category==='flight')return FLIGHT_SUITS;
   if(category==='agility')return AGILITY_SUITS;
   if(category==='speed')return SPEED_SUITS;
   if(category==='superKick')return SUPER_KICK_SUITS;
@@ -47,7 +49,7 @@ function shopEntries(category){
       const price=catalog.filter(piece=>piece.setId===setId).reduce((sum,piece)=>sum+piece.catalogValue,0);
       return {setId,name:suit.name,level:suit.level,color:suit.color,accent:suit.accent,price};
     });
-    return regional.concat(FIREBALL_SUITS,STEEL_SUITS,ROOTS_SUITS,STRENGTH_SUITS,WHIRLWIND_SUITS,SUPER_KICK_SUITS,SPEED_SUITS,AGILITY_SUITS);
+    return regional.concat(FIREBALL_SUITS,STEEL_SUITS,ROOTS_SUITS,STRENGTH_SUITS,WHIRLWIND_SUITS,SUPER_KICK_SUITS,SPEED_SUITS,AGILITY_SUITS,FLIGHT_SUITS);
   }
   return catalog.filter(piece=>piece.shop&&(category==='all'||piece.part===category))
     .map(piece=>({...piece,catalogId:piece.id,price:piece.catalogValue}));
@@ -99,7 +101,12 @@ export class ErisMenu{
     p.append(el('div',`${this.mode==='buy'?'TRY IT ON':'YOUR EQUIPMENT'} · ${defs.length===3?'COMPLETE OUTFIT':EQUIPMENT_NAMES[defs[0].part]}`,'eyebrow'),el('h3',e.name||defs[0].setName));
     p.append(el('p',`Level ${defs[0].level||1} · ${defs[0].rarity} · Fixed colors${defs[0].rarity==='rare'?' · Constant white glow':''}.`));
     p.append(statComparison(appliedEquipment(g,g.inventory),appliedEquipment(g,this.previewInventory,99)));
-    if(defs[0].agilityLevels){
+    if(defs[0].flightLevels){
+      const learned=g.powers.data.levels.flight, bonus=matchingFlightBonus(this.previewInventory,99);
+      const stats=powerStats('flight',learned,{equipment:{flightLevels:bonus}});
+      p.append(el('p',`Three matching pieces grant +${defs[0].flightLevels} effective Flight levels.`,'set-note'));
+      p.append(el('p',learned?`Level ${stats.level} · ${stats.duration} seconds of Flight · 30 seconds recovery. Launch from the ground. Fireball is the only airborne attack.`:'Learn Flight to use its armor bonus.'));
+    }else if(defs[0].agilityLevels){
       const learned=g.powers.data.levels.agility, bonus=matchingAgilityBonus(this.previewInventory,99);
       const stats=powerStats('agility',learned,{equipment:{agilityLevels:bonus}});
       p.append(el('p',`Three matching pieces grant +${defs[0].agilityLevels} effective Agility levels.`,'set-note'));
