@@ -48,3 +48,6 @@ for(const path of ['royale/eris-ui.mjs', 'royale/journey-menu.mjs', 'royale/lege
 
 // Deployment templates, controlled load evidence and browser screenshots.
 for(const path of ['.env.example','load-controlled.mjs','deploy/client-config.example.json','deploy/nginx.conf.example','deploy/royale.service','deploy/OPERATIONS.md','qa/controlled-load.json','qa/controlled-load-repeat.json','tests/load-server.mjs','tests/mobile.html','qa/browser/two-heroes-landscape.jpg','qa/browser/room-controls.jpg'])FINAL_FILES.add('royale/multiplayer/'+path);
+
+// Authorized static solo release configuration, packaging and regression coverage.
+for(const path of ['royale/release-config.mjs', 'royale/multiplayer-gate.mjs', 'royale/tools/build-solo.mjs', 'royale/tests/solo-release.test.mjs', 'royale/SOLO-DEPLOYMENT.md'])FINAL_FILES.add(path);

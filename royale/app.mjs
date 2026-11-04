@@ -1,4 +1,4 @@
-import {MultiplayerMenu} from './multiplayer/menu.mjs';
+import {createMultiplayerMenu} from './multiplayer-gate.mjs';
 import {rewardNotice} from './reward-notice.mjs';
 import {installLandscapeLayout} from './landscape-layout.mjs';
 import {drawEquipmentPreview} from './eris-ui.mjs';
@@ -67,7 +67,7 @@ const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,say,appearance:()=>o
 const legendaryMenu=new LegendaryMenu(()=>game,{transaction,say,enter:enterLegendary,onClaim:resume});
 erisMenu.mergeMenu=legendaryMenu;
 let makeoverReview=null,remoteLoaded=false;
-const multiplayerMenu=new MultiplayerMenu({
+const multiplayerMenu=await createMultiplayerMenu({
  getContext:()=>({storage,slot:activeSlot,local:localStore.slot(activeSlot),snapshot:game.started&&!online()?JSON.parse(game.save()||'null'):localStore.slot(activeSlot)?.snapshot}),
  onError:error=>say(typeof error==='string'?error:error.message,7),
  onOpen:()=>{if(game.started)setScreen('pause');},

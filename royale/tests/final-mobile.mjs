@@ -38,9 +38,9 @@ document.querySelector('#run').onclick=async()=>{
   check(`${width}: largest control sizes remain on screen`,controls.every(n=>inside(n,w)));
   check(`${width}: largest control sizes do not overlap`,controls.every((a,i)=>controls.slice(i+1).every(b=>separate(a,b))));
   el('pause').click();
-  el('tree-from-pause').click();check(`${width}: Tree exit remains visible`,inside(el('close-tree'),w));
+  el('tree-from-pause').click();await until(()=>el('close-tree').getBoundingClientRect().width>0,'Tree transition did not finish');check(`${width}: Tree exit remains visible`,inside(el('close-tree'),w));
   d.querySelector('[data-eris=wardrobe]').click();check(`${width}: wardrobe stays within viewport`,inside(el('gear-preview'),w)&&inside(el('close-tree'),w)&&d.documentElement.scrollWidth===width);
-  el('close-tree').click();el('pause').click();el('manual-save').click();
+  el('close-tree').click();await until(()=>d.body.classList.contains('playing'),'Tree return did not finish');el('pause').click();el('manual-save').click();
   const saved=JSON.parse(sessionStorage.getItem(key)).slots[0].snapshot;
   check(`${width}: customization saved`,saved.look.name==='Landscape '+width&&saved.look.presentation==='female'&&saved.look.build==='strong'&&saved.look.emblem==='shield');
   const url=frame.src;await new Promise(r=>{frame.onload=r;frame.src=url;});d=frame.contentDocument;w=frame.contentWindow;
