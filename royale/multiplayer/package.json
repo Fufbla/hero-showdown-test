@@ -1,0 +1,13 @@
+{
+  "name": "royale-authority",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=24.0.0"},
+  "scripts": {
+    "dev": "node tests/review-server.mjs",
+    "start": "node server.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs",
+    "load": "node load.mjs"
+  },
+  "dependencies": {"ws": "8.22.1"}
+}

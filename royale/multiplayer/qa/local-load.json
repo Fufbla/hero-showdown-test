@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-11-04T15:48:52.006Z",
+  "scope": "Local loopback: server and synthetic clients share one process. NOT Hostinger capacity or a production soak test.",
+  "runtime": "v24.22.1",
+  "hardware": {
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCPUs": 9,
+    "availableParallelism": 8,
+    "memoryBytes": 10451423232,
+    "cgroupCPU": "800000 100000",
+    "cgroupMemory": "8589934592"
+  },
+  "secondsPerGroup": 15,
+  "results": [
+    {
+      "players": 2,
+      "connected": 2,
+      "elapsedSeconds": 15.159914704,
+      "simulationHz": 52.5728551618901,
+      "tickP95Ms": 14.682925000000978,
+      "eventLoopP99Ms": 98.893823,
+      "inputConfirmationP95Ms": 222.97889000000032,
+      "rssMiB": 129.45703125,
+      "combinedCpuPercent": 48.17913650973798,
+      "outgoingKiBPerSecond": 95.4921810958825,
+      "incomingKiBPerSecond": 3.638424371243085,
+      "errors": [],
+      "passed": false
+    },
+    {
+      "players": 4,
+      "connected": 4,
+      "elapsedSeconds": 15.000701997000002,
+      "simulationHz": 58.597257660060954,
+      "tickP95Ms": 16.45251399999688,
+      "eventLoopP99Ms": 38.895615,
+      "inputConfirmationP95Ms": 58.24088400000255,
+      "rssMiB": 177.10546875,
+      "combinedCpuPercent": 30.37431848796962,
+      "outgoingKiBPerSecond": 320.35961660901455,
+      "incomingKiBPerSecond": 9.153217464586634,
+      "errors": [],
+      "passed": true
+    },
+    {
+      "players": 8,
+      "connected": 8,
+      "elapsedSeconds": 15.004863872000001,
+      "simulationHz": 44.3856076057309,
+      "tickP95Ms": 37.444671000004746,
+      "eventLoopP99Ms": 412.352511,
+      "inputConfirmationP95Ms": 582.8630550000016,
+      "rssMiB": 194.8046875,
+      "combinedCpuPercent": 63.5525459034301,
+      "outgoingKiBPerSecond": 792.7582411716996,
+      "incomingKiBPerSecond": 10.107139344529468,
+      "errors": [],
+      "passed": false
+    },
+    {
+      "players": 16,
+      "connected": 16,
+      "elapsedSeconds": 15.000154020000002,
+      "simulationHz": 57.999404462114974,
+      "tickP95Ms": 41.40373899999395,
+      "eventLoopP99Ms": 73.793535,
+      "inputConfirmationP95Ms": 88.73654799999349,
+      "rssMiB": 210.5390625,
+      "combinedCpuPercent": 54.887536414776086,
+      "outgoingKiBPerSecond": 3648.0040136489542,
+      "incomingKiBPerSecond": 25.432030530577176,
+      "errors": [],
+      "passed": false
+    }
+  ],
+  "largestPassingLocalGroup": 4,
+  "productionCapacity": null
+}
