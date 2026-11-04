@@ -23,11 +23,11 @@ document.getElementById('test').onclick=async()=>{
     check('no page overflow',d.documentElement.scrollWidth===w.innerWidth,`${w.innerWidth} × ${w.innerHeight}`);
     for(const id of ['pause','stick']){const r=el(id).getBoundingClientRect();check(`${id} fits viewport`,r.left>=0&&r.right<=w.innerWidth&&r.top>=0&&r.bottom<=w.innerHeight);}
     const touch=d.querySelector('.touch-controls');check('touch controls visible',touch.getBoundingClientRect().height>0);
-    key('KeyD',true);await advance(.7);key('KeyD',false);await advance(.2);const walk=stats();check('keyboard walking',walk.x>start.x+60,`${start.x} → ${walk.x}`);
-    key('ShiftLeft',true);key('KeyD',true);await advance(.7);key('KeyD',false);key('ShiftLeft',false);await advance(.2);const run=stats();check('running is faster',run.x-walk.x>walk.x-start.x);
+    key('ArrowRight',true);await advance(.7);key('ArrowRight',false);await advance(.2);const walk=stats();check('keyboard walking',walk.x>start.x+60,`${start.x} → ${walk.x}`);
+    key('ShiftLeft',true);key('ArrowRight',true);await advance(.7);key('ArrowRight',false);key('ShiftLeft',false);await advance(.2);const run=stats();check('running is faster',run.x-walk.x>walk.x-start.x);
     const floor=stats().y;key('Space',true);key('Space',false);await advance(.12);const first=stats();check('first jump',first.y<floor-25);
     key('Space',true);key('Space',false);await advance(.14);const second=stats();check('double jump',second.y<first.y-25&&second.jumps===2);
-    key('KeyA',true);await advance(.2);key('KeyA',false);check('air steering',stats().x<run.x);
+    key('ArrowLeft',true);await advance(.2);key('ArrowLeft',false);check('air steering',stats().x<run.x);
     await advance(1.2);el('pause').click();await wait(150);const paused=stats();await wait(350);check('pause freezes position',stats().x===paused.x&&stats().y===paused.y);
     el('resume').click();await wait(150);
     // Synthetic pointers are not active browser pointers, so capture is expected to be unavailable.
@@ -43,9 +43,9 @@ document.getElementById('test').onclick=async()=>{
       const kick=d.querySelector('[data-control="kick"]');pointer(kick,'pointerdown',9,0,0);await advance(.1);check('touch attack starts',stats().text.includes('kick'));pointer(kick,'pointerup',9,0,0);
       pointer(stick,'pointerdown',10,x,y);w.dispatchEvent(new Event('blur'));await wait(200);check('focus loss keeps the patrol screen',el('pause-menu').hidden);w.dispatchEvent(new w.Event('focus'));await advance(.3);const focused=stats();await advance(.2);check('focus loss clears held movement',Math.abs(stats().x-focused.x)<1);
     } finally {targets.forEach((t,i)=>t.setPointerCapture=capture[i]);}
-    key('KeyA',true);await advance(2);key('KeyA',false);await advance(5.3);el('pause').click();el('edit-look').click();await wait(100);check('appearance editor opens',!el('creator').hidden);el('cancel-look').click();await wait(100);check('cancel returns to patrol',el('creator').hidden);
+    key('ArrowLeft',true);await advance(2);key('ArrowLeft',false);await advance(5.3);el('pause').click();el('edit-look').click();await wait(100);check('appearance editor opens',!el('creator').hidden);el('cancel-look').click();await wait(100);check('cancel returns to patrol',el('creator').hidden);
     report.textContent+='COMPLETE · all input/layout checks passed.\n'+el('diagnostics').textContent;
     el('pause').click();
   }catch(error){report.textContent+='STOPPED · '+error.message+'\n'+el('diagnostics').textContent;}
-  finally{for(const code of ['KeyA','KeyD','Space','ShiftLeft','KeyK','KeyJ'])key(code,false);button.disabled=false;}
+  finally{for(const code of ['ArrowLeft','ArrowRight','Space','ShiftLeft','KeyK','KeyJ'])key(code,false);button.disabled=false;}
 };

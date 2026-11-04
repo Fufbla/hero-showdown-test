@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#173d40">
-  <meta name="description" content="Create your own hero and explore Coastal Beginnings in the Hero Showdown Royale Phase 7 playtest.">
+  <meta name="description" content="Create your Style C hero, equip Power Armor and explore Hero Showdown Royale on mobile or desktop.">
 <title>Hero Showdown Royale · Refined Adventures</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23173d40'/%3E%3Cpath d='M32 8 53 32 32 56 11 32Z' fill='%23e8d298'/%3E%3Cpath d='m24 41 16-20-6 23Z' fill='%232b8067'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="royale.css">
@@ -21,7 +21,7 @@
   <div id="app">
     <header class="topbar">
       <a class="brand" href="../index.html" aria-label="Return to Hero Showdown"><span class="brand-mark">✦</span><span><small>JAMES CLAN COMICS</small><strong>HERO SHOWDOWN <em>ROYALE</em></strong></span></a>
-      <div class="top-actions"><span class="phase-label"><i></i> PHASE 10 PLAYTEST</span><button id="account-open" class="account-button">Account</button><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
+      <div class="top-actions"><span class="phase-label"><i></i> MOBILE PLAYTEST</span><button id="account-open" class="account-button">Account</button><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
     </header>
     <main id="stage" aria-label="Hero Showdown Royale game">
       <canvas id="game" aria-label="2D side-scrolling adventure. Use the left and right arrow keys to move, Space to jump, J to punch and K to kick."></canvas>
@@ -43,11 +43,11 @@
       <output id="diagnostics" hidden></output><button id="measure-performance" hidden>Measure performance</button><output id="performance-result" hidden></output>
       <section id="roster" class="overlay" aria-label="Choose your hero">
         <div class="roster-card" role="dialog" aria-modal="true" aria-labelledby="roster-title">
-          <div class="eyebrow">HERO SHOWDOWN ROYALE · PHASE 10</div>
+          <div class="eyebrow">HERO SHOWDOWN ROYALE · PLAYTEST</div>
           <h1 id="roster-title" tabindex="-1">My <em>Heroes.</em></h1>
           <p>Three heroes. Three beginnings. Choose who takes the next step.</p>
           <div id="hero-slots" class="hero-slots"></div>
-          <p class="storage-note" id="roster-note" role="status">Local heroes stay on this browser. Open Account for cloud heroes.</p>
+          <p class="storage-note" id="roster-note" role="status">Local heroes stay on this browser. Use Pause → Save Game before leaving.</p>
           <div class="practice-links"><a class="text-button practice-link" href="tests/monster-sprites.html">Approved monster sprite integration review →</a><a class="text-button practice-link" href="tests/phase10-browser.html">Phase 10 quality &amp; performance review →</a><a class="text-button practice-link" href="tests/showcase.html">Phase 9 art &amp; vertical exploration review →</a><a class="text-button practice-link" href="tests/legendary.html">Practice all eight Legendary bosses →</a><a class="text-button practice-link" href="tests/eris.html">Explore the Tree &amp; Costume Shop →</a><a class="text-button practice-link" href="tests/bosses.html">Practice all seven bosses →</a><a class="text-button practice-link" href="tests/world.html">Explore all seven regions →</a><a class="text-button practice-link" href="tests/powers.html">Practice all nine powers →</a></div>
           <button id="back-to-patrol" class="secondary" hidden>Return to current patrol</button>
         </div>

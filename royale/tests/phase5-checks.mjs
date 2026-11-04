@@ -43,7 +43,7 @@ run.onclick=async()=>{
       await command('boss-down');state=await command('status');check(`${label}: boss down with helpers does not unlock or reward`,state.active&&state.helpers===3&&state.coins===200&&state.wins===0&&el('boss-phase').textContent==='3 HELPERS REMAIN');
       await command('helpers-down');state=await command('status');check(`${label}: clearing arena awards first victory and unlock`,state.cleared&&!state.active&&state.wins===1&&state.coins===300&&state.chest==='available'&&(region===7||state.unlocked.includes(region+1)));
       el('resume').click();el('pause').click();el('manual-save').click();check(`${label}: manually saved victory is persisted with full arena cleared`,data().arena.mode==='cleared'&&data().bossProgress.records[region].wins===1);
-      await command('full-inventory');await command('at-chest');el('resume').click();tap('KeyE');await command('step',1);await until(()=>!el('chest-menu').hidden);
+      await command('full-inventory');await command('at-chest');el('resume').click();tap('ArrowUp');await command('step',1);await until(()=>!el('chest-menu').hidden);
       check(`${label}: chest previews rewards beside seven owned items`,el('chest-contents').querySelectorAll('article').length>=1&&el('chest-owned').querySelectorAll('p').length===7);
       check(`${label}: chest controls, HP and XP remain usable`,inside(el('chest-close'))&&inside(el('collect-chest'))&&inside(el('hp-text'))&&inside(el('xp-text'))&&d.documentElement.scrollWidth===width);
       if(region<4)check(`${label}: no rare equipment in early-region chest`,el('chest-contents').querySelectorAll('.rare').length===0);

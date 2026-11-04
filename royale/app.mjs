@@ -49,7 +49,8 @@ const localStore=new LocalHeroStore(storage);let store=localStore;
 let ledger=null,ledgerError='',criticalPending=null,fixtureSaveFailures=0,fixtureOrdinaryFailures=0;
 try{ledger=await LegendaryLedger.open(window.indexedDB,storagePrefix?storagePrefix+'permanent':'healthia.royale.permanent.v1');await reconcileLegendaryStore(store,ledger);}catch(error){ledger?.close();ledger=null;ledgerError=error.message||'Permanent storage is unavailable.';}
 const localLedger=ledger,localLedgerError=ledgerError;
-const cloudApi=null; // Review build: browser-local persistence; cloud backend unavailable.let cloudStore=null,accountReturn='roster';
+const cloudApi=null; // Review build: browser-local persistence; cloud backend unavailable.
+let cloudStore=null,accountReturn='roster';
 const audio=new GameAudio(storage);
 let game=new Game(),screen='roster',editing=false,activeSlot=store.data.activeSlot,activeId=null,creatorSlot=activeSlot,deleteTarget=null;
 let soundEnabled=false,toastUntil=0,regionName='',lastHud='',fps=60,drawMs=0,qaClock=0;
@@ -64,7 +65,7 @@ erisMenu.mergeMenu=legendaryMenu;
 let makeoverReview=null;
 function say(message,seconds=3){$('toast').textContent=message;$('toast').classList.add('visible');toastUntil=performance.now()+seconds*1000;}
 function storageNotice(){
-  const message=store.cloud?store.message:store.durable?store.message||'Local heroes stay on this browser. Open Account for cloud heroes.':store.message;
+  const message=store.cloud?store.message:store.durable?store.message||'Local heroes stay on this browser. Use Pause → Save Game before leaving.':store.message;
   $('roster-note').textContent=message;$('save-note').textContent=message;
   $('storage-warning').textContent=!store.durable?message:ledgerError?'Legendary storage: '+ledgerError:'';$('storage-warning').hidden=store.durable&&!ledgerError;
 }

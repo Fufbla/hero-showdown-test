@@ -26,7 +26,7 @@ button.onclick=async()=>{
     await new Promise(resolve=>{frame.onload=resolve;frame.src=`../?qa=1&touch=1&testSession=${session}`;});await attach();d.querySelector('[data-slot="0"] [data-action="continue"]').click();await advance(.2);
     check('legacy hero retains appearance, level and coins',data().look.name==='Eris Test Hero'&&data().level===99&&data().coins===87);
     check('health uses Phase 3 level growth',el('hp-text').textContent==='1570 / 1570');
-    key('KeyD');await advance(.65);key('KeyD',false);await advance(.2);el('pause').click();
+    key('ArrowRight');await advance(.65);key('ArrowRight',false);await advance(.2);el('pause').click();
     check('98 earned points imported',el('power-points').textContent==='98');check('Tree reachable at Shore camp',!el('tree-from-pause').disabled);el('tree-from-pause').click();d.querySelector('.eris-nav [data-eris="powers"]').click();
     check('Tree interface and vitals remain visible',!el('tree-menu').hidden&&inside(el('hp-text'))&&inside(el('xp-text'))&&inside(el('close-tree')));
     for(const id of POWER_IDS){
