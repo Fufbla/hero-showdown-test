@@ -1,0 +1,24 @@
+[Unit]
+Description=Hero Showdown Royale authority
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=simple
+User=royale
+Group=royale
+WorkingDirectory=/opt/royale/current/royale/multiplayer
+EnvironmentFile=/etc/royale/authority.env
+ExecStart=/usr/bin/node server.mjs
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGTERM
+StateDirectory=royale
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/royale
+[Install]
+WantedBy=multi-user.target

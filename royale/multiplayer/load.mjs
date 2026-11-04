@@ -11,7 +11,7 @@ const report={timestamp:new Date().toISOString(),scope:'Local loopback: server a
 const quantile=(a,q)=>a.length?[...a].sort((x,y)=>x-y)[Math.min(a.length-1,Math.floor(a.length*q))]:null;
 for(const count of groups){
   const directory=mkdtempSync(join(os.tmpdir(),'royale-load-'));
-  const app=startServer({capacity:count,maxConnections:count,origins:['http://localhost'],path:join(directory,'load.sqlite'),authenticate:async token=>({id:token,expiresAt:Date.now()+3600000})});
+  const app=startServer({allowNewHeroes:true,capacity:count,maxConnections:count,origins:['http://localhost'],path:join(directory,'load.sqlite'),authenticate:async token=>({id:token,expiresAt:Date.now()+3600000})});
   await once(app.server,'listening');const url=`ws://127.0.0.1:${app.server.address().port}/royale`,clients=[],latencies=[],errors=[];let timer;
   try{
     let code;

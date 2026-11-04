@@ -1,4 +1,6 @@
 import http from 'node:http';
+import {PROTOCOL} from './protocol.mjs';
+import {MigrationService,SupabaseMigrationBridge} from './migration.mjs';
 import {fileURLToPath} from 'node:url';
 import {resolve,dirname} from 'node:path';
 import {mkdirSync} from 'node:fs';
@@ -21,13 +23,14 @@ export async function authenticateSupabase(token) {
   if(!Number.isFinite(claims.exp)||claims.exp*1000<=Date.now())throw Error('Session expired.');
   return {id:user.id,expiresAt:claims.exp*1000};
 }
-export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity,maxConnections=capacity,origins=[],authenticate=authenticateSupabase,autoTick=true,serve=null}={}) {
+export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity,maxConnections=capacity,origins=[],authenticate=authenticateSupabase,autoTick=true,serve=null,migrationBridge=null,allowNewHeroes=false}={}) {
   const store=new AuthorityStore(path),authority=new Authority(store,{capacity,maxConnections});
+  const migrations=new MigrationService(authority,migrationBridge);
   const stats={ticks:0,frames:0,bytesOut:0,bytesIn:0,maxTickMs:0,commitMs:0,tickSamples:[],startedAt:Date.now()};
   const eventLoop=monitorEventLoopDelay({resolution:10});eventLoop.enable();
   const server=http.createServer((req,res)=>{
     if(req.url!=='/health'){if(serve){serve(req,res);return;}res.writeHead(404).end();return;}
-    res.writeHead(authority.failed?503:200,{'content-type':'application/json','cache-control':'no-store'}).end(JSON.stringify({ready:!authority.failed,protocol:1}));
+    res.writeHead(authority.failed?503:200,{'content-type':'application/json','cache-control':'no-store'}).end(JSON.stringify({ready:!authority.failed,protocol:PROTOCOL}));
   });
   const wss=new WebSocketServer({noServer:true,maxPayload:1024*1024,perMessageDeflate:false});
   server.on('upgrade',(req,socket,head)=>{
@@ -63,8 +66,9 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity,ma
       // Slow simulation under load, never run an unbounded catch-up spiral.
       let steps=0;while(lag>=1000/60&&steps++<6){step();lag-=1000/60;}
       lag=Math.min(lag,100);
-    }catch{authority.failed=true;for(const ws of wss.clients)ws.close(1011,'Persistence unavailable. Last confirmed state is preserved.');clearInterval(timer);}
+    }catch(error){console.error(JSON.stringify({event:'authority_failure',message:error.message}));authority.failed=true;for(const ws of wss.clients)ws.close(1011,'Persistence unavailable. Last confirmed state is preserved.');clearInterval(timer);}
   },8);
+  const overloadWindow=setInterval(()=>eventLoop.reset(),1000);
   const heartbeat=setInterval(()=>{for(const ws of wss.clients){if(!ws.alive){ws.terminate();continue;}ws.alive=false;ws.ping();}},15000);
   wss.on('connection',ws=>{
     ws.alive=true;ws.on('pong',()=>ws.alive=true);
@@ -72,12 +76,14 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity,ma
     const deadline=setTimeout(()=>ws.close(4003,'Authentication timed out.'),10000);
     let expires=null;
     ws.on('message',async buffer=>{
+      let requestId=null;
       try {
         stats.bytesIn+=buffer.length;
         if(Date.now()-windowAt>1000){windowAt=Date.now();messages=0;}
         if(++messages>90){ws.close(4008,'Input rate exceeded.');return;}
-        const m=JSON.parse(buffer.toString());if(!m||typeof m!=='object'||Array.isArray(m))throw Error('Invalid message.');
+        const m=JSON.parse(buffer.toString());requestId=typeof m?.requestId==='string'?m.requestId:null;if(!m||typeof m!=='object'||Array.isArray(m))throw Error('Invalid message.');
         if(!account) {
+          if(m.type==='auth'&&m.protocol!==PROTOCOL){send(ws,{type:'error',fatal:true,message:'Game version mismatch. Reload the game before connecting.'});ws.close(4003);return;}
           if(m.type!=='auth'||authenticating)throw Error('Authenticate first.');authenticating=true;
           try{account=await authenticate(m.token);}finally{authenticating=false;}
           if(closed)return;
@@ -86,7 +92,13 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity,ma
           send(ws,{type:'heroes',heroes:authority.list(account.id)});return;
         }
         if(m.type==='list'){send(ws,{type:'heroes',heroes:authority.list(account.id)});return;}
+        if(m.type==='migration-preview'||m.type==='migration-confirm'){
+          if(heroId)throw Error('Select or migrate one hero at a time.');
+          const result=m.type==='migration-preview'?await migrations.preview(account.id,m):await migrations.confirm(account.id,m.ticket);
+          send(ws,{type:'migration-result',requestId:m.requestId,...result});return;
+        }
         if(m.type==='create') {
+          if(!allowNewHeroes)throw Error('Create a local hero first, then review its account transfer.');
           if(heroId)throw Error('Disconnect this hero before creating another.');
           const hero=authority.create(account.id,{slot:m.slot,look:m.look,legacy:m.legacy,sourceId:m.sourceId,confirmed:m.confirmed});
           send(ws,{type:'heroes',heroes:authority.list(account.id),created:hero.id});return;
@@ -102,7 +114,7 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity,ma
           const result=authority.command(account.id,heroId,m.seq,m.method,m.args);send(ws,{type:'ack',seq:m.seq,result});send(ws,{type:'state',...authority.view(account.id,heroId)});return;
         }
         throw Error('Unsupported message.');
-      } catch(error) {send(ws,{type:'error',message:error.message});}
+      } catch(error) {send(ws,{type:'error',message:error.message,requestId});}
     });
     ws.on('error',()=>{});
     ws.on('close',()=>{closed=true;clearTimeout(deadline);clearTimeout(expires);if(heroId&&!authority.failed)try{authority.detach(heroId,ws);}catch{authority.failed=true;}});
@@ -110,7 +122,7 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity,ma
   server.listen(port,host);
   return {server,wss,authority,stats,step,publish,
     metrics(){const sorted=[...stats.tickSamples].sort((a,b)=>a-b);return {...stats,tickSamples:undefined,tickP95Ms:sorted[Math.floor(sorted.length*.95)]||0,eventLoopP99Ms:eventLoop.percentile(99)/1e6,rssBytes:process.memoryUsage().rss};},
-    async close(){clearInterval(timer);clearInterval(heartbeat);eventLoop.disable();for(const ws of wss.clients)ws.terminate();await new Promise(resolve=>server.close(resolve));if(!authority.failed)authority.commit();store.close();}
+    async close(){clearInterval(overloadWindow);clearInterval(timer);clearInterval(heartbeat);eventLoop.disable();for(const ws of wss.clients)ws.terminate();await new Promise(resolve=>server.close(resolve));if(!authority.failed)authority.commit();store.close();}
   };
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
@@ -118,7 +130,7 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
   const origins=(process.env.ROYALE_ALLOWED_ORIGINS||'').split(',').filter(Boolean);
   if(!origins.length)throw Error('Set the exact allowed website origins.');
   const path=resolve(process.env.ROYALE_DATA||'./data/authority.sqlite');mkdirSync(dirname(path),{recursive:true,mode:0o700});
-  const app=startServer({port:Number(process.env.PORT||8080),host:process.env.HOST||'127.0.0.1',path,capacity,maxConnections,origins});
+  const app=startServer({port:Number(process.env.PORT||8080),host:process.env.HOST||'127.0.0.1',path,capacity,maxConnections,origins,migrationBridge:process.env.SUPABASE_SERVICE_ROLE_KEY?new SupabaseMigrationBridge():null});
   app.server.on('listening',()=>console.log('Royale authority listening; room capacity '+capacity+'.'));
   for(const signal of ['SIGINT','SIGTERM'])process.once(signal,async()=>{await app.close();process.exit(0);});
 }

@@ -42,3 +42,9 @@ for (const path of [
   "royale/multiplayer/tests/safety.test.mjs",
   "royale/multiplayer/tests/socket-helper.mjs"
 ]) FINAL_FILES.add(path);
+
+// Actual-game integration scope; original engine, artwork and save formats stay protected.
+for(const path of ['royale/eris-ui.mjs', 'royale/journey-menu.mjs', 'royale/legendary-ui.mjs', 'royale/power-menu.mjs', 'royale/power-upgrades.mjs', 'royale/backend/supabase/migrations/20261104161434_royale_multiplayer_fence.sql', 'royale/multiplayer/game-session.mjs', 'royale/multiplayer/menu.mjs', 'royale/multiplayer/menu.css', 'royale/multiplayer/migration.mjs', 'royale/multiplayer/tests/migration-fixture.mjs', 'royale/multiplayer/tests/migration.test.mjs', 'royale/multiplayer/tests/integration.test.mjs'])FINAL_FILES.add(path);
+
+// Deployment templates, controlled load evidence and browser screenshots.
+for(const path of ['.env.example','load-controlled.mjs','deploy/client-config.example.json','deploy/nginx.conf.example','deploy/royale.service','deploy/OPERATIONS.md','qa/controlled-load.json','qa/controlled-load-repeat.json','tests/load-server.mjs','tests/mobile.html','qa/browser/two-heroes-landscape.jpg','qa/browser/room-controls.jpg'])FINAL_FILES.add('royale/multiplayer/'+path);

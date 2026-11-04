@@ -6,12 +6,13 @@ import {isBoss,segmentHit} from '../powers.mjs';
 import {stepEnemyProjectiles} from '../monsters.mjs';
 import {compactProjectiles,ProjectilePool} from '../projectiles.mjs';
 import {encodeRuntime,decodeRuntime} from './runtime.mjs';
-import {inputPacket,consumeEdges,roomCode,sequence} from './protocol.mjs';
+import {pickupLoot} from '../world-loot.mjs';
+import {PROTOCOL,inputPacket,consumeEdges,roomCode,sequence} from './protocol.mjs';
 
 const ALPHABET='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const key=g=>`${g.regionId}:${g.arenaScene?(g.arenaScene.legendary||'boss'):'world'}`;
 const clone=o=>decodeRuntime(encodeRuntime(o));
-const METHODS=new Set(['travel','enterBoss','enterLegendary','visitTree','leaveTree','upgradePower','equipPower','equipItem','buyCostume','buyHealthRoot','applyMakeover','sellItem','discardItem','resolveReward','acceptReward','claimChest','claimMergeReward','equipMergeMix','activateMergeSet','returnNormalEquipment','returnCheckpoint']);
+const METHODS=new Set(['travel','enterBoss','enterLegendary','visitTree','leaveTree','upgradePower','equipPower','equipItem','buyCostume','buyHealthRoot','useHealthRoot','pickupLoot','applyMakeover','sellItem','discardItem','resolveReward','acceptReward','claimChest','claimMergeReward','equipMergeMix','activateMergeSet','returnNormalEquipment','returnCheckpoint']);
 const hash=o=>createHash('sha256').update(JSON.stringify(o)).digest('hex');
 export class Authority {
   constructor(store,{capacity,maxConnections=capacity,now=Date.now,graceMs=30000,allowLegacyImport=false}={}) {
@@ -37,6 +38,17 @@ export class Authority {
     this.state.heroes.set(h.id,h);if(legacy)this.state.imports.set(sourceId,{owner,hero:h.id});
     this.newRoom(h,false);this.hook(h);this.commit();return h;
   }
+  adopt(owner,reservation) {
+    const {id,slot,snapshot}=reservation;
+    if(typeof id!=='string'||!Number.isInteger(slot)||slot<0||slot>2)throw Error('Invalid migration reservation.');
+    const existing=this.state.heroes.get(id);
+    if(existing){if(existing.owner!==owner||existing.slot!==slot)throw Error('Migration ownership conflict.');return existing;}
+    if(this.list(owner).some(h=>h.slot===slot))throw Error('Account slot changed during migration.');
+    const save=decodeSave(JSON.stringify(snapshot));if(!save)throw Error('Reserved save requires recovery.');
+    const game=new Game({save,now:this.now});game.started=true;game.paused=true;game.legendaryStorageReady=true;
+    const h={id,owner,slot,game,room:null,connected:false,disconnectedAt:this.now(),revision:1,commandSeq:0,lastCommand:null,imported:true};
+    this.state.heroes.set(id,h);this.newRoom(h,false);this.hook(h);this.commit();return h;
+  }
   newRoom(h,publicRoom) {
     let code=null;
     if(publicRoom)do {code=[...randomBytes(10)].map(n=>ALPHABET[n&31]).join('');}while([...this.state.rooms.values()].some(r=>r.code===code));
@@ -51,7 +63,7 @@ export class Authority {
   detach(id,connection) {
     if(this.connections.get(id)!==connection)return;
     this.connections.delete(id);this.inputs.delete(id);const h=this.state.heroes.get(id);if(!h)return;
-    h.connected=false;h.disconnectedAt=this.now();h.game.powers.cancelEffects();h.game.cancelMergeEffects();h.game.hero.attack=null;h.game.hero.attackBuffer=null;this.commit();
+    h.connected=false;h.disconnectedAt=this.now();h.game.powers.cancelEffects();h.game.cancelMergeEffects();h.game.hero.attack=null;h.game.hero.attackBuffer=null;const room=this.state.rooms.get(h.room);for(const world of room.worlds.values())this.reconcileControls(room,world);this.commit();
   }
   mode(owner,id,mode,code,persist=true) {
     const h=this.owner(owner,id),old=this.state.rooms.get(h.room);
@@ -66,7 +78,7 @@ export class Authority {
     if(mode==='solo'&&!old.code)return old;
     // Clone the authoritative graph, not a client snapshot: exact location, HP,
     // attack cooldowns and progression survive the transfer, including midair.
-    h.game=clone(h.game);old.members.delete(id);this.hook(h);
+    h.game=clone(h.game);h.game.powers.cancelEffects();h.game.cancelMergeEffects();old.members.delete(id);for(const w of old.worlds.values())this.reconcileControls(old,w);this.hook(h);
     if(target){target.members.add(id);h.room=target.id;this.bind(h);}else target=this.newRoom(h,mode==='create');
     if(!old.members.size)this.state.rooms.delete(old.id);
     h.revision++;if(persist)this.commit();return target;
@@ -86,10 +98,11 @@ export class Authority {
     if(n!==h.commandSeq+1)throw Error('Command conflict. Refresh authoritative state before retrying.');
     let result;
     if(method==='mode')result={code:this.mode(owner,id,args[0],args[1],false).code};
+    else if(method==='save')result={ok:true};
     else if(method==='pause'){if(typeof args[0]!=='boolean')throw Error('Invalid pause.');h.game.paused=args[0];result=true;}
     else {
       if(!METHODS.has(method))throw Error('Unsupported command.');
-      result=h.game[method](...args)??true;this.bind(h);
+      result=(method==='pickupLoot'?pickupLoot(h.game,...args):h.game[method](...args))??true;this.bind(h);
     }
     h.commandSeq=n;h.lastCommand={signature,result};h.revision++;this.commit();return result;
   }
@@ -102,7 +115,7 @@ export class Authority {
   }
   hook(h) {
     const g=h.game;g.now=this.now;
-    g.emit=(type,data={})=>{Game.prototype.emit.call(g,type,data);if(['reward','level','camp','hurt','defeat','respawn','boss-victory','chest-claimed','legendary-clear-ready','equipment','purchase','upgrade','heal'].includes(type))this.dirty=true;};
+    g.emit=(type,data={})=>{Game.prototype.emit.call(g,type,{...data,netId:h.eventSeq=(h.eventSeq||0)+1});if(['reward','level','camp','hurt','defeat','respawn','boss-victory','chest-claimed','legendary-clear-ready','equipment','purchase','upgrade','heal'].includes(type))this.dirty=true;};
     g.stepEnemy=()=>{};g.stepEncounter=()=>{};
     // Leaving an arena must not clear everyone else's projectiles.
     g.clearEnemyShots=()=>{g.enemyShots=[];};
@@ -139,13 +152,24 @@ export class Authority {
       if(pending)h.appliedInputSeq=pending.seq;
       if(key(g)===k)g.enemyShots=shots;
       if(g.arenaScene&&g.hero.x<240&&!g.hero.dead)g.leaveBoss();
-      this.bind(h);
+      this.bind(h);const room=this.state.rooms.get(h.room);for(const w of room.worlds.values())this.reconcileControls(room,w);
     }
     for(const r of this.state.rooms.values())for(const w of r.worlds.values())this.stepWorld(r,w);
     // Vacated public rooms expire only after disconnect grace. Hero state is
     // moved into a private solo room in the SAME subsequent durable transaction.
     for(const h of this.state.heroes.values())if(!h.connected&&this.now()-h.disconnectedAt>=this.graceMs&&this.state.rooms.get(h.room)?.code) {
       const old=this.state.rooms.get(h.room);h.game=clone(h.game);old.members.delete(h.id);this.newRoom(h,false);this.hook(h);if(!old.members.size)this.state.rooms.delete(old.id);
+    }
+  }
+  reconcileControls(r,w) {
+    const games=[...r.members].map(id=>this.state.heroes.get(id)).filter(h=>h.connected&&h.zone===w.key).map(h=>h.game);
+    const roots=new Set(),wind=new Set(),rootsMerge=new Set(),windMerge=new Set();
+    for(const g of games){for(const id of g.powers.active.roots?.targets||[])roots.add(id);for(const id of g.powers.active.whirlwind?.targets||[])wind.add(id);for(const a of g.mergeEffects)if(!a.ended)for(const id of a.targets||[])if(a.id==='venomis')rootsMerge.add(id);else if(a.id==='air')windMerge.add(id);}
+    for(const e of w.enemies){
+      e.mergeRooted=rootsMerge.has(e.id);e.mergeLifted=!isBoss(e)&&windMerge.has(e.id);
+      e.rooted=e.state!=='dead'&&(roots.has(e.id)||e.mergeRooted);
+      const lifted=e.state!=='dead'&&!isBoss(e)&&(wind.has(e.id)||e.mergeLifted);
+      if(e.lifted&&!lifted){e.airborne=true;e.vy=0;}e.lifted=lifted;
     }
   }
   stepWorld(r,w) {
@@ -155,14 +179,16 @@ export class Authority {
       const candidates=protectedPlayers.length?protectedPlayers:players;
       const target=candidates.reduce((a,b)=>Math.hypot(a.game.hero.x-e.x,a.game.hero.y-e.y)<=Math.hypot(b.game.hero.x-e.x,b.game.hero.y-e.y)?a:b);
       const g=target.game,oldState=e.state;
+      const contact=e.attack?.shape==='charge'?e.attack:e.pouncing?e:null;
+      if(contact){contact.hitHeroes??=new Set();contact.hit=players.every(p=>contact.hitHeroes.has(p.id));}
       const oldBox=g.heroBox,oldHurt=g.hurt;
-      const hits=()=>players.filter(p=>this.inDanger(p.game,e));
+      const hits=()=>players.filter(p=>this.inDanger(p.game,e)&&!contact?.hitHeroes.has(p.id));
       // Boss AOE tests use an actual intersecting hero box, then apply the same
       // damage calculation to each intersecting hero, once at the original tick.
       g.heroBox=()=>Game.prototype.heroBox.call((hits()[0]||target).game);
-      g.hurt=(amount,x,source)=>{let result=false;for(const p of hits())result=Game.prototype.hurt.call(p.game,amount,x,source)||result;return result;};
+      g.hurt=(amount,x,source)=>{let result=false;for(const p of hits()){contact?.hitHeroes.add(p.id);result=Game.prototype.hurt.call(p.game,amount,x,source)||result;}return result;};
       try{Game.prototype.stepEnemy.call(g,e,STEP);}finally{g.heroBox=oldBox;g.hurt=oldHurt;}
-      if(oldState==='dead'&&e.state!=='dead'){e.participants=new Set();}
+      if(oldState==='dead'&&e.state!=='dead'){e.participants=new Set();}if(!e.pouncing&&e.hitHeroes)delete e.hitHeroes;
     }
     // Sweep each projectile once, against the first eligible hero on its path.
     for(const shot of [...w.shots]) {
@@ -217,9 +243,9 @@ export class Authority {
     Object.defineProperty(visual.powers,'game',{value:visual});
     visual.enemyShotPool=new ProjectilePool(64);visual.powers.projectilePool=new ProjectilePool(12);
     // Deliberately excludes other players' inventories, account IDs and saves.
-    return {protocol:1,tick:this.state.tick,revision:this.store.revision,heroRevision:h.revision,commandSeq:h.commandSeq,inputSeq:h.appliedInputSeq||0,id,code:r.code,
+    return {protocol:PROTOCOL,commandResult:h.lastCommand?.result,tick:this.state.tick,revision:this.store.revision,heroRevision:h.revision,commandSeq:h.commandSeq,inputSeq:h.appliedInputSeq||0,id,code:r.code,
       players:[...r.members].map(id=>this.state.heroes.get(id)).filter(p=>p.connected).map(p=>({id:p.id,name:p.game.look.name,region:p.game.regionId})),
-      nearby:[...r.members].map(id=>this.state.heroes.get(id)).filter(p=>p.connected&&p.id!==id&&p.zone===h.zone&&Math.abs(p.game.hero.x-g.hero.x)<1500).map(p=>({id:p.id,hero:p.game.hero,look:p.game.look,outfit:p.game.visualOutfit()})),
+      nearby:[...r.members].map(id=>this.state.heroes.get(id)).filter(p=>p.connected&&p.id!==id&&p.zone===h.zone&&Math.abs(p.game.hero.x-g.hero.x)<1500).map(p=>({id:p.id,hero:p.game.hero,look:p.game.look,outfit:p.game.visualOutfit(),powers:{active:p.game.powers.active,projectiles:p.game.powers.projectiles},mergeEffects:p.game.mergeEffects,mergeShots:p.game.mergeShots})),
       game:encodeRuntime(visual)};
   }
 }

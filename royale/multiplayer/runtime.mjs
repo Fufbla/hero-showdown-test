@@ -15,7 +15,7 @@ export function encodeRuntime(root) {
     }
     if(seen.has(value))return {r:seen.get(value)};
     const id=nodes.length;seen.set(value,id);nodes.push(null);
-    let type=Array.isArray(value)?'Array':value instanceof Set?'Set':value instanceof Map?'Map':Object.keys(classes).find(k=>value instanceof classes[k])||'Object';
+    let type=Array.isArray(value)?'Array':value instanceof Set?'Set':value instanceof Map?'Map':value instanceof Game?'Game':value instanceof PowerSystem?'PowerSystem':value instanceof ProjectilePool?'ProjectilePool':'Object';
     let data;
     if(type==='Array'||type==='Set')data=[...value].map(ref);
     else if(type==='Map')data=[...value].map(([k,v])=>[ref(k),ref(v)]);

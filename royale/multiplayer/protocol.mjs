@@ -1,5 +1,5 @@
 // The client sends intentions, never coordinates, damage, loot or progression.
-export const PROTOCOL = 1;
+export const PROTOCOL = 2;
 export const ROOM_CODE = /^[A-HJ-NP-Z2-9]{10}$/;
 export const INPUT_KEYS = ['move','vertical','run','jump','punch','kick','punchHeld','kickHeld','heal','interact','portal','tree','nextTarget','powers'];
 export function inputPacket(raw) {

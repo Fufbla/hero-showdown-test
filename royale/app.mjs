@@ -1,3 +1,4 @@
+import {MultiplayerMenu} from './multiplayer/menu.mjs';
 import {rewardNotice} from './reward-notice.mjs';
 import {installLandscapeLayout} from './landscape-layout.mjs';
 import {drawEquipmentPreview} from './eris-ui.mjs';
@@ -46,9 +47,11 @@ const testPrefix=params.has('qa')&&params.get('testSession')?`royale-test-${para
 const practiceHero = ['male','female'].includes(params.get('practice')) && !testPrefix ? params.get('practice') : null;
 const storagePrefix = testPrefix || (practiceHero ? `style-c-trial-v1-${practiceHero}:` : '');
 const storage={getItem:key=>(storagePrefix?sessionStorage:localStorage).getItem(storagePrefix+key),setItem:(key,value)=>(storagePrefix?sessionStorage:localStorage).setItem(storagePrefix+key,value)};
+$('hero-art-status').textContent='Opening saved heroes…';
 const localStore=new LocalHeroStore(storage);let store=localStore;
 let ledger=null,ledgerError='',criticalPending=null,fixtureSaveFailures=0,fixtureOrdinaryFailures=0;
 try{ledger=await LegendaryLedger.open(window.indexedDB,storagePrefix?storagePrefix+'permanent':'healthia.royale.permanent.v1');await reconcileLegendaryStore(store,ledger);}catch(error){ledger?.close();ledger=null;ledgerError=error.message||'Permanent storage is unavailable.';}
+$('hero-art-status').textContent='Preparing hero artwork…';
 const localLedger=ledger,localLedgerError=ledgerError;
 const cloudApi=null; // Review build: browser-local persistence; cloud backend unavailable.
 let cloudStore=null,accountReturn='roster';
@@ -57,25 +60,38 @@ let game=new Game(),screen='roster',editing=false,activeSlot=store.data.activeSl
 let soundEnabled=false,toastUntil=0,regionName='',lastHud='',fps=60,drawMs=0,qaClock=0;
 const input=new Input(document,()=>{if(criticalPending||powerUpgrades.busy||screen==='mergeReward')return;if(screen==='powerPicker')closePowerPicker();else if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();else if(screen==='account')accountMenu?.hooks.close();else if(screen==='tree')returnAdventure();else if(['controls','world','inventory','chest','mergeReward'].includes(screen))showPause();},loadControls(storage));
 const journeyMenu=new JourneyMenu(()=>game,persist,say,resume,transaction);
-const powerUpgrades=new InstantPowerUpgrades(()=>({game,store,index:activeSlot,heroId:activeId}));
+const powerUpgrades=new InstantPowerUpgrades(()=>({game,store,index:activeSlot,heroId:activeId,blocked:!online()&&activeId&&multiplayerMenu.isLinked(activeId),remote:online()?multiplayerMenu.session:null}));
 const powerMenu=new PowerMenu(()=>game,persist,say,powerUpgrades),controlMenu=new ControlMenu(input,storage,say);
 const renderer=new Renderer($('game')),creator=new Creator(),powerButtons=[...document.querySelectorAll('.power-button')];
 const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,say,appearance:()=>openCreator(activeSlot,true),leave:returnAdventure});
 const legendaryMenu=new LegendaryMenu(()=>game,{transaction,say,enter:enterLegendary,onClaim:resume});
 erisMenu.mergeMenu=legendaryMenu;
-let makeoverReview=null;
+let makeoverReview=null,remoteLoaded=false;
+const multiplayerMenu=new MultiplayerMenu({
+ getContext:()=>({storage,slot:activeSlot,local:localStore.slot(activeSlot),snapshot:game.started&&!online()?JSON.parse(game.save()||'null'):localStore.slot(activeSlot)?.snapshot}),
+ onError:error=>say(typeof error==='string'?error:error.message,7),
+ onOpen:()=>{if(game.started)setScreen('pause');},
+ onClose:()=>game.started?resume():setScreen('roster'),
+ onState:(next,state)=>{game=next;if(!remoteLoaded){remoteLoaded=true;activeId=state.id;startPatrol(true);if(multiplayerMenu.dialog.open)setScreen('pause');}game.paused=screen!=='play';for(const e of game.enemies)if(e.boss||e.legendaryHelper)renderer.bossArt.step(e,game.time,.1,game.hero.x);handleEvents();updateHud();}
+});
+function online(){return !!multiplayerMenu.session?.active;}
+
 function say(message,seconds=3){$('toast').textContent=message;$('toast').classList.add('visible');toastUntil=performance.now()+seconds*1000;}
 function storageNotice(){
-  const message=store.cloud?store.message:store.durable?store.message||'Local heroes stay on this browser. Use Pause → Save Game before leaving.':store.message;
+  const message=online()?'Account progress and exact position are saved by the server.':store.cloud?store.message:store.durable?store.message||'Local heroes stay on this browser. Use Pause → Save Game before leaving.':store.message;
   $('roster-note').textContent=message;$('save-note').textContent=message;
   $('storage-warning').textContent=!store.durable?message:ledgerError?'Legendary storage: '+ledgerError:'';$('storage-warning').hidden=store.durable&&!ledgerError;
 }
 function persist({manual=false}={}){
+  if(online())return {ok:true,account:true};
+  if(activeId&&multiplayerMenu.isLinked(activeId))return {ok:false,error:'This hero uses account saving. Reconnect to continue.'};
   if(criticalPending||powerUpgrades.busy||!game.started||!game.canSave())return {ok:false,error:'Saving resumes after five seconds outside combat.'};
   if(!shouldWriteAdventure({manual,heroId:activeId,safe:true}))return {ok:true,skipped:true};
   return persistSnapshot(game.save());
 }
 function persistSnapshot(snapshot,requireDurable=false){
+  if(online())return {ok:true,account:true};
+  if(activeId&&multiplayerMenu.isLinked(activeId))return {ok:false,error:'This hero uses account saving. Reconnect to continue.'};
   if(testPrefix&&fixtureOrdinaryFailures>0){fixtureOrdinaryFailures--;return {ok:false,error:'Simulated practice cache failure.'};}
   const result=store.writeSlot(activeSlot,snapshot,{region:game.treeVisit?`Tree of Eris · ${game.getRegion().name}`:`${game.getRegion().name} · ${boardAt(game.regionId,game.hero.x).name}`,expectedId:activeId,requireDurable});
   if((result.ok||result.retained)&&store.data.slots[activeSlot])activeId=store.data.slots[activeSlot].id;
@@ -102,8 +118,10 @@ async function finishCritical(){
 }
 $('permanent-retry').onclick=()=>void finishCritical();$('permanent-reload').onclick=()=>location.reload();
 function showMergeReward(){setScreen('mergeReward');legendaryMenu.reward();$('merge-reward-title').focus();}
-function enterLegendary(id){if(!game.enterLegendary(id)){say('Reach level 99, leave combat and resolve rewards before entering.');return;}handleEvents();setScreen('play');updateHud();}
-function transaction(action){
+async function enterLegendary(id){if(!await game.enterLegendary(id)){say('Reach level 99, leave combat and resolve rewards before entering.');return;}handleEvents();setScreen('play');updateHud();}
+async function transaction(action){
+  if(online()){try{const value=await action();return value===false?{ok:false,error:'This action is not available.'}:typeof value==='object'?value:{ok:true};}catch(e){say(e.message,7);return {ok:false,error:e.message};}}
+  if(activeId&&multiplayerMenu.isLinked(activeId))return {ok:false,error:'This hero uses account saving. Reconnect to continue.'};
   if(powerUpgrades.busy)return {ok:false,error:'An upgrade is being saved.'};
   if(criticalPending)return {ok:false,error:'A permanent transaction is already saving.'};
   if(!game.canSave())return {ok:false,error:'Wait five seconds outside combat.'};
@@ -120,10 +138,10 @@ function updateMakeoverQuote(){
 }
 $('creator-form').addEventListener('input',updateMakeoverQuote);
 $('cancel-makeover').onclick=()=>{makeoverReview=null;$('makeover-confirm').hidden=true;};
-$('confirm-makeover').onclick=()=>{const q=makeoverReview;if(!q)return;makeoverReview=null;const result=transaction(()=>game.applyMakeover(q.next,{confirmed:true,revision:q.revision}));if(result.ok){editing=false;setScreen('tree');erisMenu.open();say('Appearance updated. Your progress is unchanged.');}else updateMakeoverQuote();};
+$('confirm-makeover').onclick=async()=>{const q=makeoverReview;if(!q)return;makeoverReview=null;const result=await transaction(()=>game.applyMakeover(q.next,{confirmed:true,revision:q.revision}));if(result.ok){editing=false;setScreen('tree');erisMenu.open();say('Appearance updated. Your progress is unchanged.');}else updateMakeoverQuote();};
 function setScreen(next){
   if(criticalPending||powerUpgrades.busy)return;
-  screen=next;input.enabled=next==='play';input.clear();game.paused=next!=='play';
+  screen=next;if(online())multiplayerMenu.session.pause(next!=='play');input.enabled=next==='play';input.clear();game.paused=next!=='play';
   for(const [name,id] of Object.entries({account:'account-menu',roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',mergeReward:'merge-reward'}))$(id).hidden=next!==name;
   const inGame=game.started&&(['play','powerPicker','pause','tree','controls','world','inventory','chest','mergeReward','account'].includes(next)||(next==='creator'&&editing));
   $('hud').hidden=!inGame;$('mission').hidden=!inGame;$('pause').disabled=!inGame;
@@ -142,7 +160,7 @@ function renderRoster(){
     const detail=document.createElement('p');detail.className='slot-detail';detail.textContent=slot?`Level ${slot.snapshot.level} · ${slot.lastRegion}`:'The coast is waiting for its next hero.';card.append(detail);
     const saved=document.createElement('p');saved.className='last-saved';saved.textContent=slot?`Last saved: ${dateText(slot.updatedAt)}`:'Create your look. Find your courage.';card.append(saved);
     const button=document.createElement('button');button.className=slot?'primary':'secondary';button.dataset.action=slot?'continue':'create';button.textContent=slot?'Continue →':'Create Hero +';button.disabled=!store.writable&&!slot;button.onclick=()=>slot?continueHero(i):openCreator(i,false);card.append(button);
-    if(slot){const del=document.createElement('button');del.className='text-button delete-hero';del.textContent='Delete Hero';del.disabled=!store.writable;del.onclick=()=>{deleteTarget={index:i,id:slot.id,name:slot.snapshot.look.name};$('delete-description').textContent=`Delete ${slot.snapshot.look.name}, level ${slot.snapshot.level}?`;setScreen('delete');$('cancel-delete').focus();};card.append(del);}
+    if(slot){const del=document.createElement('button');del.className='text-button delete-hero';del.textContent='Delete Hero';del.disabled=!store.writable||multiplayerMenu.isLinked(slot.id);del.onclick=()=>{deleteTarget={index:i,id:slot.id,name:slot.snapshot.look.name};$('delete-description').textContent=`Delete ${slot.snapshot.look.name}, level ${slot.snapshot.level}?`;setScreen('delete');$('cancel-delete').focus();};card.append(del);}
     container.append(card);
     const c=canvas.getContext('2d');c.fillStyle='#c4d4a41c';c.beginPath();c.ellipse(180,284,62,10,0,0,Math.PI*2);c.fill();
     if(slot)drawHero(c,180,282,slot.snapshot.look,previewHero('idle',0),0,2.2,{view:'front',outfit:equipmentOutfit(slot.snapshot.inventory,slot.snapshot.outfit)});
@@ -150,13 +168,14 @@ function renderRoster(){
   }
   $('back-to-patrol').hidden=!game.started;storageNotice();
 }
-function openRoster(){if(!game.canSave()){say('Leave combat before switching heroes.');return;}persist();renderRoster();setScreen('roster');$('roster-title').focus();}
+function openRoster(){if(online()){multiplayerMenu.open();return;}if(!game.canSave()){say('Leave combat before switching heroes.');return;}persist();renderRoster();setScreen('roster');$('roster-title').focus();}
 function continueHero(index){
+  const linked=localStore.slot(index);if(linked&&multiplayerMenu.isLinked(linked.id)){activeSlot=index;multiplayerMenu.open();void multiplayerMenu.run(()=>multiplayerMenu.connect());return;}
   const slot=store.slot(index);if(!slot)return;if(slot.snapshot.legendary.revision&&!ledger){say('This hero needs its permanent progress record. '+ledgerError,9);return;}
   activeSlot=index;activeId=slot.id;game=new Game({save:slot.snapshot});startPatrol(true);
 }
-function openCreator(index=activeSlot,isEdit=true){
-  if(isEdit&&!game.treeVisit&&!game.visitTree()){say('Visit Eris after five safe seconds to change appearance.');return;}
+async function openCreator(index=activeSlot,isEdit=true){
+  if(isEdit&&!game.treeVisit&&!await game.visitTree()){say('Visit Eris after five safe seconds to change appearance.');return;}
   if(isEdit&&!game.canSave()){say('Leave combat before customizing.');return;}editing=isEdit;creatorSlot=index;
   creator.fill(editing?game.look:styleCDefault('male'),editing?game.visualOutfit():STARTER_OUTFIT,!editing);
   $('name').disabled=editing;makeoverReview=null;$('makeover-confirm').hidden=true;$('makeover-cost').hidden=!editing;
@@ -167,7 +186,7 @@ function openCreator(index=activeSlot,isEdit=true){
 function cancelCreator(){if(editing){editing=false;setScreen('tree');erisMenu.open('home');}else{renderRoster();setScreen('roster');}}
 function startPatrol(continued){
   bindStyleCGame(renderer.cloth,game);
-  game.legendaryStorageReady=!!ledger&&store.writable;
+  game.legendaryStorageReady=online()||!!ledger&&store.writable;
   game.onBossVisualStep=(boss,time,dt,x)=>renderer.bossArt.step(boss,time,dt,x);
   if(game.arenaScene)renderer.bossArt.step(game.arenaScene.boss,game.time,0,game.hero.x);
   game.started=true;regionName='';lastHud='';renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.cameraY=0;renderer.clearParticles();
@@ -180,17 +199,17 @@ async function begin(){
   else{activeSlot=creatorSlot;activeId=null;game=new Game({look});if(store.cloud){$('begin').disabled=true;try{await store.create(activeSlot,game.save());activeId=store.slot(activeSlot).id;}catch(e){say(e.message,8);return;}finally{$('begin').disabled=false;}}startPatrol(false);}
 }
 function pause(){if(!game.started||screen!=='play')return;showPause();persist();}
-function showPause(){pausePanel('home');$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero','manual-save'])$(id).disabled=!game.canSave();$('return-camp').disabled=!game.canTravel();$('safe-save-note').textContent=game.canSave()?(store.cloud?'Manual cloud saving is available.':'Saving is available · browser-local only.'):'Saving is locked. Resume and spend five seconds without attacking or taking damage.';$('resume').focus();}
-function openTree(panel='home'){if(powerUpgrades.busy)return;if(typeof panel!=='string')panel='home';if(!game.visitTree()){say('Leave combat for five seconds before visiting the Tree.');return;}setScreen('tree');persist();erisMenu.open(panel);$('tree-title').focus();}
-function returnAdventure(){if(powerUpgrades.busy||!game.treeVisit)return;game.leaveTree();persist();resume();}
-function showChest(){if(!game.availableChest()||!game.canSave())return;setScreen('chest');openChestMenu(game,()=>{if(transaction(()=>game.claimChest()).ok){setScreen('inventory');journeyMenu.inventory();say('Coins and Roots collected. Choose which equipment to keep.');}});$('chest-title').focus();}
+function showPause(){pausePanel('home');$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero','manual-save'])$(id).disabled=!game.canSave();$('return-camp').disabled=!game.canTravel();$('safe-save-note').textContent=game.canSave()?(online()?'Server saving is active. Save Game confirms your current position.':store.cloud?'Manual cloud saving is available.':'Saving is available · browser-local only.'):'Saving is locked. Resume and spend five seconds without attacking or taking damage.';$('resume').focus();}
+async function openTree(panel='home'){if(powerUpgrades.busy)return;if(typeof panel!=='string')panel='home';if(!await game.visitTree()){say('Leave combat for five seconds before visiting the Tree.');return;}setScreen('tree');persist();erisMenu.open(panel);$('tree-title').focus();}
+async function returnAdventure(){if(powerUpgrades.busy||!game.treeVisit)return;await game.leaveTree();persist();resume();}
+function showChest(){if(!game.availableChest()||!game.canSave())return;setScreen('chest');openChestMenu(game,async()=>{if((await transaction(()=>game.claimChest())).ok){setScreen('inventory');journeyMenu.inventory();say('Coins and Roots collected. Choose which equipment to keep.');}});$('chest-title').focus();}
 function resume(){if(criticalPending||powerUpgrades.busy||!game.started)return;if(game.pendingMergeReward()){showMergeReward();return;}if(game.treeVisit){setScreen('tree');erisMenu.open();return;}if(game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();say('Choose your pending reward before continuing.');return;}setScreen('play');$('pause').blur();}
 function closeDelete(){deleteTarget=null;renderRoster();setScreen('roster');}
 function tone(type){audio.effect(type);}
 function handleEvents() {
   const events = game.drain(), leveled = events.some(e => e.type === 'level');
   for (const event of events) {
-    if(event.type==='legendary-clear-ready'){const revision=game.legendary.revision;if(game.prepareLegendaryVictory())startCritical(revision,game.save());}
+    if(event.type==='legendary-clear-ready'&&!online()){const revision=game.legendary.revision;if(game.prepareLegendaryVictory())startCritical(revision,game.save());}
     if(event.type==='tree')openTree();
     if(event.type==='world-portal')openWorld();
     if(event.type==='loot-picked')say(event.message);
@@ -252,6 +271,7 @@ function updateHud() {
   $('rest').textContent=target?`${target.label} · ${input.controls.keys.interact[0].replace('Key','')}`:'';
   $('death').hidden = !h.dead || screen !== 'play'; $('diagnostics').hidden = !params.has('qa');
   if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nregion ${game.regionId} · roots ${game.healthRoots} · gear ${game.inventory.items.length}/7 · clock ${game.clock().phase}\npowers ${game.powers.data.equipped.join(',')} · points ${game.powers.data.points} · combat ${game.inCombat()}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}${game.arenaScene?`\nboss ${game.arenaScene.boss.hp.toFixed(0)}/${game.arenaScene.boss.maxHp} · phase ${game.arenaScene.boss.phase} · waves ${game.bossEncounter?.waves||0} · helpers ${game.enemies.filter(e=>e.summoned&&e.state!=='dead').length} · cleared ${game.arenaScene.cleared}`:''}`;
+  if(params.has('qa')&&online())$('diagnostics').textContent+='\nnetwork '+(multiplayerMenu.session.client.ready?'ready':'reconnecting')+' · confirmed '+multiplayerMenu.session.state.revision+' · peers '+multiplayerMenu.session.state.nearby.length+' · code '+(multiplayerMenu.session.state.code||'solo');
   if(params.has('qa')&&!game.arenaScene)$('diagnostics').textContent+='\nplatforms '+game.surfaces.filter(s=>s.tier===2||s.tier===3).map(s=>s.id+':'+game.enemies.filter(e=>e.spawnSurface?.id===s.id&&e.state!=='dead').length).join(' ');
 
 }
@@ -285,7 +305,7 @@ $('slot-picker').oncancel = event => { event.preventDefault(); closePowerPicker(
 $('picker-close').onclick = closePowerPicker;
 $('edit-hud-powers').onclick = event => openPowerPicker(0, event.currentTarget);
 const updateCompactSlots=installLandscapeLayout(input,openPowerPicker);
-$('manual-save').onclick=async()=>{if(!game.canSave()||criticalPending||powerUpgrades.busy)return;const b=$('manual-save');b.disabled=true;try{const result=store.cloud?await store.commit(activeSlot,game.save()):persist({manual:true});say(result.ok?(store.cloud?'Game saved to your account.':'Hero saved on this browser.'):result.error||'Save unavailable.');}catch(e){say(e.message,9);}finally{b.disabled=!game.canSave();}};
+$('manual-save').onclick=async()=>{if(online()){try{await multiplayerMenu.session.command('save');say('Account progress and exact location confirmed.');}catch(e){say(e.message);}return;}if(!game.canSave()||criticalPending||powerUpgrades.busy)return;const b=$('manual-save');b.disabled=true;try{const result=store.cloud?await store.commit(activeSlot,game.save()):persist({manual:true});say(result.ok?(store.cloud?'Game saved to your account.':'Hero saved on this browser.'):result.error||'Save unavailable.');}catch(e){say(e.message,9);}finally{b.disabled=!game.canSave();}};
 $('chest-close').onclick=resume;
 function openWorld(){setScreen('world');journeyMenu.map();legendaryMenu.map();$('map-title').focus();}
 $('open-map').onclick=openWorld;$('map-close').onclick=showPause;
@@ -296,7 +316,7 @@ $('creator-form').addEventListener('submit',e=>{e.preventDefault();begin();});
 $('cancel-look').onclick=cancelCreator;
 $('pause').onclick=()=>{if(criticalPending||powerUpgrades.busy||screen==='mergeReward')return;if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='tree')returnAdventure();else if(screen==='creator'&&editing)cancelCreator();else if(['controls','world','inventory','chest','mergeReward'].includes(screen))showPause();};
 $('resume').onclick=resume;$('edit-look').onclick=()=>openTree('appearance');
-$('return-camp').onclick=()=>{if(game.returnCheckpoint()){handleEvents();persist();resume();}else say('Leave combat before returning to your checkpoint.');};
+$('return-camp').onclick=async()=>{if(await game.returnCheckpoint()){handleEvents();persist();resume();}else say('Leave combat before returning to your checkpoint.');};
 $('choose-hero').onclick=openRoster;$('back-to-patrol').onclick=resume;
 $('cancel-delete').onclick=closeDelete;
 $('confirm-delete').onclick=async()=>{
@@ -373,6 +393,7 @@ function beginMeasurement(duration=30){if(screen==='pause')resume();if(screen!==
 $('measure-performance').onclick=()=>beginMeasurement();
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&measurement){measurement=null;$('performance-result').textContent='Sample cancelled: keep the game visible.';}});
 function frame(now){
+  if(screen==='play'&&!online()&&activeId&&multiplayerMenu.isLinked(activeId)){showPause();say('This hero was transferred to account saving. Open Solo & Multiplayer to reconnect.',8);}
   if (input.interrupted || document.hidden) {
     accumulator=0;last=now;requestAnimationFrame(frame);return;
   }
@@ -383,17 +404,17 @@ function frame(now){
   const waitingForArt=!styleCTextureStatus().ready||(game.arenaScene&&!renderer.bossArt.ready);
   const simulationStart=performance.now();
   if(screen==='play'&&!waitingForArt&&!criticalPending){
-    accumulator+=elapsed;while(accumulator>=STEP){
+    accumulator+=elapsed;while(accumulator>=(online()?STEP*2:STEP)){
       const action = phase10QA?.sample() || input.sample();
       const empty = action.powers?.findIndex((pressed,i) => pressed && i<3 && !game.powers.data.equipped[i]) ?? -1;
       if (empty!==-1 && game.canSave()) {openPowerPicker(empty);accumulator=0;break;}
-      game.step(STEP,action);accumulator-=STEP;
+      if(online()){if(!multiplayerMenu.session.client.ready){accumulator=0;break;}multiplayerMenu.session.input(action);}else game.step(STEP,action);accumulator-=online()?STEP*2:STEP;
     }
     handleEvents();if(!criticalPending&&screen==='play'&&game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();}
   }else accumulator=0;
   const simulationCost=performance.now()-simulationStart;
   audio.update(musicScene(game),game.started&&!['roster','delete','account'].includes(screen)&&!document.hidden&&!criticalPending);
-  const drawStart=performance.now(),signature=`${screen}:${renderer.canvas.width}:${renderer.canvas.height}:${game.regionId}:${game.clock().night}`;if(!game.treeVisit&&(screen==='play'||signature!==backgroundSignature))renderer.draw(game,screen==='play'?accumulator/STEP:1,elapsed);backgroundSignature=signature;
+  const drawStart=performance.now(),signature=`${screen}:${renderer.canvas.width}:${renderer.canvas.height}:${game.regionId}:${game.clock().night}`;if(!game.treeVisit&&(screen==='play'||signature!==backgroundSignature)){const alpha=online()?multiplayerMenu.session.alpha():screen==='play'?accumulator/STEP:1;renderer.draw(game,alpha,elapsed);if(online())multiplayerMenu.session.drawPeers(renderer,alpha);}backgroundSignature=signature;
   const cost=performance.now()-drawStart;drawMs=drawMs*.95+cost*.05;
   if(measurement&&(screen!=='play'||waitingForArt)){measurement=null;$('performance-result').textContent='Sample cancelled: keep gameplay active.';}
   const hudStart=performance.now();qaClock+=elapsed;if(qaClock>=.1){updateHud();if(screen==='tree')erisMenu.update();qaClock=0;}

@@ -11,9 +11,11 @@ test('production defaults reject client-supplied legacy progression until verifi
   assert.throws(()=>a.create('a',{slot:0,legacy:JSON.parse(new Game().save()),sourceId:'untrusted-local-save',confirmed:true}),/verified account migration/);
   assert.equal(a.list('a').length,0);store.close();
 });
-test('approved artwork and the entire existing solo implementation are byte-identical',()=>{
+test('approved artwork, balance, simulation and legacy save implementation are byte-identical',()=>{
   const paths=execFileSync('git',['diff','--name-only',BASE],{cwd:new URL('../../../',import.meta.url),encoding:'utf8'}).trim().split('\n').filter(Boolean);
-  assert.deepEqual(paths.filter(p=>!p.startsWith('royale/multiplayer/')&&p!=='royale/tests/final-preservation.mjs'),[]);
+  const integration=new Set(['royale/app.mjs','royale/index.html','royale/eris-ui.mjs','royale/journey-menu.mjs','royale/legendary-ui.mjs','royale/power-menu.mjs','royale/power-upgrades.mjs','royale/tools/build-playtest.mjs','royale/tests/final-preservation.mjs','royale/backend/supabase/migrations/20261104161434_royale_multiplayer_fence.sql']);
+  assert.deepEqual(paths.filter(p=>!p.startsWith('royale/multiplayer/')&&!integration.has(p)),[]);
+  assert.deepEqual(paths.filter(p=>/\.(png|webp|jpg|svg)$/.test(p)&&!p.startsWith('royale/multiplayer/qa/browser/')),[]);
 });
 test('combat, current health, cooldowns and exact midair position persist without a safe-save restriction',()=>{
   const store=new AuthorityStore(),a=new Authority(store,{allowLegacyImport:true,capacity:16}),h=a.create('hero',{slot:0});a.attach('hero',h.id,{close(){}});

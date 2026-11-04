@@ -46,9 +46,12 @@ export function powerUpgradeSnapshot(game,previous,id){
 
 export class InstantPowerUpgrades{
   constructor(context){this.context=context;this.busy=false;}
+  async remoteChange(remote,method,args){this.busy=true;try{const result=await remote.command(method,args);return result===false?fail('This power change is unavailable.'):typeof result==='object'?result:{ok:true};}catch(error){return fail(error.message);}finally{this.busy=false;}}
   async equip(slot, id) {
     if (this.busy) return fail('A power change is being saved.');
-    const {game, store, index, heroId} = this.context();
+    const {game, store, index, heroId,remote,blocked} = this.context();
+    if(blocked)return fail('This hero uses account saving. Reconnect before changing powers.');
+    if(remote)return this.remoteChange(remote,'equipPower',[slot,id]);
     const reason = hudEquipError(game, slot, id);
     if (reason || !game.paused) return fail(reason || 'Open the slot to choose a power.');
     const record = store.slot(index);
@@ -76,7 +79,9 @@ export class InstantPowerUpgrades{
   }
   async spend(id){
     if(this.busy)return fail('An upgrade is being saved.');
-    const {game,store,index,heroId}=this.context();
+    const {game,store,index,heroId,remote,blocked}=this.context();
+    if(blocked)return fail('This hero uses account saving. Reconnect before changing powers.');
+    if(remote){const result=await this.remoteChange(remote,'upgradePower',[id,1]);return result.ok?{...result,level:remote.game.powers.data.levels[id],points:remote.game.powers.data.points,storage:'cloud'}:result;}
     const slot=store.slot(index);
     if(!heroId||slot?.id!==heroId)return fail('Select the current hero before upgrading.');
     if(!store.writable)return fail(store.message||'Hero storage is unavailable.');

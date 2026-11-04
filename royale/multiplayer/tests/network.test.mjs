@@ -7,7 +7,7 @@ import {applyRuntimeDelta} from '../delta.mjs';
 import {decodeRuntime} from '../runtime.mjs';
 const auth=async token=>{if(!/^fixture-user-\d+$/.test(token))throw Error('Invalid fixture credentials.');return {id:token,expiresAt:Date.now()+60000};};
 test('four independent sockets share a room, move, survive creator exit and reconnect without duplicate entities',async()=>{
-  const app=startServer({capacity:16,origins:['http://localhost'],authenticate:auth,autoTick:false});await once(app.server,'listening');
+  const app=startServer({allowNewHeroes:true,capacity:16,origins:['http://localhost'],authenticate:auth,autoTick:false});await once(app.server,'listening');
   const url=`ws://127.0.0.1:${app.server.address().port}/royale`,clients=[];
   try {
     for(let i=0;i<4;i++){const c=await connect(url,'fixture-user-'+i);c.initial=await createAndSelect(c);clients.push(c);}
@@ -26,7 +26,7 @@ test('four independent sockets share a room, move, survive creator exit and reco
   }finally{for(const c of clients)c.ws.terminate();await app.close();}
 });
 test('socket authorization rejects cross-account heroes, invented damage and stale connections',async()=>{
-  const app=startServer({capacity:8,origins:['http://localhost'],authenticate:auth,autoTick:false});await once(app.server,'listening');const url=`ws://127.0.0.1:${app.server.address().port}/royale`;
+  const app=startServer({allowNewHeroes:true,capacity:8,origins:['http://localhost'],authenticate:auth,autoTick:false});await once(app.server,'listening');const url=`ws://127.0.0.1:${app.server.address().port}/royale`;
   const a=await connect(url,'fixture-user-1'),b=await connect(url,'fixture-user-2');
   try{
     const hero=await createAndSelect(a);const denied=await b.request({type:'select',id:hero.id},m=>m.type==='error');assert.match(denied.message,/account/);
@@ -35,7 +35,7 @@ test('socket authorization rejects cross-account heroes, invented damage and sta
   }finally{a.ws.terminate();b.ws.terminate();await app.close();}
 });
 test('wire deltas can reconstruct committed state through independent client baseline',async()=>{
-  const app=startServer({capacity:8,origins:['http://localhost'],authenticate:auth,autoTick:false});await once(app.server,'listening');const c=await connect(`ws://127.0.0.1:${app.server.address().port}/royale`,'fixture-user-1');
+  const app=startServer({allowNewHeroes:true,capacity:8,origins:['http://localhost'],authenticate:auth,autoTick:false});await once(app.server,'listening');const c=await connect(`ws://127.0.0.1:${app.server.address().port}/royale`,'fixture-user-1');
   try{const first=await createAndSelect(c);let baseline=applyRuntimeDelta(null,first.delta);const h=app.authority.owner('fixture-user-1',first.id);app.authority.input(h.owner,h.id,1,{jump:true});for(let i=0;i<6;i++)app.step();
     const next=await c.wait(m=>m.type==='state');baseline=applyRuntimeDelta(baseline,next.delta);const g=decodeRuntime(JSON.stringify(baseline));assert.equal(g.hero.y,h.game.hero.y);assert.equal(g.hero.hp,h.game.hero.hp);assert.equal(next.revision,app.authority.store.revision);
   }finally{c.ws.terminate();await app.close();}

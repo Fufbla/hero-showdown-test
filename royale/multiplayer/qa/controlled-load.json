@@ -1,0 +1,79 @@
+{
+  "timestamp": "2026-11-04T16:23:34.007Z",
+  "scope": "Separate server and client processes; loopback only. Four heroes per original Lightning Spree encounter in different regions. Not a WAN, mobile rendering or Hostinger capacity measurement.",
+  "hardware": {
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "cpus": 8,
+    "memory": 10451423232
+  },
+  "warmupSeconds": 5,
+  "measurementSeconds": 30,
+  "productionCapacity": null,
+  "results": [
+    {
+      "players": 2,
+      "seconds": 30.000370590000003,
+      "simulationHz": 59.99925882915568,
+      "tickP95Ms": 5.178267999999662,
+      "eventLoopP99Ms": 18.153471,
+      "inputConfirmationP95Ms": 37.69072700000106,
+      "attackInputConfirmationP95Ms": 46.216827000000194,
+      "serverCpuPercent": 8.687079572537758,
+      "rssMiB": 92.11328125,
+      "outgoingKiBPerSecond": 56.391197930781956,
+      "incomingKiBPerSecond": 6.2603393326948895,
+      "disconnects": 0,
+      "errors": [],
+      "passed": true
+    },
+    {
+      "players": 4,
+      "seconds": 30.000620022999996,
+      "simulationHz": 18.56628294925157,
+      "tickP95Ms": 24.248100999999224,
+      "eventLoopP99Ms": 378.535935,
+      "inputConfirmationP95Ms": 3339.778134,
+      "attackInputConfirmationP95Ms": 25.709455999996862,
+      "serverCpuPercent": 75.54469742075676,
+      "rssMiB": 94.01953125,
+      "outgoingKiBPerSecond": 65.48936915907888,
+      "incomingKiBPerSecond": 3.1759760273938524,
+      "disconnects": 0,
+      "errors": [],
+      "passed": false
+    },
+    {
+      "players": 8,
+      "seconds": 30.000368031999997,
+      "simulationHz": 19.43309493330685,
+      "tickP95Ms": 33.19094299999779,
+      "eventLoopP99Ms": 687.341567,
+      "inputConfirmationP95Ms": 1079.6020560000034,
+      "attackInputConfirmationP95Ms": 50.81202800000028,
+      "serverCpuPercent": 75.02355691799329,
+      "rssMiB": 127.17578125,
+      "outgoingKiBPerSecond": 144.88302079081976,
+      "incomingKiBPerSecond": 7.629333488704583,
+      "disconnects": 0,
+      "errors": [],
+      "passed": false
+    },
+    {
+      "players": 16,
+      "seconds": 30.000793739999995,
+      "simulationHz": 41.49890202205031,
+      "tickP95Ms": 26.904811000000336,
+      "eventLoopP99Ms": 50.593791,
+      "inputConfirmationP95Ms": 59.64662300000782,
+      "attackInputConfirmationP95Ms": 49.888349000000744,
+      "serverCpuPercent": 72.08407347714714,
+      "rssMiB": 226.83984375,
+      "outgoingKiBPerSecond": 733.6791885764454,
+      "incomingKiBPerSecond": 34.11211829490749,
+      "disconnects": 0,
+      "errors": [],
+      "passed": false
+    }
+  ],
+  "largestPassingTestGroup": 2
+}

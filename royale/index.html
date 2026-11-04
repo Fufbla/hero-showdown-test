@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="accounts.css">
 <link rel="stylesheet" href="world-ui.css">
 <link rel="stylesheet" href="landscape.css">
+<link rel="stylesheet" href="multiplayer/menu.css">
 </head>
 <body>
   <div id="app">
@@ -163,6 +164,10 @@
     <div id="picker-powers"></div>
   </dialog>
   <script src="../assets/animation/motion-core.js"></script>
+  <script>
+    addEventListener('error',event=>{const status=document.getElementById('hero-art-status');if(status&&!status.hidden){status.textContent='Game could not start. '+(event.message||'A required file did not load. Reload to retry.');}});
+    addEventListener('unhandledrejection',event=>{const status=document.getElementById('hero-art-status');if(status&&!status.hidden)status.textContent='Game could not start. '+(event.reason?.message||'Reload to retry.');});
+  </script>
   <script type="module" src="app.mjs"></script>
 </body>
 </html>

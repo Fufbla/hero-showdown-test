@@ -1,76 +1,73 @@
-# Persistent multiplayer development branch
+# Hero Showdown Royale multiplayer integration
 
-This is an **in-progress authoritative backend**, not a production multiplayer
-release. It lives on `feature/royale-persistent-multiplayer`, based on verified
-solo commit `defec8c3d66a8a12cef9bf22d49eeccd835e6ce6`. The existing solo game,
-approved artwork and combat/progression source files are unchanged.
+Development branch: `feature/royale-persistent-multiplayer`. This continues
+`18536ee54d064fb78bb15c668677d0f415ae9fa6`; it does not replace the existing game.
+The actual game launched with two separately authenticated Chromium pages. They
+joined by code, saw both approved heroes, moved, attacked a shared monster and each
+received its XP/coin reward. This is a development build, not a public deployment.
+See [VALIDATION.md](VALIDATION.md) for measured results and unfinished verification.
 
-## Implemented
+## Play and saving
 
-- Server-owned room membership, cryptographically random ten-character join codes
-  (50 bits), validated room joins, measured-capacity configuration and overload
-  admission checks. The creator has no owner/host role after creating the room.
-- One server hero object across private solo and shared rooms. Switching copies
-  authoritative runtime state, retaining exact coordinates, HP, facing, inventory,
-  Power Points, equipment, cooldowns, attack-hit sets and personal completion data.
-- A 60 Hz authoritative simulation using the existing `Game`, immediate durable
-  progress events and 10 Hz position commits/broadcasts with graph deltas and region/distance
-  interest filtering. No client damage, coordinate or reward updates are accepted.
-- Shared enemy/boss objects, original attack calculations, individual contribution
-  rewards, personal chest claims, and individual Legendary completion records.
-- Ordered idempotent menu commands, stale connection replacement, disconnect
-  grace and reconnect recovery. One hero cannot have two active connections.
-- SQLite WAL transactions commit the complete authority graph before confirming
-  changes. Competing writers are fenced; corrupt state fails closed. A durable
-  graph preserves references and Sets through process restart, not just a safe
-  out-of-combat save. No new cloud schema was applied to the shared Supabase project.
-- Production WebSocket authentication validates an existing Supabase token with
-  its Auth service; the client never chooses its account identity. Test identity
-  authentication is injected only by tests/review code, not by the production CLI.
-- A browser transport plus a disposable integration review using the original
-  renderer, controls and artwork. The review is clearly marked as development.
+Create or continue a local hero, then open **Pause → Solo & Multiplayer** (also
+available from hero selection). Connect an account and explicitly review a local
+transfer or the existing cloud hero. An occupied cloud slot cannot be overwritten
+by a local snapshot. The original local slot and a transfer backup are retained.
 
-## Not finished / not verified
+**Play Solo**, **Create Multiplayer Room**, **Join Multiplayer Room**, **Copy room
+code**, and **Leave Multiplayer** operate on the same authoritative hero. The room
+has no creator-host dependency. Nearby heroes use the existing Style C renderer,
+animations, equipment and power effects. Positions interpolate between updates;
+the browser sends inputs and menu intentions, never damage or reward values.
 
-- The production game UI, account flow and old local/cloud write paths have **not**
-  been migrated to the new authority. Do not connect real hero saves yet.
-- The existing cloud account backend is not deployed in the configured Supabase
-  project. Live authentication and an atomic old-cloud-to-authority migration need
-  implementation/verification before cutover. Local import is disabled in the production transport. Its test adapter validates
-  structure and empty-slot/source-ID rules; it cannot prove historical earnings.
-- Simultaneous Roots/Whirlwind ownership, repeated multi-target charge contacts,
-  disconnects during compound powers, all arena transitions and all equipment/menu
-  combinations need further shared-combat regression coverage and correction.
-- Browser multiplayer gameplay was **not** verified. The review page opened;
-  after correcting its script URL, browser security policy blocked the necessary
-  reload. No successful browser combat, mobile-layout or iPhone Safari claim is made.
-- Hostinger account resources are unknown. There is no deployed WebSocket URL,
-  tested hosting capacity, production soak result or Internet-latency result.
-- The local load test is intentionally a release gate; failures are reported,
-  not used to invent a production capacity. See `qa/local-load.json` and
-  `VALIDATION.md` for actual measurements.
+Account heroes require a connection even in solo mode. A disconnected account hero
+waits for its confirmed server state; it does not create an offline progression
+fork. Untransferred local heroes keep their existing offline behavior. Do not
+interpret “solo” as offline support for transferred heroes.
 
-## Run tests
+## Implementation
+
+- Existing 60 Hz `Game` simulation with shared enemies, bosses and warnings;
+  individual contribution rewards, personal chest claims and Legendary records.
+- Random ten-character codes, origin checks, Supabase Auth validation, per-hero
+  connection replacement, protocol 2 compatibility checks and admission control.
+- Room/server limits must be configured from host measurements; there is no default
+  advertised player capacity. Development load results are not a Hostinger limit.
+- Durable SQLite WAL commits before state confirmation; ordered idempotent menu
+  commands, immediate meaningful progress writes and 10 Hz location snapshots.
+- Whole runtime state (including current HP, coordinates, facing, progression,
+  equipment and cooldowns) survives mode changes and process restoration.
+- A server-only Supabase migration coordinator reserves an immutable hero UUID and
+  source snapshot, fences the legacy cloud writer, then adopts it transactionally
+  in SQLite. Retrying a failed adoption uses the same reservation. This is an
+  idempotent outbox between databases, not a distributed atomic transaction.
+- Local history cannot be authenticated retrospectively. The explicit one-time
+  import validates the old save schema and bounds; subsequent progression is
+  calculated by the server. A newer cloud hero always wins over local replacement.
+- Overlapping control effects remain owned by the remaining caster after departure;
+  a charging/pouncing attack can contact different players once on different ticks.
+
+## Run the verified development workflow
+
+From the repository root (Node.js 24+):
 
 ```sh
-cd royale/multiplayer
-npm ci --ignore-scripts
-npm test
-node load.mjs /absolute/path/local-load.json
+npm ci --prefix royale
+npm ci --ignore-scripts --prefix royale/multiplayer
+node --test --test-reporter=tap --test-concurrency=2 royale/tests/*.test.mjs
+npm test --prefix royale/multiplayer
+npm run dev --prefix royale/multiplayer
 ```
 
-The source has no dependency on a paid upgrade. See [DEPLOYMENT.md](DEPLOYMENT.md)
-for the Hostinger findings, required capabilities, migration gates and configuration.
+Open `http://localhost:4173/` in two separate browser profiles or tabs. The normal
+game is served, but its account selector deliberately uses disposable test identities.
+Choose Client A in one profile and Client B in the other. Create local heroes,
+review/confirm their transfers, then create/join the same code. For isolated
+viewport checks open `/multiplayer/tests/mobile.html` and use A/B; each uses a
+separate session-storage namespace. That wrapper is not a Safari/device emulator.
 
-## Review browser
-
-`tests/review-server.mjs` serves the original game modules/assets and the review
-page with disposable in-memory heroes. It deliberately has no real account data.
-In a normal local checkout, run `npm run dev` and open `http://localhost:4173/` in
-separate tabs, choosing different test players. In a managed preview that mounts
-only its selected root, prepare a checkout whose root is `royale/` and whose dev
-command is `node multiplayer/tests/review-server.mjs`; all parent game modules
-must be present. **Never publish the fixture server as production.**
-
-The published solo build is not replaced by this review. New multiplayer work can
-continue on this branch without risking the existing integration branch or saves.
+**Never deploy the review server.** It uses in-memory state and fake authentication.
+The production entry is `npm start`, with real Auth, migration credentials, persistent
+storage and WSS configuration described in [deploy/OPERATIONS.md](deploy/OPERATIONS.md).
+Original artwork, core simulation, balance and local save format were not edited.
+No main, Story Mode, Versus Mode or production hosting changes were made.

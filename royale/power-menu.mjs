@@ -63,7 +63,7 @@ export class PowerMenu {
       const empty=node('option','Empty');empty.value='';select.append(empty);
       for(const id of POWER_IDS.filter(id=>!POWERS[id].passive&&g.powers.data.levels[id])){const option=node('option',`${POWERS[id].name} · ${g.powers.data.levels[id]}`);option.value=id;select.append(option);}
       select.value=g.powers.data.equipped[i]||'';select.disabled=!safe;
-      select.onchange=()=>{if(this.busy)return;if(g.equipPower(i,select.value||null)){this.persist();this.loadout();}else this.say('Leave combat to change your loadout.');};label.append(select);$('loadout-slots').append(label);
+      select.onchange=async()=>{if(this.busy)return;if(await g.equipPower(i,select.value||null)){this.persist();this.loadout();}else this.say('Leave combat to change your loadout.');};label.append(select);$('loadout-slots').append(label);
     }
     $('power-points').textContent=g.powers.data.points;
     $('tree-from-pause').disabled=!safe;
