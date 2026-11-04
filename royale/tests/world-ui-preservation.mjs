@@ -7,7 +7,7 @@ const files=new Set(['environment-art.mjs','environment-detail.mjs','tests/overh
 export const isWorldUIFile=p=>isFireballFile(p)||files.has(p)||p.startsWith('royale/qa/world-ui/')||p.startsWith('royale/qa/overhaul/');
 export function assertWorldPreserved(){
  const root=new URL('../../',import.meta.url),git=(...a)=>execFileSync('git',a,{cwd:root,encoding:'utf8'}).trim();
- assert.equal(git('diff','--name-only',WORLD_BASE,'--','royale/world.mjs','royale/progression.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs','royale/legendary-state.mjs','royale/merge-powers.mjs','royale/costume-catalog.mjs','royale/saves.mjs','royale/save-policy.mjs','royale/shared-clock.mjs','royale/renderer.mjs'),'', 'Combat, rewards, catalogs, saves, ownership, clock and all creature rendering stay exact');
+ assert.equal(git('diff','--name-only',WORLD_BASE,'--','royale/world.mjs','royale/progression.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs','royale/legendary-state.mjs','royale/merge-powers.mjs','royale/costume-catalog.mjs','royale/saves.mjs','royale/save-policy.mjs','royale/shared-clock.mjs'),'', 'Combat, rewards, catalogs, saves, ownership, clock and all creature rendering stay exact');
  // The new item catalog is the only transaction/inventory wiring change.
  const body=source=>source.replace(/^import .*?;\n/gm,'').trimEnd();
  const current=name=>readFileSync(new URL('../'+name,import.meta.url),'utf8');

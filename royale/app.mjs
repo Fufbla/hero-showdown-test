@@ -1,3 +1,4 @@
+import {installLandscapeLayout} from './landscape-layout.mjs';
 import {drawEquipmentPreview} from './eris-ui.mjs';
 import {selectedInteraction,nearbyInteractions} from './world-loot.mjs';
 import {FrameMetrics,performanceLabel} from './performance.mjs';
@@ -215,6 +216,7 @@ function handleEvents() {
 }
 function updateHud() {
   const h = game.hero, region = game.treeVisit?{name:'Tree of Eris'}:game.arenaScene?{name:game.arenaScene.legendary?LEGENDARY[game.arenaScene.legendary].arena:`${BOSSES[game.regionId].name} Arena`}:boardAt(game.regionId,h.x);
+  document.getElementById('boss-hud').dataset.cleared=String(!!game.arenaScene?.cleared);
   updateBossHud(game,game.started&&['play','pause','tree','controls','world','inventory','chest','mergeReward'].includes(screen));
   if(game.arenaScene&&!renderer.bossArt.ready)hudText($('boss-cue'),renderer.bossArt.errors.length?'Approved art could not load. Reload to retry.':'Loading approved boss artwork…');
   hudText($('world-region'),game.treeVisit?'PEACEFUL SANCTUARY':game.getRegion().name.toUpperCase());$('world-clock').hidden=game.regionId<3;hudText($('world-clock'),formatClock(game.clock()));$('world-clock').title=clockSynchronized()?'Synchronized with account server time':'Offline clock uses this device time; server synchronization awaits the account service.';
@@ -260,6 +262,7 @@ function updatePowers(){
     b.classList.toggle('cooldown',!!cooldown);b.classList.toggle('active',!!active);b.classList.toggle('disrupted',!!disrupted);b.classList.toggle('flight-locked',!!(game.powers.flying&&def?.offensive&&id!=='fireball'));b.disabled=screen!=='play'||game.hero.dead||!!disrupted||!!criticalPending||(!id&&(special||!canEdit));
     hudAttr(b,'aria-label',!id&&!special?`Choose a power for empty slot ${i+1}`:`${def?.name||`Power slot ${i+1}`}${disrupted?' · disrupted until boss reaches half health':cooldown?' · recovering':active?(id==='flight'?' · flying, press to cancel':' · active'):' · ready'}${special?' · protected fourth power':''}`);hudAttr(b,'aria-pressed',String(!!active));
   }
+  updateCompactSlots(canEdit);
   hudText($('power-context'),game.disruptedPower?'ONE POWER DISRUPTED · restored at half boss HP':game.powers.flying?'FLIGHT · steer ↑ ↓ · press Flight to land':game.inCombat()?'IN COMBAT':game.powers.data.points?`${game.powers.data.points} Power Points · ↑ in Superpowers`:'Tap + to equip a learned power');
 }
 let pickerReturn = null;
@@ -278,6 +281,7 @@ function closePowerPicker() {
 $('slot-picker').oncancel = event => { event.preventDefault(); closePowerPicker(); };
 $('picker-close').onclick = closePowerPicker;
 $('edit-hud-powers').onclick = event => openPowerPicker(0, event.currentTarget);
+const updateCompactSlots=installLandscapeLayout(input,openPowerPicker);
 $('manual-save').onclick=async()=>{if(!game.canSave()||criticalPending||powerUpgrades.busy)return;const b=$('manual-save');b.disabled=true;try{const result=store.cloud?await store.commit(activeSlot,game.save()):persist({manual:true});say(result.ok?(store.cloud?'Game saved to your account.':'Hero saved on this browser.'):result.error||'Save unavailable.');}catch(e){say(e.message,9);}finally{b.disabled=!game.canSave();}};
 $('chest-close').onclick=resume;
 function openWorld(){setScreen('world');journeyMenu.map();legendaryMenu.map();$('map-title').focus();}

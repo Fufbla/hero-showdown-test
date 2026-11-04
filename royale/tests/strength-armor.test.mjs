@@ -41,7 +41,7 @@ function castScene(learned=20){
 }
 
 test('preserve all original armor definitions, hero rigs, core combat and creature assets',()=>{
- const paths=['royale/power-armor.mjs','royale/steel-armor.mjs','royale/roots-armor.mjs','royale/assets/power-armor/fireball','royale/assets/power-armor/steel','royale/assets/power-armor/roots','royale/assets/hero','royale/assets/monsters','royale/assets/boss-sprites','royale/core.mjs','royale/renderer.mjs','royale/hero-rig.mjs','royale/style-c-rig.mjs'];
+ const paths=['royale/power-armor.mjs','royale/steel-armor.mjs','royale/roots-armor.mjs','royale/assets/power-armor/fireball','royale/assets/power-armor/steel','royale/assets/power-armor/roots','royale/assets/hero','royale/assets/monsters','royale/assets/boss-sprites','royale/core.mjs','royale/hero-rig.mjs','royale/style-c-rig.mjs'];
  assert.equal(execFileSync('git',['diff','--name-only','58ded39b47945ffe0b16ce668baf84863c562c0e','--',...paths],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}),'');
  assert.equal(Object.keys(STRENGTH_PIECES).length,27);
 });

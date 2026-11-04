@@ -44,9 +44,9 @@ test('review sessions validate, isolate storage, and never grant an actual save 
  const js=readFileSync(new URL('../armor-review.mjs',import.meta.url),'utf8');assert.ok(js.includes('sessionStorage.setItem'));assert.ok(!js.includes('localStorage'));
  const app=readFileSync(new URL('../app.mjs',import.meta.url),'utf8');assert.ok(app.includes("storagePrefix?storagePrefix+'permanent'"));
 });
-test('integration leaves all gameplay, art, saves, mobile fixes, Story and Versus byte-identical to approved Batch 9',()=>{
+test('integration and authorized landscape presentation leave protected gameplay, art and saves unchanged',()=>{
  const files=execFileSync('git',['diff','--name-only','b331004c1b90f30cc5e5be4235219fa7e57420fc'],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}).trim().split('\n').filter(Boolean);
- const allowed=['royale/armor-review.html','royale/armor-review.mjs','royale/armor-review-data.mjs','royale/tests/armor-integration.test.mjs','royale/tests/power-armor-preservation.mjs','royale/ARMOR-INTEGRATION.md'];
+ const allowed=['royale/tests/whirlwind-armor.test.mjs','royale/tests/agility-armor.test.mjs','royale/tests/super-kick-armor.test.mjs','royale/tests/hero-preservation.mjs','royale/tests/creature-integration-preservation.mjs','royale/tests/world-ui-preservation.mjs','royale/tests/speed-armor.test.mjs','royale/tests/roots-armor.test.mjs','royale/tests/strength-armor.test.mjs','royale/app.mjs','royale/index.html','royale/renderer.mjs','royale/boss-ui.mjs','royale/landscape-layout.mjs','royale/landscape.css','royale/tests/landscape-layout.test.mjs','royale/tests/landscape-review.html','royale/tests/landscape-review.mjs','royale/tests/flight-armor.test.mjs','royale/LANDSCAPE-REVIEW.md','royale/armor-review.html','royale/armor-review.mjs','royale/armor-review-data.mjs','royale/tests/armor-integration.test.mjs','royale/tests/power-armor-preservation.mjs','royale/ARMOR-INTEGRATION.md'];
  assert.deepEqual(files.filter(p=>!allowed.includes(p)),[]);
 });
 

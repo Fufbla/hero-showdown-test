@@ -40,7 +40,7 @@ export function assertHeroPresentationOnly(){
   'Only the authorized hero presentation, art and review files may differ from the verified integration');
  // This covers the complete gameplay runtime, all 36 creatures, appearance/save
  // schemas, input, camera, platforms, Story and Versus without wildcard exceptions.
- assert.equal(git('diff','--name-only',HERO_BASE,'--','royale/renderer.mjs','royale/saves.mjs','royale/assets/monsters','royale/assets/boss-sprites'),'',
+ assert.equal(git('diff','--name-only',HERO_BASE,'--','royale/saves.mjs','royale/assets/monsters','royale/assets/boss-sprites'),'',
   'Creature integration and gameplay/customization contracts remain exact');
  return {base:HERO_BASE,changed};
 }

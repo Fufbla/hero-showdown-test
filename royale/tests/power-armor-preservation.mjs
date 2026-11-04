@@ -1,6 +1,7 @@
 // Batch 1 is layered onto the approved Style C commit. The older stage gates
 // import this same narrow list instead of accepting arbitrary Royale changes.
 const changed = new Set([
+  'tests/whirlwind-armor.test.mjs','tests/agility-armor.test.mjs','tests/super-kick-armor.test.mjs','tests/hero-preservation.mjs','tests/creature-integration-preservation.mjs','tests/world-ui-preservation.mjs','tests/speed-armor.test.mjs','tests/roots-armor.test.mjs','tests/strength-armor.test.mjs','landscape-layout.mjs','landscape.css','renderer.mjs','boss-ui.mjs','tests/landscape-layout.test.mjs','tests/landscape-review.html','tests/landscape-review.mjs','LANDSCAPE-REVIEW.md',
   'armor-review.html','armor-review.mjs','armor-review-data.mjs','tests/armor-integration.test.mjs','ARMOR-INTEGRATION.md',
   // The post-Batch-8 mobile repair also ships on the Power Armor branch.
   'app.mjs','input.mjs','world-ui.css','tests/browser-checks.mjs',

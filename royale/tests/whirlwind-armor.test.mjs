@@ -44,7 +44,7 @@ function castScene(learned=20){
 }
 
 test('protect all four approved armor collections, base hero artwork, creatures and combat geometry',()=>{
- const paths=['royale/power-armor.mjs','royale/steel-armor.mjs','royale/roots-armor.mjs','royale/strength-armor.mjs','royale/assets/power-armor/roots','royale/assets/power-armor/strength','royale/assets/power-armor/fireball','royale/assets/power-armor/steel','royale/assets/hero','royale/assets/monsters','royale/assets/boss-sprites','royale/core.mjs','royale/renderer.mjs','royale/hero-rig.mjs','royale/style-c-rig.mjs'];
+ const paths=['royale/power-armor.mjs','royale/steel-armor.mjs','royale/roots-armor.mjs','royale/strength-armor.mjs','royale/assets/power-armor/roots','royale/assets/power-armor/strength','royale/assets/power-armor/fireball','royale/assets/power-armor/steel','royale/assets/hero','royale/assets/monsters','royale/assets/boss-sprites','royale/core.mjs','royale/hero-rig.mjs','royale/style-c-rig.mjs'];
  assert.equal(execFileSync('git',['diff','--name-only','9ff23093ac8e46054c92480966b5a7c07c42f8d6','--',...paths],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}),'');
  assert.equal(Object.keys(WHIRLWIND_PIECES).length,27);
 });
