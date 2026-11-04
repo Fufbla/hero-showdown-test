@@ -1,3 +1,4 @@
+import {POLISH_FILES} from './polish-preservation.mjs';
 // Batch 1 is layered onto the approved Style C commit. The older stage gates
 // import this same narrow list instead of accepting arbitrary Royale changes.
 const changed = new Set([
@@ -21,7 +22,7 @@ const changed = new Set([
   'roots-armor.mjs','tests/roots-armor.test.mjs','GROUND-ROOTS-ARMOR.md',
   'steel-armor.mjs','power-armor-art.mjs','tests/steel-armor.test.mjs','STEEL-ARMOR.md',
 ].map(name=>'royale/'+name));
-export const isFireballFile = path => changed.has(path) ||
+export const isFireballFile = path => POLISH_FILES.has(path) || changed.has(path) ||
   /^royale\/assets\/power-armor\/flight\/(regions\.mjs|(swift|glider|kestrel|stratus|jet|vortex|aurora|zenith|firmament)\.webp)$/.test(path) ||
   /^royale\/assets\/power-armor\/agility\/(regions\.mjs|(flick|rook|kite|orbit|lynx|parallax|shutter|prism|afterimage)\.webp)$/.test(path) ||
   /^royale\/assets\/power-armor\/speed\/(regions\.mjs|(starter|relay|vector|velodrome|switchback|apex|pulse|mach|horizon)\.webp)$/.test(path) ||

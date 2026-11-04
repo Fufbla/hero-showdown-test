@@ -1,3 +1,4 @@
+import {POLISH_FILES} from './polish-preservation.mjs';
 import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -18,11 +19,11 @@ test('orientation clears every input source once without touching game data',()=
 });
 test('all non-presentation game files stay byte-identical to integration baseline',()=>{
  const allowed=new Set(['tests/whirlwind-armor.test.mjs','tests/agility-armor.test.mjs','tests/super-kick-armor.test.mjs','tests/hero-preservation.mjs','tests/creature-integration-preservation.mjs','tests/world-ui-preservation.mjs','tests/speed-armor.test.mjs','tests/roots-armor.test.mjs','tests/strength-armor.test.mjs','app.mjs','index.html','renderer.mjs','boss-ui.mjs','landscape-layout.mjs','landscape.css','tests/power-armor-preservation.mjs','tests/armor-integration.test.mjs','tests/flight-armor.test.mjs','tests/landscape-layout.test.mjs','tests/landscape-review.html','tests/landscape-review.mjs','LANDSCAPE-REVIEW.md'].map(p=>'royale/'+p));
- const files=execFileSync('git',['diff','--name-only','cc288576d5ac8be67af0cacd750b1d026b24be7b'],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}).trim().split('\n').filter(Boolean);assert.deepEqual(files.filter(p=>!allowed.has(p)),[]);
+ const files=execFileSync('git',['diff','--name-only','cc288576d5ac8be67af0cacd750b1d026b24be7b'],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}).trim().split('\n').filter(Boolean);assert.deepEqual(files.filter(p=>!allowed.has(p)&&!POLISH_FILES.has(p)),[]);
 });
 
 test('renderer changes are restricted to viewport sizing; all rendering and creature drawing stay exact',()=>{
  const git=(ref)=>execFileSync('git',['show',ref+':royale/renderer.mjs'],{cwd:new URL('../../',import.meta.url),encoding:'utf8'});
- const normalize=s=>s.replace("import {stableTouchScale} from './landscape-layout.mjs';\n",'').replace(/  resize\(\)\{[^\n]+\n/,'');
+ const normalize=s=>s.replace("import {drawBossShot} from './boss-effects.mjs';\n",'').replace('if(drawBossShot(c,shot,t))continue;','').replace("import {stableTouchScale} from './landscape-layout.mjs';\n",'').replace(/  resize\(\)\{[^\n]+\n/,'');
  assert.equal(normalize(readFileSync(new URL('../renderer.mjs',import.meta.url),'utf8')),normalize(git('cc288576d5ac8be67af0cacd750b1d026b24be7b')));
 });

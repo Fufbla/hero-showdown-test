@@ -1,3 +1,4 @@
+import {drawBossShot} from './boss-effects.mjs';
 import {stableTouchScale} from './landscape-layout.mjs';
 import {EnvironmentArt} from './environment-art.mjs';
 import {MonsterAtlas,MONSTER_HEIGHT} from './monster-art.mjs';
@@ -70,7 +71,7 @@ export class Renderer {
       if(game.nearCamp()===i){round(c,camp.x-85,camp.y-157,170,24,12,'#153b40e6');c.fillStyle='#fff1cd';c.font='11px system-ui';c.textAlign='center';c.fillText('E / REST · heal & set checkpoint',camp.x,camp.y-141);}
     }
     if(!game.arenaScene){if(visible(150,390,260,230))drawEris(c,t);worldLandmarks(c,game,this.camera,this.width);}else{drawArena(c,game);if(game.arenaScene.legendary)drawLegendaryWorld(c,game);}
-    for(const shot of game.enemyShots){if(!visible(shot.x-12,shot.y-12,24,24))continue;oval(c,shot.x,shot.y,7,5,shot.color,'#283b43',2);line(c,[[shot.x-shot.vx*.025,shot.y-shot.vy*.025],[shot.x,shot.y]],'#eadcac',2);}
+    for(const shot of game.enemyShots){if(!visible(shot.x-12,shot.y-12,24,24))continue;if(drawBossShot(c,shot,t))continue;oval(c,shot.x,shot.y,7,5,shot.color,'#283b43',2);line(c,[[shot.x-shot.vx*.025,shot.y-shot.vy*.025],[shot.x,shot.y]],'#eadcac',2);}
     for(const e of game.enemies){const vw=e.boss||e.legendaryHelper?e.w:Math.max(e.w,192),vh=e.boss||e.legendaryHelper?e.h:Math.max(e.h,MONSTER_HEIGHT[e.type]||e.h);if(visible(e.x-vw/2,e.y-vh-40,vw,vh+50))this.enemy(e,t,alpha);}
     drawPowerWorld(c,game);drawMergeWorld(c,game);
     const pos=globalThis.HealthiaMotionCore?.renderPosition({x:h.prevX,y:h.prevY,face:h.prevFace},{x:h.x,y:h.y,face:h.face},alpha,h.dead)||{x:lerp(h.prevX,h.x,alpha),y:lerp(h.prevY,h.y,alpha)};

@@ -22,7 +22,7 @@ export function initializeJourney(g,save,now){
   g.enemyShots=[];g.enemyShotPool=new ProjectilePool(64);g.treeVisit=false;g.bossEncounter=null;g.board=0;
 }
 export const journeyMethods={
-  spawnEnemyShot(values){const p=this.enemyShotPool.acquire(values);if(p)this.enemyShots.push(p);return p;},
+  spawnEnemyShot(values){const p=this.enemyShotPool.acquire({...values,fxKind:values.bossShot?values.source?.attack?.kind:null});if(p)this.enemyShots.push(p);return p;},
   clearEnemyShots(){clearProjectiles(this.enemyShots,this.enemyShotPool);},
   removeEnemyShots(source){compactProjectiles(this.enemyShots,this.enemyShotPool,p=>p.source!==source);},
   nearPortal(){return !this.arenaScene&&!this.treeVisit&&this.camps.some(c=>Math.abs(this.hero.x-(c.x+90))<=90&&Math.abs(this.hero.y-c.y)<100);},

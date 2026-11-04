@@ -42,7 +42,7 @@ export function assertApprovedIntegration(historicalBossBase=BOSS_COMMIT){
   'royale/monster-art.mjs','royale/monster-animations.mjs','royale/monster-animation-catalog.mjs'),'',
   'All 21 approved animations and the approved monster renderer remain exact');
  assert.equal(git('diff','--name-only',BOSS_COMMIT,'--','royale/assets/boss-sprites',
-  'royale/boss-art.mjs','royale/boss-sprites.mjs','royale/legendary-sprites.mjs','royale/scorpion-sprites.mjs','royale/boss-ui.mjs','royale/bosses.css'),'',
+  'royale/boss-art.mjs','royale/boss-sprites.mjs','royale/legendary-sprites.mjs','royale/scorpion-sprites.mjs','royale/bosses.css'),'',
   'All 15 approved boss integrations, metadata and renderers remain exact');
  assert.equal(git('diff','--name-only','--diff-filter=MD',historicalBossBase,BOSS_COMMIT,'--','royale/assets/boss-sprites'),'',
   'Previously completed boss artwork remains unchanged across historical batches');

@@ -1,3 +1,4 @@
+import {drawDangerZone,bossTheme} from './boss-effects.mjs';
 import { LEGENDARY } from './legendary-data.mjs';
 const line=(c,pts,color,w=2)=>{c.beginPath();pts.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.strokeStyle=color;c.lineWidth=w;c.lineJoin='round';c.lineCap='round';c.stroke();};
 const ellipse=(c,x,y,rx,ry,color)=>{c.fillStyle=color;c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);c.fill();};
@@ -39,8 +40,8 @@ export function drawLegendaryWorld(c,g){
  const scene=g.arenaScene,b=scene.boss,id=scene.legendary,a=b.attack;c.save();
  if(scene.cleared){drawRemains(c,id);c.restore();return;}
  if(b.state==='active'&&a?.shape==='lightning')for(const z of a.zones){const x=z.x+z.w/2;line(c,[[x,70],[x-35,220],[x+18,280],[x-20,410],[x,600]],'#fff6a6',9);if(a.chain)for(const s of[-1,1])line(c,[[x,410],[x+s*35,470],[x+s*55,460],[x+s*70,580]],'#ead04e',4);}
- if(b.state==='active'&&a?.shape==='barrier'){c.strokeStyle='#e4e4cf';c.lineWidth=8;c.strokeRect(b.x-b.w*.7,b.y-b.h-10,b.w*1.4,b.h+10);}
- for(const z of g.legendaryHazards){const color=LEGENDARY[id].colors[1];if(z.kind==='lightning'){line(c,[[z.x,595],[z.x+z.w*.25,580],[z.x+z.w*.4,594],[z.x+z.w*.7,579],[z.x+z.w,592]],'#f9df68',5);}else if(z.kind==='trap'){c.fillStyle=color+'80';c.fillRect(z.x,585,z.w,15);for(let x=z.x+8;x<z.x+z.w;x+=20)polygon(c,[[x,600],[x+8,565],[x+15,600]],color);}else{for(let i=0;i<5;i++){c.strokeStyle=color+'b0';c.lineWidth=5;c.beginPath();c.ellipse(z.x+z.w/2+Math.sin(z.age*5+i)*10,580-i*30,z.w*.4-i*5,11,0,0,Math.PI*2);c.stroke();}}}
+ if(b.state==='active'&&a?.shape==='barrier'){c.strokeStyle='#e4e4cf';c.lineWidth=8;for(let i=0;i<5;i++){c.beginPath();c.ellipse(b.x,b.y-b.h/2,b.w*.7+Math.sin(g.time*4+i)*3,b.h*.57,0,i*1.25,i*1.25+1.05);c.stroke();}}
+ for(const z of g.legendaryHazards)drawDangerZone(c,z,{theme:bossTheme(b),shape:z.kind,time:g.time,active:true});
  c.restore();
 }
 export function drawMergeWorld(c,g){

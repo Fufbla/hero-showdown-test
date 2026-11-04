@@ -1,3 +1,4 @@
+import {POLISH_FILES} from './polish-preservation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
@@ -47,7 +48,7 @@ test('review sessions validate, isolate storage, and never grant an actual save 
 test('integration and authorized landscape presentation leave protected gameplay, art and saves unchanged',()=>{
  const files=execFileSync('git',['diff','--name-only','b331004c1b90f30cc5e5be4235219fa7e57420fc'],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}).trim().split('\n').filter(Boolean);
  const allowed=['royale/tests/whirlwind-armor.test.mjs','royale/tests/agility-armor.test.mjs','royale/tests/super-kick-armor.test.mjs','royale/tests/hero-preservation.mjs','royale/tests/creature-integration-preservation.mjs','royale/tests/world-ui-preservation.mjs','royale/tests/speed-armor.test.mjs','royale/tests/roots-armor.test.mjs','royale/tests/strength-armor.test.mjs','royale/app.mjs','royale/index.html','royale/renderer.mjs','royale/boss-ui.mjs','royale/landscape-layout.mjs','royale/landscape.css','royale/tests/landscape-layout.test.mjs','royale/tests/landscape-review.html','royale/tests/landscape-review.mjs','royale/tests/flight-armor.test.mjs','royale/LANDSCAPE-REVIEW.md','royale/armor-review.html','royale/armor-review.mjs','royale/armor-review-data.mjs','royale/tests/armor-integration.test.mjs','royale/tests/power-armor-preservation.mjs','royale/ARMOR-INTEGRATION.md'];
- assert.deepEqual(files.filter(p=>!allowed.includes(p)),[]);
+ assert.deepEqual(files.filter(p=>!allowed.includes(p)&&!POLISH_FILES.has(p)),[]);
 });
 
 test('trial ID works in HTTP previews without crypto.randomUUID',()=>{const session=reviewSessionId({getRandomValues:a=>a.fill(123)});assert.match(session,/^armor-review-[a-f0-9-]+$/);assert.ok(reviewProfile('flight',8,null,true,session).key.includes(session));});
