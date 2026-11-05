@@ -1,3 +1,53 @@
+# Recovery migration and live verification — 2026-11-05
+
+Continued from `2de84f640953cd11428ec35fdabc615ba6810985` without replacing the existing implementation.
+
+## Applied and verified
+
+- Fresh Supabase migration approval succeeded. Applied the exact existing `20261105133227_royale_account_recovery.sql` to project `adakwbhxiuatjvphutgo`. The four additive tables have RLS enabled; anon/authenticated have no direct SELECT. All four functions are SECURITY INVOKER with no browser-role EXECUTE. No browser save, existing hero row, password, SMTP configuration, artwork or multiplayer source was changed by the migration.
+- Deployed the existing three-file backend bundle to `royale-player-accounts-staging`, active version 5. Public registration remains closed; both frontend account gates remain false.
+- **19 live staging authentication/save checks passed**: invitation-only disposable signup, duplicate username, invalid password, all three slots, ownership isolation, exact location in an independent login, stale-write rejection, idempotency, code recovery/replay rejection, reset session revocation and logout.
+- **7 additional live cloud checks passed** using the production PlayerAccountAPI, AutomaticCloudStore and CloudAutosave: complete synthetic browser-save imports into all three empty slots with verified read-back, unchanged original browser bytes, automatic saving/restoration of each full snapshot (level, XP, equipment, powers and exact position), and recovery of a deliberately lost response after a real server commit without double-saving.
+- **5 additional live recovery checks passed**: authenticated username identity/anonymous denial, current-password code rotation, retired-code rejection, password-change session revocation and unchanged three-hero roster after signing in again.
+- Final regression: **1,292 Royale tests and 57 multiplayer tests passed, no failures or skips**. Eight focused recovery/security tests also passed before migration. Initial preservation assertions correctly rejected the two new live-test files until those exact paths were added to the account test allowlist; no artwork/gameplay exceptions were broadened. An initial recovery test used incorrect password-field names; corrected to the deployed API contract and reran successfully.
+
+## Concurrent branch update
+
+While awaiting mailbox selection, another session advanced the branch to `6eca861c272ca5dcb199c3d3792e82f064cb4823`, adding numeric recovery setup, a new migration and backend support. This verification checkpoint was rebased onto those commits without replacing them. The 31 live checks above apply to deployed staging version 5 from `2de84f6`, not the newer numeric-recovery backend. The numeric migration/secret/deployment and its dedicated live tests are separate unfinished work; this session did not apply that migration or redeploy over staging. Its exact migration path is included in the preservation allowlist. A combined-branch regression rerun initially loaded the old allowlist in two workers; both affected files were rerun after the update and passed all 26 checks.
+
+## Still blocked / not claimed
+
+- Current Chromium workflow could not launch: process socket creation returned `Operation not permitted`. No current laptop/mobile/controller browser acceptance is claimed.
+- Live email delivery, email verification, username recovery through an emailed callback, and password-reset link expiry/replay still need mailbox interaction. The earlier owner-confirmed password reset remains historical evidence, not a new completed email test. No mailbox was selected in this continuation, and no new recovery email was sent.
+- Independent live API sessions passed; physical second-device restoration has NOT been accepted.
+- The owner's actual browser hero has NOT been accessed or imported. Synthetic fixture preservation does not establish its migration. Original saves must remain untouched.
+- Account creation UI is still absent from the public game. Do not instruct the owner to click controls that have not been published. Release remains gated by the unfinished email/browser checks. Preserve newer main-branch HUD changes when integrating accounts.
+- Recovery-email adding/changing remains disabled pending secure linking verification.
+
+## Owner import acceptance sequence (after optional account UI is available)
+
+1. Use the same browser/profile and the exact GitHub Pages origin where the current hero survives reopening. Keep the browser's site data.
+2. Create the account and privately retain its recovery codes; complete email verification if supplied. Keep local play available.
+3. In account settings, choose Import Existing Hero and Download Local Backup first. Review the exact hero and choose an empty cloud slot, then Confirm Import Into Empty Slot. The import retains the original local saves and a verified recovery backup.
+4. Require the verified-import message and compare full level, XP, equipment, equipped/owned powers and saved location against the source. Do not accept a mismatch or overwrite an occupied slot.
+5. Wait for Cloud saved, sign in on a second device, and compare the same hero before playing. Only after this owner acceptance and all remaining checks may mandatory login be considered.
+
+## Reproducible live tests
+
+These commands use disposable fixtures only. Invitations must be provisioned privately as single-use SHA-256 verifiers. Credential files are mode 0600 and never committed or printed. The cloud import runner requires the disposable second account to have empty slots and refuses to replace existing heroes.
+
+```sh
+ROYALE_TEST_INVITES_FILE=/private/invites.json ROYALE_TEST_RESULT_FILE=/private/fixture.json node --use-env-proxy royale/tests/player-accounts-staging.mjs
+ROYALE_TEST_RESULT_FILE=/private/fixture.json node --use-env-proxy royale/tests/player-cloud-staging.mjs
+ROYALE_TEST_RESULT_FILE=/private/fixture.json node --use-env-proxy royale/tests/player-recovery-staging.mjs
+```
+
+The initial staging runner now additionally includes successful rotation/identity/retired-code assertions for subsequent complete runs; these new assertions were verified in the separate recovery runner during this continuation, not in the original 19-check run.
+
+---
+
+# Previous checkpoint (historical; migration blocker below is now resolved)
+
 # Account continuation — 2026-11-05
 
 Started from remote `feature/royale-player-accounts` at `f5b14a7dfc1555c257f8f726140294269d36a63f`. All following changes are on that development branch only.

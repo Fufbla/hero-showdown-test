@@ -5,6 +5,9 @@ export const ACCOUNT_FILES=new Set(['account-callback.html','account-callback.cs
 for(const path of ['app.mjs', 'player-accounts-config.mjs', 'player-account-client.mjs', 'player-account-ui.mjs', 'player-accounts.css', 'cloud-autosave.mjs', 'player-save-migration.mjs', 'backend/recovery.mjs', 'backend/supabase/migrations/20261105133227_royale_account_recovery.sql', 'tests/player-account-security.test.mjs', 'tests/player-cloud.test.mjs', 'tests/recovery-request-staging.mjs', 'tests/player-accounts-browser.html', 'tests/player-accounts-browser.mjs', 'tests/player-accounts-staging.mjs'])ACCOUNT_FILES.add('royale/'+path);
 ACCOUNT_FILES.add('royale/tests/player-cloud-database.test.mjs');
 ACCOUNT_FILES.add('royale/tests/player-accounts-e2e.mjs');
+ACCOUNT_FILES.add('royale/tests/player-cloud-staging.mjs');
+ACCOUNT_FILES.add('royale/tests/player-recovery-staging.mjs');
+ACCOUNT_FILES.add('royale/backend/supabase/migrations/20261105180000_royale_numeric_recovery.sql');
 ACCOUNT_FILES.add('royale/qa/accounts/royale-account-landscape.png');
 ACCOUNT_FILES.add('royale/multiplayer/tests/safety.test.mjs');
 export function assertAccountSafetyScope(){
