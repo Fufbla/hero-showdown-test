@@ -37,6 +37,14 @@ export class MenuGamepad {
       if(this.adjusting){this.finishAdjustment(false);return;}
       if(this.editor?.current){this.editor.close(false);return;}
       const cancel=items.find(el=>/^cancel-/.test(el.id))||items.find(el=>!el.closest('.view-toggle')&&/^(Back|Cancel|Keep previewing|Keep my hero|Leave orb|Close)/i.test(el.textContent.trim()));
+      // Confirmation dialogs use their own cancel control. Every ordinary overlay
+      // delegates Back/Circle to the same game menu router as Escape/touch.
+      if(scope.matches?.('.overlay:not([hidden])')){
+        const confirm=scope.querySelector?.('.upgrade-confirm:not([hidden]), #shop-confirm:not([hidden]), #equipment-confirm:not([hidden])');
+        const confirmationCancel=confirm?.getClientRects?.().length?[...confirm.querySelectorAll('button')].find(b=>/^(Cancel|Keep|Back)/i.test(b.textContent.trim())):null;
+        if(confirmationCancel){confirmationCancel.click();return;}
+        this.back();return;
+      }
       if(cancel)cancel.click();else this.back();return;
     }
     if(edges.includes(9)&&this.editor?.current){this.finishAdjustment(true);this.editor.close(false);this.consumePause=true;return;}
