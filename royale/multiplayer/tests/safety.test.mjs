@@ -1,3 +1,4 @@
+import {CORRECTION_FILES,assertCombatCorrectionScope} from '../../tests/player-corrections-preservation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
@@ -14,7 +15,8 @@ test('production defaults reject client-supplied legacy progression until verifi
 test('approved artwork, balance, simulation and legacy save implementation are byte-identical',()=>{
   const paths=execFileSync('git',['diff','--name-only',BASE],{cwd:new URL('../../../',import.meta.url),encoding:'utf8'}).trim().split('\n').filter(Boolean);
   const integration=new Set(['royale/tests/final-mobile.mjs','royale/release-config.mjs', 'royale/multiplayer-gate.mjs', 'royale/tools/build-solo.mjs', 'royale/tests/solo-release.test.mjs', 'royale/SOLO-DEPLOYMENT.md','royale/app.mjs','royale/index.html','royale/eris-ui.mjs','royale/journey-menu.mjs','royale/legendary-ui.mjs','royale/power-menu.mjs','royale/power-upgrades.mjs','royale/tools/build-playtest.mjs','royale/tests/final-preservation.mjs','royale/backend/supabase/migrations/20261104161434_royale_multiplayer_fence.sql']);
-  assert.deepEqual(paths.filter(p=>!p.startsWith('royale/multiplayer/')&&!integration.has(p)),[]);
+  assertCombatCorrectionScope();
+  assert.deepEqual(paths.filter(p=>!p.startsWith('royale/multiplayer/')&&!integration.has(p)&&!CORRECTION_FILES.has(p)),[]);
   assert.deepEqual(paths.filter(p=>/\.(png|webp|jpg|svg)$/.test(p)&&!p.startsWith('royale/multiplayer/qa/browser/')),[]);
 });
 test('combat, current health, cooldowns and exact midair position persist without a safe-save restriction',()=>{

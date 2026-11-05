@@ -182,7 +182,7 @@ export class PowerSystem {
     for(const burst of this.bursts){
       burst.next-=dt;
       while(burst.left>0&&burst.next<=EPS){
-        const p=this.projectilePool.acquire({x:h.x+burst.face*22,y:h.y-45,vx:burst.face*BALANCE.fireballSpeed,life:BALANCE.fireballLife,damage:burst.damage,pierce:burst.pierce});if(p)this.projectiles.push(p);
+        const p=this.projectilePool.acquire({x:h.x+burst.face*22,y:h.y-30,vx:burst.face*BALANCE.fireballSpeed,life:BALANCE.fireballLife,damage:burst.damage,pierce:burst.pierce});if(p)this.projectiles.push(p);
         burst.left--;burst.next+=BALANCE.burstInterval;
       }
     }

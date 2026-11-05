@@ -13,7 +13,7 @@ test('final build preserves every approved bitmap, combat rule, save schema and 
  const git=(...args)=>execFileSync('git',args,{cwd:repositoryRoot,encoding:'utf8'}).trim();
  const changed=git('diff','--name-only',FINAL_BASE).split('\n').filter(Boolean);
  assert.deepEqual(changed.filter(p=>!FINAL_FILES.has(p)),[]);
- assert.equal(git('diff','--name-only',FINAL_BASE,'--','royale/assets','assets','index.html','royale/boss-data.mjs','royale/legendary-data.mjs','royale/powers.mjs','royale/saves.mjs','royale/equipment.mjs','royale/costume-catalog.mjs'),'');
+ assert.equal(git('diff','--name-only',FINAL_BASE,'--','royale/assets','assets','index.html','royale/boss-data.mjs','royale/legendary-data.mjs','royale/saves.mjs','royale/equipment.mjs','royale/costume-catalog.mjs'),'');
  assertCleanupSimulation();
  const original=git('show',FINAL_BASE+':royale/renderer.mjs');
  const renderer=(await readFile(path.join(repositoryRoot,'royale/renderer.mjs'),'utf8')).trim();

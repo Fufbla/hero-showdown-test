@@ -1,0 +1,8 @@
+<!doctype html><meta charset="utf-8"><title>Player corrections browser verification</title>
+<style>body{background:#102e39;color:#fff;font:15px system-ui}button,select{padding:12px;margin:5px}iframe{display:block;border:2px solid #ddc47a}pre{white-space:pre-wrap}.gallery{display:flex;flex-wrap:wrap}canvas{background:#29454d;margin:4px}</style>
+<h1>Solo controller and character verification</h1>
+<label>Viewport <select id="size"><option>844x390</option><option>390x844</option><option>568x320</option></select></label>
+<button id="run">Run Gamepad API checks v2</button><button id="art">Render hair and skin directions</button>
+<pre id="result">Ready. Uses disposable session saves and synthetic standard Gamepad API input; not a physical controller test.</pre>
+<iframe id="game" width="844" height="390" src="../index.html?qa=1&testSession=player-corrections&touch=1"></iframe>
+<div class="gallery" id="gallery"></div><script type="module" src="player-corrections-browser.mjs"></script>

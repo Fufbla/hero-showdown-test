@@ -1,3 +1,4 @@
+import {HAIR_FIT_CORRECTIONS} from './hair-fit-corrections.mjs';
 // Each non-bald style has three independently illustrated turnaround sprites.
 // Pack rectangles measure source pixels. Draw origins use reference head-space,
 // where the eyes are at y=0 and the natural temple width is about 36 units.
@@ -88,10 +89,13 @@ function hairMaterial(look,view) {
   const [sx,sy,w,h,rawLeft,rawTop] = frame;
   const fit=HAIR_FITS[view][look.hair], offset=look.presentation==='female'?4:0;
   const [ex,ey,dx,dy]=fit.slice(offset,offset+4);
-  const left=rawLeft*ex+dx, top=rawTop*ey+dy;
+  const correction=HAIR_FIT_CORRECTIONS[look.hair]?.[view];
+  const originalLeft=rawLeft*ex+dx;
+  const left=originalLeft+(correction?.x||0), top=rawTop*ey+dy;
   const front=makeCanvas(w,h), rear=makeCanvas(w,h);
   const fc=front.getContext('2d',{willReadFrequently:true}), rc=rear.getContext('2d');
-  fc.drawImage(atlases[view],sx,sy,w,h,0,0,w,h);
+  fc.save();if(correction?.mirror){fc.translate(w,0);fc.scale(-1,1);}
+  fc.drawImage(atlases[view],sx,sy,w,h,0,0,w,h);fc.restore();
   const f=fc.getImageData(0,0,w,h), r=rc.createImageData(w,h), colors=colorRamp(look.hairColor);
   for (let y=0,i=0;y<h;y++) {
     const localY=top+(y+.5)*ey/HAIR_DENSITY;

@@ -133,7 +133,7 @@ export class Input {
       return;
     }
     const edges=[];for(const action of this.padHeld)if(!this.padPrevious.has(action))edges.push(action);this.padPrevious.clear();for(const action of this.padHeld)this.padPrevious.add(action);
-    if(edges.includes('pause'))this.onPause();
+    if(edges.includes('pause')){this.onPause();this.waitForNeutralPad=true;this.padHeld.clear();this.padX=this.padY=0;return;}
     if(this.enabled)for(const action of edges)this.edges.add(action);
   }
   sample() {

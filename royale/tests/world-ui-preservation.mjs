@@ -1,3 +1,4 @@
+import {withoutHitCorrection} from './player-corrections-preservation.mjs';
 import {assertCleanupSimulation,cleanupBefore} from './cleanup-preservation.mjs';
 import {isFireballFile} from './power-armor-preservation.mjs';
 import assert from 'node:assert/strict';
@@ -18,7 +19,7 @@ export function assertWorldPreserved(){
  assert.equal(body(current('eris.mjs')).replace(/^const GROUPS=.*$/m,''),body(base('eris.mjs')).replace(/^const GROUPS=.*$/m,''));
  // Protect all combat code outside the scoped Fireball stat formula and its
  // effective-level input. The dedicated armor suite tests those differences.
- const powers=current('powers.mjs').trimEnd()
+ const powers=current('powers.mjs').trimEnd().replace('y:h.y-30,vx:burst.face','y:h.y-45,vx:burst.face')
    .replace("const scale = (level,a,b) => a + (b-a)*(level-1)/19;\nconst speedScale = (level,low,cap,bonus=0) => level ? scale(Math.min(POWER_CAP,level+bonus),low,cap) : 0;","const scale = (level,a,b) => a + (b-a)*(level-1)/19;")
    .replace("runBonus:speedScale(level,.05,.6),attackBonus:speedScale(level,.03,.5)","runBonus:scale(level,.05,.6),attackBonus:scale(level,.03,.5)")
    .replace("powerStats('speed',level,{equipment}).attackBonus","powerStats('speed',level).attackBonus")
@@ -35,6 +36,6 @@ export function assertWorldPreserved(){
    .replace('projectiles:level>=20','projectiles:level===20').replace('pierce:level>=20','pierce:level===20');
  assert.equal(powers,base('powers.mjs'));
  assert.equal(cleanupBefore('world.mjs'),base('world.mjs'));
- const before=git('show',WORLD_BASE+':royale/core.mjs'),after=readFileSync(new URL('../core.mjs',import.meta.url),'utf8');
+ const before=git('show',WORLD_BASE+':royale/core.mjs'),after=withoutHitCorrection(readFileSync(new URL('../core.mjs',import.meta.url),'utf8'));
  for(const [start,end] of [['  attackDefinition(', '  interact()'],['    const axis =','    if(input.heal)'],['    if (h.attackBuffer)','    for (const e of this.enemies)'],['  stepEnemy(', '  save()']])assert.equal(after.slice(after.indexOf(start),after.indexOf(end)),before.slice(before.indexOf(start),before.indexOf(end)),`Protected simulation block ${start}`);
 }

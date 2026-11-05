@@ -66,6 +66,7 @@ export class Game {
     this.legendary=structuredClone(save?.legendary||emptyLegendary());this.initializeLegendaryRuntime();this.initializeMergeRuntime();
     this.economy=structuredClone(save?.economy||emptyEconomy());this.sanctuary=structuredClone(save?.sanctuary||null);
     this.random=random; this.baseEquipment=equipmentStats(equipment); this.combatTimer=0;initializeJourney(this,save,now);this.initializeBosses(save);this.refreshEquipment();
+    this.hitRecovery=new Map();this.hitEvents=new Map();
     this.events = []; this.attackSerial = 0; this.deathTimer = 0; this.started = false;
     const camp = this.camps[this.world.checkpoint.region===this.regionId?this.world.checkpoint.index:0], level = save?.level || 1;
     this.hero = { x: camp.x, y: camp.y, prevX: camp.x, prevY: camp.y, w: 34, h: 88,
@@ -185,8 +186,17 @@ export class Game {
     const h = this.hero;
     if (Object.hasOwn(TYPES,source.type)&&!isBoss(source)&&this.isSafeCamp())return false;
     if (h.invulnerable > 0 || h.dead || !Number.isFinite(amount) || amount<=0) return false;
+    // Different attackers do not share recovery. Regular strikes have an explicit
+    // event token; legacy hazards/boss volleys retain their own recovery window.
+    this.hitRecovery??=new Map();this.hitEvents??=new Map();
+    const event=source.damageEvent, key=source, recovery=!!(source.boss&&source.attack);
+    if(event?this.hitEvents.get(key)===event:recovery&&(this.hitRecovery.get(key)||0)>this.time)return false;
+    if(event)this.hitEvents.set(key,event);
+    if(this.hitEvents.size>512)this.hitEvents.delete(this.hitEvents.keys().next().value);
+    for(const [attacker,until] of this.hitRecovery)if(until<=this.time)this.hitRecovery.delete(attacker);
     const incoming=this.powers.incoming(amount,source);if(incoming===null){if(h.agile)h.dodgeAge=0;return false;}this.markCombat();
-    h.hp = Math.max(0, h.hp - incoming); h.invulnerable = 1.05; h.hurtAge = 0;
+    if(recovery)this.hitRecovery.set(key,this.time+1.05);
+    h.hp = Math.max(0, h.hp - incoming); h.hurtAge = 0;
     if(!this.powers.active.steel){h.stun=.16;h.vx = (h.x >= fromX ? 1 : -1) * 210;h.attack=null;h.attackBuffer=null;}
     this.emit('hurt');
     if (h.hp <= 0) this.defeat();

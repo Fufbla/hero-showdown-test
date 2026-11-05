@@ -1,3 +1,4 @@
+import {readFileSync} from 'node:fs';
 import {assertCleanupSimulation} from './cleanup-preservation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -36,7 +37,11 @@ function shop(level=99,learned=20){
 }
 const buy=(g,selection)=>g.buyCostume(selection,{confirmed:true,revision:g.economy.revision});
 test('protect all eight approved armor collections, base hero artwork, creatures and combat geometry',()=>{
- assertCleanupSimulation();const paths=['royale/agility-armor.mjs','royale/assets/power-armor/agility','royale/world-ui.css','royale/tests/mobile-input.test.mjs','royale/speed-armor.mjs','royale/assets/power-armor/speed','royale/power-armor.mjs','royale/steel-armor.mjs','royale/roots-armor.mjs','royale/strength-armor.mjs','royale/whirlwind-armor.mjs','royale/super-kick-armor.mjs','royale/assets/power-armor/superKick','royale/assets/power-armor/whirlwind','royale/assets/power-armor/roots','royale/assets/power-armor/strength','royale/assets/power-armor/fireball','royale/assets/power-armor/steel','royale/assets/hero','royale/assets/monsters','royale/assets/boss-sprites','royale/hero-rig.mjs','royale/style-c-rig.mjs'];
+ assertCleanupSimulation();
+ const cssBase=execFileSync('git',['show','04466d81dc161cded79056177d30861e6831a6e2:royale/world-ui.css'],{encoding:'utf8'});
+ const css=readFileSync(new URL('../world-ui.css',import.meta.url),'utf8');
+ assert.equal(css.replace('.equipment-card>div>p{display:block;line-height:1.5;overflow-wrap:anywhere}', '.equipment-card>div>p{display:none}').replace('\n.controller-focus{outline:3px solid #f3b83e!important;outline-offset:-3px!important;box-shadow:0 0 0 2px #163f48!important}\n',''),cssBase);
+ const paths=['royale/agility-armor.mjs','royale/assets/power-armor/agility','royale/tests/mobile-input.test.mjs','royale/speed-armor.mjs','royale/assets/power-armor/speed','royale/power-armor.mjs','royale/steel-armor.mjs','royale/roots-armor.mjs','royale/strength-armor.mjs','royale/whirlwind-armor.mjs','royale/super-kick-armor.mjs','royale/assets/power-armor/superKick','royale/assets/power-armor/whirlwind','royale/assets/power-armor/roots','royale/assets/power-armor/strength','royale/assets/power-armor/fireball','royale/assets/power-armor/steel','royale/assets/hero','royale/assets/monsters','royale/assets/boss-sprites','royale/hero-rig.mjs','royale/style-c-rig.mjs'];
  assert.equal(execFileSync('git',['diff','--name-only','eebe04a7d862fef40620822a0707e20fca4307fa','--',...paths],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}),'');
  assert.equal(Object.keys(FLIGHT_PIECES).length,27);
  const powers=['fireball','steel','roots','strength','whirlwind','superKick','speed','agility','flight'];

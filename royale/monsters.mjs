@@ -24,7 +24,7 @@ export function advancedEnemy(g,e,dt){
     // At a platform edge keep facing a tracked hero; never turn away in pursuit.
     move(info.speed*(info.behavior==='phase'?(1+Math.sin(g.time*3)*.35):1));
   }else if(e.state==='warn'&&e.age>=(coast?(e.type==='crawler'?.55:.7):Math.max(.38,.8-info.region*.045))){
-    e.state='strike';e.age=0;e.hit=false;
+    e.state='strike';e.age=0;e.hit=false;e.damageEvent={};
     if(info.behavior==='pounce'||info.behavior==='hop'){e.airborne=true;e.vy=coast?-180:-260;e.airVx=e.face*(coast?95:info.speed*1.8);e.pouncing=true;}
   }else if(e.state==='strike'){
     if(!ranged.has(info.behavior))move(coast?(e.type==='crawler'?155:105):info.speed*(info.behavior==='skitter'?2.1:info.behavior==='lunge'?2:1.25));

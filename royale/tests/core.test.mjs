@@ -71,10 +71,10 @@ test('level ups restore health, carry remaining XP, and enforce the 99-level cap
   const {g,e}=duel();g.hero.hp=25;g.hero.xp=45;e.hp=0;e.state='dead';g.reward(e);assert.equal(g.hero.level,2);assert.equal(g.hero.xp,9);assert.equal(g.hero.hp,115);
   g.gainXP(100000000);assert.equal(g.hero.level,LEVEL_CAP);assert.equal(g.hero.xp,0);
 });
-test('enemies telegraph before hitting and respect invulnerability', () => {
+test('enemies telegraph before hitting and cannot repeat the same strike', () => {
   const {g,e}=duel();e.provoked=true;e.state='patrol';e.age=0;e.x=e.spawnX=1045;g.hero.x=1000;
   ticks(g,35);assert.equal(g.hero.hp,100);assert.equal(e.state,'warn');ticks(g,17);assert.equal(g.hero.hp,95);
-  const hp=g.hero.hp;assert.equal(g.hurt(7,e.x),false);assert.equal(g.hero.hp,hp);
+  const hp=g.hero.hp;assert.equal(g.hurt(7,e.x,e),false);assert.equal(g.hero.hp,hp);
 });
 test('enemy patrols stay on their platforms and leash back', () => {
   const g=new Game();g.hero.x=0;

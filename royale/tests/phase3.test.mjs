@@ -106,7 +106,7 @@ test('Whirlwind damages a boss without lifting or disabling its attack',()=>{
 });
 test('Fireball sweep collides with solid walls before enemies, ignores one-way platforms and does not home',()=>{
   const g=setup('fireball',20),e=enemy(g,1110,{h:60});g.surfaces=[...g.surfaces,{x:1060,y:500,w:8,h:100}];cast(g,'fireball');tick(g,1);near(e.hp,10000);
-  const c=setup('fireball',1),far=enemy(c,1100,{y:450,h:30});cast(c,'fireball');tick(c,.5);near(far.hp,10000);assert.ok(c.powers.projectiles.every(p=>p.y===555));
+  const c=setup('fireball',1),far=enemy(c,1100,{y:450,h:30});cast(c,'fireball');tick(c,.5);near(far.hp,10000);assert.ok(c.powers.projectiles.every(p=>p.y===570));
   near(segmentHit(0,0,100,0,{x:40,y:-2,w:2,h:4}),.4);
 });
 test('independent cooldowns pause, persist, survive respawn and cannot reset through unequipping',()=>{

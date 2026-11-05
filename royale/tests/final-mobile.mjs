@@ -22,7 +22,7 @@ document.querySelector('#run').onclick=async()=>{
   d.querySelector('[data-action=create]').click();
   check(`${width}: creator preview remains visible`,inside(el('hero-preview'),w));
   check(`${width}: Begin and Back remain visible`,inside(el('begin'),w)&&inside(el('cancel-look'),w));
-  for(const sex of ['male','female']){select('presentation',sex);for(const pose of ['walk','run','jump','punch','kick','strength']){select('preview-pose',pose);check(`${width}: ${sex} ${pose} preview`,el('hero-preview').getAttribute('aria-label').toLowerCase().includes(pose==='strength'?'strength':pose));}}
+  for(const sex of ['male','female']){select('presentation',sex);check(`${width}: no animation selector`,!el('preview-pose'));for(const view of ['front','back','side','left']){el('view-'+view).click();check(`${width}: ${sex} ${view} idle preview`,el('hero-preview').getAttribute('aria-label').endsWith('Idle'));}}
   el('name').value='Landscape '+width;el('name').dispatchEvent(new w.Event('input',{bubbles:true}));
   el('tab-body').click();select('build','strong');el('tab-suit').click();select('emblem','shield');el('begin').click();
   await until(()=>d.body.classList.contains('playing'),'Patrol did not start');await wait(150);

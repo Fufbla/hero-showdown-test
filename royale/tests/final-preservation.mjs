@@ -1,3 +1,4 @@
+import {CORRECTION_FILES} from './player-corrections-preservation.mjs';
 import {CLEANUP_FILES} from './cleanup-preservation.mjs';
 // Scope of the final test-build work. Artwork and simulation have no exceptions.
 export const FINAL_BASE='3fdaee3eeba50a703f6a850b1871facd1de7896e';
@@ -51,3 +52,5 @@ for(const path of ['.env.example','load-controlled.mjs','deploy/client-config.ex
 
 // Authorized static solo release configuration, packaging and regression coverage.
 for(const path of ['royale/release-config.mjs', 'royale/multiplayer-gate.mjs', 'royale/tools/build-solo.mjs', 'royale/tests/solo-release.test.mjs', 'royale/SOLO-DEPLOYMENT.md'])FINAL_FILES.add(path);
+
+for(const path of CORRECTION_FILES)FINAL_FILES.add(path);

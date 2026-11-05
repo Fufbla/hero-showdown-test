@@ -1,3 +1,4 @@
+import {withoutHitCorrection,assertCombatCorrectionScope} from './player-corrections-preservation.mjs';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
@@ -8,13 +9,14 @@ export const cleanupBefore=name=>git('show',CLEANUP_BASE+':royale/'+name);
 export const cleanupCurrent=name=>readFileSync(new URL('../'+name,import.meta.url),'utf8').trimEnd();
 const replaceBlock=(current,before,start,end)=>current.slice(0,current.indexOf(start))+before.slice(before.indexOf(start),before.indexOf(end))+current.slice(current.indexOf(end));
 export function assertCleanupSimulation(){
- let current=cleanupCurrent('core.mjs'),before=cleanupBefore('core.mjs');
+ assertCombatCorrectionScope();
+ let current=withoutHitCorrection(cleanupCurrent('core.mjs')),before=cleanupBefore('core.mjs');
  current=current.replace('    this.activateCheckpoint();\n','');
  current=replaceBlock(current,before,'  enterPortal() {','  step(dt');
  assert.equal(current,before,'Only checkpoint activation/healing changes in simulation');
  current=cleanupCurrent('world.mjs');before=cleanupBefore('world.mjs');
  assert.equal(replaceBlock(current,before,'export function regionSpawns(id)','export const GATES'),before,'Only platform population changes; all geometry/species/stat definitions remain exact');
- assert.equal(git('diff','--name-only',CLEANUP_BASE,'--','royale/assets','assets','index.html','royale/powers.mjs','royale/progression.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs','royale/boss-data.mjs','royale/legendary-data.mjs','royale/boss-loot.mjs','royale/legendary-state.mjs','royale/merge-powers.mjs','royale/equipment.mjs','royale/costume-catalog.mjs','royale/saves.mjs','royale/journey.mjs'),'');
+ assert.equal(git('diff','--name-only',CLEANUP_BASE,'--','royale/assets','assets','index.html','royale/progression.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs','royale/boss-data.mjs','royale/legendary-data.mjs','royale/boss-loot.mjs','royale/legendary-state.mjs','royale/merge-powers.mjs','royale/equipment.mjs','royale/costume-catalog.mjs','royale/saves.mjs','royale/journey.mjs'),'');
 }
 
 for(const path of ['tests/strength-armor.test.mjs', 'tests/flight-armor.test.mjs', 'tests/super-kick-armor.test.mjs', 'tests/roots-armor.test.mjs', 'tests/speed-armor.test.mjs', 'tests/whirlwind-armor.test.mjs', 'tests/agility-armor.test.mjs', 'tests/phase9.test.mjs'])CLEANUP_FILES.add('royale/'+path);
