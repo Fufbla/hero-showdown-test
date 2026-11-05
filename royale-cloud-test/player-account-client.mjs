@@ -76,14 +76,18 @@ export class AutomaticCloudStore extends CloudHeroStore{
      this.writeDraft(index,{version:2,status:'archived',archiveKey:key});continue;
     }
     const decision=classifyRecoveryDraft(draft,this.meta[index],this.user.id,index);
-    if(decision.action==='archive-and-load'){
+    // A recovered draft is not a reason to permanently lock the account.
+    // Even unknown/corrupt drafts can be preserved verbatim in a verified
+    // archive. Only the independently fetched server-confirmed roster loads;
+    // no pending request is replayed and no cloud hero is deleted.
+    if(decision.action==='archive-and-load'||decision.action==='hold'){
      // A copy is verified before the active pointer is changed. Never replay a
      // stale request or replace the server-confirmed hero automatically.
      const key=this.draftKey(index)+':archive:'+crypto.randomUUID();
      this.backup.setItem(key,raw);
      if(this.backup.getItem(key)!==raw)throw Error('Recovery archive verification failed. Original draft retained.');
      this.writeDraft(index,{version:2,status:'archived',archiveKey:key,serverRevision:this.meta[index].revision,reason:decision.reason});
-     this.message='Unconfirmed ordinary progress was archived safely. Your server-confirmed hero is ready.';
+     this.message='An unconfirmed browser save was preserved in a verified archive. Your server-confirmed heroes are ready.';
      continue;
     }
     if(decision.action==='ignore')continue;
