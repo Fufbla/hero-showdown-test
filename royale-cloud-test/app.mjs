@@ -396,7 +396,9 @@ document.addEventListener('keydown',e=>{
 
 let accountMenu=null;
 async function useCloud({reload=false}={}){
- if(!cloudApi)return;const discardPending=reload;const owner=(await cloudApi.auth.getSession()).data.session?.user.id;if(store.cloud&&owner!==store.user.id)reload=true;if(store.cloud&&store.failure&&!reload)await store.retry();if(!reload)await flushCloud();const candidate=new AutomaticCloudStore(cloudApi,{backup:storage,onStatus:message=>{candidate.message=message;storageNotice();}});await candidate.refresh({discardPending});cloudStore=candidate;store=candidate;ledger={commit:(id,rev,snapshot)=>candidate.irreversible(id,rev,snapshot)};ledgerError='';game=new Game();activeId=null;activeSlot=0;autosave.reset();document.body.classList.add('cloud-mode');if(candidate.failure){cloudFailure(candidate.failure);return;}renderRoster();setScreen('roster');
+ if(!cloudApi)return;const discardPending=reload;const owner=(await cloudApi.auth.getSession()).data.session?.user.id;if(store.cloud&&owner!==store.user.id)reload=true;// Do not replay an old failed request while entering the account. The
+ // recovery policy archives it first and loads the server-confirmed roster.
+ if(!reload&&store.cloud&&!store.failure)await flushCloud();const candidate=new AutomaticCloudStore(cloudApi,{backup:storage,onStatus:message=>{candidate.message=message;storageNotice();}});await candidate.refresh({discardPending});cloudStore=candidate;store=candidate;ledger={commit:(id,rev,snapshot)=>candidate.irreversible(id,rev,snapshot)};ledgerError='';game=new Game();activeId=null;activeSlot=0;autosave.reset();document.body.classList.add('cloud-mode');if(candidate.failure){cloudFailure(candidate.failure);return;}renderRoster();setScreen('roster');
 }
 function signedOut(){autosave.reset();game.paused=true;input.clear();store=localStore;cloudStore=null;ledger=localLedger;ledgerError=localLedgerError;game=new Game();activeId=null;document.body.classList.remove('cloud-mode');setScreen('account');accountMenu.render('welcome');}
 if(cloudApi){
