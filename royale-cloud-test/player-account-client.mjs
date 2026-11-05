@@ -2,6 +2,7 @@ import {CloudAPI,CloudHeroStore} from './cloud-client.mjs';
 import {CLOUD_CONFIG} from './cloud-config.mjs';
 import {ACCOUNT_ENDPOINT} from './player-accounts-config.mjs';
 import {setServerClock} from './shared-clock.mjs';
+import {classifyRecoveryDraft} from './cloud-recovery-policy.mjs';
 export class PlayerAccountAPI extends CloudAPI{
  constructor(options){super(options);this.endpoint=ACCOUNT_ENDPOINT;}
  async request(body){const headers={apikey:CLOUD_CONFIG.publishableKey,'Content-Type':'application/json'};if(body?.authenticated){const {data,error}=await this.auth.getSession();if(error||!data?.session)throw Object.assign(Error('Session expired. Sign in again; your cloud heroes are unchanged.'),{status:401});if(body.payload.accountId&&body.payload.accountId!==data.session.user.id)throw Error('Account changed. This save belongs to the previous account.');headers.Authorization='Bearer '+data.session.access_token;}
@@ -74,30 +75,27 @@ export class AutomaticCloudStore extends CloudHeroStore{
      if(this.backup.getItem(key)!==raw)throw Error('Recovery archive could not be verified.');
      this.writeDraft(index,{version:2,status:'archived',archiveKey:key});continue;
     }
-    draftCount++;if(draftCount>1)throw Error('Multiple unconfirmed drafts need review. Export them before reloading.');
-    if(draft.version===2&&draft.status==='pending'){
-     const body=JSON.parse(draft.pending.payload);
-     if(body.action!=='commit'||!['create','import','manual','irreversible','delete'].includes(body.kind)||body.accountId!==this.user.id||body.slot!==index||!Number.isSafeInteger(body.expectedRevision)||body.expectedRevision<0||!/^[-a-f0-9]{36}$/i.test(draft.pending.requestId))throw Error('Invalid recovery draft. Export it before reloading.');
-     // A stale ordinary autosave must never block the account indefinitely.
-     // Keep the full draft in a verified immutable archive and load the newer
-     // server-confirmed hero. Never auto-replay a superseded mutation.
-     const confirmed=this.meta[index];
-     // A pending ordinary autosave may have an unknown acknowledgement or a
-     // superseded revision. Preserve its exact payload first, then use the
-     // server-confirmed hero as the playable baseline. No destructive or
-     // irreversible operations are ever auto-archived.
-     if(body.kind==='manual'&&confirmed&&!confirmed.deleted&&confirmed.hero_id===body.heroId){
-      const key=this.draftKey(index)+':archive:'+crypto.randomUUID();
-      this.backup.setItem(key,raw);
-      if(this.backup.getItem(key)!==raw)throw Error('Recovery archive could not be verified; existing saves are unchanged.');
-      this.writeDraft(index,{version:2,status:'archived',archiveKey:key,serverRevision:confirmed.revision,reason:'ordinary-save-reconciliation'});
-      this.message='Previous unconfirmed progress is archived on this browser. Loaded the server-confirmed hero; archived changes were not applied.';
-      continue;
-     }
+    const decision=classifyRecoveryDraft(draft,this.meta[index],this.user.id,index);
+    if(decision.action==='archive-and-load'){
+     // A copy is verified before the active pointer is changed. Never replay a
+     // stale request or replace the server-confirmed hero automatically.
+     const key=this.draftKey(index)+':archive:'+crypto.randomUUID();
+     this.backup.setItem(key,raw);
+     if(this.backup.getItem(key)!==raw)throw Error('Recovery archive verification failed. Original draft retained.');
+     this.writeDraft(index,{version:2,status:'archived',archiveKey:key,serverRevision:this.meta[index].revision,reason:decision.reason});
+     this.message='Unconfirmed ordinary progress was archived safely. Your server-confirmed hero is ready.';
+     continue;
+    }
+    if(decision.action==='ignore')continue;
+    draftCount++;
+    if(draftCount>1)throw Error('Multiple unconfirmed drafts need review. Export them before reloading.');
+    if(decision.action==='hold'&&draft?.version===2&&draft.status==='pending'&&draft.pending?.payload){
+     // Retain the original request for an explicit, owner-verified retry.
      if(this.api.pending)throw Error('Multiple unconfirmed drafts need review. Export them before reloading.');
      this.api.pending=draft.pending;
     }else blockedRecovery=true;
-    this.failure=Error('An unconfirmed save was recovered from this browser. Retry it or reload confirmed cloud heroes.');
+    this.failure=Error('An unconfirmed save needs review. No cloud hero was overwritten.');
+
    }catch(error){this.failure=error;blockedRecovery=true;}
   }
   if(blockedRecovery)this.api.pending=null;
