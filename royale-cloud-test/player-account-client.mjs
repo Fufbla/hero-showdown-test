@@ -82,12 +82,16 @@ export class AutomaticCloudStore extends CloudHeroStore{
      // Keep the full draft in a verified immutable archive and load the newer
      // server-confirmed hero. Never auto-replay a superseded mutation.
      const confirmed=this.meta[index];
-     if(body.kind==='manual'&&confirmed&&!confirmed.deleted&&confirmed.revision>body.expectedRevision){
+     // A pending ordinary autosave may have an unknown acknowledgement or a
+     // superseded revision. Preserve its exact payload first, then use the
+     // server-confirmed hero as the playable baseline. No destructive or
+     // irreversible operations are ever auto-archived.
+     if(body.kind==='manual'&&confirmed&&!confirmed.deleted&&confirmed.hero_id===body.heroId){
       const key=this.draftKey(index)+':archive:'+crypto.randomUUID();
       this.backup.setItem(key,raw);
-      if(this.backup.getItem(key)!==raw)throw Error('Could not verify the recovery archive; no cloud data was changed.');
-      this.writeDraft(index,{version:2,status:'archived',archiveKey:key,serverRevision:confirmed.revision,reason:'superseded-manual-save'});
-      this.message='A superseded local save was safely archived. Your newer confirmed cloud hero is ready.';
+      if(this.backup.getItem(key)!==raw)throw Error('Recovery archive could not be verified; existing saves are unchanged.');
+      this.writeDraft(index,{version:2,status:'archived',archiveKey:key,serverRevision:confirmed.revision,reason:'ordinary-save-reconciliation'});
+      this.message='Previous unconfirmed progress is archived on this browser. Loaded the server-confirmed hero; archived changes were not applied.';
       continue;
      }
      if(this.api.pending)throw Error('Multiple unconfirmed drafts need review. Export them before reloading.');
