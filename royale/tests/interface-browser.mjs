@@ -71,3 +71,65 @@ document.querySelector('#run').onclick=async()=>{
   summary.textContent='COMPLETE · '+checks+' browser checks passed across five viewports. Synthetic Gamepad API; no physical hardware verification.';
  }catch(error){summary.textContent='FAIL · '+error.message+' · '+checks+' passed';log.textContent+='ERROR '+error.stack+'\n';}finally{button.disabled=false;}
 };
+
+
+// Isolated menu regression suite: never touches real player saves.
+const menuRun=document.createElement('button');menuRun.id='menu-regression-run';menuRun.type='button';menuRun.textContent='Test Resume and Back Navigation';document.querySelector('#run').after(menuRun);
+menuRun.onclick=async()=>{
+ menuRun.disabled=true;log.textContent='';let count=0;
+ const check=(ok,label)=>{log.textContent+=(ok?'PASS ':'FAIL ')+label+'\n';if(!ok)throw Error(label);count++;summary.textContent=count+' menu checks passed';};
+ try{
+ for(const [width,height]of [[568,320],[844,390],[390,844]]){
+  const f=await load(width,height,true),{d,w,key}=f;
+  d.querySelector('#royale-play-local')?.click();
+  const el=id=>d.getElementById(id);
+  const saved=()=>JSON.parse(sessionStorage.getItem(key+PROFILE_KEY)).slots[0].snapshot;
+  const compare=(before,after,label)=>{
+   for(const part of ['level','xp','coins'])check(before[part]===after[part],label+' '+part);
+   for(const part of ['look','inventory','powers'])check(JSON.stringify(before[part])===JSON.stringify(after[part]),label+' '+part);
+   check(before.world.location.x===after.world.location.x&&before.world.location.y===after.world.location.y,label+' position');
+  };
+  const resumed=async(label,before)=>{
+   await until(()=>d.body.classList.contains('playing'),label+' returns to gameplay');
+   check(el('menu-exit-actions').hidden,label+' closes navigation overlay');
+   check(!el('pause').disabled,label+' restores pause control');
+   compare(before,saved(),label);
+  };
+  const go=async(open,screen)=>{
+   const before=saved();el('pause').click();el(open).click();
+   await until(()=>!el(screen).hidden,open+' panel appears');
+   const actions=el('menu-exit-actions');
+   check(!actions.hidden&&actions.getClientRects().length>0,open+' has visible resume and back controls');
+   [...actions.querySelectorAll('button')].find(b=>b.textContent==='Resume Game').click();
+   await resumed(open,before);
+  };
+  // My Hero is a nested panel inside the Pause overlay.
+  const beforeHero=saved();el('pause').click();el('open-my-hero').click();
+  check(!el('pause-hero').hidden&&!el('menu-exit-actions').hidden,'My Hero visible with Resume');
+  el('menu-exit-actions').querySelector('button:last-child').click();await resumed('My Hero',beforeHero);
+  for(const [open,screen]of [['open-map','world-menu'],['open-inventory','inventory-menu'],['open-controls','controls-menu']])await go(open,screen);
+  for(const panel of ['powers','wardrobe','roots','merge','home']){
+   const before=saved();el('pause').click();el('tree-from-pause').click();
+   await until(()=>!el('tree-menu').hidden,'Tree of Eris opens safely');
+   d.querySelector('.eris-nav [data-eris='+panel+']')?.click();
+   check(!el('menu-exit-actions').hidden,'Eris '+panel+' has Resume');
+   el('menu-exit-actions').querySelector('button:last-child').click();
+   await resumed('Tree '+panel,before);
+  }
+  // Submenu B/Circle goes back to Pause, then Start/Options resumes.
+  const pad=await controller(w);el('pause').click();el('open-map').click();await pad.press(1);
+  await until(()=>!el('pause-menu').hidden,'Controller B returns to pause');
+  check(el('world-menu').hidden,'B/Circle closes map');
+  el('open-controls').click();await pad.press(9);
+  await until(()=>d.body.classList.contains('playing'),'Controller Start resumes');
+  check(el('controls-menu').hidden,'Start/Options closes settings');
+  // Touchscreen pointer click uses the exact same shared Resume button.
+  const beforeTouch=saved();el('pause').click();el('open-inventory').click();
+  const touchResume=el('menu-exit-actions').querySelector('button:last-child');
+  touchResume.dispatchEvent(new w.MouseEvent('click',{bubbles:true}));
+  await resumed('Touch-compatible Resume control',beforeTouch);
+ }
+ summary.textContent='COMPLETE · '+count+' isolated menu assertions across phone landscape, tablet landscape and portrait. Synthetic input only; physical hardware remains to be checked.';
+ }catch(error){summary.textContent='FAIL · '+error.message+' · '+count+' passed';log.textContent+='ERROR '+error.stack+'\n';}
+ finally{menuRun.disabled=false;}
+};
