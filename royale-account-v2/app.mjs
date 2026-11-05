@@ -5,8 +5,8 @@ const $=id=>document.getElementById(id);
 const api=new PlayerAccountAPI({storageKey:'healthia.royale.auth.v1'});
 let cloud=null,busy=false;
 function status(t){$('status').textContent=t;}
-function button(label,fn){const b=document.createElement('button');b.textContent=label;b.onclick=()=>void run(fn);return b;}
-async function run(fn){if(busy)return;busy=true;try{await fn();}catch(e){status(e.message||String(e));}finally{busy=false;}}
+function button(label,fn){const b=document.createElement('button');b.type='button';b.textContent=label;b.addEventListener('click',()=>{status('Button pressed: '+label);void run(fn);});return b;}
+async function run(fn){if(busy){status('Another account request is still running.');return;}busy=true;try{await fn();}catch(e){status(e.message||String(e));}finally{busy=false;}}
 function snapshotInfo(slot){const s=slot?.snapshot;if(!s)return 'Empty';const hero=s.hero||{};return 'Hero: '+String(hero.name||s.name||'Saved Hero')+' · Level '+String(hero.level||s.level||'?')+' · XP '+String(hero.xp??s.xp??'?');}
 async function load(){const next=new CloudHeroStore(api);await next.refresh();cloud=next;$('login').hidden=true;$('roster').hidden=false;$('account-name').textContent='Account: '+(cloud.user?.username||'Signed in');render();status('Cloud roster loaded. Existing saves have not been modified.');}
 function render(){const root=$('slots');root.replaceChildren();const local=new LocalHeroStore(localStorage);
