@@ -1,3 +1,5 @@
+import {NATURAL_SKIN_TONES} from './color-options.mjs';
+import {entryEditor} from './controller-entry.mjs';
 import {HAIR_CATALOG,HAIR_CATEGORIES} from './hair-catalog.mjs';
 import { DEFAULT_LOOK, LOOK_OPTIONS, LOOK_RANGES, COLOR_FIELDS, sanitizeLook, validateName, canRecolorOutfit } from './appearance.mjs';
 import { drawHero } from './hero-art.mjs';
@@ -22,6 +24,7 @@ export class Creator{
       if(control.type==='checkbox')label.classList.add('check-field');
       $(`${group}-fields`).append(label);
     }
+    this.createSkinChoices();
     this.createHairGallery();
     for(const view of STYLE_C_VIEWS)$(`view-${view}`).onclick=()=>{this.view=view;for(const v of STYLE_C_VIEWS)$(`view-${v}`).setAttribute('aria-pressed',String(v===view));this.draw();this.refreshHairGallery();};
     for(const button of document.querySelectorAll('[data-tab]')){
@@ -35,6 +38,15 @@ export class Creator{
       }
       this.read();this.validate(false);this.draw();this.refreshHairGallery();
     });
+  }
+  createSkinChoices(){
+    const section=document.createElement('section');section.className='natural-skin';
+    const heading=document.createElement('h3');heading.textContent='Natural skin tones';
+    const note=document.createElement('p');note.textContent='Pale to deep · cool, neutral, warm, golden, olive and reddish brown';
+    const grid=document.createElement('div');grid.className='skin-swatches';grid.setAttribute('role','group');grid.setAttribute('aria-label','Natural skin tones');
+    for(const tone of NATURAL_SKIN_TONES){const b=document.createElement('button');b.type='button';b.style.background=tone.color;b.dataset.skin=tone.color;b.title=tone.name;b.setAttribute('aria-label',tone.name);b.onclick=()=>{$('skin').value=tone.color;$('skin').dispatchEvent(new Event('input',{bubbles:true}));};grid.append(b);}
+    const custom=document.createElement('button');custom.type='button';custom.className='secondary';custom.id='custom-skin-color';custom.textContent='Custom color';custom.onclick=()=>entryEditor(document).color($('skin'));
+    section.append(heading,note,grid,custom);$('identity-fields').after(section);
   }
   createHairGallery(){
     this.hairCategory=HAIR_CATEGORIES[0];
@@ -62,7 +74,7 @@ export class Creator{
   read(){
     const values={name:$('name').value};
     for(const field of Object.values(FIELD_GROUPS).flat()){const el=$(field);values[field]=el.type==='checkbox'?el.checked:el.type==='range'?Number(el.value):el.value;if(el.type==='range')$(`${field}-value`).textContent=`${Math.round(Number(el.value)*100)}%`;}
-    this.look=sanitizeLook(values);$('preview-name').textContent=$('name').value.trim()||'Your hero';return this.look;
+    this.look=sanitizeLook(values);for(const b of document.querySelectorAll('[data-skin]'))b.setAttribute('aria-pressed',String(b.dataset.skin===this.look.skin));$('preview-name').textContent=$('name').value.trim()||'Your hero';return this.look;
   }
   validate(show=true){const result=validateName($('name').value);$('name').setAttribute('aria-invalid',String(!result.ok));$('name-error').hidden=result.ok||!show;$('name-error').textContent=result.error||'';if(show&&!result.ok){this.tab('identity');$('name').focus();}return result;}
   draw(now=performance.now()){

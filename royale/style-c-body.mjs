@@ -1,3 +1,4 @@
+import {skinShade} from './skin-color.mjs';
 // The protected rest sprites contain the original reference RGB. Torso plates
 // have a second, emblem-free painting for changing the insignia cleanly.
 import {STYLE_C_DEFAULTS} from './style-c-defaults.mjs';
@@ -53,6 +54,14 @@ function material(kind,model,x,y,r,g,b) {
     if (model.sex==='male' ? b>r*1.12 && b>g*1.1 : b>g*1.18 && r>g*1.14) return 'suit';
     return;
   }
+  if(kind==='source'){
+    // Registered exposed-skin regions on the untouched resting plates. This
+    // keeps their exact pose and silhouette when recoloring hands and arms.
+    const regions=model.sex==='male'?[[133,193,27,27],[224,194,27,31],[132,230,29,31],[249,219,33,30],[188,164,26,20]]:
+      [[113,200,23,23],[185,203,29,29],[162,174,24,20]];
+    const px=x-model.box[0],py=y-model.box[1];
+    if(regions.some(([a,b,w,h])=>px>=a&&px<a+w&&py>=b&&py<b+h)&&r>32&&r>g*1.3&&g>b*1.15)return 'skin';
+  }
   const inHead=y<model.head[1]+44 || model.sex==='female' && x<model.head[0]-54 && y<475;
   // Gold bands and hoops are separate from the hair dye; skin and the white
   // eye highlights also retain independent materials.
@@ -83,7 +92,7 @@ function colored(kind,model,look,palette,symbol) {
   for(let y=0;y<tile.height;y++)for(let x=0;x<tile.width;x++){
     const i=(y*tile.width+x)*4;if(!d[i+3])continue;
     const id=material(kind,model,x+ox,y+oy,d[i],d[i+1],d[i+2]);
-    if(inks[id])shade(d,i,...inks[id]);
+    if(inks[id]){if(id==='skin'){const skin=skinShade([d[i],d[i+1],d[i+2]],inks[id][0]);for(let k=0;k<3;k++)d[i+k]=skin[k];}else shade(d,i,...inks[id]);}
   }
   c.putImageData(pixels,0,0);variants.set(key,tile);
   if(variants.size>CACHE_LIMIT)variants.delete(variants.keys().next().value);

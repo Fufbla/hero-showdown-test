@@ -1,3 +1,4 @@
+import {skinShade} from './skin-color.mjs';
 // A second angle of each painted part supplies profile hands, bent deltoids,
 // raised heels and foreshortened soles. The source face, chest, and cape have
 // their own layers, so changing a glove or boot cannot recolor the face.
@@ -65,6 +66,7 @@ function material(angle,part,look,palette,item) {
   for(let i=0;i<data.length;i+=4){
     if(!data[i+3])continue;
     const zone=Math.round(cell.zones[i]/32),target=paletteRGB[zone];if(!target)continue;
+    if(zone===1){const skin=skinShade([data[i],data[i+1],data[i+2]],target);for(let k=0;k<3;k++)data[i+k]=skin[k];continue;}
     const y=data[i]*.2126+data[i+1]*.7152+data[i+2]*.0722,ref=anchors[zone];
     for(let k=0;k<3;k++)data[i+k]=y<ref?target[k]*y/ref:target[k]+(255-target[k])*(y-ref)/(255-ref);
   }

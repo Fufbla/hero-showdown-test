@@ -1,3 +1,4 @@
+import {skinShade} from './skin-color.mjs';
 import {headwearFit} from './headwear-fit.mjs';
 // Creator turnarounds use the supplied direction board for the neutral silhouettes.
 // The newly illustrated bald, capeless underlays reveal the head and rear armor
@@ -57,6 +58,7 @@ function materialFor(model, name, colors, base) {
     for(let col=0;col<w;col++,offset+=4) {
       const at=(row*w+col)*4,id=mask[offset], target=changed[id];
       if(!px[at+3]||!target)continue;
+      if(id===1){const skin=skinShade([px[at],px[at+1],px[at+2]],target);for(let k=0;k<3;k++)px[at+k]=skin[k];continue;}
       const high=Math.max(px[at],px[at+1],px[at+2]);
       if(high<24)continue;
       // Preserve the original ink and the local painted light, even for a very pale hairstyle.

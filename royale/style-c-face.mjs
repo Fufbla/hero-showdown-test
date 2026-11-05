@@ -1,3 +1,4 @@
+import {skinShade} from './skin-color.mjs';
 // The full forward resting figure is drawn from the original reference elsewhere.
 // These plates fit its exposed face to a separate scalp, native hair and individual features.
 import {STYLE_C_DEFAULTS} from './style-c-defaults.mjs';
@@ -36,7 +37,7 @@ const defaultLoader = url => new Promise((resolve,reject) => {
 
 export function isOmittedEyelidSkin(base,i,mask) {
   const r=base[i],g=base[i+1],b=base[i+2];
-  return base[i+3]>0&&mask[i]===0&&mask[i+1]===0&&mask[i+2]===0&&r>100&&g>50&&b>20&&r-g>22&&g-b>12;
+  return base[i+3]>0&&mask[i]===0&&mask[i+1]===0&&mask[i+2]===0&&r>40&&g>16&&b>5&&r-g>8&&g-b>5&&r>g*1.2&&g>b*1.1;
 }
 
 export function prepareStyleCFace({canvasFactory, imageLoader} = {}) {
@@ -84,11 +85,12 @@ export function styleCFaceChanged(look) {
 // Modulate painted values relative to the default palette. The material mask protects
 // pupil ink, sclera, teeth, gold earrings and scalp outlines from other color controls.
 function recolor(data, i, material, channels, selected, reference) {
+  const skin=channels.includes(0)?skinShade([data[i],data[i+1],data[i+2]],selected[0],reference[0]):null;
   for (let k=0;k<3;k++) {
     let value=data[i+k];
     for (const ch of channels) {
       const weight=material[i+ch]/255;
-      if (weight) value+=(cap(data[i+k]*(selected[ch][k]+12)/(reference[ch][k]+12))-data[i+k])*weight;
+      if (weight) value+=((ch===0?skin[k]:cap(data[i+k]*(selected[ch][k]+12)/(reference[ch][k]+12)))-data[i+k])*weight;
     }
     data[i+k]=cap(value);
   }
@@ -217,9 +219,10 @@ function buildFace(look, mode, closed, steel) {
       const i=((yy+(y-oy)*density)*W+(x-ox)*density+xx)*4,j=(yy*patch.width+xx)*4;
       if(!mask[i+ch])continue;
       const colors=[original[i],original[i+1],original[i+2],255];
+      const skin=skinShade([original[i],original[i+1],original[i+2]],selected[0],reference[0]);
       for(const tint of channels){
         const weight=material[i+tint]/255;
-        for(let k=0;k<3;k++)colors[k]+=(cap(original[i+k]*(selected[tint][k]+12)/(reference[tint][k]+12))-original[i+k])*weight;
+        for(let k=0;k<3;k++)colors[k]+=((tint===0?skin[k]:cap(original[i+k]*(selected[tint][k]+12)/(reference[tint][k]+12)))-original[i+k])*weight;
       }
       for(let k=0;k<3;k++)item.data[j+k]=colors[k];
       item.data[j+3]=mask[i+ch]*original[i+3]/255;
