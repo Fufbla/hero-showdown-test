@@ -86,7 +86,7 @@ function online(){return !!multiplayerMenu.session?.active;}
 const autosave=new CloudAutosave(()=>({store,game,index:activeSlot,blocked:criticalPending||powerUpgrades.busy||online()}),{onError:cloudFailure});
 function cloudFailure(error){game.paused=true;input.enabled=false;input.clear();setScreen('account');void accountMenu.open('settings').then(()=>accountMenu.status('Saving stopped: '+error.message+' Your local recovery draft is retained. Reload your cloud heroes before continuing.'));}
 async function flushCloud(){if(!store.cloud)return;await autosave.flush();await store.flush();if(game.started){await autosave.save({force:true});await store.flush();}}
-if(cloudApi)setInterval(()=>void autosave.save(),5000);
+if(cloudApi)setInterval(()=>{if(screen==='play'&&game.started&&!store.failure)void autosave.save();},5000);
 
 
 function say(message,seconds=3){$('toast').textContent=message;$('toast').classList.add('visible');toastUntil=performance.now()+seconds*1000;}
@@ -96,7 +96,7 @@ function storageNotice(){
   $('storage-warning').textContent=!store.durable?message:ledgerError?'Legendary storage: '+ledgerError:'';$('storage-warning').hidden=store.durable&&!ledgerError;
 }
 function persist({manual=false}={}){
-  if(store.cloud){void autosave.save({force:true});return {ok:true,pending:true};}
+  if(store.cloud){void autosave.save({force:manual});return {ok:true,pending:true};}
   if(online())return {ok:true,account:true};
   if(activeId&&multiplayerMenu.isLinked(activeId))return {ok:false,error:'This hero uses account saving. Reconnect to continue.'};
   if(criticalPending||powerUpgrades.busy||!game.started||!game.canSave())return {ok:false,error:'Saving resumes after five seconds outside combat.'};
