@@ -306,7 +306,7 @@ function updatePowers(){
     b.classList.toggle('cooldown',!!cooldown);b.classList.toggle('active',!!active);b.classList.toggle('disrupted',!!disrupted);b.classList.toggle('flight-locked',!!(game.powers.flying&&def?.offensive&&id!=='fireball'));b.disabled=screen!=='play'||game.hero.dead||!!disrupted||!!criticalPending||(!id&&(special||!canEdit));
     hudAttr(b,'aria-label',!id&&!special?`Choose a power for empty slot ${i+1}`:`${def?.name||`Power slot ${i+1}`}${disrupted?' · disrupted until boss reaches half health':cooldown?' · recovering':active?(id==='flight'?' · flying, press to cancel':' · active'):' · ready'}${special?' · protected fourth power':''}`);hudAttr(b,'aria-pressed',String(!!active));
   }
-  updateCompactSlots(canEdit);
+  updateCompactSlots(canEdit,game);
   hudText($('power-context'),game.disruptedPower?'ONE POWER DISRUPTED · restored at half boss HP':game.powers.flying?'FLIGHT · steer ↑ ↓ · press Flight to land':game.inCombat()?'IN COMBAT':game.powers.data.points?`${game.powers.data.points} Power Points · ↑ in Superpowers`:'Tap + to equip a learned power');
 }
 let pickerReturn = null;
@@ -424,6 +424,7 @@ function frame(now){
   }
   const menuScreen=screen;menuGamepad.poll(now);
   if(menuScreen!==screen){input.waitForNeutralPad=true;input.clear();}
+  if(menuGamepad.consumePause)input.waitForNeutralPad=true;
   input.pollGamepad();
   const wallElapsed=Math.max(0,(now-last)/1000),elapsed=Math.min(.1,wallElapsed);last=now;if(wallElapsed>0)fps=fps*.95+.05/wallElapsed;
   if(game.started&&!game.arenaScene&&game.hero.x>5600)renderer.bossArt.prepare(game.regionId);

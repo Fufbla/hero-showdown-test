@@ -1,3 +1,4 @@
+import {INTERFACE_FILES} from './interface-preservation.mjs';
 import {assertAccountSafetyScope} from './account-preservation.mjs';
 import {withoutBalance,assertBalanceScope,BALANCE_FILES} from './balance-preservation.mjs';
 import assert from 'node:assert/strict';
@@ -25,3 +26,6 @@ export function assertCombatCorrectionScope(){
 for(const path of BALANCE_FILES)CORRECTION_FILES.add(path);
 
 assertAccountSafetyScope();
+
+// The independent interface branch adds only the reviewed presentation files.
+for(const path of INTERFACE_FILES)CORRECTION_FILES.add(path);

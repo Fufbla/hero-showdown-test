@@ -133,7 +133,7 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   limb('arms',0);
   c.save();
   if(p.headTilt){c.translate(...p.faceCenter);c.rotate(p.headTilt);c.translate(-p.faceCenter[0],-p.faceCenter[1]);}
-  if(!bareHead && !h.steel && look.hairColor===base.hairColor){
+  if(!bareHead && !h.steel && look.hairColor===base.hairColor && look.skin===base.skin){
     drawRegisteredHead(c,original,p.head);
     if(faceEdited||blink)drawStyleCFace(c,look,{center:p.faceCenter,mode:'features',blink});
   }else{
