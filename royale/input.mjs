@@ -1,16 +1,16 @@
 import { normalizeControls } from './controls.mjs';
 // Every physical pointer owns its action. Releasing one finger never releases another.
 export class Input {
-  constructor(root, onPause, controls) {
+  constructor(root, onPause, controls, onBack=onPause) {
     this.abort=new AbortController();const listen=(target,event,handler)=>target.addEventListener(event,handler,{signal:this.abort.signal});this.controls=normalizeControls(controls);this.padHeld=new Set();this.padPrevious=new Set();this.vertical=0;this.gamepadLabel='No controller connected';
     this.keys = new Set(); this.pointers = new Map(); this.edges = new Set(); this.axis = 0; this.stickPointer = null; this.enabled = false;
     this.tapCounts = new Map();
     this.interrupted = false;
-    this.root = root; this.onPause = onPause;
+    this.root = root; this.onPause = onPause; this.onBack = onBack;
     this.stick = root.querySelector('#stick'); this.knob = root.querySelector('#stick-knob');
     listen(window,'keydown', e => {
       if(this.interrupted || e.defaultPrevented) return;
-      if(e.code==='Escape'&&!e.repeat){if(e.cancelable)e.preventDefault();this.onPause();return;}
+      if(e.code==='Escape'&&!e.repeat){if(e.cancelable)e.preventDefault();this.onBack();return;}
       if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
       if (['Space','Enter'].includes(e.code) && e.target.closest?.('button,a')) return;
       if (this.controls.keys.pause.includes(e.code) && !e.repeat) { if(e.cancelable)e.preventDefault(); this.onPause(); return; }
