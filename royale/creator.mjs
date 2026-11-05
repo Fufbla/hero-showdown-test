@@ -1,7 +1,7 @@
 import {HAIR_CATALOG,HAIR_CATEGORIES} from './hair-catalog.mjs';
 import { DEFAULT_LOOK, LOOK_OPTIONS, LOOK_RANGES, COLOR_FIELDS, sanitizeLook, validateName, canRecolorOutfit } from './appearance.mjs';
 import { drawHero } from './hero-art.mjs';
-import { PREVIEW_POSES, previewHero } from './hero-rig.mjs';
+import { previewHero } from './hero-rig.mjs';
 import {styleCDefault,STYLE_C_VIEWS} from './style-c-defaults.mjs';
 const $=id=>document.getElementById(id);
 const labelFor={waist:'Waist shape',hips:'Hip width',chest:'Chest shape',jaw:'Jaw width',presentation:'Presentation',age:'Age appearance',skin:'Skin tone',eyes:'Eye color',hair:'Hairstyle',hairColor:'Hair color',face:'Face shape',eyeShape:'Eye shape',brows:'Eyebrows',nose:'Nose',mouth:'Mouth',facialHair:'Facial hair',build:'Body build',height:'Height',shoulders:'Shoulder width',muscle:'Muscularity',torso:'Torso proportion',arms:'Arm proportion',legs:'Leg proportion',suit:'Primary suit color',trim:'Secondary suit color',emblemColor:'Emblem color',emblem:'Superhero emblem',capeColor:'Cape color',cape:'Wear a cape'};
@@ -23,7 +23,6 @@ export class Creator{
       $(`${group}-fields`).append(label);
     }
     this.createHairGallery();
-    for(const pose of PREVIEW_POSES)$('preview-pose').add(new Option(title(pose).replaceAll('-',' '),pose));
     for(const view of STYLE_C_VIEWS)$(`view-${view}`).onclick=()=>{this.view=view;for(const v of STYLE_C_VIEWS)$(`view-${v}`).setAttribute('aria-pressed',String(v===view));this.draw();this.refreshHairGallery();};
     for(const button of document.querySelectorAll('[data-tab]')){
       button.onclick=()=>this.tab(button.dataset.tab);
@@ -36,7 +35,6 @@ export class Creator{
       }
       this.read();this.validate(false);this.draw();this.refreshHairGallery();
     });
-    $('preview-pose').addEventListener('change',()=>this.draw());
   }
   createHairGallery(){
     this.hairCategory=HAIR_CATEGORIES[0];
@@ -54,7 +52,7 @@ export class Creator{
   tab(key){for(const name of Object.keys(FIELD_GROUPS)){const selected=key===name;$(`panel-${name}`).hidden=!selected;$(`tab-${name}`).setAttribute('aria-selected',String(selected));$(`tab-${name}`).tabIndex=selected?0:-1;}document.querySelector('.creator-fields').scrollTop=0;}
   fill(value,outfit,newHero=false){
     this.newHero=newHero;
-    this.look=sanitizeLook(value);this.outfit=outfit;this.view='front';for(const v of STYLE_C_VIEWS)$(`view-${v}`).setAttribute('aria-pressed',String(v===this.view));$('preview-pose').value='idle';
+    this.look=sanitizeLook(value);this.outfit=outfit;this.view='front';for(const v of STYLE_C_VIEWS)$(`view-${v}`).setAttribute('aria-pressed',String(v===this.view));
     $('name').value=this.look.name;
     for(const field of Object.values(FIELD_GROUPS).flat()){$(field)[$(field).type==='checkbox'?'checked':'value']=this.look[field];}
     for(const field of['suit','trim','emblemColor','capeColor'])$(field).disabled=!canRecolorOutfit(outfit);
@@ -68,9 +66,9 @@ export class Creator{
   }
   validate(show=true){const result=validateName($('name').value);$('name').setAttribute('aria-invalid',String(!result.ok));$('name-error').hidden=result.ok||!show;$('name-error').textContent=result.error||'';if(show&&!result.ok){this.tab('identity');$('name').focus();}return result;}
   draw(now=performance.now()){
-    const canvas=$('hero-preview'),c=canvas.getContext('2d'),time=now/1000,h=previewHero($('preview-pose').value,time);
+    const canvas=$('hero-preview'),c=canvas.getContext('2d'),time=now/1000,h=previewHero('idle',time);
     c.clearRect(0,0,480,480);c.fillStyle='#112f3933';c.beginPath();c.ellipse(240,430,70,9,0,0,Math.PI*2);c.fill();
     drawHero(c,240,428,this.look,h,time,3.05,{view:this.view,outfit:this.outfit});
-    canvas.setAttribute('aria-label',`${title(this.view)} view of ${this.look.name}, ${$('preview-pose').selectedOptions[0].textContent}`);
+    canvas.setAttribute('aria-label',`${title(this.view)} view of ${this.look.name}, Idle`);
   }
 }

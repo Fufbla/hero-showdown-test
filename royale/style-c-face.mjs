@@ -34,6 +34,11 @@ const defaultLoader = url => new Promise((resolve,reject) => {
   const im = new Image(); im.onload=()=>resolve(im); im.onerror=()=>reject(new Error('Face artwork failed to load')); im.src=url.href;
 });
 
+export function isOmittedEyelidSkin(base,i,mask) {
+  const r=base[i],g=base[i+1],b=base[i+2];
+  return base[i+3]>0&&mask[i]===0&&mask[i+1]===0&&mask[i+2]===0&&r>100&&g>50&&b>20&&r-g>22&&g-b>12;
+}
+
 export function prepareStyleCFace({canvasFactory, imageLoader} = {}) {
   if (art) return Promise.resolve(true);
   if (loading) return loading;
@@ -50,6 +55,20 @@ export function prepareStyleCFace({canvasFactory, imageLoader} = {}) {
         const canvas=makeCanvas(atlas.width,atlas.height), c=canvas.getContext('2d',{willReadFrequently:true});
         c.drawImage(atlas,0,0);
         loaded[sex]=Array.from({length:9},(_,i)=>c.getImageData(i%3*w,Math.floor(i/3)*h,w,h).data);
+      }
+      // The source mask excluded whole eye rectangles, including eyelid skin.
+      // Repair only warm skin pixels omitted from those rectangles. Explicit iris
+      // and brow material weights, neutral sclera and dark linework are protected.
+      for(const sex of ['male','female']) {
+        const layers=loaded[sex], base=layers[0], mask=layers[2];
+        const {origin:[ox,oy],size:[w]}=STYLE_C_FACE_ANCHORS[sex];
+        for(const name of ['nearEye','farEye']) {
+          const [x,y,width,height]=features[sex][name];
+          for(let yy=0;yy<height*density;yy++)for(let xx=0;xx<width*density;xx++){
+            const i=((y-oy)*density+yy)*w*density*4+((x-ox)*density+xx)*4;
+            if(isOmittedEyelidSkin(base,i,mask))mask[i]=255;
+          }
+        }
       }
       art=loaded; return true;
     })

@@ -1,3 +1,4 @@
+import {MenuGamepad} from './menu-gamepad.mjs';
 import {createMultiplayerMenu} from './multiplayer-gate.mjs';
 import {rewardNotice} from './reward-notice.mjs';
 import {installLandscapeLayout} from './landscape-layout.mjs';
@@ -141,6 +142,7 @@ $('cancel-makeover').onclick=()=>{makeoverReview=null;$('makeover-confirm').hidd
 $('confirm-makeover').onclick=async()=>{const q=makeoverReview;if(!q)return;makeoverReview=null;const result=await transaction(()=>game.applyMakeover(q.next,{confirmed:true,revision:q.revision}));if(result.ok){editing=false;setScreen('tree');erisMenu.open();say('Appearance updated. Your progress is unchanged.');}else updateMakeoverQuote();};
 function setScreen(next){
   if(criticalPending||powerUpgrades.busy)return;
+  if(next==='play'&&screen!=='play')input.waitForNeutralPad=true;
   screen=next;if(online())multiplayerMenu.session.pause(next!=='play');input.enabled=next==='play';input.clear();game.paused=next!=='play';
   for(const [name,id] of Object.entries({account:'account-menu',roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',mergeReward:'merge-reward'}))$(id).hidden=next!==name;
   const inGame=game.started&&(['play','powerPicker','pause','tree','controls','world','inventory','chest','mergeReward','account'].includes(next)||(next==='creator'&&editing));
@@ -392,13 +394,15 @@ document.addEventListener('visibilitychange',resetFrameClock);
 function beginMeasurement(duration=30){if(screen==='pause')resume();if(screen!=='play'){$('performance-result').textContent='Start gameplay before measuring.';return;}last=performance.now();measurement=new FrameMetrics(last,{duration,heap:performance.memory?.usedJSHeapSize??null});measurement.gameTime=game.time;$('performance-result').dataset.measurement='';$('performance-result').textContent=`Measuring ${duration} seconds of visible gameplay…`;}
 $('measure-performance').onclick=()=>beginMeasurement();
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&measurement){measurement=null;$('performance-result').textContent='Sample cancelled: keep the game visible.';}});
+const menuGamepad=new MenuGamepad({active:()=>screen!=='play'&&!criticalPending&&!powerUpgrades.busy,back:()=>input.onPause()});
 function frame(now){
   if(screen==='play'&&!online()&&activeId&&multiplayerMenu.isLinked(activeId)){showPause();say('This hero was transferred to account saving. Open Solo & Multiplayer to reconnect.',8);}
   if (input.interrupted || document.hidden) {
     accumulator=0;last=now;requestAnimationFrame(frame);return;
   }
+  const menuScreen=screen;menuGamepad.poll(now);
+  if(menuScreen!==screen){input.waitForNeutralPad=true;input.clear();}
   input.pollGamepad();
-  powerMenu.pollGamepad(screen==='tree'&&erisMenu.panel==='powers');
   const wallElapsed=Math.max(0,(now-last)/1000),elapsed=Math.min(.1,wallElapsed);last=now;if(wallElapsed>0)fps=fps*.95+.05/wallElapsed;
   if(game.started&&!game.arenaScene&&game.hero.x>5600)renderer.bossArt.prepare(game.regionId);
   const waitingForArt=!styleCTextureStatus().ready||(game.arenaScene&&!renderer.bossArt.ready);
