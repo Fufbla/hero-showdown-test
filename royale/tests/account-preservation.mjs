@@ -3,6 +3,8 @@ import {execFileSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
 export const ACCOUNT_FILES=new Set(['account-callback.html','account-callback.css','account-callback.mjs','auth-callback-state.mjs','tests/auth-callback.test.mjs','cloud-client.mjs','saves.mjs','save-recovery.mjs','recovery-ui.mjs','tests/account-recovery.test.mjs','tests/account-preservation.mjs','ACCOUNT-IMPLEMENTATION.md','backend/index.ts','tests/account-staging.mjs','tests/hero-preservation.mjs','tests/polish.test.mjs'].map(p=>'royale/'+p));
 for(const path of ['app.mjs', 'player-accounts-config.mjs', 'player-account-client.mjs', 'player-account-ui.mjs', 'player-accounts.css', 'cloud-autosave.mjs', 'player-save-migration.mjs', 'backend/recovery.mjs', 'backend/supabase/migrations/20261105133227_royale_account_recovery.sql', 'tests/player-account-security.test.mjs', 'tests/player-cloud.test.mjs', 'tests/recovery-request-staging.mjs', 'tests/player-accounts-browser.html', 'tests/player-accounts-browser.mjs', 'tests/player-accounts-staging.mjs'])ACCOUNT_FILES.add('royale/'+path);
+ACCOUNT_FILES.add('royale/tests/player-cloud-database.test.mjs');
+ACCOUNT_FILES.add('royale/tests/player-accounts-e2e.mjs');
 ACCOUNT_FILES.add('royale/qa/accounts/royale-account-landscape.png');
 ACCOUNT_FILES.add('royale/multiplayer/tests/safety.test.mjs');
 export function assertAccountSafetyScope(){

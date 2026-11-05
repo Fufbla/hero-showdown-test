@@ -10,7 +10,7 @@ import {shouldWriteAdventure} from './save-policy.mjs';
 import {clockSynchronized} from './shared-clock.mjs';
 import {CloudAPI, CloudHeroStore} from './cloud-client.mjs';
 import {AccountMenu} from './account-ui.mjs';
-import {PLAYER_ACCOUNTS_ENABLED} from './player-accounts-config.mjs';
+import {PLAYER_ACCOUNTS_ENABLED,PLAYER_ACCOUNTS_REQUIRED} from './player-accounts-config.mjs';
 import {PlayerAccountAPI,AutomaticCloudStore} from './player-account-client.mjs';
 import {PlayerAccountMenu} from './player-account-ui.mjs';
 import {CloudAutosave,cloudCheckpoint} from './cloud-autosave.mjs';
@@ -85,7 +85,7 @@ const multiplayerMenu=await createMultiplayerMenu({
 function online(){return !!multiplayerMenu.session?.active;}
 const autosave=new CloudAutosave(()=>({store,game,index:activeSlot,blocked:criticalPending||powerUpgrades.busy||online()}),{onError:cloudFailure});
 function cloudFailure(error){game.paused=true;input.enabled=false;input.clear();setScreen('account');void accountMenu.open('settings').then(()=>accountMenu.status('Saving stopped: '+error.message+' Your local recovery draft is retained. Reload your cloud heroes before continuing.'));}
-async function flushCloud(){if(!store.cloud)return;await store.flush();if(game.started){await autosave.save({force:true});await store.flush();}}
+async function flushCloud(){if(!store.cloud)return;await autosave.flush();await store.flush();if(game.started){await autosave.save({force:true});await store.flush();}}
 if(cloudApi)setInterval(()=>void autosave.save(),5000);
 
 
@@ -155,7 +155,7 @@ $('creator-form').addEventListener('input',updateMakeoverQuote);
 $('cancel-makeover').onclick=()=>{makeoverReview=null;$('makeover-confirm').hidden=true;};
 $('confirm-makeover').onclick=async()=>{const q=makeoverReview;if(!q)return;makeoverReview=null;const result=await transaction(()=>game.applyMakeover(q.next,{confirmed:true,revision:q.revision}));if(result.ok){editing=false;setScreen('tree');erisMenu.open();say('Appearance updated. Your progress is unchanged.');}else updateMakeoverQuote();};
 function setScreen(next){
-  if(PLAYER_ACCOUNTS_ENABLED&&!store.cloud)next='account';
+  if(PLAYER_ACCOUNTS_REQUIRED&&!store.cloud)next='account';
   if(store.cloud&&store.failure&&next!=='account')return;
   if(criticalPending||powerUpgrades.busy)return;
   if(next==='play'&&screen!=='play')input.waitForNeutralPad=true;
@@ -189,7 +189,7 @@ function renderRoster(){
 async function openRoster(){if(store.cloud){try{await flushCloud();}catch(e){cloudFailure(e);return;}}if(online()){multiplayerMenu.open();return;}if(!game.canSave()){say('Leave combat before switching heroes.');return;}persist();renderRoster();setScreen('roster');$('roster-title').focus();}
 function continueHero(index){
   if(store.cloud&&(store.saving||store.failure))return;autosave.reset();
-  const linked=localStore.slot(index);if(linked&&multiplayerMenu.isLinked(linked.id)){activeSlot=index;multiplayerMenu.open();void multiplayerMenu.run(()=>multiplayerMenu.connect());return;}
+  const linked=!store.cloud&&localStore.slot(index);if(linked&&multiplayerMenu.isLinked(linked.id)){activeSlot=index;multiplayerMenu.open();void multiplayerMenu.run(()=>multiplayerMenu.connect());return;}
   const slot=store.slot(index);if(!slot)return;if(slot.snapshot.legendary.revision&&!ledger){say('This hero needs its permanent progress record. '+ledgerError,9);return;}
   activeSlot=index;activeId=slot.id;game=new Game({save:slot.snapshot});startPatrol(true);
 }
@@ -371,14 +371,13 @@ document.addEventListener('keydown',e=>{
 
 let accountMenu=null;
 async function useCloud({reload=false}={}){
- if(!cloudApi)return;const owner=(await cloudApi.auth.getSession()).data.session?.user.id;if(store.cloud&&owner!==store.user.id)reload=true;if(store.cloud&&store.failure&&!reload)await store.retry();if(!reload)await flushCloud();const candidate=new AutomaticCloudStore(cloudApi,{backup:storage,onStatus:message=>{candidate.message=message;storageNotice();}});await candidate.refresh();cloudStore=candidate;store=candidate;ledger={commit:(id,rev,snapshot)=>candidate.irreversible(id,rev,snapshot)};ledgerError='';game=new Game();activeId=null;activeSlot=0;autosave.reset();document.body.classList.add('cloud-mode');renderRoster();setScreen('roster');
+ if(!cloudApi)return;const discardPending=reload;const owner=(await cloudApi.auth.getSession()).data.session?.user.id;if(store.cloud&&owner!==store.user.id)reload=true;if(store.cloud&&store.failure&&!reload)await store.retry();if(!reload)await flushCloud();const candidate=new AutomaticCloudStore(cloudApi,{backup:storage,onStatus:message=>{candidate.message=message;storageNotice();}});await candidate.refresh({discardPending});cloudStore=candidate;store=candidate;ledger={commit:(id,rev,snapshot)=>candidate.irreversible(id,rev,snapshot)};ledgerError='';game=new Game();activeId=null;activeSlot=0;autosave.reset();document.body.classList.add('cloud-mode');if(candidate.failure){cloudFailure(candidate.failure);return;}renderRoster();setScreen('roster');
 }
-function signedOut(){game.paused=true;input.clear();store=localStore;cloudStore=null;ledger=localLedger;ledgerError=localLedgerError;game=new Game();activeId=null;document.body.classList.remove('cloud-mode');setScreen('account');accountMenu.render('welcome');}
+function signedOut(){autosave.reset();game.paused=true;input.clear();store=localStore;cloudStore=null;ledger=localLedger;ledgerError=localLedgerError;game=new Game();activeId=null;document.body.classList.remove('cloud-mode');setScreen('account');accountMenu.render('welcome');}
 if(cloudApi){
- accountMenu=new PlayerAccountMenu(cloudApi,{show:()=>{accountReturn=game.started?'pause':'roster';setScreen('account');},close:()=>{if(!store.cloud)return;accountReturn==='pause'?showPause():(renderRoster(),setScreen('roster'));},cloud:useCloud,reload:()=>useCloud({reload:true}),flush:flushCloud,signedOut,currentCloud:()=>store.cloud?store:null,storage,prepareImport:hero=>prepareLegacyImport(hero,{storage,ledger:localLedger})});
+ accountMenu=new PlayerAccountMenu(cloudApi,{allowLocal:!PLAYER_ACCOUNTS_REQUIRED,show:()=>{accountReturn=game.started?'pause':'roster';setScreen('account');},close:()=>{if(!store.cloud&&PLAYER_ACCOUNTS_REQUIRED)return;accountReturn==='pause'?showPause():(renderRoster(),setScreen('roster'));},cloud:useCloud,reload:()=>useCloud({reload:true}),flush:flushCloud,signedOut,currentCloud:()=>store.cloud?store:null,storage,prepareImport:hero=>prepareLegacyImport(hero,{storage,ledger:localLedger})});
  cloudApi.auth.onAuthStateChange((event,session)=>{if(store.cloud&&(event==='SIGNED_OUT'||session&&session.user.id!==store.user?.id))queueMicrotask(signedOut);});
  $('account-open').onclick=()=>{if(!powerUpgrades.busy&&!criticalPending)void accountMenu.open(store.cloud?'settings':'welcome');};
- void(async()=>{await accountMenu.open();try{const {data}=await cloudApi.auth.getSession();if(data.session)await useCloud();}catch(e){accountMenu.status(e.message);}})();
 }else $('account-open').hidden=true;
 let phase10QA=null;
 if(testPrefix){
@@ -397,6 +396,7 @@ if (practiceHero) {
   document.querySelector('.phase-label').textContent = 'STYLE C PRACTICE';
 }
 renderRoster();setScreen('roster');
+if(cloudApi)void(async()=>{if(PLAYER_ACCOUNTS_REQUIRED||!localStore.data.slots.some(Boolean))await accountMenu.open();try{const {data}=await cloudApi.auth.getSession();if(data.session)await useCloud();}catch(e){accountMenu.status(e.message);}})();
 if (practiceHero && store.slot(0)) {
   continueHero(0);
   say('Practice patrol · Use ⇄ to change powers or tap + to fill an empty slot.', 7);

@@ -1,3 +1,60 @@
+# Account continuation — 2026-11-05
+
+Started from remote `feature/royale-player-accounts` at `f5b14a7dfc1555c257f8f726140294269d36a63f`. All following changes are on that development branch only.
+
+## What changed
+
+- Each cloud mutation writes its exact payload and retry ID to an account/slot-specific browser journal before sending it. After reopening, an uncertain write pauses account play and can be retried idempotently. This includes all three slots, imports, deletes, and permanent transactions. Failed journal writes stop before network submission.
+- Forced autosaves during an in-flight write retain the latest checkpoint; leaving a hero/account awaits the save queue. Late errors from an old account no longer replace the current screen.
+- Recovery settings offer a draft download and an explicitly confirmed reload of server progress. Reload archives the original draft before replacing its marker. Legacy local save keys remain untouched.
+- Import verification compares complete snapshots independent of JSONB property order. Failed read-back blocks further writes. Concurrent imports and stale revisions cannot replace existing cloud heroes.
+- Optional account screens and mandatory login now have separate gates, both off. Once approved for optional rollout, new browsers see Create Account / Log In; browsers with local heroes retain local play and can enter accounts to import. An unrelated local multiplayer transfer marker no longer intercepts a cloud hero in the same numbered slot. Multiplayer source is unchanged.
+- An expired authenticated session can be cleared locally; network failures still retain it for retry.
+
+## Validation
+
+Final verification: **1,292 Royale tests passed; 57 multiplayer tests passed; six real staging safety probes passed. Zero failures/skips in the final runs.** Current browser workflow execution remains blocked, as detailed below. Coverage includes:
+
+- Actual PGlite/PostgreSQL migration and transactions: three complete browser-save imports; level, XP, appearance, equipment, powers, region, health, and exact position on independent clients; autosaving all slots; stale-write rejection; concurrent-import winner; duplicate source rejection; owner isolation; anonymous/authenticated direct-access denial.
+- Lost-response/restart/retry in every slot, durable-backup failure, explicit archival, account isolation, JSONB read-back, permanent-transaction retry, forced-save coalescing and late-session errors.
+- Six real staging safety probes passed: health, unsigned roster denial, unsigned recovery-identity denial, public registration closure, foreign-origin denial and anonymous direct-table denial. No real account was created and no player save was changed by these probes.
+- A Chromium + actual Supabase browser SDK HTTP-fixture runner is provided at `tests/player-accounts-e2e.mjs`. It has NOT run successfully in this continuation: local Chromium cannot create its process socket (`Operation not permitted`), and the cloud browser could not reach this checkout's isolated preview server. Do not count its assertions as passing. Prior 84 UI checks apply to the previous commit, not these corrections.
+- An initial full parallel regression run lost a Style C test worker to SIGKILL under resource pressure; the final run limits test concurrency. A missing local `ws` dependency was supplied from the existing pinned installation; multiplayer then passed 57/57. No dependencies or lockfiles were changed.
+
+## Release blockers — not completed
+
+1. The existing additive recovery migration still needs successful Supabase confirmation. The connector returned `status: expired` for the attempted application. A subsequent database read confirms the recovery-code, application-session and security-epoch tables are absent. Staging remains version 4; the new backend was not deployed against an incompatible schema.
+2. After migration, deploy the existing reviewed three-file staging bundle, keep public registration closed, and execute `tests/player-accounts-staging.mjs` with disposable invitation-only fixtures. Verify real login/logout, code rotation/use/replay, reset fencing, verification email, username display, callback expiration and interruption cases. Current working public password reset is unchanged; the owner's earlier successful reset/replay test is retained as user-confirmed evidence only.
+3. Rerun the current browser workflow and controller suite in a browser-enabled environment, then verify the same account on an actual second device. Separate API clients with a local PostgreSQL engine are not physical-device acceptance or live Auth acceptance.
+4. The owner's current browser hero has NOT been imported here. It is on the owner's browser. The user confirmed it survives closing/reopening. Keep local play available during rollout; have the owner explicitly import that exact hero into an empty account slot, verify cloud read-back and a second-device load before considering mandatory login.
+5. Add/change recovery-email linking remains disabled. Existing Gmail SMTP does not by itself verify the disabled dual-confirmation adapter. Do not enable the old Resend adapter or expose mail credentials.
+6. Existing shared-project advisor warnings include disabled [leaked-password protection](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection) and unrelated multiplayer RPC/policy advisories. Account tables are intentionally service-only with RLS and no browser privileges. Other game schemas and Auth settings were not changed.
+
+## Publication rule
+
+The user authorized publishing Create Account / Log In **after all authentication, recovery and cloud-saving checks pass**, and requires the existing hero's safe import before mandatory login. Those conditions are not yet met; neither public frontend nor public registration was activated.
+
+Current public `main`, independently read during this continuation, is `07b8e38e99355c976c5b4b1ac67c76a21105c854` (standalone HUD/skin/controller update). When release conditions pass, integrate only the account changes onto the then-current public branch and preserve those newer interface updates. Do not replace Pages with the older account branch wholesale. Do not force-push or clear saves/tables.
+
+Commands:
+
+```
+cd royale
+node --test --test-concurrency=2 --test-reporter=tap tests/*.test.mjs
+cd multiplayer && npm test
+```
+
+Browser fixture runner (requires a local HTTP server and Playwright/Chromium):
+
+```
+ROYALE_PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs \
+ROYALE_QA_OUTPUT=/private/test-output node royale/tests/player-accounts-e2e.mjs
+```
+
+---
+
+# Prior checkpoint (historical)
+
 # Player accounts — gated development build
 
 ## Current public release
