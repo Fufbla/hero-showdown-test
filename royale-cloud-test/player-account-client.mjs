@@ -67,7 +67,7 @@ export class AutomaticCloudStore extends CloudHeroStore{
   if(this.backup)for(let index=0;index<3;index++){
    try{
     const raw=this.backup.getItem(this.draftKey(index));if(!raw)continue;
-    let draft;try{draft=JSON.parse(raw);}catch{if(!discardPending)throw Error('Unreadable recovery draft. Export it before reloading.');}
+    let draft;try{draft=JSON.parse(raw);}catch{draft={version:0,status:'unreadable'};}
     if(draft?.status==='confirmed'||draft?.status==='archived')continue;
     if(discardPending){
      // Explicit cloud reload preserves a separate immutable copy for recovery.
