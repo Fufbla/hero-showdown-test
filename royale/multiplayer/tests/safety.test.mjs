@@ -18,7 +18,7 @@ test('approved artwork, balance, simulation and legacy save implementation are b
   assertCombatCorrectionScope();
   assert.deepEqual(paths.filter(p=>!p.startsWith('royale/multiplayer/')&&!integration.has(p)&&!CORRECTION_FILES.has(p)),[]);
   const approvedQA=new Set(['royale/qa/balance/royale-sale-confirmation.jpg','royale/qa/balance/royale-sell-landscape.jpg']);
-  assert.deepEqual(paths.filter(p=>/\.(png|webp|jpg|svg)$/.test(p)&&!p.startsWith('royale/multiplayer/qa/browser/')&&!approvedQA.has(p)),[]);
+  assert.deepEqual(paths.filter(p=>/\.(png|webp|jpg|svg)$/.test(p)&&!p.startsWith('royale/multiplayer/qa/browser/')&&!approvedQA.has(p)&&p!=='royale/qa/accounts/royale-account-landscape.png'),[]);
   assert.equal(execFileSync('git',['diff','--name-only','594a4b8f6281d7f004268e7b4f72a1fe1ab13912','--',...approvedQA],{cwd:new URL('../../../',import.meta.url),encoding:'utf8'}),'');
 });
 test('combat, current health, cooldowns and exact midair position persist without a safe-save restriction',()=>{

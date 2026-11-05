@@ -9,7 +9,7 @@ export function callbackRequest(url){
  return {type,tokens:{access_token,refresh_token}};
 }
 export class PasswordRecovery{
- constructor(auth){this.auth=auth;this.ready=false;this.busy=false;this.done=false;}
+ constructor(auth,{onPasswordChanged=async()=>{}}={}){this.auth=auth;this.onPasswordChanged=onPasswordChanged;this.ready=false;this.busy=false;this.done=false;}
  async accept(request){
   this.ready=false;if(request.error)throw Error(request.error);
   const result=await this.auth.setSession(request.tokens);if(result.error)throw Error('This link is invalid or expired. Request a new link.');
@@ -25,8 +25,9 @@ export class PasswordRecovery{
   try{
    const {error}=await this.auth.updateUser({password});if(error)throw Error('Password change failed. Request a new link if this one has expired.');
    this.done=true;this.ready=false;
+   let accountSessionsRevoked=true;try{await this.onPasswordChanged();}catch{accountSessionsRevoked=false;}
    const logout=await this.auth.signOut({scope:'global'});
-   return {changed:true,sessionsRevoked:!logout.error};
+   return {changed:true,sessionsRevoked:!logout.error&&accountSessionsRevoked};
   }finally{this.busy=false;}
  }
 }
