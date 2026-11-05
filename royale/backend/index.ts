@@ -8,6 +8,10 @@ const CALLBACK=SITE+'/hero-showdown-test/royale/account-callback.html';
 const REGISTRATION_READY=Deno.env.get('ROYALE_REGISTRATION_READY')==='true';
 const origins=new Set([SITE,'http://localhost:4173','http://127.0.0.1:4173','http://terminal.local:4173',...(Deno.env.get('ROYALE_ALLOWED_ORIGINS')||'').split(',').filter(Boolean)]);
 const uuid=(v:unknown)=>typeof v==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(v);
+// Secret pepper is configured only in the Edge Function environment, never in frontend code.
+async function numericVerifier(owner:string,code:string){const pepper=Deno.env.get('ROYALE_NUMERIC_RECOVERY_PEPPER');if(!pepper||pepper.length<32)fail('Numeric recovery is not configured.',503);const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(pepper),{name:'HMAC',hash:'SHA-256'},false,['sign']);const sig=await crypto.subtle.sign('HMAC',key,new TextEncoder().encode(owner+':'+code));return Array.from(new Uint8Array(sig),x=>x.toString(16).padStart(2,'0')).join('');}
+function numericCode(value:unknown){if(typeof value!=='string'||!/^[0-9]{15}$/.test(value))fail('Enter exactly 15 digits.');return value;}
+function strongNumeric(code:string){if(new Set(code).size<7)return false;if(/(\d)\1{3,}/.test(code))return false;if(/(?:012345|123456|234567|345678|456789|567890|987654|876543|765432|654321|543210)/.test(code))return false;const chunks=code.match(/.{3}/g)||[];if(new Set(chunks).size<4)return false;return true;}
 const hash=async(s:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))).map(x=>x.toString(16).padStart(2,'0')).join('');
 const client=(key=KEY)=>createClient(URL,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
 const fail=(message:string,status=400)=>{throw Object.assign(Error(message),{status});};
@@ -49,9 +53,9 @@ Deno.serve(async(req)=>{
   if(body.action==='recover-code'){
    await limited(db,'code-ip:'+ipHash,12,3600);await limited(db,'code-global',120,3600);
    const name=validateUsername(body.username);await limited(db,'code-name:'+await hash(name),5,3600);
-   validatePasscode(body.passcode);const code=normalizeRecoveryCode(body.code);
+   validatePasscode(body.passcode);const isNumeric=typeof body.code==='string'&&/^[0-9]{15}$/.test(body.code);const code=isNumeric?numericCode(body.code):normalizeRecoveryCode(body.code);
    const mapping=await db.from('royale8_usernames').select('user_id').eq('username',name).maybeSingle();
-   const consumed=code&&mapping.data?.user_id?await db.rpc('royale8_consume_code',{p_owner:mapping.data.user_id,p_hash:await recoveryHash(code)}):null;
+   const consumed=code&&mapping.data?.user_id?(isNumeric?await db.rpc('royale8_consume_numeric_code',{p_owner:mapping.data.user_id,p_verifier:await numericVerifier(mapping.data.user_id,code)}):await db.rpc('royale8_consume_code',{p_owner:mapping.data.user_id,p_hash:await recoveryHash(code)})):null;
    if(consumed?.error)fail('Recovery is temporarily unavailable.',503);
    if(!consumed?.data)fail('Username or recovery code was not accepted.',401);
    // Consume BEFORE changing the password. Failure is closed: retry with another
@@ -115,6 +119,14 @@ Deno.serve(async(req)=>{
    const r=await db.rpc('royale8_password_fence',{p_owner:user.id,p_begin:false});if(r.error)fail('Sign-out could not be confirmed.',503);return respond({ok:true});
   }
   if(user.app_metadata?.royale_username){const sid=verifiedSessionId(token!);const s=await db.from('royale8_sessions').select('revoked').eq('owner_id',user.id).eq('session_id',sid||crypto.randomUUID()).maybeSingle();if(s.error||!s.data||s.data.revoked)fail('Sign in again with your username.',401);}
+  if(body.action==='set-numeric-recovery'){
+   await limited(db,'numeric-setup:'+user.id,3,3600);await reauthenticate(db,user,body.passcode);
+   const code=numericCode(body.code);if(body.confirmCode!==code)fail('The confirmation code does not match.');if(!strongNumeric(code))fail('Choose a less predictable 15-digit code. Avoid sequences, repetitions and dates.');
+   const verifier=await numericVerifier(user.id,code);
+   // Upsert only the numeric verifier. Existing long recovery codes remain valid.
+   const stored=await db.from('royale8_numeric_recovery').upsert({owner_id:user.id,verifier,used_at:null},{onConflict:'owner_id'});if(stored.error)fail('Numeric code was not activated. Existing recovery codes are unchanged.',503);
+   return respond({message:'Numeric recovery code activated. Existing recovery codes remain available.'});
+  }
   if(body.action==='rotate-recovery-codes'){
    await limited(db,'rotate:'+user.id,3,3600);await reauthenticate(db,user,body.passcode);
    const recovery=await recoveryBundle(),r=await db.rpc('royale8_rotate_codes',{p_owner:user.id,p_hashes:recovery.hashes});if(r.error)fail('Recovery codes could not be changed.',503);
