@@ -48,3 +48,15 @@ Real staging HTTP suite: 18 passed, 0 failed, 0 skipped. The disposable test her
 New recovery UI has not yet been browser/mobile/controller-tested. No claim is made that the requested complete account system is operational.
 
 Final automated runs: Royale 1,238 passed / 0 failed / 0 skipped; multiplayer regression 57 passed / 0 failed / 0 skipped. Baseline Royale before changes: 1,227 passed / 0 failed / 0 skipped. Eleven focused recovery tests were added. Historical scope tests were updated for the exact authorized save changes; approved balance QA screenshots are checked against the prior release rather than misclassified as changed game artwork. Initial intermediate scope failures are resolved; no assertions were removed without an exact replacement invariant.
+
+## Password callback development checkpoint
+
+Added `account-callback.html`, its mobile CSS and module, and `auth-callback-state.mjs`. The page strips credentials from the address bar before initializing Auth; session persistence and automatic URL detection are disabled. It validates the identity with Auth before showing the reset form, validates password confirmation, prevents duplicate submission, reports failed session revocation, and never accesses hero storage. Verification-only links cannot open the reset form. Current implementation accepts Supabase implicit email-link fragments; PKCE callbacks are deliberately rejected rather than falsely reported successful. Email requests must use an explicitly allowed callback URL and compatible flow.
+
+The callback is NOT publicly deployed. Managed-browser smoke check verified the missing-link error and hidden password form. Real emailed reset completion and phone/controller checks remain unverified. Direct preview on port 4174 was inaccessible to the cloud browser; the supported managed preview on 4173 loaded correctly.
+
+Latest regression results: 1,248 Royale tests passed, 57 multiplayer tests passed, and 18 actual staging HTTP checks passed; zero failed or skipped. The ten new callback tests use an injected Auth stub, so they are not evidence that a real password-reset email was redeemed successfully.
+
+Configuration blockers remain: Supabase's default redirect is localhost; a deployed and approved staging callback must be added to the Auth redirect allowlist. The connector cannot update that setting. Auth's Gmail SMTP secret is not readable by Edge Functions; custom username mail needs its own server-side SMTP credential or another explicitly authorized mail-sending integration. Do not copy credentials into chat, frontend code, repository files or logs. No additional secret has been requested or received in plaintext.
+
+Recovery codes, complete account UI, automatic cloud saving, completed legacy migration and complete mobile end-to-end tests are still unfinished. Public registration and mandatory login remain disabled. This checkpoint does not claim completion of those requirements.

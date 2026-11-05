@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
-export const ACCOUNT_FILES=new Set(['cloud-client.mjs','saves.mjs','save-recovery.mjs','recovery-ui.mjs','tests/account-recovery.test.mjs','tests/account-preservation.mjs','ACCOUNT-IMPLEMENTATION.md','backend/index.ts','tests/account-staging.mjs','tests/hero-preservation.mjs','tests/polish.test.mjs'].map(p=>'royale/'+p));
+export const ACCOUNT_FILES=new Set(['account-callback.html','account-callback.css','account-callback.mjs','auth-callback-state.mjs','tests/auth-callback.test.mjs','cloud-client.mjs','saves.mjs','save-recovery.mjs','recovery-ui.mjs','tests/account-recovery.test.mjs','tests/account-preservation.mjs','ACCOUNT-IMPLEMENTATION.md','backend/index.ts','tests/account-staging.mjs','tests/hero-preservation.mjs','tests/polish.test.mjs'].map(p=>'royale/'+p));
 export function assertAccountSafetyScope(){
  const original=name=>execFileSync('git',['show','594a4b8f6281d7f004268e7b4f72a1fe1ab13912:royale/'+name],{cwd:new URL('../../',import.meta.url),encoding:'utf8'});
  let saves=readFileSync(new URL('../saves.mjs',import.meta.url),'utf8');
