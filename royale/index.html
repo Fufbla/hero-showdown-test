@@ -21,18 +21,10 @@
 <link rel="stylesheet" href="interface-controls.css">
 </head>
 <body>
-  <div id="royale-optional-welcome" role="dialog" aria-modal="true" aria-labelledby="royale-welcome-title" style="position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:18px;background:rgba(7,19,29,.96);color:#fff;font-family:system-ui,sans-serif;overflow:auto">
-<section style="width:min(100%,450px);padding:26px;border:1px solid #779da4;border-radius:18px;background:#17343d;box-sizing:border-box;text-align:center">
-<h1 id="royale-welcome-title" style="font-size:1.6rem">HERO SHOWDOWN ROYALE</h1><p>YOUR HERO. YOUR LEGACY.</p>
-<a href="account-test-login.html" style="display:block;padding:14px;margin:14px 0;background:#e1f1ff;color:#132b37;border-radius:9px;font-weight:bold;text-decoration:none">Log In — Account Test</a>
-<a href="private-registration.html" style="display:block;padding:14px;margin:14px 0;border:1px solid #b6dce3;color:white;border-radius:9px;text-decoration:none">Create Account — Invitation Only</a>
-<button id="royale-play-local" type="button" style="width:100%;padding:14px;margin:0;background:#9bdcc1;color:#112f27;border:0;border-radius:9px;font:inherit;font-weight:bold;cursor:pointer">Play Without Account</button>
-<p style="font-size:.82rem;line-height:1.5">Cloud account access is currently a separate test. Signing in does not yet transfer a session to gameplay. Local browser heroes are preserved.</p>
-</section></div><script>document.addEventListener('DOMContentLoaded',()=>{const button=document.getElementById('royale-play-local');button?.addEventListener('click',()=>{document.getElementById('royale-optional-welcome')?.remove();});});</script>
 <div id="app">
     <header class="topbar">
       <a class="brand" href="../index.html" aria-label="Return to Hero Showdown"><span class="brand-mark">✦</span><span><small>JAMES CLAN COMICS</small><strong>HERO SHOWDOWN <em>ROYALE</em></strong></span></a>
-      <div class="top-actions"><span class="phase-label"><i></i> MOBILE PLAYTEST</span><a class="account-button" href="account-test-login.html" aria-label="Open optional account login test page">Test Account Login</a><button id="account-open" class="account-button" hidden>Account</button><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
+      <div class="top-actions"><span class="phase-label"><i></i> MOBILE PLAYTEST</span><button id="account-open" class="account-button" hidden>Account</button><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
     </header>
     <main id="stage" aria-label="Hero Showdown Royale game">
       <canvas id="game" aria-label="2D side-scrolling adventure. Use the left and right arrow keys to move, Space to jump, J to punch and K to kick."></canvas>
