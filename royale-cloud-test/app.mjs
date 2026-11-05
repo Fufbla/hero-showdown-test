@@ -84,7 +84,7 @@ const multiplayerMenu=await createMultiplayerMenu({
 });
 function online(){return !!multiplayerMenu.session?.active;}
 const autosave=new CloudAutosave(()=>({store,game,index:activeSlot,blocked:criticalPending||powerUpgrades.busy||online()}),{onError:cloudFailure});
-function cloudFailure(error){game.paused=true;input.enabled=false;input.clear();setScreen('account');void accountMenu.open('settings').then(()=>accountMenu.status('Saving stopped: '+error.message+' Your local recovery draft is retained. Reload your cloud heroes before continuing.'));}
+function cloudFailure(error){game.paused=true;input.enabled=false;input.clear();setScreen('account');void accountMenu.open('settings').then(()=>accountMenu.status('Cloud saving paused: '+error.message+' Existing browser drafts and confirmed heroes were retained.'));}
 async function flushCloud(){if(!store.cloud)return;await autosave.flush();await store.flush();if(game.started){await autosave.save({force:true});await store.flush();}}
 if(cloudApi)setInterval(()=>{if(screen==='play'&&game.started&&!store.failure)void autosave.save();},5000);
 
@@ -236,7 +236,7 @@ async function resume(){
   // Navigation must not wait for network I/O: the automatic cloud store keeps
   // its own durable pending draft and save queue. A slow connection must never
   // trap the player in the sanctuary.
-  if(store.cloud&&store.failure)throw store.failure;
+  if(store.cloud&&store.failure){say('Cloud saving is paused. Your hero remains loaded; resolve the save before exiting.',8);}
   if(game.treeVisit){
    if(!game.leaveTree()){say('Unable to leave Tree of Eris.',6);return;}
    // The game restores its exact saved world coordinates; the next autosave
