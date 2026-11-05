@@ -78,6 +78,18 @@ export class AutomaticCloudStore extends CloudHeroStore{
     if(draft.version===2&&draft.status==='pending'){
      const body=JSON.parse(draft.pending.payload);
      if(body.action!=='commit'||!['create','import','manual','irreversible','delete'].includes(body.kind)||body.accountId!==this.user.id||body.slot!==index||!Number.isSafeInteger(body.expectedRevision)||body.expectedRevision<0||!/^[-a-f0-9]{36}$/i.test(draft.pending.requestId))throw Error('Invalid recovery draft. Export it before reloading.');
+     // A stale ordinary autosave must never block the account indefinitely.
+     // Keep the full draft in a verified immutable archive and load the newer
+     // server-confirmed hero. Never auto-replay a superseded mutation.
+     const confirmed=this.meta[index];
+     if(body.kind==='manual'&&confirmed&&!confirmed.deleted&&confirmed.revision>body.expectedRevision){
+      const key=this.draftKey(index)+':archive:'+crypto.randomUUID();
+      this.backup.setItem(key,raw);
+      if(this.backup.getItem(key)!==raw)throw Error('Could not verify the recovery archive; no cloud data was changed.');
+      this.writeDraft(index,{version:2,status:'archived',archiveKey:key,serverRevision:confirmed.revision,reason:'superseded-manual-save'});
+      this.message='A superseded local save was safely archived. Your newer confirmed cloud hero is ready.';
+      continue;
+     }
      if(this.api.pending)throw Error('Multiple unconfirmed drafts need review. Export them before reloading.');
      this.api.pending=draft.pending;
     }else blockedRecovery=true;
