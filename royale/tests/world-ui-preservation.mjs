@@ -1,3 +1,4 @@
+import {withoutBalance} from './balance-preservation.mjs';
 import {withoutHitCorrection} from './player-corrections-preservation.mjs';
 import {assertCleanupSimulation,cleanupBefore} from './cleanup-preservation.mjs';
 import {isFireballFile} from './power-armor-preservation.mjs';
@@ -13,7 +14,7 @@ export function assertWorldPreserved(){
  assert.equal(git('diff','--name-only',WORLD_BASE,'--','royale/progression.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs','royale/legendary-state.mjs','royale/merge-powers.mjs','royale/costume-catalog.mjs','royale/saves.mjs','royale/save-policy.mjs','royale/shared-clock.mjs'),'', 'Combat, rewards, catalogs, saves, ownership, clock and all creature rendering stay exact');
  // The new item catalog is the only transaction/inventory wiring change.
  const body=source=>source.replace(/^import .*?;\n/gm,'').trimEnd();
- const current=name=>readFileSync(new URL('../'+name,import.meta.url),'utf8');
+ const current=name=>withoutBalance(name,readFileSync(new URL('../'+name,import.meta.url),'utf8'));
  const base=name=>git('show',WORLD_BASE+':royale/'+name);
  assert.equal(body(current('equipment.mjs')).replace("  if(pieces.chest?.strengthLevels && !pieces.gloves)pieces.gloves={...pieces.chest,part:'gloves'};\n",'').replace('...WARDROBE_CATALOG','...COSTUME_CATALOG').replace('pieces.emblem??={...pieces.chest','pieces.emblem={...pieces.chest'),body(base('equipment.mjs')));
  assert.equal(body(current('eris.mjs')).replace(/^const GROUPS=.*$/m,''),body(base('eris.mjs')).replace(/^const GROUPS=.*$/m,''));

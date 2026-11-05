@@ -1,3 +1,4 @@
+import {expectedDamage} from './expected-balance.mjs';
 import {pickupLoot} from '../world-loot.mjs';
 import {WORLD_CLOCK_REFERENCE} from '../world-state.mjs';
 import test from 'node:test';
@@ -56,15 +57,15 @@ test('equipment level checks also protect equipping earned pieces and loading un
  const g=camp(1);g.inventory.items=[{uid:'drop-1',...item('horizon')}];g.inventory.nextId=2;assert.equal(g.equipItem('drop-1'),false);g.inventory.equipped.helmet='drop-1';g.refreshEquipment();assert.equal(g.equipment.strength,0);
 });
 test('equipment defense multiplies Steel reduction; speed caps and power enhancements leave cooldowns unchanged',()=>{
- const g=camp();const q=buy(g,set('horizon'));for(const i of q.items)g.equipItem(i.uid);g.powers.data.levels.speed=20;g.powers.data.levels.steel=20;g.powers.data.equipped=['steel','fireball',null];g.powers.data.levels.fireball=20;g.leaveTree();g.paused=false;g.powers.activate('steel');const damage=g.powers.incoming(100,{});assert.ok(Math.abs(damage-100*.25*(1-g.equipment.defense))<1e-8);assert.equal(g.powers.speed,.6);assert.equal(g.powers.attackRate,1.5);assert.equal(g.powers.stats('fireball').cooldown,5);assert.equal(g.powers.stats('fireball').damage,119+g.equipment.fireball);assert.equal(g.powers.stats('fireball').pierce,2);
+ const g=camp();const q=buy(g,set('horizon'));for(const i of q.items)g.equipItem(i.uid);g.powers.data.levels.speed=20;g.powers.data.levels.steel=20;g.powers.data.equipped=['steel','fireball',null];g.powers.data.levels.fireball=20;g.leaveTree();g.paused=false;g.powers.activate('steel');const damage=g.powers.incoming(100,{});assert.ok(Math.abs(damage-100*.25*(1-g.equipment.defense))<1e-8);assert.equal(g.powers.speed,.6);assert.equal(g.powers.attackRate,1.5);assert.equal(g.powers.stats('fireball').cooldown,5);assert.equal(g.powers.stats('fireball').damage,expectedDamage('fireball',20,g.hero.level,g.equipment));assert.equal(g.powers.stats('fireball').pierce,2);
  const natural=13+3*98;assert.ok(g.attackDefinition('punch').damage<natural*1.3);assert.ok(g.equipment.defense<=.25);
 });
 test('fixed costume colors, glyphs and glow are independent of all starter palette changes',()=>{
  const g=camp();const q=buy(g,set('cavern'));for(const i of q.items)g.equipItem(i.uid);const colors=JSON.stringify(g.visualOutfit().pieces);for(const k of ['suit','trim','emblemColor','capeColor'])g.look[k]='#ffffff';g.look.emblem='wave';assert.equal(JSON.stringify(g.visualOutfit().pieces),colors);assert.ok(COSTUME_CATALOG['eris-cavern-rare-chest'].stats.strength>COSTUME_CATALOG['eris-cavern-ordinary-chest'].stats.strength);
 });
-test('resale is exactly floor(25%), sales once only, worn references removed and Legendary never sellable',()=>{
+test('resale is exactly floor(25%), sales once only, worn sale blocked until unequipped and Legendary never sellable',()=>{
  for(const value of [100,400,1000,103])assert.equal(resaleValue({catalogValue:value}),Math.floor(value/4));assert.equal(resaleValue({catalogValue:1000,rarity:'legendary'}),null);assert.equal(LEGENDARY_POLICY.enabled,true);
- const g=camp(),q=buy(g,item()),uid=q.items[0].uid;g.equipItem(uid);const revision=g.economy.revision,value=g.salePreview(uid).value,coins=g.hero.coins;assert.equal(g.sellItem(uid,{revision}).ok,false);assert.ok(g.sellItem(uid,{confirmed:true,revision}).ok);assert.equal(g.hero.coins,coins+value);assert.equal(g.inventory.equipped.helmet,undefined);assert.equal(g.inventory.retired[uid],'sold');assert.equal(g.sellItem(uid,{confirmed:true,revision:g.economy.revision}).ok,false);assert.equal(g.hero.coins,coins+value);
+ const g=camp(),q=buy(g,item()),uid=q.items[0].uid;g.equipItem(uid);assert.equal(g.salePreview(uid).ok,false);assert.equal(g.sellItem(uid,{confirmed:true,revision:g.economy.revision}).ok,false);g.equipItem(uid);const revision=g.economy.revision,value=g.salePreview(uid).value,coins=g.hero.coins;assert.equal(g.sellItem(uid,{revision}).ok,false);assert.ok(g.sellItem(uid,{confirmed:true,revision}).ok);assert.equal(g.hero.coins,coins+value);assert.equal(g.inventory.equipped.helmet,undefined);assert.equal(g.inventory.retired[uid],'sold');assert.equal(g.sellItem(uid,{confirmed:true,revision:g.economy.revision}).ok,false);assert.equal(g.hero.coins,coins+value);
 });
 test('discard requires confirmation and leaves permanent tombstones after save reload',()=>{
  const g=camp(),q=buy(g,set()),uid=q.items[0].uid;g.equipItem(uid);assert.equal(g.discardItem(uid),false);assert.ok(g.discardItem(uid,true));assert.equal(g.discardItem(uid,true),false);const copy=new Game({save:decodeSave(g.save())});assert.equal(copy.inventory.retired[uid],'discarded');assert.ok(copy.inventory.items.every(i=>i.uid!==uid));assert.equal(copy.inventory.equipped.helmet,undefined);
@@ -94,7 +95,7 @@ test('Phase 1–5 saves migrate without resetting legacy inventory, powers, appe
 
 for(const [region,level] of [[1,10],[2,20],[3,35],[4,50],[5,65],[6,80],[7,99]])test(`Region ${region}: recommended-level full suit keeps regional bosses dangerous and power rules intact`,()=>{
  const g=camp(level),catalog=Object.values(COSTUME_SETS).filter(s=>s.level<=level).at(-1),natural=g.attackDefinition('punch').damage;
- const q=buy(g,set(catalog.id));for(const i of q.items)g.equipItem(i.uid);assert.ok(g.attackDefinition('punch').damage<natural*1.35);g.leaveTree();g.paused=false;for(let r=1;r<region;r++)bossVictory(g.world,r);g.travel(region);g.hero.x=5840;g.enterBoss();const b=g.bossEncounter.boss,hp=b.maxHp;
+ const q=buy(g,set(catalog.id));for(const i of q.items)g.equipItem(i.uid);assert.equal(g.attackDefinition('punch').damage,natural+g.equipment.damage+g.equipment.strength*.5);g.leaveTree();g.paused=false;for(let r=1;r<region;r++)bossVictory(g.world,r);g.travel(region);g.hero.x=5840;g.enterBoss();const b=g.bossEncounter.boss,hp=b.maxHp;
  g.hero.invulnerable=0;const before=g.hero.hp;assert.ok(g.hurt(b.damage,b.x,b));assert.ok(g.hero.hp<before);assert.equal(b.hp,hp);assert.equal(g.monsterDamage(b),b.damage);assert.equal(g.visitTree(),false);
  for(const power of POWER_IDS){const stats=powerStats(power,Math.min(20,level-1),{heroLevel:level,equipment:g.equipment});assert.equal(stats.cooldown,powerStats(power,Math.min(20,level-1)).cooldown);}
 });

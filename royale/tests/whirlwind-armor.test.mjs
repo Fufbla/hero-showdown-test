@@ -1,3 +1,4 @@
+import {expectedDamage,near as balanceNear} from './expected-balance.mjs';
 import {assertCleanupSimulation} from './cleanup-preservation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -55,34 +56,34 @@ for(const [i,s] of WHIRLWIND_SUITS.entries())test(s.name+' whole set, piece pric
  const price=totals[i];assert.equal(s.level,10*(i+1));assert.equal(coins-g.hero.coins,price);
  assert.deepEqual(purchase.definitions.map(d=>d.catalogValue),[Math.floor(price/4),price/2,Math.ceil(price/4)]);
  for(const item of purchase.items)assert.ok(g.equipItem(item.uid));
- const stats=g.powers.stats('whirlwind');assert.equal(stats.level,21+i);assert.equal(stats.damage,70+i*3);
+ const stats=g.powers.stats('whirlwind');assert.equal(stats.level,21+i);assert.equal(stats.damage,expectedDamage('whirlwind',stats.level,g.hero.level,g.equipment));
  assert.equal(stats.duration,6);assert.equal(stats.targets,5);assert.equal(stats.cooldown,12);
  const saved=validateSnapshot(JSON.parse(g.save()));assert.equal(saved.powers.levels.whirlwind,20);assert.equal(saved.powers.points,points);
  const r=new Game({save:decodeSave(g.save())});assert.equal(r.powers.stats('whirlwind').level,stats.level);
  for(const piece of purchase.items){const copy=new Game({save:saved});copy.paused=true;assert.ok(copy.equipItem(piece.uid));assert.equal(copy.powers.stats('whirlwind').level,20);}
- const sale=r.sellItem(purchase.items[1].uid,{confirmed:true,revision:r.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,resaleValue(purchase.definitions[1]));assert.equal(r.powers.stats('whirlwind').damage,67);
+ assert.equal(r.salePreview(purchase.items[1].uid).ok,false);assert.ok(r.equipItem(purchase.items[1].uid)); const sale=r.sellItem(purchase.items[1].uid,{confirmed:true,revision:r.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,resaleValue(purchase.definitions[1]));assert.equal(r.powers.stats('whirlwind').damage,expectedDamage('whirlwind',20,99));
 });
 test('level 29 lifts and spins five regular enemies, deals six finite ticks and starts cooldown on release',()=>{
- const g=castScene(),enemies=Array.from({length:6},(_,i)=>target(g,20+i,30+i*12));
+ const g=castScene(),enemies=Array.from({length:6},(_,i)=>target(g,20+i,30+i*12,{hp:20000,maxHp:20000}));
  assert.ok(g.powers.activateSlot(0));const effect=g.powers.active.whirlwind;
  assert.deepEqual(effect.targets,enemies.slice(0,5).map(e=>e.id));assert.ok(enemies.slice(0,5).every(e=>e.lifted));assert.ok(!enemies[5].lifted);
  const e=enemies[0],y=e.y;g.powers.step(.5);assert.ok(e.y<y-45);const x=e.x;
- g.powers.step(.5);assert.notEqual(e.x,x);assert.equal(e.hp,9906);
- for(let t=2;t<=6;t++){g.powers.step(1);assert.equal(e.hp,10000-t*94);}
- assert.equal(enemies[5].hp,10000);assert.ok(!g.powers.active.whirlwind);assert.ok(enemies.every(e=>!e.lifted));
+ g.powers.step(.5);assert.notEqual(e.x,x);balanceNear(e.hp,20000-expectedDamage('whirlwind',29,99));
+ for(let t=2;t<=6;t++){g.powers.step(1);balanceNear(e.hp,20000-t*expectedDamage('whirlwind',29,99));}
+ balanceNear(enemies[5].hp,20000);assert.ok(!g.powers.active.whirlwind);assert.ok(enemies.every(e=>!e.lifted));
  assert.equal(g.powers.cooldowns.whirlwind,12);assert.equal(g.powers.activateSlot(0),false);
- for(let i=0;i<60;i++)g.stepEnemy(e,STEP);assert.ok(!e.airborne);g.powers.step(11);assert.equal(e.hp,9436);assert.equal(g.powers.activateSlot(0),false);
+ for(let i=0;i<60;i++)g.stepEnemy(e,STEP);assert.ok(!e.airborne);g.powers.step(11);balanceNear(e.hp,20000-expectedDamage('whirlwind',29,99)*6);assert.equal(g.powers.activateSlot(0),false);
  g.powers.step(1);assert.ok(g.powers.activateSlot(0));
 });
 test('mid-cast gear removal lowers future damage and releases excess targets without resetting the clock',()=>{
  const g=castScene(1),enemies=[target(g,100,20),target(g,101,35),target(g,102,50)];
- assert.ok(g.powers.activateSlot(0));g.powers.step(1);assert.equal(enemies[0].hp,9963);
+ assert.ok(g.powers.activateSlot(0));g.powers.step(1);balanceNear(enemies[0].hp,10000-expectedDamage('whirlwind',10,99));
  delete g.inventory.equipped.helmet;g.refreshEquipment();const a=g.powers.active.whirlwind;
- assert.deepEqual([a.age,a.level,a.damage,a.duration],[1,1,10,2]);assert.deepEqual(a.targets,[100]);
- assert.ok(!enemies[1].lifted&&!enemies[2].lifted);g.powers.step(1);assert.equal(enemies[0].hp,9953);
- assert.equal(enemies[1].hp,9963);assert.equal(g.powers.cooldowns.whirlwind,12);
+ assert.deepEqual([a.age,a.level,a.damage,a.duration],[1,1,expectedDamage('whirlwind',1,99),2]);assert.deepEqual(a.targets,[100]);
+ assert.ok(!enemies[1].lifted&&!enemies[2].lifted);g.powers.step(1);balanceNear(enemies[0].hp,10000-expectedDamage('whirlwind',10,99)-expectedDamage('whirlwind',1,99));
+ balanceNear(enemies[1].hp,10000-expectedDamage('whirlwind',10,99));assert.equal(g.powers.cooldowns.whirlwind,12);
  const max=castScene(),e=target(max,10,20);max.powers.activateSlot(0);max.powers.step(1);
- delete max.inventory.equipped.chest;max.refreshEquipment();max.powers.step(1);assert.equal(e.hp,10000-94-67);
+ delete max.inventory.equipped.chest;max.refreshEquipment();max.powers.step(1);balanceNear(e.hp,10000-expectedDamage('whirlwind',29,99)-expectedDamage('whirlwind',20,99));
 });
 test('an already-expired shortened cast releases immediately and re-equipping cannot reacquire targets',()=>{
  const g=castScene(1),e=target(g,10,20);g.powers.activateSlot(0);g.powers.step(2.5);
@@ -94,7 +95,7 @@ test('a grounded Legendary boss takes each armored Whirlwind tick without lift o
  const g=legendaryGame('lightning',{loadout:'control'}),b=g.arenaScene.boss;
  g.disruptedPower=null;g.powers.data.levels.whirlwind=20;g.powers.data.equipped[0]='whirlwind';g.inventory=inventoryFor(ids(WHIRLWIND_SUITS[8]));g.refreshEquipment();
  g.hero.x=b.x-115;g.hero.y=b.y;const {x,y,hp}=b;assert.ok(g.powers.activateSlot(0));assert.ok(g.powers.active.whirlwind.targets.includes(b.id));
- for(let i=1;i<=6;i++){g.powers.step(1);assert.deepEqual([b.x,b.y,b.hp],[x,y,hp-94*i]);assert.ok(!b.lifted&&!b.airborne);}
+ for(let i=1;i<=6;i++){g.powers.step(1);assert.deepEqual([b.x,b.y],[x,y]);balanceNear(b.hp,hp-expectedDamage('whirlwind',29,99)*i);assert.ok(!b.lifted&&!b.airborne);}
  assert.equal(g.powers.cooldowns.whirlwind,12);
 });
 test('Whirlwind damages every regional and Legendary boss without displacing it',()=>{
@@ -139,7 +140,7 @@ test('armored and unarmored heroes have identical travel, jump arcs, basic hitbo
 test('only damage scales above 20, and every target milestone below 20 remains in force',()=>{
  for(let learned=1;learned<=20;learned++)for(let bonus=0;bonus<=9;bonus++){
   const level=learned+bonus,stats=powerStats('whirlwind',learned,{equipment:{whirlwindLevels:bonus}});
-  assert.equal(stats.damage,10+3*(level-1));assert.equal(stats.targets,Math.min(5,1+Math.floor(level/5)));
+  assert.equal(stats.damage,expectedDamage('whirlwind',level));assert.equal(stats.targets,Math.min(5,1+Math.floor(level/5)));
   assert.equal(stats.duration,stats.targets+1);assert.equal(stats.cooldown,12);
  }
  assert.equal(powerStats('whirlwind',20,{equipment:{whirlwindLevels:1000}}).level,29);

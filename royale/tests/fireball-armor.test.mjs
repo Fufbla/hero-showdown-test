@@ -1,3 +1,4 @@
+import {expectedDamage,near as balanceNear} from './expected-balance.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {execFileSync} from 'node:child_process';
@@ -37,7 +38,7 @@ for(const suit of FIREBALL_SUITS)test(suit.name+' purchase, save, cast and immed
  assert.deepEqual(p.definitions.map(d=>d.catalogValue),[Math.floor(suit.price/4),suit.price/2,Math.ceil(suit.price/4)]);
  for(const i of p.items)assert.ok(g.equipItem(i.uid));
  const stats=g.powers.stats('fireball');assert.equal(stats.level,20+suit.fireballLevels);assert.equal(stats.projectiles,3);
- assert.equal(stats.pierce,2);assert.equal(stats.cooldown,5);assert.equal(stats.damage,24+5*(stats.level-1)+4);
+ assert.equal(stats.pierce,2);assert.equal(stats.cooldown,5);assert.equal(stats.damage,expectedDamage('fireball',stats.level,g.hero.level,{fireball:4}));
  assert.equal(JSON.stringify(g.powers.data),start);
  const snapshot=decodeSave(g.save());assert.ok(snapshot);assert.equal(validateSnapshot(JSON.parse(g.save())).inventory.items.length,3);
  const clone=new Game({save:snapshot});assert.equal(clone.powers.stats('fireball').level,stats.level);
@@ -47,7 +48,7 @@ for(const suit of FIREBALL_SUITS)test(suit.name+' purchase, save, cast and immed
    assert.equal(r.powers.stats('fireball').level,20);
    assert.equal(r.equipment.fireball,4-FIREBALL_PIECES[piece.catalogId].stats.fireball);
  }
- const resale=clone.salePreview(p.items[0].uid);assert.equal(resale.value,resaleValue(p.definitions[0]));
+ assert.equal(clone.salePreview(p.items[0].uid).ok,false);assert.ok(clone.equipItem(p.items[0].uid)); const resale=clone.salePreview(p.items[0].uid);assert.equal(resale.value,resaleValue(p.definitions[0]));
  assert.ok(clone.sellItem(p.items[0].uid,{confirmed:true,revision:clone.economy.revision}).ok);
  assert.equal(clone.powers.stats('fireball').level,20);assert.equal(clone.equipment.fireball,3);
 });

@@ -1,3 +1,4 @@
+import {expectedDamage,near as balanceNear} from './expected-balance.mjs';
 import {assertCleanupSimulation} from './cleanup-preservation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -51,37 +52,37 @@ for(const [i,s] of ROOTS_SUITS.entries())test(s.name+' whole set, piece pricing,
  const price=totals[i];assert.equal(s.level,10*(i+1));assert.equal(coins-g.hero.coins,price);
  assert.deepEqual(purchase.definitions.map(d=>d.catalogValue),[Math.floor(price/4),price/2,Math.ceil(price/4)]);
  for(const item of purchase.items)assert.ok(g.equipItem(item.uid));
- const stats=g.powers.stats('roots');assert.equal(stats.level,21+i);assert.equal(stats.damage,46+i*2);
+ const stats=g.powers.stats('roots');assert.equal(stats.level,21+i);assert.equal(stats.damage,expectedDamage('roots',stats.level,g.hero.level,g.equipment));
  assert.equal(stats.duration,6);assert.equal(stats.targets,5);assert.equal(stats.cooldown,10);
  const saved=validateSnapshot(JSON.parse(g.save()));assert.equal(saved.powers.levels.roots,20);assert.equal(saved.powers.points,points);
  const r=new Game({save:decodeSave(g.save())});assert.equal(r.powers.stats('roots').level,stats.level);
  for(const piece of purchase.items){const copy=new Game({save:saved});copy.paused=true;assert.ok(copy.equipItem(piece.uid));assert.equal(copy.powers.stats('roots').level,20);}
- const sale=r.sellItem(purchase.items[1].uid,{confirmed:true,revision:r.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,resaleValue(purchase.definitions[1]));assert.equal(r.powers.stats('roots').damage,44);
+ assert.equal(r.salePreview(purchase.items[1].uid).ok,false);assert.ok(r.equipItem(purchase.items[1].uid)); const sale=r.sellItem(purchase.items[1].uid,{confirmed:true,revision:r.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,resaleValue(purchase.definitions[1]));assert.equal(r.powers.stats('roots').damage,expectedDamage('roots',20,99));
 });
 test('level 29 catches five ground targets and squeezes exactly six times before release and cooldown',()=>{
  const g=castScene(),ground=Array.from({length:6},(_,i)=>target(g,i,25+i*14));
  const air=target(g,9,1,{airborne:true,y:550}),fly=target(g,10,2,{flying:true,y:560});
  assert.ok(g.powers.activateSlot(0));assert.deepEqual(g.powers.active.roots.targets,ground.slice(0,5).map(e=>e.id));
  const x=ground[0].x;g.stepEnemy(ground[0],STEP);assert.equal(ground[0].x,x);
- for(let i=0;i<6;i++){g.powers.step(1);assert.equal(ground[0].hp,10000-62*(i+1));}
+ for(let i=0;i<6;i++){g.powers.step(1);balanceNear(ground[0].hp,10000-expectedDamage('roots',29,99)*(i+1));}
  assert.equal(g.powers.active.roots,undefined);assert.equal(g.powers.cooldowns.roots,10);
- for(const e of ground)assert.ok(!e.rooted);for(const e of [ground[5],air,fly])assert.equal(e.hp,10000);
- g.powers.step(9);assert.equal(ground[0].hp,9628);assert.equal(g.powers.activateSlot(0),false);
+ for(const e of ground)assert.ok(!e.rooted);for(const e of [ground[5],air,fly])balanceNear(e.hp,10000);
+ g.powers.step(9);balanceNear(ground[0].hp,10000-expectedDamage('roots',29,99)*6);assert.equal(g.powers.activateSlot(0),false);
 });
 test('gear refresh releases excess targets and reduces the remaining squeezes without restarting the cast',()=>{
  const g=castScene(1);const enemy=[target(g,1,20),target(g,2,40),target(g,3,60)];
- assert.ok(g.powers.activateSlot(0));g.powers.step(1);assert.equal(enemy[0].hp,9976);
+ assert.ok(g.powers.activateSlot(0));g.powers.step(1);balanceNear(enemy[0].hp,10000-expectedDamage('roots',10,99));
  // Combat locks normal equipment changes; exercise the actual inventory rebuild.
  delete g.inventory.equipped.helmet;g.refreshEquipment();const effect=g.powers.active.roots;
- assert.equal(effect.age,1);assert.equal(effect.duration,2);assert.equal(effect.damage,6);assert.deepEqual(effect.targets,[1]);
+ assert.equal(effect.age,1);assert.equal(effect.duration,2);assert.equal(effect.damage,expectedDamage('roots',1,99));assert.deepEqual(effect.targets,[1]);
  assert.ok(!enemy[1].rooted&&!enemy[2].rooted);g.powers.step(1);
- assert.equal(enemy[0].hp,9970);assert.equal(enemy[1].hp,9976);assert.equal(g.powers.cooldowns.roots,10);
+ balanceNear(enemy[0].hp,10000-expectedDamage('roots',10,99)-expectedDamage('roots',1,99));balanceNear(enemy[1].hp,10000-expectedDamage('roots',10,99));assert.equal(g.powers.cooldowns.roots,10);
  const max=castScene(20);const foe=target(max,11,10);max.powers.activateSlot(0);max.powers.step(1);
- delete max.inventory.equipped.chest;max.refreshEquipment();max.powers.step(1);assert.equal(foe.hp,10000-62-44);
+ delete max.inventory.equipped.chest;max.refreshEquipment();max.powers.step(1);balanceNear(foe.hp,10000-expectedDamage('roots',29,99)-expectedDamage('roots',20,99));
 });
 test('airborne targets are immune, including a target leaving the ground between ticks',()=>{
  const g=castScene(),e=target(g,0,15);g.powers.activateSlot(0);g.powers.step(.4);e.airborne=true;e.y-=50;g.powers.step(.7);
- assert.equal(e.hp,10000);assert.ok(!e.rooted);e.airborne=false;e.y=e.surface.y;g.powers.step(2);assert.equal(e.hp,10000);
+ balanceNear(e.hp,10000);assert.ok(!e.rooted);e.airborne=false;e.y=e.surface.y;g.powers.step(2);balanceNear(e.hp,10000);
 });
 test('armored Roots halves a grounded Legendary boss’s stride, permits an attack, and excludes the flying boss',()=>{
  function prepare(id){
@@ -93,8 +94,8 @@ test('armored Roots halves a grounded Legendary boss’s stride, permits an atta
  assert.ok(g.powers.activate('roots'));assert.ok(b.rooted);g.stepEnemy(b,STEP);control.g.stepEnemy(control.b,STEP);
  assert.ok(Math.abs(control.b.x-x)>0);assert.ok(Math.abs((b.x-x)*2-(control.b.x-x))<1e-6);
  b.state='idle';b.age=2;g.stepEnemy(b,STEP);assert.equal(b.state,'windup');
- const hp=b.hp;g.powers.step(1);assert.equal(hp-b.hp,62);
- const air=prepare('air');air.g.powers.activate('roots');const airHp=air.b.hp;air.g.powers.step(1);assert.ok(!air.b.rooted);assert.equal(air.b.hp,airHp);
+ const hp=b.hp;g.powers.step(1);balanceNear(hp-b.hp,expectedDamage('roots',29,99));
+ const air=prepare('air');air.g.powers.activate('roots');const airHp=air.b.hp;air.g.powers.step(1);assert.ok(!air.b.rooted);balanceNear(air.b.hp,airHp);
 });
 test('seven-item limit, 25% resale, mixed tier, mixed collection, and unlearned Roots',()=>{
  const g=shop(99,0),s=ROOTS_SUITS[0];const items=buy(g,{setId:s.setId}).items;

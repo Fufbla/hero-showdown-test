@@ -32,7 +32,7 @@ for(const [power,c] of Object.entries(ARMOR_COLLECTIONS))test(power+': every tie
  const saved=validateSnapshot(JSON.parse(g.save()));const restored=new Game({save:decodeSave(JSON.stringify(saved))});assert.deepEqual(restored.inventory,g.inventory);assert.deepEqual(restored.powers.data.levels,g.powers.data.levels);assert.equal(restored.powers.data.points,78);assert.equal(restored.powers.cooldowns[power],7);assert.equal(restored.powers.stats(power).level,21+i);
  assert.ok(g.equipItem(result.items[1].uid));assert.equal(g.powers.stats(power).level,20);assert.equal(g.powers.cooldowns[power],7);assert.equal(JSON.stringify(g.powers.data.levels),permanent);
  const next=c.suits[(i+1)%9],mixed=buy(g,{catalogId:next.setId+'-chest'});assert.ok(mixed.ok);g.equipItem(mixed.items[0].uid);assert.equal(g.powers.stats(power).level,20);
- const sale=g.sellItem(result.items[0].uid,{confirmed:true,revision:g.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,resaleValue(c.catalog[s.setId+'-helmet']));
+ assert.equal(g.salePreview(result.items[0].uid).ok,false);assert.ok(g.equipItem(result.items[0].uid)); const sale=g.sellItem(result.items[0].uid,{confirmed:true,revision:g.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,resaleValue(c.catalog[s.setId+'-helmet']));
  const individual=shop();for(const part of COSTUME_PARTS)assert.ok(buy(individual,{catalogId:s.setId+'-'+part}).ok);assert.equal(99999-individual.hero.coins,s.price);
  }
 });

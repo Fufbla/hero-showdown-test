@@ -1,3 +1,4 @@
+import {expectedDamage,near as balanceNear} from './expected-balance.mjs';
 import {assertCleanupSimulation} from './cleanup-preservation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -56,12 +57,12 @@ for(const [i,s] of SUPER_KICK_SUITS.entries())test(s.name+' whole set, piece pri
  const price=totals[i];assert.equal(s.level,10*(i+1));assert.equal(coins-g.hero.coins,price);
  assert.deepEqual(purchase.definitions.map(d=>d.catalogValue),[Math.floor(price/4),price/2,Math.ceil(price/4)]);
  for(const item of purchase.items)assert.ok(g.equipItem(item.uid));
- const stats=g.powers.stats('superKick');assert.equal(stats.level,21+i);assert.equal(stats.damage,159+i*2);
+ const stats=g.powers.stats('superKick');assert.equal(stats.level,21+i);assert.equal(stats.damage,expectedDamage('superKick',stats.level,g.hero.level,g.equipment));
  assert.equal(stats.kicks,6);assert.equal(stats.reach,76);assert.equal(stats.cooldown,6);
  const saved=validateSnapshot(JSON.parse(g.save()));assert.equal(saved.powers.levels.superKick,20);assert.equal(saved.powers.points,points);
  const r=new Game({save:decodeSave(g.save())});assert.equal(r.powers.stats('superKick').level,stats.level);
  for(const piece of purchase.items){const copy=new Game({save:saved});copy.paused=true;assert.ok(copy.equipItem(piece.uid));assert.equal(copy.powers.stats('superKick').level,20);}
- const sale=r.sellItem(purchase.items[1].uid,{confirmed:true,revision:r.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,resaleValue(purchase.definitions[1]));assert.equal(r.powers.stats('superKick').damage,157);
+ assert.equal(r.salePreview(purchase.items[1].uid).ok,false);assert.ok(r.equipItem(purchase.items[1].uid)); const sale=r.sellItem(purchase.items[1].uid,{confirmed:true,revision:r.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,resaleValue(purchase.definitions[1]));assert.equal(r.powers.stats('superKick').damage,expectedDamage('superKick',20,99));
 });
 function stageCombo(g,health){
  g.hero.face=1;
@@ -141,7 +142,7 @@ test('armored and unarmored heroes have identical travel, jump arcs, basic hitbo
 test('only damage scales above 20, and every kick-count milestone below 20 remains in force',()=>{
  for(let learned=1;learned<=20;learned++)for(let bonus=0;bonus<=9;bonus++){
   const level=learned+bonus,stats=powerStats('superKick',learned,{equipment:{superKickLevels:bonus}});
-  assert.equal(stats.damage,21+2*(level-1));assert.equal(stats.kicks,Math.min(6,2+Math.floor(level/5)));
+  assert.equal(stats.damage,expectedDamage('superKick',level));assert.equal(stats.kicks,Math.min(6,2+Math.floor(level/5)));
   assert.equal(stats.reach,76);assert.equal(stats.cooldown,6);
  }
  assert.equal(powerStats('superKick',20,{equipment:{superKickLevels:1000}}).level,29);

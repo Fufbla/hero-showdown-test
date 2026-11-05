@@ -1,3 +1,4 @@
+import {offensiveDamage} from './combat-tuning.mjs';
 import {groundedForRoots,releaseInvalidRoots} from './roots-armor.mjs';
 import { MERGE_POWERS } from './legendary-data.mjs';
 import {ProjectilePool,clearProjectiles,compactProjectiles} from './projectiles.mjs';
@@ -45,15 +46,15 @@ export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
   level=integer(level,1,20)+armorLevels;const n=tier(level),eq=equipmentStats(equipment),strength=10+2*(heroLevel-1)+eq.strength;
   const base={level,cooldown:POWERS[id]?.cooldown||0};
   switch(id) {
-    case 'strength': return {...base,targets:n,damage:45+8*(level-1)+2*strength+eq.damage,bossEffectiveness:scale(Math.min(level,POWER_CAP),.25,1),reach:59};
-    case 'superKick': return {...base,kicks:n+1,damage:16+2*(level-1)+.5*strength+eq.damage,reach:76};
-    case 'fireball': return {...base,projectiles:level>=20?3:level>=10?2:1,damage:24+5*(level-1)+eq.fireball,pierce:level>=20?2:1};
+    case 'strength': return {...base,targets:n,damage:offensiveDamage(id,45+8*(level-1)+2*(strength-eq.strength),level,heroLevel)+2*eq.strength+eq.damage,bossEffectiveness:scale(Math.min(level,POWER_CAP),.25,1),reach:59};
+    case 'superKick': return {...base,kicks:n+1,damage:offensiveDamage(id,16+2*(level-1)+.5*(strength-eq.strength),level,heroLevel)+.5*eq.strength+eq.damage,reach:76};
+    case 'fireball': return {...base,projectiles:level>=20?3:level>=10?2:1,damage:offensiveDamage(id,24+5*(level-1),level,heroLevel)+eq.fireball,pierce:level>=20?2:1};
     case 'flight': return {...base,duration:level+2,bossHitChance:.5};
     case 'steel': return {...base,reduction:interpolate(level,[[1,.2],[5,.3],[10,.45],[15,.6],[20,.75],[29,.84]]),duration:interpolate(level,[[1,3],[5,4],[10,5],[15,6],[20,8],[29,10.25]])};
-    case 'roots': return {...base,targets:n,duration:n+1,damage:6+2*(level-1)+eq.roots};
+    case 'roots': return {...base,targets:n,duration:n+1,damage:offensiveDamage(id,6+2*(level-1),level,heroLevel)+eq.roots};
     case 'agility': return {...base,duration:scale(level,5,15),dodge:.75,legendaryDodge:.5};
     case 'speed': return {...base,runBonus:speedScale(level,.05,.6),attackBonus:speedScale(level,.03,.5)};
-    case 'whirlwind': return {...base,targets:n,duration:n+1,damage:10+3*(level-1)+eq.whirlwind};
+    case 'whirlwind': return {...base,targets:n,duration:n+1,damage:offensiveDamage(id,10+3*(level-1),level,heroLevel)+eq.whirlwind};
     default: throw new Error('Unknown power');
   }
 }

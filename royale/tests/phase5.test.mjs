@@ -131,7 +131,7 @@ for(const region of [1,2,3,4,5,6,7])for(const [name,ids] of Object.entries({braw
       const gap=target.x-h.x,desired=name==='ranged'&&g.powers.flying?170:70;
       h.face=gap>=0?1:-1;
       const move=Math.abs(gap)>desired?Math.sign(gap):0;
-      g.step(STEP,{move,run:true,kickHeld:name!=='ranged'||!g.powers.flying,powers:[frames%60===1,frames%120===1,frames%180===1],vertical:g.powers.flying?Math.sign(550-h.y)*.3:0});
+      g.step(STEP,{move,run:true,kickHeld:(name!=='ranged'||!g.powers.flying)&&!ids.slice(0,2).some(id=>g.powers.ready(id)),powers:[true,true,frames%180===1],vertical:g.powers.flying?Math.sign(550-h.y)*.3:0});
     }
     assert.equal(h.level>=BOSSES[region].level,true);assert.equal(g.bossEncounter,null,`${name} stalled at ${b.hp} boss HP with ${g.enemies.filter(e=>e.state!=='dead').length} enemies`);assert.equal(g.bossProgress.records[region].wins,1);assert.ok(g.time<300);assert.ok(h.x>=ARENA.left);
   });

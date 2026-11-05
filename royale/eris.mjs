@@ -78,6 +78,7 @@ export const erisMethods={
   salePreview(uid){
     const item=this.inventory.items.find(i=>i.uid===uid),def=itemDefinition(item),value=resaleValue(def);
     if(!this.shopReady())return failed('Selling is available only at the central Costume Shop.');
+    if(Object.values(this.inventory.equipped).includes(uid))return failed('Unequip this item before selling it.');
     if(!def||value===null)return failed('This item cannot be sold. Legendary equipment has no resale.');
     if(this.hero.coins+value>999999)return failed('Coin balance is full. Spend some coins before selling.');
     return {ok:true,uid,value,def,revision:this.economy.revision};

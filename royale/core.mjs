@@ -1,3 +1,4 @@
+import {BASIC_GROWTH} from './combat-tuning.mjs';
 import {normalizeLoot,nearbyInteractions,stepLoot,selectedInteraction,pickupLoot} from './world-loot.mjs';
 import {sharedNow} from './shared-clock.mjs';
 import { legendaryMethods, stepLegendaryBoss } from './legendary-bosses.mjs';
@@ -22,8 +23,8 @@ export const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
 const approach = (v, target, amount) => v < target ? Math.min(v + amount, target) : Math.max(v - amount, target);
 export const overlaps = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 export const ATTACKS = Object.freeze({
-  punch: { startup: .055, active: .105, duration: .27, reach: 59, damage: 13 },
-  kick: { startup: .10, active: .13, duration: .39, reach: 76, damage: 19 },
+  punch: { startup: .055, active: .105, duration: .27, reach: 59, damage: 5 },
+  kick: { startup: .10, active: .13, duration: .39, reach: 76, damage: 8 },
 });
 export { DEFAULT_LOOK, sanitizeLook } from './appearance.mjs';
 export function decodeSave(text) {
@@ -94,7 +95,7 @@ export class Game {
       hp: info.hp, maxHp: info.hp, w: info.w, h: info.h, face: id % 2 ? -1 : 1,
       state: 'patrol', age: id * .13, flash: 0, stagger: 0, respawn: 0, protection: .8, hit: false };
   }
-  attackDefinition(kind) {return {...ATTACKS[kind],damage:ATTACKS[kind].damage+3*(this.hero.level-1)+this.equipment.damage+this.equipment.strength*.5};}
+  attackDefinition(kind) {return {...ATTACKS[kind],damage:ATTACKS[kind].damage+BASIC_GROWTH[kind]*(this.hero.level-1)+this.equipment.damage+this.equipment.strength*.5};}
   markCombat(){this.combatTimer=PROGRESSION.combatGrace;}
   inCombat(){return !!this.bossEncounter||this.combatTimer>1e-8||!!this.hero.attack||Object.entries(this.powers.active).some(([id])=>POWERS[id].offensive)||this.powers.projectiles.length>0||this.powers.bursts.length>0||this.enemyShots.length>0||this.mergeEffects.some(e=>e.offensive)||this.mergeShots.length>0;}
 

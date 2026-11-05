@@ -21,7 +21,7 @@ function reset(){
     if(mode==='boss'){e.boss=e.legendary=true;e.w=62;e.h=66;}if(mode==='air'){e.y=e.prevY=500;e.flying=true;}
     game.enemies.push(e);
   }
-  paused=false;game.paused=false;input.enabled=true;input.clear();$('lab-pause').hidden=true;renderer.camera=0;renderer.particles=[];accumulator=0;updateHud();
+  paused=false;game.paused=false;input.enabled=true;input.clear();$('lab-pause').hidden=true;renderer.camera=0;renderer.clearParticles();accumulator=0;updateHud();
 }
 function togglePause(){paused=!paused;game.paused=paused;input.enabled=!paused;input.clear();$('lab-pause').hidden=!paused;}
 function updateHud(){

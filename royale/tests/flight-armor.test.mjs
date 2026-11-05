@@ -61,7 +61,7 @@ for(const [i,s] of FLIGHT_SUITS.entries())test(s.name+' whole set, piece pricing
  const saved=validateSnapshot(JSON.parse(g.save()));assert.equal(saved.powers.levels.flight,20);assert.equal(saved.powers.points,points);
  const r=new Game({save:decodeSave(g.save())});assert.equal(r.powers.stats('flight').level,stats.level);
  for(const piece of purchase.items){const copy=new Game({save:saved});copy.paused=true;assert.ok(copy.equipItem(piece.uid));assert.equal(copy.powers.stats('flight').level,20);}
- const sale=r.sellItem(purchase.items[1].uid,{confirmed:true,revision:r.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,resaleValue(purchase.definitions[1]));assert.equal(r.powers.stats('flight').level,20);
+ assert.equal(r.salePreview(purchase.items[1].uid).ok,false);assert.ok(r.equipItem(purchase.items[1].uid)); const sale=r.sellItem(purchase.items[1].uid,{confirmed:true,revision:r.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,resaleValue(purchase.definitions[1]));assert.equal(r.powers.stats('flight').level,20);
 });
 test('seven-item limit, 25% resale, mixed tier, mixed collection, and unlearned Flight',()=>{
  const g=shop(99,0),s=FLIGHT_SUITS[0];const items=buy(g,{setId:s.setId}).items;

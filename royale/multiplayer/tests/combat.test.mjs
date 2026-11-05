@@ -18,7 +18,9 @@ for(let region=1;region<=7;region++)test(`regional boss ${region}: shared phases
   try{
     assert.equal(boss,hs[1].game.arenaScene.boss);
     for(let tick=0;tick<5000&&!hs[0].game.arenaScene.cleared;tick++){
-      for(const h of hs){const target=h.game.enemies.find(e=>e.state!=='dead');if(target){Object.assign(h.game.hero,{x:target.x-40,y:target.y,face:1,vx:0,vy:0});a.input(h.owner,h.id,tick+1,{punchHeld:true});}}
+      // Late encounters use the fixture's owned brawler powers. Keep basic
+      // attacks on early bosses so this level-99 fixture observes every phase.
+      for(const h of hs){const target=h.game.enemies.find(e=>e.state!=='dead');if(target){Object.assign(h.game.hero,{x:target.x-40,y:target.y,face:1,vx:0,vy:0});const usePowers=region>=4,ready=usePowers&&['strength','superKick'].some(id=>h.game.powers.ready(id));a.input(h.owner,h.id,tick+1,{punchHeld:!ready,powers:[usePowers,usePowers,false]});}}
       a.tick();phases.add(boss.phase);
     }
     assert.equal(boss.hp,0);assert.ok(phases.has(2));assert.ok(phases.has(3));

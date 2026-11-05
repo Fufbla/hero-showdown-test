@@ -51,8 +51,8 @@ test('all low tide routes can be crossed with ordinary jumps', () => {
 });
 function duel(){const g=new Game();const e=g.enemies[0];g.enemies=[e];e.x=e.spawnX=220;e.protection=0;e.state='recover';e.age=-100;g.hero.x=175;g.hero.invulnerable=0;return {g,e};}
 test('one punch damages each target once; attacks cannot hit behind the hero', () => {
-  const {g,e}=duel();g.step(STEP,{punch:true});ticks(g,13);assert.equal(e.hp,e.maxHp-ATTACKS.punch.damage);ticks(g,8);assert.equal(e.hp,e.maxHp-13);
-  e.x=130;g.step(STEP,{kick:true});ticks(g,30);assert.equal(e.hp,e.maxHp-13);
+  const {g,e}=duel();g.step(STEP,{punch:true});ticks(g,13);assert.equal(e.hp,e.maxHp-ATTACKS.punch.damage);ticks(g,8);assert.equal(e.hp,e.maxHp-ATTACKS.punch.damage);
+  e.x=130;g.step(STEP,{kick:true});ticks(g,30);assert.equal(e.hp,e.maxHp-ATTACKS.punch.damage);
 });
 test('held basic attacks chain with only animation recovery, including while airborne', () => {
   const g=empty();ticks(g,100,{punchHeld:true});assert.ok(g.attackSerial>=6);
@@ -63,7 +63,7 @@ test('airborne attacks connect using the current hero and enemy positions', () =
   g.step(STEP,{kick:true});ticks(g,10);assert.ok(e.hp<e.maxHp);
 });
 test('a defeated enemy rewards once, respawns later, and avoids spawning on the hero', () => {
-  const {g,e}=duel();e.hp=13;g.step(STEP,{punch:true});ticks(g,10);assert.equal(e.state,'dead');assert.equal(g.kills,1);assert.equal(g.hero.coins,1);assert.equal(g.hero.xp,14);
+  const {g,e}=duel();e.hp=ATTACKS.punch.damage;g.step(STEP,{punch:true});ticks(g,10);assert.equal(e.state,'dead');assert.equal(g.kills,1);assert.equal(g.hero.coins,1);assert.equal(g.hero.xp,14);
   ticks(g,1140,{punchHeld:true});assert.equal(e.state,'dead');assert.equal(g.hero.coins,1);
   g.hero.x=800;ticks(g,2);assert.equal(e.state,'patrol');assert.equal(e.hp,e.maxHp);assert.ok(e.protection>0);
 });

@@ -64,7 +64,7 @@ for(const [i,suit] of STEEL_SUITS.entries())test(suit.name+' level gate, real tr
   assert.equal(restored.hero.vx,oldVx);assert.equal(restored.hero.stun,0);assert.ok(restored.hero.hp<restored.hero.maxHp);
   restored.powers.step(stats.duration);assert.equal(restored.hero.steel,false);near(restored.powers.cooldowns.steel,15);
   for(const piece of pieces){const copy=new Game({save:saved});copy.paused=true;assert.ok(copy.equipItem(piece.uid));assert.equal(copy.powers.stats('steel').level,20);}
-  const sale=g.sellItem(pieces[1].uid,{confirmed:true,revision:g.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,Math.floor(price/8));assert.equal(g.powers.stats('steel').level,20);
+  assert.equal(g.salePreview(pieces[1].uid).ok,false);assert.ok(g.equipItem(pieces[1].uid)); const sale=g.sellItem(pieces[1].uid,{confirmed:true,revision:g.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,Math.floor(price/8));assert.equal(g.powers.stats('steel').level,20);
   assert.equal(resaleValue(STEEL_PIECES[pieces[0].catalogId]),Math.floor(Math.floor(price/4)/4));
 });
 test('changing gear during Steel Body immediately shortens or ends it and retains elapsed time and cooldown',()=>{

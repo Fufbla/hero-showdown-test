@@ -1,3 +1,4 @@
+import {expectedDamage,near as balanceNear} from './expected-balance.mjs';
 import {assertCleanupSimulation} from './cleanup-preservation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -56,19 +57,19 @@ for(const [i,suit] of STRENGTH_SUITS.entries())test(suit.name+' pricing, matchin
  for(const [j,item] of result.items.entries()){
   assert.ok(g.equipItem(item.uid));assert.equal(g.powers.stats('strength').level,j===2?21+i:20);
  }
- const stats=g.powers.stats('strength');assert.equal(stats.damage,before.damage+8*(i+1));
+ const stats=g.powers.stats('strength');assert.equal(stats.damage,expectedDamage('strength',stats.level,g.hero.level,g.equipment));
  assert.equal(stats.targets,5);assert.equal(stats.reach,59);assert.equal(stats.cooldown,8);assert.equal(stats.bossEffectiveness,1);
  assert.deepEqual([g.attackDefinition('punch'),g.attackDefinition('kick'),g.powers.attackRate,g.powers.speed],basic);
  const snapshot=validateSnapshot(JSON.parse(g.save()));assert.equal(snapshot.powers.levels.strength,20);
  assert.equal(snapshot.powers.points,points);assert.equal(snapshot.inventory.items.length,3);
  const restored=new Game({save:decodeSave(g.save())});assert.deepEqual(restored.powers.stats('strength'),stats);
  for(const item of result.items){const copy=new Game({save:snapshot});copy.paused=true;assert.ok(copy.equipItem(item.uid));assert.deepEqual(copy.powers.stats('strength'),before);}
- const sale=restored.sellItem(result.items[1].uid,{confirmed:true,revision:restored.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,Math.floor(price/2/4));assert.equal(restored.powers.stats('strength').damage,before.damage);assert.equal(restored.visualOutfit().pieces.gloves,undefined);
+ assert.equal(restored.salePreview(result.items[1].uid).ok,false);assert.ok(restored.equipItem(result.items[1].uid)); const sale=restored.sellItem(result.items[1].uid,{confirmed:true,revision:restored.economy.revision});assert.ok(sale.ok);assert.equal(sale.value,Math.floor(price/2/4));assert.equal(restored.powers.stats('strength').damage,before.damage);assert.equal(restored.visualOutfit().pieces.gloves,undefined);
 });
 test('effective tiers retain the learned target milestones, reach, boss scaling and cooldown',()=>{
  for(let learned=1;learned<=20;learned++)for(let bonus=0;bonus<=9;bonus++){
   const level=learned+bonus,stats=powerStats('strength',learned,{equipment:{strengthLevels:bonus}});
-  assert.equal(stats.targets,Math.min(5,1+Math.floor(level/5)));assert.equal(stats.damage,65+8*(level-1));
+  assert.equal(stats.targets,Math.min(5,1+Math.floor(level/5)));assert.equal(stats.damage,expectedDamage('strength',level));
   assert.equal(stats.cooldown,8);assert.equal(stats.reach,59);
   assert.equal(stats.bossEffectiveness,.25+.75*(Math.min(level,20)-1)/19);
  }
