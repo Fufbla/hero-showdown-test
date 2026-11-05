@@ -1,3 +1,4 @@
+import {assertAccountSafetyScope} from './account-preservation.mjs';
 import {withoutBalance,assertBalanceScope,BALANCE_FILES} from './balance-preservation.mjs';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
@@ -18,7 +19,9 @@ export function assertCombatCorrectionScope(){
  assert.equal(withoutHitCorrection(read('core.mjs')),before('core.mjs'),'Only damage event tracking/recovery may change in core');
  assert.equal(withoutBalance('powers.mjs',read('powers.mjs')),before('powers.mjs').replace('y:h.y-45,vx:burst.face','y:h.y-30,vx:burst.face'),'Only Fireball vertical origin changes; all balance and piercing remain exact');
  assert.equal(read('monsters.mjs'),before('monsters.mjs').replace("e.state='strike';e.age=0;e.hit=false;","e.state='strike';e.age=0;e.hit=false;e.damageEvent={};"),'Only a strike identity may change in monster AI');
- assert.equal(git('diff','--name-only',CORRECTIONS_BASE,'--','assets','royale/assets','royale/progression.mjs','royale/equipment.mjs','royale/saves.mjs','royale/save-policy.mjs','royale/boss-data.mjs','royale/legendary-data.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs'),'','Approved art, rewards, progression, saves and bosses remain byte-identical');
+ assert.equal(git('diff','--name-only',CORRECTIONS_BASE,'--','assets','royale/assets','royale/progression.mjs','royale/equipment.mjs','royale/save-policy.mjs','royale/boss-data.mjs','royale/legendary-data.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs'),'','Approved art, rewards, progression, saves and bosses remain byte-identical');
 }
 
 for(const path of BALANCE_FILES)CORRECTION_FILES.add(path);
+
+assertAccountSafetyScope();

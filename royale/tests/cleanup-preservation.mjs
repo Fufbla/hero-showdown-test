@@ -1,3 +1,4 @@
+import {assertAccountSafetyScope} from './account-preservation.mjs';
 import {withoutHitCorrection,assertCombatCorrectionScope} from './player-corrections-preservation.mjs';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
@@ -16,9 +17,11 @@ export function assertCleanupSimulation(){
  assert.equal(current,before,'Only checkpoint activation/healing changes in simulation');
  current=cleanupCurrent('world.mjs');before=cleanupBefore('world.mjs');
  assert.equal(replaceBlock(current,before,'export function regionSpawns(id)','export const GATES'),before,'Only platform population changes; all geometry/species/stat definitions remain exact');
- assert.equal(git('diff','--name-only',CLEANUP_BASE,'--','royale/assets','assets','index.html','royale/progression.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs','royale/boss-data.mjs','royale/legendary-data.mjs','royale/boss-loot.mjs','royale/legendary-state.mjs','royale/merge-powers.mjs','royale/equipment.mjs','royale/costume-catalog.mjs','royale/saves.mjs','royale/journey.mjs'),'');
+ assert.equal(git('diff','--name-only',CLEANUP_BASE,'--','royale/assets','assets','index.html','royale/progression.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs','royale/boss-data.mjs','royale/legendary-data.mjs','royale/boss-loot.mjs','royale/legendary-state.mjs','royale/merge-powers.mjs','royale/equipment.mjs','royale/costume-catalog.mjs','royale/journey.mjs'),'');
 }
 
 for(const path of ['tests/strength-armor.test.mjs', 'tests/flight-armor.test.mjs', 'tests/super-kick-armor.test.mjs', 'tests/roots-armor.test.mjs', 'tests/speed-armor.test.mjs', 'tests/whirlwind-armor.test.mjs', 'tests/agility-armor.test.mjs', 'tests/phase9.test.mjs'])CLEANUP_FILES.add('royale/'+path);
 
 for(const path of ['gameplay-landscape.jpg','helmet-fit.jpg','hair-fit.jpg'])CLEANUP_FILES.add('royale/qa/cleanup/'+path);
+
+assertAccountSafetyScope();

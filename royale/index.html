@@ -51,8 +51,17 @@
           <p class="storage-note" id="roster-note" role="status">Local heroes stay on this browser. Use Pause → Save Game before leaving.</p>
           <div class="practice-links"><a class="text-button practice-link" href="tests/monster-sprites.html">Approved monster sprite integration review →</a><a class="text-button practice-link" href="tests/phase10-browser.html">Phase 10 quality &amp; performance review →</a><a class="text-button practice-link" href="tests/showcase.html">Phase 9 art &amp; vertical exploration review →</a><a class="text-button practice-link" href="tests/legendary.html">Practice all eight Legendary bosses →</a><a class="text-button practice-link" href="tests/eris.html">Explore the Tree &amp; Costume Shop →</a><a class="text-button practice-link" href="tests/bosses.html">Practice all seven bosses →</a><a class="text-button practice-link" href="tests/world.html">Explore all seven regions →</a><a class="text-button practice-link" href="tests/powers.html">Practice all nine powers →</a></div>
           <button id="back-to-patrol" class="secondary" hidden>Return to current patrol</button>
+          <button id="recover-local" class="secondary">Find or back up existing heroes</button>
         </div>
       </section>
+      <dialog id="local-recovery" class="sale-dialog" aria-labelledby="local-recovery-title">
+        <h2 id="local-recovery-title">Existing hero recovery</h2>
+        <p>Saves belong to the browser and website where you played. Try the original device, browser and game address. Private browsing and embedded websites may use separate storage.</p>
+        <div id="recovery-results"></div><p id="recovery-status" role="status"></p>
+        <p>This read-only check keeps all source saves. Cloud import will be available after accounts are configured and tested.</p>
+        <button id="download-recovery" class="primary">Download local backup</button>
+        <button id="cancel-recovery" class="secondary">Close</button>
+      </dialog>
       <section id="account-menu" class="overlay game-panel" hidden>
         <div id="account-panel" class="account-card" role="dialog" aria-modal="true" aria-labelledby="account-title">
           <header><div><div class="eyebrow">HERO SHOWDOWN ROYALE</div><h2 id="account-title" tabindex="-1">Your account. Your heroes.</h2></div><button id="account-close" class="secondary">Back to heroes</button></header>

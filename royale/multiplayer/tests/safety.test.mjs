@@ -17,7 +17,9 @@ test('approved artwork, balance, simulation and legacy save implementation are b
   const integration=new Set(['royale/tests/final-mobile.mjs','royale/release-config.mjs', 'royale/multiplayer-gate.mjs', 'royale/tools/build-solo.mjs', 'royale/tests/solo-release.test.mjs', 'royale/SOLO-DEPLOYMENT.md','royale/app.mjs','royale/index.html','royale/eris-ui.mjs','royale/journey-menu.mjs','royale/legendary-ui.mjs','royale/power-menu.mjs','royale/power-upgrades.mjs','royale/tools/build-playtest.mjs','royale/tests/final-preservation.mjs','royale/backend/supabase/migrations/20261104161434_royale_multiplayer_fence.sql']);
   assertCombatCorrectionScope();
   assert.deepEqual(paths.filter(p=>!p.startsWith('royale/multiplayer/')&&!integration.has(p)&&!CORRECTION_FILES.has(p)),[]);
-  assert.deepEqual(paths.filter(p=>/\.(png|webp|jpg|svg)$/.test(p)&&!p.startsWith('royale/multiplayer/qa/browser/')),[]);
+  const approvedQA=new Set(['royale/qa/balance/royale-sale-confirmation.jpg','royale/qa/balance/royale-sell-landscape.jpg']);
+  assert.deepEqual(paths.filter(p=>/\.(png|webp|jpg|svg)$/.test(p)&&!p.startsWith('royale/multiplayer/qa/browser/')&&!approvedQA.has(p)),[]);
+  assert.equal(execFileSync('git',['diff','--name-only','594a4b8f6281d7f004268e7b4f72a1fe1ab13912','--',...approvedQA],{cwd:new URL('../../../',import.meta.url),encoding:'utf8'}),'');
 });
 test('combat, current health, cooldowns and exact midair position persist without a safe-save restriction',()=>{
   const store=new AuthorityStore(),a=new Authority(store,{allowLegacyImport:true,capacity:16}),h=a.create('hero',{slot:0});a.attach('hero',h.id,{close(){}});

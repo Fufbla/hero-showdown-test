@@ -29,6 +29,7 @@ import { regionAt, boardAt } from './world.mjs';
 import { Input } from './input.mjs';
 import { Renderer, drawHero } from './renderer.mjs';
 import { LocalHeroStore, PROFILE_KEY } from './saves.mjs';
+import {installSaveRecovery} from './recovery-ui.mjs';
 import { Creator } from './creator.mjs';
 import { previewHero, animationState } from './hero-rig.mjs';
 import { STARTER_OUTFIT } from './appearance.mjs';
@@ -48,6 +49,7 @@ const testPrefix=params.has('qa')&&params.get('testSession')?`royale-test-${para
 const practiceHero = ['male','female'].includes(params.get('practice')) && !testPrefix ? params.get('practice') : null;
 const storagePrefix = testPrefix || (practiceHero ? `style-c-trial-v1-${practiceHero}:` : '');
 const storage={getItem:key=>(storagePrefix?sessionStorage:localStorage).getItem(storagePrefix+key),setItem:(key,value)=>(storagePrefix?sessionStorage:localStorage).setItem(storagePrefix+key,value)};
+installSaveRecovery(storage);
 $('hero-art-status').textContent='Opening saved heroes…';
 const localStore=new LocalHeroStore(storage);let store=localStore;
 let ledger=null,ledgerError='',criticalPending=null,fixtureSaveFailures=0,fixtureOrdinaryFailures=0;
@@ -59,7 +61,7 @@ let cloudStore=null,accountReturn='roster';
 const audio=new GameAudio(storage);
 let game=new Game(),screen='roster',editing=false,activeSlot=store.data.activeSlot,activeId=null,creatorSlot=activeSlot,deleteTarget=null;
 let soundEnabled=false,toastUntil=0,regionName='',lastHud='',fps=60,drawMs=0,qaClock=0;
-const input=new Input(document,()=>{const sale=document.querySelector('.sale-dialog[open]');if(sale){sale.querySelector('#cancel-sale')?.click();return;}if(criticalPending||powerUpgrades.busy||screen==='mergeReward')return;if(screen==='powerPicker')closePowerPicker();else if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();else if(screen==='account')accountMenu?.hooks.close();else if(screen==='tree')returnAdventure();else if(['controls','world','inventory','chest','mergeReward'].includes(screen))showPause();},loadControls(storage));
+const input=new Input(document,()=>{const sale=document.querySelector('.sale-dialog[open]');if(sale){sale.querySelector('#cancel-sale,#cancel-recovery')?.click();return;}if(criticalPending||powerUpgrades.busy||screen==='mergeReward')return;if(screen==='powerPicker')closePowerPicker();else if(screen==='play')pause();else if(screen==='pause')resume();else if(screen==='creator')cancelCreator();else if(screen==='delete')closeDelete();else if(screen==='account')accountMenu?.hooks.close();else if(screen==='tree')returnAdventure();else if(['controls','world','inventory','chest','mergeReward'].includes(screen))showPause();},loadControls(storage));
 const journeyMenu=new JourneyMenu(()=>game,persist,say,resume,transaction);
 const powerUpgrades=new InstantPowerUpgrades(()=>({game,store,index:activeSlot,heroId:activeId,blocked:!online()&&activeId&&multiplayerMenu.isLinked(activeId),remote:online()?multiplayerMenu.session:null}));
 const powerMenu=new PowerMenu(()=>game,persist,say,powerUpgrades),controlMenu=new ControlMenu(input,storage,say);
@@ -342,7 +344,7 @@ window.addEventListener('storage',e=>{if(storagePrefix||store.cloud||e.key!==PRO
 // Keyboard focus stays in the active panel. Tabs also support arrow-key navigation.
 document.addEventListener('keydown',e=>{
   if(e.key!=='Tab'||screen==='play'&&!criticalPending)return;
-  const panel=criticalPending?$('permanent-save'):$( { account:'account-menu',creator:'creator',roster:'roster',delete:'delete-dialog',pause:'pause-menu',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',mergeReward:'merge-reward'}[screen]);
+  const panel=document.querySelector('dialog[open]')||(criticalPending?$('permanent-save'):$( { account:'account-menu',creator:'creator',roster:'roster',delete:'delete-dialog',pause:'pause-menu',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',mergeReward:'merge-reward'}[screen]));
   if(!panel)return;
   const nodes=[...panel.querySelectorAll('a[href],button,input,select')].filter(n=>!n.disabled&&n.tabIndex!==-1&&n.getClientRects().length);
   if(!nodes.length)return;

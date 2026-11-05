@@ -1,3 +1,4 @@
+import {ACCOUNT_FILES,assertAccountSafetyScope} from './account-preservation.mjs';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
@@ -17,12 +18,15 @@ export function withoutBalance(name,s){
  return s;
 }
 export function assertBalanceScope(){
+ assertAccountSafetyScope();
  const git=(...a)=>execFileSync('git',a,{cwd:new URL('../../',import.meta.url),encoding:'utf8',maxBuffer:32e6}).trimEnd();
  for(const name of ['core.mjs','powers.mjs','eris.mjs'])assert.equal(withoutBalance(name,readFileSync(new URL('../'+name,import.meta.url),'utf8')).trimEnd(),git('show',BALANCE_BASE+':royale/'+name),`Only authorized damage formulas / worn-sale protection changed in ${name}`);
- assert.equal(git('diff','--name-only',BALANCE_BASE,'--','assets','index.html','royale/assets','royale/progression.mjs','royale/equipment.mjs','royale/costume-catalog.mjs','royale/world.mjs','royale/monsters.mjs','royale/journey.mjs','royale/saves.mjs','royale/save-policy.mjs','royale/boss-data.mjs','royale/legendary-data.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs'),'','Art, XP, rewards, respawns, population, saves, item bonuses and boss mechanics stay exact');
+ assert.equal(git('diff','--name-only',BALANCE_BASE,'--','assets','index.html','royale/assets','royale/progression.mjs','royale/equipment.mjs','royale/costume-catalog.mjs','royale/world.mjs','royale/monsters.mjs','royale/journey.mjs','royale/save-policy.mjs','royale/boss-data.mjs','royale/legendary-data.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs'),'','Art, XP, rewards, respawns, population, saves, item bonuses and boss mechanics stay exact');
 }
 
 for(const p of ['tests/expected-balance.mjs','tests/armor-integration.test.mjs','tests/agility-armor.test.mjs','tests/speed-armor.test.mjs','tests/steel-armor.test.mjs','tests/phase5.test.mjs'])BALANCE_FILES.add('royale/'+p);
 BALANCE_FILES.add('royale/multiplayer/tests/combat.test.mjs');
 BALANCE_FILES.add('royale/tests/powers-lab.mjs');
 for(const path of ['royale-sell-landscape.jpg','royale-sale-confirmation.jpg'])BALANCE_FILES.add('royale/qa/balance/'+path);
+
+for(const path of ACCOUNT_FILES)BALANCE_FILES.add(path);

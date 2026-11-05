@@ -1,7 +1,10 @@
 import {createClient} from 'npm:@supabase/supabase-js@2.118.0';
 import {validateSnapshot,validateProgress,validateUsername,validatePasscode,validSlot,MAX_SAVE_BYTES} from './validation.mjs';
 const URL=Deno.env.get('SUPABASE_URL')!,KEY=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,ANON=Deno.env.get('SUPABASE_ANON_KEY')!;
-const SITE='https://healthia-showdown-royale-phase1.gladcreek512.chatgpt.site';
+const SITE='https://fufbla.github.io';
+const CALLBACK=SITE+'/hero-showdown-test/royale/account-callback.html';
+// Public registration stays closed until recovery, migration and callback tests pass.
+const REGISTRATION_READY=Deno.env.get('ROYALE_REGISTRATION_READY')==='true';
 const origins=new Set([SITE,'http://localhost:4173','http://terminal.local:4173',...(Deno.env.get('ROYALE_ALLOWED_ORIGINS')||'').split(',').filter(Boolean)]);
 const uuid=(v:unknown)=>typeof v==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(v);
 const hash=async(s:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))).map(x=>x.toString(16).padStart(2,'0')).join('');
@@ -17,7 +20,7 @@ Deno.serve(async(req)=>{
   const db=client();
   if(req.method==='GET'){
    const{data,error}=await db.from('royale8_configuration').select('email_ready,google_ready,apple_ready,recovery_ready').eq('id',1).single();if(error)fail('Account service unavailable.',503);
-   return respond({serverTime:Date.now(),clockReference:Date.UTC(2026,0,1),methods:{username:true,email:data.email_ready,google:data.google_ready,apple:data.apple_ready,recovery:data.recovery_ready&&!!Deno.env.get('ROYALE_MAIL_API_KEY')&&Deno.env.get('ROYALE_DUAL_CONFIRMATION_VERIFIED')==='true'},provider:'Supabase'});
+   return respond({serverTime:Date.now(),clockReference:Date.UTC(2026,0,1),registrationReady:REGISTRATION_READY,methods:{username:true,email:data.email_ready,google:data.google_ready,apple:data.apple_ready,recovery:data.recovery_ready&&!!Deno.env.get('ROYALE_MAIL_API_KEY')&&Deno.env.get('ROYALE_DUAL_CONFIRMATION_VERIFIED')==='true'},provider:'Supabase'});
   }
   if(req.method!=='POST')return respond({error:'Method not allowed.'},405);
   if(Number(req.headers.get('content-length'))>MAX_SAVE_BYTES+4096)fail('Request too large.',413);
@@ -32,6 +35,7 @@ Deno.serve(async(req)=>{
    await limited(db,'auth-ip:'+ipHash,60,900);await limited(db,'auth-global',600,900);
    const name=validateUsername(body.username);await limited(db,'auth-name:'+await hash(name),12,900);
    if(body.action==='username-signup'){
+    if(!REGISTRATION_READY)fail('Registration is not available until account recovery and save migration are verified.',503);
     validatePasscode(body.passcode);if(body.acknowledgeNoRecovery!==true)fail('Acknowledge the no-recovery warning first.');
     await limited(db,'signup-ip:'+ipHash,5,3600);await limited(db,'signup-global',100,3600);
     const reservation=crypto.randomUUID();
@@ -78,7 +82,7 @@ Deno.serve(async(req)=>{
    await db.auth.admin.signOut(reauth.data.session!.access_token,'local');
    // Acquire a short per-account lock. Failure leaves the account unchanged.
    await limited(db,'email-link-lock:'+user.id,1,120);
-   const options={redirectTo:SITE+'/royale/?emailVerified=1'};
+   const options={redirectTo:CALLBACK};
    const current=await db.auth.admin.generateLink({type:'email_change_current',email:user.email,newEmail:body.email,options});
    const next=await db.auth.admin.generateLink({type:'email_change_new',email:user.email,newEmail:body.email,options});
    if(current.error||next.error)fail('Email linking could not be started. The address may already belong to an account.');

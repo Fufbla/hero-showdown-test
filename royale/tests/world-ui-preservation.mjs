@@ -1,3 +1,4 @@
+import {assertAccountSafetyScope} from './account-preservation.mjs';
 import {withoutBalance} from './balance-preservation.mjs';
 import {withoutHitCorrection} from './player-corrections-preservation.mjs';
 import {assertCleanupSimulation,cleanupBefore} from './cleanup-preservation.mjs';
@@ -11,7 +12,7 @@ export const isWorldUIFile=p=>isFireballFile(p)||files.has(p)||p.startsWith('roy
 export function assertWorldPreserved(){
  assertCleanupSimulation();
  const root=new URL('../../',import.meta.url),git=(...a)=>execFileSync('git',a,{cwd:root,encoding:'utf8'}).trim();
- assert.equal(git('diff','--name-only',WORLD_BASE,'--','royale/progression.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs','royale/legendary-state.mjs','royale/merge-powers.mjs','royale/costume-catalog.mjs','royale/saves.mjs','royale/save-policy.mjs','royale/shared-clock.mjs'),'', 'Combat, rewards, catalogs, saves, ownership, clock and all creature rendering stay exact');
+ assert.equal(git('diff','--name-only',WORLD_BASE,'--','royale/progression.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs','royale/legendary-state.mjs','royale/merge-powers.mjs','royale/costume-catalog.mjs','royale/save-policy.mjs','royale/shared-clock.mjs'),'', 'Combat, rewards, catalogs, saves, ownership, clock and all creature rendering stay exact');
  // The new item catalog is the only transaction/inventory wiring change.
  const body=source=>source.replace(/^import .*?;\n/gm,'').trimEnd();
  const current=name=>withoutBalance(name,readFileSync(new URL('../'+name,import.meta.url),'utf8'));
@@ -40,3 +41,5 @@ export function assertWorldPreserved(){
  const before=git('show',WORLD_BASE+':royale/core.mjs'),after=withoutHitCorrection(readFileSync(new URL('../core.mjs',import.meta.url),'utf8'));
  for(const [start,end] of [['  attackDefinition(', '  interact()'],['    const axis =','    if(input.heal)'],['    if (h.attackBuffer)','    for (const e of this.enemies)'],['  stepEnemy(', '  save()']])assert.equal(after.slice(after.indexOf(start),after.indexOf(end)),before.slice(before.indexOf(start),before.indexOf(end)),`Protected simulation block ${start}`);
 }
+
+assertAccountSafetyScope();

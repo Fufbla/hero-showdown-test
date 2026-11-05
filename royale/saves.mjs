@@ -2,6 +2,7 @@ import { legendaryDominates } from './legendary-state.mjs';
 import { decodeSave, SAVE_KEY } from './core.mjs';
 import { CAMPS, regionAt } from './world.mjs';
 export const PROFILE_KEY='healthia.royale.profiles.v2';
+export const BACKUP_KEY='healthia.royale.profiles.backup.v2';
 export const SLOT_COUNT=3;
 const blank=()=>({version:2,revision:0,activeSlot:0,legacyImported:false,slots:[null,null,null]});
 const copy=value=>JSON.parse(JSON.stringify(value));
@@ -42,6 +43,9 @@ export class LocalHeroStore{
     try{
       const current=this.storage.getItem(PROFILE_KEY);
       if(current!==this.lastRaw){this.writable=false;this.durable=false;this.message='Heroes changed in another tab. Reload before saving here to avoid overwriting them.';return {ok:false,error:this.message};}
+      // Retain the last valid envelope before replacing it. Never back up a
+      // damaged envelope over a usable recovery copy. Failure aborts the write.
+      if(current!==null&&parseProfiles(current))this.storage.setItem(BACKUP_KEY,current);
       const raw=JSON.stringify(candidate);this.storage.setItem(PROFILE_KEY,raw);this.lastRaw=raw;this.data=candidate;this.durable=true;return {ok:true};
     }catch{if(!atomic)this.data=candidate;this.durable=false;this.message='Saving is unavailable. Keep this tab open; this patrol is only in memory.';return {ok:false,retained:!atomic,error:this.message};}
   }
