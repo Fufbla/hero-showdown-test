@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="eris.css">
   <link rel="stylesheet" href="legendary.css">
   <link rel="stylesheet" href="accounts.css">
-<link rel="stylesheet" href="world-ui.css">
+<link rel="stylesheet" href="world-ui.css?v=e7917dbf344a">
 <link rel="stylesheet" href="landscape.css">
 <link rel="stylesheet" href="multiplayer/menu.css">
 </head>
@@ -167,6 +167,7 @@
     addEventListener('error',event=>{const status=document.getElementById('hero-art-status');if(status&&!status.hidden){status.textContent='Game could not start. '+(event.message||'A required file did not load. Reload to retry.');}});
     addEventListener('unhandledrejection',event=>{const status=document.getElementById('hero-art-status');if(status&&!status.hidden)status.textContent='Game could not start. '+(event.reason?.message||'Reload to retry.');});
   </script>
-  <script type="module" src="app.mjs"></script>
+  <script type="importmap">{"imports":{"./app.mjs":"./app.mjs?v=55f4c64c3f71","./core.mjs":"./core.mjs?v=6cabf6f65290","./creator.mjs":"./creator.mjs?v=02b5d5adcb87","./hair-fit-corrections.mjs":"./hair-fit-corrections.mjs?v=fbc532894ec8","./input.mjs":"./input.mjs?v=da8d687cb3bd","./menu-gamepad.mjs":"./menu-gamepad.mjs?v=f777c3ce4841","./monsters.mjs":"./monsters.mjs?v=a6e2fee2e959","./powers.mjs":"./powers.mjs?v=c3e690276877","./style-c-face.mjs":"./style-c-face.mjs?v=337a4a80556b","./style-c-hair.mjs":"./style-c-hair.mjs?v=17be9f51196f"}}</script>
+  <script type="module" src="./app.mjs?v=55f4c64c3f71"></script>
 </body>
 </html>
