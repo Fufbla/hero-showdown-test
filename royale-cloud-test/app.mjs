@@ -225,7 +225,7 @@ async function returnAdventure(){await resume();}
 function showChest(){if(!game.availableChest()||!game.canSave())return;setScreen('chest');openChestMenu(game,async()=>{if((await transaction(()=>game.claimChest())).ok){setScreen('inventory');journeyMenu.inventory();say('Coins and Roots collected. Choose which equipment to keep.');}});$('chest-title').focus();}
 let resumeInProgress=false;
 async function resume(){
- if(resumeInProgress||criticalPending||powerUpgrades.busy||!game.started)return;
+ if(resumeInProgress||criticalPending||powerUpgrades.busy||!game.started){say('Resume unavailable while a permanent action is completing.',6);return;}
  if(document.querySelector('.sale-dialog[open]')||[...document.querySelectorAll('#tree-menu .upgrade-confirm:not([hidden]),#shop-confirm:not([hidden]),#equipment-confirm:not([hidden])')].some(el=>el.getClientRects().length)){say('Confirm or cancel the pending action first.',6);return;}
  if(game.pendingMergeReward()){showMergeReward();return;}
  if(game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();say('Choose your pending reward before continuing.');return;}
@@ -233,7 +233,10 @@ async function resume(){
  try{
   // Never bypass a failed or unconfirmed cloud save. Wait for any in-flight
   // commit before leaving the sanctuary, rather than trapping the player.
-  if(store.cloud){if(store.failure)throw store.failure;await store.flush();if(store.failure)throw store.failure;}
+  // Navigation must not wait for network I/O: the automatic cloud store keeps
+  // its own durable pending draft and save queue. A slow connection must never
+  // trap the player in the sanctuary.
+  if(store.cloud&&store.failure)throw store.failure;
   if(game.treeVisit){
    if(!game.leaveTree()){say('Unable to leave Tree of Eris.',6);return;}
    // The game restores its exact saved world coordinates; the next autosave
@@ -241,6 +244,7 @@ async function resume(){
    persist();
   }
   setScreen('play');
+  if(screen!=='play')say('Resume blocked by game state. Please report this message.',8);
   $('pause').blur();
  }catch(error){say('Cloud save needs attention: '+(error.message||'retry saving'),8);}
  finally{resumeInProgress=false;}
