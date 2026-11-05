@@ -221,9 +221,30 @@ async function begin(){
 function pause(){if(!game.started||screen!=='play')return;showPause();persist();}
 function showPause(){pausePanel('home');$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero','manual-save'])$(id).disabled=!game.canSave();$('return-camp').disabled=!game.canTravel();$('safe-save-note').textContent=game.canSave()?(online()?'Server saving is active. Save Game confirms your current position.':store.cloud?store.saving?'Saving to your account…':'Automatic cloud saving is active.':'Saving is available · browser-local only.'):'Saving is locked. Resume and spend five seconds without attacking or taking damage.';$('resume').focus();}
 async function openTree(panel='home'){if(powerUpgrades.busy)return;if(typeof panel!=='string')panel='home';if(!await game.visitTree()){say('Leave combat for five seconds before visiting the Tree.');return;}setScreen('tree');persist();erisMenu.open(panel);$('tree-title').focus();}
-async function returnAdventure(){if(powerUpgrades.busy||!game.treeVisit)return;await game.leaveTree();persist();resume();}
+async function returnAdventure(){await resume();}
 function showChest(){if(!game.availableChest()||!game.canSave())return;setScreen('chest');openChestMenu(game,async()=>{if((await transaction(()=>game.claimChest())).ok){setScreen('inventory');journeyMenu.inventory();say('Coins and Roots collected. Choose which equipment to keep.');}});$('chest-title').focus();}
-function resume(){if(criticalPending||powerUpgrades.busy||store.cloud&&(store.saving||store.failure)||!game.started)return;if(game.pendingMergeReward()){showMergeReward();return;}if(game.treeVisit){setScreen('tree');erisMenu.open();return;}if(game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();say('Choose your pending reward before continuing.');return;}setScreen('play');$('pause').blur();}
+let resumeInProgress=false;
+async function resume(){
+ if(resumeInProgress||criticalPending||powerUpgrades.busy||!game.started)return;
+ if(document.querySelector('.sale-dialog[open]')||[...document.querySelectorAll('#tree-menu .upgrade-confirm:not([hidden]),#shop-confirm:not([hidden]),#equipment-confirm:not([hidden])')].some(el=>el.getClientRects().length)){say('Confirm or cancel the pending action first.',6);return;}
+ if(game.pendingMergeReward()){showMergeReward();return;}
+ if(game.inventory.pending.length&&game.canSave()){setScreen('inventory');journeyMenu.inventory();say('Choose your pending reward before continuing.');return;}
+ resumeInProgress=true;
+ try{
+  // Never bypass a failed or unconfirmed cloud save. Wait for any in-flight
+  // commit before leaving the sanctuary, rather than trapping the player.
+  if(store.cloud){if(store.failure)throw store.failure;await store.flush();if(store.failure)throw store.failure;}
+  if(game.treeVisit){
+   if(!game.leaveTree()){say('Unable to leave Tree of Eris.',6);return;}
+   // The game restores its exact saved world coordinates; the next autosave
+   // records the return without creating a new hero or resetting progress.
+   persist();
+  }
+  setScreen('play');
+  $('pause').blur();
+ }catch(error){say('Cloud save needs attention: '+(error.message||'retry saving'),8);}
+ finally{resumeInProgress=false;}
+}
 function closeDelete(){deleteTarget=null;renderRoster();setScreen('roster');}
 function tone(type){audio.effect(type);}
 function handleEvents() {
