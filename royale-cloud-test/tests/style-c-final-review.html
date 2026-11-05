@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#142831">
+<title>Hero workshop · Style C · Hero Showdown Royale</title>
+<style>
+:root{color-scheme:dark;--paper:#f3efdd;--muted:#bed0c9;--ink:#11262d;--panel:#1b353b;--line:#476267;--gold:#e7cb86;font-family:system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#142b32;color:var(--paper)}main{max-width:1100px;margin:auto;padding:28px clamp(16px,4vw,54px) 70px}nav,.actions,.options{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+nav{justify-content:space-between;padding-bottom:20px;border-bottom:1px solid var(--line)}.imprint,.eyebrow{font-size:.7rem;letter-spacing:.14em;font-weight:750;color:var(--gold)}
+header{padding:clamp(25px,5vw,56px) 0 22px}h1,h2,h3,p{margin:0}h1{font:650 clamp(2.3rem,7vw,4.5rem)/1.05 Georgia,serif;letter-spacing:-.035em}
+header p,section>p,figcaption,.notice{color:var(--muted);line-height:1.55}header p{max-width:50ch;margin:12px 0 17px}h2{font-size:clamp(1.35rem,3vw,1.85rem);margin:10px 0}h3{font-size:1.03rem}
+a{color:var(--gold);text-underline-offset:.2em}a:focus-visible,select:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+button,.actions a,select{min-height:44px;border:1px solid var(--line);border-radius:7px;background:#28454b;color:var(--paper);padding:8px 12px;font:inherit}
+button,.actions a{font-weight:650;cursor:pointer}.actions a{text-decoration:none}.actions a:first-child{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+section{margin:0 0 32px;padding-top:15px}.lab{padding:clamp(12px,3vw,24px);border-radius:14px;background:#203b40;border:1px solid var(--line)}
+.options{margin:18px 0 14px;align-items:end}.options label{display:flex;gap:5px;flex-direction:column;font-size:.77rem;color:var(--muted)}.options select{font-size:.92rem;max-width:100%}
+canvas{width:100%;display:block;max-height:470px;object-fit:contain;background:#e6e9df;border-radius:8px}
+.status{font-size:.85rem;margin:10px 0 0;min-height:1.3em}.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.wide{grid-column:1/-1}figure{margin:0;min-width:0;border:1px solid var(--line);background:var(--panel);border-radius:10px;overflow:hidden}
+figure a,figure img,video{display:block;width:100%}figure img{height:auto}figcaption{font-size:.84rem;padding:10px 14px}figcaption strong{display:block;color:var(--paper);margin-bottom:2px}
+video{background:#0b2026;max-height:550px;border-radius:8px}.camera-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;align-items:start}.camera-row img{max-height:500px;object-fit:contain}
+.notes{display:block;background:var(--panel);padding:16px;border-radius:8px;font-size:.92rem;line-height:1.6}.notes ul{margin:8px 0;padding-left:20px}.notes p{margin:8px 0 0}footer{padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+@media(max-width:640px){main{padding-top:14px}.gallery,.camera-row{grid-template-columns:1fr}.options{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.options button{width:100%}.camera-row img{max-height:420px}}
+</style>
+</head>
+<body><main>
+<nav><span class="imprint">JAMES CLAN COMICS</span><a href="style-c-review.html">Back to the playtest</a></nav>
+<header><h1>Hero workshop</h1><p>Inspect the Guardian and Sentinel at the same scale, then take either hero out onto Sunwash Strand.</p>
+<div class="actions"><a href="../index.html?practice=male">Play as the Guardian</a><a href="../index.html?practice=female">Play as the Sentinel</a><a href="../index.html">Open my heroes</a></div></header>
+<section class="lab" aria-labelledby="live-heading"><small class="eyebrow">LIVE RENDERER</small><h2 id="live-heading">Try a pose</h2>
+<p>Compare how hair, armor and capes sit on each hero. Use Hold pose to inspect a frame.</p>
+<div class="options"><label>Pose<select id="pose"></select></label><label>View<select id="view"></select></label><label>Outfit<select id="kit"></select></label><button id="hold" aria-pressed="false">Hold pose</button><button id="step">Step 1/24 s</button></div>
+<canvas id="preview" width="920" height="390" aria-label="Live Guardian and Sentinel animation"></canvas>
+<p class="status" id="live-status" role="status">Loading hero artwork…</p></section>
+<section><small class="eyebrow">01 / CHARACTER MODEL</small><h2>Reference and turnarounds</h2>
+<div class="gallery">
+<figure class="wide"><a href="../qa/style-c/system/final/standing-reference.webp"><img loading="lazy" src="../qa/style-c/system/final/standing-reference.webp" width="1200" height="385" alt="The two original standing heroes beside their equal-scale in-game sprites"></a><figcaption><strong>Standing portraits</strong>The original reference keeps its background. The neighboring columns use the game’s transparent sprites.</figcaption></figure>
+<figure class="wide"><a href="../qa/style-c/system/final/turnarounds.webp"><img loading="lazy" src="../qa/style-c/system/final/turnarounds.webp" width="1200" height="520" alt="Front, game, right, left and back views of the Guardian and Sentinel"></a><figcaption><strong>Five views per hero</strong>The ground line stays fixed in every view.</figcaption></figure></div></section>
+<section><small class="eyebrow">CUSTOMIZATION</small><h2>Faces, builds and hair</h2><div class="gallery">
+<figure><a href="../qa/style-c/system/final/face-detail.webp"><img loading="lazy" src="../qa/style-c/system/final/face-detail.webp" alt="Source faces, protected default faces and custom faces"></a><figcaption><strong>Face details</strong>Compare source pixels, then inspect a change of features and age.</figcaption></figure>
+<figure><a href="../qa/style-c/system/final/builds.webp"><img loading="lazy" src="../qa/style-c/system/final/builds.webp" alt="Four body builds shown on both heroes"></a><figcaption><strong>Eight custom looks</strong>Slender, balanced, strong and full builds on both heroes.</figcaption></figure>
+</div><p style="margin-top:14px">Open a full-size contact sheet to compare every hairstyle on both heroes. <a href="../qa/style-c/system/final/hair-front.webp">Front</a> · <a href="../qa/style-c/system/final/hair-side.webp">Side</a> · <a href="../qa/style-c/system/final/hair-back.webp">Back</a> · <a href="../qa/style-c/system/hair/directional-gallery.webp">Hair-layer artwork</a></p></section>
+<section><small class="eyebrow">02 / MOVEMENT</small><h2>Animation film and pose sheets</h2>
+<video controls playsinline preload="metadata" poster="../qa/style-c/system/final/film-poster.webp" src="../qa/style-c/system/final/hero-motion.mp4"></video>
+<p class="notice">The film shows the character poses on starter and customized heroes. Play a patrol to see projectiles and power effects during combat.</p>
+<p class="notice">Inspect the transparent game sprites. <a href="../assets/hero/style-c-accurate/sprites/guardian-1.png">Guardian sheet 1</a> · <a href="../assets/hero/style-c-accurate/sprites/sentinel-1.png">Sentinel sheet 1</a> · <a href="../assets/hero/style-c-accurate/sprites/frames.json">All sheets and frame coordinates</a></p>
+<div class="gallery" style="margin-top:14px">
+<figure><a href="../qa/style-c/system/final/motion-male.webp"><img loading="lazy" src="../qa/style-c/system/final/motion-male.webp" alt="Guardian contact sheet covering all supported motion states"></a><figcaption><strong>Guardian</strong>Open the sheet to inspect each named pose.</figcaption></figure>
+<figure><a href="../qa/style-c/system/final/motion-female.webp"><img loading="lazy" src="../qa/style-c/system/final/motion-female.webp" alt="Sentinel contact sheet covering all supported motion states"></a><figcaption><strong>Sentinel</strong>The same sampling schedule as the Guardian.</figcaption></figure></div></section>
+<section><small class="eyebrow">03 / WARDROBE</small><h2>Regional armor and Villain Merge</h2><div class="gallery">
+<figure><a href="../qa/style-c/system/final/regional-armor.webp"><img loading="lazy" src="../qa/style-c/system/final/regional-armor.webp" alt="Worn costume sets from the normal equipment catalog"></a><figcaption><strong>Regional sets</strong>Ordinary and rare armor at each applicable hero level.</figcaption></figure>
+<figure><a href="../qa/style-c/system/final/merge-armor.webp"><img loading="lazy" src="../qa/style-c/system/final/merge-armor.webp" alt="Eight complete Villain Merge looks and partial and mixed examples"></a><figcaption><strong>Villain Merge</strong>Compare complete sets with a single piece and mixed pieces.</figcaption></figure></div></section>
+<section><small class="eyebrow">04 / SUNWASH STRAND</small><h2>Gameplay scale</h2><p>These captures use the gameplay canvas, its normal camera, and the integrated Bottle Critter. The browser adds controls around this canvas.</p>
+<div class="camera-row" style="margin-top:12px"><figure><a href="../qa/style-c/system/final/coast-desktop.webp"><img loading="lazy" src="../qa/style-c/system/final/coast-desktop.webp" alt="Guardian and a Bottle Critter at desktop camera scale"></a><figcaption><strong>1280 × 720</strong>Desktop canvas</figcaption></figure>
+<figure><a href="../qa/style-c/system/final/coast-portrait.webp"><img loading="lazy" src="../qa/style-c/system/final/coast-portrait.webp" alt="Sentinel and a Bottle Critter at portrait camera scale"></a><figcaption><strong>390 × 640</strong>Phone-sized portrait canvas</figcaption></figure></div></section>
+<p class="notes"><a href="../qa/style-c/system/patrol-portrait.jpg">Portrait playtest with touch controls</a> · <a href="../qa/style-c/system/patrol-desktop.jpg">Desktop playtest with the full HUD</a></p>
+<section><small class="eyebrow">05 / VERIFICATION</small><h2>What was checked</h2><div class="notes"><div id="results" aria-live="polite">Loading the saved verification results…</div><p><a href="../qa/style-c/system/final/verification.json">Open the full verification record</a></p></div></section>
+<footer>Hero Showdown Royale · Character artwork review</footer>
+</main><script type="module" src="style-c-final-review.mjs"></script></body></html>

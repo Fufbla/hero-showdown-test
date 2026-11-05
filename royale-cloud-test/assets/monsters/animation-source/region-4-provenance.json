@@ -1,0 +1,36 @@
+{
+  "generator": "built-in image_gen",
+  "referenceFiles": [
+    "poses/scorpion.png",
+    "poses/beetle.png",
+    "poses/venomCrawler.png"
+  ],
+  "specification": "Thirty distinct full-body poses per approved design: idle, connected-leg walking, compact anticipation/strike/recovery, hit, collapse. Preserve scorpion claws and segmented stinger tail, beetle single large front head and six legs, crawler segmented purple-teal limbs. True alpha and constant acquisition scale.",
+  "normalization": {
+    "scorpionMirroredFrameIndices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      16,
+      17,
+      18,
+      20,
+      21,
+      22,
+      23
+    ],
+    "beetle": "All left-facing source frames mirrored to game-facing right.",
+    "venomCrawler": "Source right facing."
+  },
+  "qualityReview": "Rejected beetle drafts with an extra head are not used. Final sheet preserves original large head and ordinary rear leg. Scorpion night-eye highlight corrected after browser inspection.",
+  "review": "User animation approval and physical-device testing pending."
+}

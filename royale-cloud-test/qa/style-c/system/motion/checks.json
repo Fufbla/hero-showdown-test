@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "states": {
+    "idle": 4,
+    "walk": 4,
+    "run": 6,
+    "turn": 5,
+    "jump": 4,
+    "double-jump": 4,
+    "fall": 4,
+    "land": 4,
+    "punch": 4,
+    "kick": 4,
+    "air-punch": 4,
+    "air-kick": 4,
+    "strength": 4,
+    "superKick": 4,
+    "fireball": 4,
+    "flight": 4,
+    "steel": 4,
+    "roots": 5,
+    "agility": 4,
+    "speed": 6,
+    "whirlwind": 5,
+    "hurt": 4,
+    "knockback": 4,
+    "defeat": 4,
+    "respawn": 4
+  },
+  "completeFrameSamples": 214,
+  "paintedLimbs": 856,
+  "contactSamples": 640,
+  "maxBoneErrorSourcePixels": 1.2079226507921703e-13,
+  "maxContactErrorGamePixels": 4.3220627292571254e-14,
+  "art": {
+    "ready": true,
+    "error": null,
+    "angles": 2,
+    "paintedParts": 32,
+    "tintedParts": 0,
+    "tintLimit": 144
+  }
+}

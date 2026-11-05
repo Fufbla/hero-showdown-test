@@ -1,0 +1,25 @@
+{
+  "region": 2,
+  "monsters": [
+    "bark",
+    "mushroom",
+    "sprout"
+  ],
+  "frames": 90,
+  "assertions": 954,
+  "passed": true,
+  "textureBytes": 22118400,
+  "viewports": [
+    [
+      1280,
+      720
+    ],
+    [
+      390,
+      844
+    ]
+  ],
+  "renderer": "@napi-rs/canvas using actual MonsterAtlas and Renderer.enemy",
+  "browser": "Not run by this raster test; see separate browser evidence.",
+  "physicalDevices": "Not tested"
+}

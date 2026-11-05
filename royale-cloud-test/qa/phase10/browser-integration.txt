@@ -1,0 +1,101 @@
+COMPLETE · 100 Phase 10 integration checks passed across five sizes. Real IndexedDB deletion/recovery, manual saving, portals and responsive controls. Physical devices and cloud authentication not tested.
+PASS · 390: moving and pausing do not overwrite manual save
+PASS · 390: safe manual-save button enabled
+PASS · 390: explicit save keeps elevated exact position
+PASS · 390: returning to roster does not auto-save
+PASS · 390: continue restores manual elevation and appearance
+PASS · 390: independent volume levels update
+PASS · 390: adjustable joystick size exists
+PASS · 390: settings fit without horizontal overflow
+PASS · 390: manual save blocked in combat
+PASS · 390: all regular regions stay open
+PASS · 390: low-level portal travel does not implicitly save
+PASS · 390: level-one hero arrives at safe Region 7 checkpoint
+PASS · 390: manual portal save persists selected destination
+PASS · 390: input cleanup removes Escape handler and held keys
+PASS · 390: confirmed deletion affects only selected hero
+PASS · 390: deletion has a durable immutable-ID tombstone
+PASS · 390: stale cache cannot recover deleted hero
+PASS · 390: stale reward transaction cannot recreate deleted hero
+PASS · 390: HP and XP remain available
+PASS · 390: no game runtime exceptions
+PASS · 844: moving and pausing do not overwrite manual save
+PASS · 844: safe manual-save button enabled
+PASS · 844: explicit save keeps elevated exact position
+PASS · 844: returning to roster does not auto-save
+PASS · 844: continue restores manual elevation and appearance
+PASS · 844: independent volume levels update
+PASS · 844: adjustable joystick size exists
+PASS · 844: settings fit without horizontal overflow
+PASS · 844: manual save blocked in combat
+PASS · 844: all regular regions stay open
+PASS · 844: low-level portal travel does not implicitly save
+PASS · 844: level-one hero arrives at safe Region 7 checkpoint
+PASS · 844: manual portal save persists selected destination
+PASS · 844: input cleanup removes Escape handler and held keys
+PASS · 844: confirmed deletion affects only selected hero
+PASS · 844: deletion has a durable immutable-ID tombstone
+PASS · 844: stale cache cannot recover deleted hero
+PASS · 844: stale reward transaction cannot recreate deleted hero
+PASS · 844: HP and XP remain available
+PASS · 844: no game runtime exceptions
+PASS · 320: moving and pausing do not overwrite manual save
+PASS · 320: safe manual-save button enabled
+PASS · 320: explicit save keeps elevated exact position
+PASS · 320: returning to roster does not auto-save
+PASS · 320: continue restores manual elevation and appearance
+PASS · 320: independent volume levels update
+PASS · 320: adjustable joystick size exists
+PASS · 320: settings fit without horizontal overflow
+PASS · 320: manual save blocked in combat
+PASS · 320: all regular regions stay open
+PASS · 320: low-level portal travel does not implicitly save
+PASS · 320: level-one hero arrives at safe Region 7 checkpoint
+PASS · 320: manual portal save persists selected destination
+PASS · 320: input cleanup removes Escape handler and held keys
+PASS · 320: confirmed deletion affects only selected hero
+PASS · 320: deletion has a durable immutable-ID tombstone
+PASS · 320: stale cache cannot recover deleted hero
+PASS · 320: stale reward transaction cannot recreate deleted hero
+PASS · 320: HP and XP remain available
+PASS · 320: no game runtime exceptions
+PASS · 768: moving and pausing do not overwrite manual save
+PASS · 768: safe manual-save button enabled
+PASS · 768: explicit save keeps elevated exact position
+PASS · 768: returning to roster does not auto-save
+PASS · 768: continue restores manual elevation and appearance
+PASS · 768: independent volume levels update
+PASS · 768: adjustable joystick size exists
+PASS · 768: settings fit without horizontal overflow
+PASS · 768: manual save blocked in combat
+PASS · 768: all regular regions stay open
+PASS · 768: low-level portal travel does not implicitly save
+PASS · 768: level-one hero arrives at safe Region 7 checkpoint
+PASS · 768: manual portal save persists selected destination
+PASS · 768: input cleanup removes Escape handler and held keys
+PASS · 768: confirmed deletion affects only selected hero
+PASS · 768: deletion has a durable immutable-ID tombstone
+PASS · 768: stale cache cannot recover deleted hero
+PASS · 768: stale reward transaction cannot recreate deleted hero
+PASS · 768: HP and XP remain available
+PASS · 768: no game runtime exceptions
+PASS · 1280: moving and pausing do not overwrite manual save
+PASS · 1280: safe manual-save button enabled
+PASS · 1280: explicit save keeps elevated exact position
+PASS · 1280: returning to roster does not auto-save
+PASS · 1280: continue restores manual elevation and appearance
+PASS · 1280: independent volume levels update
+PASS · 1280: adjustable joystick size exists
+PASS · 1280: settings fit without horizontal overflow
+PASS · 1280: manual save blocked in combat
+PASS · 1280: all regular regions stay open
+PASS · 1280: low-level portal travel does not implicitly save
+PASS · 1280: level-one hero arrives at safe Region 7 checkpoint
+PASS · 1280: manual portal save persists selected destination
+PASS · 1280: input cleanup removes Escape handler and held keys
+PASS · 1280: confirmed deletion affects only selected hero
+PASS · 1280: deletion has a durable immutable-ID tombstone
+PASS · 1280: stale cache cannot recover deleted hero
+PASS · 1280: stale reward transaction cannot recreate deleted hero
+PASS · 1280: HP and XP remain available
+PASS · 1280: no game runtime exceptions

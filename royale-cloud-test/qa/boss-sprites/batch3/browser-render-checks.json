@@ -1,0 +1,6 @@
+{
+  "checks": 61,
+  "failures": [],
+  "passed": true,
+  "scope": "Browser image decoding, actual canvas draws, all phase patterns and animation states, simulation isolation and contact timing"
+}

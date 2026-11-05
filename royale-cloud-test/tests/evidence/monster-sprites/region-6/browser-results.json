@@ -1,0 +1,9 @@
+{
+  "region": 6,
+  "pass": true,
+  "checks": 1883,
+  "milliseconds": 174.1,
+  "cacheBytes": 22118400,
+  "nightScreenshot": "browser.jpg",
+  "physicalDevices": "not tested"
+}

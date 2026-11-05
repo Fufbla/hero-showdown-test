@@ -1,0 +1,134 @@
+{
+  "baseCommitSha": "24f29cb3fcac896983d4a17b998d0256b42369a9",
+  "baseline": {
+    "tests": 650,
+    "passed": 649,
+    "failed": 1,
+    "reason": "Old Batch 2 preservation guard incorrectly flagged newly committed Batch 2 additions. Corrected to inspect modifications/deletions of existing base files; new Batch 3 guard protects prior assets and unrelated files."
+  },
+  "automated": {
+    "passed": 657,
+    "failed": 0,
+    "skipped": 0
+  },
+  "focused": {
+    "passed": 44,
+    "failed": 0,
+    "skipped": 0
+  },
+  "browserRender": {
+    "checks": 61,
+    "failures": [],
+    "passed": true,
+    "scope": "Browser image decoding, actual canvas draws, all phase patterns and animation states, simulation isolation and contact timing"
+  },
+  "browserGameplay": {
+    "passed": 725,
+    "regions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "viewports": [
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ],
+      [
+        320,
+        568
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        1280,
+        800
+      ]
+    ]
+  },
+  "nativeRaster": [
+    {
+      "region": 7,
+      "name": "desktop",
+      "width": 1280,
+      "height": 720,
+      "frames": 600,
+      "mean_ms": 0.11725636833332904,
+      "p95_ms": 0.8162929999998596,
+      "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+    },
+    {
+      "region": 7,
+      "name": "mobile-sized",
+      "width": 390,
+      "height": 844,
+      "frames": 600,
+      "mean_ms": 0.09726920166666332,
+      "p95_ms": 0.7014239999998608,
+      "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+    }
+  ],
+  "fullGameBrowserPerformance": [
+    {
+      "seconds": 30.351600000000747,
+      "frames": 42,
+      "averageFPS": 1.3837820740916118,
+      "onePercentLowFPS": 0.9836710603974044,
+      "p95FrameMs": 1016.5,
+      "averageSimulationMs": 0.27619047591551427,
+      "averageDrawMs": 9.785714285980378,
+      "maxDrawMs": 28.199999999254942,
+      "averageHudMs": 0.20714285703642027,
+      "heapStartBytes": 15880595,
+      "simulationSeconds": 3.2833333333333234,
+      "region": 7,
+      "width": 1348,
+      "height": 781,
+      "heapEndBytes": 13931528,
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "monsters": 1,
+      "scene": "regional"
+    },
+    {
+      "seconds": 30.69560000000037,
+      "frames": 35,
+      "averageFPS": 1.1402285669607233,
+      "onePercentLowFPS": 0.9836710603973976,
+      "p95FrameMs": 1016.5999999999913,
+      "averageSimulationMs": 0.33428571415799,
+      "averageDrawMs": 4.268571428528854,
+      "maxDrawMs": 8.199999999254942,
+      "averageHudMs": 0.21428571455180645,
+      "heapStartBytes": 10575100,
+      "simulationSeconds": 3.166666666666707,
+      "region": 7,
+      "width": 844,
+      "height": 390,
+      "heapEndBytes": 11032777,
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "monsters": 1,
+      "scene": "regional"
+    }
+  ],
+  "manualVisualReview": {
+    "performed": true,
+    "scope": "Approved reference, source sheets, all-state native contact sheet, actual browser desktop and 844x390 gameplay screenshots, attack warnings and phase-3 arena.",
+    "physicalDevices": false,
+    "limitations": [
+      "No physical-device or Safari testing",
+      "Sustained 60 FPS not demonstrated in cloud browser",
+      "Four-pose loops; hand-drawn in-betweens remain an optional refinement",
+      "Final aesthetic approval remains with user"
+    ]
+  }
+}

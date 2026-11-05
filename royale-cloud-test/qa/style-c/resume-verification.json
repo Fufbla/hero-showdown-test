@@ -1,0 +1,37 @@
+{
+  "verified_at": "2026-11-02T19:22:29.579094+00:00",
+  "github_branch": "feature/royale-style-c-heroes",
+  "github_commit": "3f8418555b6338f62e1a3a7257a569b6c4b30bc8",
+  "verified_tree": "4dc8fd508c5560e1ebedd588f314a6c415d3dabd",
+  "royale_tests": {
+    "passed": 973,
+    "failed": 0,
+    "skipped": 0
+  },
+  "browser_checks": {
+    "passed": true,
+    "draws": 1775,
+    "assertions": 4911,
+    "hairstyles": 49,
+    "builds": 4,
+    "presentations": 2,
+    "poses": 23
+  },
+  "practice_smoke": [
+    "male desktop practice loaded",
+    "female 390x844 practice loaded",
+    "touch jump and punch controls exercised",
+    "focus-loss pause visible"
+  ],
+  "packaging": {
+    "review_links_checked": true,
+    "module_references_checked": 453,
+    "missing_module_references": 0
+  },
+  "limitations": [
+    "Physical mobile devices not tested",
+    "Sustained 60 FPS not established",
+    "Full animation rollout awaits visual approval"
+  ],
+  "github_changes_this_resume": false
+}

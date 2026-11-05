@@ -1,0 +1,2 @@
+30.4s · 1.3 rendered FPS · draw avg 1.13ms / max 1.80ms · p95 frame 1016.5ms · Region 5 · 1363×799. This browser only.
+Active gameplay throughout; 17 current-region enemies, Region 5 night, walking/running and held kicks during sample. Remote cloud Chromium, not a physical device.

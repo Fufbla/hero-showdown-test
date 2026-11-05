@@ -1,0 +1,223 @@
+{
+  "baseCommit": "f140ba3083090a6959f3d8951d2bcc063fa5385d",
+  "baseline": {
+    "passed": 637,
+    "failed": 0,
+    "skipped": 0
+  },
+  "nodeSuite": {
+    "passed": 650,
+    "failed": 0,
+    "skipped": 0
+  },
+  "focusedSuite": {
+    "passed": 223,
+    "failed": 0,
+    "skipped": 0
+  },
+  "browserRender": {
+    "checks": 180,
+    "failures": [],
+    "passed": true,
+    "scope": "Browser image decoding, actual canvas draws, all phase patterns and animation states, simulation isolation and contact timing"
+  },
+  "browserGameplayFinal": {
+    "assertionsPassed": 725,
+    "bossRegions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "viewports": [
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ],
+      [
+        320,
+        568
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        1280,
+        800
+      ]
+    ],
+    "physicalDevices": false
+  },
+  "browserBatchChecksBeforeLandscapeFix": {
+    "batch1": 321,
+    "batch2": 304
+  },
+  "previewPerformance": [
+    {
+      "boss": "Giant Scorpion",
+      "frames": 15,
+      "meanFrameMs": 696.5133333333331,
+      "p95FrameMs": 1016.5,
+      "averageFPS": 1.4357226949472137,
+      "scope": "Browser animation preview, not full-game or physical-device performance"
+    },
+    {
+      "boss": "Venomis",
+      "frames": 15,
+      "meanFrameMs": 697.6199999999992,
+      "p95FrameMs": 1016.5,
+      "averageFPS": 1.4334451420544152,
+      "scope": "Browser animation preview, not full-game or physical-device performance"
+    },
+    {
+      "boss": "AtomDust",
+      "frames": 15,
+      "meanFrameMs": 702.0666666666667,
+      "p95FrameMs": 1016.5,
+      "averageFPS": 1.424366157060108,
+      "scope": "Browser animation preview, not full-game or physical-device performance"
+    }
+  ],
+  "fullGamePerformance": [
+    {
+      "seconds": 30.66390000000037,
+      "frames": 35,
+      "averageFPS": 1.1414073226171353,
+      "onePercentLowFPS": 0.9836710603974044,
+      "p95FrameMs": 1016.5,
+      "averageSimulationMs": 0.7485714284437043,
+      "averageDrawMs": 1.3399999999840344,
+      "maxDrawMs": 2.2000000001862645,
+      "averageHudMs": 0.19428571441343853,
+      "heapStartBytes": 10790788,
+      "simulationSeconds": 3.1833333333333225,
+      "region": 4,
+      "width": 1348,
+      "height": 781,
+      "heapEndBytes": 10621469,
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "monsters": 1,
+      "scene": "regional"
+    },
+    {
+      "seconds": 30.634199999999815,
+      "frames": 35,
+      "averageFPS": 1.1425139223482321,
+      "onePercentLowFPS": 0.9837678307919314,
+      "p95FrameMs": 1016.5,
+      "averageSimulationMs": 0.2857142857142857,
+      "averageDrawMs": 10.35142857139664,
+      "maxDrawMs": 14.299999999813735,
+      "averageHudMs": 0.26000000004257473,
+      "heapStartBytes": 11666787,
+      "simulationSeconds": 3.1499999999999893,
+      "region": 5,
+      "width": 1348,
+      "height": 781,
+      "heapEndBytes": 10118814,
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "monsters": 1,
+      "scene": "regional"
+    },
+    {
+      "seconds": 30.842800000000185,
+      "frames": 35,
+      "averageFPS": 1.13478672494066,
+      "onePercentLowFPS": 0.9837678307919331,
+      "p95FrameMs": 1016.5,
+      "averageSimulationMs": 0.30857142859271597,
+      "averageDrawMs": 9.431428571391319,
+      "maxDrawMs": 20.200000000186265,
+      "averageHudMs": 0.2514285714498588,
+      "heapStartBytes": 10310336,
+      "simulationSeconds": 3.1833333333333225,
+      "region": 6,
+      "width": 1348,
+      "height": 781,
+      "heapEndBytes": 10147364,
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "monsters": 1,
+      "scene": "regional"
+    }
+  ],
+  "nativeRasterPerformance": [
+    {
+      "region": 4,
+      "name": "desktop",
+      "width": 1280,
+      "height": 720,
+      "frames": 600,
+      "mean_ms": 0.6635456699999986,
+      "p95_ms": 1.0720830000000205,
+      "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+    },
+    {
+      "region": 4,
+      "name": "mobile-sized",
+      "width": 390,
+      "height": 844,
+      "frames": 600,
+      "mean_ms": 0.5520411516666536,
+      "p95_ms": 0.8381779999999708,
+      "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+    },
+    {
+      "region": 5,
+      "name": "desktop",
+      "width": 1280,
+      "height": 720,
+      "frames": 600,
+      "mean_ms": 0.13858236333331053,
+      "p95_ms": 1.1544450000001234,
+      "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+    },
+    {
+      "region": 5,
+      "name": "mobile-sized",
+      "width": 390,
+      "height": 844,
+      "frames": 600,
+      "mean_ms": 0.15912740166668907,
+      "p95_ms": 1.3925769999987097,
+      "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+    },
+    {
+      "region": 6,
+      "name": "desktop",
+      "width": 1280,
+      "height": 720,
+      "frames": 600,
+      "mean_ms": 0.13963762166665825,
+      "p95_ms": 1.1792720000012196,
+      "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+    },
+    {
+      "region": 6,
+      "name": "mobile-sized",
+      "width": 390,
+      "height": 844,
+      "frames": 600,
+      "mean_ms": 0.15689735833332633,
+      "p95_ms": 1.3259289999987232,
+      "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+    }
+  ],
+  "manualVisualReview": {
+    "performed": true,
+    "scope": "Source/contact sheets, numbered eight-leg overlay, three full-game desktop screenshots, three 844x390 landscape screenshots, and portrait camera/HUD inspection.",
+    "limitations": [
+      "No physical devices or Safari tested",
+      "60 FPS not achieved in the cloud-browser samples",
+      "Four-pose Venomis/AtomDust loops can benefit from hand-drawn in-betweens",
+      "Final aesthetic approval remains with user"
+    ]
+  }
+}

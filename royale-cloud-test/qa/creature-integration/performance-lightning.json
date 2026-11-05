@@ -1,0 +1,20 @@
+{
+  "creature": "legendary-lightning",
+  "scope": "Cloud browser; no physical-device claim",
+  "viewport": [
+    390,
+    844
+  ],
+  "assetLoadMs": 57.70000000298023,
+  "seconds": 12.313899999999995,
+  "samples": 79,
+  "averageFPS": 6.415514175037968,
+  "onePercentLowFPS": 0.9837678307919331,
+  "meanStepAndDrawMs": 1.2899999998509883,
+  "p95StepAndDrawMs": 3.7999999970197678,
+  "simulationSeconds": 2.5666666666666664,
+  "maxEnemies": 1,
+  "maxEffects": 3,
+  "errors": [],
+  "bossReady": true
+}

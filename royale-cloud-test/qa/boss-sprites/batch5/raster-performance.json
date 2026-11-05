@@ -1,0 +1,68 @@
+[
+  {
+    "id": "sonic",
+    "viewport": [
+      1280,
+      720
+    ],
+    "frames": 600,
+    "meanMs": 0.15145269833333316,
+    "p95Ms": 1.3883390000000873,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "sonic",
+    "viewport": [
+      390,
+      844
+    ],
+    "frames": 600,
+    "meanMs": 0.14629227333333952,
+    "p95Ms": 1.326787000000195,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "styro",
+    "viewport": [
+      1280,
+      720
+    ],
+    "frames": 600,
+    "meanMs": 0.16148517333334667,
+    "p95Ms": 1.4339860000000044,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "styro",
+    "viewport": [
+      390,
+      844
+    ],
+    "frames": 600,
+    "meanMs": 0.1723595349999952,
+    "p95Ms": 1.4652219999998124,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "wastelander",
+    "viewport": [
+      1280,
+      720
+    ],
+    "frames": 600,
+    "meanMs": 0.14232535666665702,
+    "p95Ms": 1.2040870000000723,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  },
+  {
+    "id": "wastelander",
+    "viewport": [
+      390,
+      844
+    ],
+    "frames": 600,
+    "meanMs": 0.1334592400000171,
+    "p95Ms": 1.1750040000006265,
+    "scope": "Native boss renderer cost only; not browser FPS"
+  }
+]

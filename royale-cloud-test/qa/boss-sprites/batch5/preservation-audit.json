@@ -1,0 +1,20 @@
+{
+  "baseCommit": "ec0566750e1ff7bf665fa490b7d1e031cc2ca124",
+  "remoteHeadAtStart": "ec0566750e1ff7bf665fa490b7d1e031cc2ca124",
+  "newerRemoteCommitsAtStart": false,
+  "unchangedTrackedFiles": 859,
+  "modifiedTrackedFiles": [
+    "royale/BOSS-SPRITES.md",
+    "royale/legendary-sprites.mjs",
+    "royale/tests/boss-sprites-batch4-review.mjs",
+    "royale/tests/boss-sprites-batch4.test.mjs",
+    "royale/tests/boss-sprites.test.mjs",
+    "royale/tools/review-boss-sprites-batch4.mjs"
+  ],
+  "deletedFiles": [],
+  "existingBossAssetFilesUnchanged": 48,
+  "completedBossesPreserved": 10,
+  "regularMonsterProjectUntouched": true,
+  "gameplayStoryVersusUntouched": true,
+  "runtimeDiff": "Only merges three new data profiles into existing Legendary adapter; no algorithm changes."
+}

@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "assertions": 6443,
+  "draws": 2139,
+  "poses": 23,
+  "customization": [
+    {
+      "key": "presentation",
+      "variants": 2
+    },
+    {
+      "key": "age",
+      "variants": 3
+    },
+    {
+      "key": "build",
+      "variants": 4
+    },
+    {
+      "key": "hair",
+      "variants": 7
+    },
+    {
+      "key": "face",
+      "variants": 3
+    },
+    {
+      "key": "eyeShape",
+      "variants": 3
+    },
+    {
+      "key": "brows",
+      "variants": 3
+    },
+    {
+      "key": "nose",
+      "variants": 3
+    },
+    {
+      "key": "mouth",
+      "variants": 3
+    },
+    {
+      "key": "facialHair",
+      "variants": 3
+    },
+    {
+      "key": "emblem",
+      "variants": 6
+    }
+  ],
+  "equipment": 155,
+  "materials": {
+    "ready": true,
+    "error": null,
+    "cacheEntries": 48,
+    "source": "/workspace/scratch/b1b01864f56a/hero-animation/royale/assets/hero/ink-materials.png"
+  },
+  "scope": "Actual hero renderer, all saved appearance controls, all catalog equipment, both facings, front/back views and proportion extremes",
+  "renderer": "@napi-rs/canvas",
+  "physicalDevices": "Not tested"
+}

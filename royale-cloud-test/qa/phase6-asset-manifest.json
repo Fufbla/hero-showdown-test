@@ -1,0 +1,89 @@
+{
+  "baseline": "3310c269b6b33a702235e68632dbe60b9ccd65ef",
+  "files": [
+    {
+      "path": "assets/shore/boss-core.js",
+      "sha256": "9aa1e4df937f4429c2f5a4a5819fb301d04692bf07d5d57d29dbffb69c2222ff"
+    },
+    {
+      "path": "assets/shore/boss-parts.png",
+      "sha256": "a69b822ac60774273cecafb3bdda5889e07349aa137d09740aebb2eb88c3e7fc"
+    },
+    {
+      "path": "assets/scorpion-rig/rig-core.js",
+      "sha256": "b714aee4ef6be57886dfabafb3a57830f4446f763a521b12483d5ee80191039b"
+    },
+    {
+      "path": "assets/animation/bushman-animation-atlas.js",
+      "sha256": "00be5d34197d987332864b741d3ef803a06ccb18bc37a18e2d91df963ce64881"
+    },
+    {
+      "path": "assets/animation/bushman-presence.png",
+      "sha256": "2a6d41e5c2f0224211d9cea48e6238fc59e5326546bbb2f12a602e39587c63f5"
+    },
+    {
+      "path": "assets/animation/bushman-walk.png",
+      "sha256": "f188f06067b7065c7bf910c72787d3e9f60ddd923d3c00f0448f375d9b2ae477"
+    },
+    {
+      "path": "assets/animation/bushman-reactions.png",
+      "sha256": "88441f49dee7be76212949c1b868e18db6302d4b7b8db78359a8391bdfc56235"
+    },
+    {
+      "path": "assets/animation/bushman-attacks.png",
+      "sha256": "b5c4a62fdf2f596ae7d42a509acc17276d521f62c11f64b794a9e552247edd23"
+    },
+    {
+      "path": "assets/animation/wastelander-atlas.js",
+      "sha256": "522902c57fa1a563c381c881ef326cf561de8c595e12f4a3f6ef415c1e1704ee"
+    },
+    {
+      "path": "assets/animation/wastelander-presence.png",
+      "sha256": "3ed8b3b6577bc0c9aaa18a45eea306789a478bb19533f95925a6d90e73339332"
+    },
+    {
+      "path": "assets/animation/wastelander-attacks.png",
+      "sha256": "df3e9edad2167af146da816a20120d57e84e3090e51687ef9975fc8371fcd26d"
+    },
+    {
+      "path": "assets/animation/wastelander-swing.png",
+      "sha256": "723b6c8ff25e5886b6890c7c9cfb6d5ea55f8680f5fe6e156cd7da7a3442c560"
+    },
+    {
+      "path": "assets/animation/venomis-thornbear-atlas.js",
+      "sha256": "f5e5bb717b45c68303846df03e35c0c87bb4669ee7b900cd200f85afc91136c5"
+    },
+    {
+      "path": "assets/animation/venomis-presence.png",
+      "sha256": "4a318b0f1210509edf771040486200762f2b86a9a6fc5e6a4bcc3cffd53d0ee6"
+    },
+    {
+      "path": "assets/animation/venomis-reaction.png",
+      "sha256": "35818d2c23a789c7fe1e87f949cd664722dc7a4238aa56bce003f71e0532c1ae"
+    },
+    {
+      "path": "assets/villain-motion/fighter-atlas.js",
+      "sha256": "e45bd31787d75a11101f10662558462527922fa87867fd3b512451c394c37de9"
+    },
+    {
+      "path": "assets/villain-motion/wastelander-combat.png",
+      "sha256": "12b603e670d1419d705abcd0498f691103b0519dfc5a70b1195c27125bff2bf8"
+    },
+    {
+      "path": "assets/villain-motion/atomdust-combat.png",
+      "sha256": "d6a0287839f6271596343dc1976bbd973285321eda91fb0169b142434953d586"
+    },
+    {
+      "path": "assets/villain-motion/atomdust-punch.png",
+      "sha256": "48a020a72534843d633cd6a13a0ee329dfab71ae2b0a1b4ec6909426e4e5fa77"
+    },
+    {
+      "path": "assets/villain-motion/atomdust_walk.png",
+      "sha256": "5ce44f5d06c19d87d9fc2b8872d68e52ce60c4fbd32042f43102e0aa594fc31b"
+    },
+    {
+      "path": "assets/animation/motion-core.js",
+      "sha256": "c3b2fce20811c4bb560d67592503ee3efd4ef127f0e2cd261cefef5692a596be"
+    }
+  ]
+}

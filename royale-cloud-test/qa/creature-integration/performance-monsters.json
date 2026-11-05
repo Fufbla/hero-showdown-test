@@ -1,0 +1,20 @@
+{
+  "creature": "monster-bottle",
+  "scope": "Cloud browser; no physical-device claim",
+  "viewport": [
+    1300,
+    720
+  ],
+  "assetLoadMs": 55.79999999701977,
+  "seconds": 12.364,
+  "samples": 16,
+  "averageFPS": 1.2940795858945324,
+  "onePercentLowFPS": 0.9836710603974116,
+  "meanStepAndDrawMs": 6.188235294292955,
+  "p95StepAndDrawMs": 76.09999999403954,
+  "simulationSeconds": 1.35,
+  "maxEnemies": 24,
+  "maxEffects": 3,
+  "errors": [],
+  "bossReady": null
+}

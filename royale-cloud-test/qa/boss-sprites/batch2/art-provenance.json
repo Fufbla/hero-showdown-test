@@ -1,0 +1,44 @@
+{
+  "baseCommit": "f140ba3083090a6959f3d8951d2bcc063fa5385d",
+  "createdAt": "2026-11-01",
+  "tool": "image_gen.imagegen",
+  "referencePolicy": "Approved supplied reference panels were used as visual references, not cropped into animation frames.",
+  "method": {
+    "Giant Scorpion": "New transparent purple armor / green venom component painting using the existing rig UV layout and approved Venom Crawler concept. Connected IK anatomy, tail segments, attack targets and gait are preserved. A second generation pass cleaned alpha; only the final component source is included. Whole-pose export contains four samples each for eight states; runtime uses the continuous rig.",
+    "Venomis": "New full-size 4\u00d78 animation source based on Mutant Stalker. Four distinct poses for each of idle, walk, thorn strike, thorn volley, poison, rising thorns, hit, collapse. Transparent poses isolated and aligned without enlarging concept thumbnails.",
+    "AtomDust": "New full-size 4\u00d78 animation source based on Energy Phantom. Four distinct poses each for idle, walk, energy blast, expansion/shockwave, debris, atomic surge, hit, collapse. Transparent aura edges are preserved; unrelated neighboring fragments are excluded."
+  },
+  "files": [
+    {
+      "path": "royale/assets/boss-sprites/source/batch2/regional-atomdust.png",
+      "sha256": "93cefebf3fb7c2d7aea4ee0c3c7b2d46724688d7924b36ca1741f67c1672c198",
+      "bytes": 3384364
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch2/scorpion-parts.png",
+      "sha256": "6ffce42f2a8aa6346f3392dd44c1a559167931fdf23e05c1b5e8222cd1afea67",
+      "bytes": 2356184
+    },
+    {
+      "path": "royale/assets/boss-sprites/source/batch2/regional-venomis.png",
+      "sha256": "8b27ce555fc884beeaa2d64239690910f8b7041ce76dac1763a1313be5c3fb9d",
+      "bytes": 3252391
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/04_Giant_Scorpion.png",
+      "sha256": "c3b78ad8f699a5b6ead2ab4906db7e8e9766fca8c38d65166441b9b0a4986672",
+      "bytes": 205033
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/05_Venomis.png",
+      "sha256": "93c85e4dbabb602acc719ee433365428e785705a5fd6bcafa787e146beb575cc",
+      "bytes": 209943
+    },
+    {
+      "path": "royale/assets/boss-sprites/references/06_AtomDust.png",
+      "sha256": "7896f21dbca8419cc9168bfd420d010cf7c599fd037ad1722eb9797a6bd4c3a5",
+      "bytes": 209115
+    }
+  ],
+  "review": "Integration and animation states complete for this batch; final visual approval is the user\u2019s. Four pose movement cycles use short crossfades. Detached projectiles and area effects continue to come from the unchanged combat renderer."
+}

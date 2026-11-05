@@ -1,0 +1,40 @@
+{
+  "browserRuns": [
+    {
+      "boss": "lightning",
+      "viewport": [
+        1280,
+        800
+      ],
+      "seconds": 30.969499999998508,
+      "averageFPS": 1.3238831753822946,
+      "averageDrawMs": 3.4121951220965965,
+      "p95FrameMs": 1016.5
+    },
+    {
+      "boss": "air",
+      "viewport": [
+        844,
+        390
+      ],
+      "seconds": 30.860399999999252,
+      "averageFPS": 1.166543531516146,
+      "averageDrawMs": 2.4222222219945655,
+      "p95FrameMs": 1016.5
+    },
+    {
+      "boss": "styrodog",
+      "viewport": [
+        844,
+        390
+      ],
+      "seconds": 30.792899999999253,
+      "averageFPS": 1.3314757622699063,
+      "averageDrawMs": 2.6073170731343875,
+      "p95FrameMs": 1016.5
+    }
+  ],
+  "sustained60FPSVerified": false,
+  "physicalDevicesTested": false,
+  "interpretation": "Cloud browser frame scheduling is slow (p95 approximately 1 second); average whole-game drawing is 2.4\u20133.5 ms. This does not establish device performance or a cause for the low measured FPS. Native raster timings are separate and are not FPS."
+}

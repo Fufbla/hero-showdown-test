@@ -1,0 +1,2 @@
+Remote Chromium · 1363 × 936 · tall/full hero · six regular target fixtures · ability level 20 · Whirlwind, Steel Body, Fireball and passive Speed
+30.3s · 1.4 FPS · draw avg 1.19ms / max 3.00ms · p95 frame 1016.5ms. This browser only.

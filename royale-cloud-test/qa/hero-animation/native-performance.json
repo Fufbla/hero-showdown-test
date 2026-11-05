@@ -1,0 +1,53 @@
+{
+  "scope": "Native hero-only raster draw cost, not browser FPS",
+  "metrics": [
+    {
+      "hero": "Coast Guardian",
+      "draws": 180,
+      "meanMs": 0.7647063944444401,
+      "p95Ms": 1.381890000000567
+    },
+    {
+      "hero": "Night Current",
+      "draws": 180,
+      "meanMs": 0.7664708722220591,
+      "p95Ms": 1.3384960000003048
+    },
+    {
+      "hero": "Iron Reef",
+      "draws": 180,
+      "meanMs": 0.5523684944444136,
+      "p95Ms": 0.8392779999994673
+    },
+    {
+      "hero": "Tide Runner",
+      "draws": 180,
+      "meanMs": 0.667555494444524,
+      "p95Ms": 1.013375000000451
+    },
+    {
+      "hero": "Young Comet",
+      "draws": 180,
+      "meanMs": 0.5440606888889508,
+      "p95Ms": 0.9581140000009327
+    },
+    {
+      "hero": "Silver Grove",
+      "draws": 180,
+      "meanMs": 0.4745381833333037,
+      "p95Ms": 0.7011139999995066
+    },
+    {
+      "hero": "Amber Sentinel",
+      "draws": 180,
+      "meanMs": 0.3001701777777776,
+      "p95Ms": 0.4409410000007483
+    },
+    {
+      "hero": "Violet Coast",
+      "draws": 180,
+      "meanMs": 0.6927863000000596,
+      "p95Ms": 1.0418169999993552
+    }
+  ]
+}

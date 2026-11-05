@@ -1,0 +1,58 @@
+[
+  {
+    "region": 1,
+    "checks": 2003,
+    "passed": true,
+    "ms": 117.10000000149012,
+    "textureBytes": 22118400,
+    "errors": []
+  },
+  {
+    "region": 2,
+    "checks": 2003,
+    "passed": true,
+    "ms": 104.80000000447035,
+    "textureBytes": 22118400,
+    "errors": []
+  },
+  {
+    "region": 3,
+    "checks": 1935,
+    "passed": true,
+    "ms": 103.29999999701977,
+    "textureBytes": 22118400,
+    "errors": []
+  },
+  {
+    "region": 4,
+    "checks": 2003,
+    "passed": true,
+    "ms": 155.5,
+    "textureBytes": 22118400,
+    "errors": []
+  },
+  {
+    "region": 5,
+    "checks": 2003,
+    "passed": true,
+    "ms": 112.39999999850988,
+    "textureBytes": 22118400,
+    "errors": []
+  },
+  {
+    "region": 6,
+    "checks": 1883,
+    "passed": true,
+    "ms": 92.20000000298023,
+    "textureBytes": 22118400,
+    "errors": []
+  },
+  {
+    "region": 7,
+    "checks": 2003,
+    "passed": true,
+    "ms": 173.39999999850988,
+    "textureBytes": 22118400,
+    "errors": []
+  }
+]

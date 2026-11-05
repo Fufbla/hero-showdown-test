@@ -1,0 +1,8 @@
+{
+  "boss": "Wastelander",
+  "frames": 15,
+  "meanFrameMs": 685.4066666666671,
+  "p95FrameMs": 1016.5,
+  "averageFPS": 1.458987851494489,
+  "scope": "Browser animation preview, not full-game or physical-device performance"
+}

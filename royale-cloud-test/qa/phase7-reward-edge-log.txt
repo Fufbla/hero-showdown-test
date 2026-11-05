@@ -1,0 +1,18 @@
+PASS · 17 reward/storage-failure/mixed-suit browser assertions.
+PASS · failed irreversible write freezes gameplay before revealing rewards
+PASS · failure explains retry and does not advertise a saved victory
+PASS · successful retry records full victory once
+PASS · seven owned items are shown alongside all three earned pieces
+PASS · selecting three discards enables legal seven-slot claim
+PASS · discard confirmation names permanent loss
+PASS · duplicate reward submission has no extra equipment or revision
+PASS · two earned full suits coexist within seven total inventory slots
+PASS · mixed full-body preview and exact comparisons are shown
+PASS · mixing different villains preserves all three normal powers and locks fourth
+PASS · Legendary sale is unavailable with no coin reward
+PASS · Legendary destruction shows unrecoverable, cannot-earn-again warning
+PASS · discard commits ownership and tombstone
+PASS · reopening never restores destroyed Legendary helmet
+PASS · lost piece prevents reactivation of the full suit
+PASS · remaining full suit still activates normally
+PASS · all eight Legendary map entrances are locked at Level 98

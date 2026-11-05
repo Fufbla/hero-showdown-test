@@ -1,0 +1,8 @@
+{
+  "region": 4,
+  "checks": 2003,
+  "passed": true,
+  "ms": 169.3,
+  "nightEyes": "visually inspected after scorpion highlight correction",
+  "physicalDevices": "not tested"
+}

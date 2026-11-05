@@ -1,0 +1,62 @@
+[
+  {
+    "region": 4,
+    "name": "desktop",
+    "width": 1280,
+    "height": 720,
+    "frames": 600,
+    "mean_ms": 0.6635456699999986,
+    "p95_ms": 1.0720830000000205,
+    "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+  },
+  {
+    "region": 4,
+    "name": "mobile-sized",
+    "width": 390,
+    "height": 844,
+    "frames": 600,
+    "mean_ms": 0.5520411516666536,
+    "p95_ms": 0.8381779999999708,
+    "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+  },
+  {
+    "region": 5,
+    "name": "desktop",
+    "width": 1280,
+    "height": 720,
+    "frames": 600,
+    "mean_ms": 0.13858236333331053,
+    "p95_ms": 1.1544450000001234,
+    "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+  },
+  {
+    "region": 5,
+    "name": "mobile-sized",
+    "width": 390,
+    "height": 844,
+    "frames": 600,
+    "mean_ms": 0.15912740166668907,
+    "p95_ms": 1.3925769999987097,
+    "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+  },
+  {
+    "region": 6,
+    "name": "desktop",
+    "width": 1280,
+    "height": 720,
+    "frames": 600,
+    "mean_ms": 0.13963762166665825,
+    "p95_ms": 1.1792720000012196,
+    "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+  },
+  {
+    "region": 6,
+    "name": "mobile-sized",
+    "width": 390,
+    "height": 844,
+    "frames": 600,
+    "mean_ms": 0.15689735833332633,
+    "p95_ms": 1.3259289999987232,
+    "scope": "Native headless boss-renderer cost, not browser FPS or device testing"
+  }
+]

@@ -1,0 +1,398 @@
+{
+  "method": "Catalog-complete ordinary set at recommended level; legal Speed investment; uninterrupted punch bound. Human time-to-kill will differ. No combat values adjusted.",
+  "xp": [
+    {
+      "level": 1,
+      "nextLevelXP": 50
+    },
+    {
+      "level": 10,
+      "nextLevelXP": 626
+    },
+    {
+      "level": 20,
+      "nextLevelXP": 2026
+    },
+    {
+      "level": 35,
+      "nextLevelXP": 5626
+    },
+    {
+      "level": 50,
+      "nextLevelXP": 11026
+    },
+    {
+      "level": 65,
+      "nextLevelXP": 18226
+    },
+    {
+      "level": 80,
+      "nextLevelXP": 38978
+    },
+    {
+      "level": 90,
+      "nextLevelXP": 88068
+    },
+    {
+      "level": 98,
+      "nextLevelXP": 161608
+    }
+  ],
+  "lowLevelFarmXP": 0,
+  "monsters": [
+    {
+      "id": "bottle",
+      "name": "Bottle Critter",
+      "region": 1,
+      "heroLevel": 1,
+      "hp": 34,
+      "damage": 5,
+      "nightDamage": 5,
+      "xp": 14,
+      "punchDamage": 19,
+      "uninterruptedPunchSeconds": 0.53,
+      "dayHitsToDefeatHero": 21,
+      "equalLevelKillsToNext": 4
+    },
+    {
+      "id": "slime",
+      "name": "Trash Slime",
+      "region": 1,
+      "heroLevel": 4,
+      "hp": 48,
+      "damage": 6,
+      "nightDamage": 6,
+      "xp": 20,
+      "punchDamage": 28,
+      "uninterruptedPunchSeconds": 0.49,
+      "dayHitsToDefeatHero": 25,
+      "equalLevelKillsToNext": 9
+    },
+    {
+      "id": "crawler",
+      "name": "Sand Crawler",
+      "region": 1,
+      "heroLevel": 8,
+      "hp": 60,
+      "damage": 7,
+      "nightDamage": 7,
+      "xp": 26,
+      "punchDamage": 40,
+      "uninterruptedPunchSeconds": 0.45,
+      "dayHitsToDefeatHero": 31,
+      "equalLevelKillsToNext": 17
+    },
+    {
+      "id": "sprout",
+      "name": "Thorn Sprout",
+      "region": 2,
+      "heroLevel": 11,
+      "hp": 120,
+      "damage": 10,
+      "nightDamage": 10,
+      "xp": 90,
+      "punchDamage": 53,
+      "uninterruptedPunchSeconds": 0.63,
+      "dayHitsToDefeatHero": 26,
+      "equalLevelKillsToNext": 9
+    },
+    {
+      "id": "mushroom",
+      "name": "Toxic Mushroom",
+      "region": 2,
+      "heroLevel": 15,
+      "hp": 180,
+      "damage": 14,
+      "nightDamage": 14,
+      "xp": 125,
+      "punchDamage": 65,
+      "uninterruptedPunchSeconds": 0.59,
+      "dayHitsToDefeatHero": 23,
+      "equalLevelKillsToNext": 10
+    },
+    {
+      "id": "bark",
+      "name": "Bark Crawler",
+      "region": 2,
+      "heroLevel": 20,
+      "hp": 250,
+      "damage": 18,
+      "nightDamage": 18,
+      "xp": 175,
+      "punchDamage": 84,
+      "uninterruptedPunchSeconds": 0.54,
+      "dayHitsToDefeatHero": 23,
+      "equalLevelKillsToNext": 12
+    },
+    {
+      "id": "scrap",
+      "name": "Scrap Crawler",
+      "region": 3,
+      "heroLevel": 21,
+      "hp": 300,
+      "damage": 20,
+      "nightDamage": 40,
+      "xp": 200,
+      "punchDamage": 87,
+      "uninterruptedPunchSeconds": 0.72,
+      "dayHitsToDefeatHero": 22,
+      "equalLevelKillsToNext": 12
+    },
+    {
+      "id": "sludge",
+      "name": "Sludge Beast",
+      "region": 3,
+      "heroLevel": 28,
+      "hp": 420,
+      "damage": 28,
+      "nightDamage": 56,
+      "xp": 280,
+      "punchDamage": 108,
+      "uninterruptedPunchSeconds": 0.72,
+      "dayHitsToDefeatHero": 19,
+      "equalLevelKillsToNext": 14
+    },
+    {
+      "id": "drone",
+      "name": "Rust Drone",
+      "region": 3,
+      "heroLevel": 35,
+      "hp": 550,
+      "damage": 35,
+      "nightDamage": 70,
+      "xp": 360,
+      "punchDamage": 133,
+      "uninterruptedPunchSeconds": 0.9,
+      "dayHitsToDefeatHero": 19,
+      "equalLevelKillsToNext": 16
+    },
+    {
+      "id": "scorpion",
+      "name": "Cave Scorpion",
+      "region": 4,
+      "heroLevel": 36,
+      "hp": 650,
+      "damage": 40,
+      "nightDamage": 80,
+      "xp": 410,
+      "punchDamage": 136,
+      "uninterruptedPunchSeconds": 0.9,
+      "dayHitsToDefeatHero": 17,
+      "equalLevelKillsToNext": 15
+    },
+    {
+      "id": "beetle",
+      "name": "Acid Beetle",
+      "region": 4,
+      "heroLevel": 43,
+      "hp": 820,
+      "damage": 50,
+      "nightDamage": 100,
+      "xp": 520,
+      "punchDamage": 161,
+      "uninterruptedPunchSeconds": 1.08,
+      "dayHitsToDefeatHero": 16,
+      "equalLevelKillsToNext": 16
+    },
+    {
+      "id": "venomCrawler",
+      "name": "Venom Crawler",
+      "region": 4,
+      "heroLevel": 50,
+      "hp": 1000,
+      "damage": 60,
+      "nightDamage": 120,
+      "xp": 650,
+      "punchDamage": 186,
+      "uninterruptedPunchSeconds": 1.08,
+      "dayHitsToDefeatHero": 16,
+      "equalLevelKillsToNext": 17
+    },
+    {
+      "id": "thornBeast",
+      "name": "Thorn Beast",
+      "region": 5,
+      "heroLevel": 51,
+      "hp": 1200,
+      "damage": 65,
+      "nightDamage": 130,
+      "xp": 720,
+      "punchDamage": 189,
+      "uninterruptedPunchSeconds": 1.26,
+      "dayHitsToDefeatHero": 15,
+      "equalLevelKillsToNext": 16
+    },
+    {
+      "id": "stalker",
+      "name": "Mutant Stalker",
+      "region": 5,
+      "heroLevel": 58,
+      "hp": 1550,
+      "damage": 78,
+      "nightDamage": 156,
+      "xp": 880,
+      "punchDamage": 210,
+      "uninterruptedPunchSeconds": 1.44,
+      "dayHitsToDefeatHero": 14,
+      "equalLevelKillsToNext": 17
+    },
+    {
+      "id": "spitter",
+      "name": "Poison Spitter",
+      "region": 5,
+      "heroLevel": 65,
+      "hp": 1900,
+      "damage": 90,
+      "nightDamage": 180,
+      "xp": 1040,
+      "punchDamage": 235,
+      "uninterruptedPunchSeconds": 1.62,
+      "dayHitsToDefeatHero": 14,
+      "equalLevelKillsToNext": 18
+    },
+    {
+      "id": "wisp",
+      "name": "Shadow Wisp",
+      "region": 6,
+      "heroLevel": 66,
+      "hp": 2200,
+      "damage": 100,
+      "nightDamage": 200,
+      "xp": 1160,
+      "punchDamage": 238,
+      "uninterruptedPunchSeconds": 1.8,
+      "dayHitsToDefeatHero": 12,
+      "equalLevelKillsToNext": 17
+    },
+    {
+      "id": "phantom",
+      "name": "Energy Phantom",
+      "region": 6,
+      "heroLevel": 73,
+      "hp": 2850,
+      "damage": 120,
+      "nightDamage": 240,
+      "xp": 1400,
+      "punchDamage": 263,
+      "uninterruptedPunchSeconds": 1.98,
+      "dayHitsToDefeatHero": 12,
+      "equalLevelKillsToNext": 18
+    },
+    {
+      "id": "sentinel",
+      "name": "Dark Sentinel",
+      "region": 6,
+      "heroLevel": 80,
+      "hp": 3500,
+      "damage": 140,
+      "nightDamage": 280,
+      "xp": 1650,
+      "punchDamage": 288,
+      "uninterruptedPunchSeconds": 2.34,
+      "dayHitsToDefeatHero": 11,
+      "equalLevelKillsToNext": 24
+    },
+    {
+      "id": "apocalypse",
+      "name": "Apocalypse Mutant",
+      "region": 7,
+      "heroLevel": 81,
+      "hp": 4000,
+      "damage": 150,
+      "nightDamage": 300,
+      "xp": 1800,
+      "punchDamage": 291,
+      "uninterruptedPunchSeconds": 2.52,
+      "dayHitsToDefeatHero": 10,
+      "equalLevelKillsToNext": 24
+    },
+    {
+      "id": "guardian",
+      "name": "Corrupted Guardian",
+      "region": 7,
+      "heroLevel": 90,
+      "hp": 5500,
+      "damage": 185,
+      "nightDamage": 370,
+      "xp": 2250,
+      "punchDamage": 322,
+      "uninterruptedPunchSeconds": 3.24,
+      "dayHitsToDefeatHero": 9,
+      "equalLevelKillsToNext": 40
+    },
+    {
+      "id": "titan",
+      "name": "Pollution Titan",
+      "region": 7,
+      "heroLevel": 99,
+      "hp": 7000,
+      "damage": 220,
+      "nightDamage": 440,
+      "xp": 2800,
+      "punchDamage": 353,
+      "uninterruptedPunchSeconds": 3.6,
+      "dayHitsToDefeatHero": 9,
+      "equalLevelKillsToNext": null
+    }
+  ],
+  "bosses": [
+    {
+      "name": "Trash Monster",
+      "level": 10,
+      "hp": 950,
+      "damage": 18,
+      "perfectUptimeBasicSeconds": 4.1,
+      "warning": "Lower bound: no travel, knockback, defenses, misses, dodge, helpers or special powers."
+    },
+    {
+      "name": "Bushman",
+      "level": 20,
+      "hp": 2600,
+      "damage": 32,
+      "perfectUptimeBasicSeconds": 5.6,
+      "warning": "Lower bound: no travel, knockback, defenses, misses, dodge, helpers or special powers."
+    },
+    {
+      "name": "Wastelander",
+      "level": 35,
+      "hp": 6000,
+      "damage": 52,
+      "perfectUptimeBasicSeconds": 8.1,
+      "warning": "Lower bound: no travel, knockback, defenses, misses, dodge, helpers or special powers."
+    },
+    {
+      "name": "Giant Scorpion",
+      "level": 50,
+      "hp": 11000,
+      "damage": 82,
+      "perfectUptimeBasicSeconds": 10.6,
+      "warning": "Lower bound: no travel, knockback, defenses, misses, dodge, helpers or special powers."
+    },
+    {
+      "name": "Venomis",
+      "level": 65,
+      "hp": 18000,
+      "damage": 120,
+      "perfectUptimeBasicSeconds": 13.8,
+      "warning": "Lower bound: no travel, knockback, defenses, misses, dodge, helpers or special powers."
+    },
+    {
+      "name": "AtomDust",
+      "level": 80,
+      "hp": 28000,
+      "damage": 175,
+      "perfectUptimeBasicSeconds": 17.5,
+      "warning": "Lower bound: no travel, knockback, defenses, misses, dodge, helpers or special powers."
+    },
+    {
+      "name": "Ultimate Pollution Boss",
+      "level": 99,
+      "hp": 42000,
+      "damage": 235,
+      "perfectUptimeBasicSeconds": 21.4,
+      "warning": "Lower bound: no travel, knockback, defenses, misses, dodge, helpers or special powers."
+    }
+  ],
+  "legendaryHP": 126000,
+  "legendaryBasicLowerBoundSeconds": 64.2
+}

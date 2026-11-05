@@ -1,0 +1,46 @@
+import {Game} from '../core.mjs';
+import {PROFILE_KEY,LocalHeroStore} from '../saves.mjs';
+import {LegendaryLedger,reconcileLegendaryStore} from '../legendary-ledger.mjs';
+import {SCENARIOS} from './benchmark-scenes.mjs';
+const $=id=>document.getElementById(id),frame=$('frame'),wait=ms=>new Promise(r=>setTimeout(r,ms));let serial=0;
+const until=async(fn,message='UI timeout')=>{const end=Date.now()+90000;while(!fn()){if(Date.now()>end)throw Error(message);await wait(50);}};
+export function command(action,value){const request=`p10-${++serial}`;return new Promise((resolve,reject)=>{const timer=setTimeout(()=>{removeEventListener('message',receive);reject(Error('Fixture timeout: '+action));},30000);function receive(e){if(e.source===frame.contentWindow&&e.origin===location.origin&&e.data?.type==='royale-phase10-result'&&e.data.request===request){clearTimeout(timer);removeEventListener('message',receive);resolve(e.data);}}addEventListener('message',receive);frame.contentWindow.postMessage({type:'royale-phase10-fixture',action,value,request},location.origin);});}
+async function load(width,height,kind='checks'){
+ frame.width=width;frame.height=height;const session=`p10-${kind}-${Date.now()}-${width}`,prefix=`royale-test-${session}:`,stamp=new Date().toISOString();
+ const slots=['Quality Explorer','Independent Hero',null].map((name,i)=>{if(!name)return null;const g=new Game({look:{name,cape:true,hair:i?'locs':'braids'}});g.hero.coins=i*77;return {id:`${session}-${i}`,createdAt:stamp,updatedAt:stamp,lastRegion:'Coastal Beginnings',snapshot:JSON.parse(g.save())};});
+ sessionStorage.setItem(prefix+PROFILE_KEY,JSON.stringify({version:2,revision:0,activeSlot:0,legacyImported:true,slots}));const start=performance.now();
+ const url=`../?qa=1&touch=1&testSession=${session}`;await new Promise(r=>{frame.onload=r;frame.src=url;});await until(()=>frame.contentDocument.documentElement.dataset.phase10Ready==='true','Phase 10 fixture did not start');
+ const d=frame.contentDocument,errors=[];d.defaultView.addEventListener('error',e=>errors.push(e.message));return {d,errors,el:id=>d.getElementById(id),session,prefix,url,loadMs:performance.now()-start,data:()=>JSON.parse(sessionStorage.getItem(prefix+PROFILE_KEY))};
+}
+function busy(on){$('checks').disabled=$('benchmark').disabled=$('viewport').disabled=on;}
+$('checks').onclick=async()=>{busy(true);$('log').textContent='';let count=0;const check=(label,ok)=>{if(!ok)throw Error(label);count++;$('log').textContent+=`PASS · ${label}\n`;};
+ try{for(const [width,height] of [[390,844],[844,390],[320,568],[768,1024],[1280,800]]){
+  $('report').textContent=`Integration ${width} × ${height} · ${count} checks passed`;let f=await load(width,height),{d,el,data}=f;d.querySelector('[data-action=continue]').click();
+  const raw=sessionStorage.getItem(f.prefix+PROFILE_KEY);await command('place',{x:842,y:320});el('pause').click();
+  check(`${width}: moving and pausing do not overwrite manual save`,sessionStorage.getItem(f.prefix+PROFILE_KEY)===raw);
+  check(`${width}: safe manual-save button enabled`,!el('manual-save').disabled);el('manual-save').click();check(`${width}: explicit save keeps elevated exact position`,data().slots[0].snapshot.world.location.x===842&&data().slots[0].snapshot.world.location.y===320);
+  el('resume').click();await command('place',{x:460,y:480});el('pause').click();el('choose-hero').click();check(`${width}: returning to roster does not auto-save`,data().slots[0].snapshot.world.location.x===842);
+  d.querySelector('[data-action=continue]').click();el('pause').click();const restored=(await command('status')).state;check(`${width}: continue restores manual elevation and appearance`,restored.x===842&&restored.y===320&&data().slots[0].snapshot.look.hair==='braids');
+  el('open-controls').click();const music=el('volume-music'),effects=el('volume-effects');music.value=22;music.dispatchEvent(new Event('input',{bubbles:true}));effects.value=77;effects.dispatchEvent(new Event('input',{bubbles:true}));check(`${width}: independent volume levels update`,el('volume-music-value').textContent==='22%'&&el('volume-effects-value').textContent==='77%');
+  const stick=el('touch-stickSize');check(`${width}: adjustable joystick size exists`,!!stick);if(stick){stick.value=106;stick.dispatchEvent(new Event('input',{bubbles:true}));}
+  check(`${width}: settings fit without horizontal overflow`,d.documentElement.scrollWidth===width);el('close-controls').click();el('resume').click();await command('combat');el('pause').click();check(`${width}: manual save blocked in combat`,el('manual-save').disabled);el('resume').click();await command('step',301);await command('place',{x:160,y:600});el('pause').click();
+  el('open-map').click();check(`${width}: all regular regions stay open`,[...d.querySelectorAll('[data-travel]')].length===7&&[...d.querySelectorAll('[data-travel]')].every(n=>!n.disabled));d.querySelector('[data-travel="7"]').click();check(`${width}: low-level portal travel does not implicitly save`,data().slots[0].snapshot.world.region===1);el('pause').click();const danger=(await command('status')).state;check(`${width}: level-one hero arrives at safe Region 7 checkpoint`,danger.region===7&&danger.level===1&&danger.x===160);el('manual-save').click();check(`${width}: manual portal save persists selected destination`,data().slots[0].snapshot.world.region===7);
+  const disposed=await command('dispose-input');check(`${width}: input cleanup removes Escape handler and held keys`,disposed.detail.aborted&&disposed.detail.keys===0&&disposed.detail.pausedBefore===disposed.detail.pausedAfter);el('choose-hero').click();d.querySelector('[data-slot="1"] .delete-hero').click();el('confirm-delete').click();await until(()=>data().slots[1]===null);check(`${width}: confirmed deletion affects only selected hero`,data().slots[0]!==null&&data().slots[2]===null);
+  // Simulate a crash between the durable deletion and ordinary cache update.
+  const ledger=await LegendaryLedger.open(indexedDB,f.prefix+'permanent'),records=await ledger.all();check(`${width}: deletion has a durable immutable-ID tombstone`,records.some(r=>r.heroId===f.session+'-1'&&r.deleted));
+  sessionStorage.setItem(f.prefix+PROFILE_KEY,raw);const storage={getItem:k=>sessionStorage.getItem(f.prefix+k),setItem:(k,v)=>sessionStorage.setItem(f.prefix+k,v)},store=new LocalHeroStore(storage);await reconcileLegendaryStore(store,ledger);check(`${width}: stale cache cannot recover deleted hero`,store.slot(1)===null&&store.slot(0)!==null);
+  let rejected=false;try{await ledger.commit(f.session+'-1',0,new Game().save());}catch(e){rejected=/deleted/.test(e.message);}check(`${width}: stale reward transaction cannot recreate deleted hero`,rejected);ledger.close();
+  check(`${width}: HP and XP remain available`,!!el('hp-text')&&!!el('xp-text'));check(`${width}: no game runtime exceptions`,f.errors.length===0);
+ }
+ $('report').textContent=`COMPLETE · ${count} Phase 10 integration checks passed across five sizes. Real IndexedDB deletion/recovery, manual saving, portals and responsive controls. Physical devices and cloud authentication not tested.`;
+ }catch(error){$('report').textContent=`FAIL · ${error.message}\n${count} checks passed.`;}finally{busy(false);}
+};
+$('benchmark').onclick=async()=>{busy(true);const rows=[];const [width,height]=$('viewport').value.split(',').map(Number);$('results').textContent='';$('raw').textContent='';
+ try{for(const scene of SCENARIOS){$('report').textContent=`Benchmarking ${scene} at ${width} × ${height}…`;const f=await load(width,height,'benchmark');f.d.querySelector('[data-action=continue]').click();const artStart=performance.now();await command('setup',scene);let state=(await command('status')).state;for(let i=0;!state.artReady&&i<120;i++){await wait(250);state=(await command('status')).state;}if(!state.artReady)throw Error('Approved boss art did not finish loading');const artReadyMs=performance.now()-artStart;
+   await command('measure',20);await until(()=>!!f.el('performance-result').dataset.measurement||f.el('performance-result').textContent.startsWith('Sample cancelled'),'Benchmark did not finish');if(!f.el('performance-result').dataset.measurement)throw Error(f.el('performance-result').textContent);
+   const row={scenario:scene,loadMs:f.loadMs,artReadyMs,...JSON.parse(f.el('performance-result').dataset.measurement)};rows.push(row);$('raw').textContent=JSON.stringify(rows,null,2);
+   $('results').innerHTML='<table><thead><tr><th>Scene</th><th>FPS</th><th>1% low</th><th>Load ms</th><th>Simulation ms</th><th>Draw ms</th></tr></thead><tbody>'+rows.map(r=>`<tr><td>${r.scenario}</td><td>${r.averageFPS.toFixed(1)}</td><td>${r.onePercentLowFPS.toFixed(1)}</td><td>${r.loadMs.toFixed(0)}</td><td>${r.averageSimulationMs.toFixed(2)}</td><td>${r.averageDrawMs.toFixed(2)}</td></tr>`).join('')+'</tbody></table>';
+   f.el('pause').click();
+  }$('report').textContent=`COMPLETE · ${rows.length} measured scenarios at ${width} × ${height}. Touch uses synthetic pointers. These measurements describe this browser environment only; they do not certify a physical phone or sustained 60 FPS.`;
+ }catch(error){$('report').textContent=`FAIL · ${error.message}`;}finally{busy(false);}
+};

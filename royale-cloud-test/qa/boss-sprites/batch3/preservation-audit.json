@@ -1,0 +1,22 @@
+{
+  "baseCommitSha": "24f29cb3fcac896983d4a17b998d0256b42369a9",
+  "modifiedTrackedFiles": [
+    "royale/BOSS-SPRITES.md",
+    "royale/boss-art.mjs",
+    "royale/boss-sprites.mjs",
+    "royale/tests/boss-art.test.mjs",
+    "royale/tests/boss-sprites-batch2.test.mjs",
+    "royale/tests/boss-sprites.test.mjs",
+    "royale/tests/bosses.html",
+    "royale/tests/phase5-checks.mjs"
+  ],
+  "unchangedTrackedFiles": 768,
+  "allChangesWithinBossPresentationDocsAndTests": true,
+  "priorBossAssetsUnchanged": true,
+  "scorpionRigUnchanged": true,
+  "combatAndSaveFilesUnchanged": true,
+  "regularMonstersUnchanged": true,
+  "storyAndVersusUnchanged": true,
+  "mainAndRoyaleBranchesWritten": false,
+  "batch3GithubWrites": false
+}

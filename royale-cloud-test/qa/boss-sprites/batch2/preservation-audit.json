@@ -1,0 +1,26 @@
+{
+  "baseCommit": "f140ba3083090a6959f3d8951d2bcc063fa5385d",
+  "trackedPathsInBase": 722,
+  "modifiedTrackedFiles": [
+    "royale/BOSS-SPRITES.md",
+    "royale/boss-art.mjs",
+    "royale/boss-sprites.mjs",
+    "royale/bosses.css",
+    "royale/tests/boss-art.test.mjs",
+    "royale/tests/boss-lab.mjs",
+    "royale/tests/boss-sprites.test.mjs",
+    "royale/tests/bosses.html",
+    "royale/tests/phase5-checks.mjs"
+  ],
+  "unchangedTrackedPaths": 713,
+  "batch1ArtworkByteIdentical": true,
+  "regularMonstersUntouched": true,
+  "sharedRigAndSharedArtUntouched": true,
+  "gameplayAndSaveModulesUntouched": true,
+  "storyAndVersusUntouched": true,
+  "githubWrites": false,
+  "localCommitCreated": false,
+  "deletions": [],
+  "scope": "Read-only Git tree/diff audit; all new files are Royale boss assets, integration, tools, review or evidence.",
+  "bossOnlyStylesheetChange": "Short-landscape boss HUD placement; no world/monster styles changed."
+}

@@ -1,0 +1,29 @@
+{
+  "scope": "Cloud Chrome browser sample; not physical phone testing",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "viewport": [
+    1218,
+    480
+  ],
+  "visibility": [
+    "visible"
+  ],
+  "focused": true,
+  "seconds": 12.014,
+  "samples": 710,
+  "averageFPS": 59.097719327451316,
+  "onePercentLowFPS": 25.24455664247327,
+  "meanStepAndDrawMs": 10.551898734190837,
+  "p95StepAndDrawMs": 15.5,
+  "assetPreparationMs": 22.5,
+  "heapBytes": 38007165,
+  "simulationSeconds": 11.983333333333333,
+  "maxEnemies": 24,
+  "creatureErrors": [],
+  "textures": {
+    "ready": true,
+    "error": null,
+    "entries": 0,
+    "limit": 64
+  }
+}

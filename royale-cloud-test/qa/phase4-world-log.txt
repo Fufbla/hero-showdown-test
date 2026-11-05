@@ -1,0 +1,284 @@
+
+portrait
+Running Phase 4 world / economy / save / rendering checks…
+PASS · pending equipment survives reload and opens reward selection
+PASS · equipment screen keeps HP and XP visible
+PASS · replacement shows exact stat comparison
+PASS · cancel replacement changes nothing
+PASS · confirmed replacement keeps seven carried items
+PASS · rare equipment equips and persists
+PASS · ordinary discard also requires confirmation
+PASS · inventory has no horizontal overflow
+PASS · Health Root button fits beside persistent vitals
+PASS · Health Root restores 25% HP immediately
+PASS · second Root has no cooldown
+PASS · remote Tree opens without changing region or location
+PASS · Root purchase fits small screens
+PASS · Root purchase costs 50 and persists
+PASS · insufficient coins disable purchasing
+PASS · clock advances while at Tree
+PASS · world map contains all seven regions
+PASS · locked regions cannot fast travel
+PASS · Coastal Beginnings card is reachable
+PASS · Polluted Forest card is reachable
+PASS · Industrial Wasteland card is reachable
+PASS · Toxic Underground card is reachable
+PASS · Mutated Territories card is reachable
+PASS · Dark Energy Realm card is reachable
+PASS · Final Showdown card is reachable
+PASS · fast travel lands at safe destination camp
+PASS · night countdown visible in Region 3
+PASS · combat disables safe saving, Tree and checkpoint return
+PASS · combat disables all map travel
+PASS · unlocked backward travel works and Coast remains daytime
+PASS · reload preserves appearance, roots, gear, clock and world history
+PASS · Thorn Sprout has distinct art and yellow night eyes
+PASS · Toxic Mushroom has distinct art and yellow night eyes
+PASS · Bark Crawler has distinct art and yellow night eyes
+PASS · Scrap Crawler has distinct art and yellow night eyes
+PASS · Sludge Beast has distinct art and yellow night eyes
+PASS · Rust Drone has distinct art and yellow night eyes
+PASS · Cave Scorpion has distinct art and yellow night eyes
+PASS · Acid Beetle has distinct art and yellow night eyes
+PASS · Venom Crawler has distinct art and yellow night eyes
+PASS · Thorn Beast has distinct art and yellow night eyes
+PASS · Mutant Stalker has distinct art and yellow night eyes
+PASS · Poison Spitter has distinct art and yellow night eyes
+PASS · Shadow Wisp has distinct art and yellow night eyes
+PASS · Energy Phantom has distinct art and yellow night eyes
+PASS · Dark Sentinel has distinct art and yellow night eyes
+PASS · Apocalypse Mutant has distinct art and yellow night eyes
+PASS · Corrupted Guardian has distinct art and yellow night eyes
+PASS · Pollution Titan has distinct art and yellow night eyes
+PASS · all 18 new species have different silhouettes
+PASS · rare white outline stays bright through idle, run and combat hit-flashes
+COMPLETE · 51 Phase 4 checks passed at 390 × 844.
+Synthetic browser checks, not physical-device certification.
+
+
+landscape
+Running Phase 4 world / economy / save / rendering checks…
+PASS · pending equipment survives reload and opens reward selection
+PASS · equipment screen keeps HP and XP visible
+PASS · replacement shows exact stat comparison
+PASS · cancel replacement changes nothing
+PASS · confirmed replacement keeps seven carried items
+PASS · rare equipment equips and persists
+PASS · ordinary discard also requires confirmation
+PASS · inventory has no horizontal overflow
+PASS · Health Root button fits beside persistent vitals
+PASS · Health Root restores 25% HP immediately
+PASS · second Root has no cooldown
+PASS · remote Tree opens without changing region or location
+PASS · Root purchase fits small screens
+PASS · Root purchase costs 50 and persists
+PASS · insufficient coins disable purchasing
+PASS · clock advances while at Tree
+PASS · world map contains all seven regions
+PASS · locked regions cannot fast travel
+PASS · Coastal Beginnings card is reachable
+PASS · Polluted Forest card is reachable
+PASS · Industrial Wasteland card is reachable
+PASS · Toxic Underground card is reachable
+PASS · Mutated Territories card is reachable
+PASS · Dark Energy Realm card is reachable
+PASS · Final Showdown card is reachable
+PASS · fast travel lands at safe destination camp
+PASS · night countdown visible in Region 3
+PASS · combat disables safe saving, Tree and checkpoint return
+PASS · combat disables all map travel
+PASS · unlocked backward travel works and Coast remains daytime
+PASS · reload preserves appearance, roots, gear, clock and world history
+PASS · Thorn Sprout has distinct art and yellow night eyes
+PASS · Toxic Mushroom has distinct art and yellow night eyes
+PASS · Bark Crawler has distinct art and yellow night eyes
+PASS · Scrap Crawler has distinct art and yellow night eyes
+PASS · Sludge Beast has distinct art and yellow night eyes
+PASS · Rust Drone has distinct art and yellow night eyes
+PASS · Cave Scorpion has distinct art and yellow night eyes
+PASS · Acid Beetle has distinct art and yellow night eyes
+PASS · Venom Crawler has distinct art and yellow night eyes
+PASS · Thorn Beast has distinct art and yellow night eyes
+PASS · Mutant Stalker has distinct art and yellow night eyes
+PASS · Poison Spitter has distinct art and yellow night eyes
+PASS · Shadow Wisp has distinct art and yellow night eyes
+PASS · Energy Phantom has distinct art and yellow night eyes
+PASS · Dark Sentinel has distinct art and yellow night eyes
+PASS · Apocalypse Mutant has distinct art and yellow night eyes
+PASS · Corrupted Guardian has distinct art and yellow night eyes
+PASS · Pollution Titan has distinct art and yellow night eyes
+PASS · all 18 new species have different silhouettes
+PASS · rare white outline stays bright through idle, run and combat hit-flashes
+COMPLETE · 51 Phase 4 checks passed at 844 × 390.
+Synthetic browser checks, not physical-device certification.
+
+
+small
+Running Phase 4 world / economy / save / rendering checks…
+PASS · pending equipment survives reload and opens reward selection
+PASS · equipment screen keeps HP and XP visible
+PASS · replacement shows exact stat comparison
+PASS · cancel replacement changes nothing
+PASS · confirmed replacement keeps seven carried items
+PASS · rare equipment equips and persists
+PASS · ordinary discard also requires confirmation
+PASS · inventory has no horizontal overflow
+PASS · Health Root button fits beside persistent vitals
+PASS · Health Root restores 25% HP immediately
+PASS · second Root has no cooldown
+PASS · remote Tree opens without changing region or location
+PASS · Root purchase fits small screens
+PASS · Root purchase costs 50 and persists
+PASS · insufficient coins disable purchasing
+PASS · clock advances while at Tree
+PASS · world map contains all seven regions
+PASS · locked regions cannot fast travel
+PASS · Coastal Beginnings card is reachable
+PASS · Polluted Forest card is reachable
+PASS · Industrial Wasteland card is reachable
+PASS · Toxic Underground card is reachable
+PASS · Mutated Territories card is reachable
+PASS · Dark Energy Realm card is reachable
+PASS · Final Showdown card is reachable
+PASS · fast travel lands at safe destination camp
+PASS · night countdown visible in Region 3
+PASS · combat disables safe saving, Tree and checkpoint return
+PASS · combat disables all map travel
+PASS · unlocked backward travel works and Coast remains daytime
+PASS · reload preserves appearance, roots, gear, clock and world history
+PASS · Thorn Sprout has distinct art and yellow night eyes
+PASS · Toxic Mushroom has distinct art and yellow night eyes
+PASS · Bark Crawler has distinct art and yellow night eyes
+PASS · Scrap Crawler has distinct art and yellow night eyes
+PASS · Sludge Beast has distinct art and yellow night eyes
+PASS · Rust Drone has distinct art and yellow night eyes
+PASS · Cave Scorpion has distinct art and yellow night eyes
+PASS · Acid Beetle has distinct art and yellow night eyes
+PASS · Venom Crawler has distinct art and yellow night eyes
+PASS · Thorn Beast has distinct art and yellow night eyes
+PASS · Mutant Stalker has distinct art and yellow night eyes
+PASS · Poison Spitter has distinct art and yellow night eyes
+PASS · Shadow Wisp has distinct art and yellow night eyes
+PASS · Energy Phantom has distinct art and yellow night eyes
+PASS · Dark Sentinel has distinct art and yellow night eyes
+PASS · Apocalypse Mutant has distinct art and yellow night eyes
+PASS · Corrupted Guardian has distinct art and yellow night eyes
+PASS · Pollution Titan has distinct art and yellow night eyes
+PASS · all 18 new species have different silhouettes
+PASS · rare white outline stays bright through idle, run and combat hit-flashes
+COMPLETE · 51 Phase 4 checks passed at 320 × 568.
+Synthetic browser checks, not physical-device certification.
+
+
+tablet
+Running Phase 4 world / economy / save / rendering checks…
+PASS · pending equipment survives reload and opens reward selection
+PASS · equipment screen keeps HP and XP visible
+PASS · replacement shows exact stat comparison
+PASS · cancel replacement changes nothing
+PASS · confirmed replacement keeps seven carried items
+PASS · rare equipment equips and persists
+PASS · ordinary discard also requires confirmation
+PASS · inventory has no horizontal overflow
+PASS · Health Root button fits beside persistent vitals
+PASS · Health Root restores 25% HP immediately
+PASS · second Root has no cooldown
+PASS · remote Tree opens without changing region or location
+PASS · Root purchase fits small screens
+PASS · Root purchase costs 50 and persists
+PASS · insufficient coins disable purchasing
+PASS · clock advances while at Tree
+PASS · world map contains all seven regions
+PASS · locked regions cannot fast travel
+PASS · Coastal Beginnings card is reachable
+PASS · Polluted Forest card is reachable
+PASS · Industrial Wasteland card is reachable
+PASS · Toxic Underground card is reachable
+PASS · Mutated Territories card is reachable
+PASS · Dark Energy Realm card is reachable
+PASS · Final Showdown card is reachable
+PASS · fast travel lands at safe destination camp
+PASS · night countdown visible in Region 3
+PASS · combat disables safe saving, Tree and checkpoint return
+PASS · combat disables all map travel
+PASS · unlocked backward travel works and Coast remains daytime
+PASS · reload preserves appearance, roots, gear, clock and world history
+PASS · Thorn Sprout has distinct art and yellow night eyes
+PASS · Toxic Mushroom has distinct art and yellow night eyes
+PASS · Bark Crawler has distinct art and yellow night eyes
+PASS · Scrap Crawler has distinct art and yellow night eyes
+PASS · Sludge Beast has distinct art and yellow night eyes
+PASS · Rust Drone has distinct art and yellow night eyes
+PASS · Cave Scorpion has distinct art and yellow night eyes
+PASS · Acid Beetle has distinct art and yellow night eyes
+PASS · Venom Crawler has distinct art and yellow night eyes
+PASS · Thorn Beast has distinct art and yellow night eyes
+PASS · Mutant Stalker has distinct art and yellow night eyes
+PASS · Poison Spitter has distinct art and yellow night eyes
+PASS · Shadow Wisp has distinct art and yellow night eyes
+PASS · Energy Phantom has distinct art and yellow night eyes
+PASS · Dark Sentinel has distinct art and yellow night eyes
+PASS · Apocalypse Mutant has distinct art and yellow night eyes
+PASS · Corrupted Guardian has distinct art and yellow night eyes
+PASS · Pollution Titan has distinct art and yellow night eyes
+PASS · all 18 new species have different silhouettes
+PASS · rare white outline stays bright through idle, run and combat hit-flashes
+COMPLETE · 51 Phase 4 checks passed at 768 × 1024.
+Synthetic browser checks, not physical-device certification.
+
+
+desktop
+Running Phase 4 world / economy / save / rendering checks…
+PASS · pending equipment survives reload and opens reward selection
+PASS · equipment screen keeps HP and XP visible
+PASS · replacement shows exact stat comparison
+PASS · cancel replacement changes nothing
+PASS · confirmed replacement keeps seven carried items
+PASS · rare equipment equips and persists
+PASS · ordinary discard also requires confirmation
+PASS · inventory has no horizontal overflow
+PASS · Health Root button fits beside persistent vitals
+PASS · Health Root restores 25% HP immediately
+PASS · second Root has no cooldown
+PASS · remote Tree opens without changing region or location
+PASS · Root purchase fits small screens
+PASS · Root purchase costs 50 and persists
+PASS · insufficient coins disable purchasing
+PASS · clock advances while at Tree
+PASS · world map contains all seven regions
+PASS · locked regions cannot fast travel
+PASS · Coastal Beginnings card is reachable
+PASS · Polluted Forest card is reachable
+PASS · Industrial Wasteland card is reachable
+PASS · Toxic Underground card is reachable
+PASS · Mutated Territories card is reachable
+PASS · Dark Energy Realm card is reachable
+PASS · Final Showdown card is reachable
+PASS · fast travel lands at safe destination camp
+PASS · night countdown visible in Region 3
+PASS · combat disables safe saving, Tree and checkpoint return
+PASS · combat disables all map travel
+PASS · unlocked backward travel works and Coast remains daytime
+PASS · reload preserves appearance, roots, gear, clock and world history
+PASS · Thorn Sprout has distinct art and yellow night eyes
+PASS · Toxic Mushroom has distinct art and yellow night eyes
+PASS · Bark Crawler has distinct art and yellow night eyes
+PASS · Scrap Crawler has distinct art and yellow night eyes
+PASS · Sludge Beast has distinct art and yellow night eyes
+PASS · Rust Drone has distinct art and yellow night eyes
+PASS · Cave Scorpion has distinct art and yellow night eyes
+PASS · Acid Beetle has distinct art and yellow night eyes
+PASS · Venom Crawler has distinct art and yellow night eyes
+PASS · Thorn Beast has distinct art and yellow night eyes
+PASS · Mutant Stalker has distinct art and yellow night eyes
+PASS · Poison Spitter has distinct art and yellow night eyes
+PASS · Shadow Wisp has distinct art and yellow night eyes
+PASS · Energy Phantom has distinct art and yellow night eyes
+PASS · Dark Sentinel has distinct art and yellow night eyes
+PASS · Apocalypse Mutant has distinct art and yellow night eyes
+PASS · Corrupted Guardian has distinct art and yellow night eyes
+PASS · Pollution Titan has distinct art and yellow night eyes
+PASS · all 18 new species have different silhouettes
+PASS · rare white outline stays bright through idle, run and combat hit-flashes
+COMPLETE · 51 Phase 4 checks passed at 1280 × 800.
+Synthetic browser checks, not physical-device certification.

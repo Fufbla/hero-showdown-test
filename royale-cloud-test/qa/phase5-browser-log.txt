@@ -1,0 +1,723 @@
+PASS · Trash Monster: artwork loads, renders and labels temporary art correctly
+PASS · Bushman: artwork loads, renders and labels temporary art correctly
+PASS · Wastelander: artwork loads, renders and labels temporary art correctly
+PASS · Giant Scorpion: artwork loads, renders and labels temporary art correctly
+PASS · Venomis: artwork loads, renders and labels temporary art correctly
+PASS · AtomDust: artwork loads, renders and labels temporary art correctly
+PASS · Ultimate Pollution Boss: artwork loads, renders and labels temporary art correctly
+PASS · all seven bosses render distinct silhouettes
+PASS · 390×844 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Trash Monster: three power buttons and touch controls fit
+PASS · 390×844 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Trash Monster: all pause map travel blocked
+PASS · 390×844 · Trash Monster: touch Health Root heals during battle
+PASS · 390×844 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 390×844 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 390×844 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 390×844 · Trash Monster: victory is persisted with full arena cleared
+PASS · 390×844 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 390×844 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 390×844 · Trash Monster: no rare equipment in early-region chest
+PASS · 390×844 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 390×844 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 390×844 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Trash Monster: walking exit returns to exploration
+DONE · 390×844 · Trash Monster
+PASS · 390×844 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Bushman: three power buttons and touch controls fit
+PASS · 390×844 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Bushman: all pause map travel blocked
+PASS · 390×844 · Bushman: touch Health Root heals during battle
+PASS · 390×844 · Bushman: Phase 2 HUD updates immediately
+PASS · 390×844 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Bushman: boss down with helpers does not unlock or reward
+PASS · 390×844 · Bushman: clearing arena awards first victory and unlock
+PASS · 390×844 · Bushman: victory is persisted with full arena cleared
+PASS · 390×844 · Bushman: chest previews rewards beside seven owned items
+PASS · 390×844 · Bushman: chest controls, HP and XP remain usable
+PASS · 390×844 · Bushman: no rare equipment in early-region chest
+PASS · 390×844 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Bushman: cancel preserves owned and pending equipment
+PASS · 390×844 · Bushman: confirmed replacement enforces seven slots
+PASS · 390×844 · Bushman: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Bushman: walking exit returns to exploration
+DONE · 390×844 · Bushman
+PASS · 390×844 · Wastelander: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Wastelander: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Wastelander: three power buttons and touch controls fit
+PASS · 390×844 · Wastelander: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Wastelander: all pause map travel blocked
+PASS · 390×844 · Wastelander: touch Health Root heals during battle
+PASS · 390×844 · Wastelander: Phase 2 HUD updates immediately
+PASS · 390×844 · Wastelander: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Wastelander: boss down with helpers does not unlock or reward
+PASS · 390×844 · Wastelander: clearing arena awards first victory and unlock
+PASS · 390×844 · Wastelander: victory is persisted with full arena cleared
+PASS · 390×844 · Wastelander: chest previews rewards beside seven owned items
+PASS · 390×844 · Wastelander: chest controls, HP and XP remain usable
+PASS · 390×844 · Wastelander: no rare equipment in early-region chest
+PASS · 390×844 · Wastelander: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Wastelander: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Wastelander: cancel preserves owned and pending equipment
+PASS · 390×844 · Wastelander: confirmed replacement enforces seven slots
+PASS · 390×844 · Wastelander: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Wastelander: walking exit returns to exploration
+DONE · 390×844 · Wastelander
+PASS · 390×844 · Giant Scorpion: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Giant Scorpion: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Giant Scorpion: three power buttons and touch controls fit
+PASS · 390×844 · Giant Scorpion: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Giant Scorpion: all pause map travel blocked
+PASS · 390×844 · Giant Scorpion: touch Health Root heals during battle
+PASS · 390×844 · Giant Scorpion: Phase 2 HUD updates immediately
+PASS · 390×844 · Giant Scorpion: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Giant Scorpion: boss down with helpers does not unlock or reward
+PASS · 390×844 · Giant Scorpion: clearing arena awards first victory and unlock
+PASS · 390×844 · Giant Scorpion: victory is persisted with full arena cleared
+PASS · 390×844 · Giant Scorpion: chest previews rewards beside seven owned items
+PASS · 390×844 · Giant Scorpion: chest controls, HP and XP remain usable
+PASS · 390×844 · Giant Scorpion: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Giant Scorpion: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Giant Scorpion: cancel preserves owned and pending equipment
+PASS · 390×844 · Giant Scorpion: confirmed replacement enforces seven slots
+PASS · 390×844 · Giant Scorpion: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Giant Scorpion: walking exit returns to exploration
+DONE · 390×844 · Giant Scorpion
+PASS · 390×844 · Venomis: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Venomis: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Venomis: three power buttons and touch controls fit
+PASS · 390×844 · Venomis: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Venomis: all pause map travel blocked
+PASS · 390×844 · Venomis: touch Health Root heals during battle
+PASS · 390×844 · Venomis: Phase 2 HUD updates immediately
+PASS · 390×844 · Venomis: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Venomis: boss down with helpers does not unlock or reward
+PASS · 390×844 · Venomis: clearing arena awards first victory and unlock
+PASS · 390×844 · Venomis: victory is persisted with full arena cleared
+PASS · 390×844 · Venomis: chest previews rewards beside seven owned items
+PASS · 390×844 · Venomis: chest controls, HP and XP remain usable
+PASS · 390×844 · Venomis: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Venomis: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Venomis: cancel preserves owned and pending equipment
+PASS · 390×844 · Venomis: confirmed replacement enforces seven slots
+PASS · 390×844 · Venomis: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Venomis: walking exit returns to exploration
+DONE · 390×844 · Venomis
+PASS · 390×844 · AtomDust: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · AtomDust: boss bar, HP and XP fit without overlap
+PASS · 390×844 · AtomDust: three power buttons and touch controls fit
+PASS · 390×844 · AtomDust: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · AtomDust: all pause map travel blocked
+PASS · 390×844 · AtomDust: touch Health Root heals during battle
+PASS · 390×844 · AtomDust: Phase 2 HUD updates immediately
+PASS · 390×844 · AtomDust: Phase 3 wave has exactly three helpers
+PASS · 390×844 · AtomDust: boss down with helpers does not unlock or reward
+PASS · 390×844 · AtomDust: clearing arena awards first victory and unlock
+PASS · 390×844 · AtomDust: victory is persisted with full arena cleared
+PASS · 390×844 · AtomDust: chest previews rewards beside seven owned items
+PASS · 390×844 · AtomDust: chest controls, HP and XP remain usable
+PASS · 390×844 · AtomDust: equipment waits for choice and never exceeds seven
+PASS · 390×844 · AtomDust: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · AtomDust: cancel preserves owned and pending equipment
+PASS · 390×844 · AtomDust: confirmed replacement enforces seven slots
+PASS · 390×844 · AtomDust: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · AtomDust: walking exit returns to exploration
+DONE · 390×844 · AtomDust
+PASS · 390×844 · Ultimate Pollution Boss: immediate full-HP boss and recommended-level hero
+PASS · 390×844 · Ultimate Pollution Boss: boss bar, HP and XP fit without overlap
+PASS · 390×844 · Ultimate Pollution Boss: three power buttons and touch controls fit
+PASS · 390×844 · Ultimate Pollution Boss: saving, Tree and checkpoint escape blocked
+PASS · 390×844 · Ultimate Pollution Boss: all pause map travel blocked
+PASS · 390×844 · Ultimate Pollution Boss: touch Health Root heals during battle
+PASS · 390×844 · Ultimate Pollution Boss: Phase 2 HUD updates immediately
+PASS · 390×844 · Ultimate Pollution Boss: Phase 3 wave has exactly three helpers
+PASS · 390×844 · Ultimate Pollution Boss: boss down with helpers does not unlock or reward
+PASS · 390×844 · Ultimate Pollution Boss: clearing arena awards first victory and unlock
+PASS · 390×844 · Ultimate Pollution Boss: victory is persisted with full arena cleared
+PASS · 390×844 · Ultimate Pollution Boss: chest previews rewards beside seven owned items
+PASS · 390×844 · Ultimate Pollution Boss: chest controls, HP and XP remain usable
+PASS · 390×844 · Ultimate Pollution Boss: equipment waits for choice and never exceeds seven
+PASS · 390×844 · Ultimate Pollution Boss: replacement shows stat comparison and asks confirmation
+PASS · 390×844 · Ultimate Pollution Boss: cancel preserves owned and pending equipment
+PASS · 390×844 · Ultimate Pollution Boss: confirmed replacement enforces seven slots
+PASS · 390×844 · Ultimate Pollution Boss: reload keeps wins, claimed chest, coins and appearance
+PASS · 390×844 · Ultimate Pollution Boss: walking exit returns to exploration
+DONE · 390×844 · Ultimate Pollution Boss
+PASS · 844×390 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Trash Monster: three power buttons and touch controls fit
+PASS · 844×390 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Trash Monster: all pause map travel blocked
+PASS · 844×390 · Trash Monster: touch Health Root heals during battle
+PASS · 844×390 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 844×390 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 844×390 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 844×390 · Trash Monster: victory is persisted with full arena cleared
+PASS · 844×390 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 844×390 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 844×390 · Trash Monster: no rare equipment in early-region chest
+PASS · 844×390 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 844×390 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 844×390 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Trash Monster: walking exit returns to exploration
+DONE · 844×390 · Trash Monster
+PASS · 844×390 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Bushman: three power buttons and touch controls fit
+PASS · 844×390 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Bushman: all pause map travel blocked
+PASS · 844×390 · Bushman: touch Health Root heals during battle
+PASS · 844×390 · Bushman: Phase 2 HUD updates immediately
+PASS · 844×390 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Bushman: boss down with helpers does not unlock or reward
+PASS · 844×390 · Bushman: clearing arena awards first victory and unlock
+PASS · 844×390 · Bushman: victory is persisted with full arena cleared
+PASS · 844×390 · Bushman: chest previews rewards beside seven owned items
+PASS · 844×390 · Bushman: chest controls, HP and XP remain usable
+PASS · 844×390 · Bushman: no rare equipment in early-region chest
+PASS · 844×390 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Bushman: cancel preserves owned and pending equipment
+PASS · 844×390 · Bushman: confirmed replacement enforces seven slots
+PASS · 844×390 · Bushman: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Bushman: walking exit returns to exploration
+DONE · 844×390 · Bushman
+PASS · 844×390 · Wastelander: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Wastelander: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Wastelander: three power buttons and touch controls fit
+PASS · 844×390 · Wastelander: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Wastelander: all pause map travel blocked
+PASS · 844×390 · Wastelander: touch Health Root heals during battle
+PASS · 844×390 · Wastelander: Phase 2 HUD updates immediately
+PASS · 844×390 · Wastelander: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Wastelander: boss down with helpers does not unlock or reward
+PASS · 844×390 · Wastelander: clearing arena awards first victory and unlock
+PASS · 844×390 · Wastelander: victory is persisted with full arena cleared
+PASS · 844×390 · Wastelander: chest previews rewards beside seven owned items
+PASS · 844×390 · Wastelander: chest controls, HP and XP remain usable
+PASS · 844×390 · Wastelander: no rare equipment in early-region chest
+PASS · 844×390 · Wastelander: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Wastelander: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Wastelander: cancel preserves owned and pending equipment
+PASS · 844×390 · Wastelander: confirmed replacement enforces seven slots
+PASS · 844×390 · Wastelander: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Wastelander: walking exit returns to exploration
+DONE · 844×390 · Wastelander
+PASS · 844×390 · Giant Scorpion: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Giant Scorpion: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Giant Scorpion: three power buttons and touch controls fit
+PASS · 844×390 · Giant Scorpion: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Giant Scorpion: all pause map travel blocked
+PASS · 844×390 · Giant Scorpion: touch Health Root heals during battle
+PASS · 844×390 · Giant Scorpion: Phase 2 HUD updates immediately
+PASS · 844×390 · Giant Scorpion: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Giant Scorpion: boss down with helpers does not unlock or reward
+PASS · 844×390 · Giant Scorpion: clearing arena awards first victory and unlock
+PASS · 844×390 · Giant Scorpion: victory is persisted with full arena cleared
+PASS · 844×390 · Giant Scorpion: chest previews rewards beside seven owned items
+PASS · 844×390 · Giant Scorpion: chest controls, HP and XP remain usable
+PASS · 844×390 · Giant Scorpion: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Giant Scorpion: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Giant Scorpion: cancel preserves owned and pending equipment
+PASS · 844×390 · Giant Scorpion: confirmed replacement enforces seven slots
+PASS · 844×390 · Giant Scorpion: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Giant Scorpion: walking exit returns to exploration
+DONE · 844×390 · Giant Scorpion
+PASS · 844×390 · Venomis: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Venomis: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Venomis: three power buttons and touch controls fit
+PASS · 844×390 · Venomis: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Venomis: all pause map travel blocked
+PASS · 844×390 · Venomis: touch Health Root heals during battle
+PASS · 844×390 · Venomis: Phase 2 HUD updates immediately
+PASS · 844×390 · Venomis: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Venomis: boss down with helpers does not unlock or reward
+PASS · 844×390 · Venomis: clearing arena awards first victory and unlock
+PASS · 844×390 · Venomis: victory is persisted with full arena cleared
+PASS · 844×390 · Venomis: chest previews rewards beside seven owned items
+PASS · 844×390 · Venomis: chest controls, HP and XP remain usable
+PASS · 844×390 · Venomis: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Venomis: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Venomis: cancel preserves owned and pending equipment
+PASS · 844×390 · Venomis: confirmed replacement enforces seven slots
+PASS · 844×390 · Venomis: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Venomis: walking exit returns to exploration
+DONE · 844×390 · Venomis
+PASS · 844×390 · AtomDust: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · AtomDust: boss bar, HP and XP fit without overlap
+PASS · 844×390 · AtomDust: three power buttons and touch controls fit
+PASS · 844×390 · AtomDust: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · AtomDust: all pause map travel blocked
+PASS · 844×390 · AtomDust: touch Health Root heals during battle
+PASS · 844×390 · AtomDust: Phase 2 HUD updates immediately
+PASS · 844×390 · AtomDust: Phase 3 wave has exactly three helpers
+PASS · 844×390 · AtomDust: boss down with helpers does not unlock or reward
+PASS · 844×390 · AtomDust: clearing arena awards first victory and unlock
+PASS · 844×390 · AtomDust: victory is persisted with full arena cleared
+PASS · 844×390 · AtomDust: chest previews rewards beside seven owned items
+PASS · 844×390 · AtomDust: chest controls, HP and XP remain usable
+PASS · 844×390 · AtomDust: equipment waits for choice and never exceeds seven
+PASS · 844×390 · AtomDust: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · AtomDust: cancel preserves owned and pending equipment
+PASS · 844×390 · AtomDust: confirmed replacement enforces seven slots
+PASS · 844×390 · AtomDust: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · AtomDust: walking exit returns to exploration
+DONE · 844×390 · AtomDust
+PASS · 844×390 · Ultimate Pollution Boss: immediate full-HP boss and recommended-level hero
+PASS · 844×390 · Ultimate Pollution Boss: boss bar, HP and XP fit without overlap
+PASS · 844×390 · Ultimate Pollution Boss: three power buttons and touch controls fit
+PASS · 844×390 · Ultimate Pollution Boss: saving, Tree and checkpoint escape blocked
+PASS · 844×390 · Ultimate Pollution Boss: all pause map travel blocked
+PASS · 844×390 · Ultimate Pollution Boss: touch Health Root heals during battle
+PASS · 844×390 · Ultimate Pollution Boss: Phase 2 HUD updates immediately
+PASS · 844×390 · Ultimate Pollution Boss: Phase 3 wave has exactly three helpers
+PASS · 844×390 · Ultimate Pollution Boss: boss down with helpers does not unlock or reward
+PASS · 844×390 · Ultimate Pollution Boss: clearing arena awards first victory and unlock
+PASS · 844×390 · Ultimate Pollution Boss: victory is persisted with full arena cleared
+PASS · 844×390 · Ultimate Pollution Boss: chest previews rewards beside seven owned items
+PASS · 844×390 · Ultimate Pollution Boss: chest controls, HP and XP remain usable
+PASS · 844×390 · Ultimate Pollution Boss: equipment waits for choice and never exceeds seven
+PASS · 844×390 · Ultimate Pollution Boss: replacement shows stat comparison and asks confirmation
+PASS · 844×390 · Ultimate Pollution Boss: cancel preserves owned and pending equipment
+PASS · 844×390 · Ultimate Pollution Boss: confirmed replacement enforces seven slots
+PASS · 844×390 · Ultimate Pollution Boss: reload keeps wins, claimed chest, coins and appearance
+PASS · 844×390 · Ultimate Pollution Boss: walking exit returns to exploration
+DONE · 844×390 · Ultimate Pollution Boss
+PASS · 320×568 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Trash Monster: three power buttons and touch controls fit
+PASS · 320×568 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Trash Monster: all pause map travel blocked
+PASS · 320×568 · Trash Monster: touch Health Root heals during battle
+PASS · 320×568 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 320×568 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 320×568 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 320×568 · Trash Monster: victory is persisted with full arena cleared
+PASS · 320×568 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 320×568 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 320×568 · Trash Monster: no rare equipment in early-region chest
+PASS · 320×568 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 320×568 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 320×568 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Trash Monster: walking exit returns to exploration
+DONE · 320×568 · Trash Monster
+PASS · 320×568 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Bushman: three power buttons and touch controls fit
+PASS · 320×568 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Bushman: all pause map travel blocked
+PASS · 320×568 · Bushman: touch Health Root heals during battle
+PASS · 320×568 · Bushman: Phase 2 HUD updates immediately
+PASS · 320×568 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Bushman: boss down with helpers does not unlock or reward
+PASS · 320×568 · Bushman: clearing arena awards first victory and unlock
+PASS · 320×568 · Bushman: victory is persisted with full arena cleared
+PASS · 320×568 · Bushman: chest previews rewards beside seven owned items
+PASS · 320×568 · Bushman: chest controls, HP and XP remain usable
+PASS · 320×568 · Bushman: no rare equipment in early-region chest
+PASS · 320×568 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Bushman: cancel preserves owned and pending equipment
+PASS · 320×568 · Bushman: confirmed replacement enforces seven slots
+PASS · 320×568 · Bushman: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Bushman: walking exit returns to exploration
+DONE · 320×568 · Bushman
+PASS · 320×568 · Wastelander: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Wastelander: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Wastelander: three power buttons and touch controls fit
+PASS · 320×568 · Wastelander: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Wastelander: all pause map travel blocked
+PASS · 320×568 · Wastelander: touch Health Root heals during battle
+PASS · 320×568 · Wastelander: Phase 2 HUD updates immediately
+PASS · 320×568 · Wastelander: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Wastelander: boss down with helpers does not unlock or reward
+PASS · 320×568 · Wastelander: clearing arena awards first victory and unlock
+PASS · 320×568 · Wastelander: victory is persisted with full arena cleared
+PASS · 320×568 · Wastelander: chest previews rewards beside seven owned items
+PASS · 320×568 · Wastelander: chest controls, HP and XP remain usable
+PASS · 320×568 · Wastelander: no rare equipment in early-region chest
+PASS · 320×568 · Wastelander: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Wastelander: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Wastelander: cancel preserves owned and pending equipment
+PASS · 320×568 · Wastelander: confirmed replacement enforces seven slots
+PASS · 320×568 · Wastelander: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Wastelander: walking exit returns to exploration
+DONE · 320×568 · Wastelander
+PASS · 320×568 · Giant Scorpion: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Giant Scorpion: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Giant Scorpion: three power buttons and touch controls fit
+PASS · 320×568 · Giant Scorpion: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Giant Scorpion: all pause map travel blocked
+PASS · 320×568 · Giant Scorpion: touch Health Root heals during battle
+PASS · 320×568 · Giant Scorpion: Phase 2 HUD updates immediately
+PASS · 320×568 · Giant Scorpion: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Giant Scorpion: boss down with helpers does not unlock or reward
+PASS · 320×568 · Giant Scorpion: clearing arena awards first victory and unlock
+PASS · 320×568 · Giant Scorpion: victory is persisted with full arena cleared
+PASS · 320×568 · Giant Scorpion: chest previews rewards beside seven owned items
+PASS · 320×568 · Giant Scorpion: chest controls, HP and XP remain usable
+PASS · 320×568 · Giant Scorpion: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Giant Scorpion: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Giant Scorpion: cancel preserves owned and pending equipment
+PASS · 320×568 · Giant Scorpion: confirmed replacement enforces seven slots
+PASS · 320×568 · Giant Scorpion: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Giant Scorpion: walking exit returns to exploration
+DONE · 320×568 · Giant Scorpion
+PASS · 320×568 · Venomis: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Venomis: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Venomis: three power buttons and touch controls fit
+PASS · 320×568 · Venomis: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Venomis: all pause map travel blocked
+PASS · 320×568 · Venomis: touch Health Root heals during battle
+PASS · 320×568 · Venomis: Phase 2 HUD updates immediately
+PASS · 320×568 · Venomis: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Venomis: boss down with helpers does not unlock or reward
+PASS · 320×568 · Venomis: clearing arena awards first victory and unlock
+PASS · 320×568 · Venomis: victory is persisted with full arena cleared
+PASS · 320×568 · Venomis: chest previews rewards beside seven owned items
+PASS · 320×568 · Venomis: chest controls, HP and XP remain usable
+PASS · 320×568 · Venomis: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Venomis: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Venomis: cancel preserves owned and pending equipment
+PASS · 320×568 · Venomis: confirmed replacement enforces seven slots
+PASS · 320×568 · Venomis: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Venomis: walking exit returns to exploration
+DONE · 320×568 · Venomis
+PASS · 320×568 · AtomDust: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · AtomDust: boss bar, HP and XP fit without overlap
+PASS · 320×568 · AtomDust: three power buttons and touch controls fit
+PASS · 320×568 · AtomDust: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · AtomDust: all pause map travel blocked
+PASS · 320×568 · AtomDust: touch Health Root heals during battle
+PASS · 320×568 · AtomDust: Phase 2 HUD updates immediately
+PASS · 320×568 · AtomDust: Phase 3 wave has exactly three helpers
+PASS · 320×568 · AtomDust: boss down with helpers does not unlock or reward
+PASS · 320×568 · AtomDust: clearing arena awards first victory and unlock
+PASS · 320×568 · AtomDust: victory is persisted with full arena cleared
+PASS · 320×568 · AtomDust: chest previews rewards beside seven owned items
+PASS · 320×568 · AtomDust: chest controls, HP and XP remain usable
+PASS · 320×568 · AtomDust: equipment waits for choice and never exceeds seven
+PASS · 320×568 · AtomDust: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · AtomDust: cancel preserves owned and pending equipment
+PASS · 320×568 · AtomDust: confirmed replacement enforces seven slots
+PASS · 320×568 · AtomDust: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · AtomDust: walking exit returns to exploration
+DONE · 320×568 · AtomDust
+PASS · 320×568 · Ultimate Pollution Boss: immediate full-HP boss and recommended-level hero
+PASS · 320×568 · Ultimate Pollution Boss: boss bar, HP and XP fit without overlap
+PASS · 320×568 · Ultimate Pollution Boss: three power buttons and touch controls fit
+PASS · 320×568 · Ultimate Pollution Boss: saving, Tree and checkpoint escape blocked
+PASS · 320×568 · Ultimate Pollution Boss: all pause map travel blocked
+PASS · 320×568 · Ultimate Pollution Boss: touch Health Root heals during battle
+PASS · 320×568 · Ultimate Pollution Boss: Phase 2 HUD updates immediately
+PASS · 320×568 · Ultimate Pollution Boss: Phase 3 wave has exactly three helpers
+PASS · 320×568 · Ultimate Pollution Boss: boss down with helpers does not unlock or reward
+PASS · 320×568 · Ultimate Pollution Boss: clearing arena awards first victory and unlock
+PASS · 320×568 · Ultimate Pollution Boss: victory is persisted with full arena cleared
+PASS · 320×568 · Ultimate Pollution Boss: chest previews rewards beside seven owned items
+PASS · 320×568 · Ultimate Pollution Boss: chest controls, HP and XP remain usable
+PASS · 320×568 · Ultimate Pollution Boss: equipment waits for choice and never exceeds seven
+PASS · 320×568 · Ultimate Pollution Boss: replacement shows stat comparison and asks confirmation
+PASS · 320×568 · Ultimate Pollution Boss: cancel preserves owned and pending equipment
+PASS · 320×568 · Ultimate Pollution Boss: confirmed replacement enforces seven slots
+PASS · 320×568 · Ultimate Pollution Boss: reload keeps wins, claimed chest, coins and appearance
+PASS · 320×568 · Ultimate Pollution Boss: walking exit returns to exploration
+DONE · 320×568 · Ultimate Pollution Boss
+PASS · 768×1024 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Trash Monster: three power buttons and touch controls fit
+PASS · 768×1024 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Trash Monster: all pause map travel blocked
+PASS · 768×1024 · Trash Monster: touch Health Root heals during battle
+PASS · 768×1024 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 768×1024 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 768×1024 · Trash Monster: victory is persisted with full arena cleared
+PASS · 768×1024 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 768×1024 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 768×1024 · Trash Monster: no rare equipment in early-region chest
+PASS · 768×1024 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 768×1024 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 768×1024 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Trash Monster: walking exit returns to exploration
+DONE · 768×1024 · Trash Monster
+PASS · 768×1024 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Bushman: three power buttons and touch controls fit
+PASS · 768×1024 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Bushman: all pause map travel blocked
+PASS · 768×1024 · Bushman: touch Health Root heals during battle
+PASS · 768×1024 · Bushman: Phase 2 HUD updates immediately
+PASS · 768×1024 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Bushman: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Bushman: clearing arena awards first victory and unlock
+PASS · 768×1024 · Bushman: victory is persisted with full arena cleared
+PASS · 768×1024 · Bushman: chest previews rewards beside seven owned items
+PASS · 768×1024 · Bushman: chest controls, HP and XP remain usable
+PASS · 768×1024 · Bushman: no rare equipment in early-region chest
+PASS · 768×1024 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Bushman: cancel preserves owned and pending equipment
+PASS · 768×1024 · Bushman: confirmed replacement enforces seven slots
+PASS · 768×1024 · Bushman: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Bushman: walking exit returns to exploration
+DONE · 768×1024 · Bushman
+PASS · 768×1024 · Wastelander: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Wastelander: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Wastelander: three power buttons and touch controls fit
+PASS · 768×1024 · Wastelander: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Wastelander: all pause map travel blocked
+PASS · 768×1024 · Wastelander: touch Health Root heals during battle
+PASS · 768×1024 · Wastelander: Phase 2 HUD updates immediately
+PASS · 768×1024 · Wastelander: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Wastelander: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Wastelander: clearing arena awards first victory and unlock
+PASS · 768×1024 · Wastelander: victory is persisted with full arena cleared
+PASS · 768×1024 · Wastelander: chest previews rewards beside seven owned items
+PASS · 768×1024 · Wastelander: chest controls, HP and XP remain usable
+PASS · 768×1024 · Wastelander: no rare equipment in early-region chest
+PASS · 768×1024 · Wastelander: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Wastelander: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Wastelander: cancel preserves owned and pending equipment
+PASS · 768×1024 · Wastelander: confirmed replacement enforces seven slots
+PASS · 768×1024 · Wastelander: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Wastelander: walking exit returns to exploration
+DONE · 768×1024 · Wastelander
+PASS · 768×1024 · Giant Scorpion: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Giant Scorpion: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Giant Scorpion: three power buttons and touch controls fit
+PASS · 768×1024 · Giant Scorpion: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Giant Scorpion: all pause map travel blocked
+PASS · 768×1024 · Giant Scorpion: touch Health Root heals during battle
+PASS · 768×1024 · Giant Scorpion: Phase 2 HUD updates immediately
+PASS · 768×1024 · Giant Scorpion: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Giant Scorpion: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Giant Scorpion: clearing arena awards first victory and unlock
+PASS · 768×1024 · Giant Scorpion: victory is persisted with full arena cleared
+PASS · 768×1024 · Giant Scorpion: chest previews rewards beside seven owned items
+PASS · 768×1024 · Giant Scorpion: chest controls, HP and XP remain usable
+PASS · 768×1024 · Giant Scorpion: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Giant Scorpion: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Giant Scorpion: cancel preserves owned and pending equipment
+PASS · 768×1024 · Giant Scorpion: confirmed replacement enforces seven slots
+PASS · 768×1024 · Giant Scorpion: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Giant Scorpion: walking exit returns to exploration
+DONE · 768×1024 · Giant Scorpion
+PASS · 768×1024 · Venomis: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Venomis: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Venomis: three power buttons and touch controls fit
+PASS · 768×1024 · Venomis: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Venomis: all pause map travel blocked
+PASS · 768×1024 · Venomis: touch Health Root heals during battle
+PASS · 768×1024 · Venomis: Phase 2 HUD updates immediately
+PASS · 768×1024 · Venomis: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Venomis: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Venomis: clearing arena awards first victory and unlock
+PASS · 768×1024 · Venomis: victory is persisted with full arena cleared
+PASS · 768×1024 · Venomis: chest previews rewards beside seven owned items
+PASS · 768×1024 · Venomis: chest controls, HP and XP remain usable
+PASS · 768×1024 · Venomis: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Venomis: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Venomis: cancel preserves owned and pending equipment
+PASS · 768×1024 · Venomis: confirmed replacement enforces seven slots
+PASS · 768×1024 · Venomis: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Venomis: walking exit returns to exploration
+DONE · 768×1024 · Venomis
+PASS · 768×1024 · AtomDust: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · AtomDust: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · AtomDust: three power buttons and touch controls fit
+PASS · 768×1024 · AtomDust: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · AtomDust: all pause map travel blocked
+PASS · 768×1024 · AtomDust: touch Health Root heals during battle
+PASS · 768×1024 · AtomDust: Phase 2 HUD updates immediately
+PASS · 768×1024 · AtomDust: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · AtomDust: boss down with helpers does not unlock or reward
+PASS · 768×1024 · AtomDust: clearing arena awards first victory and unlock
+PASS · 768×1024 · AtomDust: victory is persisted with full arena cleared
+PASS · 768×1024 · AtomDust: chest previews rewards beside seven owned items
+PASS · 768×1024 · AtomDust: chest controls, HP and XP remain usable
+PASS · 768×1024 · AtomDust: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · AtomDust: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · AtomDust: cancel preserves owned and pending equipment
+PASS · 768×1024 · AtomDust: confirmed replacement enforces seven slots
+PASS · 768×1024 · AtomDust: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · AtomDust: walking exit returns to exploration
+DONE · 768×1024 · AtomDust
+PASS · 768×1024 · Ultimate Pollution Boss: immediate full-HP boss and recommended-level hero
+PASS · 768×1024 · Ultimate Pollution Boss: boss bar, HP and XP fit without overlap
+PASS · 768×1024 · Ultimate Pollution Boss: three power buttons and touch controls fit
+PASS · 768×1024 · Ultimate Pollution Boss: saving, Tree and checkpoint escape blocked
+PASS · 768×1024 · Ultimate Pollution Boss: all pause map travel blocked
+PASS · 768×1024 · Ultimate Pollution Boss: touch Health Root heals during battle
+PASS · 768×1024 · Ultimate Pollution Boss: Phase 2 HUD updates immediately
+PASS · 768×1024 · Ultimate Pollution Boss: Phase 3 wave has exactly three helpers
+PASS · 768×1024 · Ultimate Pollution Boss: boss down with helpers does not unlock or reward
+PASS · 768×1024 · Ultimate Pollution Boss: clearing arena awards first victory and unlock
+PASS · 768×1024 · Ultimate Pollution Boss: victory is persisted with full arena cleared
+PASS · 768×1024 · Ultimate Pollution Boss: chest previews rewards beside seven owned items
+PASS · 768×1024 · Ultimate Pollution Boss: chest controls, HP and XP remain usable
+PASS · 768×1024 · Ultimate Pollution Boss: equipment waits for choice and never exceeds seven
+PASS · 768×1024 · Ultimate Pollution Boss: replacement shows stat comparison and asks confirmation
+PASS · 768×1024 · Ultimate Pollution Boss: cancel preserves owned and pending equipment
+PASS · 768×1024 · Ultimate Pollution Boss: confirmed replacement enforces seven slots
+PASS · 768×1024 · Ultimate Pollution Boss: reload keeps wins, claimed chest, coins and appearance
+PASS · 768×1024 · Ultimate Pollution Boss: walking exit returns to exploration
+DONE · 768×1024 · Ultimate Pollution Boss
+PASS · 1280×800 · Trash Monster: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Trash Monster: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Trash Monster: three power buttons and touch controls fit
+PASS · 1280×800 · Trash Monster: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Trash Monster: all pause map travel blocked
+PASS · 1280×800 · Trash Monster: touch Health Root heals during battle
+PASS · 1280×800 · Trash Monster: Phase 2 HUD updates immediately
+PASS · 1280×800 · Trash Monster: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Trash Monster: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Trash Monster: clearing arena awards first victory and unlock
+PASS · 1280×800 · Trash Monster: victory is persisted with full arena cleared
+PASS · 1280×800 · Trash Monster: chest previews rewards beside seven owned items
+PASS · 1280×800 · Trash Monster: chest controls, HP and XP remain usable
+PASS · 1280×800 · Trash Monster: no rare equipment in early-region chest
+PASS · 1280×800 · Trash Monster: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Trash Monster: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Trash Monster: cancel preserves owned and pending equipment
+PASS · 1280×800 · Trash Monster: confirmed replacement enforces seven slots
+PASS · 1280×800 · Trash Monster: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Trash Monster: walking exit returns to exploration
+DONE · 1280×800 · Trash Monster
+PASS · 1280×800 · Bushman: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Bushman: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Bushman: three power buttons and touch controls fit
+PASS · 1280×800 · Bushman: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Bushman: all pause map travel blocked
+PASS · 1280×800 · Bushman: touch Health Root heals during battle
+PASS · 1280×800 · Bushman: Phase 2 HUD updates immediately
+PASS · 1280×800 · Bushman: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Bushman: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Bushman: clearing arena awards first victory and unlock
+PASS · 1280×800 · Bushman: victory is persisted with full arena cleared
+PASS · 1280×800 · Bushman: chest previews rewards beside seven owned items
+PASS · 1280×800 · Bushman: chest controls, HP and XP remain usable
+PASS · 1280×800 · Bushman: no rare equipment in early-region chest
+PASS · 1280×800 · Bushman: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Bushman: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Bushman: cancel preserves owned and pending equipment
+PASS · 1280×800 · Bushman: confirmed replacement enforces seven slots
+PASS · 1280×800 · Bushman: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Bushman: walking exit returns to exploration
+DONE · 1280×800 · Bushman
+PASS · 1280×800 · Wastelander: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Wastelander: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Wastelander: three power buttons and touch controls fit
+PASS · 1280×800 · Wastelander: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Wastelander: all pause map travel blocked
+PASS · 1280×800 · Wastelander: touch Health Root heals during battle
+PASS · 1280×800 · Wastelander: Phase 2 HUD updates immediately
+PASS · 1280×800 · Wastelander: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Wastelander: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Wastelander: clearing arena awards first victory and unlock
+PASS · 1280×800 · Wastelander: victory is persisted with full arena cleared
+PASS · 1280×800 · Wastelander: chest previews rewards beside seven owned items
+PASS · 1280×800 · Wastelander: chest controls, HP and XP remain usable
+PASS · 1280×800 · Wastelander: no rare equipment in early-region chest
+PASS · 1280×800 · Wastelander: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Wastelander: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Wastelander: cancel preserves owned and pending equipment
+PASS · 1280×800 · Wastelander: confirmed replacement enforces seven slots
+PASS · 1280×800 · Wastelander: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Wastelander: walking exit returns to exploration
+DONE · 1280×800 · Wastelander
+PASS · 1280×800 · Giant Scorpion: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Giant Scorpion: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Giant Scorpion: three power buttons and touch controls fit
+PASS · 1280×800 · Giant Scorpion: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Giant Scorpion: all pause map travel blocked
+PASS · 1280×800 · Giant Scorpion: touch Health Root heals during battle
+PASS · 1280×800 · Giant Scorpion: Phase 2 HUD updates immediately
+PASS · 1280×800 · Giant Scorpion: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Giant Scorpion: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Giant Scorpion: clearing arena awards first victory and unlock
+PASS · 1280×800 · Giant Scorpion: victory is persisted with full arena cleared
+PASS · 1280×800 · Giant Scorpion: chest previews rewards beside seven owned items
+PASS · 1280×800 · Giant Scorpion: chest controls, HP and XP remain usable
+PASS · 1280×800 · Giant Scorpion: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Giant Scorpion: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Giant Scorpion: cancel preserves owned and pending equipment
+PASS · 1280×800 · Giant Scorpion: confirmed replacement enforces seven slots
+PASS · 1280×800 · Giant Scorpion: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Giant Scorpion: walking exit returns to exploration
+DONE · 1280×800 · Giant Scorpion
+PASS · 1280×800 · Venomis: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Venomis: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Venomis: three power buttons and touch controls fit
+PASS · 1280×800 · Venomis: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Venomis: all pause map travel blocked
+PASS · 1280×800 · Venomis: touch Health Root heals during battle
+PASS · 1280×800 · Venomis: Phase 2 HUD updates immediately
+PASS · 1280×800 · Venomis: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Venomis: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Venomis: clearing arena awards first victory and unlock
+PASS · 1280×800 · Venomis: victory is persisted with full arena cleared
+PASS · 1280×800 · Venomis: chest previews rewards beside seven owned items
+PASS · 1280×800 · Venomis: chest controls, HP and XP remain usable
+PASS · 1280×800 · Venomis: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Venomis: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Venomis: cancel preserves owned and pending equipment
+PASS · 1280×800 · Venomis: confirmed replacement enforces seven slots
+PASS · 1280×800 · Venomis: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Venomis: walking exit returns to exploration
+DONE · 1280×800 · Venomis
+PASS · 1280×800 · AtomDust: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · AtomDust: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · AtomDust: three power buttons and touch controls fit
+PASS · 1280×800 · AtomDust: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · AtomDust: all pause map travel blocked
+PASS · 1280×800 · AtomDust: touch Health Root heals during battle
+PASS · 1280×800 · AtomDust: Phase 2 HUD updates immediately
+PASS · 1280×800 · AtomDust: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · AtomDust: boss down with helpers does not unlock or reward
+PASS · 1280×800 · AtomDust: clearing arena awards first victory and unlock
+PASS · 1280×800 · AtomDust: victory is persisted with full arena cleared
+PASS · 1280×800 · AtomDust: chest previews rewards beside seven owned items
+PASS · 1280×800 · AtomDust: chest controls, HP and XP remain usable
+PASS · 1280×800 · AtomDust: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · AtomDust: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · AtomDust: cancel preserves owned and pending equipment
+PASS · 1280×800 · AtomDust: confirmed replacement enforces seven slots
+PASS · 1280×800 · AtomDust: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · AtomDust: walking exit returns to exploration
+DONE · 1280×800 · AtomDust
+PASS · 1280×800 · Ultimate Pollution Boss: immediate full-HP boss and recommended-level hero
+PASS · 1280×800 · Ultimate Pollution Boss: boss bar, HP and XP fit without overlap
+PASS · 1280×800 · Ultimate Pollution Boss: three power buttons and touch controls fit
+PASS · 1280×800 · Ultimate Pollution Boss: saving, Tree and checkpoint escape blocked
+PASS · 1280×800 · Ultimate Pollution Boss: all pause map travel blocked
+PASS · 1280×800 · Ultimate Pollution Boss: touch Health Root heals during battle
+PASS · 1280×800 · Ultimate Pollution Boss: Phase 2 HUD updates immediately
+PASS · 1280×800 · Ultimate Pollution Boss: Phase 3 wave has exactly three helpers
+PASS · 1280×800 · Ultimate Pollution Boss: boss down with helpers does not unlock or reward
+PASS · 1280×800 · Ultimate Pollution Boss: clearing arena awards first victory and unlock
+PASS · 1280×800 · Ultimate Pollution Boss: victory is persisted with full arena cleared
+PASS · 1280×800 · Ultimate Pollution Boss: chest previews rewards beside seven owned items
+PASS · 1280×800 · Ultimate Pollution Boss: chest controls, HP and XP remain usable
+PASS · 1280×800 · Ultimate Pollution Boss: equipment waits for choice and never exceeds seven
+PASS · 1280×800 · Ultimate Pollution Boss: replacement shows stat comparison and asks confirmation
+PASS · 1280×800 · Ultimate Pollution Boss: cancel preserves owned and pending equipment
+PASS · 1280×800 · Ultimate Pollution Boss: confirmed replacement enforces seven slots
+PASS · 1280×800 · Ultimate Pollution Boss: reload keeps wins, claimed chest, coins and appearance
+PASS · 1280×800 · Ultimate Pollution Boss: walking exit returns to exploration
+DONE · 1280×800 · Ultimate Pollution Boss

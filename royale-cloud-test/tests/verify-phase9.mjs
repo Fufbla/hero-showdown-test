@@ -1,0 +1,15 @@
+import {execFileSync} from 'node:child_process';
+import {readFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {BOSS_ART_DEPENDENCIES} from '../boss-art.mjs';
+const base='5cfe1a5c80648ea1f66e76fb780119e9c7caa541',main='b11a1d8103f10e38d63788496660b99d4a8d9e6e';
+const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+assert.equal(git('branch','--show-current'),'feature/showdown-royale');
+const changed=[...git('diff','--name-only',base).split('\n'),...git('ls-files','--others','--exclude-standard').split('\n')].filter(Boolean);
+assert.ok(changed.every(p=>p.startsWith('royale/')));
+assert.equal(git('rev-parse',main+'^{commit}'),main);
+const protectedPaths=['royale/backend','royale/vendor','royale/accounts.mjs','royale/cloud-api.mjs','royale/cloud-saves.mjs','royale/cloud-validation.mjs','royale/shared-clock.mjs','royale/saves.mjs','royale/legendary-ledger.mjs','royale/legendary-state.mjs','royale/equipment.mjs','royale/costume-catalog.mjs','royale/legendary-data.mjs','royale/boss-data.mjs','royale/bosses.mjs','royale/legendary-bosses.mjs','royale/merge-powers.mjs','royale/progression.mjs','royale/powers.mjs','royale/world-state.mjs'];
+assert.equal(git('diff','--name-only',base,'--',...protectedPaths),'','Established combat/data/auth systems must remain unchanged');
+for(const file of [...BOSS_ART_DEPENDENCIES,'assets/animation/motion-core.js'])assert.deepEqual(readFileSync(file),execFileSync('git',['show',`${base}:${file}`],{maxBuffer:32*1024*1024}));
+assert.equal(git('diff','--name-only',base,'--',':(exclude)royale'),'');
+console.log('PASS: Phase 9 is Royale-only; main, Story, Versus, 35 shared approved art/motion assets, combat balance tables, durable saves and unfinished authentication are unchanged.');

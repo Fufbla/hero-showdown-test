@@ -1,0 +1,17 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {createHash} from 'node:crypto';
+import {HAIR_CATALOG} from '../hair-catalog.mjs';
+import {sanitizeLook,HAIR_STYLES} from '../appearance.mjs';
+import {drawHero} from '../hero-art.mjs';
+import {drawDetailedHair,hairMotion} from '../hair-art.mjs';
+import {Game,STEP,decodeSave} from '../core.mjs';
+import {previewHero,PREVIEW_POSES} from '../hero-rig.mjs';
+import {appearanceQuote} from '../eris.mjs';
+const require=createRequire(import.meta.url),{createCanvas}=require('@napi-rs/canvas');
+test('42 new hairstyles have distinct actual raster silhouettes/details',()=>{assert.equal(HAIR_CATALOG.length,42);const hashes=new Set();for(const style of HAIR_CATALOG){const c=createCanvas(120,150),ctx=c.getContext('2d');ctx.translate(60,45);ctx.scale(2,2);const look=sanitizeLook({hair:style.id});drawDetailedHair(ctx,look,false,0,'rear');drawDetailedHair(ctx,look,false,0);const hash=createHash('sha256').update(c.toBuffer('image/png')).digest('hex');assert.ok(!hashes.has(hash),style.id+' duplicates another drawing');hashes.add(hash);}assert.equal(hashes.size,42);});
+test('every legacy and new hairstyle survives save round-trip without changing combat',()=>{for(const hair of HAIR_STYLES){const g=new Game({look:{hair}});const b=new Game();g.enemies=[];b.enemies=[];for(let i=0;i<30;i++){g.step(STEP,{move:1,jump:i===0});b.step(STEP,{move:1,jump:i===0});}assert.deepEqual(g.hero,b.hero);assert.equal(decodeSave(g.save()).look.hair,hair);}});
+test('all hairstyles render front/back through every animation and equipment overlay without mutating appearance',()=>{const c=createCanvas(300,300),ctx=c.getContext('2d');for(const style of HAIR_CATALOG)for(const view of ['front','back','game'])for(const pose of PREVIEW_POSES){const look=sanitizeLook({hair:style.id,presentation:view==='front'?'female':'male'}),before=JSON.stringify(look);drawHero(ctx,150,270,look,previewHero(pose,.15),.15,1.5,{view,outfit:{pieces:{helmet:{color:'#445566',accent:'#aabbcc'}}}});assert.equal(JSON.stringify(look),before);}});
+test('long hair follows motion with bounded lag; short hair stays stable',()=>{const owner={},h={face:1,vx:0,vy:0};hairMotion(owner,h,0,'long-locs');h.vx=315;const first=hairMotion(owner,h,.016,'long-locs');const second=hairMotion(owner,h,.032,'long-locs');assert.ok(Math.abs(second.wind)>Math.abs(first.wind));assert.ok(Math.abs(second.wind)<7);assert.equal(hairMotion({},h,0,'buzz').wind,0);});
+test('new cosmetic sliders use existing body/face price groups and keep equipment stats exact',()=>{const g=new Game(),before=JSON.stringify(g.hero);for(const key of ['waist','hips','chest','jaw']){const q=appearanceQuote(g.look,{...g.look,[key]:1.1});assert.equal(q.cost,key==='jaw'?200:300);assert.equal(q.next[key],1.1);}assert.equal(JSON.stringify(g.hero),before);});

@@ -1,0 +1,22 @@
+COMPLETE · all 20 viewport/suite runs passed.
+PASS · portrait · Input · 18 checks
+PASS · portrait · Creator · 140 checks
+PASS · portrait · Powers · 65 checks
+PASS · portrait · World · 52 checks
+PASS · landscape · Input · 18 checks
+PASS · landscape · Creator · 140 checks
+PASS · landscape · Powers · 65 checks
+PASS · landscape · World · 52 checks
+PASS · small · Input · 18 checks
+PASS · small · Creator · 140 checks
+PASS · small · Powers · 65 checks
+PASS · small · World · 52 checks
+PASS · tablet · Input · 18 checks
+PASS · tablet · Creator · 140 checks
+PASS · tablet · Powers · 65 checks
+PASS · tablet · World · 52 checks
+PASS · desktop · Input · 18 checks
+PASS · desktop · Creator · 140 checks
+PASS · desktop · Powers · 65 checks
+PASS · desktop · World · 52 checks
+Full results are in the Browser suite log below.

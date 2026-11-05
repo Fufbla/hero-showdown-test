@@ -1,0 +1,100 @@
+{
+  "regions": [
+    {
+      "region": 1,
+      "checks": 1967,
+      "passed": true,
+      "ms": 115.40000000596046,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 2,
+      "checks": 1967,
+      "passed": true,
+      "ms": 80.70000000298023,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 3,
+      "checks": 1911,
+      "passed": true,
+      "ms": 173,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 4,
+      "checks": 1967,
+      "passed": true,
+      "ms": 82.09999999403954,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 5,
+      "checks": 1967,
+      "passed": true,
+      "ms": 173.79999999701977,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 6,
+      "checks": 1855,
+      "passed": true,
+      "ms": 121,
+      "textureBytes": 20643840,
+      "errors": []
+    },
+    {
+      "region": 7,
+      "checks": 1967,
+      "passed": true,
+      "ms": 66.20000000298023,
+      "textureBytes": 20643840,
+      "errors": []
+    }
+  ],
+  "benchmarks": [
+    {
+      "region": 6,
+      "viewport": [
+        1300,
+        540
+      ],
+      "assetLoadMs": 11.5,
+      "atlasBuildMs": 7.600000008940697,
+      "simulationSeconds": 1.183333333333334,
+      "samples": 16,
+      "seconds": 10.447699999999998,
+      "averageFPS": 1.5314375412770278,
+      "onePercentLowFPS": 0.9837678307919331,
+      "meanStepAndDrawMs": 3.670588234768194,
+      "p95StepAndDrawMs": 21.700000002980232,
+      "cacheTextureBytes": 10321920,
+      "errors": []
+    },
+    {
+      "region": 6,
+      "viewport": [
+        390,
+        720
+      ],
+      "assetLoadMs": 52.29999999701977,
+      "atlasBuildMs": 7.0999999940395355,
+      "simulationSeconds": 1.0500000000000012,
+      "samples": 14,
+      "seconds": 10.231070000000006,
+      "averageFPS": 1.3683808242930593,
+      "onePercentLowFPS": 0.9837678307919331,
+      "meanStepAndDrawMs": 2.62000000278155,
+      "p95StepAndDrawMs": 12.400000005960464,
+      "cacheTextureBytes": 10321920,
+      "errors": []
+    }
+  ],
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "scope": "Cloud browser; no physical device claims"
+}

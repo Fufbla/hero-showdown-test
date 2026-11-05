@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "draws": 1793,
+  "assertions": 4929,
+  "hairstyles": 49,
+  "builds": 4,
+  "presentations": 2,
+  "poses": 25,
+  "textures": {
+    "ready": true,
+    "error": null,
+    "entries": 0,
+    "limit": 64
+  },
+  "faces": {
+    "faceEntries": 15,
+    "faceLimit": 24
+  },
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "scope": "Canvas render visibility, bounds and immutable appearance/equipment. Not physical-device or subjective animation approval."
+}

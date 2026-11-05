@@ -1,0 +1,8 @@
+{
+  "boss": "AtomDust",
+  "frames": 15,
+  "meanFrameMs": 702.0666666666667,
+  "p95FrameMs": 1016.5,
+  "averageFPS": 1.424366157060108,
+  "scope": "Browser animation preview, not full-game or physical-device performance"
+}

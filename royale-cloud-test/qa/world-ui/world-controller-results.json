@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "controller": "Synthetic standard Gamepad API",
+  "checks": [
+    "target cycle",
+    "Root pickup",
+    "held Interact produces one pickup",
+    "second press equipment pickup",
+    "portal not activated"
+  ],
+  "physicalDevice": false
+}

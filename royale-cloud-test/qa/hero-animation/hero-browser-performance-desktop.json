@@ -1,0 +1,30 @@
+{
+  "hero": "Coast Guardian",
+  "region": 1,
+  "viewport": [
+    1296,
+    540
+  ],
+  "scope": "Cloud browser sample; no physical-device claim",
+  "visibility": [
+    "visible"
+  ],
+  "focused": true,
+  "seconds": 12.030699999999998,
+  "samples": 20,
+  "averageFPS": 1.6624136583906177,
+  "onePercentLowFPS": 0.9837678307919331,
+  "meanStepAndDrawMs": 8.938095238591943,
+  "p95StepAndDrawMs": 34.100000001490116,
+  "assetPreparationMs": 63.29999999701977,
+  "simulationSeconds": 1.4666666666666666,
+  "maxEnemies": 24,
+  "maxEffects": 5,
+  "creatureErrors": [],
+  "heroMaterials": {
+    "ready": true,
+    "error": null,
+    "cacheEntries": 48,
+    "source": "/royale/assets/hero/ink-materials.png"
+  }
+}

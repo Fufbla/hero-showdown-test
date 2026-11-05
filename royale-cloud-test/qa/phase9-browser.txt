@@ -1,0 +1,595 @@
+PASS · 390 Coastal Beginnings: HUD and touch controls visible
+PASS · 390 Coastal Beginnings: no horizontal overflow
+PASS · 390 Coastal Beginnings tier 1: real touch handler lands and resets double jump
+PASS · 390 Coastal Beginnings tier 1: vertical camera contains hero
+PASS · 390 Coastal Beginnings tier 1: elevated monster has valid home
+PASS · 390 Coastal Beginnings tier 2: real touch handler lands and resets double jump
+PASS · 390 Coastal Beginnings tier 2: vertical camera contains hero
+PASS · 390 Coastal Beginnings tier 2: elevated monster has valid home
+PASS · 390 Coastal Beginnings tier 3: real touch handler lands and resets double jump
+PASS · 390 Coastal Beginnings tier 3: vertical camera contains hero
+PASS · 390 Coastal Beginnings tier 3: elevated monster has valid home
+PASS · 390 Coastal Beginnings tier 4: real touch handler lands and resets double jump
+PASS · 390 Coastal Beginnings tier 4: vertical camera contains hero
+PASS · 390 Coastal Beginnings tier 4: elevated monster has valid home
+PASS · 390 Coastal Beginnings: 50% threshold has no knockback or damage bonus
+PASS · 390 Coastal Beginnings: wounded elevated enemy remains active
+PASS · 390 Coastal Beginnings: bounded texture caches
+PASS · 390 Polluted Forest: HUD and touch controls visible
+PASS · 390 Polluted Forest: no horizontal overflow
+PASS · 390 Polluted Forest tier 1: real touch handler lands and resets double jump
+PASS · 390 Polluted Forest tier 1: vertical camera contains hero
+PASS · 390 Polluted Forest tier 1: elevated monster has valid home
+PASS · 390 Polluted Forest tier 2: real touch handler lands and resets double jump
+PASS · 390 Polluted Forest tier 2: vertical camera contains hero
+PASS · 390 Polluted Forest tier 2: elevated monster has valid home
+PASS · 390 Polluted Forest tier 3: real touch handler lands and resets double jump
+PASS · 390 Polluted Forest tier 3: vertical camera contains hero
+PASS · 390 Polluted Forest tier 3: elevated monster has valid home
+PASS · 390 Polluted Forest tier 4: real touch handler lands and resets double jump
+PASS · 390 Polluted Forest tier 4: vertical camera contains hero
+PASS · 390 Polluted Forest tier 4: elevated monster has valid home
+PASS · 390 Polluted Forest: 50% threshold has no knockback or damage bonus
+PASS · 390 Polluted Forest: wounded elevated enemy remains active
+PASS · 390 Polluted Forest: bounded texture caches
+PASS · 390 Industrial Wasteland: HUD and touch controls visible
+PASS · 390 Industrial Wasteland: no horizontal overflow
+PASS · 390 Industrial Wasteland tier 1: real touch handler lands and resets double jump
+PASS · 390 Industrial Wasteland tier 1: vertical camera contains hero
+PASS · 390 Industrial Wasteland tier 1: elevated monster has valid home
+PASS · 390 Industrial Wasteland tier 2: real touch handler lands and resets double jump
+PASS · 390 Industrial Wasteland tier 2: vertical camera contains hero
+PASS · 390 Industrial Wasteland tier 2: elevated monster has valid home
+PASS · 390 Industrial Wasteland tier 3: real touch handler lands and resets double jump
+PASS · 390 Industrial Wasteland tier 3: vertical camera contains hero
+PASS · 390 Industrial Wasteland tier 3: elevated monster has valid home
+PASS · 390 Industrial Wasteland tier 4: real touch handler lands and resets double jump
+PASS · 390 Industrial Wasteland tier 4: vertical camera contains hero
+PASS · 390 Industrial Wasteland tier 4: elevated monster has valid home
+PASS · 390 Industrial Wasteland: 50% threshold has no knockback or damage bonus
+PASS · 390 Industrial Wasteland: wounded elevated enemy remains active
+PASS · 390 Industrial Wasteland: bounded texture caches
+PASS · 390 Toxic Underground: HUD and touch controls visible
+PASS · 390 Toxic Underground: no horizontal overflow
+PASS · 390 Toxic Underground tier 1: real touch handler lands and resets double jump
+PASS · 390 Toxic Underground tier 1: vertical camera contains hero
+PASS · 390 Toxic Underground tier 1: elevated monster has valid home
+PASS · 390 Toxic Underground tier 2: real touch handler lands and resets double jump
+PASS · 390 Toxic Underground tier 2: vertical camera contains hero
+PASS · 390 Toxic Underground tier 2: elevated monster has valid home
+PASS · 390 Toxic Underground tier 3: real touch handler lands and resets double jump
+PASS · 390 Toxic Underground tier 3: vertical camera contains hero
+PASS · 390 Toxic Underground tier 3: elevated monster has valid home
+PASS · 390 Toxic Underground tier 4: real touch handler lands and resets double jump
+PASS · 390 Toxic Underground tier 4: vertical camera contains hero
+PASS · 390 Toxic Underground tier 4: elevated monster has valid home
+PASS · 390 Toxic Underground: 50% threshold has no knockback or damage bonus
+PASS · 390 Toxic Underground: wounded elevated enemy remains active
+PASS · 390 Toxic Underground: bounded texture caches
+PASS · 390 Mutated Territories: HUD and touch controls visible
+PASS · 390 Mutated Territories: no horizontal overflow
+PASS · 390 Mutated Territories tier 1: real touch handler lands and resets double jump
+PASS · 390 Mutated Territories tier 1: vertical camera contains hero
+PASS · 390 Mutated Territories tier 1: elevated monster has valid home
+PASS · 390 Mutated Territories tier 2: real touch handler lands and resets double jump
+PASS · 390 Mutated Territories tier 2: vertical camera contains hero
+PASS · 390 Mutated Territories tier 2: elevated monster has valid home
+PASS · 390 Mutated Territories tier 3: real touch handler lands and resets double jump
+PASS · 390 Mutated Territories tier 3: vertical camera contains hero
+PASS · 390 Mutated Territories tier 3: elevated monster has valid home
+PASS · 390 Mutated Territories tier 4: real touch handler lands and resets double jump
+PASS · 390 Mutated Territories tier 4: vertical camera contains hero
+PASS · 390 Mutated Territories tier 4: elevated monster has valid home
+PASS · 390 Mutated Territories: 50% threshold has no knockback or damage bonus
+PASS · 390 Mutated Territories: wounded elevated enemy remains active
+PASS · 390 Mutated Territories: bounded texture caches
+PASS · 390 Dark Energy Realm: HUD and touch controls visible
+PASS · 390 Dark Energy Realm: no horizontal overflow
+PASS · 390 Dark Energy Realm tier 1: real touch handler lands and resets double jump
+PASS · 390 Dark Energy Realm tier 1: vertical camera contains hero
+PASS · 390 Dark Energy Realm tier 1: elevated monster has valid home
+PASS · 390 Dark Energy Realm tier 2: real touch handler lands and resets double jump
+PASS · 390 Dark Energy Realm tier 2: vertical camera contains hero
+PASS · 390 Dark Energy Realm tier 2: elevated monster has valid home
+PASS · 390 Dark Energy Realm tier 3: real touch handler lands and resets double jump
+PASS · 390 Dark Energy Realm tier 3: vertical camera contains hero
+PASS · 390 Dark Energy Realm tier 3: elevated monster has valid home
+PASS · 390 Dark Energy Realm tier 4: real touch handler lands and resets double jump
+PASS · 390 Dark Energy Realm tier 4: vertical camera contains hero
+PASS · 390 Dark Energy Realm tier 4: elevated monster has valid home
+PASS · 390 Dark Energy Realm: 50% threshold has no knockback or damage bonus
+PASS · 390 Dark Energy Realm: wounded elevated enemy remains active
+PASS · 390 Dark Energy Realm: bounded texture caches
+PASS · 390 Final Showdown: HUD and touch controls visible
+PASS · 390 Final Showdown: no horizontal overflow
+PASS · 390 Final Showdown tier 1: real touch handler lands and resets double jump
+PASS · 390 Final Showdown tier 1: vertical camera contains hero
+PASS · 390 Final Showdown tier 1: elevated monster has valid home
+PASS · 390 Final Showdown tier 2: real touch handler lands and resets double jump
+PASS · 390 Final Showdown tier 2: vertical camera contains hero
+PASS · 390 Final Showdown tier 2: elevated monster has valid home
+PASS · 390 Final Showdown tier 3: real touch handler lands and resets double jump
+PASS · 390 Final Showdown tier 3: vertical camera contains hero
+PASS · 390 Final Showdown tier 3: elevated monster has valid home
+PASS · 390 Final Showdown tier 4: real touch handler lands and resets double jump
+PASS · 390 Final Showdown tier 4: vertical camera contains hero
+PASS · 390 Final Showdown tier 4: elevated monster has valid home
+PASS · 390 Final Showdown: 50% threshold has no knockback or damage bonus
+PASS · 390 Final Showdown: wounded elevated enemy remains active
+PASS · 390 Final Showdown: bounded texture caches
+PASS · 844 Coastal Beginnings: HUD and touch controls visible
+PASS · 844 Coastal Beginnings: no horizontal overflow
+PASS · 844 Coastal Beginnings tier 1: real touch handler lands and resets double jump
+PASS · 844 Coastal Beginnings tier 1: vertical camera contains hero
+PASS · 844 Coastal Beginnings tier 1: elevated monster has valid home
+PASS · 844 Coastal Beginnings tier 2: real touch handler lands and resets double jump
+PASS · 844 Coastal Beginnings tier 2: vertical camera contains hero
+PASS · 844 Coastal Beginnings tier 2: elevated monster has valid home
+PASS · 844 Coastal Beginnings tier 3: real touch handler lands and resets double jump
+PASS · 844 Coastal Beginnings tier 3: vertical camera contains hero
+PASS · 844 Coastal Beginnings tier 3: elevated monster has valid home
+PASS · 844 Coastal Beginnings tier 4: real touch handler lands and resets double jump
+PASS · 844 Coastal Beginnings tier 4: vertical camera contains hero
+PASS · 844 Coastal Beginnings tier 4: elevated monster has valid home
+PASS · 844 Coastal Beginnings: 50% threshold has no knockback or damage bonus
+PASS · 844 Coastal Beginnings: wounded elevated enemy remains active
+PASS · 844 Coastal Beginnings: bounded texture caches
+PASS · 844 Polluted Forest: HUD and touch controls visible
+PASS · 844 Polluted Forest: no horizontal overflow
+PASS · 844 Polluted Forest tier 1: real touch handler lands and resets double jump
+PASS · 844 Polluted Forest tier 1: vertical camera contains hero
+PASS · 844 Polluted Forest tier 1: elevated monster has valid home
+PASS · 844 Polluted Forest tier 2: real touch handler lands and resets double jump
+PASS · 844 Polluted Forest tier 2: vertical camera contains hero
+PASS · 844 Polluted Forest tier 2: elevated monster has valid home
+PASS · 844 Polluted Forest tier 3: real touch handler lands and resets double jump
+PASS · 844 Polluted Forest tier 3: vertical camera contains hero
+PASS · 844 Polluted Forest tier 3: elevated monster has valid home
+PASS · 844 Polluted Forest tier 4: real touch handler lands and resets double jump
+PASS · 844 Polluted Forest tier 4: vertical camera contains hero
+PASS · 844 Polluted Forest tier 4: elevated monster has valid home
+PASS · 844 Polluted Forest: 50% threshold has no knockback or damage bonus
+PASS · 844 Polluted Forest: wounded elevated enemy remains active
+PASS · 844 Polluted Forest: bounded texture caches
+PASS · 844 Industrial Wasteland: HUD and touch controls visible
+PASS · 844 Industrial Wasteland: no horizontal overflow
+PASS · 844 Industrial Wasteland tier 1: real touch handler lands and resets double jump
+PASS · 844 Industrial Wasteland tier 1: vertical camera contains hero
+PASS · 844 Industrial Wasteland tier 1: elevated monster has valid home
+PASS · 844 Industrial Wasteland tier 2: real touch handler lands and resets double jump
+PASS · 844 Industrial Wasteland tier 2: vertical camera contains hero
+PASS · 844 Industrial Wasteland tier 2: elevated monster has valid home
+PASS · 844 Industrial Wasteland tier 3: real touch handler lands and resets double jump
+PASS · 844 Industrial Wasteland tier 3: vertical camera contains hero
+PASS · 844 Industrial Wasteland tier 3: elevated monster has valid home
+PASS · 844 Industrial Wasteland tier 4: real touch handler lands and resets double jump
+PASS · 844 Industrial Wasteland tier 4: vertical camera contains hero
+PASS · 844 Industrial Wasteland tier 4: elevated monster has valid home
+PASS · 844 Industrial Wasteland: 50% threshold has no knockback or damage bonus
+PASS · 844 Industrial Wasteland: wounded elevated enemy remains active
+PASS · 844 Industrial Wasteland: bounded texture caches
+PASS · 844 Toxic Underground: HUD and touch controls visible
+PASS · 844 Toxic Underground: no horizontal overflow
+PASS · 844 Toxic Underground tier 1: real touch handler lands and resets double jump
+PASS · 844 Toxic Underground tier 1: vertical camera contains hero
+PASS · 844 Toxic Underground tier 1: elevated monster has valid home
+PASS · 844 Toxic Underground tier 2: real touch handler lands and resets double jump
+PASS · 844 Toxic Underground tier 2: vertical camera contains hero
+PASS · 844 Toxic Underground tier 2: elevated monster has valid home
+PASS · 844 Toxic Underground tier 3: real touch handler lands and resets double jump
+PASS · 844 Toxic Underground tier 3: vertical camera contains hero
+PASS · 844 Toxic Underground tier 3: elevated monster has valid home
+PASS · 844 Toxic Underground tier 4: real touch handler lands and resets double jump
+PASS · 844 Toxic Underground tier 4: vertical camera contains hero
+PASS · 844 Toxic Underground tier 4: elevated monster has valid home
+PASS · 844 Toxic Underground: 50% threshold has no knockback or damage bonus
+PASS · 844 Toxic Underground: wounded elevated enemy remains active
+PASS · 844 Toxic Underground: bounded texture caches
+PASS · 844 Mutated Territories: HUD and touch controls visible
+PASS · 844 Mutated Territories: no horizontal overflow
+PASS · 844 Mutated Territories tier 1: real touch handler lands and resets double jump
+PASS · 844 Mutated Territories tier 1: vertical camera contains hero
+PASS · 844 Mutated Territories tier 1: elevated monster has valid home
+PASS · 844 Mutated Territories tier 2: real touch handler lands and resets double jump
+PASS · 844 Mutated Territories tier 2: vertical camera contains hero
+PASS · 844 Mutated Territories tier 2: elevated monster has valid home
+PASS · 844 Mutated Territories tier 3: real touch handler lands and resets double jump
+PASS · 844 Mutated Territories tier 3: vertical camera contains hero
+PASS · 844 Mutated Territories tier 3: elevated monster has valid home
+PASS · 844 Mutated Territories tier 4: real touch handler lands and resets double jump
+PASS · 844 Mutated Territories tier 4: vertical camera contains hero
+PASS · 844 Mutated Territories tier 4: elevated monster has valid home
+PASS · 844 Mutated Territories: 50% threshold has no knockback or damage bonus
+PASS · 844 Mutated Territories: wounded elevated enemy remains active
+PASS · 844 Mutated Territories: bounded texture caches
+PASS · 844 Dark Energy Realm: HUD and touch controls visible
+PASS · 844 Dark Energy Realm: no horizontal overflow
+PASS · 844 Dark Energy Realm tier 1: real touch handler lands and resets double jump
+PASS · 844 Dark Energy Realm tier 1: vertical camera contains hero
+PASS · 844 Dark Energy Realm tier 1: elevated monster has valid home
+PASS · 844 Dark Energy Realm tier 2: real touch handler lands and resets double jump
+PASS · 844 Dark Energy Realm tier 2: vertical camera contains hero
+PASS · 844 Dark Energy Realm tier 2: elevated monster has valid home
+PASS · 844 Dark Energy Realm tier 3: real touch handler lands and resets double jump
+PASS · 844 Dark Energy Realm tier 3: vertical camera contains hero
+PASS · 844 Dark Energy Realm tier 3: elevated monster has valid home
+PASS · 844 Dark Energy Realm tier 4: real touch handler lands and resets double jump
+PASS · 844 Dark Energy Realm tier 4: vertical camera contains hero
+PASS · 844 Dark Energy Realm tier 4: elevated monster has valid home
+PASS · 844 Dark Energy Realm: 50% threshold has no knockback or damage bonus
+PASS · 844 Dark Energy Realm: wounded elevated enemy remains active
+PASS · 844 Dark Energy Realm: bounded texture caches
+PASS · 844 Final Showdown: HUD and touch controls visible
+PASS · 844 Final Showdown: no horizontal overflow
+PASS · 844 Final Showdown tier 1: real touch handler lands and resets double jump
+PASS · 844 Final Showdown tier 1: vertical camera contains hero
+PASS · 844 Final Showdown tier 1: elevated monster has valid home
+PASS · 844 Final Showdown tier 2: real touch handler lands and resets double jump
+PASS · 844 Final Showdown tier 2: vertical camera contains hero
+PASS · 844 Final Showdown tier 2: elevated monster has valid home
+PASS · 844 Final Showdown tier 3: real touch handler lands and resets double jump
+PASS · 844 Final Showdown tier 3: vertical camera contains hero
+PASS · 844 Final Showdown tier 3: elevated monster has valid home
+PASS · 844 Final Showdown tier 4: real touch handler lands and resets double jump
+PASS · 844 Final Showdown tier 4: vertical camera contains hero
+PASS · 844 Final Showdown tier 4: elevated monster has valid home
+PASS · 844 Final Showdown: 50% threshold has no knockback or damage bonus
+PASS · 844 Final Showdown: wounded elevated enemy remains active
+PASS · 844 Final Showdown: bounded texture caches
+PASS · 320 Coastal Beginnings: HUD and touch controls visible
+PASS · 320 Coastal Beginnings: no horizontal overflow
+PASS · 320 Coastal Beginnings tier 1: real touch handler lands and resets double jump
+PASS · 320 Coastal Beginnings tier 1: vertical camera contains hero
+PASS · 320 Coastal Beginnings tier 1: elevated monster has valid home
+PASS · 320 Coastal Beginnings tier 2: real touch handler lands and resets double jump
+PASS · 320 Coastal Beginnings tier 2: vertical camera contains hero
+PASS · 320 Coastal Beginnings tier 2: elevated monster has valid home
+PASS · 320 Coastal Beginnings tier 3: real touch handler lands and resets double jump
+PASS · 320 Coastal Beginnings tier 3: vertical camera contains hero
+PASS · 320 Coastal Beginnings tier 3: elevated monster has valid home
+PASS · 320 Coastal Beginnings tier 4: real touch handler lands and resets double jump
+PASS · 320 Coastal Beginnings tier 4: vertical camera contains hero
+PASS · 320 Coastal Beginnings tier 4: elevated monster has valid home
+PASS · 320 Coastal Beginnings: 50% threshold has no knockback or damage bonus
+PASS · 320 Coastal Beginnings: wounded elevated enemy remains active
+PASS · 320 Coastal Beginnings: bounded texture caches
+PASS · 320 Polluted Forest: HUD and touch controls visible
+PASS · 320 Polluted Forest: no horizontal overflow
+PASS · 320 Polluted Forest tier 1: real touch handler lands and resets double jump
+PASS · 320 Polluted Forest tier 1: vertical camera contains hero
+PASS · 320 Polluted Forest tier 1: elevated monster has valid home
+PASS · 320 Polluted Forest tier 2: real touch handler lands and resets double jump
+PASS · 320 Polluted Forest tier 2: vertical camera contains hero
+PASS · 320 Polluted Forest tier 2: elevated monster has valid home
+PASS · 320 Polluted Forest tier 3: real touch handler lands and resets double jump
+PASS · 320 Polluted Forest tier 3: vertical camera contains hero
+PASS · 320 Polluted Forest tier 3: elevated monster has valid home
+PASS · 320 Polluted Forest tier 4: real touch handler lands and resets double jump
+PASS · 320 Polluted Forest tier 4: vertical camera contains hero
+PASS · 320 Polluted Forest tier 4: elevated monster has valid home
+PASS · 320 Polluted Forest: 50% threshold has no knockback or damage bonus
+PASS · 320 Polluted Forest: wounded elevated enemy remains active
+PASS · 320 Polluted Forest: bounded texture caches
+PASS · 320 Industrial Wasteland: HUD and touch controls visible
+PASS · 320 Industrial Wasteland: no horizontal overflow
+PASS · 320 Industrial Wasteland tier 1: real touch handler lands and resets double jump
+PASS · 320 Industrial Wasteland tier 1: vertical camera contains hero
+PASS · 320 Industrial Wasteland tier 1: elevated monster has valid home
+PASS · 320 Industrial Wasteland tier 2: real touch handler lands and resets double jump
+PASS · 320 Industrial Wasteland tier 2: vertical camera contains hero
+PASS · 320 Industrial Wasteland tier 2: elevated monster has valid home
+PASS · 320 Industrial Wasteland tier 3: real touch handler lands and resets double jump
+PASS · 320 Industrial Wasteland tier 3: vertical camera contains hero
+PASS · 320 Industrial Wasteland tier 3: elevated monster has valid home
+PASS · 320 Industrial Wasteland tier 4: real touch handler lands and resets double jump
+PASS · 320 Industrial Wasteland tier 4: vertical camera contains hero
+PASS · 320 Industrial Wasteland tier 4: elevated monster has valid home
+PASS · 320 Industrial Wasteland: 50% threshold has no knockback or damage bonus
+PASS · 320 Industrial Wasteland: wounded elevated enemy remains active
+PASS · 320 Industrial Wasteland: bounded texture caches
+PASS · 320 Toxic Underground: HUD and touch controls visible
+PASS · 320 Toxic Underground: no horizontal overflow
+PASS · 320 Toxic Underground tier 1: real touch handler lands and resets double jump
+PASS · 320 Toxic Underground tier 1: vertical camera contains hero
+PASS · 320 Toxic Underground tier 1: elevated monster has valid home
+PASS · 320 Toxic Underground tier 2: real touch handler lands and resets double jump
+PASS · 320 Toxic Underground tier 2: vertical camera contains hero
+PASS · 320 Toxic Underground tier 2: elevated monster has valid home
+PASS · 320 Toxic Underground tier 3: real touch handler lands and resets double jump
+PASS · 320 Toxic Underground tier 3: vertical camera contains hero
+PASS · 320 Toxic Underground tier 3: elevated monster has valid home
+PASS · 320 Toxic Underground tier 4: real touch handler lands and resets double jump
+PASS · 320 Toxic Underground tier 4: vertical camera contains hero
+PASS · 320 Toxic Underground tier 4: elevated monster has valid home
+PASS · 320 Toxic Underground: 50% threshold has no knockback or damage bonus
+PASS · 320 Toxic Underground: wounded elevated enemy remains active
+PASS · 320 Toxic Underground: bounded texture caches
+PASS · 320 Mutated Territories: HUD and touch controls visible
+PASS · 320 Mutated Territories: no horizontal overflow
+PASS · 320 Mutated Territories tier 1: real touch handler lands and resets double jump
+PASS · 320 Mutated Territories tier 1: vertical camera contains hero
+PASS · 320 Mutated Territories tier 1: elevated monster has valid home
+PASS · 320 Mutated Territories tier 2: real touch handler lands and resets double jump
+PASS · 320 Mutated Territories tier 2: vertical camera contains hero
+PASS · 320 Mutated Territories tier 2: elevated monster has valid home
+PASS · 320 Mutated Territories tier 3: real touch handler lands and resets double jump
+PASS · 320 Mutated Territories tier 3: vertical camera contains hero
+PASS · 320 Mutated Territories tier 3: elevated monster has valid home
+PASS · 320 Mutated Territories tier 4: real touch handler lands and resets double jump
+PASS · 320 Mutated Territories tier 4: vertical camera contains hero
+PASS · 320 Mutated Territories tier 4: elevated monster has valid home
+PASS · 320 Mutated Territories: 50% threshold has no knockback or damage bonus
+PASS · 320 Mutated Territories: wounded elevated enemy remains active
+PASS · 320 Mutated Territories: bounded texture caches
+PASS · 320 Dark Energy Realm: HUD and touch controls visible
+PASS · 320 Dark Energy Realm: no horizontal overflow
+PASS · 320 Dark Energy Realm tier 1: real touch handler lands and resets double jump
+PASS · 320 Dark Energy Realm tier 1: vertical camera contains hero
+PASS · 320 Dark Energy Realm tier 1: elevated monster has valid home
+PASS · 320 Dark Energy Realm tier 2: real touch handler lands and resets double jump
+PASS · 320 Dark Energy Realm tier 2: vertical camera contains hero
+PASS · 320 Dark Energy Realm tier 2: elevated monster has valid home
+PASS · 320 Dark Energy Realm tier 3: real touch handler lands and resets double jump
+PASS · 320 Dark Energy Realm tier 3: vertical camera contains hero
+PASS · 320 Dark Energy Realm tier 3: elevated monster has valid home
+PASS · 320 Dark Energy Realm tier 4: real touch handler lands and resets double jump
+PASS · 320 Dark Energy Realm tier 4: vertical camera contains hero
+PASS · 320 Dark Energy Realm tier 4: elevated monster has valid home
+PASS · 320 Dark Energy Realm: 50% threshold has no knockback or damage bonus
+PASS · 320 Dark Energy Realm: wounded elevated enemy remains active
+PASS · 320 Dark Energy Realm: bounded texture caches
+PASS · 320 Final Showdown: HUD and touch controls visible
+PASS · 320 Final Showdown: no horizontal overflow
+PASS · 320 Final Showdown tier 1: real touch handler lands and resets double jump
+PASS · 320 Final Showdown tier 1: vertical camera contains hero
+PASS · 320 Final Showdown tier 1: elevated monster has valid home
+PASS · 320 Final Showdown tier 2: real touch handler lands and resets double jump
+PASS · 320 Final Showdown tier 2: vertical camera contains hero
+PASS · 320 Final Showdown tier 2: elevated monster has valid home
+PASS · 320 Final Showdown tier 3: real touch handler lands and resets double jump
+PASS · 320 Final Showdown tier 3: vertical camera contains hero
+PASS · 320 Final Showdown tier 3: elevated monster has valid home
+PASS · 320 Final Showdown tier 4: real touch handler lands and resets double jump
+PASS · 320 Final Showdown tier 4: vertical camera contains hero
+PASS · 320 Final Showdown tier 4: elevated monster has valid home
+PASS · 320 Final Showdown: 50% threshold has no knockback or damage bonus
+PASS · 320 Final Showdown: wounded elevated enemy remains active
+PASS · 320 Final Showdown: bounded texture caches
+PASS · 768 Coastal Beginnings: HUD and touch controls visible
+PASS · 768 Coastal Beginnings: no horizontal overflow
+PASS · 768 Coastal Beginnings tier 1: real keyboard handler lands and resets double jump
+PASS · 768 Coastal Beginnings tier 1: vertical camera contains hero
+PASS · 768 Coastal Beginnings tier 1: elevated monster has valid home
+PASS · 768 Coastal Beginnings tier 2: real keyboard handler lands and resets double jump
+PASS · 768 Coastal Beginnings tier 2: vertical camera contains hero
+PASS · 768 Coastal Beginnings tier 2: elevated monster has valid home
+PASS · 768 Coastal Beginnings tier 3: real keyboard handler lands and resets double jump
+PASS · 768 Coastal Beginnings tier 3: vertical camera contains hero
+PASS · 768 Coastal Beginnings tier 3: elevated monster has valid home
+PASS · 768 Coastal Beginnings tier 4: real keyboard handler lands and resets double jump
+PASS · 768 Coastal Beginnings tier 4: vertical camera contains hero
+PASS · 768 Coastal Beginnings tier 4: elevated monster has valid home
+PASS · 768 Coastal Beginnings: 50% threshold has no knockback or damage bonus
+PASS · 768 Coastal Beginnings: wounded elevated enemy remains active
+PASS · 768 Coastal Beginnings: bounded texture caches
+PASS · 768 Polluted Forest: HUD and touch controls visible
+PASS · 768 Polluted Forest: no horizontal overflow
+PASS · 768 Polluted Forest tier 1: real keyboard handler lands and resets double jump
+PASS · 768 Polluted Forest tier 1: vertical camera contains hero
+PASS · 768 Polluted Forest tier 1: elevated monster has valid home
+PASS · 768 Polluted Forest tier 2: real keyboard handler lands and resets double jump
+PASS · 768 Polluted Forest tier 2: vertical camera contains hero
+PASS · 768 Polluted Forest tier 2: elevated monster has valid home
+PASS · 768 Polluted Forest tier 3: real keyboard handler lands and resets double jump
+PASS · 768 Polluted Forest tier 3: vertical camera contains hero
+PASS · 768 Polluted Forest tier 3: elevated monster has valid home
+PASS · 768 Polluted Forest tier 4: real keyboard handler lands and resets double jump
+PASS · 768 Polluted Forest tier 4: vertical camera contains hero
+PASS · 768 Polluted Forest tier 4: elevated monster has valid home
+PASS · 768 Polluted Forest: 50% threshold has no knockback or damage bonus
+PASS · 768 Polluted Forest: wounded elevated enemy remains active
+PASS · 768 Polluted Forest: bounded texture caches
+PASS · 768 Industrial Wasteland: HUD and touch controls visible
+PASS · 768 Industrial Wasteland: no horizontal overflow
+PASS · 768 Industrial Wasteland tier 1: real keyboard handler lands and resets double jump
+PASS · 768 Industrial Wasteland tier 1: vertical camera contains hero
+PASS · 768 Industrial Wasteland tier 1: elevated monster has valid home
+PASS · 768 Industrial Wasteland tier 2: real keyboard handler lands and resets double jump
+PASS · 768 Industrial Wasteland tier 2: vertical camera contains hero
+PASS · 768 Industrial Wasteland tier 2: elevated monster has valid home
+PASS · 768 Industrial Wasteland tier 3: real keyboard handler lands and resets double jump
+PASS · 768 Industrial Wasteland tier 3: vertical camera contains hero
+PASS · 768 Industrial Wasteland tier 3: elevated monster has valid home
+PASS · 768 Industrial Wasteland tier 4: real keyboard handler lands and resets double jump
+PASS · 768 Industrial Wasteland tier 4: vertical camera contains hero
+PASS · 768 Industrial Wasteland tier 4: elevated monster has valid home
+PASS · 768 Industrial Wasteland: 50% threshold has no knockback or damage bonus
+PASS · 768 Industrial Wasteland: wounded elevated enemy remains active
+PASS · 768 Industrial Wasteland: bounded texture caches
+PASS · 768 Toxic Underground: HUD and touch controls visible
+PASS · 768 Toxic Underground: no horizontal overflow
+PASS · 768 Toxic Underground tier 1: real keyboard handler lands and resets double jump
+PASS · 768 Toxic Underground tier 1: vertical camera contains hero
+PASS · 768 Toxic Underground tier 1: elevated monster has valid home
+PASS · 768 Toxic Underground tier 2: real keyboard handler lands and resets double jump
+PASS · 768 Toxic Underground tier 2: vertical camera contains hero
+PASS · 768 Toxic Underground tier 2: elevated monster has valid home
+PASS · 768 Toxic Underground tier 3: real keyboard handler lands and resets double jump
+PASS · 768 Toxic Underground tier 3: vertical camera contains hero
+PASS · 768 Toxic Underground tier 3: elevated monster has valid home
+PASS · 768 Toxic Underground tier 4: real keyboard handler lands and resets double jump
+PASS · 768 Toxic Underground tier 4: vertical camera contains hero
+PASS · 768 Toxic Underground tier 4: elevated monster has valid home
+PASS · 768 Toxic Underground: 50% threshold has no knockback or damage bonus
+PASS · 768 Toxic Underground: wounded elevated enemy remains active
+PASS · 768 Toxic Underground: bounded texture caches
+PASS · 768 Mutated Territories: HUD and touch controls visible
+PASS · 768 Mutated Territories: no horizontal overflow
+PASS · 768 Mutated Territories tier 1: real keyboard handler lands and resets double jump
+PASS · 768 Mutated Territories tier 1: vertical camera contains hero
+PASS · 768 Mutated Territories tier 1: elevated monster has valid home
+PASS · 768 Mutated Territories tier 2: real keyboard handler lands and resets double jump
+PASS · 768 Mutated Territories tier 2: vertical camera contains hero
+PASS · 768 Mutated Territories tier 2: elevated monster has valid home
+PASS · 768 Mutated Territories tier 3: real keyboard handler lands and resets double jump
+PASS · 768 Mutated Territories tier 3: vertical camera contains hero
+PASS · 768 Mutated Territories tier 3: elevated monster has valid home
+PASS · 768 Mutated Territories tier 4: real keyboard handler lands and resets double jump
+PASS · 768 Mutated Territories tier 4: vertical camera contains hero
+PASS · 768 Mutated Territories tier 4: elevated monster has valid home
+PASS · 768 Mutated Territories: 50% threshold has no knockback or damage bonus
+PASS · 768 Mutated Territories: wounded elevated enemy remains active
+PASS · 768 Mutated Territories: bounded texture caches
+PASS · 768 Dark Energy Realm: HUD and touch controls visible
+PASS · 768 Dark Energy Realm: no horizontal overflow
+PASS · 768 Dark Energy Realm tier 1: real keyboard handler lands and resets double jump
+PASS · 768 Dark Energy Realm tier 1: vertical camera contains hero
+PASS · 768 Dark Energy Realm tier 1: elevated monster has valid home
+PASS · 768 Dark Energy Realm tier 2: real keyboard handler lands and resets double jump
+PASS · 768 Dark Energy Realm tier 2: vertical camera contains hero
+PASS · 768 Dark Energy Realm tier 2: elevated monster has valid home
+PASS · 768 Dark Energy Realm tier 3: real keyboard handler lands and resets double jump
+PASS · 768 Dark Energy Realm tier 3: vertical camera contains hero
+PASS · 768 Dark Energy Realm tier 3: elevated monster has valid home
+PASS · 768 Dark Energy Realm tier 4: real keyboard handler lands and resets double jump
+PASS · 768 Dark Energy Realm tier 4: vertical camera contains hero
+PASS · 768 Dark Energy Realm tier 4: elevated monster has valid home
+PASS · 768 Dark Energy Realm: 50% threshold has no knockback or damage bonus
+PASS · 768 Dark Energy Realm: wounded elevated enemy remains active
+PASS · 768 Dark Energy Realm: bounded texture caches
+PASS · 768 Final Showdown: HUD and touch controls visible
+PASS · 768 Final Showdown: no horizontal overflow
+PASS · 768 Final Showdown tier 1: real keyboard handler lands and resets double jump
+PASS · 768 Final Showdown tier 1: vertical camera contains hero
+PASS · 768 Final Showdown tier 1: elevated monster has valid home
+PASS · 768 Final Showdown tier 2: real keyboard handler lands and resets double jump
+PASS · 768 Final Showdown tier 2: vertical camera contains hero
+PASS · 768 Final Showdown tier 2: elevated monster has valid home
+PASS · 768 Final Showdown tier 3: real keyboard handler lands and resets double jump
+PASS · 768 Final Showdown tier 3: vertical camera contains hero
+PASS · 768 Final Showdown tier 3: elevated monster has valid home
+PASS · 768 Final Showdown tier 4: real keyboard handler lands and resets double jump
+PASS · 768 Final Showdown tier 4: vertical camera contains hero
+PASS · 768 Final Showdown tier 4: elevated monster has valid home
+PASS · 768 Final Showdown: 50% threshold has no knockback or damage bonus
+PASS · 768 Final Showdown: wounded elevated enemy remains active
+PASS · 768 Final Showdown: bounded texture caches
+PASS · 1280 Coastal Beginnings: HUD and touch controls visible
+PASS · 1280 Coastal Beginnings: no horizontal overflow
+PASS · 1280 Coastal Beginnings tier 1: real controller handler lands and resets double jump
+PASS · 1280 Coastal Beginnings tier 1: vertical camera contains hero
+PASS · 1280 Coastal Beginnings tier 1: elevated monster has valid home
+PASS · 1280 Coastal Beginnings tier 2: real controller handler lands and resets double jump
+PASS · 1280 Coastal Beginnings tier 2: vertical camera contains hero
+PASS · 1280 Coastal Beginnings tier 2: elevated monster has valid home
+PASS · 1280 Coastal Beginnings tier 3: real controller handler lands and resets double jump
+PASS · 1280 Coastal Beginnings tier 3: vertical camera contains hero
+PASS · 1280 Coastal Beginnings tier 3: elevated monster has valid home
+PASS · 1280 Coastal Beginnings tier 4: real controller handler lands and resets double jump
+PASS · 1280 Coastal Beginnings tier 4: vertical camera contains hero
+PASS · 1280 Coastal Beginnings tier 4: elevated monster has valid home
+PASS · 1280 Coastal Beginnings: 50% threshold has no knockback or damage bonus
+PASS · 1280 Coastal Beginnings: wounded elevated enemy remains active
+PASS · 1280 Coastal Beginnings: bounded texture caches
+PASS · 1280 Polluted Forest: HUD and touch controls visible
+PASS · 1280 Polluted Forest: no horizontal overflow
+PASS · 1280 Polluted Forest tier 1: real controller handler lands and resets double jump
+PASS · 1280 Polluted Forest tier 1: vertical camera contains hero
+PASS · 1280 Polluted Forest tier 1: elevated monster has valid home
+PASS · 1280 Polluted Forest tier 2: real controller handler lands and resets double jump
+PASS · 1280 Polluted Forest tier 2: vertical camera contains hero
+PASS · 1280 Polluted Forest tier 2: elevated monster has valid home
+PASS · 1280 Polluted Forest tier 3: real controller handler lands and resets double jump
+PASS · 1280 Polluted Forest tier 3: vertical camera contains hero
+PASS · 1280 Polluted Forest tier 3: elevated monster has valid home
+PASS · 1280 Polluted Forest tier 4: real controller handler lands and resets double jump
+PASS · 1280 Polluted Forest tier 4: vertical camera contains hero
+PASS · 1280 Polluted Forest tier 4: elevated monster has valid home
+PASS · 1280 Polluted Forest: 50% threshold has no knockback or damage bonus
+PASS · 1280 Polluted Forest: wounded elevated enemy remains active
+PASS · 1280 Polluted Forest: bounded texture caches
+PASS · 1280 Industrial Wasteland: HUD and touch controls visible
+PASS · 1280 Industrial Wasteland: no horizontal overflow
+PASS · 1280 Industrial Wasteland tier 1: real controller handler lands and resets double jump
+PASS · 1280 Industrial Wasteland tier 1: vertical camera contains hero
+PASS · 1280 Industrial Wasteland tier 1: elevated monster has valid home
+PASS · 1280 Industrial Wasteland tier 2: real controller handler lands and resets double jump
+PASS · 1280 Industrial Wasteland tier 2: vertical camera contains hero
+PASS · 1280 Industrial Wasteland tier 2: elevated monster has valid home
+PASS · 1280 Industrial Wasteland tier 3: real controller handler lands and resets double jump
+PASS · 1280 Industrial Wasteland tier 3: vertical camera contains hero
+PASS · 1280 Industrial Wasteland tier 3: elevated monster has valid home
+PASS · 1280 Industrial Wasteland tier 4: real controller handler lands and resets double jump
+PASS · 1280 Industrial Wasteland tier 4: vertical camera contains hero
+PASS · 1280 Industrial Wasteland tier 4: elevated monster has valid home
+PASS · 1280 Industrial Wasteland: 50% threshold has no knockback or damage bonus
+PASS · 1280 Industrial Wasteland: wounded elevated enemy remains active
+PASS · 1280 Industrial Wasteland: bounded texture caches
+PASS · 1280 Toxic Underground: HUD and touch controls visible
+PASS · 1280 Toxic Underground: no horizontal overflow
+PASS · 1280 Toxic Underground tier 1: real controller handler lands and resets double jump
+PASS · 1280 Toxic Underground tier 1: vertical camera contains hero
+PASS · 1280 Toxic Underground tier 1: elevated monster has valid home
+PASS · 1280 Toxic Underground tier 2: real controller handler lands and resets double jump
+PASS · 1280 Toxic Underground tier 2: vertical camera contains hero
+PASS · 1280 Toxic Underground tier 2: elevated monster has valid home
+PASS · 1280 Toxic Underground tier 3: real controller handler lands and resets double jump
+PASS · 1280 Toxic Underground tier 3: vertical camera contains hero
+PASS · 1280 Toxic Underground tier 3: elevated monster has valid home
+PASS · 1280 Toxic Underground tier 4: real controller handler lands and resets double jump
+PASS · 1280 Toxic Underground tier 4: vertical camera contains hero
+PASS · 1280 Toxic Underground tier 4: elevated monster has valid home
+PASS · 1280 Toxic Underground: 50% threshold has no knockback or damage bonus
+PASS · 1280 Toxic Underground: wounded elevated enemy remains active
+PASS · 1280 Toxic Underground: bounded texture caches
+PASS · 1280 Mutated Territories: HUD and touch controls visible
+PASS · 1280 Mutated Territories: no horizontal overflow
+PASS · 1280 Mutated Territories tier 1: real controller handler lands and resets double jump
+PASS · 1280 Mutated Territories tier 1: vertical camera contains hero
+PASS · 1280 Mutated Territories tier 1: elevated monster has valid home
+PASS · 1280 Mutated Territories tier 2: real controller handler lands and resets double jump
+PASS · 1280 Mutated Territories tier 2: vertical camera contains hero
+PASS · 1280 Mutated Territories tier 2: elevated monster has valid home
+PASS · 1280 Mutated Territories tier 3: real controller handler lands and resets double jump
+PASS · 1280 Mutated Territories tier 3: vertical camera contains hero
+PASS · 1280 Mutated Territories tier 3: elevated monster has valid home
+PASS · 1280 Mutated Territories tier 4: real controller handler lands and resets double jump
+PASS · 1280 Mutated Territories tier 4: vertical camera contains hero
+PASS · 1280 Mutated Territories tier 4: elevated monster has valid home
+PASS · 1280 Mutated Territories: 50% threshold has no knockback or damage bonus
+PASS · 1280 Mutated Territories: wounded elevated enemy remains active
+PASS · 1280 Mutated Territories: bounded texture caches
+PASS · 1280 Dark Energy Realm: HUD and touch controls visible
+PASS · 1280 Dark Energy Realm: no horizontal overflow
+PASS · 1280 Dark Energy Realm tier 1: real controller handler lands and resets double jump
+PASS · 1280 Dark Energy Realm tier 1: vertical camera contains hero
+PASS · 1280 Dark Energy Realm tier 1: elevated monster has valid home
+PASS · 1280 Dark Energy Realm tier 2: real controller handler lands and resets double jump
+PASS · 1280 Dark Energy Realm tier 2: vertical camera contains hero
+PASS · 1280 Dark Energy Realm tier 2: elevated monster has valid home
+PASS · 1280 Dark Energy Realm tier 3: real controller handler lands and resets double jump
+PASS · 1280 Dark Energy Realm tier 3: vertical camera contains hero
+PASS · 1280 Dark Energy Realm tier 3: elevated monster has valid home
+PASS · 1280 Dark Energy Realm tier 4: real controller handler lands and resets double jump
+PASS · 1280 Dark Energy Realm tier 4: vertical camera contains hero
+PASS · 1280 Dark Energy Realm tier 4: elevated monster has valid home
+PASS · 1280 Dark Energy Realm: 50% threshold has no knockback or damage bonus
+PASS · 1280 Dark Energy Realm: wounded elevated enemy remains active
+PASS · 1280 Dark Energy Realm: bounded texture caches
+PASS · 1280 Final Showdown: HUD and touch controls visible
+PASS · 1280 Final Showdown: no horizontal overflow
+PASS · 1280 Final Showdown tier 1: real controller handler lands and resets double jump
+PASS · 1280 Final Showdown tier 1: vertical camera contains hero
+PASS · 1280 Final Showdown tier 1: elevated monster has valid home
+PASS · 1280 Final Showdown tier 2: real controller handler lands and resets double jump
+PASS · 1280 Final Showdown tier 2: vertical camera contains hero
+PASS · 1280 Final Showdown tier 2: elevated monster has valid home
+PASS · 1280 Final Showdown tier 3: real controller handler lands and resets double jump
+PASS · 1280 Final Showdown tier 3: vertical camera contains hero
+PASS · 1280 Final Showdown tier 3: elevated monster has valid home
+PASS · 1280 Final Showdown tier 4: real controller handler lands and resets double jump
+PASS · 1280 Final Showdown tier 4: vertical camera contains hero
+PASS · 1280 Final Showdown tier 4: elevated monster has valid home
+PASS · 1280 Final Showdown: 50% threshold has no knockback or damage bonus
+PASS · 1280 Final Showdown: wounded elevated enemy remains active
+PASS · 1280 Final Showdown: bounded texture caches

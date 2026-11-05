@@ -1,0 +1,11 @@
+Desktop camp sample
+1280×720 · Coastal Beginnings · playable UI ready in 253 ms (this browser, cache state uncontrolled).
+30.4s · 1.5 rendered FPS · draw avg 1.50ms / max 4.40ms · p95 frame 1016.5ms · Region 1 · 1280×720. This browser only.
+Portrait camp sample
+390×740 · Coastal Beginnings · playable UI ready in 266 ms (this browser, cache state uncontrolled).
+30.6s · 1.1 rendered FPS · draw avg 1.00ms / max 1.40ms · p95 frame 1016.5ms · Region 1 · 390×740. This browser only.
+Landscape camp sample
+844×390 · Final Showdown · playable UI ready in 302 ms (this browser, cache state uncontrolled).
+30.6s · 1.3 rendered FPS · draw avg 1.39ms / max 5.00ms · p95 frame 1016.5ms · Region 7 · 844×390. This browser only.
+Dark Energy Realm Tier 4 night sample
+30.7s · 1.1 rendered FPS · draw avg 1.00ms / max 2.30ms · p95 frame 1016.5ms · Region 6 · 1363×784. This browser only.
