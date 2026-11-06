@@ -24,24 +24,26 @@ function saveLocal(remote){
  for(let i=0;i<3;i++){const snap=remote.slots[i];next.slots[i]=snap?{id:'code-slot-'+i,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),lastRegion:'Cloud hero',snapshot:snap}:null;}
  const result=store.flush(next,{atomic:true});if(!result.ok)throw Error('Could not restore game slots: '+result.error);
 }
+function backupJournal(pending,reason,remote){
+ const key=PREFIX+'recovery-backup:'+crypto.randomUUID();
+ const raw=JSON.stringify({reason,code,local:pending,cloudRevision:remote.revision,cloudSlot:remote.slots?.[pending?.slot]??null,backedUpAt:Date.now()});
+ localStorage.setItem(key,raw);
+ if(localStorage.getItem(key)!==raw)throw Error('Local backup verification failed; cloud heroes were not modified.');
+ return key;
+}
 async function reconcile(remote){
- const pending=journalRead();if(!pending)return remote;
- if(![0,1,2].includes(pending.slot)||!pending.snapshot||!Number.isSafeInteger(pending.revision))throw Error('Recovery journal needs attention; no data was overwritten.');
- const original=JSON.stringify(pending.snapshot);
- if(JSON.stringify(remote.slots[pending.slot])===original){localStorage.removeItem(journalKey());return remote;}
- if(remote.revision!==pending.revision){
-  const backupKey=PREFIX+'conflict-backup:'+crypto.randomUUID();
-  const backup=JSON.stringify({code,slot:pending.slot,snapshot:pending.snapshot,localRevision:pending.revision,cloudRevision:remote.revision,savedAt:Date.now()});
-  localStorage.setItem(backupKey,backup);
-  if(localStorage.getItem(backupKey)!==backup)throw Error('Unable to preserve local recovery. No cloud data was changed.');
-  localStorage.removeItem(journalKey());
-  status('Cloud heroes loaded. Conflicting local save safely backed up; newer cloud progress was not overwritten.');
-  return remote;
- }
- const result=await api({action:'save',code,slot:pending.slot,revision:remote.revision,snapshot:pending.snapshot});
- const confirmed=await api({action:'recover',code});
- if(result.revision!==confirmed.revision||JSON.stringify(confirmed.slots[pending.slot])!==original)throw Error('Save not confirmed. Local recovery journal retained.');
- localStorage.removeItem(journalKey());return confirmed;
+ // A recovery journal is not a login credential and must never block
+ // access to a valid code. Archive it first, then load the cloud roster.
+ const raw=localStorage.getItem(journalKey());
+ if(raw===null)return remote;
+ let pending;try{pending=JSON.parse(raw);}catch{pending={unreadableJournal:raw};}
+ const same=Number.isInteger(pending?.slot)&&pending.slot>=0&&pending.slot<3&&
+ pending.snapshot&&JSON.stringify(remote.slots[pending.slot])===JSON.stringify(pending.snapshot);
+ if(same){localStorage.removeItem(journalKey());return remote;}
+ backupJournal(pending,'Unconfirmed or divergent local journal; cloud preferred for login',remote);
+ // Retain the original journal until a cloud restoration has completed.
+ // It will be archived under the recovery-backup key as well.
+ return remote;
 }
 async function loadCode(value){
  if(!/^\d{10}$/.test(value))throw Error('Enter exactly 10 digits.');
@@ -52,10 +54,16 @@ async function loadCode(value){
   code=value;
   const resolved=await reconcile(remote);
   saveLocal(resolved);
+  // Remove the original pending journal only after local restoration succeeds
+  // and its separate backup is durable.
+  if(localStorage.getItem(journalKey())!==null){
+   const backups=Object.keys(localStorage).filter(k=>k.startsWith(PREFIX+'recovery-backup:'));
+   if(backups.length) localStorage.removeItem(journalKey());
+  }
   revision=resolved.revision;slots=resolved.slots;last=slots.map(s=>s?JSON.stringify(s):null);
   localStorage.setItem(CODE_KEY,code);blocked=false;renderCode();view('playing');
   const frame=$('game-frame');frame.src='../royale/?codePlay=1&build=5006253f';
-  status('Cloud ready · saving every 8 seconds');
+  status('Cloud ready · saving every 8 seconds. Any conflicting local progress was preserved as a backup.');
  }finally{loading=false;}
 }
 async function saveProgress(slot,snapshot){
