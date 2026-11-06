@@ -160,7 +160,7 @@ $('creator-form').addEventListener('input',updateMakeoverQuote);
 $('cancel-makeover').onclick=()=>{makeoverReview=null;$('makeover-confirm').hidden=true;};
 $('confirm-makeover').onclick=async()=>{const q=makeoverReview;if(!q)return;makeoverReview=null;const result=await transaction(()=>game.applyMakeover(q.next,{confirmed:true,revision:q.revision}));if(result.ok){editing=false;setScreen('tree');erisMenu.open();say('Appearance updated. Your progress is unchanged.');}else updateMakeoverQuote();};
 function setScreen(next){
-  if(codePlay&&next==='roster'&&game.started)sendCodeProgress();
+  if(codePlay&&next==='roster'&&game.started)sendCodeProgress(true);
   if(criticalPending||powerUpgrades.busy)return;
   if(next==='play'&&screen!=='play')input.waitForNeutralPad=true;
   screen=next;if(online())multiplayerMenu.session.pause(next!=='play');input.enabled=next==='play';input.clear();game.paused=next!=='play';
@@ -221,7 +221,7 @@ async function begin(){
   if(editing){const q=game.makeoverPreview(look);if(!q.ok){say(q.error);return;}makeoverReview=q;$('makeover-confirm-text').textContent=`Apply these changes for ${q.cost} coins? ${q.makeover?'Complete makeover price applied.':'Your level, equipment and progress stay the same.'}`;$('makeover-confirm').hidden=false;$('confirm-makeover').focus();}
   else{activeSlot=creatorSlot;activeId=null;game=new Game({look});if(store.cloud){$('begin').disabled=true;try{await store.create(activeSlot,game.save());activeId=store.slot(activeSlot).id;}catch(e){say(e.message,8);return;}finally{$('begin').disabled=false;}}startPatrol(false);}
 }
-function pause(){if(!game.started||screen!=='play')return;showPause();persist();}
+function pause(){if(!game.started||screen!=='play')return;if(codePlay)sendCodeProgress(true);showPause();persist();}
 function showPause(){pausePanel('home');$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero','manual-save'])$(id).disabled=!game.canSave();$('return-camp').disabled=!game.canTravel();$('safe-save-note').textContent=game.canSave()?(online()?'Server saving is active. Save Game confirms your current position.':store.cloud?'Manual cloud saving is available.':'Saving is available · browser-local only.'):'Saving is locked. Resume and spend five seconds without attacking or taking damage.';$('resume').focus();}
 async function openTree(panel='home'){if(powerUpgrades.busy)return;if(typeof panel!=='string')panel='home';if(!await game.visitTree()){say('Leave combat for five seconds before visiting the Tree.');return;}setScreen('tree');persist();erisMenu.open(panel);$('tree-title').focus();}
 function openConfirmation(){
@@ -499,9 +499,9 @@ function frame(now){
 requestAnimationFrame(frame);
 // The code-save game is opt-in and isolated from ordinary browser hero slots.
 // Send exact in-memory progress every eight seconds; the parent owns cloud writes.
-function sendCodeProgress(){
- if(!codePlay||!game.started||screen!=='play'||criticalPending||powerUpgrades.busy||online())return;
- try{const selected=Number(activeSlot);if(!Number.isInteger(selected)||selected<0||selected>2)return;window.parent.postMessage({type:'royale-code-progress',slot:selected,snapshot:game.save(),heroId:activeId},location.origin);}catch{}
+function sendCodeProgress(force=false){
+ if(!codePlay||!game.started||(!force&&screen!=='play')||criticalPending||powerUpgrades.busy||online())return;
+ try{const selected=Number(activeSlot);if(!Number.isInteger(selected)||selected<0||selected>2)return;const snapshot=game.save();if(!snapshot)return;const parsed=JSON.parse(snapshot);console.info('[V3 live hero]',{slot:selected+1,x:game.hero.x,y:game.hero.y,savedX:parsed.world?.location?.x,savedY:parsed.world?.location?.y,xp:game.hero.xp,coins:game.hero.coins});window.parent.postMessage({type:'royale-code-progress',slot:selected,snapshot,heroId:activeId},location.origin);}catch{}
 }
 if(codePlay)setInterval(sendCodeProgress,8000);
 
