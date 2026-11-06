@@ -85,7 +85,8 @@ export class ErisMenu{
     this.selected=entries.find(e=>key(e)===key(this.selected||{}))||entries[0]||null;
     for(const e of entries){
       if(this.mode==='sell'){list.append(this.saleCard(e));continue;}
-      const locked=g.hero.level<e.level,card=button('',()=>{this.selected=e;this.wardrobe();},'shop-item');card.dataset.catalog=key(e);card.setAttribute('aria-pressed',String(key(e)===key(this.selected||{})));
+      const locked=g.hero.level<e.level,card=this.mode==='owned'?el('article',undefined,'shop-item'):button('',()=>{this.selected=e;this.wardrobe();},'shop-item');
+      if(this.mode==='owned'){card.tabIndex=0;card.setAttribute('role','group');card.setAttribute('aria-label',e.name);card.onclick=event=>{if(event.target.closest('button'))return;this.selected=e;this.wardrobe();};card.onkeydown=event=>{if(event.target===card&&(event.key==='Enter'||event.key===' ')){event.preventDefault();this.selected=e;this.wardrobe();}};}card.dataset.catalog=key(e);card.setAttribute('aria-pressed',String(key(e)===key(this.selected||{})));
       const icon=itemIcon(e);
       const text=el('span');text.append(el('b',e.name),el('small',`${locked?'LOCKED · ':''}LEVEL ${e.level||1} · ${(e.rarity||'ordinary').toUpperCase()}${e.legacy?' · LEGACY':''}`),el('small',this.mode==='owned'?(Object.values(g.inventory.equipped).includes(e.uid)?'Equipped':'In wardrobe'):`${e.price===null?'Not sellable':e.price+' coins'}${e.setId&&!e.catalogId&&!e.uid?' · 3 pieces':''}`));card.append(icon,text);
       if(this.mode==='owned'&&e.uid){
