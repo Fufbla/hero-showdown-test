@@ -30,28 +30,3 @@ $('load').onclick=()=>void run(async()=>{code=$('input').value.trim();if(!/^\d{1
 $('continue').onclick=()=>void run(launch);
 $('refresh').onclick=()=>void run(launch);
 setInterval(()=>{if(refresh&&!blocked)void renew().catch(e=>status('Session renewal failed: '+e.message));},12*60000);
-
-// Fullscreen is presentation-only. Keep the existing iframe and cloud-save session intact.
-const fullscreenTarget=$('roster'),fullscreenButton=$('fullscreen-toggle');
-function fullscreenActive(){return document.fullscreenElement===fullscreenTarget||fullscreenTarget.classList.contains('fullscreen-fallback');}
-function syncFullscreen(){
- const active=fullscreenActive();
- fullscreenButton.textContent=active?'⤢':'⛶';
- fullscreenButton.setAttribute('aria-label',active?'Exit fullscreen':'Enter fullscreen');
- fullscreenButton.setAttribute('aria-pressed',String(active));
- fullscreenButton.title=active?'Exit fullscreen':'Fullscreen';
-}
-fullscreenButton.addEventListener('click',async()=>{
- if(fullscreenActive()){
-  if(document.fullscreenElement===fullscreenTarget){try{await document.exitFullscreen();}catch(e){status('Could not exit fullscreen: '+e.message);}}
-  fullscreenTarget.classList.remove('fullscreen-fallback');
- }else{
-  if(typeof fullscreenTarget.requestFullscreen==='function'){
-   try{await fullscreenTarget.requestFullscreen();}catch{fullscreenTarget.classList.add('fullscreen-fallback');}
-  }else fullscreenTarget.classList.add('fullscreen-fallback');
- }
- syncFullscreen();
-});
-document.addEventListener('fullscreenchange',syncFullscreen);
-window.addEventListener('resize',syncFullscreen);
-syncFullscreen();
