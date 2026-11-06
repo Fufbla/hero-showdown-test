@@ -38,7 +38,7 @@ export function decodeSave(text) {
     if(!powers)return null;
     const checkpoint=integer(data.checkpoint,CAMPS.length-1);
     const world=normalizeWorld(data.version>=4?data.world:null,checkpoint),inventory=data.version>=4?normalizeInventory(data.inventory):emptyInventory();
-    if(!world||!inventory||data.version>=4&&(!data.world||!Number.isInteger(data.healthRoots)||data.healthRoots<0||data.healthRoots>4))return null;
+    if(!world||!inventory||data.version>=4&&(!data.world||!Number.isInteger(data.healthRoots)||data.healthRoots<0||data.healthRoots>10))return null;
     if(Object.values(inventory.equipped).some(uid=>(itemDefinition(inventory.items.find(i=>i.uid===uid))?.level||1)>level))return null;
     const bossProgress=normalizeBossProgress(data.version>=5?data.bossProgress:null,world.bossVictories,{strict:data.version>=5});if(!bossProgress)return null;
     const legendary=normalizeLegendary(data.version>=7?data.legendary:null,inventory,level);if(!legendary||data.version>=7&&!data.legendary)return null;
