@@ -83,7 +83,8 @@ const journeyMenu=new JourneyMenu(()=>game,persist,say,resume,transaction);
 const powerUpgrades=new InstantPowerUpgrades(()=>({game,store,index:activeSlot,heroId:activeId,blocked:!online()&&activeId&&multiplayerMenu.isLinked(activeId),remote:online()?multiplayerMenu.session:null}));
 const powerMenu=new PowerMenu(()=>game,persist,say,powerUpgrades),controlMenu=new ControlMenu(input,storage,say);
 const renderer=new Renderer($('game')),creator=new Creator(),powerButtons=[...document.querySelectorAll('.power-button')];
-const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,say,appearance:()=>openCreator(activeSlot,true),leave:returnAdventure});
+const creatorHome=document.createComment('Character creator home');$('creator').before(creatorHome);
+const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,say,appearance:()=>openCreator(activeSlot,true),leave:returnAdventure,navigate:()=>{if(!canLeaveMenu())return false;if(screen==='creator'&&editing){abandonUnconfirmedAppearance();setScreen('tree');}return true;}});
 const legendaryMenu=new LegendaryMenu(()=>game,{transaction,say,enter:enterLegendary,onClaim:resume});
 erisMenu.mergeMenu=legendaryMenu;
 let makeoverReview=null,remoteLoaded=false;
@@ -164,9 +165,13 @@ function setScreen(next){
   if(criticalPending||powerUpgrades.busy)return;
   if(next==='play'&&screen!=='play')input.waitForNeutralPad=true;
   screen=next;if(online())multiplayerMenu.session.pause(next!=='play');input.enabled=next==='play';input.clear();game.paused=next!=='play';
+  const embeddedAppearance=next==='creator'&&editing&&game.treeVisit;
+  if(embeddedAppearance)$('eris-appearance-panel').append($('creator'));else creatorHome.after($('creator'));
+  $('creator').classList.toggle('overlay',!embeddedAppearance);
   for(const [name,id] of Object.entries({account:'account-menu',roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',mergeReward:'merge-reward'}))$(id).hidden=next!==name;
   const inGame=game.started&&(['play','powerPicker','pause','tree','controls','world','inventory','chest','mergeReward','account'].includes(next)||(next==='creator'&&editing));
-  $('hud').hidden=!inGame;$('mission').hidden=!inGame;$('pause').disabled=!inGame;$('return-menu').hidden=!inGame;
+  if(embeddedAppearance)$('tree-menu').hidden=false;
+  $('hud').hidden=!inGame;$('mission').hidden=!inGame;$('pause').disabled=!inGame;
   $('pause').setAttribute('aria-label',next==='play'?'Pause game':'Resume game');$('pause').textContent=next==='play'?'Ⅱ':'▷';
   document.body.classList.toggle('sanctuary-view',game.treeVisit);document.body.classList.toggle('playing',next==='play');document.body.classList.toggle('game-view',inGame);
   if(next!=='play'){$('world-portal').hidden=true;$('rest').hidden=true;$('visit-tree').hidden=true;$('death').hidden=true;}
@@ -199,13 +204,14 @@ function continueHero(index){
   activeSlot=index;activeId=slot.id;game=new Game({save:slot.snapshot});startPatrol(true);
 }
 async function openCreator(index=activeSlot,isEdit=true){
+  if(isEdit&&!canLeaveMenu())return;
   if(isEdit&&!game.treeVisit&&!await game.visitTree()){say('Visit Eris after five safe seconds to change appearance.');return;}
   if(isEdit&&!game.canSave()){say('Leave combat before customizing.');return;}editing=isEdit;creatorSlot=index;
   creator.fill(editing?game.look:styleCDefault('male'),editing?game.visualOutfit():STARTER_OUTFIT,!editing);
   $('name').disabled=editing;makeoverReview=null;$('makeover-confirm').hidden=true;$('makeover-cost').hidden=!editing;
   $('creator-slot').textContent=`${editing?'CUSTOMIZE':'CREATE'} · HERO SLOT 0${index+1}`;
   $('begin').textContent=editing?'REVIEW APPEARANCE COST →':'BEGIN YOUR ADVENTURE →';$('cancel-look').textContent=editing?'Cancel appearance changes':'Back to heroes';
-  setScreen('creator');updateMakeoverQuote();$('creator-title').focus();
+  setScreen('creator');if(editing)erisMenu.selectPanel('appearance');updateMakeoverQuote();$('creator-title').focus();
 }
 function cancelCreator(){if(editing){editing=false;setScreen('tree');erisMenu.open('home');}else{renderRoster();setScreen('roster');}}
 function startPatrol(continued){
@@ -385,7 +391,7 @@ $('open-controls').onclick=()=>{setScreen('controls');controlMenu.render();$('se
 $('creator-form').addEventListener('submit',e=>{e.preventDefault();begin();});
 $('cancel-look').onclick=cancelCreator;
 $('pause').onclick=()=>{if(screen==='play')pause();else if(game.started)resume();else backToPause();};
-$('return-menu').onclick=()=>{if(!game.started)return;if(screen==='play'){pause();return;}if(!canLeaveMenu()||!leaveTreeForNavigation())return;abandonUnconfirmedAppearance();showPause();};
+$('return-menu').onclick=()=>backToPause();
 $('resume').onclick=resume;$('edit-look').onclick=()=>openTree('appearance');
 $('return-camp').onclick=async()=>{if(await game.returnCheckpoint()){handleEvents();persist();resume();}else say('Leave combat before returning to your checkpoint.');};
 $('choose-hero').onclick=openRoster;$('back-to-patrol').onclick=resume;

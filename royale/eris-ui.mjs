@@ -55,8 +55,8 @@ function shopEntries(category){
     .map(piece=>({...piece,catalogId:piece.id,price:piece.catalogValue}));
 }
 export class ErisMenu{
-  constructor(getGame,{powerMenu,transaction,say,appearance,leave}){
-    Object.assign(this,{getGame,powerMenu,transaction,say,appearance,leave});this.panel='home';this.mode='buy';this.category='sets';this.selected={setId:'shore-ordinary'};this.view='front';this.previewInventory=null;this.confirm=null;
+  constructor(getGame,{powerMenu,transaction,say,appearance,leave,navigate}){
+    Object.assign(this,{getGame,powerMenu,transaction,say,appearance,leave,navigate});this.panel='home';this.mode='buy';this.category='sets';this.selected={setId:'shore-ordinary'};this.view='front';this.previewInventory=null;this.confirm=null;
     for(const b of document.querySelectorAll('[data-eris]'))b.onclick=()=>this.open(b.dataset.eris);
     $('eris-appearance').onclick=appearance;$('close-tree').onclick=leave;
     for(const view of STYLE_C_VIEWS)$(`gear-view-${view}`).onclick=()=>{this.view=view;this.draw();};
@@ -65,6 +65,10 @@ export class ErisMenu{
   }
   open(panel='home'){
     if(panel==='appearance'){this.appearance();return;}
+    if(this.navigate?.()===false)return;
+    this.selectPanel(panel);
+  }
+  selectPanel(panel){
     this.panel=panel;this.confirm=null;
     for(const n of document.querySelectorAll('[data-eris-panel]'))n.hidden=n.dataset.erisPanel!==panel;
     for(const b of document.querySelectorAll('[data-eris]'))b.setAttribute('aria-pressed',String(b.dataset.eris===panel));

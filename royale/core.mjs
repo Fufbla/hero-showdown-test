@@ -1,4 +1,4 @@
-import {BASIC_GROWTH} from './combat-tuning.mjs';
+import {BASIC_GROWTH,damageToEnemy,damageToHero} from './combat-tuning.mjs';
 import {normalizeLoot,expireLoot,nearbyInteractions,stepLoot,selectedInteraction,pickupLoot} from './world-loot.mjs';
 import {sharedNow} from './shared-clock.mjs';
 import { legendaryMethods, stepLegendaryBoss } from './legendary-bosses.mjs';
@@ -122,6 +122,7 @@ export class Game {
   }
   damageEnemy(e,amount,{kind='punch',knock=0,face=this.hero.face,stagger=true}={}){
     if(e.state==='dead'||e.protection>0||!Number.isFinite(amount)||amount<=0)return false;
+    amount=damageToEnemy(amount,this.hero.level,e);
     if(e.legendary&&e.state==='active'&&e.attack?.shape==='barrier')amount*=.5;
     this.markCombat();e.provoked=true;e.hp=Math.max(0,e.hp-amount);e.flash=.12;
     // Visual flinch never resets an attack or recovery timer. Brief pauses have a refractory window.
@@ -195,7 +196,7 @@ export class Game {
     if(event)this.hitEvents.set(key,event);
     if(this.hitEvents.size>512)this.hitEvents.delete(this.hitEvents.keys().next().value);
     for(const [attacker,until] of this.hitRecovery)if(until<=this.time)this.hitRecovery.delete(attacker);
-    const incoming=this.powers.incoming(amount,source);if(incoming===null){if(h.agile)h.dodgeAge=0;return false;}this.markCombat();
+    const incoming=this.powers.incoming(damageToHero(amount,h.level,source),source);if(incoming===null){if(h.agile)h.dodgeAge=0;return false;}this.markCombat();
     if(recovery)this.hitRecovery.set(key,this.time+1.05);
     h.hp = Math.max(0, h.hp - incoming); h.hurtAge = 0;
     if(!this.powers.active.steel){h.stun=.16;h.vx = (h.x >= fromX ? 1 : -1) * 210;h.attack=null;h.attackBuffer=null;}
