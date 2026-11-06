@@ -385,7 +385,7 @@ $('open-controls').onclick=()=>{setScreen('controls');controlMenu.render();$('se
 $('creator-form').addEventListener('submit',e=>{e.preventDefault();begin();});
 $('cancel-look').onclick=cancelCreator;
 $('pause').onclick=()=>{if(screen==='play')pause();else if(game.started)resume();else backToPause();};
-$('return-menu').onclick=()=>{if(!game.started)return;if(screen==='play'){pause();return;}abandonUnconfirmedAppearance();showPause();};
+$('return-menu').onclick=()=>{if(!game.started)return;if(screen==='play'){pause();return;}if(!canLeaveMenu()||!leaveTreeForNavigation())return;abandonUnconfirmedAppearance();showPause();};
 $('resume').onclick=resume;$('edit-look').onclick=()=>openTree('appearance');
 $('return-camp').onclick=async()=>{if(await game.returnCheckpoint()){handleEvents();persist();resume();}else say('Leave combat before returning to your checkpoint.');};
 $('choose-hero').onclick=openRoster;$('back-to-patrol').onclick=resume;
