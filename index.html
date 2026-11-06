@@ -2116,10 +2116,10 @@ function showModeSelect(){
  mode='modes';modeScreen(`<section class="panel mode-panel"><div class="eyebrow">HEALTHIA</div><h1>HERO <span>SHOWDOWN</span></h1><p class="mode-subtitle">Choose your showdown.</p><div class="mode-grid">
  <button class="mode-tile" id="story-mode" ${loaded?'':'disabled'}><span class="mode-number">01 / THE JOURNEY</span><span class="mode-symbol" aria-hidden="true">▶</span><h3>STORY MODE</h3><p>Chapters 1–3<br>Battle the villains. Escape the cave. Save Shore Front.</p><span class="mode-status">${loaded?'BEGIN YOUR JOURNEY →':'LOADING HEROES…'}</span></button>
  <button class="mode-tile versus-tile" id="versus-mode" ${loaded?'':'disabled'}><span class="mode-number">02 / THE ARENA</span><span class="mode-symbol" aria-hidden="true">VS</span><h3>VERSUS</h3><p>Three heroes. Nine villains.<br>Your fight. Your challenge.</p><span class="mode-status">${loaded?'ENTER THE ARENA →':'LOADING HEROES…'}</span></button>
- <button class="mode-tile" id="royale-mode" aria-label="Hero Showdown Royale — Play Now"><span class="mode-number">03 / THE ULTIMATE CLASH</span><span class="mode-symbol" aria-hidden="true">▶</span><h3>HERO SHOWDOWN ROYALE</h3><p>Your hero. Your adventure.</p><span class="mode-status">PLAY NOW →</span></button>
+ <a class="mode-tile" id="royale-mode" href="./royale-v3-staging/" target="_blank" rel="noopener noreferrer" aria-label="Open Hero Showdown Royale V3 in a new browser tab" style="text-decoration:none;color:inherit"><span class="mode-number">03 / THE ULTIMATE CLASH</span><span class="mode-symbol" aria-hidden="true">▶</span><h3>HERO SHOWDOWN ROYALE</h3><p>Your hero. Your adventure.</p><span class="mode-status">OPEN ROYALE IN NEW TAB →</span></a>
  </div></section>`);
  document.getElementById('versus-mode').onclick=()=>{audio();showDifficulty();};
- document.getElementById('royale-mode').onclick=()=>{window.location.href=new URL('royale-v3-staging/',window.location.href).href;};
+ document.getElementById('royale-mode').addEventListener('click',()=>{const tile=document.getElementById('royale-mode');tile.querySelector('.mode-status').textContent='IF NO TAB OPENS, TAP AGAIN →';});
  document.getElementById('story-mode').onclick=()=>showStorySelect();
 }
 function showDifficulty(){
