@@ -29,7 +29,15 @@ async function reconcile(remote){
  if(![0,1,2].includes(pending.slot)||!pending.snapshot||!Number.isSafeInteger(pending.revision))throw Error('Recovery journal needs attention; no data was overwritten.');
  const original=JSON.stringify(pending.snapshot);
  if(JSON.stringify(remote.slots[pending.slot])===original){localStorage.removeItem(journalKey());return remote;}
- if(remote.revision!==pending.revision)throw Error('Another device saved newer progress. Local recovery journal retained; no overwrite.');
+ if(remote.revision!==pending.revision){
+  const backupKey=PREFIX+'conflict-backup:'+crypto.randomUUID();
+  const backup=JSON.stringify({code,slot:pending.slot,snapshot:pending.snapshot,localRevision:pending.revision,cloudRevision:remote.revision,savedAt:Date.now()});
+  localStorage.setItem(backupKey,backup);
+  if(localStorage.getItem(backupKey)!==backup)throw Error('Unable to preserve local recovery. No cloud data was changed.');
+  localStorage.removeItem(journalKey());
+  status('Cloud heroes loaded. Conflicting local save safely backed up; newer cloud progress was not overwritten.');
+  return remote;
+ }
  const result=await api({action:'save',code,slot:pending.slot,revision:remote.revision,snapshot:pending.snapshot});
  const confirmed=await api({action:'recover',code});
  if(result.revision!==confirmed.revision||JSON.stringify(confirmed.slots[pending.slot])!==original)throw Error('Save not confirmed. Local recovery journal retained.');
