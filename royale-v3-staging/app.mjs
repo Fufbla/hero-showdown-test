@@ -2,6 +2,7 @@ import {LocalHeroStore} from '../royale/saves.mjs';
 const $=id=>document.getElementById(id),url='https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-v3-staging',prefix='royale-v3-play:';
 const storage={getItem:k=>localStorage.getItem(prefix+k),setItem:(k,v)=>localStorage.setItem(prefix+k,v)};
 let access='',refresh='',code='',slots=[],last=[null,null,null],busy=false,blocked=false,queue=Promise.resolve();
+const roomSlots=new Set();
 function status(s){$('status').textContent=s;}
 async function api(action,body={},auth=true){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json',...(auth?{Authorization:'Bearer '+access}:{})},body:JSON.stringify({action,...body}),cache:'no-store'});const d=await r.json();if(!r.ok){const e=Error((d.error||'Cloud error')+' (HTTP '+r.status+', '+action+')');e.status=r.status;e.retryAfter=r.headers.get('Retry-After');throw e;}return d;}
 async function renew(){const r=await api('renew',{refresh},false);access=r.access;refresh=r.refresh;}
@@ -26,7 +27,30 @@ last=slots.map(x=>x.snapshot?JSON.stringify(x.snapshot):null);console.info('[V3 
 }
 async function save(slot,snapshot){if(blocked||!access||![0,1,2].includes(slot)||!snapshot)return;const raw=JSON.stringify(snapshot);if(raw===last[slot])return;const key=prefix+'journal:'+slot;const journal=JSON.stringify({snapshot,revision:slots[slot].revision});localStorage.setItem(key,journal);
 queue=queue.then(async()=>{if(blocked||raw===last[slot])return;try{const result=await call('save',{slot:slot+1,revision:slots[slot].revision,snapshot});slots[slot].revision=result.revision;slots[slot].snapshot=snapshot;last[slot]=raw;console.info('[V3 cloud confirmed]',{slot:slot+1,revision:result.revision,x:snapshot.world.location.x,y:snapshot.world.location.y,xp:snapshot.xp,coins:snapshot.coins});if(localStorage.getItem(key)===journal)localStorage.removeItem(key);status('Saved Slot '+(slot+1)+' · '+new Date().toLocaleTimeString());}catch(e){blocked=true;status('Cloud saving paused: '+e.message+' Local recovery preserved. Re-enter your code to retry safely.');console.error('[V3 save rejected]',{slot:slot+1,revision:slots[slot].revision,status:e.status,reason:e.message});}});return queue;}
-window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow||e.data?.type!=='royale-code-progress')return;try{
+window.addEventListener('message',async e=>{
+ if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow)return;
+ if(e.data?.type==='royale-room-session'){
+  const {slot,snapshot,resume,requestId}=e.data;
+  try{
+   if(!Number.isInteger(slot)||slot<0||slot>2||typeof requestId!=='string'||requestId.length>100)throw Error('Select a saved hero.');
+   if(blocked||!access)throw Error('Resolve the cloud save before joining multiplayer.');
+   if(!resume){if(!snapshot)throw Error('Save this hero before joining multiplayer.');await save(slot,snapshot);await queue;if(blocked)throw Error('Cloud saving must finish before joining multiplayer.');}
+   await renew();
+   e.source.postMessage({type:'royale-room-session-result',requestId,access},location.origin);
+  }catch(error){e.source.postMessage({type:'royale-room-session-result',requestId,error:error.message},location.origin);}
+  return;
+ }
+ if(e.data?.type==='royale-multiplayer-checkpoint'){
+  const {slot,snapshot,revision,savedAt}=e.data;
+  if(!Number.isInteger(slot)||slot<0||slot>2||!snapshot?.world?.location||!Number.isSafeInteger(revision)||revision<(slots[slot]?.revision??0))return;
+  roomSlots.add(slot);slots[slot].snapshot=snapshot;slots[slot].revision=revision;last[slot]=JSON.stringify(snapshot);
+  const store=new LocalHeroStore(storage),current=store.slot(slot);
+  if(current)store.writeSlot(slot,JSON.stringify(snapshot),{expectedId:current.id,region:'Multiplayer'});
+  status('Saved Slot '+(slot+1)+' · '+new Date(savedAt).toLocaleTimeString());return;
+ }
+ if(e.data?.type==='royale-room-released'){roomSlots.delete(e.data.slot);return;}
+ if(e.data?.type!=='royale-code-progress'||roomSlots.has(e.data.slot))return;
+ try{
  const snapshot=typeof e.data.snapshot==='string'?JSON.parse(e.data.snapshot):e.data.snapshot;
  if(!snapshot||typeof snapshot!=='object'||!snapshot.world?.location){status('Gameplay snapshot missing location; cloud save not attempted.');return;}
  console.info('[V3 save outgoing]',{slot:e.data.slot,region:snapshot.world.region,x:snapshot.world.location.x,y:snapshot.world.location.y,level:snapshot.level,xp:snapshot.xp,coins:snapshot.coins});

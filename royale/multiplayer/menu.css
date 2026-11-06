@@ -3,5 +3,7 @@
 
 @media(max-width:700px) and (orientation:portrait){body.game-view:has(#multiplayer-status:not([hidden])) .brand{visibility:hidden}#multiplayer-status{left:calc(env(safe-area-inset-left) + 12px);transform:none;max-width:calc(100vw - 120px)}}
 #mp-code{user-select:text;-webkit-user-select:text;-webkit-touch-callout:default}
+#multiplayer-menu #mp-join-form{grid-template-columns:1fr;gap:8px;margin:0}
+#multiplayer-menu #mp-create{align-self:start}
 
 #mp-room{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 12px}#mp-players,#mp-room .mp-actions{grid-column:1/-1}#mp-room p{margin:6px 0}#multiplayer-menu #mp-status{min-height:0}#multiplayer-menu #mp-room .mp-actions{align-items:end}@media(max-width:440px){#mp-room{grid-template-columns:1fr}#mp-room .mp-actions,#multiplayer-menu form,#mp-transfer{grid-template-columns:1fr}#mp-copy{justify-self:start}}

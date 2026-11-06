@@ -21,7 +21,7 @@ export class GameSession extends EventTarget {
       if(this.sourceId){try{const links=this.links(),link=links[this.sourceId];if(link?.heroId===s.id){link.confirmedRevision=s.revision;link.status='confirmed';this.storage.setItem(MIGRATION_KEY,JSON.stringify(links));}}catch(error){this.onError('Account progress is safe; this browser could not record the migration receipt. '+error.message);}}
       this.dispatchEvent(new CustomEvent('state',{detail:s}));
     });
-    for(const type of ['heroes','status','error'])this.client.addEventListener(type,e=>this.dispatchEvent(new CustomEvent(type,{detail:e.detail})));
+    for(const type of ['heroes','status','error','checkpoint'])this.client.addEventListener(type,e=>this.dispatchEvent(new CustomEvent(type,{detail:e.detail})));
   }
   links(){return JSON.parse(this.storage.getItem(MIGRATION_KEY)||'{}');}
   link(sourceId){return this.links()[sourceId];}

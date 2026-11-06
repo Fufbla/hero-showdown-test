@@ -1,7 +1,10 @@
-import {MULTIPLAYER_ENABLED} from './release-config.mjs';
+import {MULTIPLAYER_ENABLED,PRIVATE_ROOMS_ENABLED} from './release-config.mjs';
 // Keep the existing migration receipt fence without importing networking code.
 const MIGRATION_KEY='healthia.royale.multiplayer.links.v1';
 export async function createMultiplayerMenu(hooks,{enabled=MULTIPLAYER_ENABLED,document:doc=globalThis.document,loadMenu=()=>import('./multiplayer/menu.mjs')}={}){
+ if(PRIVATE_ROOMS_ENABLED&&hooks.getContext().codePlay==='v3'){
+  const {V3MultiplayerMenu}=await import('./multiplayer/v3-menu.mjs');return new V3MultiplayerMenu(hooks);
+ }
  if(enabled){const {MultiplayerMenu}=await loadMenu();return new MultiplayerMenu(hooks);}
  const unavailable=()=>{hooks.onError('Online Multiplayer — Coming Soon. Account-linked heroes require the account service; their saved backup is preserved. Choose a local hero to play solo.');return false;};
  for(const id of ['pause-primary','roster']){
