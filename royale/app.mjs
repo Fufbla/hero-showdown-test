@@ -175,7 +175,8 @@ function setScreen(next){
 function dateText(value){const date=new Date(value);return value&&Number.isFinite(date.getTime())?new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(date):'Imported from Phase 1';}
 function renderRoster(){
   const container=$('hero-slots');container.replaceChildren();
-  for(let i=0;i<3;i++){
+  // V3 exposes two reliable hero slots; Slot 3 data remains stored untouched.
+  for(let i=0;i<(codePlay&&params.get('codePlay')==='v3'?2:3);i++){
     const slot=store.slot(i),card=document.createElement('article');card.className='hero-slot';card.dataset.slot=i;
     const number=document.createElement('small');number.className='slot-number';number.textContent=`HERO SLOT 0${i+1}`;card.append(number);
     const canvas=document.createElement('canvas');canvas.width=360;canvas.height=320;canvas.setAttribute('aria-label',slot?`Portrait of ${slot.snapshot.look.name}`:'Empty hero slot');card.append(canvas);
