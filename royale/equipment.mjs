@@ -21,7 +21,7 @@ export const itemDefinition=item=>EQUIPMENT[item?.catalogId];
 export function normalizeInventory(raw={}){
   // Unclaimed rewards are a queue, not carried equipment. Long battles must not
   // invalidate an otherwise valid save merely because more than 32 drops await review.
-  if(!raw||typeof raw!=='object'||!Array.isArray(raw.items)||raw.items.length>7||!Array.isArray(raw.pending))return null;
+  if(!raw||typeof raw!=='object'||!Array.isArray(raw.items)||raw.items.length>20||!Array.isArray(raw.pending))return null;
   const ids=new Set(),valid=item=>{
     if(!item||!Object.hasOwn(EQUIPMENT,item.catalogId)||typeof item.uid!=='string'||!/^drop-\d+$/.test(item.uid)||ids.has(item.uid)||!Number.isSafeInteger(Number(item.uid.slice(5)))||Number(item.uid.slice(5))>=1e9)return false;
     ids.add(item.uid);return true;
