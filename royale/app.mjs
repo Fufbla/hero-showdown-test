@@ -47,8 +47,9 @@ window.visualViewport?.addEventListener('resize',sizeVisibleViewport);sizeVisibl
 // The visible QA harness uses its own session-storage namespace, never real hero slots.
 const testPrefix=params.has('qa')&&params.get('testSession')?`royale-test-${params.get('testSession')}:`:'';
 const practiceHero = ['male','female'].includes(params.get('practice')) && !testPrefix ? params.get('practice') : null;
-const storagePrefix = testPrefix || (practiceHero ? `style-c-trial-v1-${practiceHero}:` : '');
-const storage={getItem:key=>(storagePrefix?sessionStorage:localStorage).getItem(storagePrefix+key),setItem:(key,value)=>(storagePrefix?sessionStorage:localStorage).setItem(storagePrefix+key,value)};
+const codePlay=params.get('codePlay')==='1'&&window.parent!==window&&window.parent.location.origin===location.origin;
+const storagePrefix = testPrefix || (codePlay?'royale-code-play-v1:':(practiceHero ? `style-c-trial-v1-${practiceHero}:` : ''));
+const storage={getItem:key=>(testPrefix||practiceHero?sessionStorage:localStorage).getItem(storagePrefix+key),setItem:(key,value)=>(testPrefix||practiceHero?sessionStorage:localStorage).setItem(storagePrefix+key,value)};
 $('hero-art-status').textContent='Opening saved heroes…';
 const localStore=new LocalHeroStore(storage);let store=localStore;
 let ledger=null,ledgerError='',criticalPending=null,fixtureSaveFailures=0,fixtureOrdinaryFailures=0;
@@ -494,6 +495,12 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+// The code-save game is opt-in and isolated from ordinary browser hero slots.
+// Send exact in-memory progress every eight seconds; the parent owns cloud writes.
+if(codePlay)setInterval(()=>{
+ if(!game.started||criticalPending||powerUpgrades.busy||online())return;
+ try{const snapshot=game.save();window.parent.postMessage({type:'royale-code-progress',slot:activeSlot,snapshot},location.origin);}catch{}
+},8000);
 
 function pausePanel(panel){
  $('pause-primary').hidden=panel!=='home';$('pause-hero').hidden=panel!=='hero';$('pause-powers').hidden=panel!=='powers';$('pause-back').hidden=panel==='home';
