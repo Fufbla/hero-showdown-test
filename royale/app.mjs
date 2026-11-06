@@ -47,8 +47,8 @@ window.visualViewport?.addEventListener('resize',sizeVisibleViewport);sizeVisibl
 // The visible QA harness uses its own session-storage namespace, never real hero slots.
 const testPrefix=params.has('qa')&&params.get('testSession')?`royale-test-${params.get('testSession')}:`:'';
 const practiceHero = ['male','female'].includes(params.get('practice')) && !testPrefix ? params.get('practice') : null;
-const codePlay=params.get('codePlay')==='1'&&window.parent!==window&&window.parent.location.origin===location.origin;
-const storagePrefix = testPrefix || (codePlay?'royale-code-play-v1:':(practiceHero ? `style-c-trial-v1-${practiceHero}:` : ''));
+const codePlay=['1','v3'].includes(params.get('codePlay'))&&window.parent!==window&&window.parent.location.origin===location.origin;
+const storagePrefix = testPrefix || (codePlay?(params.get('codePlay')==='v3'?'royale-v3-play:':'royale-code-play-v1:'):(practiceHero ? `style-c-trial-v1-${practiceHero}:` : ''));
 const storage={getItem:key=>(testPrefix||practiceHero?sessionStorage:localStorage).getItem(storagePrefix+key),setItem:(key,value)=>(testPrefix||practiceHero?sessionStorage:localStorage).setItem(storagePrefix+key,value)};
 $('hero-art-status').textContent='Opening saved heroes…';
 const localStore=new LocalHeroStore(storage);let store=localStore;
