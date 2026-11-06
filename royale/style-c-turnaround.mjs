@@ -7,7 +7,8 @@ import {sanitizeLook, costumePalette} from './appearance.mjs';
 import {STYLE_C_DEFAULTS} from './style-c-defaults.mjs';
 import {TURNAROUND_MODELS} from './assets/hero/style-c-accurate/turnaround/model.mjs';
 import {sampleStyleCMotion} from './style-c-motion.mjs';
-import {drawStyleCHair} from './style-c-hair.mjs';
+import {drawStyleCHair,registerNativeTurnaroundHair} from './style-c-hair.mjs';
+import {drawStyleCHead,headRegistration} from './style-c-head.mjs';
 import {drawStyleCEquipment, drawStyleCEquipmentAura, withStyleCEquipmentGlow} from './style-c-equipment.mjs';
 import {emblem} from './style-c-paint.mjs';
 
@@ -33,7 +34,7 @@ export function prepareTurnarounds({canvasFactory, imageLoader} = {}) {
     if(art.width!==ids.width || art.height!==ids.height) throw Error('Different turnaround layer and material atlas sizes.');
     const canvas=rasterCanvas(ids.width,ids.height), c=canvas.getContext('2d',{willReadFrequently:true});
     c.drawImage(ids,0,0); mask=c.getImageData(0,0,ids.width,ids.height).data;
-    artwork=art;
+    artwork=art;registerNativeTurnaroundHair(art,mask,TURNAROUND_MODELS);
     return true;
   }).catch(cause=>{error=cause.message;loading=null;return false;});
   return loading;
@@ -44,11 +45,8 @@ function materialFor(model, name, colors, base) {
   const rect=model.parts[name]; if (!rect) return null;
   const [x,y,w,h,left,top]=rect;
   const changed=MATERIALS.map((key,id)=>id && colors[key]!==base[key] ? rgb(colors[key]) : null);
-  const profile = model === TURNAROUND_MODELS['male-side'] || model === TURNAROUND_MODELS['female-side'];
-  const sculpt = profile && (name==='head' || name==='bareHead') &&
-    ['eyeShape','brows','nose','mouth'].some(k=>colors[k]!==base[k]);
-  if(!changed.some(Boolean) && !sculpt) return {image:artwork, x,y,w,h,left,top};
-  const key=[x,y, ...MATERIALS.slice(1).map(k=>colors[k]), ...(sculpt?['eyeShape','brows','nose','mouth'].map(k=>colors[k]):[])].join('|');
+  if(!changed.some(Boolean)) return {image:artwork, x,y,w,h,left,top};
+  const key=[x,y, ...MATERIALS.slice(1).map(k=>colors[k])].join('|');
   if(materialCache.has(key)) return materialCache.get(key);
   const canvas=rasterCanvas(w,h), c=canvas.getContext('2d',{willReadFrequently:true});
   c.drawImage(artwork,x,y,w,h,0,0,w,h);
@@ -66,44 +64,11 @@ function materialFor(model, name, colors, base) {
       for(let k=0;k<3;k++)px[at+k]=shade<=1?target[k]*shade:target[k]+(255-target[k])*Math.min(1,(shade-1)*(id===2?.30:.75));
     }
   }
-  if(sculpt) sculptProfile(im,left,top,colors,name);
   c.putImageData(im,0,0);
   const result={image:canvas,x:0,y:0,w,h,left,top};
   if(materialCache.size>=120)materialCache.delete(materialCache.keys().next().value);
   materialCache.set(key,result);
   return result;
-}
-
-// Adjust the existing painted profile features locally. The falloff pins the
-// outer edge to its original pixels, preserving the cheek, temple and hairline.
-function sculptProfile(im,left,top,l,name) {
-  const eyeX=(l.presentation==='male'?38:33)+(name==='bareHead'?2:0);
-  const eyeY=l.presentation==='male'?-207:-211;
-  const mouth=[47,-178], nose=[51,-192];
-  const src=im.data.slice(),dst=im.data,w=im.width,h=im.height;
-  const influence=(dx,dy,rx,ry)=>Math.max(0,1-dx*dx/(rx*rx)-dy*dy/(ry*ry))**2;
-  for(let row=0;row<h;row++)for(let col=0;col<w;col++) {
-    const x=col+left,y=row+top,dx=x-eyeX,dy=y-eyeY;
-    if(x<6||x>65||y<-255||y>-160)continue;
-    let u=col,v=row;
-    if(l.eyeShape!=='almond') {
-      const weight=influence(dx,dy,26,18);
-      u-=dx*weight*(l.eyeShape==='wide'?.19:.04);
-      v-=dy*weight*(l.eyeShape==='round'?.24:-.10);
-    }
-    if(l.brows!=='bold') {
-      const b=y-(eyeY-23),weight=influence(dx,b,24,10);
-      v+=weight*(l.brows==='straight'?dx*.17:b*.15+1);
-    }
-    const nx=x-nose[0],ny=y-nose[1], n=influence(nx,ny,13,11);
-    if(l.nose==='broad')u-=nx*n*.35;else if(l.nose==='small')u+=n*(1.8+nx*.22);
-    const mx=x-mouth[0],my=y-mouth[1], a=influence(mx,my,15,9);
-    if(l.mouth==='full')v-=my*a*.35;else if(l.mouth==='smile')v+=a*Math.max(0,-mx)*.30;
-    if(u===col&&v===row)continue;
-    const ix=Math.max(0,Math.min(w-2,Math.floor(u))),iy=Math.max(0,Math.min(h-2,Math.floor(v)));
-    const fx=u-ix,fy=v-iy,i=(iy*w+ix)*4,o=(row*w+col)*4;
-    for(let k=0;k<4;k++)dst[o+k]=lerp(lerp(src[i+k],src[i+4+k],fx),lerp(src[i+4*w+k],src[i+4*w+4+k],fx),fy);
-  }
 }
 
 function styledModel(m,look) {
@@ -117,14 +82,6 @@ function styledModel(m,look) {
   });
   const legs=m.legs.map(chain=>chain.map(p=>[around(p[0],hip[0],look.hips),p[1]*look.legs]));
   return {...m,hip:[hip[0],hipY],shoulder:[shoulder[0],shoulderY],head:[m.head[0],shoulderY+m.head[1]-shoulder[1]],arms,legs};
-}
-
-function neutralShape(l) {
-  return l.build==='balanced'&&l.age==='young'&&l.muscle===.35&&['chest','hips','waist','shoulders','torso','arms','legs','jaw'].every(key=>l[key]===1);
-}
-
-function neutralFace(l,base) {
-  return ['face','eyeShape','brows','nose','mouth','facialHair'].every(key=>l[key]===base[key]);
 }
 
 export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
@@ -144,7 +101,7 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
     arms:sample.arms.map((chain,i)=>chain.map((p,j)=>blend(fitted.arms[i][j],p))),
     legs:sample.legs.map((chain,i)=>chain.map((p,j)=>blend(fitted.legs[i][j],p))),
     hip:blend(fitted.hip,sample.hip),shoulder:blend(fitted.shoulder,sample.shoulder),head:blend(fitted.head,sample.head),
-    faceWidth:m.faceWidth*look.jaw,
+    faceWidth:m.faceWidth,
   };
   if(pose.state==='idle') {
     // Reference eyes and gloves stay in their neutral registration when the hero breathes.
@@ -171,10 +128,6 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
   c.save(); c.translate(x,y);c.scale(sizeX*scale*(left?-1:1),sizeY*scale);c.rotate(pose.rotation||0);c.globalAlpha*=pose.opacity;
   if(h.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;
   look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
-  const regularHair=look.hair===base.hair&&look.headwearCoverage!=='tucked';
-  if (pose.state==='idle'&&neutralShape(look)&&neutralFace(look,base)&&regularHair&&look.cape&&!Object.keys(pieces).length&&look.emblem===base.emblem&&!h.steel) {
-    draw('source',[0,0]);c.restore();return report;
-  }
   drawStyleCEquipmentAura(c,pieces,pose,look,{view});
   const turn=angle(m.hip,m.shoulder)-angle(pose.hip,pose.shoulder);
   const cloak=()=>withStyleCEquipmentGlow(c,pieces.cape,()=>draw('cape',m.shoulder,pose.shoulder,-turn+(pose.moving?Math.sin(time*8)*.025:0),look.shoulders,look.torso*.35+look.legs*.65));
@@ -201,27 +154,18 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
   wear('belt');limb('arms',0);
   if(look.cape&&back)cloak();
   wear('cape');
-  const headWidth=look.jaw*(look.face==='round'?1.06:look.face==='angular'?.96:1);
-  const headHeight=look.age==='teen'?1.035:look.age==='older'?.98:1;
   const motion={wind:Math.sin(time*7)*pose.moving*2.8,bounce:Math.cos(time*12)*pose.moving};
-  c.save();c.translate(...pose.head);c.rotate(pose.headTilt||0);c.scale(headWidth,headHeight);
-  const head=(name)=>draw(name,m.head,[0,0]);
-  const hair=layer=>{
-    c.save();const unit=m.faceWidth/36;c.scale(unit,unit);drawStyleCHair(c,look,motion,time,layer,view);c.restore();
-  };
-  if(regularHair)head('head');
-  else { hair('rear');head('bareHead');hair('front'); }
-  if(!back && look.facialHair!=='none'){
-    const beard=look.facialHair==='beard';
-    c.save();c.lineCap='round';c.strokeStyle=colors.hairColor;c.lineWidth=beard?6:1.05;
-    const y0=look.presentation==='female'?29:28;
-    if(beard){c.beginPath();c.moveTo(-4,y0-4);c.quadraticCurveTo(13,y0+11,33,y0+9);c.stroke();}
-    else for(let j=0;j<6;j++){c.beginPath();c.moveTo(1+j*4,y0+j*.8);c.lineTo(2+j*4,y0+2+j*.8);c.stroke();}
-    c.restore();
-  }
-  c.restore();
-  // The overlay follows the exact jaw/age scale used for the head, not torso proportions.
-  pose.faceWidth=m.faceWidth;pose.headScale=[headWidth,headHeight];
+  const blinkClock=time%3.9;
+  const blink=pose.state==='idle'&&blinkClock>3.52&&blinkClock<3.70?Math.sin((blinkClock-3.52)/.18*Math.PI):0;
+  c.save();c.translate(...pose.head);c.rotate(pose.headTilt||0);
+  const unit=headRegistration(look,view).unit;c.scale(unit,unit);
+  drawStyleCHair(c,look,motion,time,'rear',view);
+  drawStyleCHead(c,colors,{view,blink});
+  drawStyleCHead(c,colors,{view,accessoriesOnly:true});
+  drawStyleCHair(c,look,motion,time,'front',view);c.restore();
+  // Jaw controls reshape only the lower skin contour. Helmets and hair share
+  // the unchanged scalp anchor through every animation and directional view.
+  pose.headScale=[1,1];
   wear('mask');wear('helmet');
   c.restore();
   return report;

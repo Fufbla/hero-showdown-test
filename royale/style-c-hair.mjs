@@ -1,3 +1,6 @@
+import {separateNativeHair} from './native-hair-mattes.mjs';
+import {headRegistration} from './style-c-head.mjs';
+import {STYLE_C_DEFAULTS} from './style-c-defaults.mjs';
 import {HAIR_FIT_CORRECTIONS} from './hair-fit-corrections.mjs';
 // Each non-bald style has three independently illustrated turnaround sprites.
 // Pack rectangles measure source pixels. Draw origins use reference head-space,
@@ -16,7 +19,7 @@ const views = ['front','side','back'];
 const materials = new Map();
 const ART_ROOT = './assets/hero/style-c-accurate/hair/';
 const MAX_MATERIALS = 32;
-let atlases, makeCanvas, loading, lastError = null;
+let atlases, nativeFront, nativeTurns, makeCanvas, loading, lastError = null;
 const clamp = (value,min=0,max=1) => Math.max(min,Math.min(max,value));
 const webCanvas = (w,h) => typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w,h) :
   Object.assign(document.createElement('canvas'),{width:w,height:h});
@@ -26,6 +29,10 @@ const loadWebImage = url => new Promise((resolve,reject) => {
   image.onerror = () => reject(new Error('Could not load the illustrated hair atlas.'));
   image.src = url.href;
 });
+
+// Original direction plates are separated with alpha mattes; material IDs
+// remove neck/costume remnants. Hair and gold cuffs retain their original RGB.
+export function registerNativeTurnaroundHair(art,mask,models){nativeTurns={art,mask,models};materials.clear();}
 
 export function styleCHairStatus() {
   return {ready:!!atlases, error:lastError, styles:Object.keys(HAIR_FRAMES.front).length+1,
@@ -39,6 +46,10 @@ export async function prepareStyleCHair({imageLoader=loadWebImage,canvasFactory=
   loading = (async () => {
     try {
       const images = await Promise.all(views.map(view => imageLoader(new URL(ART_ROOT+view+'.webp',import.meta.url))));
+      // The approved default ponytail/locs have exact transparent hair plates.
+      // Keep that artwork, but never draw the old face or full-character sprite.
+      const originals=await Promise.all(['male','female'].map(sex=>imageLoader(new URL('./assets/hero/style-c-accurate/face/'+sex+'.png',import.meta.url))));
+      nativeFront=Object.fromEntries(['male','female'].map((sex,i)=>[sex,originals[i]]));
       atlases = Object.fromEntries(views.map((view,i) => [view,images[i]]));
       lastError = null;
       return true;
@@ -86,28 +97,54 @@ function hairMaterial(look,view) {
     materials.delete(key); materials.set(key,cached);
     return cached;
   }
-  const [sx,sy,w,h,rawLeft,rawTop] = frame;
+  let [sx,sy,w,h,rawLeft,rawTop] = frame;
   const fit=HAIR_FITS[view][look.hair], offset=look.presentation==='female'?4:0;
-  const [ex,ey,dx,dy]=fit.slice(offset,offset+4);
-  const correction=HAIR_FIT_CORRECTIONS[look.hair]?.[view];
-  const originalLeft=rawLeft*ex+dx;
-  const left=originalLeft+(correction?.x||0), top=rawTop*ey+dy;
+  let [ex,ey,dx,dy]=fit.slice(offset,offset+4);
+  let source=atlases[view],native=false,turnMask=null,turnModel=null;
+  let correction=HAIR_FIT_CORRECTIONS[look.hair]?.[view];
+  if(view==='front'&&look.hair===STYLE_C_DEFAULTS[look.presentation].hair){
+    native=true;source=nativeFront[look.presentation];w=source.width/3;h=source.height/3;sx=w;sy=h*2;
+    const unit=headRegistration(look,view).unit;
+    ex=ey=HAIR_DENSITY/(2*unit);dx=dy=0;correction=null;
+    const origin=look.presentation==='female'?[-172,-148]:[-130,-139];
+    rawLeft=origin[0]/unit/ex;rawTop=origin[1]/unit/ey;
+  }
+  if(view!=='front'&&nativeTurns&&look.hair===STYLE_C_DEFAULTS[look.presentation].hair){
+    native=true;source=nativeTurns.art;turnMask=nativeTurns.mask;turnModel=nativeTurns.models[look.presentation+'-'+view];
+    let left,top;[sx,sy,w,h,left,top]=turnModel.parts.head;
+    const unit=headRegistration(look,view).unit;ex=ey=HAIR_DENSITY/unit;dx=dy=0;correction=null;
+    rawLeft=(left-turnModel.head[0])/HAIR_DENSITY;rawTop=(top-turnModel.head[1])/HAIR_DENSITY;
+  }
+  const left=rawLeft*ex+dx+(correction?.x||0), top=rawTop*ey+dy+(correction?.y||0);
   const front=makeCanvas(w,h), rear=makeCanvas(w,h);
   const fc=front.getContext('2d',{willReadFrequently:true}), rc=rear.getContext('2d');
   fc.save();if(correction?.mirror){fc.translate(w,0);fc.scale(-1,1);}
-  fc.drawImage(atlases[view],sx,sy,w,h,0,0,w,h);fc.restore();
+  fc.drawImage(source,sx,sy,w,h,0,0,w,h);fc.restore();
+  if(turnMask)separateNativeHair(fc,look.presentation,view);
   const f=fc.getImageData(0,0,w,h), r=rc.createImageData(w,h), colors=colorRamp(look.hairColor);
+  const target=[1,3,5].map(j=>parseInt(look.hairColor.slice(j,j+2),16));
+  const nativeBase=[1,3,5].map(j=>parseInt(STYLE_C_DEFAULTS[look.presentation].hairColor.slice(j,j+2),16));
   for (let y=0,i=0;y<h;y++) {
     const localY=top+(y+.5)*ey/HAIR_DENSITY;
     for (let x=0;x<w;x++,i+=4) {
+      if(turnMask&&view==='back'){
+        const id=turnMask[((sy+y)*source.width+sx+x)*4];
+        // The rear plates also included a few pixels of the original neck and
+        // cape. Those belong to body layers, never to the hairstyle.
+        if(look.presentation==='male'&&y>139&&id===1||look.presentation==='female'&&y>173&&[3,4,5].includes(id))f.data[i+3]=0;
+      }
       const alpha=f.data[i+3];
       if (!alpha) continue;
       // Lossless grayscale encodes fiber luminance. Colored pixels encode the
       // metal cuffs, which retain their own material under every hair color.
       const metal=f.data[i]-f.data[i+2]>40 && f.data[i+1]-f.data[i+2]>14;
       if (!metal) {
-        const rgb=colors[f.data[i]];
-        for (let k=0;k<3;k++) f.data[i+k]=rgb[k];
+        if(native){
+          for(let k=0;k<3;k++)f.data[i+k]=clamp(f.data[i+k]*(target[k]+17)/(nativeBase[k]+17),0,255);
+        }else{
+          const rgb=colors[f.data[i]];
+          for(let k=0;k<3;k++)f.data[i+k]=rgb[k];
+        }
       }
       const [frontAlpha,rearAlpha]=sections(view,left+(x+.5)*ex/HAIR_DENSITY,localY);
       for (let k=0;k<3;k++) r.data[i+k]=f.data[i+k];

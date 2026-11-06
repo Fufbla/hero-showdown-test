@@ -1,13 +1,12 @@
 import {STYLE_C_FEATURES} from './assets/hero/style-c-features.mjs';
 import {STYLE_C_PARTS} from './assets/hero/style-c-parts.mjs';
 import {prepareStyleCBody} from './style-c-body.mjs';
-import {prepareStyleCFace} from './style-c-face.mjs';
+import {prepareStyleCHead} from './style-c-head.mjs';
 import {prepareStyleCHair} from './style-c-hair.mjs';
 import {prepareStyleCMotion} from './style-c-motion.mjs';
 import {prepareFireballArt,prepareSteelArt,prepareRootsArt,prepareArmorCollection} from './power-armor-art.mjs';
 import {prepareStyleCEquipment} from './style-c-equipment.mjs';
 import {prepareTurnarounds} from './style-c-turnaround.mjs';
-import {prepareDefaultSprites} from './style-c-sprites.mjs';
 const url=new URL('./assets/hero/style-c-parts.png',import.meta.url),cache=new Map();
 let source=null, features=null, pending=null, makeCanvas=null, error=null, ready=false;
 export const STYLE_C_TEXTURE_LIMIT=64;
@@ -24,8 +23,8 @@ export async function prepareStyleCMaterials({imageLoader,canvasFactory}={}){
  const options={canvasFactory:makeCanvas,imageLoader:load};
  pending=(async()=>{
    try {
-     const packs={body:prepareStyleCBody,face:prepareStyleCFace,hair:prepareStyleCHair,motion:prepareStyleCMotion,
-       equipment:prepareStyleCEquipment,fireballArmor:prepareFireballArt,steelArmor:prepareSteelArt,rootArmor:prepareRootsArt,strengthArmor:options=>prepareArmorCollection('strength',options),whirlwindArmor:options=>prepareArmorCollection('whirlwind',options),superKickArmor:options=>prepareArmorCollection('superKick',options),flightArmor:options=>prepareArmorCollection('flight',options),agilityArmor:options=>prepareArmorCollection('agility',options),speedArmor:options=>prepareArmorCollection('speed',options),turnarounds:prepareTurnarounds,sprites:prepareDefaultSprites};
+     const packs={body:prepareStyleCBody,face:prepareStyleCHead,hair:prepareStyleCHair,motion:prepareStyleCMotion,
+       equipment:prepareStyleCEquipment,fireballArmor:prepareFireballArt,steelArmor:prepareSteelArt,rootArmor:prepareRootsArt,strengthArmor:options=>prepareArmorCollection('strength',options),whirlwindArmor:options=>prepareArmorCollection('whirlwind',options),superKickArmor:options=>prepareArmorCollection('superKick',options),flightArmor:options=>prepareArmorCollection('flight',options),agilityArmor:options=>prepareArmorCollection('agility',options),speedArmor:options=>prepareArmorCollection('speed',options),turnarounds:prepareTurnarounds};
      const [im,featuresImage,results]=await Promise.all([load(url),load(new URL('./assets/hero/style-c-features.png',import.meta.url)),
        Promise.all(Object.entries(packs).map(async ([name,prepare])=>[name,await prepare(options)]))]);
      const missing=results.filter(([,ok])=>!ok).map(([name])=>name);

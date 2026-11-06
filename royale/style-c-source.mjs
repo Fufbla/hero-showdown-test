@@ -1,13 +1,11 @@
 import {headwearFit} from './headwear-fit.mjs';
 import {sanitizeLook,costumePalette} from './appearance.mjs';
-import {STYLE_C_DEFAULTS} from './style-c-defaults.mjs';
 import {drawStyleCHair} from './style-c-hair.mjs';
 import {hairMotion} from './hair-art.mjs';
-import {STYLE_C_FACE_ANCHORS,drawStyleCFace,styleCFaceChanged} from './style-c-face.mjs';
+import {STYLE_C_FACE_ANCHORS,drawStyleCHead,headRegistration} from './style-c-head.mjs';
 import {drawStyleCMotionLimb,sampleStyleCMotion} from './style-c-motion.mjs';
 import {drawStyleCEquipment,drawStyleCEquipmentAura,withStyleCEquipmentGlow} from './style-c-equipment.mjs';
-import {drawSourceRest,drawRegisteredHead,drawStyleCCape,drawStyleCTorso,styleCBodyStatus} from './style-c-body.mjs';
-import {drawDefaultSprite,isDefaultLook} from './style-c-sprites.mjs';
+import {drawStyleCCape,drawStyleCTorso,styleCBodyStatus} from './style-c-body.mjs';
 export {prepareStyleCMaterials as prepareSourceArt} from './style-c-materials.mjs';
 
 const UNIT=.35;
@@ -65,14 +63,14 @@ function worldPose(p,width,height,artSource) {
     hip:project(p.hip),head:project(p.head),shoulder:project(p.shoulder)};
 }
 function drawHairLayer(c,look,p,movement,time,layer,view) {
-  const size=look.presentation==='male'?2.55:2.50;
+  const size=headRegistration(look,'front').unit;
   c.save();c.translate(...p.faceCenter);if(layer==='rear')c.rotate(p.headTilt||0);c.scale(size,size);
   drawStyleCHair(c,look,movement,time,layer,view==='game'?'front':view);
   c.restore();
 }
 export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   if(!styleCBodyStatus().ready)return false;
-  const look=sanitizeLook(raw),original=models[look.presentation],base=STYLE_C_DEFAULTS[look.presentation];
+  const look=sanitizeLook(raw),original=models[look.presentation];
   const pieces=options.outfit?.pieces||{}, palette=materialPalette(look,pieces,options.outfit,h.steel);
   const width=bodyWidths[look.build],height=look.height*(look.age==='teen'?.98:look.age==='older'?.99:1);
   const p=sampleStyleCMotion(fitModel(look),look,h,time,{...options,unit:UNIT});
@@ -88,38 +86,15 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   }
   const blinkClock=time%3.9;
   const blink=p.clip==='idle'&&blinkClock>3.52&&blinkClock<3.70 ? Math.sin((blinkClock-3.52)/.18*Math.PI) : 0;
-  const starter=(!options.outfit||options.outfit.origin==='starter')&&!Object.keys(pieces).length;
   const liveCape=look.cape&&view==='game'&&options.cloth&&!options.bake;
-  if(!liveCape&&view==='game'&&p.clip!=='idle'&&!options.bake&&!options.layered&&!blink&&scale<=1.35&&starter&&isDefaultLook(look)&&(!h.steel||p.clip==='steel')&&drawDefaultSprite(c,p,look)){
-    c.restore();return worldPose(p,width,height,'atlas');
-  }
   c.rotate(p.rotation);c.scale(UNIT*width,UNIT*height);c.translate(-original.origin[0],-original.origin[1]);
   look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
-  const customHair=look.hair!==base.hair||look.headwearCoverage==='tucked';
-  const differentJaw=look.jaw!==base.jaw||look.face!==base.face;
-  const bareHead=customHair||differentJaw;
-  const faceEdited=styleCFaceChanged(look);
-  const untouchedBody=look.build===base.build && ['waist','hips','chest','shoulders','torso','arms','legs','muscle'].every(k=>look[k]===base[k]);
-  const referenceIdle=p.clip==='idle'&&untouchedBody&&!bareHead&&look.cape&&starter&&
-    look.emblem===base.emblem&&palette.emblemColor===base.emblemColor&&!h.steel;
-  if(referenceIdle&&!liveCape){
-    // Hold the original standing key, then breathe without reconstructing its
-    // silhouette. Both the neutral source size and its opaque RGB are exact.
-    const breath=p.phase<.13?0:Math.sin((p.phase-.13)/.87*Math.PI)**2;
-    c.translate(0,original.origin[1]);c.scale(1,1+breath*.005);c.translate(0,-original.origin[1]);
-    // The native canvas high-quality reconstruction filters even an identity
-    // transform. Bilinear sampling at 1:1 preserves the unfiltered source RGB.
-    c.imageSmoothingQuality='low';
-    drawSourceRest(c,original,look,palette);
-    if(faceEdited||blink)drawStyleCFace(c,look,{center,mode:'features',blink});
-    c.restore();return worldPose(p,width,height,'reference');
-  }
   const faceLook=h.steel?{...look,skin:'#a4b7ca'}:look;
   const motion=hairMotion(options.artState||options.cloth,h,time,look.hair,options.dt);
   const wear=(part,item,side=0)=>drawStyleCEquipment(c,part,item,p,look,{view,side,steel:h.steel});
   drawStyleCEquipmentAura(c,pieces,p,look,{view});
   if(look.cape)withStyleCEquipmentGlow(c,pieces.cape,()=>drawStyleCCape(c,original,p,look,palette,time,liveCape?{owner:options.cloth,hero:h,dt:options.dt}:null));
-  if(customHair)drawHairLayer(c,look,p,motion,time,'rear',view);
+  drawHairLayer(c,look,p,motion,time,'rear',view);
   function limb(group,i){
     drawStyleCMotionLimb(c,p,group,i,faceLook,palette,pieces);
     const part=group==='arms'?'gloves':'boots';
@@ -134,13 +109,11 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   limb('arms',0);
   c.save();
   if(p.headTilt){c.translate(...p.faceCenter);c.rotate(p.headTilt);c.translate(-p.faceCenter[0],-p.faceCenter[1]);}
-  if(!bareHead && !h.steel && look.hairColor===base.hairColor && look.skin===base.skin){
-    drawRegisteredHead(c,original,p.head);
-    if(faceEdited||blink)drawStyleCFace(c,look,{center:p.faceCenter,mode:'features',blink});
-  }else{
-    drawStyleCFace(c,faceLook,{center:p.faceCenter,mode:customHair?'head':'native-head',steel:h.steel,blink});
-  }
-  if(customHair)drawHairLayer(c,look,p,motion,time,'front',view);
+  c.save();c.translate(...p.faceCenter);const headUnit=headRegistration(look,'front').unit;c.scale(headUnit,headUnit);
+  drawStyleCHead(c,faceLook,{view:'front',blink});c.restore();
+  c.save();c.translate(...p.faceCenter);c.scale(headUnit,headUnit);
+  drawStyleCHead(c,faceLook,{view:'front',accessoriesOnly:true});c.restore();
+  drawHairLayer(c,look,p,motion,time,'front',view);
   c.restore();
   wear('mask',pieces.mask);wear('helmet',pieces.helmet);
   c.restore();return worldPose(p,width,height,'layers');
