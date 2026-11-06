@@ -1,6 +1,6 @@
 # Style C head and hair review
 
-Status: implemented and tested on `feature/royale-v3-layered-heads`; awaiting Chris's visual approval. The official game has not been changed by this branch.
+Status: REJECTED by Chris. Do not publish or merge this redesign. Chris requires the original illustrated faces. Continue on `feature/royale-v3-original-face-fixes` at commit `2a435a65444935e8b3524b008932a4ff8f4dc744`. The official game was never changed by this rejected branch.
 
 Release baseline: `5defeb33c626d19755b26f030b5e7b840f6b4b77`.
 
