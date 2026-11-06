@@ -148,19 +148,22 @@ export function drawStyleCCape(c,base,p,look,palette,time,live=null) {
   const dx=p.shoulder[0]-base.shoulder[0],dy=p.shoulder[1]-base.shoulder[1];
   if(live){
     const motion=paintedCapeMotion(live.owner,live.hero,time,live.dt),top=y-base.shoulder[1],left=x-base.shoulder[0];
-    c.save();c.translate(p.shoulder[0],p.shoulder[1]);
-    // Adjacent strips use matching endpoints; the source pixels and colors stay
-    // unchanged. The upper clasp has zero offset and the free hem carries waves.
+    // Composite on integer scanline boundaries, then filter the whole cloth
+    // once at camera scale. Directly scaling separate strips leaves pale seams.
+    const padX=128,padY=64,w=tile.width+padX*2,h=tile.height+padY*2;
+    const buffer=motion.canvas??=makeCanvas(w,h);
+    if(buffer.width!==w||buffer.height!==h){buffer.width=w;buffer.height=h;}
+    const ink=buffer.getContext('2d');ink.clearRect(0,0,w,h);
     const bands=16,height=tile.height/bands;
     for(let i=0;i<bands;i++){
       const start=i*height,end=(i+1)*height;
       const a=paintedCapeOffset(motion,(top+start)/(top+tile.height)),b=paintedCapeOffset(motion,(top+end)/(top+tile.height));
-      const sampleHeight=Math.min(height+.35,tile.height-start);
-      c.save();c.translate(left+a.x,top+start+a.y);
-      c.transform(1,0,(b.x-a.x)/height,1+(b.y-a.y)/height,0,0);
-      c.drawImage(tile,0,start,tile.width,sampleHeight,0,0,tile.width,sampleHeight);c.restore();
+      const from=padY+Math.round(start+a.y),to=padY+Math.round(end+b.y),shear=(b.x-a.x)/height,stretch=(to-from)/height;
+      ink.save();ink.beginPath();ink.rect(0,from,w,to-from);ink.clip();
+      ink.transform(1,0,shear,stretch,padX+a.x-shear*start,from-stretch*start);
+      ink.drawImage(tile,0,0);ink.restore();
     }
-    c.restore();return;
+    c.drawImage(buffer,p.shoulder[0]+left-padX,p.shoulder[1]+top-padY);return;
   }
   const wind=(p.moving||0)+(p.clip==='flight'?1:0);
   // Shear the complete painted cloth around its clasp. A single filtered image
