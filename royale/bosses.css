@@ -10,3 +10,6 @@
   .boss-heading small{display:block;font-size:8px;line-height:10px;letter-spacing:0}
   .boss-cue{font-size:9px;line-height:11px;min-height:11px}
 }
+
+/* Enemy HUD: name and damage-responsive health bar only. */
+.boss-hud{width:min(460px,78%);padding:7px 12px}.boss-heading{justify-content:center}.boss-health{margin:5px 0 1px}.boss-cue,.boss-art-note,#boss-phase{display:none!important}
