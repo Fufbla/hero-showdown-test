@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="legendary.css">
   <link rel="stylesheet" href="accounts.css">
 <link rel="stylesheet" href="world-ui.css?v=d20da6df">
-<link rel="stylesheet" href="landscape.css">
+<link rel="stylesheet" href="landscape.css?v=c552074a">
 <link rel="stylesheet" href="menu-navigation.css?v=1">
 <link rel="stylesheet" href="multiplayer/menu.css">
 <link rel="stylesheet" href="interface-controls.css">
@@ -40,7 +40,7 @@
       <div id="mission" class="mission" hidden><span class="mission-icon">✧</span><div><small>YOUR FIRST PATROL</small><strong id="mission-title">Meet the coast's troublemakers</strong><span id="mission-progress">Defeat 6 monsters · Discover all 3 types</span></div><b id="mission-count">0/6</b></div>
       <div id="toast" class="toast" role="status" aria-live="polite"></div>
       <div id="hero-art-status" role="status">Loading hero artwork…</div>
-      <button type="button" id="cycle-interaction" class="rest-button" data-control="nextTarget" hidden>Next target</button><button type="button" id="world-portal" class="rest-button" data-control="portal" hidden>◎ WORLD PORTAL</button><button type="button" id="rest" class="rest-button" data-control="interact" hidden>Pick Up <kbd>E</kbd></button>
+      <button type="button" id="cycle-interaction" class="rest-button" data-control="nextTarget" hidden aria-hidden="true" tabindex="-1"></button><button type="button" id="world-portal" class="rest-button" data-control="portal" hidden>◎ WORLD PORTAL</button><button type="button" id="rest" class="rest-button" data-control="interact" hidden>Pick Up <kbd>E</kbd></button>
       <button type="button" id="visit-tree" class="rest-button tree-button" data-control="tree" hidden>♧ TREE OF ERIS <kbd>T</kbd></button>
       <div id="death" class="death-overlay" hidden role="status"><span>✦</span><h2>Take a breath, hero.</h2><p>Returning to your checkpoint with full health.</p><small>10% of next-level XP is lost. Levels, coins and items are kept.</small></div>
       <output id="diagnostics" hidden></output><button id="measure-performance" hidden>Measure performance</button><output id="performance-result" hidden></output>
@@ -169,7 +169,7 @@
     addEventListener('error',event=>{const status=document.getElementById('hero-art-status');if(status&&!status.hidden){status.textContent='Game could not start. '+(event.message||'A required file did not load. Reload to retry.');}});
     addEventListener('unhandledrejection',event=>{const status=document.getElementById('hero-art-status');if(status&&!status.hidden)status.textContent='Game could not start. '+(event.reason?.message||'Reload to retry.');});
   </script>
-  <script type="importmap">{"imports":{"./app.mjs":"./app.mjs?v=24d4433e","./core.mjs":"./core.mjs?v=a1f9fe226d9d","./creator.mjs":"./creator.mjs?v=eab4aa773e31","./hair-fit-corrections.mjs":"./hair-fit-corrections.mjs?v=fbc532894ec8","./input.mjs":"./input.mjs?v=da8d687cb3bd","./menu-gamepad.mjs":"./menu-gamepad.mjs?v=141e270c41fd","./monsters.mjs":"./monsters.mjs?v=a6e2fee2e959","./powers.mjs":"./powers.mjs?v=6a083133e3a6","./style-c-face.mjs":"./style-c-face.mjs?v=892ff5913880","./style-c-hair.mjs":"./style-c-hair.mjs?v=17be9f51196f","./combat-tuning.mjs":"./combat-tuning.mjs?v=4708349019c3","./eris.mjs":"./eris.mjs?v=93d6ce572d3a","./eris-ui.mjs":"./eris-ui.mjs?v=ddb989c813a0","./color-options.mjs":"./color-options.mjs?v=5b18bfc16bcf","./compact-hud.mjs":"./compact-hud.mjs?v=9ba12dca340b","./controller-entry.mjs":"./controller-entry.mjs?v=adbbd4ac411a","./landscape-layout.mjs":"./landscape-layout.mjs?v=f9a860b474ab","./skin-color.mjs":"./skin-color.mjs?v=aa7ce8877506","./spatial-navigation.mjs":"./spatial-navigation.mjs?v=3cffd5811435","./style-c-body.mjs":"./style-c-body.mjs?v=62395bd963ad","./style-c-motion-paint.mjs":"./style-c-motion-paint.mjs?v=d6f869459d70","./style-c-source.mjs":"./style-c-source.mjs?v=14062027c93f","./style-c-turnaround.mjs":"./style-c-turnaround.mjs?v=b873eff0c55e"}}</script>
-  <script type="module" src="./app.mjs?v=24d4433e"></script>
+  <script type="importmap">{"imports":{"./app.mjs":"./app.mjs?v=c552074a","./core.mjs":"./core.mjs?v=a1f9fe226d9d","./creator.mjs":"./creator.mjs?v=eab4aa773e31","./hair-fit-corrections.mjs":"./hair-fit-corrections.mjs?v=fbc532894ec8","./input.mjs":"./input.mjs?v=da8d687cb3bd","./menu-gamepad.mjs":"./menu-gamepad.mjs?v=141e270c41fd","./monsters.mjs":"./monsters.mjs?v=a6e2fee2e959","./powers.mjs":"./powers.mjs?v=6a083133e3a6","./style-c-face.mjs":"./style-c-face.mjs?v=892ff5913880","./style-c-hair.mjs":"./style-c-hair.mjs?v=17be9f51196f","./combat-tuning.mjs":"./combat-tuning.mjs?v=4708349019c3","./eris.mjs":"./eris.mjs?v=93d6ce572d3a","./eris-ui.mjs":"./eris-ui.mjs?v=ddb989c813a0","./color-options.mjs":"./color-options.mjs?v=5b18bfc16bcf","./compact-hud.mjs":"./compact-hud.mjs?v=9ba12dca340b","./controller-entry.mjs":"./controller-entry.mjs?v=adbbd4ac411a","./landscape-layout.mjs":"./landscape-layout.mjs?v=f9a860b474ab","./skin-color.mjs":"./skin-color.mjs?v=aa7ce8877506","./spatial-navigation.mjs":"./spatial-navigation.mjs?v=3cffd5811435","./style-c-body.mjs":"./style-c-body.mjs?v=62395bd963ad","./style-c-motion-paint.mjs":"./style-c-motion-paint.mjs?v=d6f869459d70","./style-c-source.mjs":"./style-c-source.mjs?v=14062027c93f","./style-c-turnaround.mjs":"./style-c-turnaround.mjs?v=b873eff0c55e"}}</script>
+  <script type="module" src="./app.mjs?v=c552074a"></script>
 </body>
 </html>
