@@ -7,11 +7,16 @@ export class CapeCloth{
  advance(p,h,time,dt){
   const desired=p.cape.slice(1).map((v,i)=>Math.atan2(v[0]-p.cape[i][0],v[1]-p.cape[i][1]));
   if(!this.angles||this.face!==h.face){this.angles=desired;this.velocity.fill(0);}
-  this.face=h.face;const impulse=clamp(((h.vx||0)-this.lastVx)*-.0015+((h.vy||0)-this.lastVy)*.0006,-.28,.28);
+  this.face=h.face;
+  const vx=h.vx||0,vy=h.vy||0,airborne=!h.grounded;
+  const speed=clamp(Math.abs(vx)/300,0,1),direction=Math.sign(vx)||this.face||1;
+  const flutter=Math.sin(time*(3.4+speed*7))* (.018+speed*.065);
+  const drift=direction*speed*.28+(airborne?clamp(vy/650,-.18,.2):0);
+  const impulse=clamp((vx-this.lastVx)*-.0015+(vy-this.lastVy)*.0006,-.28,.28);
   this.lastVx=h.vx||0;this.lastVy=h.vy||0;
   const steps=Math.max(1,Math.ceil(Math.min(dt,.1)*120)),step=Math.min(dt,.1)/steps;
   for(let n=0;n<steps;n++)for(let i=0;i<8;i++){
-    const target=desired[i]+impulse*(i+1)/8;
+    const tip=(i+1)/8;const target=desired[i]+impulse*tip+drift*tip+flutter*tip;
     this.velocity[i]+=(42*(target-this.angles[i])-10*this.velocity[i])*step;
     this.angles[i]+=this.velocity[i]*step;
   }
