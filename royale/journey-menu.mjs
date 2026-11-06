@@ -15,8 +15,8 @@ export class JourneyMenu {
   preview(item){const g=this.getGame(),def=itemDefinition(item),panel=el('section',undefined,'equipment-preview'),canvas=el('canvas');canvas.width=360;canvas.height=420;const inv=structuredClone(g.inventory);if(!inv.items.some(i=>i.uid===item.uid))inv.items.push(item);inv.equipped[def.part]=item.uid;const body=el('div');body.append(el('h3',def.name),el('p',`${def.rarity} · Level ${def.level||1} · Fixed colors`),el('p',statsText(def)));for(const view of ['front','back']){const b=el('button',view==='front'?'Front preview':'Back preview','secondary');b.onclick=()=>drawEquipmentPreview(canvas,g,inv,view);body.append(b);}panel.append(canvas,body);$('equipment-list').prepend(panel);drawEquipmentPreview(canvas,g,inv);panel.scrollIntoView({block:'nearest'});}
   shop(){
     const g=this.getGame(),section=$('root-shop');section.replaceChildren();
-    const text=el('div');text.append(el('strong','Health Roots'),el('p',`Restore 25% HP anywhere. ${g.healthRoots} / 4 carried · 50 coins each.`));
-    const button=el('button','Buy Health Root · 50 ◈','secondary');button.id='buy-root';button.disabled=!g.canSave()||g.healthRoots>=4||g.hero.coins<50;
+    const text=el('div');text.append(el('strong','Health Roots'),el('p',`Restore 25% HP anywhere. ${g.healthRoots} / 10 carried · 50 coins each.`));
+    const button=el('button','Buy Health Root · 50 ◈','secondary');button.id='buy-root';button.disabled=!g.canSave()||g.healthRoots>=10||g.hero.coins<50;
     button.onclick=async()=>{if(await g.buyHealthRoot()){this.persist();this.shop();this.say('One Health Root added.');}};section.append(text,button);
   }
   updateClock(){const g=this.getGame();for(const region of WORLD_REGIONS){const n=document.querySelector(`[data-region="${region.id}"] small`);if(n)n.textContent=`RECOMMENDED ${region.levels.join('–')} · ${formatClock(worldClock(g.world.clockReference,g.now(),region.id))}`;}}
@@ -34,11 +34,11 @@ export class JourneyMenu {
   }
   inventory(){
     const g=this.getGame();this.confirmation=null;$('equipment-confirm').hidden=true;
-    $('inventory-summary').textContent=`${g.inventory.items.length} / 7 carried · Equipped and unequipped items share this limit. ${g.healthRoots} / 4 Health Roots stored separately.`;
+    $('inventory-summary').textContent=`${g.inventory.items.length} / 7 carried · Equipped and unequipped items share this limit. ${g.healthRoots} / 10 Health Roots stored separately.`;
     const list=$('equipment-list');list.replaceChildren();
     if(!g.inventory.items.length)list.append(el('p','Your starter suit is always yours. Regular monsters may drop fixed-color costume equipment.','empty-equipment'));
     const ground=g.loot.find(o=>o.id===this.groundReward),pending=ground?.item||g.inventory.pending[0],reward=$('pending-reward');reward.replaceChildren();reward.hidden=!pending;
-    if(pending){const def=itemDefinition(pending);reward.append(el('div',g.inventory.items.length>=7?'INVENTORY FULL · CHOOSE YOUR REWARD':'CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`${def.rarity==='rare'?'Constant white glow.':'No glow.'} Choose a carried item below to compare and replace, or leave this item.`));
+    if(pending){const def=itemDefinition(pending);reward.append(el('div',g.inventory.items.length>=20?'INVENTORY FULL · CHOOSE YOUR REWARD':'CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`${def.rarity==='rare'?'Constant white glow.':'No glow.'} Choose a carried item below to compare and replace, or leave this item.`));
       if(g.inventory.items.length<7){const keep=el('button','Keep this equipment','primary');keep.id='accept-reward';keep.disabled=!g.canSave();keep.onclick=async()=>{if(await this.commit(()=>ground?pickupForGame(g,ground.id):g.acceptReward()))this.inventory();};reward.append(keep);}
       const decline=el('button',ground?'Leave orb on the ground':'Discard new reward','secondary');decline.id='discard-reward';decline.onclick=()=>{if(ground){this.groundReward=null;this.resume();}else this.confirm(null,true);};reward.append(decline);}
     for(const item of g.inventory.items){
