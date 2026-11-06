@@ -213,7 +213,7 @@ function startPatrol(continued){
   game.onBossVisualStep=(boss,time,dt,x)=>renderer.bossArt.step(boss,time,dt,x);
   if(game.arenaScene)renderer.bossArt.step(game.arenaScene.boss,game.time,0,game.hero.x);
   game.started=true;regionName='';lastHud='';renderer.camera=Math.max(0,game.hero.x-renderer.width*.37);renderer.cameraY=0;renderer.clearParticles();
-  setScreen('play');persist();updateHud();if(game.pendingMergeReward())showMergeReward();else if(game.treeVisit){setScreen('tree');erisMenu.open();}else if(game.inventory.pending.length){setScreen('inventory');journeyMenu.inventory();}say(continued?'Welcome back, hero. Your patrol continues.':'Welcome to the coast! Move right to find your first Bottle Critter.',4);
+  setScreen('play');persist();if(codePlay)queueMicrotask(sendCodeProgress);updateHud();if(game.pendingMergeReward())showMergeReward();else if(game.treeVisit){setScreen('tree');erisMenu.open();}else if(game.inventory.pending.length){setScreen('inventory');journeyMenu.inventory();}say(continued?'Welcome back, hero. Your patrol continues.':'Welcome to the coast! Move right to find your first Bottle Critter.',4);
 }
 async function begin(){
   const validation=creator.validate();if(!validation.ok)return;
@@ -501,7 +501,7 @@ requestAnimationFrame(frame);
 // Send exact in-memory progress every eight seconds; the parent owns cloud writes.
 function sendCodeProgress(){
  if(!codePlay||!game.started||criticalPending||powerUpgrades.busy||online())return;
- try{window.parent.postMessage({type:'royale-code-progress',slot:activeSlot,snapshot:game.save()},location.origin);}catch{}
+ try{const selected=Number(activeSlot);if(!Number.isInteger(selected)||selected<0||selected>2)return;window.parent.postMessage({type:'royale-code-progress',slot:selected,snapshot:game.save(),heroId:activeId},location.origin);}catch{}
 }
 if(codePlay)setInterval(sendCodeProgress,8000);
 
