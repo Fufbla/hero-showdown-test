@@ -42,7 +42,7 @@ export function benchmark(level,{type='guardian',gear='ordinary',build='mixed',a
   const power=attack==='rotation'?[true,true,true]:['strength','superKick','fireball'].includes(attack)?['strength','superKick','fireball'].map(id=>id===attack):[];
   g.step(STEP,{powers:power,kickHeld:attack==='rotation'||attack==='kick',punchHeld:attack==='punch'});
   hits+=g.drain().filter(event=>event.type==='hit').length;steps++;
-  if(steps===60)firstSecond=e.maxHp-e.hp;
+  if(steps<=60)firstSecond=e.maxHp-e.hp;
  }
  return {level,type,gear,build,attack,hp:e.maxHp,seconds:e.hp<=0?Number((steps*STEP).toFixed(2)):null,remaining:Number(e.hp.toFixed(2)),firstSecond:Number(firstSecond.toFixed(2)),hits};
 }

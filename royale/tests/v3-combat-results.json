@@ -59,7 +59,7 @@
       "hp": 5500,
       "seconds": 0.78,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 5500,
       "hits": 7
     },
     {
@@ -71,7 +71,7 @@
       "hp": 5500,
       "seconds": 0.27,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 5500,
       "hits": 5
     },
     {
@@ -83,7 +83,7 @@
       "hp": 5500,
       "seconds": 0.15,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 5500,
       "hits": 3
     },
     {
@@ -107,7 +107,7 @@
       "hp": 5500,
       "seconds": 0.27,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 5500,
       "hits": 5
     },
     {
@@ -119,7 +119,7 @@
       "hp": 5500,
       "seconds": 0.15,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 5500,
       "hits": 3
     },
     {
@@ -143,7 +143,7 @@
       "hp": 5500,
       "seconds": 0.27,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 5500,
       "hits": 5
     },
     {
@@ -155,7 +155,7 @@
       "hp": 5500,
       "seconds": 0.15,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 5500,
       "hits": 3
     },
     {
@@ -179,7 +179,7 @@
       "hp": 5500,
       "seconds": 0.27,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 5500,
       "hits": 5
     },
     {
@@ -191,7 +191,7 @@
       "hp": 5500,
       "seconds": 0.15,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 5500,
       "hits": 3
     },
     {
@@ -203,7 +203,7 @@
       "hp": 34,
       "seconds": 0.92,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 34,
       "hits": 3
     },
     {
@@ -215,7 +215,7 @@
       "hp": 120,
       "seconds": 0.07,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 120,
       "hits": 2
     },
     {
@@ -227,7 +227,7 @@
       "hp": 420,
       "seconds": 0.07,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 420,
       "hits": 2
     },
     {
@@ -239,7 +239,7 @@
       "hp": 1550,
       "seconds": 0.07,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 1550,
       "hits": 2
     },
     {
@@ -251,7 +251,7 @@
       "hp": 3500,
       "seconds": 0.05,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 3500,
       "hits": 2
     },
     {
@@ -517,7 +517,7 @@
       "hp": 34,
       "seconds": 0.92,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 34,
       "hits": 3
     },
     {
@@ -529,7 +529,7 @@
       "hp": 120,
       "seconds": 0.07,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 120,
       "hits": 2
     },
     {
@@ -541,7 +541,7 @@
       "hp": 420,
       "seconds": 0.07,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 420,
       "hits": 2
     },
     {
@@ -553,7 +553,7 @@
       "hp": 1550,
       "seconds": 0.07,
       "remaining": 0,
-      "firstSecond": 0,
+      "firstSecond": 1550,
       "hits": 2
     },
     {
