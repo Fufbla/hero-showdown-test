@@ -50,3 +50,13 @@ button:focus-visible,a:focus-visible{outline:3px solid #f1d494;outline-offset:3p
 
 /* Gameplay-only presentation: keep routine narration out of the action viewport. */
 body.game-view #toast { display: none !important; }
+
+/* Compact navigation and direct wardrobe equipment controls. */
+#close-tree{display:none!important}
+#menu-exit-actions{display:none!important}
+#return-menu:not([hidden]){display:inline-flex;align-items:center;justify-content:center}
+.shop-item{position:relative}
+.shop-item:has(.wardrobe-quick-equip){padding-right:52px}
+.wardrobe-quick-equip{position:absolute;top:6px;right:6px;z-index:2;width:40px;height:40px;min-width:40px;min-height:40px;padding:0;border:1px solid #e5ca81;border-radius:10px;background:#b99a52;color:#122e2e;font-size:26px;font-weight:800;line-height:1;touch-action:manipulation}
+.wardrobe-quick-equip:disabled{opacity:1;background:#dfc988;color:#173c3d}
+.wardrobe-quick-equip:focus-visible{outline:3px solid #f4e5b5;outline-offset:2px}
