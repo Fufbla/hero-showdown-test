@@ -71,7 +71,7 @@ function updateMenuExitActions(next){
  const enabled=hasResumeActions(next,{gameStarted:game.started,editing,pauseSubmenu:$('pause-primary').hidden});
  const overlay=enabled?$(menuExitOverlays[next]):null;
  if(!overlay){menuExitActions.hidden=true;return;}
- overlay.append(menuExitActions);menuExitActions.hidden=false;
+ overlay.append(menuExitActions);menuExitActions.hidden=true;
 }
 const input=new Input(document,()=>{
  if(criticalPending||powerUpgrades.busy||screen==='mergeReward')return;
@@ -166,7 +166,7 @@ function setScreen(next){
   screen=next;if(online())multiplayerMenu.session.pause(next!=='play');input.enabled=next==='play';input.clear();game.paused=next!=='play';
   for(const [name,id] of Object.entries({account:'account-menu',roster:'roster',creator:'creator',pause:'pause-menu',delete:'delete-dialog',tree:'tree-menu',controls:'controls-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',mergeReward:'merge-reward'}))$(id).hidden=next!==name;
   const inGame=game.started&&(['play','powerPicker','pause','tree','controls','world','inventory','chest','mergeReward','account'].includes(next)||(next==='creator'&&editing));
-  $('hud').hidden=!inGame;$('mission').hidden=!inGame;$('pause').disabled=!inGame;
+  $('hud').hidden=!inGame;$('mission').hidden=!inGame;$('pause').disabled=!inGame;$('return-menu').hidden=!inGame;
   $('pause').setAttribute('aria-label',next==='play'?'Pause game':'Resume game');$('pause').textContent=next==='play'?'Ⅱ':'▷';
   document.body.classList.toggle('sanctuary-view',game.treeVisit);document.body.classList.toggle('playing',next==='play');document.body.classList.toggle('game-view',inGame);
   if(next!=='play'){$('world-portal').hidden=true;$('rest').hidden=true;$('visit-tree').hidden=true;$('death').hidden=true;}
@@ -385,6 +385,7 @@ $('open-controls').onclick=()=>{setScreen('controls');controlMenu.render();$('se
 $('creator-form').addEventListener('submit',e=>{e.preventDefault();begin();});
 $('cancel-look').onclick=cancelCreator;
 $('pause').onclick=()=>{if(screen==='play')pause();else if(game.started)resume();else backToPause();};
+$('return-menu').onclick=()=>{if(!game.started)return;if(screen==='play'){pause();return;}abandonUnconfirmedAppearance();showPause();};
 $('resume').onclick=resume;$('edit-look').onclick=()=>openTree('appearance');
 $('return-camp').onclick=async()=>{if(await game.returnCheckpoint()){handleEvents();persist();resume();}else say('Leave combat before returning to your checkpoint.');};
 $('choose-hero').onclick=openRoster;$('back-to-patrol').onclick=resume;
