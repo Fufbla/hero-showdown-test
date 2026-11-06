@@ -1,3 +1,4 @@
+import {LOOT} from './progression.mjs';
 import { LEGENDARY, LEGENDARY_ATTACKS, LEGENDARY_HP, MERGE_CATALOG } from './legendary-data.mjs';
 import { ARENA, bossPhase } from './boss-data.mjs';
 import { itemDefinition } from './equipment.mjs';
@@ -97,7 +98,7 @@ export const legendaryMethods={
  pendingMergeReward(){return Object.entries(this.legendary.defeated).find(([,r])=>!r.claimed)?.[0]||null;},
  claimMergeReward(id,keepUids,discardUids,{confirmed=false,revision}={}){
   const record=this.legendary.defeated[id];if(!confirmed||revision!==this.legendary.revision||!this.canSave()||!record||record.claimed||!Array.isArray(keepUids)||!Array.isArray(discardUids))return false;
-  if(new Set(keepUids).size!==keepUids.length||new Set(discardUids).size!==discardUids.length||keepUids.some(uid=>!record.pieces.some(p=>p.uid===uid))||discardUids.some(uid=>!this.inventory.items.some(p=>p.uid===uid))||this.inventory.items.length-discardUids.length+keepUids.length>7)return false;
+  if(new Set(keepUids).size!==keepUids.length||new Set(discardUids).size!==discardUids.length||keepUids.some(uid=>!record.pieces.some(p=>p.uid===uid))||discardUids.some(uid=>!this.inventory.items.some(p=>p.uid===uid))||this.inventory.items.length-discardUids.length+keepUids.length>LOOT.inventoryLimit)return false;
   for(const uid of discardUids)this.retireItem(uid);this.inventory.items=this.inventory.items.filter(i=>!discardUids.includes(i.uid));
   record.claimed=true;
   for(const p of record.pieces){if(keepUids.includes(p.uid)){this.inventory.items.push({uid:p.uid,catalogId:p.catalogId});p.state='owned';}else{p.state='discarded';this.retireItem(p.uid);}}

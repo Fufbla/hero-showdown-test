@@ -89,7 +89,8 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   const blinkClock=time%3.9;
   const blink=p.clip==='idle'&&blinkClock>3.52&&blinkClock<3.70 ? Math.sin((blinkClock-3.52)/.18*Math.PI) : 0;
   const starter=(!options.outfit||options.outfit.origin==='starter')&&!Object.keys(pieces).length;
-  if(view==='game'&&p.clip!=='idle'&&!options.bake&&!options.layered&&!blink&&scale<=1.35&&starter&&isDefaultLook(look)&&(!h.steel||p.clip==='steel')&&drawDefaultSprite(c,p,look)){
+  const liveCape=look.cape&&view==='game'&&options.cloth&&!options.bake;
+  if(!liveCape&&view==='game'&&p.clip!=='idle'&&!options.bake&&!options.layered&&!blink&&scale<=1.35&&starter&&isDefaultLook(look)&&(!h.steel||p.clip==='steel')&&drawDefaultSprite(c,p,look)){
     c.restore();return worldPose(p,width,height,'atlas');
   }
   c.rotate(p.rotation);c.scale(UNIT*width,UNIT*height);c.translate(-original.origin[0],-original.origin[1]);
@@ -101,7 +102,7 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   const untouchedBody=look.build===base.build && ['waist','hips','chest','shoulders','torso','arms','legs','muscle'].every(k=>look[k]===base[k]);
   const referenceIdle=p.clip==='idle'&&untouchedBody&&!bareHead&&look.cape&&starter&&
     look.emblem===base.emblem&&palette.emblemColor===base.emblemColor&&!h.steel;
-  if(referenceIdle){
+  if(referenceIdle&&!liveCape){
     // Hold the original standing key, then breathe without reconstructing its
     // silhouette. Both the neutral source size and its opaque RGB are exact.
     const breath=p.phase<.13?0:Math.sin((p.phase-.13)/.87*Math.PI)**2;
@@ -117,7 +118,7 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   const motion=hairMotion(options.artState||options.cloth,h,time,look.hair,options.dt);
   const wear=(part,item,side=0)=>drawStyleCEquipment(c,part,item,p,look,{view,side,steel:h.steel});
   drawStyleCEquipmentAura(c,pieces,p,look,{view});
-  if(look.cape)withStyleCEquipmentGlow(c,pieces.cape,()=>drawStyleCCape(c,original,p,look,palette,time));
+  if(look.cape)withStyleCEquipmentGlow(c,pieces.cape,()=>drawStyleCCape(c,original,p,look,palette,time,liveCape?{owner:options.cloth,hero:h,dt:options.dt}:null));
   if(customHair)drawHairLayer(c,look,p,motion,time,'rear',view);
   function limb(group,i){
     drawStyleCMotionLimb(c,p,group,i,faceLook,palette,pieces);

@@ -1,3 +1,4 @@
+import {LOOT} from './progression.mjs';
 import {WARDROBE_CATALOG as COSTUME_CATALOG} from './flight-armor.mjs';
 import { COSTUME_PARTS, resaleValue } from './costume-catalog.mjs';
 import { itemDefinition } from './equipment.mjs';
@@ -60,7 +61,7 @@ export const erisMethods={
     const definitions=selection?.catalogId?[COSTUME_CATALOG[selection.catalogId]]:Object.values(COSTUME_CATALOG).filter(d=>d.setId===selection?.setId&&d.shop);
     if(!definitions.length||definitions.some(d=>!d?.shop)||(!selection.catalogId&&definitions.length!==3))return failed('That costume is not sold here.');
     if(definitions.some(d=>d.level>this.hero.level))return failed(`Requires hero level ${Math.max(...definitions.map(d=>d.level))}.`);
-    const cost=definitions.reduce((s,d)=>s+d.catalogValue,0),needed=Math.max(0,this.inventory.items.length+definitions.length-7);
+    const cost=definitions.reduce((s,d)=>s+d.catalogValue,0),needed=Math.max(0,this.inventory.items.length+definitions.length-LOOT.inventoryLimit);
     if(this.hero.coins<cost)return failed(`Need ${cost} coins. Your balance is ${this.hero.coins}.`);
     if(new Set(discardUids).size!==discardUids.length||discardUids.some(uid=>!this.inventory.items.some(i=>i.uid===uid)))return failed('Choose distinct owned items to discard.');
     if(discardUids.length!==needed)return {ok:false,error:`Choose ${needed} owned item${needed===1?'':'s'} to discard before buying.`,needed,cost,definitions};
@@ -90,7 +91,7 @@ export const erisMethods={
   },
   rootPreview(count=1){
     if(!this.nearTree()||!this.canSave())return failed('Visit the Tree of Eris outside combat.');
-    if(!Number.isInteger(count)||count<1||count>4-this.healthRoots)return failed(`Space for ${4-this.healthRoots} Health Roots.`);
+    if(!Number.isInteger(count)||count<1||count>LOOT.rootLimit-this.healthRoots)return failed(`Space for ${LOOT.rootLimit-this.healthRoots} Health Roots.`);
     const cost=count*50;if(this.hero.coins<cost)return failed(`Need ${cost} coins.`);
     return {ok:true,count,cost,revision:this.economy.revision};
   },

@@ -1,5 +1,29 @@
 import {CAPE_LENGTH} from './hero-rig.mjs';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+// Live Style C uses painted cape tiles, not the older angular-chain renderer.
+// Keep inertia outside hero/save state; a WeakMap releases retired renderers.
+const paintedCapes=new WeakMap();
+export function paintedCapeMotion(owner,h,time,dt=1/60){
+ let s=paintedCapes.get(owner);
+ if(!s){s={lean:0,lift:0,speed:0,air:0,kick:0,lastVy:h.vy||0,face:h.face||1,time};paintedCapes.set(owner,s);}
+ const step=clamp(Number.isFinite(dt)?dt:1/60,0,.05);
+ if(!step)return s;
+ const face=h.face||1,vx=h.vx||0,vy=h.vy||0,speed=clamp(Math.abs(vx)/400,0,1.3),air=h.grounded?0:1;
+ if(face!==s.face){s.lean*=-.45;s.face=face;}
+ // Takeoff and double-jump acceleration briefly lift the hem; landing damps it.
+ s.kick=clamp(s.kick+(vy-s.lastVy)*.025,-18,18)*Math.exp(-step*7);s.lastVy=vy;
+ const blend=1-Math.exp(-step*8),direction=Math.sign(vx*face)||1;
+ const lean=-direction*speed*60-air*10;
+ const lift=air?clamp(vy*.028,-18,13)+s.kick:0;
+ s.lean+=(lean-s.lean)*blend;s.lift+=(lift-s.lift)*blend;
+ s.speed+=(speed-s.speed)*blend;s.air+=(air-s.air)*blend;s.time=time;
+ return s;
+}
+export function paintedCapeOffset(s,fraction){
+ const t=clamp(fraction,0,1),weight=t*t;
+ const wave=Math.sin(s.time*(3+s.speed*5)-t*5)*(1.5+s.speed*5+s.air*2);
+ return {x:(s.lean+wave)*weight,y:(s.lift+Math.sin(s.time*4-t*6)*(s.speed+s.air)*2)*weight};
+}
 // Eight damped angular springs. Cosmetic only: no collision or combat state is read back.
 // Exact link lengths avoid stretch, and bending above the floor avoids clipped hems.
 export class CapeCloth{

@@ -7,17 +7,17 @@ import {matchingStrengthBonus} from './strength-armor.mjs';
 import {matchingRootsBonus,refreshRootsEffect} from './roots-armor.mjs';
 import {matchingSteelBonus, refreshSteelEffect} from './steel-armor.mjs';
 import {matchingFireballBonus} from './power-armor.mjs';
-import {spawnLoot} from './world-loot.mjs';
+import {spawnLoot,normalizeLoot} from './world-loot.mjs';
 import { matchingMerge, mergeEntitlement } from './legendary-state.mjs';
 import { WORLD_REGIONS, TYPES, regionDefinition, regionCamps, regionSpawns, regionSurfaces, boardIndex, GATES } from './world.mjs';
-import { LOOT, RESPAWN, worldClock, monsterXP, xpForLevel, maximumHP } from './progression.mjs';
+import { LOOT, RESPAWN, worldClock, monsterXP, xpForLevel, maximumHP, regularLootOutcome } from './progression.mjs';
 import { emptyInventory, equipmentBonuses, equipmentOutfit, itemDefinition, rollEquipment } from './equipment.mjs';
 import { initialWorld } from './world-state.mjs';
 import { equipmentStats, isBoss } from './powers.mjs';
 import {ProjectilePool,clearProjectiles,compactProjectiles} from './projectiles.mjs';
 
 export function initializeJourney(g,save,now){
-  g.loot=structuredClone(save?.loot||[]);g.now=now;g.world=structuredClone(save?.world||initialWorld(now()));g.regionId=g.world.region;
+  g.loot=normalizeLoot(save?.loot||[],now());g.now=now;g.world=structuredClone(save?.world||initialWorld(now()));g.regionId=g.world.region;
   g.camps=regionCamps(g.regionId);g.healthRoots=save?.healthRoots||0;g.inventory=structuredClone(save?.inventory||emptyInventory());
   g.enemyShots=[];g.enemyShotPool=new ProjectilePool(64);g.treeVisit=false;g.bossEncounter=null;g.board=0;
 }
@@ -95,7 +95,7 @@ export const journeyMethods={
     this.refreshEquipment();return true;
   },
   resolveReward(uid,confirmed=false){
-    // Pending loot is unclaimed. It cannot be equipped or count as an eighth carried item.
+    // Pending boss rewards remain unclaimed, outside the carried equipment limit.
     if(!confirmed||!this.canSave()||!this.inventory.pending.length)return false;
     if(uid===null){this.retireItem(this.inventory.pending[0].uid);this.recordEconomy('discard');this.inventory.pending.shift();return true;}
     const index=this.inventory.items.findIndex(i=>i.uid===uid);if(index<0)return false;
@@ -118,8 +118,9 @@ export const journeyMethods={
     h.coins=Math.min(999999,h.coins+coins);this.gainXP(xp);
     let root=false,item=null;
     if(regular&&!summoned){
-      if(this.random()<LOOT.rootChance){spawnLoot(this,e,'root');root=true;}
-      item=rollEquipment(info.region,this.random,this.inventory.nextId);
+      const outcome=regularLootOutcome(this.random());
+      if(outcome==='root'){spawnLoot(this,e,'root');root=true;}
+      if(outcome==='equipment')item=rollEquipment(info.region,this.random,this.inventory.nextId);
       if(item){
         this.inventory.nextId++;
         // Reveal every item before the player accepts it, even when capacity remains.

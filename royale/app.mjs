@@ -4,7 +4,7 @@ import {createMultiplayerMenu} from './multiplayer-gate.mjs';
 import {rewardNotice} from './reward-notice.mjs';
 import {installLandscapeLayout} from './landscape-layout.mjs';
 import {drawEquipmentPreview} from './eris-ui.mjs';
-import {selectedInteraction,nearbyInteractions} from './world-loot.mjs';
+import {selectedInteraction,nearbyInteractions,expireLoot} from './world-loot.mjs';
 import {FrameMetrics,performanceLabel} from './performance.mjs';
 import {text as hudText,html as hudHTML,attr as hudAttr} from './hud-dom.mjs';
 import {shouldWriteAdventure} from './save-policy.mjs';
@@ -312,7 +312,7 @@ function updateHud() {
 
   hudText($('world-region'),game.treeVisit?'PEACEFUL SANCTUARY':game.getRegion().name.toUpperCase());$('world-clock').hidden=game.regionId<3;hudText($('world-clock'),formatClock(game.clock()));$('world-clock').title=clockSynchronized()?'Synchronized with account server time':'Offline clock uses this device time; server synchronization awaits the account service.';
   hudText($('root-count'),game.healthRoots);hudText($('health-root').querySelector('kbd'),input.controls.keys.heal[0].replace('Key','').replace('Digit',''));$('health-root').disabled=screen!=='play'||h.dead||game.healthRoots===0||h.hp>=h.maxHp;
-  hudAttr($('health-root'),'aria-label',`Use Health Root · ${game.healthRoots} of 4 · restore 25% HP`);
+  hudAttr($('health-root'),'aria-label',`Use Health Root · ${game.healthRoots} of 10 · restore 25% HP`);
   if (region.name !== regionName) { regionName = region.name; $('region').textContent = region.name;$('stage').setAttribute('aria-label',`${game.getRegion().name} game`);$('game').setAttribute('aria-label',`${game.getRegion().name}, ${region.name}. Move, double-jump, punch, kick and use your equipped powers.`); }
   const snapshot = `${h.hp}|${h.maxHp}|${h.level}|${h.xp}|${h.coins}|${game.look.name}|${game.kills}|${game.species.size}|${game.reachedEnd}`;
   if (snapshot !== lastHud) {
@@ -340,7 +340,7 @@ function updateHud() {
   $('cycle-interaction').hidden=true;
   $('rest').textContent=target?`${target.label} · ${input.controls.keys.interact[0].replace('Key','')}`:'';
   $('death').hidden = !h.dead || screen !== 'play'; $('diagnostics').hidden = !params.has('qa');
-  if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nregion ${game.regionId} · roots ${game.healthRoots} · gear ${game.inventory.items.length}/7 · clock ${game.clock().phase}\npowers ${game.powers.data.equipped.join(',')} · points ${game.powers.data.points} · combat ${game.inCombat()}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}${game.arenaScene?`\nboss ${game.arenaScene.boss.hp.toFixed(0)}/${game.arenaScene.boss.maxHp} · phase ${game.arenaScene.boss.phase} · waves ${game.bossEncounter?.waves||0} · helpers ${game.enemies.filter(e=>e.summoned&&e.state!=='dead').length} · cleared ${game.arenaScene.cleared}`:''}`;
+  if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nregion ${game.regionId} · roots ${game.healthRoots} · gear ${game.inventory.items.length}/20 · clock ${game.clock().phase}\npowers ${game.powers.data.equipped.join(',')} · points ${game.powers.data.points} · combat ${game.inCombat()}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}${game.arenaScene?`\nboss ${game.arenaScene.boss.hp.toFixed(0)}/${game.arenaScene.boss.maxHp} · phase ${game.arenaScene.boss.phase} · waves ${game.bossEncounter?.waves||0} · helpers ${game.enemies.filter(e=>e.summoned&&e.state!=='dead').length} · cleared ${game.arenaScene.cleared}`:''}`;
   if(params.has('qa')&&online())$('diagnostics').textContent+='\nnetwork '+(multiplayerMenu.session.client.ready?'ready':'reconnecting')+' · confirmed '+multiplayerMenu.session.state.revision+' · peers '+multiplayerMenu.session.state.nearby.length+' · code '+(multiplayerMenu.session.state.code||'solo');
   if(params.has('qa')&&!game.arenaScene)$('diagnostics').textContent+='\nplatforms '+game.surfaces.filter(s=>s.tier===2||s.tier===3).map(s=>s.id+':'+game.enemies.filter(e=>e.spawnSurface?.id===s.id&&e.state!=='dead').length).join(' ');
 
@@ -468,6 +468,10 @@ function frame(now){
   if(screen==='play'&&!online()&&activeId&&multiplayerMenu.isLinked(activeId)){showPause();say('This hero was transferred to account saving. Open Solo & Multiplayer to reconnect.',8);}
   if (input.interrupted || document.hidden) {
     accumulator=0;last=now;requestAnimationFrame(frame);return;
+  }
+  if(game.started&&!online()&&expireLoot(game)){
+    backgroundSignature='';
+    if(screen==='inventory'&&journeyMenu.groundReward&&!game.loot.some(o=>o.id===journeyMenu.groundReward)){journeyMenu.groundReward=null;journeyMenu.inventory();}
   }
   const menuScreen=screen;menuGamepad.poll(now);
   if(menuScreen!==screen){input.waitForNeutralPad=true;input.clear();}

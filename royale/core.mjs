@@ -1,5 +1,5 @@
 import {BASIC_GROWTH} from './combat-tuning.mjs';
-import {normalizeLoot,nearbyInteractions,stepLoot,selectedInteraction,pickupLoot} from './world-loot.mjs';
+import {normalizeLoot,expireLoot,nearbyInteractions,stepLoot,selectedInteraction,pickupLoot} from './world-loot.mjs';
 import {sharedNow} from './shared-clock.mjs';
 import { legendaryMethods, stepLegendaryBoss } from './legendary-bosses.mjs';
 import { mergeMethods } from './merge-powers.mjs';
@@ -330,6 +330,7 @@ export class Game {
 
   save() {
     if(!this.canSave())return null;
+    expireLoot(this);
     const h=this.hero;
     this.world.checkpoint=this.world.checkpoint.region===this.regionId?{region:this.regionId,index:this.checkpoint}:this.world.checkpoint;
     if(!this.world.activated.includes(`${this.world.checkpoint.region}:${this.world.checkpoint.index}`))this.world.activated.push(`${this.world.checkpoint.region}:${this.world.checkpoint.index}`);

@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>V3 loot and cape verification</title>
+<style>body{font:15px system-ui;background:#102c36;color:#f4e7c1;margin:12px}button{padding:10px;margin:4px}iframe{display:block;border:0;width:844px;height:390px;max-width:100%}pre{white-space:pre-wrap;max-height:260px;overflow:auto}canvas{background:#d3e2d1;border-radius:8px;max-width:100%}</style>
+<h1>V3 loot and cape verification</h1><p>Isolated test heroes. Player saves and accounts are never accessed.</p>
+<button id="run">Run browser checks</button><button id="reload">Reload persistence check</button>
+<button id="movement">Run, turn and double jump</button><p id="summary" role="status">Ready</p>
+<iframe id="game" title="V3 test heroes"></iframe><pre id="log"></pre>
+<h2>Live painted capes</h2><p>Idle · run · jump · fall. Both approved character designs, rendered with live cape motion.</p><canvas id="capes" width="880" height="370"></canvas>
+<script type="module" src="v3-loot-browser.mjs"></script></html>

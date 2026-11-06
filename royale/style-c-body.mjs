@@ -1,4 +1,5 @@
 import {skinShade} from './skin-color.mjs';
+import {paintedCapeMotion,paintedCapeOffset} from './cape.mjs';
 // The protected rest sprites contain the original reference RGB. Torso plates
 // have a second, emblem-free painting for changing the insignia cleanly.
 import {STYLE_C_DEFAULTS} from './style-c-defaults.mjs';
@@ -141,10 +142,26 @@ export function drawStyleCTorso(c,base,p,look,palette,hasEquippedEmblem) {
   }
   c.restore();
 }
-export function drawStyleCCape(c,base,p,look,palette,time) {
+export function drawStyleCCape(c,base,p,look,palette,time,live=null) {
   const tile=colored('cape',base,look,palette);if(!tile)return;
   const x=base.sex==='male'?438:776, y=base.sex==='male'?417:436;
   const dx=p.shoulder[0]-base.shoulder[0],dy=p.shoulder[1]-base.shoulder[1];
+  if(live){
+    const motion=paintedCapeMotion(live.owner,live.hero,time,live.dt),top=y-base.shoulder[1],left=x-base.shoulder[0];
+    c.save();c.translate(p.shoulder[0],p.shoulder[1]);
+    // Adjacent strips use matching endpoints; the source pixels and colors stay
+    // unchanged. The upper clasp has zero offset and the free hem carries waves.
+    const bands=16,height=tile.height/bands;
+    for(let i=0;i<bands;i++){
+      const start=i*height,end=(i+1)*height;
+      const a=paintedCapeOffset(motion,(top+start)/(top+tile.height)),b=paintedCapeOffset(motion,(top+end)/(top+tile.height));
+      const sampleHeight=Math.min(height+.35,tile.height-start);
+      c.save();c.translate(left+a.x,top+start+a.y);
+      c.transform(1,0,(b.x-a.x)/height,1+(b.y-a.y)/height,0,0);
+      c.drawImage(tile,0,start,tile.width,sampleHeight,0,0,tile.width,sampleHeight);c.restore();
+    }
+    c.restore();return;
+  }
   const wind=(p.moving||0)+(p.clip==='flight'?1:0);
   // Shear the complete painted cloth around its clasp. A single filtered image
   // keeps the ink line and folds continuous at every camera scale.

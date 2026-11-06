@@ -1,3 +1,4 @@
+import {LOOT} from './progression.mjs';
 import { ARENA, BOSSES, BOSS_MOVEMENT, attackFor, bossPhase } from './boss-data.mjs';
 import { bossVictory, monsterXP } from './progression.mjs';
 import { rollChest, initialBossProgress } from './boss-state.mjs';
@@ -103,9 +104,9 @@ export const bossMethods={
   availableChest(){return !this.arenaScene?.legendary&&this.arenaScene?.cleared&&this.bossProgress.records[this.regionId]?.chest.state==='available'?this.bossProgress.records[this.regionId].chest:null;},
   claimChest(){
     const chest=this.availableChest();if(!chest||!this.canSave()||this.inventory.pending.length)return false;
-    this.hero.coins=Math.min(999999,this.hero.coins+chest.coins);const roots=Math.min(4-this.healthRoots,chest.roots);this.healthRoots+=roots;
-    for(const item of chest.items)this.inventory.pending.push({uid:`drop-${this.inventory.nextId++}`,catalogId:item.catalogId});
+    this.hero.coins=Math.min(999999,this.hero.coins+chest.coins);const roots=Math.min(LOOT.rootLimit-this.healthRoots,chest.roots);this.healthRoots+=roots;
+    for(const item of chest.items)this.inventory.pending.push({...structuredClone(item),uid:`drop-${this.inventory.nextId++}`});
     chest.state='claimed';this.recordEconomy('chest');this.emit('chest-claimed',{coins:chest.coins,roots,overflow:chest.roots-roots});return true;
   },
-  acceptReward(){if(!this.inventory.pending.length||this.inventory.items.length>=7||!this.canSave())return false;this.inventory.items.push(this.inventory.pending.shift());this.recordEconomy('reward');return true;},
+  acceptReward(){if(!this.inventory.pending.length||this.inventory.items.length>=LOOT.inventoryLimit||!this.canSave())return false;this.inventory.items.push(this.inventory.pending.shift());this.recordEconomy('reward');return true;},
 };
