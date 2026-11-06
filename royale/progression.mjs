@@ -20,7 +20,7 @@ export function formatClock(clock){
   if(clock.remaining===null)return 'Permanent day';
   return `${clock.night?'☾':'☀'} ${clock.phase} · ${Math.floor(clock.remaining/60)}:${String(clock.remaining%60).padStart(2,'0')}`;
 }
-export const LOOT=Object.freeze({rootChance:.10,rootPrice:50,rootLimit:4,ordinaryChance:.12,rareChance:[0,0,0,0,.07,.08,.09,.10],inventoryLimit:7});
+export const LOOT=Object.freeze({rootChance:.10,rootPrice:50,rootLimit:10,ordinaryChance:.12,rareChance:[0,0,0,0,.07,.08,.09,.10],inventoryLimit:20});
 export const RESPAWN=Object.freeze({common:18,strong:36,elite:150,safeDistance:160});
 // A Phase 5 encounter coordinator will call this after a verified victory. No battle is fabricated here.
 export function bossVictory(world,region){
