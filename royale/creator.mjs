@@ -64,7 +64,7 @@ export class Creator{
   tab(key){for(const name of Object.keys(FIELD_GROUPS)){const selected=key===name;$(`panel-${name}`).hidden=!selected;$(`tab-${name}`).setAttribute('aria-selected',String(selected));$(`tab-${name}`).tabIndex=selected?0:-1;}document.querySelector('.creator-fields').scrollTop=0;}
   fill(value,outfit,newHero=false){
     this.newHero=newHero;
-    this.look=sanitizeLook(value);this.outfit=outfit;this.view='front';for(const v of STYLE_C_VIEWS)$(`view-${v}`).setAttribute('aria-pressed',String(v===this.view));
+    this.look=sanitizeLook(value);this.outfit=outfit;this.originalCostume=Object.fromEntries(['suit','trim','emblemColor','capeColor','emblem','cape'].map(key=>[key,this.look[key]]));this.view='front';for(const v of STYLE_C_VIEWS)$(`view-${v}`).setAttribute('aria-pressed',String(v===this.view));
     $('name').value=this.look.name;
     for(const field of Object.values(FIELD_GROUPS).flat()){$(field)[$(field).type==='checkbox'?'checked':'value']=this.look[field];}
     for(const field of['suit','trim','emblemColor','capeColor'])$(field).disabled=!canRecolorOutfit(outfit);
@@ -74,7 +74,7 @@ export class Creator{
   read(){
     const values={name:$('name').value};
     for(const field of Object.values(FIELD_GROUPS).flat()){const el=$(field);values[field]=el.type==='checkbox'?el.checked:el.type==='range'?Number(el.value):el.value;if(el.type==='range')$(`${field}-value`).textContent=`${Math.round(Number(el.value)*100)}%`;}
-    this.look=sanitizeLook(values);for(const b of document.querySelectorAll('[data-skin]'))b.setAttribute('aria-pressed',String(b.dataset.skin===this.look.skin));$('preview-name').textContent=$('name').value.trim()||'Your hero';return this.look;
+    if(!this.newHero)Object.assign(values,this.originalCostume);this.look=sanitizeLook(values);for(const b of document.querySelectorAll('[data-skin]'))b.setAttribute('aria-pressed',String(b.dataset.skin===this.look.skin));$('preview-name').textContent=$('name').value.trim()||'Your hero';return this.look;
   }
   validate(show=true){const result=validateName($('name').value);$('name').setAttribute('aria-invalid',String(!result.ok));$('name-error').hidden=result.ok||!show;$('name-error').textContent=result.error||'';if(show&&!result.ok){this.tab('identity');$('name').focus();}return result;}
   draw(now=performance.now()){
