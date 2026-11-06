@@ -58,9 +58,8 @@ async function saveProgress(slot,snapshot){
   try{
    journalWrite({slot,revision,snapshot,createdAt:Date.now()});
    const result=await api({action:'save',code,slot,revision,snapshot});
-   const verified=await api({action:'recover',code});
-   if(result.revision!==verified.revision||JSON.stringify(verified.slots[slot])!==raw)throw Error('Cloud acknowledgement could not be verified.');
-   revision=verified.revision;slots=verified.slots;last[slot]=raw;localStorage.removeItem(journalKey());
+   if(result.revision!==revision+1)throw Error('Unexpected cloud revision. Local recovery journal retained.');
+   revision=result.revision;slots[slot]=snapshot;last[slot]=raw;localStorage.removeItem(journalKey());
    status('Cloud saved · '+new Date().toLocaleTimeString());
   }catch(error){blocked=true;status('Cloud sync paused · '+error.message+' Local recovery retained.');}
  });
