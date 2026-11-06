@@ -22,14 +22,13 @@ export class JourneyMenu {
   updateClock(){const g=this.getGame();for(const region of WORLD_REGIONS){const n=document.querySelector(`[data-region="${region.id}"] small`);if(n)n.textContent=`RECOMMENDED ${region.levels.join('–')} · ${formatClock(worldClock(g.world.clockReference,g.now(),region.id))}`;}}
   map(){
     const g=this.getGame(),list=$('region-cards');list.replaceChildren();
-    $('map-note').textContent=g.canTravel()?'Free portals reach all seven regions. Recommended levels describe danger, not entry requirements.':'Travel locked. Finish the encounter and spend five seconds without attacking or taking damage.';
+    $('map-note').textContent='';
     for(const region of WORLD_REGIONS){
       const open=true,current=region.id===g.regionId,card=el('article',undefined,'region-card');card.style.setProperty('--region-color',region.sky[0]);card.dataset.region=region.id;if(current)card.setAttribute('aria-current','location');
       const art=el('div',undefined,`region-art ${region.theme}`);art.append(el('span',String(region.id).padStart(2,'0'),'region-number'),el('b',['','≋','♧','▥','◇','❧','✧','✦'][region.id]));card.append(art);
-      const body=el('div',undefined,'region-copy');body.append(el('small',`RECOMMENDED ${region.levels.join('–')} · ${formatClock(worldClock(g.world.clockReference,g.now(),region.id))}`),el('h3',region.name),el('p',region.boards.join(' → ')));
-      body.append(el('p',`Portal destination: ${region.boards[0]} · safe checkpoint`));
-      body.append(el('p',`${document.body.classList.contains('practice-world')?'Unlocked practice fixture':g.world.bossVictories.includes(region.id)?'Victory recorded':'Challenge available'} · ${region.boss}`,'boss-note'));
-      const button=el('button',current?'Portal to safe camp':'Travel to safe camp',open?'secondary':'secondary locked');button.disabled=!open||!g.canTravel();button.dataset.travel=region.id;
+      const body=el('div',undefined,'region-copy');
+      body.append(el('h3',region.name),el('small',`LV ${region.levels.join('–')}`));
+      const button=el('button',current?'Travel':'Travel','secondary');button.disabled=!g.canTravel();button.dataset.travel=region.id;
       button.onclick=async()=>{if(await g.travel(region.id)){this.persist();this.resume();this.say(`${region.name} · arrived at safe camp.`);}else{this.say('Portal travel requires five safe seconds outside combat.');this.map();}};body.append(button);card.append(body);list.append(card);
     }
   }
