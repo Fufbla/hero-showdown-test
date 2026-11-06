@@ -27,6 +27,13 @@ const features = {
   }
 };
 const featureIndex = {nearEye:[4,0],farEye:[4,1],nearBrow:[5,0],farBrow:[5,1],nose:[6,0],mouth:[6,1]};
+function featureCoverage(kind,atlas,i){
+  const [layer,ch]=featureIndex[kind];
+  // The source eye mask overlaps the brow. Eyebrow ink belongs to its own
+  // component and must not stretch or duplicate when the eye shape changes.
+  const brow=kind.endsWith('Eye')?atlas[2][i+2]/255:0;
+  return atlas[layer][i+ch]*(1-brow);
+}
 const cap = v => Math.max(0, Math.min(255, v));
 const rgb = c => [1,3,5].map(i => parseInt(c.slice(i,i+2),16));
 const defaultFactory = (w,h) => typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w,h) :
@@ -57,18 +64,18 @@ export function prepareStyleCFace({canvasFactory, imageLoader} = {}) {
         c.drawImage(atlas,0,0);
         loaded[sex]=Array.from({length:9},(_,i)=>c.getImageData(i%3*w,Math.floor(i/3)*h,w,h).data);
       }
-      // The source mask excluded whole eye rectangles, including eyelid skin.
-      // Repair only warm skin pixels omitted from those rectangles. Explicit iris
-      // and brow material weights, neutral sclera and dark linework are protected.
+      // Recover skin material across the entire original illustrated head. The
+      // old eye cutouts extended beyond the feature rectangles, leaving warm
+      // default-color rings. Material recovery changes no artwork or geometry.
+      // The coverage plate separates gold accessories from the skin, while
+      // iris/brow channels preserve those independently selectable materials.
       for(const sex of ['male','female']) {
-        const layers=loaded[sex], base=layers[0], mask=layers[2];
-        const {origin:[ox,oy],size:[w]}=STYLE_C_FACE_ANCHORS[sex];
-        for(const name of ['nearEye','farEye']) {
-          const [x,y,width,height]=features[sex][name];
-          for(let yy=0;yy<height*density;yy++)for(let xx=0;xx<width*density;xx++){
-            const i=((y-oy)*density+yy)*w*density*4+((x-ox)*density+xx)*4;
-            if(isOmittedEyelidSkin(base,i,mask))mask[i]=255;
-          }
+        const layers=loaded[sex], base=layers[0], mask=layers[2], coverage=layers[3];
+        for(let i=0;i<base.length;i+=4){
+          if(!base[i+3]||coverage[i+2]>32||mask[i+1]>64||mask[i+2]>64)continue;
+          const r=base[i],g=base[i+1],b=base[i+2];
+          const skin=mask[i]>127 || (r>38&&g>14&&b>4&&r-g>7&&g-b>4&&r>g*1.12&&g>b*1.08);
+          if(skin){mask[i]=255;mask[i+1]=0;mask[i+2]=0;}
         }
       }
       art=loaded; return true;
@@ -194,14 +201,20 @@ function buildFace(look, mode, closed, steel) {
   const canvas=makeCanvas(W,H), c=canvas.getContext('2d',{willReadFrequently:true});
   const im=c.createImageData(W,H), data=im.data, changed=Object.keys(featureIndex).filter(k=>replaceFeature(k,look,closed));
   const transparentSkin=!channels.includes(0);
-  const masks=changed.map(k=>{const [index,ch]=featureIndex[k];return [atlas[index],ch];});
   for(let i=0;i<data.length;i+=4){
     if(!source[i+3])continue;
     let edit=0;
-    for (const [mask,ch] of masks) edit=Math.max(edit,mask[i+ch]);
+    for (const kind of changed) edit=Math.max(edit,featureCoverage(kind,atlas,i));
     const mix=edit/255;
-    for(let k=0;k<3;k++)data[i+k]=source[i+k]*(1-mix)+neutral[i+k]*mix;
+    for(let k=0;k<3;k++)data[i+k]=source[i+k];
     if(channels.length)recolor(data,i,material,channels,selected,reference);
+    // Once a feature is removed its background is skin, regardless of whether
+    // that pixel used to be iris or eyebrow ink. Recoloring the mixture with the
+    // old feature's material was the cause of the orange ghost eyebrows.
+    if(mix){
+      const bare=channels.includes(0)?skinShade([neutral[i],neutral[i+1],neutral[i+2]],selected[0],reference[0]):[neutral[i],neutral[i+1],neutral[i+2]];
+      for(let k=0;k<3;k++)data[i+k]=data[i+k]*(1-mix)+bare[k]*mix;
+    }
     if(!exposed || !transparentSkin) data[i+3]=source[i+3];
     else {
       // With one parameter changed, all neighboring source facial pixels remain exact.
@@ -214,10 +227,10 @@ function buildFace(look, mode, closed, steel) {
   for(const kind of changed){
     const box=features[sex][kind], [x,y,pw,ph]=box;
     const patch=makeCanvas(pw*density,ph*density), pc=patch.getContext('2d'), item=pc.createImageData(patch.width,patch.height);
-    const [layer,ch]=featureIndex[kind], mask=atlas[layer], original=atlas[8];
+    const original=atlas[8];
     for(let yy=0;yy<patch.height;yy++)for(let xx=0;xx<patch.width;xx++){
       const i=((yy+(y-oy)*density)*W+(x-ox)*density+xx)*4,j=(yy*patch.width+xx)*4;
-      if(!mask[i+ch])continue;
+      const coverage=featureCoverage(kind,atlas,i);if(!coverage)continue;
       const colors=[original[i],original[i+1],original[i+2],255];
       const skin=skinShade([original[i],original[i+1],original[i+2]],selected[0],reference[0]);
       for(const tint of channels){
@@ -225,26 +238,10 @@ function buildFace(look, mode, closed, steel) {
         for(let k=0;k<3;k++)colors[k]+=((tint===0?skin[k]:cap(original[i+k]*(selected[tint][k]+12)/(reference[tint][k]+12)))-original[i+k])*weight;
       }
       for(let k=0;k<3;k++)item.data[j+k]=colors[k];
-      item.data[j+3]=mask[i+ch]*original[i+3]/255;
+      item.data[j+3]=coverage*original[i+3]/255;
     }
     pc.putImageData(item,0,0);
     drawEditedFeature(c,kind,patch,box,look,model,closed);
-  }
-  if((closed || look.eyeShape!=='almond') && look.brows==='bold'){
-    // The heavy source brow meets the upper eyelid. Restore its ink after the
-    // changing eyelid has been painted, so a blink cannot erase the eyebrows.
-    for(const kind of ['nearBrow','farBrow']){
-      const [x,y,pw,ph]=features[sex][kind], brow=makeCanvas(pw*density,ph*density);
-      const bc=brow.getContext('2d'), ink=bc.createImageData(brow.width,brow.height);
-      for(let yy=0;yy<brow.height;yy++)for(let xx=0;xx<brow.width;xx++){
-        const i=((yy+(y-oy)*density)*W+(x-ox)*density+xx)*4,j=(yy*brow.width+xx)*4;
-        const a=material[i+2]*Math.max(atlas[4][i],atlas[4][i+1])/255;
-        if(!a)continue;
-        for(let k=0;k<3;k++)ink.data[j+k]=cap(atlas[8][i+k]*(selected[2][k]+12)/(reference[2][k]+12));
-        ink.data[j+3]=a*atlas[8][i+3]/255;
-      }
-      bc.putImageData(ink,0,0);c.drawImage(brow,x,y,pw,ph);
-    }
   }
   if(look.age==='older')drawAge(c,sex,selected[0]);
   if(look.facialHair!=='none'){

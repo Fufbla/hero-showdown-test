@@ -15,6 +15,6 @@ export function styleCCacheStatus(){
 export function drawHero(c,x,y,look,hero,time,scale=1,options={}){
   const view=options.view||'game';
   const opt=liveStyleCOptions(options,hero,time);
-  const render=view==='side'||view==='left'||view==='back' ? drawTurnaroundHero : drawSourceHero;
+  const render=view==='side'||view==='right'||view==='left'||view==='back' ? drawTurnaroundHero : drawSourceHero;
   return render(c,x,y,look,hero,time,scale,opt)||poseFor(look,hero,time,view);
 }

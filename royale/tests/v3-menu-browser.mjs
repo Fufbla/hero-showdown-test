@@ -1,3 +1,4 @@
+import {REVIEW_LOOKS} from './original-face-fixtures.mjs';
 import {combatFixture} from './combat-benchmark.mjs';
 import {decodeSave} from '../core.mjs';
 import {LocalHeroStore,PROFILE_KEY} from '../saves.mjs';
@@ -14,7 +15,7 @@ const inside=(r,w,h)=>r.width>0&&r.height>0&&r.left>=0&&r.top>=0&&r.right<=w+1&&
 const separate=(a,b)=>a.right<=b.left+.5||b.right<=a.left+.5||a.bottom<=b.top+.5||b.bottom<=a.top+.5;
 addEventListener('message',e=>{if(e.source===frame.contentWindow&&e.origin===location.origin&&e.data?.type==='royale-code-progress')messages.push({...e.data,at:performance.now(),snapshot:decodeSave(e.data.snapshot)});});
 function fixture(slot,encounter=false){
- const g=combatFixture(slot===1?90:14);g.look.name='Menu QA '+(slot+1);g.healthRoots=10;
+ const g=combatFixture(slot===1?90:14);if(new URLSearchParams(location.search).has('heads'))g.look={...REVIEW_LOOKS[slot===0?1:5]};g.look.name='Menu QA '+(slot+1);g.healthRoots=10;
  while(g.inventory.items.length<20)g.inventory.items.push(rollHelmetStats(costumeDrop(1,'ordinary',0,g.inventory.nextId++),()=>.3+slot*.2));
  g.hero.x=160+slot*8;g.hero.coins=468+slot;g.hero.xp=57+slot;g.hero.hp-=20;
  if(encounter){g.loadRegion(7);const target=g.enemies.find(e=>e.type==='guardian'&&e.surface.id==='sand-b');Object.assign(g.hero,{x:target.x-45,y:target.y,face:1,hp:g.hero.maxHp});for(const e of g.enemies)if(e!==target){e.hp=0;e.state='dead';e.respawn=180;}}

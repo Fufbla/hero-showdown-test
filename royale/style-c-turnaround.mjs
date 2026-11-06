@@ -33,6 +33,23 @@ export function prepareTurnarounds({canvasFactory, imageLoader} = {}) {
     if(art.width!==ids.width || art.height!==ids.height) throw Error('Different turnaround layer and material atlas sizes.');
     const canvas=rasterCanvas(ids.width,ids.height), c=canvas.getContext('2d',{willReadFrequently:true});
     c.drawImage(ids,0,0); mask=c.getImageData(0,0,ids.width,ids.height).data;
+    // Preserve every original profile pixel. Only recover omitted skin material
+    // around the eye; hair, earrings, iris and intentional dark ink stay intact.
+    c.clearRect(0,0,canvas.width,canvas.height);c.drawImage(art,0,0);
+    const source=c.getImageData(0,0,canvas.width,canvas.height).data;
+    for(const sex of ['male','female'])for(const name of ['source','head','bareHead']){
+      const [sx,sy,w,h,left,top]=TURNAROUND_MODELS[sex+'-side'].parts[name];
+      const eyeX=(sex==='male'?38:33)+(name==='bareHead'?2:0),eyeY=sex==='male'?-207:-211;
+      for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+        const px=x+left,py=y+top,i=((sy+y)*art.width+sx+x)*4;
+        if(mask[i]!==0||Math.abs(px-eyeX)>26||py<eyeY-26||py>eyeY+18||!source[i+3])continue;
+        const r=source[i],g=source[i+1],b=source[i+2];
+        if(!(r>38&&g>14&&b>4&&r-g>7&&g-b>4&&r>g*1.12&&g>b*1.08))continue;
+        let iris=false;
+        for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++)if(x+dx>=0&&x+dx<w&&y+dy>=0&&y+dy<h&&mask[((sy+y+dy)*art.width+sx+x+dx)*4]===6)iris=true;
+        if(!iris)mask[i]=1;
+      }
+    }
     artwork=art;
     return true;
   }).catch(cause=>{error=cause.message;loading=null;return false;});
