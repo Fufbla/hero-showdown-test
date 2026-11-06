@@ -78,6 +78,6 @@ $('input-code').addEventListener('keydown',e=>{if(e.key==='Enter')$('load-code')
 $('copy').onclick=()=>void navigator.clipboard.writeText(code).then(()=>status('Code copied.'),()=>status('Copy the displayed code to keep it safe.'));
 $('switch').onclick=()=>{if(journalRead()){status('Unconfirmed progress is retained on this device. Wait for cloud recovery before switching codes.');return;}blocked=true;$('game-frame').removeAttribute('src');code=null;localStorage.removeItem(CODE_KEY);view('welcome');};
 const previous=localStorage.getItem(CODE_KEY);
-if(previous&&/^\d{10}$/.test(previous))void loadCode(previous).catch(e=>{view('enter-code');status(e.message);});
+if(previous&&/^\d{10}$/.test(previous))$('input-code').value=previous;
 window.addEventListener('online',()=>{if(code&&blocked)void loadCode(code).catch(e=>status('Cloud recovery waiting: '+e.message));});
 setInterval(()=>{if(code&&blocked&&navigator.onLine&&!loading)void loadCode(code).catch(e=>status('Cloud recovery waiting: '+e.message));},15000);
