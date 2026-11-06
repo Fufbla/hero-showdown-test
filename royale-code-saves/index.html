@@ -5,4 +5,7 @@
 <section id="enter-code" hidden><h1>WELCOME BACK</h1><p>Enter your 10-digit code to load your three heroes.</p><input id="input-code" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="off" aria-label="10-digit hero code" placeholder="0000000000"><button id="load-code" class="primary">Load My Heroes</button><button id="back" class="secondary">Back</button></section>
 <section id="playing" hidden><div><small>Cloud save · <span id="playing-code"></span></small><button id="switch" class="secondary">Change Code</button></div><iframe id="game-frame" title="Hero Showdown Royale playable game" allow="fullscreen"></iframe></section>
 <p id="status" role="status" aria-live="polite">Ready.</p>
-<script type="module" src="./app.mjs?v=49ef0a76"></script></body></html>
+<script>
+window.addEventListener('error',event=>{const node=document.getElementById('status');if(node)node.textContent='Game loading error: '+(event.message||'unknown error');});
+window.addEventListener('unhandledrejection',event=>{const node=document.getElementById('status');if(node)node.textContent='Game connection error: '+String(event.reason?.message||event.reason);});
+</script><script type="module" src="./app.mjs?v=6140fa91"></script></body></html>
