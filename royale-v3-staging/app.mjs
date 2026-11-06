@@ -20,6 +20,7 @@ queue=queue.then(async()=>{if(blocked||raw===last[slot])return;try{const result=
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow||e.data?.type!=='royale-code-progress')return;void save(e.data.slot,e.data.snapshot);});
 $('new').onclick=()=>void run(async()=>{const r=await api('create',{},false);access=r.access;refresh=r.refresh;code=r.code;$('code').textContent=code;$('welcome').hidden=true;$('new-code').hidden=false;});
 $('enter').onclick=()=>$('input-area').hidden=false;
+$('copy').onclick=()=>void navigator.clipboard.writeText(code).then(()=>status('Code copied. Keep it safe.'),()=>status('Copy the code displayed above.'));
 $('load').onclick=()=>void run(async()=>{code=$('input').value.trim();if(!/^\d{10}$/.test(code))throw Error('Enter 10 digits');const r=await api('verify',{code},false);access=r.access;refresh=r.refresh;await launch();});
 $('continue').onclick=()=>void run(launch);
 $('refresh').onclick=()=>void run(launch);
