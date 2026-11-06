@@ -9,6 +9,19 @@ async function call(action,body){try{return await api(action,body);}catch(e){if(
 async function run(fn){if(busy)return;busy=true;try{await fn();}catch(e){status(e.message);}finally{busy=false;}}
 async function launch(){slots=(await call('slots')).slots;
 const store=new LocalHeroStore(storage),next=structuredClone(store.data);
+// Slot 3 recovery: an unconfirmed locally created hero must not be erased
+// by an empty cloud response. The cloud write is revision-checked.
+if(slots[2]?.snapshot===null&&store.data.slots[2]?.snapshot){
+ const localSnapshot=store.data.slots[2].snapshot;
+ const backupKey=prefix+'slot3-before-recovery:'+crypto.randomUUID();
+ const raw=JSON.stringify(localSnapshot);
+ localStorage.setItem(backupKey,raw);
+ if(localStorage.getItem(backupKey)!==raw)throw Error('Slot 3 backup verification failed.');
+ const saved=await call('save',{slot:3,revision:slots[2].revision,snapshot:localSnapshot});
+ slots[2]={...slots[2],snapshot:localSnapshot,revision:saved.revision};
+ status('Slot 3 recovered from local save and confirmed in cloud.');
+}
+
 for(let i=0;i<3;i++){let snap=slots[i]?.snapshot||null;const journal=localStorage.getItem(prefix+'journal:'+i);if(journal){let j;try{j=JSON.parse(journal);}catch{}if(j?.snapshot&&snap===null&&j.revision===slots[i].revision){const saved=await call('save',{slot:i+1,revision:j.revision,snapshot:j.snapshot});slots[i].revision=saved.revision;snap=j.snapshot;localStorage.removeItem(prefix+'journal:'+i);}else if(j?.snapshot&&JSON.stringify(snap)!==JSON.stringify(j.snapshot)){const backup=prefix+'conflict:'+crypto.randomUUID();localStorage.setItem(backup,journal);if(localStorage.getItem(backup)!==journal)throw Error('Recovery backup failed');localStorage.removeItem(prefix+'journal:'+i);}}
 next.slots[i]=snap?{id:'v3-slot-'+i,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),lastRegion:'Cloud',snapshot:snap}:null;}
 const original=storage.getItem('healthia.royale.profiles.v2');if(original){const backup=prefix+'backup:'+crypto.randomUUID();localStorage.setItem(backup,original);if(localStorage.getItem(backup)!==original)throw Error('Local backup failed');}
