@@ -500,7 +500,7 @@ requestAnimationFrame(frame);
 // The code-save game is opt-in and isolated from ordinary browser hero slots.
 // Send exact in-memory progress every eight seconds; the parent owns cloud writes.
 function sendCodeProgress(){
- if(!codePlay||!game.started||criticalPending||powerUpgrades.busy||online())return;
+ if(!codePlay||!game.started||screen!=='play'||criticalPending||powerUpgrades.busy||online())return;
  try{const selected=Number(activeSlot);if(!Number.isInteger(selected)||selected<0||selected>2)return;window.parent.postMessage({type:'royale-code-progress',slot:selected,snapshot:game.save(),heroId:activeId},location.origin);}catch{}
 }
 if(codePlay)setInterval(sendCodeProgress,8000);
