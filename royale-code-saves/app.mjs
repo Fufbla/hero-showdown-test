@@ -13,6 +13,14 @@ function journalRead(){try{return JSON.parse(localStorage.getItem(journalKey())|
 function journalWrite(value){const raw=JSON.stringify(value);localStorage.setItem(journalKey(),raw);if(localStorage.getItem(journalKey())!==raw)throw Error('Recovery journal could not be verified.');}
 function saveLocal(remote){
  const store=new LocalHeroStore(storage),next=structuredClone(store.data);
+ // Preserve existing isolated code-play heroes before restoring a different
+ // cloud snapshot. Never touch the regular royale browser save namespace.
+ const existing=storage.getItem('healthia.royale.profiles.v2');
+ if(existing&&store.data.slots.some((hero,i)=>hero&&JSON.stringify(hero.snapshot)!==JSON.stringify(remote.slots[i]))){
+  const backupKey=PREFIX+'code-switch-backup:'+crypto.randomUUID();
+  localStorage.setItem(backupKey,existing);
+  if(localStorage.getItem(backupKey)!==existing)throw Error('Could not verify local hero backup. Cloud restore cancelled.');
+ }
  for(let i=0;i<3;i++){const snap=remote.slots[i];next.slots[i]=snap?{id:'code-slot-'+i,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),lastRegion:'Cloud hero',snapshot:snap}:null;}
  const result=store.flush(next,{atomic:true});if(!result.ok)throw Error('Could not restore game slots: '+result.error);
 }
@@ -72,3 +80,5 @@ $('copy').onclick=()=>void navigator.clipboard.writeText(code).then(()=>status('
 $('switch').onclick=()=>{if(journalRead()){status('Unconfirmed progress is retained on this device. Wait for cloud recovery before switching codes.');return;}blocked=true;$('game-frame').removeAttribute('src');code=null;localStorage.removeItem(CODE_KEY);view('welcome');};
 const previous=localStorage.getItem(CODE_KEY);
 if(previous&&/^\d{10}$/.test(previous))void loadCode(previous).catch(e=>{view('enter-code');status(e.message);});
+window.addEventListener('online',()=>{if(code&&blocked)void loadCode(code).catch(e=>status('Cloud recovery waiting: '+e.message));});
+setInterval(()=>{if(code&&blocked&&navigator.onLine&&!loading)void loadCode(code).catch(e=>status('Cloud recovery waiting: '+e.message));},15000);
