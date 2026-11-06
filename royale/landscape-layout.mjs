@@ -5,7 +5,7 @@ export const stableTouchScale=(width,height)=>Math.max(.65,Math.min(1,Math.min(w
 export function installLandscapeLayout(input,openSlot){
  const media=window.matchMedia('(pointer:coarse)');let orientation;
  const resize=()=>{
-  const w=window.innerWidth,h=window.innerHeight,wide=w>h;
+  const viewport=window.visualViewport;const w=viewport?.width||window.innerWidth,h=viewport?.height||window.innerHeight,wide=w>h;
   const touch=media.matches||document.body.classList.contains('force-touch');
   document.body.classList.toggle('landscape-game',landscapeLayout(w,h,touch));
   document.body.classList.toggle('touch-layout',touch);
