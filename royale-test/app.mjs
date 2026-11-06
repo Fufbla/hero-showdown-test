@@ -3,12 +3,25 @@ const $=id=>document.getElementById(id);
 const ENDPOINT='https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-code-saves';
 const CODE_KEY='healthia.royale.code-saves.v1', PREFIX='royale-code-play-v1:', JOURNAL='healthia.royale.code-journal.v2:';
 const storage={getItem:k=>localStorage.getItem(PREFIX+k),setItem:(k,v)=>localStorage.setItem(PREFIX+k,v)};
-let code=null,revision=0,slots=[null,null,null],last=[null,null,null],queue=Promise.resolve(),blocked=false,loading=false;
+let code=null,revision=0,slots=[null,null,null],last=[null,null,null],queue=Promise.resolve(),blocked=false,loading=false,loginCooldownUntil=0,retryDelay=2000,retryTimer=null;
 const status=(message)=>{$('status').textContent=message;};
 const view=(name)=>{for(const id of ['welcome','new-code','enter-code','playing'])$(id).hidden=id!==name;};
 const journalKey=()=>JOURNAL+code;
 const slotJournalKey=slot=>JOURNAL+code+':slot:'+slot;
-async function api(body){const response=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store',signal:AbortSignal.timeout(20000)});let data;try{data=await response.json();}catch{throw Error('Cloud connection interrupted. Your local progress is retained.');}if(!response.ok)throw Error(response.status===404?'Code not found or unavailable.':data.error||'Cloud service unavailable.');return data;}
+async function api(body){
+ const isLogin=body.action==='recover'||body.action==='create';
+ if(isLogin&&Date.now()<loginCooldownUntil)throw Error('Please wait before trying your code again.');
+ const response=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store',signal:AbortSignal.timeout(20000)});
+ let data;try{data=await response.json();}catch{throw Error('Cloud connection interrupted. Your local progress is retained.');}
+ if(response.status===429){
+  const seconds=Number(response.headers.get('Retry-After'));
+  const wait=Number.isFinite(seconds)&&seconds>0?Math.min(seconds,3600):60;
+  loginCooldownUntil=Date.now()+wait*1000;
+  throw Error('Too many requests. Please wait '+Math.ceil(wait)+' seconds before trying again.');
+ }
+ if(!response.ok)throw Error(response.status===404?'Code not found or unavailable.':data.error||'Cloud service unavailable.');
+ return data;
+}
 function renderCode(){ $('code').textContent=code||'';$('playing-code').textContent=code||'';}
 function journalRead(){try{return JSON.parse(localStorage.getItem(journalKey())||'null');}catch{throw Error('Recovery journal cannot be read. Local data was not changed.');}}
 function journalWrite(value){const raw=JSON.stringify(value);localStorage.setItem(journalKey(),raw);if(localStorage.getItem(journalKey())!==raw)throw Error('Recovery journal could not be verified.');}
@@ -48,7 +61,7 @@ async function reconcile(remote){
 }
 async function loadCode(value){
  if(!/^\d{10}$/.test(value))throw Error('Enter exactly 10 digits.');
- if(loading)return;loading=true;blocked=true;
+ if(loading)return;if(Date.now()<loginCooldownUntil)throw Error('Please wait for the login cooldown.');loading=true;blocked=true;
  try{
   await queue;
   const remote=await api({action:'recover',code:value});
@@ -120,5 +133,6 @@ $('copy').onclick=()=>void navigator.clipboard.writeText(code).then(()=>status('
 $('switch').onclick=()=>{if(journalRead()){status('Unconfirmed progress is retained on this device. Wait for cloud recovery before switching codes.');return;}blocked=true;$('game-frame').removeAttribute('src');code=null;localStorage.removeItem(CODE_KEY);view('welcome');};
 const previous=localStorage.getItem(CODE_KEY);
 if(previous&&/^\d{10}$/.test(previous))$('input-code').value=previous;
-window.addEventListener('online',()=>{if(code&&blocked)void loadCode(code).catch(e=>status('Cloud recovery waiting: '+e.message));});
-setInterval(()=>{if(code&&blocked&&navigator.onLine&&!loading)void loadCode(code).catch(e=>status('Cloud recovery waiting: '+e.message));},15000);
+// Do not retry login in the background. Only explicit player actions may
+// request a code session; failed saves retain their local journals.
+window.addEventListener('online',()=>{if(code&&blocked)status('Connection restored. Your local hero is safe. Re-enter your code to resume cloud saving.');});
