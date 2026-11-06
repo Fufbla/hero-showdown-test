@@ -16,7 +16,7 @@ function sheet(w,h,title,subtitle){const canvas=createCanvas(w,h),c=canvas.getCo
 function head(c,renderer,look,view,x,y,size=205){const tile=createCanvas(540,620),tc=tile.getContext('2d');renderer(tc,275,565,look,previewHero('idle',0),0,4,{view});c.drawImage(tile,105,100,340,320,x,y,size,size*320/340);}
 const directions=['front','side','back','left'],labels=['Front','Right','Back','Left'];
 {
- const [canvas,c]=sheet(1120,1120,'Original faces retained · color correction review','Same original artwork, eye shapes, facial proportions and hair · all four directions');
+ const [canvas,c]=sheet(1120,1120,'Original faces retained · color correction review','Original facial artwork and outfits · short cut follows the supplied reference');
  for(let row=0;row<2;row++){
   const top=100+row*495;c.fillStyle='#f4e7b1';c.font='bold 20px sans-serif';c.fillText(row?'Short hairstyle from your screenshot':'Pale skin · original curly ponytail',25,top);
   for(let state=0;state<2;state++)for(let v=0;v<4;v++){

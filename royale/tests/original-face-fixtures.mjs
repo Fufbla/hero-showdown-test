@@ -9,3 +9,6 @@ export const REVIEW_LOOKS=[
  {...styleCDefault('female'),name:'Fantasy · blue',skin:'#3698b8',hair:'bob',eyes:'#5a982e',mouth:'smile',jaw:.85},
  {...styleCDefault('male'),name:'No hair · older',skin:'#c68b64',hair:'none',age:'older',brows:'soft',mouth:'smile',jaw:1.15},
 ];
+// Review-only colors approximate the supplied Rexi photograph. No live preset
+// or saved appearance is changed by this fixture.
+export const SHORT_HAIR_REVIEW={...REVIEW_LOOKS[1],name:'Rexi · corrected short',skin:'#e99b83',hairColor:'#3e2048'};

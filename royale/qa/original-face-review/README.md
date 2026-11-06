@@ -1,44 +1,48 @@
-# Original Style C faces — correction review
+# Original Style C faces and reference short hairstyle
 
-Awaiting visual approval. The official game has not been changed.
+**Development review only. Awaiting visual approval; the official game has not been changed.**
 
-Chris rejected the redrawn faces in `8502b9c8db9d894c22e75fe7990c6e4430f73af4` and required the original appearance. This branch starts again from the verified release `5defeb33c626d19755b26f030b5e7b840f6b4b77`. It contains none of the rejected head renderer, hair reconstruction, or body-rendering changes. Do not deploy the rejected branch.
+Chris rejected the redrawn faces in `8502b9c8db9d894c22e75fe7990c6e4430f73af4`. This branch starts from release `5defeb33c626d19755b26f030b5e7b840f6b4b77` and retains the original illustrated faces. It contains none of the rejected head renderer or body changes. Do not deploy the rejected branch.
 
-![Original and corrected colors in all four views](comparison.webp)
+## Short hairstyle requested from the corrected Rexi image
 
-The original eyes, facial geometry, linework, proportions, hair and costume illustrations are retained. Corrections affect how colors are assigned and how changed features replace their original component. No artwork has been regenerated or edited.
+![Previous short cut and the reference-fitted replacement](short-hair-comparison.webp)
 
-## Corrected defects
+The short cut (`buzz`) now uses a new hair-only transparent plate based on Chris's corrected image: a compact rounded crown, curved forehead hairline, shallow central dip and tapered temples. The original face, ears, earrings, body and costume artwork remain unchanged. This is an intentional replacement of this one hairstyle; all other hairstyles keep their existing artwork and rendering.
 
-- The skin material mask omitted skin beyond the eye-feature rectangles. Recover that material across the original head, preserving iris, eye whites, ink and gold accessories.
-- Erased eyebrow pixels were still classified as eyebrow material. Their skin underlay therefore kept the original orange color. Recolor the original feature and the exposed skin separately before compositing.
-- Eye and eyebrow masks overlapped. Keep original brow ink separate from eye transformations so changing the eye shape does not duplicate the brow.
-- Recover omitted skin material in the original profile's eye region without replacing profile art.
-- Route the explicit `right` view to the existing profile renderer. The creator's established `side` route and existing hair fit corrections remain intact.
+The sheet contains front, right-profile and back artwork. The left view mirrors the entire registered profile with the head. Separate male/female attachment measurements fit the original skulls; the far temple is foreshortened to meet the original three-quarter face. Side and back crowns follow the close-cut silhouette instead of the former tall oval. The same animated head transform moves hair and face together. Existing hair colors, saved `buzz` selections and equipment controls continue to apply. No save migration or preset changes are introduced.
 
-## Visual review
+The old hair atlases remain byte-for-byte unchanged for rollback. The new sibling is `royale/assets/hero/style-c-accurate/hair/buzz-reference-v2.png`. [Asset provenance and generation prompt](short-hair-provenance.md) document the reference and built-in image generation used for the hair-only plate. No face or body was generated.
 
+- [Actual browser preview](short-hair-browser.jpg)
+- [Four views, both presentations, light/dark skin and jaw extremes](short-hair-variants.webp)
+- [Twelve movement and power poses](short-hair-animation.webp)
+
+The before row is rendered from the previous review commit `2a435a65444935e8b3524b008932a4ff8f4dc744`. Both rows use identical appearance selections and framing. Review-only colors approximate the supplied photograph; player-selected colors and live presets are not changed.
+
+## Retained original-face corrections
+
+The preceding review commit corrected skin material coverage across the original head, recolored skin exposed by erased eyebrows, separated overlapping eyebrow/eye masks, recovered omitted profile skin material, and routed the explicit right view to the original profile renderer. It retained the original eyes, proportions, linework and shading. The short-hair change does not alter those face modules.
+
+- [Original face color correction comparison](comparison.webp)
 - [Eyebrow, mouth and eye selections](facial-selections.webp)
-- [Screenshot examples, dark female and light male](examples-1.webp)
+- [Additional original-art examples](examples-1.webp)
 - [Beard, stubble, fantasy skin and older bald hero](examples-2.webp)
-- [Working browser preview](browser-review.jpg)
 
-The local review page is `royale/tests/original-face-review.html`. It uses the same renderer as the game and can switch all existing appearance selections, directions, equipment and animation poses. It does not read or write player accounts or saves.
+The interactive local review page is `royale/tests/original-face-review.html`. It uses the game renderer and exposes existing appearance, equipment and animation choices. It never reads or writes player accounts or saves.
 
 ## Verification
 
-Eight focused tests passed, including an exact comparison of **2,744 rendered frames** against the release renderer: both presentations, all 48 hairstyles plus bald, four established views, and idle/walk/run/jump/fall/punch/kick. With the original palette and facial selections, every compared pixel matches. Color correction also preserves the original alpha silhouette at light, medium, dark and fantasy skin colors. The tests reproduce the old orange eyebrow ghost and confirm its removal.
+All **13 focused tests passed**. The original default face plates remain pixel-identical to the release. **2,688 rendered frames** covering both presentations, every unchanged hairstyle, four established views and seven movement poses remain pixel-identical to the release. The deliberately replaced short style is tested separately: all authored views change, the forehead opening is curved, the far temple contacts the original face at every allowed jaw extreme, and hair colors retain identical alpha. **240 short-hair animation/equipment frames** retain head/shoulder anchors, lower body/equipment pixels and input appearance records. Warm hair animation frames allocate no additional tinted canvases; the existing bounded cache remains in use.
 
-All 42 existing targeted menu/controller, loot/inventory and combat regression tests passed. The browser rendered 392 hairstyle/direction combinations successfully. Twenty browser save checks passed with the original-art appearance fixtures: both visible slots, eight-second save snapshot cadence, levels, XP, all 20 equipment records, powers, Health Roots, selected appearance, exact position/health, document reload and hidden Slot 3 retention.
+Browser rendering passed **392 hairstyle/direction combinations**. The new short cut was inspected in all four views, during movement and with a rare headpiece. **Twenty isolated browser save checks passed**: both visible slots, eight-second save snapshot cadence, levels, XP, all 20 equipment records, powers, Health Roots, selected appearance, exact position/health, document reload and hidden Slot 3 retention.
 
-Browser save verification uses isolated fixture storage and cloud-save snapshot events. No live player save or backend account record was accessed or rewritten; this is not a claim of a new live authentication/backend roundtrip. Authentication, saves, slot visibility, gameplay, combat tuning, equipment, body/cape assets, and other modes are unchanged from the release baseline.
+The earlier review also passed all 42 targeted menu/controller, loot/inventory and combat regression tests. Those protected systems are unchanged by this hair-only revision. Browser save verification uses fixture storage and cloud-save snapshot events; no live player or backend account record was accessed or rewritten, and this is not a new live authentication/backend roundtrip claim.
 
 ```sh
-node --expose-gc --test royale/tests/original-face-fidelity.test.mjs
-node --test royale/tests/menu-gamepad.test.mjs royale/tests/menu-navigation.test.mjs royale/tests/v3-loot.test.mjs royale/tests/v3-combat.test.mjs
+node --expose-gc --test royale/tests/original-face-fidelity.test.mjs royale/tests/short-hair-reference.test.mjs
 node royale/tests/render-original-face-review.mjs
+node royale/tests/render-short-hair-review.mjs
 ```
 
-The test-only reference loader reads source modules from the release commit and shares unchanged artwork read-only. Both comparison rows are rendered with identical selections and framing. The Canvas test dependency is `@napi-rs/canvas`.
-
-Publish only after approval of this original-art correction. The prior redrawn-head proposal remains rejected.
+Publish only after Chris approves the visual result. The prior redrawn-head proposal remains rejected.

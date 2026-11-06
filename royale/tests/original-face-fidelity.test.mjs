@@ -29,9 +29,9 @@ function hero(renderer,canvas,look,view,pose='idle',time=.19){
 test('original default faces are pixel-identical, including native hair, ears, eyes and shading',()=>{
  for(const sex of ['male','female'])for(const mode of ['head','native-head','features'])assert.equal(hash(face(drawStyleCFace,styleCDefault(sex),mode)),hash(face(baseline.drawStyleCFace,styleCDefault(sex),mode)),`${sex}/${mode}`);
 });
-test('every original hairstyle and movement pose retains the original face and body pixels',async()=>{
+test('all unchanged hairstyles and movement poses retain the original face and body pixels',async()=>{
  const a=createCanvas(240,270),b=createCanvas(240,270);let frames=0;
- for(const sex of ['male','female'])for(const hair of LOOK_OPTIONS.hair)for(const view of ['front','side','back','left'])for(const pose of ['idle','walk','run','jump','fall','punch','kick']){
+ for(const sex of ['male','female'])for(const hair of LOOK_OPTIONS.hair.filter(h=>h!=='buzz'))for(const view of ['front','side','back','left'])for(const pose of ['idle','walk','run','jump','fall','punch','kick']){
   const look={...styleCDefault(sex),hair};hero(drawHero,a,look,view,pose);hero(baseline.drawHero,b,look,view,pose);
   assert.equal(hash(a),hash(b),`${sex}/${hair}/${view}/${pose}: original appearance`);frames++;
   if(frames%64===0){await setImmediate();global.gc?.();}
@@ -80,6 +80,6 @@ test('existing saved appearance records and both visible slots are unchanged by 
 });
 test('approved assets, body/cape art, appearance schema, login, saves, combat and other modes remain untouched',()=>{
  const cwd=fileURLToPath(new URL('../../',import.meta.url));
- const paths=['royale/assets','assets','royale/style-c-body.mjs','royale/style-c-source.mjs','royale/style-c-hair.mjs','royale/style-c-motion.mjs','royale/core.mjs','royale/app.mjs','royale/saves.mjs','royale/appearance.mjs','royale/cape.mjs','royale/equipment.mjs','royale/backend','royale/multiplayer','royale-v3-staging','royale-cloud-test','index.html','story','versus'];
+ const paths=['royale/assets',':(exclude)royale/assets/hero/style-c-accurate/hair/buzz-reference-v2.png','assets','royale/style-c-body.mjs','royale/style-c-source.mjs','royale/style-c-motion.mjs','royale/core.mjs','royale/app.mjs','royale/saves.mjs','royale/appearance.mjs','royale/cape.mjs','royale/equipment.mjs','royale/backend','royale/multiplayer','royale-v3-staging','royale-cloud-test','index.html','story','versus'];
  assert.equal(execFileSync('git',['diff','--name-only',ORIGINAL_FACE_BASE,'--',...paths],{cwd,encoding:'utf8'}).trim(),'');
 });

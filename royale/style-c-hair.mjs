@@ -1,4 +1,5 @@
 import {HAIR_FIT_CORRECTIONS} from './hair-fit-corrections.mjs';
+import {BUZZ_REFERENCE} from './buzz-reference.mjs';
 // Each non-bald style has three independently illustrated turnaround sprites.
 // Pack rectangles measure source pixels. Draw origins use reference head-space,
 // where the eyes are at y=0 and the natural temple width is about 36 units.
@@ -16,7 +17,7 @@ const views = ['front','side','back'];
 const materials = new Map();
 const ART_ROOT = './assets/hero/style-c-accurate/hair/';
 const MAX_MATERIALS = 32;
-let atlases, makeCanvas, loading, lastError = null;
+let atlases, shortReference, makeCanvas, loading, lastError = null;
 const clamp = (value,min=0,max=1) => Math.max(min,Math.min(max,value));
 const webCanvas = (w,h) => typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w,h) :
   Object.assign(document.createElement('canvas'),{width:w,height:h});
@@ -38,8 +39,9 @@ export async function prepareStyleCHair({imageLoader=loadWebImage,canvasFactory=
   makeCanvas = canvasFactory;
   loading = (async () => {
     try {
-      const images = await Promise.all(views.map(view => imageLoader(new URL(ART_ROOT+view+'.webp',import.meta.url))));
+      const images = await Promise.all([...views.map(view => imageLoader(new URL(ART_ROOT+view+'.webp',import.meta.url))),imageLoader(new URL(BUZZ_REFERENCE.file,import.meta.url))]);
       atlases = Object.fromEntries(views.map((view,i) => [view,images[i]]));
+      shortReference=images[3];
       lastError = null;
       return true;
     } catch (error) {
@@ -77,6 +79,34 @@ function sections(view, x, y) {
   return [band(y,threshold,threshold+1),1-band(y,threshold-1.5,threshold-.5)];
 }
 
+function referenceShortMaterial(look,view){
+  const [sx,sy,sw,sh]=BUZZ_REFERENCE.frames[view];
+  const [left,top,width,height]=BUZZ_REFERENCE.fits[view][look.presentation];
+  // Cache at four pixels per head unit rather than retaining full-sheet-sized
+  // tinted copies for every color. Registration and tinting happen only once.
+  const w=Math.ceil(width*4),h=Math.ceil(height*4),front=makeCanvas(w,h),rear=makeCanvas(w,h);
+  const c=front.getContext('2d',{willReadFrequently:true});c.drawImage(shortReference,sx,sy,sw,sh,0,0,w,h);
+  const im=c.getImageData(0,0,w,h),px=im.data,colors=colorRamp(look.hairColor);
+  // Feed the illustrated lighting through the existing hair-color ramp. The
+  // saved color remains authoritative, with the original controls unchanged.
+  for(let i=0;i<px.length;i+=4)if(px[i+3]){
+    const light=px[i]*.2126+px[i+1]*.7152+px[i+2]*.0722;
+    const color=colors[Math.round(clamp(light*112/40,0,255))];
+    for(let k=0;k<3;k++)px[i+k]=color[k];
+  }
+  c.putImageData(im,0,0);
+  let fitted=front;
+  if(view==='front'){
+    fitted=makeCanvas(w,h);
+    const fc=fitted.getContext('2d'),split=-left/width*w;
+    fc.drawImage(front,0,0,split,h,0,0,split,h);
+    fc.drawImage(front,split,0,w-split,h,split,0,(w-split)*BUZZ_REFERENCE.farTempleScale[look.presentation],h);
+  }
+  // This close cut already has authored forehead/ear openings. A generic
+  // long-hair split would cut through its curved hairline and temple points.
+  return {front:fitted,rear,left,top,w:width,h:height};
+}
+
 function hairMaterial(look,view) {
   const frame = HAIR_FRAMES[view][look.hair];
   if (!atlases || !frame) return null;
@@ -85,6 +115,11 @@ function hairMaterial(look,view) {
     const cached=materials.get(key);
     materials.delete(key); materials.set(key,cached);
     return cached;
+  }
+  if(look.hair==='buzz'){
+    const value=referenceShortMaterial(look,view);
+    while(materials.size>=MAX_MATERIALS)materials.delete(materials.keys().next().value);
+    materials.set(key,value);return value;
   }
   const [sx,sy,w,h,rawLeft,rawTop] = frame;
   const fit=HAIR_FITS[view][look.hair], offset=look.presentation==='female'?4:0;

@@ -4,13 +4,14 @@ import {styleCHairStatus} from '../style-c-hair.mjs';
 import {previewHero,PREVIEW_POSES} from '../hero-rig.mjs';
 import {styleCDefault} from '../style-c-defaults.mjs';
 import {sanitizeLook,LOOK_OPTIONS} from '../appearance.mjs';
-import {REVIEW_LOOKS} from './original-face-fixtures.mjs';
+import {REVIEW_LOOKS,SHORT_HAIR_REVIEW} from './original-face-fixtures.mjs';
 import {styleCOutfit} from './style-c-scenes.mjs';
 const $=id=>document.getElementById(id),views=['front','right','back','left'];
-let look={...REVIEW_LOOKS[0]},running=false,time=0,last=0,outfit='starter',ready=false;
+const examples=[SHORT_HAIR_REVIEW,...REVIEW_LOOKS];
+let look={...examples[0]},running=false,time=0,last=0,outfit='starter',ready=false;
 const canvases=views.map(view=>{const section=document.createElement('section');section.className='view';const title=document.createElement('h2');title.textContent=view[0].toUpperCase()+view.slice(1);const canvas=document.createElement('canvas');canvas.width=420;canvas.height=510;canvas.setAttribute('aria-label',view+' character preview');section.append(title,canvas);$('views').append(section);return canvas;});
 function option(select,value,label=value){const o=document.createElement('option');o.value=value;o.textContent=label;select.append(o);}
-REVIEW_LOOKS.forEach((l,i)=>option($('example'),i,l.name));PREVIEW_POSES.forEach(p=>option($('pose'),p));
+examples.forEach((l,i)=>option($('example'),i,l.name));PREVIEW_POSES.forEach(p=>option($('pose'),p));
 const fields={presentation:LOOK_OPTIONS.presentation,skin:'color',eyes:'color',hair:LOOK_OPTIONS.hair,hairColor:'color',face:LOOK_OPTIONS.face,jaw:'range',eyeShape:LOOK_OPTIONS.eyeShape,brows:LOOK_OPTIONS.brows,nose:LOOK_OPTIONS.nose,mouth:LOOK_OPTIONS.mouth,facialHair:LOOK_OPTIONS.facialHair,age:LOOK_OPTIONS.age};
 const labels={presentation:'Character',skin:'Skin tone',eyes:'Eye color',hair:'Hairstyle',hairColor:'Hair color',face:'Face shape',jaw:'Jaw width',eyeShape:'Eye shape',brows:'Eyebrows',nose:'Nose',mouth:'Mouth',facialHair:'Facial hair',age:'Age'};
 for(const [key,values]of Object.entries(fields)){
@@ -20,7 +21,7 @@ for(const [key,values]of Object.entries(fields)){
  input.value=look[key];input.addEventListener('input',()=>{look=sanitizeLook({...look,[key]:values==='range'?Number(input.value):input.value});render();});label.append(input);$('controls').append(label);
 }
 const gearLabel=document.createElement('label');gearLabel.append('Equipment');const gear=document.createElement('select');gear.id='gear';for(const v of ['starter','ordinary','rare','merge:venomis'])option(gear,v);gearLabel.append(gear);$('controls').append(gearLabel);gear.onchange=()=>{outfit=gear.value;render();};
-$('example').onchange=()=>{look={...REVIEW_LOOKS[Number($('example').value)]};for(const key of Object.keys(fields))$(key).value=look[key];render();};
+$('example').onchange=()=>{look={...examples[Number($('example').value)]};for(const key of Object.keys(fields))$(key).value=look[key];render();};
 $('pose').onchange=()=>{time=.18;render();};
 $('animate').onclick=()=>{running=!running;$('animate').textContent=running?'Pause animation':'Play animation';};
 function render(){if(!ready)return;const h=previewHero($('pose').value,time);canvases.forEach((canvas,i)=>{const c=canvas.getContext('2d');c.clearRect(0,0,canvas.width,canvas.height);drawHero(c,220,455,look,h,time,3.45,{view:views[i],poseName:$('pose').value,outfit:styleCOutfit(outfit)});});$('status').textContent=`${look.presentation} · ${look.hair} · ${look.skin} · ${$('pose').value}`;}
