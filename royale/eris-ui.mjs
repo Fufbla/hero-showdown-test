@@ -87,7 +87,22 @@ export class ErisMenu{
       if(this.mode==='sell'){list.append(this.saleCard(e));continue;}
       const locked=g.hero.level<e.level,card=button('',()=>{this.selected=e;this.wardrobe();},'shop-item');card.dataset.catalog=key(e);card.setAttribute('aria-pressed',String(key(e)===key(this.selected||{})));
       const icon=itemIcon(e);
-      const text=el('span');text.append(el('b',e.name),el('small',`${locked?'LOCKED · ':''}LEVEL ${e.level||1} · ${(e.rarity||'ordinary').toUpperCase()}${e.legacy?' · LEGACY':''}`),el('small',this.mode==='owned'?(Object.values(g.inventory.equipped).includes(e.uid)?'Equipped':'In wardrobe'):`${e.price===null?'Not sellable':e.price+' coins'}${e.setId&&!e.catalogId&&!e.uid?' · 3 pieces':''}`));card.append(icon,text);list.append(card);
+      const text=el('span');text.append(el('b',e.name),el('small',`${locked?'LOCKED · ':''}LEVEL ${e.level||1} · ${(e.rarity||'ordinary').toUpperCase()}${e.legacy?' · LEGACY':''}`),el('small',this.mode==='owned'?(Object.values(g.inventory.equipped).includes(e.uid)?'Equipped':'In wardrobe'):`${e.price===null?'Not sellable':e.price+' coins'}${e.setId&&!e.catalogId&&!e.uid?' · 3 pieces':''}`));card.append(icon,text);
+      if(this.mode==='owned'&&e.uid){
+        const equipped=Object.values(g.inventory.equipped).includes(e.uid);
+        const equip=button(equipped?'✓':'+',async event=>{
+          event?.stopPropagation?.();
+          if(equipped)return;
+          const result=await this.transaction(()=>g.equipItem(e.uid));
+          if(result.ok){this.selected=e;this.wardrobe();}
+          else if(result.error)this.say(result.error);
+        },'wardrobe-quick-equip');
+        equip.type='button';equip.setAttribute('aria-label',equipped?`${e.name} equipped`:`Equip ${e.name}`);
+        equip.title=equipped?'Equipped':`Equip ${e.name}`;
+        equip.disabled=equipped||locked;
+        card.append(equip);
+      }
+      list.append(card);
     }
     if(!entries.length)list.append(el('p','Your starter suit is always available. Buy or earn equipment to fill your wardrobe.','empty-equipment'));
     if(this.mode!=='sell')this.detail();
@@ -174,7 +189,7 @@ export class ErisMenu{
     }else if(this.mode==='sell'){
       const q=g.salePreview(e.uid),b=button(q.ok?`Review sale · ${q.value} coins`:'Cannot sell',()=>this.reviewAction('sell',e.uid),'primary');b.id='review-sale';b.disabled=!q.ok;p.append(b);
     }else{
-      const equipped=Object.values(g.inventory.equipped).includes(e.uid),b=button(equipped?'Unequip piece':'Equip piece',async()=>{const r=await this.transaction(()=>g.equipItem(e.uid));if(r.ok)this.wardrobe();},'primary');b.id='equip-piece';b.disabled=g.hero.level<(defs[0].level||1);p.append(b,button('Discard piece',()=>this.reviewAction('discard',e.uid),'text-button'));
+      const equipped=Object.values(g.inventory.equipped).includes(e.uid),b=button(equipped?'Unequip piece':'Equip piece',async()=>{const r=await this.transaction(()=>g.equipItem(e.uid));if(r.ok)this.wardrobe();},'primary');b.id='equip-piece';b.disabled=g.hero.level<(defs[0].level||1);p.append(button('Discard piece',()=>this.reviewAction('discard',e.uid),'text-button'));
     }
   }
   reviewBuy(selection){
