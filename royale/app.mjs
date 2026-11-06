@@ -309,7 +309,7 @@ function updateHud() {
   const h = game.hero, region = game.treeVisit?{name:'Tree of Eris'}:game.arenaScene?{name:game.arenaScene.legendary?LEGENDARY[game.arenaScene.legendary].arena:`${BOSSES[game.regionId].name} Arena`}:boardAt(game.regionId,h.x);
   document.getElementById('boss-hud').dataset.cleared=String(!!game.arenaScene?.cleared);
   updateBossHud(game,game.started&&['play','pause','tree','controls','world','inventory','chest','mergeReward'].includes(screen));
-  if(game.arenaScene&&!renderer.bossArt.ready)hudText($('boss-cue'),renderer.bossArt.errors.length?'Approved art could not load. Reload to retry.':'Loading approved boss artwork…');
+
   hudText($('world-region'),game.treeVisit?'PEACEFUL SANCTUARY':game.getRegion().name.toUpperCase());$('world-clock').hidden=game.regionId<3;hudText($('world-clock'),formatClock(game.clock()));$('world-clock').title=clockSynchronized()?'Synchronized with account server time':'Offline clock uses this device time; server synchronization awaits the account service.';
   hudText($('root-count'),game.healthRoots);hudText($('health-root').querySelector('kbd'),input.controls.keys.heal[0].replace('Key','').replace('Digit',''));$('health-root').disabled=screen!=='play'||h.dead||game.healthRoots===0||h.hp>=h.maxHp;
   hudAttr($('health-root'),'aria-label',`Use Health Root · ${game.healthRoots} of 4 · restore 25% HP`);
