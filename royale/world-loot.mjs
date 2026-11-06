@@ -36,9 +36,9 @@ export function nearbyInteractions(g){
 export function selectedInteraction(g,kind=null){const list=nearbyInteractions(g).filter(t=>!kind||kind==='loot'&&t.kind==='loot'||kind==='travel'&&t.kind!=='loot');return list.find(t=>t.id===g.interactionTarget)||list[0];}
 export function pickupLoot(g,id,replaceUid=null,confirmed=false){
  const o=g.loot.find(o=>o.id===id);if(!o||g.arenaScene||g.hero.dead||o.region!==g.regionId||Math.hypot(g.hero.x-o.x,g.hero.y-o.y)>90)return false;
- if(o.kind==='root'){if(g.healthRoots>=4){g.emit('loot-full',{message:'Health Roots full · use one or leave this orb.'});return false;}g.healthRoots++;g.recordEconomy('reward');}
+ if(o.kind==='root'){if(g.healthRoots>=10){g.emit('loot-full',{message:'Health Roots full · use one or leave this orb.'});return false;}g.healthRoots++;g.recordEconomy('reward');}
  else {
-  if(g.inventory.items.length>=7){
+  if(g.inventory.items.length>=20){
    if(!confirmed||!replaceUid||!g.canSave()){g.emit('loot-full',{id,message:'Equipment full · compare items or leave this orb.'});return false;}
    const old=g.inventory.items.find(i=>i.uid===replaceUid);if(!old||itemDefinition(old).rarity==='legendary')return false;
    if(!g.discardItem(replaceUid,true))return false;
