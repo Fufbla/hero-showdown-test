@@ -7,6 +7,7 @@ let code=null,revision=0,slots=[null,null,null],last=[null,null,null],queue=Prom
 const status=(message)=>{$('status').textContent=message;};
 const view=(name)=>{for(const id of ['welcome','new-code','enter-code','playing'])$(id).hidden=id!==name;};
 const journalKey=()=>JOURNAL+code;
+const slotJournalKey=slot=>JOURNAL+code+':slot:'+slot;
 async function api(body){const response=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store',signal:AbortSignal.timeout(20000)});let data;try{data=await response.json();}catch{throw Error('Cloud connection interrupted. Your local progress is retained.');}if(!response.ok)throw Error(response.status===404?'Code not found or unavailable.':data.error||'Cloud service unavailable.');return data;}
 function renderCode(){ $('code').textContent=code||'';$('playing-code').textContent=code||'';}
 function journalRead(){try{return JSON.parse(localStorage.getItem(journalKey())||'null');}catch{throw Error('Recovery journal cannot be read. Local data was not changed.');}}
@@ -53,6 +54,24 @@ async function loadCode(value){
   const remote=await api({action:'recover',code:value});
   code=value;
   const resolved=await reconcile(remote);
+  // Preserve unsent slot-specific journals independently. Do not overwrite
+  // their local browser heroes with older cloud snapshots on reload.
+  for(let i=0;i<3;i++){
+   const pending=localStorage.getItem(slotJournalKey(i));if(!pending)continue;
+   let local;try{local=JSON.parse(pending);}catch{continue;}
+   if(!local?.snapshot)continue;
+   if(JSON.stringify(resolved.slots[i])===JSON.stringify(local.snapshot)){localStorage.removeItem(slotJournalKey(i));continue;}
+   if(resolved.slots[i]===null&&Number.isInteger(local.revision)&&local.revision===resolved.revision){
+    // Only publish to a genuinely empty cloud slot at the expected revision.
+    const saved=await api({action:'save',code:value,slot:i,revision:resolved.revision,snapshot:local.snapshot});
+    resolved.revision=saved.revision;resolved.slots[i]=local.snapshot;localStorage.removeItem(slotJournalKey(i));
+   }else{
+    const backupKey=PREFIX+'slot-conflict-backup:'+crypto.randomUUID();
+    localStorage.setItem(backupKey,pending);
+    if(localStorage.getItem(backupKey)!==pending)throw Error('Could not preserve conflicting local hero.');
+    localStorage.removeItem(slotJournalKey(i));
+   }
+  }
   saveLocal(resolved);
   // Remove the original pending journal only after local restoration succeeds
   // and its separate backup is durable.
@@ -69,13 +88,19 @@ async function loadCode(value){
 async function saveProgress(slot,snapshot){
  if(!code||blocked||![0,1,2].includes(slot)||!snapshot||typeof snapshot!=='object')return;
  const raw=JSON.stringify(snapshot);if(raw===last[slot])return;
+ // Record the correct slot synchronously before queuing network work, so
+ // closing immediately after creation cannot lose an unsent hero.
+ const localKey=slotJournalKey(slot);
+ const entry=JSON.stringify({slot,snapshot,createdAt:Date.now(),revision});
+ try{localStorage.setItem(localKey,entry);if(localStorage.getItem(localKey)!==entry)throw Error('journal not durable');}
+ catch(error){blocked=true;status('Local save could not be preserved. Cloud sync paused.');return;}
  queue=queue.then(async()=>{
   if(blocked||raw===last[slot])return;
   try{
-   journalWrite({slot,revision,snapshot,createdAt:Date.now()});
    const result=await api({action:'save',code,slot,revision,snapshot});
    if(result.revision!==revision+1)throw Error('Unexpected cloud revision. Local recovery journal retained.');
-   revision=result.revision;slots[slot]=snapshot;last[slot]=raw;localStorage.removeItem(journalKey());
+   revision=result.revision;slots[slot]=snapshot;last[slot]=raw;
+   if(localStorage.getItem(localKey)===entry)localStorage.removeItem(localKey);
    status('Cloud saved · '+new Date().toLocaleTimeString());
   }catch(error){blocked=true;status('Cloud sync paused · '+error.message+' Local recovery retained.');}
  });
