@@ -33,8 +33,8 @@ export function prepareTurnarounds({canvasFactory, imageLoader} = {}) {
     if(art.width!==ids.width || art.height!==ids.height) throw Error('Different turnaround layer and material atlas sizes.');
     const canvas=rasterCanvas(ids.width,ids.height), c=canvas.getContext('2d',{willReadFrequently:true});
     c.drawImage(ids,0,0); mask=c.getImageData(0,0,ids.width,ids.height).data;
-    // Preserve every original profile pixel. Only recover omitted skin material
-    // around the eye; hair, earrings, iris and intentional dark ink stay intact.
+    // Preserve every original profile pixel. Recover omitted skin material and
+    // the bare scalp highlight accidentally classified as costume trim.
     c.clearRect(0,0,canvas.width,canvas.height);c.drawImage(art,0,0);
     const source=c.getImageData(0,0,canvas.width,canvas.height).data;
     for(const sex of ['male','female'])for(const name of ['source','head','bareHead']){
@@ -42,7 +42,10 @@ export function prepareTurnarounds({canvasFactory, imageLoader} = {}) {
       const eyeX=(sex==='male'?38:33)+(name==='bareHead'?2:0),eyeY=sex==='male'?-207:-211;
       for(let y=0;y<h;y++)for(let x=0;x<w;x++){
         const px=x+left,py=y+top,i=((sy+y)*art.width+sx+x)*4;
-        if(mask[i]!==0||Math.abs(px-eyeX)>26||py<eyeY-26||py>eyeY+18||!source[i+3])continue;
+        const scalp=name==='bareHead'&&py<eyeY-40;
+        if(scalp&&mask[i]===4){mask[i]=1;continue;}
+        const omitted=mask[i]===0&&(name==='bareHead'||(Math.abs(px-eyeX)<=26&&py>=eyeY-26&&py<=eyeY+18));
+        if(!omitted||!source[i+3])continue;
         const r=source[i],g=source[i+1],b=source[i+2];
         if(!(r>38&&g>14&&b>4&&r-g>7&&g-b>4&&r>g*1.12&&g>b*1.08))continue;
         let iris=false;
@@ -224,7 +227,7 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
   c.save();c.translate(...pose.head);c.rotate(pose.headTilt||0);c.scale(headWidth,headHeight);
   const head=(name)=>draw(name,m.head,[0,0]);
   const hair=layer=>{
-    c.save();const unit=m.faceWidth/36;c.scale(unit,unit);drawStyleCHair(c,look,motion,time,layer,view);c.restore();
+    c.save();const unit=m.faceWidth/36;c.scale(unit,unit);drawStyleCHair(c,look,motion,time,layer,left?'left':view);c.restore();
   };
   if(regularHair)head('head');
   else { hair('rear');head('bareHead');hair('front'); }

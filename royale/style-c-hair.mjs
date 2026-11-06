@@ -1,4 +1,6 @@
 import {HAIR_FIT_CORRECTIONS} from './hair-fit-corrections.mjs';
+import {HAIR_REFERENCE_V3,HAIR_REFERENCE_IDS,hairReferenceURL} from './hair-reference-v3.mjs';
+import {createReferenceHair,drawReferenceHair} from './hair-reference-material.mjs';
 import {BUZZ_REFERENCE} from './buzz-reference.mjs';
 // Each non-bald style has three independently illustrated turnaround sprites.
 // Pack rectangles measure source pixels. Draw origins use reference head-space,
@@ -17,7 +19,7 @@ const views = ['front','side','back'];
 const materials = new Map();
 const ART_ROOT = './assets/hero/style-c-accurate/hair/';
 const MAX_MATERIALS = 32;
-let atlases, shortReference, makeCanvas, loading, lastError = null;
+let atlases, shortReference, referenceImages, makeCanvas, loading, lastError = null;
 const clamp = (value,min=0,max=1) => Math.max(min,Math.min(max,value));
 const webCanvas = (w,h) => typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w,h) :
   Object.assign(document.createElement('canvas'),{width:w,height:h});
@@ -30,7 +32,7 @@ const loadWebImage = url => new Promise((resolve,reject) => {
 
 export function styleCHairStatus() {
   return {ready:!!atlases, error:lastError, styles:Object.keys(HAIR_FRAMES.front).length+1,
-    directions:views.length, materials:materials.size, limit:MAX_MATERIALS};
+    directions:4, materials:materials.size, limit:MAX_MATERIALS};
 }
 
 export async function prepareStyleCHair({imageLoader=loadWebImage,canvasFactory=webCanvas}={}) {
@@ -39,9 +41,10 @@ export async function prepareStyleCHair({imageLoader=loadWebImage,canvasFactory=
   makeCanvas = canvasFactory;
   loading = (async () => {
     try {
-      const images = await Promise.all([...views.map(view => imageLoader(new URL(ART_ROOT+view+'.webp',import.meta.url))),imageLoader(new URL(BUZZ_REFERENCE.file,import.meta.url))]);
+      const images = await Promise.all([...views.map(view => imageLoader(new URL(ART_ROOT+view+'.webp',import.meta.url))),imageLoader(new URL(BUZZ_REFERENCE.file,import.meta.url)),...HAIR_REFERENCE_IDS.map(id=>imageLoader(hairReferenceURL(id)))]);
       atlases = Object.fromEntries(views.map((view,i) => [view,images[i]]));
       shortReference=images[3];
+      referenceImages=Object.fromEntries(HAIR_REFERENCE_IDS.map((id,i)=>[id,images[i+4]]));
       lastError = null;
       return true;
     } catch (error) {
@@ -108,13 +111,18 @@ function referenceShortMaterial(look,view){
 }
 
 function hairMaterial(look,view) {
-  const frame = HAIR_FRAMES[view][look.hair];
+  const frame = HAIR_FRAMES[view==='left'?'side':view][look.hair];
   if (!atlases || !frame) return null;
   const key = view+'|'+look.hair+'|'+look.hairColor+'|'+look.presentation;
   if (materials.has(key)) {
     const cached=materials.get(key);
     materials.delete(key); materials.set(key,cached);
     return cached;
+  }
+  if(HAIR_REFERENCE_V3[look.hair]){
+    const value=createReferenceHair(look,view,referenceImages[look.hair],makeCanvas,colorRamp);
+    while(materials.size>=MAX_MATERIALS)materials.delete(materials.keys().next().value);
+    materials.set(key,value);return value;
   }
   if(look.hair==='buzz'){
     const value=referenceShortMaterial(look,view);
@@ -158,13 +166,14 @@ function hairMaterial(look,view) {
 
 export function drawStyleCHair(context,look,motion,time,layer='front',direction='front') {
   if (look.hair==='none') return true;
-  const view=direction===true || direction==='back' ? 'back' :
+  const view=direction==='left' && HAIR_REFERENCE_V3[look.hair] ? 'left' : direction===true || direction==='back' ? 'back' :
     direction==='side' || direction==='left' || direction==='right' || direction==='game' ? 'side' : 'front';
   const art=hairMaterial(look,view);
   if (!art) return false;
   if (look.helmet && layer==='front') return true;
   context.save();
   if(look.headwearCoverage==='tucked'){context.beginPath();context.rect(-200,0,400,400);context.clip();}
+  if(art.reference){drawReferenceHair(context,art,layer,motion,time);context.restore();return true;}
   if (layer==='rear') {
     const length=styleCHairDefinition(look.hair)?.length??0;
     // The root stays seated against the scalp as long ends lag during turns.

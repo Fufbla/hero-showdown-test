@@ -1,0 +1,4 @@
+# Generated isolated review; rebuild with tools/build-nine-hair-preview.py.
+/royale-v3-hair-preview/
+# Earlier creator exports contain repeated captures; preserve locally, not as QA evidence.
+/royale/qa/nine-hair-review/screenshots/

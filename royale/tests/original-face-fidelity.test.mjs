@@ -15,6 +15,7 @@ import {previewHero} from '../hero-rig.mjs';
 import {Game} from '../core.mjs';
 import {LocalHeroStore,PROFILE_KEY} from '../saves.mjs';
 import {originalFaceBaseline,ORIGINAL_FACE_BASE} from './original-face-baseline.mjs';
+import {HAIR_REFERENCE_IDS} from '../hair-reference-v3.mjs';
 import {REVIEW_LOOKS} from './original-face-fixtures.mjs';
 const setup={canvasFactory:createCanvas,imageLoader:u=>loadImage(fileURLToPath(u))};
 await prepareStyleCMaterials(setup);const baseline=await originalFaceBaseline(setup);after(()=>baseline.close());
@@ -31,7 +32,7 @@ test('original default faces are pixel-identical, including native hair, ears, e
 });
 test('all unchanged hairstyles and movement poses retain the original face and body pixels',async()=>{
  const a=createCanvas(240,270),b=createCanvas(240,270);let frames=0;
- for(const sex of ['male','female'])for(const hair of LOOK_OPTIONS.hair.filter(h=>h!=='buzz'))for(const view of ['front','side','back','left'])for(const pose of ['idle','walk','run','jump','fall','punch','kick']){
+ for(const sex of ['male','female'])for(const hair of LOOK_OPTIONS.hair.filter(h=>h!=='buzz'&&!HAIR_REFERENCE_IDS.includes(h)))for(const view of ['front','side','back','left'])for(const pose of ['idle','walk','run','jump','fall','punch','kick']){
   const look={...styleCDefault(sex),hair};hero(drawHero,a,look,view,pose);hero(baseline.drawHero,b,look,view,pose);
   assert.equal(hash(a),hash(b),`${sex}/${hair}/${view}/${pose}: original appearance`);frames++;
   if(frames%64===0){await setImmediate();global.gc?.();}
@@ -66,6 +67,14 @@ test('facial selections update immediately and returning to the original selecti
   }
  }
 });
+test('profile forehead follows skin color and cannot inherit costume trim',()=>{
+ const canvas=createCanvas(400,430),ctx=canvas.getContext('2d');
+ const forehead=look=>{ctx.clearRect(0,0,400,430);drawHero(ctx,200,400,look,previewHero('idle',0),0,2,{view:'right'});return ctx.getImageData(190,190,60,40).data;};
+ for(const sex of ['male','female']){
+  const look={...styleCDefault(sex),hair:'none',skin:'#2e211c'};
+  assert.deepEqual(forehead({...look,trim:'#00ff00'}),forehead(look),sex+': upper forehead is skin, not gold costume material');
+ }
+});
 test('explicit right direction selects the existing profile for every hairstyle',()=>{
  const a=createCanvas(240,270),b=createCanvas(240,270);
  for(const sex of ['male','female'])for(const hair of LOOK_OPTIONS.hair){const look={...styleCDefault(sex),hair};assert.equal(hash(hero(drawHero,a,look,'right')),hash(hero(drawHero,b,look,'side')));assert.notEqual(hash(a),hash(hero(drawHero,b,look,'front')));}
@@ -80,6 +89,6 @@ test('existing saved appearance records and both visible slots are unchanged by 
 });
 test('approved assets, body/cape art, appearance schema, login, saves, combat and other modes remain untouched',()=>{
  const cwd=fileURLToPath(new URL('../../',import.meta.url));
- const paths=['royale/assets',':(exclude)royale/assets/hero/style-c-accurate/hair/buzz-reference-v2.png','assets','royale/style-c-body.mjs','royale/style-c-source.mjs','royale/style-c-motion.mjs','royale/core.mjs','royale/app.mjs','royale/saves.mjs','royale/appearance.mjs','royale/cape.mjs','royale/equipment.mjs','royale/backend','royale/multiplayer','royale-v3-staging','royale-cloud-test','index.html','story','versus'];
+ const paths=['royale/assets',':(exclude)royale/assets/hero/style-c-accurate/hair/buzz-reference-v2.png',':(exclude)royale/assets/hero/style-c-accurate/hair/reference-v3','assets','royale/style-c-body.mjs','royale/style-c-source.mjs','royale/style-c-motion.mjs','royale/core.mjs','royale/app.mjs','royale/saves.mjs','royale/appearance.mjs','royale/cape.mjs','royale/equipment.mjs','royale/backend','royale/multiplayer','royale-v3-staging','royale-cloud-test','index.html','story','versus'];
  assert.equal(execFileSync('git',['diff','--name-only',ORIGINAL_FACE_BASE,'--',...paths],{cwd,encoding:'utf8'}).trim(),'');
 });
