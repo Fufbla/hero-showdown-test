@@ -21,9 +21,22 @@ function createAutosync(){return new CodeAutosync({
  onStatus:status
 });}
 function display(){ $('entry').hidden=!!code;$('account').hidden=!code;if(!code)return;$('code').textContent=code;const root=$('slots');root.replaceChildren();const local=new LocalHeroStore(localStorage);
- for(let i=0;i<3;i++){const div=document.createElement('div');div.className='slot';const h=document.createElement('h3');h.textContent='Slot '+(i+1);div.append(h);const p=document.createElement('p');const saved=slots[i];const hero=saved?.hero||{};p.textContent=saved?'Level '+String(hero.level??saved.level??'?')+' · XP '+String(hero.xp??saved.xp??'?'):'Empty cloud slot';div.append(p);
+ for(let i=0;i<3;i++){const div=document.createElement('div');div.className='slot';const h=document.createElement('h3');h.textContent='Slot '+(i+1);div.append(h);const p=document.createElement('p');const saved=slots[i];const hero=saved?.hero||saved||{};p.textContent=saved?'Level '+String(hero.level??saved.level??'?')+' · XP '+String(hero.xp??saved.xp??'?'):'Empty cloud slot';div.append(p);
  if(!saved){for(let j=0;j<3;j++){const existing=local.slot(j);if(!existing)continue;div.append(button('Copy Browser Hero '+(j+1),async()=>{const current=await request({action:'recover',code});if(current.revision!==revision||current.slots[i]!==null)throw Error('Cloud slot changed. Reload before importing.');const result=await request({action:'save',code,slot:i,revision,snapshot:existing.snapshot});revision=result.revision;const verified=await request({action:'recover',code});if(!verified.slots[i])throw Error('Import not verified. Browser save is unchanged.');slots=verified.slots;revision=verified.revision;display();status('Browser hero copied and verified. Original browser save retained.');}));}}
- else{div.append(button('Verify Saved Hero',async()=>{const remote=await request({action:'recover',code});if(JSON.stringify(remote.slots[i])!==JSON.stringify(saved))throw Error('Cloud slot changed. No data overwritten.');revision=remote.revision;status('Slot '+(i+1)+' verified. Revision '+revision+'.');}));}
+ else{
+ div.append(button('Restore to Empty Browser Slot',async()=>{
+  const localStore=new LocalHeroStore(localStorage);
+  const empty=[0,1,2].find(n=>!localStore.slot(n));
+  if(empty===undefined)throw Error('All browser hero slots are occupied. No save was overwritten.');
+  const remote=await request({action:'recover',code});
+  if(!remote.slots[i])throw Error('Cloud hero is missing.');
+  const result=localStore.writeSlot(empty,remote.slots[i],{expectedId:null,requireDurable:true});
+  if(!result.ok)throw Error(result.error||'Browser restore failed.');
+  const verified=new LocalHeroStore(localStorage).slot(empty);
+  if(!verified?.snapshot)throw Error('Browser restore could not be verified.');
+  status('Cloud hero restored into empty browser slot '+(empty+1)+'. Reload the playable game to select it.');
+ }));
+ div.append(button('Verify Saved Hero',async()=>{const remote=await request({action:'recover',code});if(JSON.stringify(remote.slots[i])!==JSON.stringify(saved))throw Error('Cloud slot changed. No data overwritten.');revision=remote.revision;status('Slot '+(i+1)+' verified. Revision '+revision+'.');}));}
  if(!saved){for(let j=0;j<3;j++){if(!local.slot(j))continue;const browserIndex=j;div.append(button('Auto-Save Browser Hero '+(j+1),async()=>{
   if(autosync){autosync.stop();autosync=null;}
   if(!confirm('Automatically copy Browser Hero '+(j+1)+' into empty Cloud Slot '+(i+1)+' and keep saving while this page stays open? Your browser hero will not be deleted.'))return;
@@ -39,4 +52,6 @@ $('copy').onclick=()=>void run(async()=>{await navigator.clipboard.writeText(cod
 $('forget').onclick=()=>void run(async()=>{if(autosync){autosync.stop();autosync=null;}code=null;slots=[null,null,null];revision=0;localStorage.removeItem(key);display();status('Code removed from this browser only. Cloud heroes remain stored.');});
 $('reload').onclick=()=>void run(()=>recover(code));
 window.addEventListener('pagehide',()=>autosync?.stop());
+$('launch-game').onclick=()=>{const panel=$('playable');panel.hidden=false;const frame=$('game-frame');if(!frame.getAttribute('src'))frame.src='../royale/';status('Playable game opened. Browser hero saves can be copied to your code slots above.');};
+$('reload-game').onclick=()=>{const frame=$('game-frame');frame.src='../royale/?reload='+Date.now();status('Game reloaded.');};
 const remembered=localStorage.getItem(key);if(remembered)void run(()=>recover(remembered));
