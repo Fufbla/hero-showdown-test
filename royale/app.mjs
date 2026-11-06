@@ -329,7 +329,7 @@ function updateHud() {
   $('account-open').disabled=!!cloudApi?.writing||!!criticalPending||screen==='mergeReward'||game.started&&!game.canSave();
   const travelTarget=selectedInteraction(game,'travel');
   $('world-portal').hidden=screen!=='play'||!travelTarget;
-  $('world-portal').textContent=travelTarget?`↑ ${travelTarget.label} · ${input.controls.keys.portal[0]?.replace('Arrow','')}`:'';
+  $('world-portal').textContent=travelTarget?'↑ Enter Portal':'';
   $('visit-tree').hidden=screen!=='play'||!game.nearTree()||game.inCombat();
   updatePowers();
   if(screen==='world')journeyMenu.updateClock();
