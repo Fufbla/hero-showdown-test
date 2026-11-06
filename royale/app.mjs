@@ -336,8 +336,8 @@ function updateHud() {
   if(screen==='controls')hudText($('controller-status'),input.gamepadLabel);
   const target=selectedInteraction(game,'loot');
   $('rest').hidden=screen!=='play'||!target;
-  $('cycle-interaction').textContent=`Next target · ${input.controls.keys.nextTarget[0].replace('Key','')}`;
-  $('cycle-interaction').hidden=screen!=='play'||nearbyInteractions(game).length<2&&!(game.portalPickupGuard?.region===game.regionId&&game.nearPortal());
+  // Target cycling remains available through the configured keyboard/controller input; no gameplay banner.
+  $('cycle-interaction').hidden=true;
   $('rest').textContent=target?`${target.label} · ${input.controls.keys.interact[0].replace('Key','')}`:'';
   $('death').hidden = !h.dead || screen !== 'play'; $('diagnostics').hidden = !params.has('qa');
   if (params.has('qa')) $('diagnostics').textContent = `FPS ${fps.toFixed(0)} · draw ${drawMs.toFixed(2)}ms · ${screen} · t ${game.time.toFixed(2)}\nx ${h.x.toFixed(1)} y ${h.y.toFixed(1)} · ${animationState(h)}\nvx ${h.vx.toFixed(1)} vy ${h.vy.toFixed(1)} · jumps ${h.jumps}\nmonsters ${game.enemies.filter(e => e.state !== 'dead').length} · kills ${game.kills}\nregion ${game.regionId} · roots ${game.healthRoots} · gear ${game.inventory.items.length}/7 · clock ${game.clock().phase}\npowers ${game.powers.data.equipped.join(',')} · points ${game.powers.data.points} · combat ${game.inCombat()}\nviewport ${innerWidth}×${innerHeight} · save ${store.durable ? 'ready' : 'unavailable'}${game.arenaScene?`\nboss ${game.arenaScene.boss.hp.toFixed(0)}/${game.arenaScene.boss.maxHp} · phase ${game.arenaScene.boss.phase} · waves ${game.bossEncounter?.waves||0} · helpers ${game.enemies.filter(e=>e.summoned&&e.state!=='dead').length} · cleared ${game.arenaScene.cleared}`:''}`;
