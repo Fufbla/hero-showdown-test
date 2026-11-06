@@ -43,3 +43,18 @@
 .playing [data-control] > *, .playing #stick > * {pointer-events: none;}
 
 .controller-focus{outline:3px solid #f3b83e!important;outline-offset:-3px!important;box-shadow:0 0 0 2px #163f48!important}
+
+/* Compact portal action: visible only when the existing interaction target is in range. */
+body.game-view #world-portal:not([hidden]) {left:50%;right:auto;bottom:70px;transform:translateX(-50%);width:auto;max-width:150px;min-height:28px;padding:4px 10px;font-size:11px;line-height:1.2;white-space:nowrap;opacity:.9;pointer-events:auto;}
+/* Seven compact, scroll-safe map selections; keep original region artwork. */
+#world-menu .journey-scroll {padding-bottom:max(110px,calc(env(safe-area-inset-bottom) + 90px));}
+#world-menu .region-cards {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+#world-menu .region-card {min-height:102px;}
+#world-menu .region-art {width:66px;}
+#world-menu .region-art b {font-size:35px;}
+#world-menu .region-copy {padding:10px;display:flex;flex-direction:column;justify-content:center;gap:5px;}
+#world-menu .region-copy h3 {font-size:17px;line-height:1.15;margin:0;}
+#world-menu .region-copy small {font-size:11px;letter-spacing:.3px;}
+#world-menu .region-copy button {margin:3px 0 0;padding:7px 9px;font-size:12px;}
+#world-menu .region-card[data-region='7'] {grid-column:auto;}
+@media(max-width:700px){#world-menu .region-cards{grid-template-columns:1fr;}#world-menu .region-card{min-height:85px;}#world-menu .region-art{width:68px;}body.game-view #world-portal:not([hidden]){bottom:88px;}}
