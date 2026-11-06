@@ -115,7 +115,7 @@ function persistSnapshot(snapshot,requireDurable=false){
   if(testPrefix&&fixtureOrdinaryFailures>0){fixtureOrdinaryFailures--;return {ok:false,error:'Simulated practice cache failure.'};}
   const result=store.writeSlot(activeSlot,snapshot,{region:game.treeVisit?`Tree of Eris · ${game.getRegion().name}`:`${game.getRegion().name} · ${boardAt(game.regionId,game.hero.x).name}`,expectedId:activeId,requireDurable});
   if((result.ok||result.retained)&&store.data.slots[activeSlot])activeId=store.data.slots[activeSlot].id;
-  storageNotice();return result;
+  storageNotice();if(codePlay&&result.ok)queueMicrotask(sendCodeProgress);return result;
 }
 function startCritical(expectedRevision,snapshot){
   const sourceScreen=screen;
@@ -160,6 +160,7 @@ $('creator-form').addEventListener('input',updateMakeoverQuote);
 $('cancel-makeover').onclick=()=>{makeoverReview=null;$('makeover-confirm').hidden=true;};
 $('confirm-makeover').onclick=async()=>{const q=makeoverReview;if(!q)return;makeoverReview=null;const result=await transaction(()=>game.applyMakeover(q.next,{confirmed:true,revision:q.revision}));if(result.ok){editing=false;setScreen('tree');erisMenu.open();say('Appearance updated. Your progress is unchanged.');}else updateMakeoverQuote();};
 function setScreen(next){
+  if(codePlay&&next==='roster'&&game.started)sendCodeProgress();
   if(criticalPending||powerUpgrades.busy)return;
   if(next==='play'&&screen!=='play')input.waitForNeutralPad=true;
   screen=next;if(online())multiplayerMenu.session.pause(next!=='play');input.enabled=next==='play';input.clear();game.paused=next!=='play';
@@ -275,6 +276,7 @@ function closeDelete(){deleteTarget=null;renderRoster();setScreen('roster');}
 function tone(type){audio.effect(type);}
 function handleEvents() {
   const events = game.drain(), leveled = events.some(e => e.type === 'level');
+  if(codePlay&&events.some(e=>['level','boss-defeated','legendary-clear-ready','loot-picked','world-portal','tree'].includes(e.type)))queueMicrotask(sendCodeProgress);
   for (const event of events) {
     if(event.type==='legendary-clear-ready'&&!online()){const revision=game.legendary.revision;if(game.prepareLegendaryVictory())startCritical(revision,game.save());}
     if(event.type==='tree')openTree();
@@ -497,10 +499,11 @@ function frame(now){
 requestAnimationFrame(frame);
 // The code-save game is opt-in and isolated from ordinary browser hero slots.
 // Send exact in-memory progress every eight seconds; the parent owns cloud writes.
-if(codePlay)setInterval(()=>{
- if(!game.started||criticalPending||powerUpgrades.busy||online())return;
- try{const snapshot=game.save();window.parent.postMessage({type:'royale-code-progress',slot:activeSlot,snapshot},location.origin);}catch{}
-},8000);
+function sendCodeProgress(){
+ if(!codePlay||!game.started||criticalPending||powerUpgrades.busy||online())return;
+ try{window.parent.postMessage({type:'royale-code-progress',slot:activeSlot,snapshot:game.save()},location.origin);}catch{}
+}
+if(codePlay)setInterval(sendCodeProgress,8000);
 
 function pausePanel(panel){
  $('pause-primary').hidden=panel!=='home';$('pause-hero').hidden=panel!=='hero';$('pause-powers').hidden=panel!=='powers';$('pause-back').hidden=panel==='home';
