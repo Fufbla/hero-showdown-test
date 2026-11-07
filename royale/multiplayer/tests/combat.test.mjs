@@ -10,6 +10,7 @@ function encounter(region,legendary=null) {
   const store=new AuthorityStore(),a=new Authority(store,{allowLegacyImport:true,capacity:16});
   const hs=[0,1].map(n=>{const save=legendaryFixture();if(!legendary){save.world.bossVictories=[];save.bossProgress=initialBossProgress([]);}const h=a.create('owner'+n,{slot:0,legacy:save,sourceId:'boss-fixture-'+n,confirmed:true});a.attach(h.owner,h.id,{close(){}});h.game.travel(region);return h;});
   const room=a.mode(hs[0].owner,hs[0].id,'create');a.mode(hs[1].owner,hs[1].id,'join',room.code);
+  a.command(hs[0].owner,hs[0].id,1,'startRoom');
   for(const h of hs){if(legendary)assert.equal(h.game.enterLegendary(legendary),true);else assert.equal(h.game.enterBoss(),true);a.bind(h);h.game.hero.invulnerable=10000;}
   return {store,a,hs,boss:hs[0].game.arenaScene.boss,room};
 }

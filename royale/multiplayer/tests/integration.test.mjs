@@ -41,7 +41,7 @@ test('protocol mismatches are rejected before selecting or changing a hero',asyn
 test('a shared pounce can contact each hero once on different ticks',()=>{
  const store=new AuthorityStore(),a=new Authority(store,{capacity:4}),one=a.create('a',{slot:0}),two=a.create('b',{slot:0});
  try{
-  a.attach('a',one.id,{close(){}});a.attach('b',two.id,{close(){}});const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);
+  a.attach('a',one.id,{close(){}});a.attach('b',two.id,{close(){}});const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);a.command('a',one.id,1,'startRoom');
   const world=room.worlds.get(one.zone),e=world.enemies[0];world.enemies.splice(1);
   Object.assign(e,{x:400,y:400,airborne:true,pouncing:true,airVx:0,vy:0,hit:false,state:'strike',protection:0});
   for(const h of [one,two])Object.assign(h.game.hero,{x:h===one?400:700,y:400,invulnerable:0});

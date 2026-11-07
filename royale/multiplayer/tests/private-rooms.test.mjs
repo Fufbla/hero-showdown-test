@@ -29,6 +29,8 @@ test('five real connections select saved heroes, create/join by six digits; a si
     }
     const [host]=sessions;await host.command('mode',['create']);const code=host.state.code;assert.match(code,/^\d{6}$/);
     for(const s of sessions.slice(1,5))await s.command('mode',['join',code]);
+    await assert.rejects(()=>sessions[1].command('startRoom'),/Only the room/);
+    await host.command('startRoom');assert.equal(host.state.phase,'playing');
     await assert.rejects(()=>sessions[5].command('mode',['join',code]),/capacity/);
     const room=[...app.authority.state.rooms.values()].find(r=>r.code===code);assert.equal(room.members.size,MAX_ROOM_PLAYERS);
     const expected=[];

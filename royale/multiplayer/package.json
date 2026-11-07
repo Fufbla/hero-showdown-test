@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "node tests/v3-review-server.mjs",
     "start": "node server.mjs",
+    "soak": "node tests/five-player-soak.mjs",
     "test": "node --test --test-concurrency=1 tests/*.test.mjs"
   },
   "dependencies": {

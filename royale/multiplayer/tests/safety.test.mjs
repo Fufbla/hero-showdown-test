@@ -27,7 +27,7 @@ test('disconnect grace expires into solo only for the disconnected hero',()=>{
 test('solo pause freezes enemies; pausing in a shared room cannot pause other heroes',()=>{
   const store=new AuthorityStore(),a=new Authority(store,{allowLegacyImport:true,capacity:16}),one=a.create('a',{slot:0}),two=a.create('b',{slot:0});a.attach('a',one.id,{close(){}});a.attach('b',two.id,{close(){}});
   a.command('a',one.id,1,'pause',[true]);const age=one.game.enemies[0].age;a.tick();assert.equal(one.game.enemies[0].age,age);
-  const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);const prior=one.game.enemies[0].age,invulnerable=one.game.hero.invulnerable;a.tick();assert.ok(one.game.enemies[0].age>prior);assert.ok(one.game.hero.invulnerable<invulnerable);assert.equal(one.game.paused,true);store.close();
+  const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);a.command('a',one.id,2,'startRoom');const prior=one.game.enemies[0].age,invulnerable=one.game.hero.invulnerable;a.tick();assert.ok(one.game.enemies[0].age>prior);assert.ok(one.game.hero.invulnerable<invulnerable);assert.equal(one.game.paused,true);store.close();
 });
 test('duplicate creation/import requests cannot mint extra heroes in an occupied slot',()=>{
   const store=new AuthorityStore(),a=new Authority(store,{allowLegacyImport:true,capacity:16}),save=JSON.parse(new Game().save());

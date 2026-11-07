@@ -15,13 +15,16 @@ try{
     const frame=page.frameLocator('#game-frame');await frame.locator('#hero-slots [data-action="multiplayer"]').first().click({timeout:30000});
     if(i===1){await frame.locator('#mp-create').click();await frame.locator('#mp-code').waitFor({state:'visible',timeout:30000});code=(await frame.locator('#mp-code').textContent()).match(/\d{6}/)[0];console.log('Created room',code);}
     else{await frame.locator('#mp-join-code').fill(code);await frame.locator('#mp-join').click();}
-    if(i<=5){await frame.locator('#multiplayer-status').waitFor({state:'visible',timeout:30000});console.log('Joined browser',i);if(i===1)await frame.locator('#mp-close').click();}
+    if(i<=5){await frame.locator('#multiplayer-status').waitFor({state:'visible',timeout:30000});console.log('Joined browser',i);assert.equal(await frame.locator('#mp-close').isEnabled(),false);}
     else{await frame.locator('#mp-status').filter({hasText:'Room capacity reached'}).waitFor({timeout:30000});console.log('Sixth browser rejected');}
   }
-  const host=pages[0].frameLocator('#game-frame');await host.locator('#multiplayer-status').click();
+  const host=pages[0].frameLocator('#game-frame');
   await host.locator('#mp-players').filter({hasText:'5/5 players'}).waitFor({timeout:10000});
   await pages[0].screenshot({path:new URL('../qa/five-player-room.png',import.meta.url).pathname});
-  await host.locator('#mp-close').click();
+  assert.equal(await host.locator('#mp-start').isEnabled(),true);
+  assert.equal(await pages[1].frameLocator('#game-frame').locator('#mp-start').isVisible(),false);
+  await host.locator('#mp-start').click();
+  for(const page of pages.slice(0,5))await page.frameLocator('#game-frame').locator('#multiplayer-menu').waitFor({state:'hidden'});
   await pages[1].frameLocator('#game-frame').locator('#game').click({position:{x:450,y:150}});
   await pages[1].keyboard.down('ArrowRight');await pages[1].waitForTimeout(600);await pages[1].keyboard.up('ArrowRight');
   await pages[1].waitForTimeout(8500);

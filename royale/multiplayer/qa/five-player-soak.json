@@ -1,0 +1,27 @@
+{
+  "kind": "local-five-client-soak",
+  "seconds": 24,
+  "players": 5,
+  "transport": "loopback WebSocket; not WAN or physical-device testing",
+  "persistence": "temporary SQLite + fixture cloud",
+  "ticks": 1440,
+  "tickP95Ms": 8.03,
+  "inputConfirmationP95Ms": 36.84,
+  "frameGapP95Ms": 108.88,
+  "outboundKBps": 404.52,
+  "stateFrames": [
+    245,
+    244,
+    244,
+    243,
+    243
+  ],
+  "cloudWritesPerHero": [
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "errors": []
+}

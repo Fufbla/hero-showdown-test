@@ -3,6 +3,7 @@
 
 @media(max-width:700px) and (orientation:portrait){body.game-view:has(#multiplayer-status:not([hidden])) .brand{visibility:hidden}#multiplayer-status{left:calc(env(safe-area-inset-left) + 12px);transform:none;max-width:calc(100vw - 120px)}}
 #mp-code{user-select:text;-webkit-user-select:text;-webkit-touch-callout:default}
+#mp-waiting{grid-column:1/-1}#multiplayer-menu button:disabled{cursor:default;opacity:.55}
 #multiplayer-menu #mp-join-form{grid-template-columns:1fr;gap:8px;margin:0}
 #multiplayer-menu #mp-create{align-self:start}
 

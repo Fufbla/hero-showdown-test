@@ -70,7 +70,7 @@ export class V3Checkpoints {
     a.state.recoveries??=new Map();a.state.recoveries.set(h.id,decodeRuntime(encodeRuntime(h)));
     const connection=a.connections.get(h.id);
     if(connection){a.detach(h.id,connection);connection.close(4009,'Cloud save conflict. Recovery retained.');}
-    const room=a.state.rooms.get(h.room);room.members.delete(h.id);
+    const room=a.state.rooms.get(h.room);room.members.delete(h.id);a.refreshHost(room);
     for(const w of room.worlds.values())a.reconcileControls(room,w);
     if(!room.members.size)a.state.rooms.delete(room.id);a.state.heroes.delete(h.id);a.commit();
   }
@@ -128,7 +128,7 @@ export class V3Checkpoints {
     a.detach(h.id,connection);
     await this.pending.get(h.id);
     const result=await this.saveHero(h),room=a.state.rooms.get(h.room);
-    room.members.delete(h.id);for(const w of room.worlds.values())a.reconcileControls(room,w);
+    room.members.delete(h.id);a.refreshHost(room);for(const w of room.worlds.values())a.reconcileControls(room,w);
     if(!room.members.size)a.state.rooms.delete(room.id);
     a.state.heroes.delete(h.id);a.commit();return result;
   }

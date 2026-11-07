@@ -18,7 +18,7 @@ const fixture=(capacity=32)=>{
   return {a,store,add};
 };
 const advance=(a,n=1)=>{for(let i=0;i<n;i++)a.tick();};
-function together(a,heroes){const r=a.mode(heroes[0].owner,heroes[0].id,'create');for(const h of heroes.slice(1))a.mode(h.owner,h.id,'join',r.code);return r;}
+function together(a,heroes){const r=a.mode(heroes[0].owner,heroes[0].id,'create');for(const h of heroes.slice(1))a.mode(h.owner,h.id,'join',r.code);a.command(heroes[0].owner,heroes[0].id,1,'startRoom');return r;}
 test('fresh heroes, no occupied-slot replacement; imported saves once, never overwrite',()=>{
   const {a,store,add}=fixture();const h=add('owner');assert.equal(h.game.hero.level,1);
   assert.throws(()=>a.create('owner',{slot:0}),/already/);
@@ -45,14 +45,14 @@ test('replayed input does not double jump; idle input expires; server controls m
   assert.equal(a.input('one',h.id,1,{jump:true}),false);a.tick();assert.equal(h.game.hero.jumps,1);
   a.input('one',h.id,2,{jump:true});a.tick();assert.equal(h.game.hero.jumps,2);now+=500;advance(a,30);assert.equal(h.game.hero.vx,0);store.close();
 });
-test('same shared enemy takes independently validated attacks; each contributor earns original rewards once',()=>{
+test('same shared enemy takes independently validated attacks; contributors split XP and keep individual drops once',()=>{
   const {a,store,add}=fixture(),hs=[add('a'),add('b')];together(a,hs);
   const e=hs[0].game.enemies[0];assert.equal(e,hs[1].game.enemies[0]);e.protection=0;
   for(const h of hs){Object.assign(h.game.hero,{x:e.x-40,y:e.y,face:1,invulnerable:100});h.game.random=()=>.99;}
   const before=hs.map(h=>({xp:h.game.hero.xp,coins:h.game.hero.coins}));
   for(let tick=0;tick<180&&e.state!=='dead';tick++){for(const h of hs)a.input(h.owner,h.id,tick+1,{punchHeld:true});a.tick();}
   assert.equal(e.state,'dead');assert.equal(e.participants.size,2);
-  for(let i=0;i<2;i++){assert.equal(hs[i].game.hero.coins-before[i].coins,1);assert.equal(hs[i].game.hero.xp-before[i].xp,14);}
+  for(let i=0;i<2;i++){assert.equal(hs[i].game.hero.coins-before[i].coins,1);assert.equal(hs[i].game.hero.xp-before[i].xp,7);}
   a.reward(hs[0],e);assert.equal(hs[0].game.hero.coins,1);assert.equal(hs[1].game.hero.coins,1);store.close();
 });
 test('multiplayer and solo mode preserve exact elevated platform, HP, progression and equipment',()=>{

@@ -1,13 +1,33 @@
 # V3 private multiplayer — development build
 
-Select an existing V3 hero, choose **Multiplayer**, then **Create Multiplayer** or
-enter a friend's six-digit code in **Join Multiplayer**. A room holds at most five
-players including its creator. A creator can wait alone while friends join.
+Select an existing V3 hero, choose **Create Multiplayer Room** or
+enter a friend's six-digit code in **Join Multiplayer Room**. A room holds at most five
+players including its creator. New rooms wait in a lobby with gameplay frozen.
+Only the room host can press **Start Adventure**, once at least two players are
+connected. Guests see a waiting message and the player list. Closing a menu or
+sending gameplay commands cannot bypass the lobby. If the host leaves or disconnects,
+another connected member becomes host; an adventure already started keeps running.
 Room codes are separate from the ten-digit code that opens a player's saved heroes.
 
 This branch continues the existing authority and game-session implementation on the
 current V3 game. It does not regenerate artwork or change solo combat balance.
 There is no second email login, account transfer, or new hero copy in the player flow.
+
+## Cooperative XP
+
+Monsters and regional bosses divide their XP among heroes who dealt damage in that
+encounter, rather than awarding the full amount to every player. A 14-XP monster
+gives two same-level contributors 7 XP each. Idle teammates and heroes who have moved
+to another region/arena or room are excluded. A contributor temporarily disconnected
+within the existing 30-second grace period keeps their earned share.
+
+The game's existing personal level penalties still apply: a much higher-level hero
+may earn less XP, and level 99 stays capped. Whole-number remainders rotate by room
+order (for example, a 14-XP pool split five ways is 3/3/3/3/2). This rotation and each
+defeat's reward marker persist across authority restarts. Single-contributor kills
+retain their original XP. Each contributor keeps the existing individual coin/drop
+rolls; regional chest ownership and permanent Legendary records remain individual.
+Reward messages display the XP actually added, including when it triggers a level-up.
 
 ## Saving
 
@@ -40,6 +60,7 @@ Requires Node.js 24 or later.
 ```sh
 npm ci --prefix royale/multiplayer
 npm test --prefix royale/multiplayer
+npm run soak --prefix royale/multiplayer
 npm run dev --prefix royale/multiplayer
 ```
 
@@ -67,7 +88,7 @@ the per-room cap remains five regardless of a larger server limit.
 Create `royale/multiplayer/config.json` from `config.example.json` with the actual WSS
 endpoint after the backend is verified. The feature branch enables the V3 menu,
 while the older account-transfer multiplayer switch remains disabled. Keep both
-frontend and authority on protocol 3. Updated entry hashes avoid stale module caches.
+frontend and authority on protocol 4. Updated entry hashes avoid stale module caches.
 
 Do not publish until real V3 session authentication, revision-safe cloud writes,
 reconnects, a sustained five-player load, proxy restarts and iPhone touch controls
@@ -75,12 +96,12 @@ have been checked on that host. Back up the authority SQLite database consistent
 with its WAL; the exact active-encounter state is stored there.
 
 No production deployment, database migration, live hero write, hosting purchase or
-DNS change was performed. Hostinger access is not connected in this workspace, and
-there is no configured public multiplayer endpoint.
+DNS change was performed. This branch has no configured public multiplayer endpoint;
+a persistent host still needs to be configured before online browser/device testing.
 
 ## Validation
 
-`npm test --prefix royale/multiplayer`: **71 passed, 0 failed**.
+`npm test --prefix royale/multiplayer`: **85 passed, 0 failed**.
 
 Automated coverage includes six independent WebSocket connections: five admitted,
 one refused; existing-hero selection; numeric room codes; creator departure; guest
@@ -89,6 +110,20 @@ runtime restart; save conflicts and recovery; failed-write retry; delayed cloud
 acknowledgements; safe return to solo; the actual V3 parent save bridge; and menu
 behavior using a DOM test environment. Cloud rows/authentication in these tests are
 disposable fixtures, not production Supabase verification.
+
+Additional coverage checks creator-only starts, minimum connected players, frozen
+lobbies, host succession, 2/3/4/5-contributor XP splits, solo kills, nonparticipants,
+level penalties and level-ups, boss XP/chests, disconnection grace, durable restarts,
+and lobby/reward cloud checkpoints. DOM checks cover waiting guests and automatic
+resume when the host starts.
+
+`npm run soak --prefix royale/multiplayer` ran five independent local WebSocket
+clients for 24 seconds, sending 30 inputs per second each, with real temporary SQLite
+persistence and fixture cloud writes. It completed 1,440 simulation ticks without
+errors; every hero had three cloud writes. Measured p95 tick time was 8.03 ms, p95
+input confirmation 36.84 ms, p95 state-frame spacing 108.88 ms, and aggregate outbound
+traffic 404.52 KB/s. These are local loopback measurements, not hosted capacity or
+phone/WAN latency guarantees. See `qa/five-player-soak.json`.
 
 The existing broader Royale suite has one pre-existing historical interface-scope
 failure, also reproduced on clean baseline `5defeb33c626d19755b26f030b5e7b840f6b4b77`.

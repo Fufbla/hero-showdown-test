@@ -18,17 +18,19 @@ export function requestV3Session({slot,snapshot,resume=false},win=window){
 
 export class V3MultiplayerMenu {
   constructor(hooks){
-    Object.assign(this,hooks);this.privateRooms=true;this.status='Choose Create Multiplayer or enter a friend’s room code.';
+    Object.assign(this,hooks);this.privateRooms=true;this.status='Create a room or enter a friend’s room code.';
     this.dialog=document.createElement('dialog');this.dialog.id='multiplayer-menu';this.dialog.setAttribute('aria-labelledby','multiplayer-title');
     this.dialog.innerHTML=`<header><h2 id="multiplayer-title">Play together</h2><button id="mp-close" aria-label="Close multiplayer menu">×</button></header>
 <p id="mp-selected"></p><p>2–${MAX_ROOM_PLAYERS} players · Your hero saves every ${AUTOSAVE_MS/1000} seconds.</p>
 <p id="mp-status" role="status" aria-live="polite"></p>
 <section id="mp-room"><p id="mp-code" hidden></p><button id="mp-copy" hidden>Copy room code</button><p id="mp-players"></p>
-<div class="mp-actions"><button id="mp-create">Create Multiplayer</button><form id="mp-join-form"><label for="mp-join-code">Six-digit room code</label><input id="mp-join-code" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" placeholder="123456" required><button id="mp-join" type="submit">Join Multiplayer</button></form>
+<p id="mp-waiting" role="status" hidden></p><div class="mp-actions"><button id="mp-create">Create Multiplayer Room</button><form id="mp-join-form"><label for="mp-join-code">Six-digit room code</label><input id="mp-join-code" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" placeholder="123456" required><button id="mp-join" type="submit">Join Multiplayer Room</button></form>
+<button id="mp-start" hidden disabled>Start Adventure</button>
 <button id="mp-leave" hidden>Leave Multiplayer</button><button id="mp-roster" hidden>Save &amp; Return to Heroes</button></div></section>`;
     document.body.append(this.dialog);this.$=id=>this.dialog.querySelector('#'+id);
     this.$('mp-close').onclick=()=>this.close();this.dialog.addEventListener('cancel',e=>{e.preventDefault();this.close();});
     this.$('mp-create').onclick=()=>this.run(()=>this.mode('create'));
+    this.$('mp-start').onclick=()=>this.run(()=>this.session.command('startRoom'));
     this.$('mp-join-form').onsubmit=e=>{e.preventDefault();void this.run(()=>this.mode('join',this.$('mp-join-code').value.trim()));};
     this.$('mp-leave').onclick=()=>this.run(()=>this.mode('solo'));
     this.$('mp-roster').onclick=()=>this.run(()=>this.release());
@@ -75,23 +77,33 @@ export class V3MultiplayerMenu {
     if(checkpoint.slot!==this.slot)return;
     window.parent.postMessage({...checkpoint,type:'royale-multiplayer-checkpoint'},location.origin);
   }
-  async mode(mode,code){if(mode==='join')roomCode(code);await this.connect();await this.session.command('mode',[mode,code]);this.renderState(this.session.state);if(mode!=='create')this.close(true);}
+  async mode(mode,code){if(mode==='join')roomCode(code);await this.connect();await this.session.command('mode',[mode,code]);this.renderState(this.session.state);if(mode!=='create'&&this.session.state.phase!=='lobby')this.close(true);}
   async checkpoint(){if(this.session?.active&&this.session.client.ready)return this.session.command('save');}
   async release(){
     if(!this.session?.client.ready)throw Error('Reconnect before returning to your solo hero.');
     const checkpoint=await this.session.client.request('release');this.confirmCheckpoint(checkpoint);this.mark(this.localId,false);
-    this.session.client.close();this.session.active=false;this.badge.hidden=true;
+    this.session.client.close();this.session.active=false;this.waiting=false;
+    this.renderState({code:null,phase:'playing',players:[]});this.badge.hidden=true;this.$('mp-roster').hidden=true;
+    this.note('Create a room or enter a friend’s room code.');
     window.parent.postMessage({type:'royale-room-released',slot:this.slot},location.origin);
     this.dialog.close();await this.onExit?.(checkpoint.snapshot);this.session=null;
   }
   renderState(state){
+    const wasWaiting=this.waiting;this.waiting=state.phase==='lobby';
     this.$('mp-code').hidden=!state.code;this.$('mp-code').textContent=state.code?'Room code: '+state.code:'';
     this.$('mp-copy').hidden=!state.code;this.$('mp-leave').hidden=!state.code;this.$('mp-roster').hidden=false;
+    this.$('mp-create').hidden=!!state.code;this.$('mp-join-form').hidden=!!state.code;
+    this.$('mp-start').hidden=!this.waiting||state.hostId!==state.id;this.$('mp-start').disabled=!state.canStart;
+    this.$('mp-close').disabled=this.waiting;
+    this.$('mp-waiting').hidden=!this.waiting;
+    this.$('mp-waiting').textContent=state.hostId===state.id?(state.canStart?'Your friends are here. Start when you’re ready.':'Waiting for at least one friend to join…'):'Waiting for the room host to start…';
     this.$('mp-roster').disabled=state.game?.canSave?!state.game.canSave():false;
-    this.$('mp-players').textContent=state.code?`${state.players.length}/${MAX_ROOM_PLAYERS} players · ${state.players.map(p=>p.name).join(' · ')}`:'Solo play';
-    this.badge.hidden=false;this.badge.textContent=state.code?`${state.players.length}/${MAX_ROOM_PLAYERS} · ${state.code}`:'Solo · autosave on';
+    this.$('mp-players').textContent=state.code?`${state.players.length}/${MAX_ROOM_PLAYERS} players · ${state.players.map(p=>p.name+(p.id===state.hostId?' (host)':'')).join(' · ')}`:'Solo play';
+    this.badge.hidden=false;this.badge.textContent=state.code?`${this.waiting?'Waiting · ':''}${state.players.length}/${MAX_ROOM_PLAYERS} · ${state.code}`:'Solo · autosave on';
+    if(this.waiting&&!this.dialog.open)this.open();
+    if(wasWaiting&&!this.waiting)this.close(true);
     if(state.cloud?.error)this.note(state.cloud.error);
   }
   open(){this.onOpen();const ctx=this.getContext();this.$('mp-selected').textContent=ctx.local?`${ctx.local.snapshot.look.name} · Level ${ctx.local.snapshot.level}`:'Select a hero first.';this.note(this.status);if(!this.dialog.open)this.dialog.showModal();}
-  close(force=false){if(this.busy&&!force)return;this.dialog.close();this.onClose();}
+  close(force=false){if(this.waiting||this.busy&&!force)return;this.dialog.close();this.onClose();}
 }
