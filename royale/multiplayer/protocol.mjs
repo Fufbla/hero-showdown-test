@@ -1,6 +1,6 @@
 // The client sends intentions, never coordinates, damage, loot or progression.
-export const PROTOCOL = 2;
-export const ROOM_CODE = /^[A-HJ-NP-Z2-9]{10}$/;
+export const PROTOCOL = 4;
+export const ROOM_CODE = /^\d{6}$/;
 export const INPUT_KEYS = ['move','vertical','run','jump','punch','kick','punchHeld','kickHeld','heal','interact','portal','tree','nextTarget','powers'];
 export function inputPacket(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw) || Object.keys(raw).some(k=>!INPUT_KEYS.includes(k))) throw Error('Invalid input.');
@@ -18,4 +18,4 @@ export function consumeEdges(input) {
   return {move:input.move,vertical:input.vertical,run:input.run,punchHeld:input.punchHeld,kickHeld:input.kickHeld};
 }
 export function sequence(n) {if(!Number.isSafeInteger(n)||n<1)throw Error('Invalid sequence.');return n;}
-export function roomCode(raw) {if(typeof raw!=='string'||!ROOM_CODE.test(raw))throw Error('Enter the ten-character room code.');return raw;}
+export function roomCode(raw) {if(typeof raw!=='string'||!ROOM_CODE.test(raw))throw Error('Enter the six-digit room code.');return raw;}

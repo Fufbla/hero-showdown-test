@@ -1,0 +1,23 @@
+{
+  "name": "royale-authority",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "node tests/v3-review-server.mjs",
+    "start": "node server.mjs",
+    "soak": "node tests/five-player-soak.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.119.0",
+    "esbuild": "0.28.2",
+    "ws": "8.22.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.14",
+    "linkedom": "0.18.12"
+  }
+}

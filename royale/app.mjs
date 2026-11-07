@@ -89,11 +89,12 @@ const legendaryMenu=new LegendaryMenu(()=>game,{transaction,say,enter:enterLegen
 erisMenu.mergeMenu=legendaryMenu;
 let makeoverReview=null,remoteLoaded=false;
 const multiplayerMenu=await createMultiplayerMenu({
- getContext:()=>({storage,slot:activeSlot,local:localStore.slot(activeSlot),snapshot:game.started&&!online()?JSON.parse(game.save()||'null'):localStore.slot(activeSlot)?.snapshot}),
+ getContext:()=>({codePlay:codePlay?params.get('codePlay'):null,storage,slot:activeSlot,local:localStore.slot(activeSlot),snapshot:game.started&&!online()?JSON.parse(game.save()||'null'):localStore.slot(activeSlot)?.snapshot}),
  onError:error=>say(typeof error==='string'?error:error.message,7),
  onOpen:()=>{if(game.started)setScreen('pause');},
  onClose:()=>game.started?resume():setScreen('roster'),
- onState:(next,state)=>{game=next;if(!remoteLoaded){remoteLoaded=true;activeId=state.id;startPatrol(true);if(multiplayerMenu.dialog.open)setScreen('pause');}game.paused=screen!=='play';for(const e of game.enemies)if(e.boss||e.legendaryHelper)renderer.bossArt.step(e,game.time,.1,game.hero.x);handleEvents();updateHud();}
+ onExit:async snapshot=>{const slot=localStore.slot(activeSlot);if(snapshot.legendary.revision){ledger??=await LegendaryLedger.open(window.indexedDB,storagePrefix?storagePrefix+'permanent':'healthia.royale.permanent.v1');const record=(await ledger.all()).find(r=>r.heroId===slot.id);if(snapshot.legendary.revision>(record?.revision||0))await ledger.commit(slot.id,record?.revision||0,JSON.stringify(snapshot));ledgerError='';}const saved=store.writeSlot(activeSlot,JSON.stringify(snapshot),{expectedId:slot.id,region:game.getRegion().name});if(!saved.ok)throw Error(saved.error);activeId=slot.id;remoteLoaded=false;game=new Game({save:snapshot});renderRoster();setScreen('roster');},
+ onState:(next,state)=>{game=next;if(!remoteLoaded){remoteLoaded=true;activeId=multiplayerMenu.privateRooms?localStore.slot(activeSlot)?.id:state.id;startPatrol(true);if(multiplayerMenu.dialog.open)setScreen('pause');}game.paused=screen!=='play';for(const e of game.enemies)if(e.boss||e.legendaryHelper)renderer.bossArt.step(e,game.time,.1,game.hero.x);handleEvents();updateHud();}
 });
 function online(){return !!multiplayerMenu.session?.active;}
 
@@ -189,6 +190,7 @@ function renderRoster(){
     const detail=document.createElement('p');detail.className='slot-detail';detail.textContent=slot?`Level ${slot.snapshot.level} · ${slot.lastRegion}`:'The coast is waiting for its next hero.';card.append(detail);
     const saved=document.createElement('p');saved.className='last-saved';saved.textContent=slot?`Last saved: ${dateText(slot.updatedAt)}`:'Create your look. Find your courage.';card.append(saved);
     const button=document.createElement('button');button.className=slot?'primary':'secondary';button.dataset.action=slot?'continue':'create';button.textContent=slot?'Continue →':'Create Hero +';button.disabled=!store.writable&&!slot;button.onclick=()=>slot?continueHero(i):openCreator(i,false);card.append(button);
+    if(slot&&multiplayerMenu.privateRooms)for(const [mode,label] of [['create','Create Multiplayer Room'],['join','Join Multiplayer Room']]){const multiplayer=document.createElement('button');multiplayer.className='secondary';multiplayer.textContent=label;multiplayer.dataset.action='multiplayer';multiplayer.dataset.roomMode=mode;multiplayer.onclick=()=>{continueHero(i);multiplayerMenu.open();multiplayerMenu.$(mode==='create'?'mp-create':'mp-join-code').focus();};card.append(multiplayer);}
     if(slot){const del=document.createElement('button');del.className='text-button delete-hero';del.textContent='Delete Hero';del.disabled=!store.writable||multiplayerMenu.isLinked(slot.id);del.onclick=()=>{deleteTarget={index:i,id:slot.id,name:slot.snapshot.look.name};$('delete-description').textContent=`Delete ${slot.snapshot.look.name}, level ${slot.snapshot.level}?`;setScreen('delete');$('cancel-delete').focus();};card.append(del);}
     container.append(card);
     const c=canvas.getContext('2d');c.fillStyle='#c4d4a41c';c.beginPath();c.ellipse(180,284,62,10,0,0,Math.PI*2);c.fill();
@@ -510,9 +512,15 @@ function frame(now){
 }
 requestAnimationFrame(frame);
 // The code-save game is opt-in and isolated from ordinary browser hero slots.
-// Send exact in-memory progress every eight seconds; the parent owns cloud writes.
+// Solo sends its snapshot to the parent. Multiplayer checkpoints the authority;
+// its independent eight-second timer also runs while menus/tabs are inactive.
 function sendCodeProgress(force=false){
- if(!codePlay||!game.started||(!force&&screen!=='play')||criticalPending||powerUpgrades.busy||online())return;
+ if(!codePlay||!game.started||criticalPending||powerUpgrades.busy)return;
+ if(online()){
+  if(multiplayerMenu.privateRooms)void multiplayerMenu.checkpoint().catch(error=>say(error.message,7));
+  return;
+ }
+ if(!force&&screen!=='play')return;
  try{const selected=Number(activeSlot);if(!Number.isInteger(selected)||selected<0||selected>2)return;const snapshot=game.save();if(!snapshot)return;const parsed=JSON.parse(snapshot);console.info('[V3 live hero]',{slot:selected+1,x:game.hero.x,y:game.hero.y,savedX:parsed.world?.location?.x,savedY:parsed.world?.location?.y,xp:game.hero.xp,coins:game.hero.coins});window.parent.postMessage({type:'royale-code-progress',slot:selected,snapshot,heroId:activeId},location.origin);}catch{}
 }
 if(codePlay)setInterval(sendCodeProgress,8000);

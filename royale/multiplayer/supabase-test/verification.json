@@ -1,0 +1,366 @@
+{
+  "verifiedAt": "2026-11-07",
+  "officialMain": "5defeb33c626d19755b26f030b5e7b840f6b4b77",
+  "officialHtmlSha256": "82fd7a2930e43caabab260fee5e84cebb3eca92d41b0034a4f5b28ca36eae0b0",
+  "automatedTests": 91,
+  "results": {
+    "combat": {
+      "target": 4,
+      "initial": [
+        7,
+        7
+      ],
+      "final": [
+        17,
+        17
+      ],
+      "updates": [
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            580.0555555555512,
+            600.8777777777782
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            765.0555555555535,
+            656.3777777777789
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            925.3888888888888,
+            804.3777777777807
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1128.8888888888873,
+            912.2944444444487
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1215.2222222222185,
+            1100.3777777777816
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1397.1388888888807,
+            1186.7111111111128
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1523,
+            1319.294444444443
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1523,
+            1495.0444444444386
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            48,
+            48
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            28.440097799510994,
+            38.2200488997555
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            3.990220048899742,
+            8.880195599021992
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        },
+        {
+          "hp": [
+            0,
+            0
+          ],
+          "x": [
+            1523,
+            1523
+          ],
+          "health": [
+            95,
+            100
+          ]
+        }
+      ],
+      "latency": {
+        "requests": 44,
+        "medianMs": 550,
+        "p95Ms": 5745,
+        "maxMs": 5940
+      }
+    },
+    "recovery": {
+      "autosaves": [
+        {
+          "i": 1,
+          "at": "2026-11-07T01:16:05.549Z",
+          "revision": 34
+        },
+        {
+          "i": 0,
+          "at": "2026-11-07T01:16:13.746Z",
+          "revision": 36
+        }
+      ],
+      "rows": [
+        {
+          "revision": 36,
+          "xp": 7,
+          "savedAt": "2026-11-07T01:16:13.746+00:00"
+        },
+        {
+          "revision": 35,
+          "xp": 7,
+          "savedAt": "2026-11-07T01:16:13.746+00:00"
+        }
+      ],
+      "disconnectPreservedRoom": true,
+      "hostTransferred": true,
+      "remainingPlayerMoves": true,
+      "reconnectRestoresXP": true,
+      "duplicateRewardPrevented": true,
+      "latency": {
+        "requests": 57,
+        "medianMs": 479,
+        "p95Ms": 1404,
+        "maxMs": 4700
+      }
+    },
+    "copy": {
+      "sourceCreatedForTest": true,
+      "sourceReadOnlyDuringCopy": true,
+      "exactSnapshotCopied": true,
+      "hiddenSlotExcluded": true,
+      "sourceUnchangedAfterTestSave": true,
+      "lastPlayerRelease": true
+    },
+    "capacity": {
+      "fivePlayers": true,
+      "sixthBlocked": true,
+      "errors": [
+        "Room is busy. Your confirmed progress is safe; retrying."
+      ],
+      "requests": 51,
+      "medianMs": 508,
+      "p95Ms": 4873,
+      "maxMs": 4953
+    },
+    "realtime": {
+      "statuses": [
+        "SUBSCRIBED",
+        "CLOSED"
+      ],
+      "frames": 5
+    }
+  },
+  "singlePlayerChecks": 42,
+  "deployment": {
+    "url": "https://hero-showdown-royale-multiplayer-test.fufbla.chatgpt.site/",
+    "status": "succeeded",
+    "access": "owner-private",
+    "hostedGameplayVerified": false,
+    "pending": "Owner sign-in; final Apple credential request declined",
+    "testedFrontend": "Exact packaged build through managed preview with live Supabase backend",
+    "siteSourceSha": "19cda49da663033f740352bd4fb92aa6c7b42586"
+  }
+}

@@ -37,7 +37,7 @@ export function decodeRuntime(text,{now=Date.now,random=Math.random}={}) {
     if(type==='Array')object.push(...data.map(value));
     else if(type==='Set')data.forEach(v=>object.add(value(v)));
     else if(type==='Map')data.forEach(([k,v])=>object.set(value(k),value(v)));
-    else for(const [k,v] of data){if(['__proto__','prototype','constructor'].includes(k))throw Error('Invalid runtime field.');Object.defineProperty(object,k,{value:value(v),writable:true,enumerable:k!=='game',configurable:true});}
+    else for(const [k,v] of data){if(['__proto__','prototype','constructor'].includes(k))throw Error('Invalid runtime field.');Object.defineProperty(object,k,{value:value(v),writable:true,enumerable:!(type==='PowerSystem'&&k==='game'),configurable:true});}
   });
   for(const o of objects)if(o instanceof ProjectilePool)o.members=new WeakSet(o.free);
   for(const g of objects.filter(o=>o instanceof Game)) {
