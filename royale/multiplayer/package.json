@@ -12,6 +12,8 @@
     "test": "node --test --test-concurrency=1 tests/*.test.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.119.0",
+    "esbuild": "0.28.2",
     "ws": "8.22.1"
   },
   "devDependencies": {

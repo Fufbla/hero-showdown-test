@@ -176,7 +176,7 @@ export class Authority {
     for(const h of this.state.heroes.values()) {
       if(!h.connected||this.state.rooms.get(h.room).phase==='lobby')continue;this.bind(h);
       const g=h.game,k=key(g),shots=g.enemyShots;g.enemyShots=[];
-      const pending=this.inputs.get(h.id),action=pending&&this.now()-pending.at<250?pending.input:{};
+      const pending=this.inputs.get(h.id),action=pending&&this.now()-pending.at<(this.inputMaxAgeMs||250)?pending.input:{};
       // A menu cannot freeze recovery/invulnerability timers in a shared fight.
       const menuPaused=g.paused&&!!this.state.rooms.get(h.room).code&&!g.treeVisit;
       if(menuPaused)g.paused=false;

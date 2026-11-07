@@ -48,6 +48,10 @@ export class V3MultiplayerMenu {
     const response=await fetch(new URL('./config.json',import.meta.url),{cache:'no-store'});
     if(!response.ok)throw Error('Multiplayer is being prepared. Your saved hero is available in solo play.');
     const config=await response.json(),url=new URL(config.endpoint,location.href);
+    if(config.transport==='supabase-test'){
+      if(url.protocol!=='https:'||url.origin!=='https://adakwbhxiuatjvphutgo.supabase.co')throw Error('Invalid test server.');
+      this.config={transport:config.transport,endpoint:url.href};this.$('mp-leave').onclick=()=>this.run(()=>this.release());return this.config;
+    }
     if(url.protocol!=='wss:'&&!(url.protocol==='ws:'&&location.protocol==='http:'&&url.host===location.host))throw Error('A secure multiplayer connection is required.');
     if(url.username||url.password||url.search||url.hash)throw Error('Invalid multiplayer connection.');
     this.config={endpoint:url.href};return this.config;
@@ -60,7 +64,9 @@ export class V3MultiplayerMenu {
     const resume=this.isLinked(this.localId);
     if(!resume&&!context.snapshot)throw Error('Leave combat for five seconds before starting multiplayer.');
     this.session?.client.close();
-    const session=new GameSession({url:this.config.endpoint,getToken:()=>requestV3Session({slot:this.slot,snapshot:this.getContext().snapshot,resume:this.isLinked(this.localId)}),storage:context.storage,onState:this.onState,onError:this.onError});
+    const getToken=()=>requestV3Session({slot:this.slot,snapshot:this.getContext().snapshot,resume:this.isLinked(this.localId)});
+    const client=this.config.transport==='supabase-test'?new (await import('./supabase-test/client.mjs')).SupabaseTestClient(this.config,getToken):null;
+    const session=new GameSession({url:this.config.endpoint,getToken,client,storage:context.storage,onState:this.onState,onError:this.onError});
     this.session=session;session.privateRooms=true;
     session.addEventListener('heroes',event=>{const hero=event.detail.find(h=>h.slot===this.slot);if(!hero){this.note('Your selected hero could not be restored.');return;}this.mark(this.localId,true);session.select(hero.id);});
     session.addEventListener('checkpoint',event=>{this.confirmCheckpoint(event.detail);this.note('Saved · '+new Date(event.detail.savedAt).toLocaleTimeString());});
