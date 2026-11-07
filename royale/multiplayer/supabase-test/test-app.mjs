@@ -25,7 +25,7 @@ async function launch(selected){
  const result=store.flush(next,{atomic:true});if(!result.ok)throw Error(result.error);
  const ledger=await LegendaryLedger.open(window.indexedDB,prefix+'permanent');
  for(const s of sessions.filter(Boolean))if(s.snapshot.legendary?.revision){const id='test-'+s.id,old=(await ledger.all()).find(x=>x.heroId===id);if(!old||old.revision<s.snapshot.legendary.revision)await ledger.commit(id,old?.revision||0,JSON.stringify(s.snapshot));}ledger.close();
- $('setup').hidden=true;$('play').hidden=false;$('back').hidden=false;$('game-frame').src='./royale/?codePlay=v3&mpDevice='+encodeURIComponent(device)+'&cloudLoad='+Date.now();status('Test saves only · choose Create Multiplayer Room or Join Multiplayer Room.');
+ $('setup').hidden=true;$('play').hidden=false;$('back').hidden=false;$('game-frame').src='./royale/?codePlay=v3&mpDevice='+encodeURIComponent(device)+'&cloudLoad='+Date.now()+(new URLSearchParams(location.search).has('qa')?'&qa':'');status('Test saves only · choose Create Multiplayer Room or Join Multiplayer Room.');
 }
 window.addEventListener('message',e=>{
  if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow)return;

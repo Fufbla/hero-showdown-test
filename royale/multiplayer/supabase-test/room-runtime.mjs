@@ -45,13 +45,28 @@ export class RoomRuntime {
     this.touch(h);return h;
   }
   touch(h){const r=this.a.state.rooms.get(h.room);if(!h.connected&&this.a.connected(r).length>=5)throw Error('Room capacity reached. Five players are already connected.');h.connected=true;h.netSeen=this.realNow;h.disconnectedAt=null;this.a.connections.set(h.id,{close(){}});if(!this.a.inputs.has(h.id))this.a.inputs.set(h.id,{seq:0,input:{},at:this.realNow});this.a.refreshHost(r);}
+  pending(rows){
+    for(const row of rows||[]){
+      const h=this.a.state.heroes.get(row.id);if(!h)continue;
+      // A confirmed disconnect takes precedence over older queued movement.
+      if(!Number.isFinite(row.seen)||row.seen<=(h.disconnectedAt||0)||this.realNow-row.seen>=5000)continue;
+      if(row.seen>(h.netSeen||0)){this.touch(h);h.netSeen=row.seen;}
+      if(!h.connected)continue;
+      for(const packet of row.packets||[])if(packet.seq>(this.a.inputs.get(h.id)?.seq||0)&&this.realNow-packet.at<1000){
+        this.a.input(h.owner,h.id,packet.seq,packet.input);
+        this.a.inputs.get(h.id).at=Math.min(this.realNow,packet.at);
+      }
+    }
+  }
   advance(){
     // No long catch-up burst after all phones sleep. Active play still uses the
     // unchanged 60 Hz physics, damage, AI, cooldowns and monster difficulty.
-    const steps=Math.min(60,Math.max(0,Math.floor((this.realNow-this.lastStep)/(STEP*1000))));
-    this.clock=this.realNow-steps*STEP*1000;
+    const start=Math.max(this.lastStep,this.realNow-1000),steps=Math.min(60,Math.max(0,Math.floor((this.realNow-start)/(STEP*1000)+1e-7)));
+    this.clock=start;
     for(let i=0;i<steps;i++){this.clock+=STEP*1000;this.a.tick();}
-    this.clock=this.realNow;this.lastStep=this.realNow;
+    // Carry the fractional tick across requests. Dropping it on every client
+    // update slows the shared world increasingly as more players join.
+    this.lastStep=this.clock;this.clock=this.realNow;
   }
   command(h,seq,method,args=[]){return this.a.command(h.owner,h.id,seq,method,args);}
   view(h){const view=this.a.view(h.owner,h.id);return {...view,roomId:this.a.state.rooms.get(h.room).code?h.room:null,cloud:{slot:h.slot,revision:h.savedRevision||0,savedAt:h.savedAt||null,error:null}};}

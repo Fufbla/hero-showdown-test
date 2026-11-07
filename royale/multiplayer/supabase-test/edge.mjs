@@ -2,15 +2,17 @@ import {randomBytes,randomUUID,createHash} from 'node:crypto';
 import {RoomRuntime,freshSnapshot} from './room-runtime.mjs';
 import {captureProgress} from '../v3-checkpoints.mjs';
 import {decodeSave} from '../../core.mjs';
+import {inputPacket,sequence} from '../protocol.mjs';
 
 const digest=s=>createHash('sha256').update(s).digest('hex');
 const prefix='royale_mp_test_',json=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'authorization, content-type, apikey','Access-Control-Allow-Methods':'POST, OPTIONS'}});
 export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
-  async function rest(path,options={}){
+  async function rest(path,options={},trace){
+    const started=performance.now();
     const response=await fetcher(url+'/rest/v1/'+path,{...options,headers:{apikey:key,...(key.startsWith('eyJ')?{Authorization:'Bearer '+key}:{}),'Content-Type':'application/json',Prefer:'return=representation',...options.headers},signal:AbortSignal.timeout(10000)});
-    const text=await response.text(),data=text?JSON.parse(text):null;if(!response.ok)throw Error('Test database request failed: '+(data?.message||response.status));return data;
+    const text=await response.text(),data=text?JSON.parse(text):null;if(trace)trace.push({step:path.split('/').at(-1).replace(prefix,''),ms:Math.round(performance.now()-started)});if(!response.ok)throw Error('Test database request failed: '+(data?.message||response.status));return data;
   }
-  const rpc=(name,data)=>rest('rpc/'+prefix+name,{method:'POST',body:JSON.stringify(data)});
+  const rpc=(name,data,trace)=>rest('rpc/'+prefix+name,{method:'POST',body:JSON.stringify(data)},trace);
   async function authenticate(token){
     if(!/^[a-f0-9]{64}$/.test(token))throw Error('Open or restore a test hero first.');
     const rows=await rest(prefix+'heroes?token_hash=eq.'+digest(token)+'&select=*');if(!rows[0])throw Error('Test session expired. Choose a test hero again.');return rows[0];
@@ -23,6 +25,7 @@ export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
   return async req=>{
     if(req.method==='OPTIONS')return json({ok:true});
     if(req.method!=='POST')return json({ok:true,prototype:'isolated-supabase-coop',version:1});
+    const started=performance.now(),trace=[],reply=(value,status=200)=>json({...value,timing:{totalMs:Math.round(performance.now()-started),database:trace}},status);
     try{
       const raw=await req.text();if(raw.length>20000)throw Error('Request too large.');const body=JSON.parse(raw),token=(req.headers.get('authorization')||'').replace(/^Bearer /,'');
       if(body.action==='source-login'){
@@ -46,15 +49,25 @@ export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
         await rpc('new_hero',{p_id:id,p_token:digest(access),p_slot:slot,p_snapshot:snapshot,p_ip:ip});
         return json({id,access,slot,snapshot,revision:0,savedAt:new Date(now()).toISOString()});
       }
-      let hero=await authenticate(token);
+      const syncing=body.action==='sync';let loaded=null;
+      if(syncing){
+        if(!/^[a-f0-9]{64}$/.test(token))throw Error('Open or restore a test hero first.');
+        if(body.input)sequence(body.inputSeq);
+        loaded=await rpc('sync_load',{p_token:digest(token),p_seq:body.input?body.inputSeq:0,p_input:body.input?inputPacket(body.input):null},trace);
+      }
+      let hero=loaded?.hero||await authenticate(token);
       if(body.action==='profile')return json({id:hero.id,slot:hero.slot,snapshot:hero.snapshot,revision:hero.revision,savedAt:hero.saved_at,roomId:hero.room_id});
       if(body.action==='hello')return json({heroes:[{id:hero.id,slot:hero.slot,name:hero.snapshot.look.name,level:hero.snapshot.level,commandSeq:hero.command_seq,room:hero.room_id}]});
       if(!['sync','command','release','select','disconnect'].includes(body.action))throw Error('Unknown test request.');
       for(let attempt=0;attempt<10;attempt++){
-        if(attempt)hero=await authenticate(token);
+        if(attempt){
+          if(syncing){loaded=await rpc('sync_load',{p_token:digest(token),p_seq:0,p_input:null},trace);hero=loaded.hero;}
+          else hero=await authenticate(token);
+        }
         const mode=body.action==='command'&&body.method==='mode'?body.args?.[0]:null;
         let roomRow=null;
-        if(hero.room_id)roomRow=(await rest(prefix+'rooms?id=eq.'+hero.room_id+'&select=*'))[0];
+        if(syncing)roomRow=loaded.room;
+        else if(hero.room_id)roomRow=(await rest(prefix+'rooms?id=eq.'+hero.room_id+'&select=*'))[0];
         else if(mode==='join'){
           if(!/^\d{6}$/.test(body.args?.[1]))throw Error('Enter the six-digit room code.');
           roomRow=(await rest(prefix+'rooms?code=eq.'+body.args[1]+'&select=*'))[0];if(!roomRow)throw Error('Room code is not active.');
@@ -62,8 +75,13 @@ export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
         const runtime=new RoomRuntime(roomRow,now()),a=runtime.a;
         const previousRoom=roomRow?a.state.rooms.get(roomRow.id):null;
         let h=a.state.heroes.get(hero.id);if(!h)h=runtime.adopt(hero);
+        // A competing sync already committed a newer frame. Our intentions are
+        // durable in the mailbox and will be picked up on the next simulation.
+        // Return only that committed state, with its actual acknowledgement.
+        if(syncing&&attempt>=2&&roomRow)return reply({state:runtime.view(h),version:roomRow.version,queued:true});
         runtime.touch(h);
-        if(body.input&&Number.isSafeInteger(body.inputSeq))a.input(h.owner,h.id,body.inputSeq,body.input);
+        if(syncing)runtime.pending(loaded.inputs);
+        else if(body.input&&Number.isSafeInteger(body.inputSeq))a.input(h.owner,h.id,body.inputSeq,body.input);
         runtime.advance();
         let result=null,leaving=body.action==='release'||mode==='solo';
         // Before a room exists, menu pause/save requests must not consume a
@@ -96,10 +114,10 @@ export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
           if(!r.members.size)a.state.rooms.set(r.id,r);
         }
         const payload={p_room:roomRow?.id||r.id,p_code:roomRow?.code||r.code,p_expected:roomRow?.version??-1,p_runtime:runtime.encode(),p_frame:runtime.frame(r),p_actor:h.id,p_join:!hero.room_id,p_leave:leaving,p_saves:checkpoints};
-        const saved=await rpc('commit',payload);
+        const saved=await rpc('commit',payload,trace);
         if(saved===false||saved?.ok===false)continue;
         if(body.action==='release')return json({slot:h.slot,snapshot:checkpoint?.snapshot||captureProgress(h.game),revision:h.savedRevision,savedAt:h.savedAt});
-        return json({state:view,result,checkpoint,version:roomRow?roomRow.version+1:0});
+        return reply({state:view,result,checkpoint,version:roomRow?roomRow.version+1:0});
       }
       return json({error:'Room is busy. Your confirmed progress is safe; retrying.'},409);
     }catch(error){return json({error:error.message},400);}

@@ -6,7 +6,7 @@ Test URL: https://hero-showdown-royale-multiplayer-test.fufbla.chatgpt.site/
 
 Deployment succeeded. The hosted URL's private sign-in gate loads, but gameplay behind that gate remains unverified in the cloud browser: the final Apple sign-in was declined. Do not describe the hosted end-to-end check as complete. The exact packaged frontend was checked through the managed preview with the deployed Supabase backend. `verified-two-clients.png` records that live-backend test, not an authenticated session on the published domain.
 
-Resume publication context: Site `appgprj_6aee76cfa5e0819194fd2c878b0c36f6`, deployment `appgdep_6aee7e92079481919ae9193247aea25d`, static source SHA `19cda49da663033f740352bd4fb92aa6c7b42586`. Source is in the Site's own repository. Its large asset upload was split into six fast-forward pushes under the 64 MiB per-push limit, with the final tree verified identical. Do not recreate the Site or purchase infrastructure.
+Publication uses the existing Site `appgprj_6aee76cfa5e0819194fd2c878b0c36f6`. Source is in the Site's own repository. The first deployment was `appgdep_6aee7e92079481919ae9193247aea25d` at Site source `19cda49da663033f740352bd4fb92aa6c7b42586`; subsequent deployments retain the same URL and private audience. Do not recreate the Site or purchase infrastructure.
 
 ## Playing on two devices
 
@@ -23,14 +23,30 @@ Test progress remains in this environment. It is not copied back to the original
 
 - Reuses the 60 Hz `Authority`, original combat, monster health, abilities, items and world generation. Test-only HTTP input expiry is one second to accommodate request latency; the existing socket transport keeps its 250 ms limit.
 - Inputs and commands are validated by the existing protocol. The client never submits trusted damage, XP, positions, equipment or inventory snapshots. Local prediction is presentation only.
-- The Edge Function reconstructs the authoritative room graph, advances elapsed simulation (at most one second per request), then commits it with a Postgres version compare-and-swap. Conflicting invocations retry; damage, defeat flags, reward distribution and hero checkpoints commit atomically.
+- The Edge Function reconstructs the authoritative room graph, advances elapsed simulation (at most one second per request), then commits it with a Postgres version compare-and-swap. Fractional simulation ticks carry across requests so extra players do not slow the world clock. Damage, defeat flags, rewards and checkpoints still commit atomically.
 - Damage contributors divide the monster's base XP equally. Indivisible remainders rotate between contributors. A 100-XP two-person reward is 50 each; capped Level 99 heroes remain capped. Solo kills retain the original calculation. A brief disconnect retains earned credit.
-- Realtime Presence announces connected clients. Read-only Postgres Changes carries sanitized visual frames for heroes and shared enemy health. Private inventories, credentials and complete saves are not published. HTTP responses remain the authoritative reconciliation path.
-- `royale_mp_test_heroes`, `royale_mp_test_rooms` and `royale_mp_test_frames` are isolated from existing saves. RLS denies public reads/writes to private tables. Only sanitized recent frames permit public reads. Both RPCs are service-role-only, SECURITY INVOKER with a fixed search path.
+- Realtime Broadcast now carries bounded cosmetic movement at 10 Hz for two players, decreasing to 4 Hz for five. A 100 ms presentation buffer smooths arrivals; extrapolation stops after 120 ms and falls back to server state after 750 ms. Only known peers in the current zone are rendered. These public-channel messages are untrusted: they never update authoritative positions, health, XP, inventories or saves. Presentation spoofing is possible in this isolated prototype; combat spoofing through movement messages is not accepted.
+- Realtime Presence announces connected clients. Read-only Postgres Changes carries shared enemy health and server visuals. Private inventories, credentials and complete saves are not published. HTTP responses remain the authoritative reconciliation path.
+- `royale_mp_test_heroes`, `royale_mp_test_rooms` and `royale_mp_test_frames` are isolated from existing saves. RLS denies public reads/writes to private tables. Only sanitized recent frames permit public reads. All three RPCs are service-role-only, SECURITY INVOKER with a fixed search path.
+- The new sync RPC authenticates, queues validated intentions and reads the room in one trip. Every simulator sees both players' queued inputs. A sync retries at most twice, then returns committed state without falsely acknowledging unapplied inputs; pending inputs survive a CAS conflict. Network-response loss retries the same sequence. Menus get priority over automatic syncs. Normal sync cadence targets 330 ms start-to-start, replacing the old extra 200 ms after every response.
 - The server alone reads its built-in secret. Frontend code contains only the existing publishable key. Existing save-code verification is relayed to the existing V3 function; copying reads the selected snapshot and creates a new test identity. It never calls the original save action.
 - Checkpoints target eight seconds during connected play, with immediate saves for commands/rewards. The complete room runtime is durable on every successful sync. No client owns the room simulation, so a creator disconnect transfers the host role without destroying the world. An OS-suspended device cannot send heartbeats; its confirmed progress remains stored.
 
-## Verified on 2026-11-07
+## Lag update verified on 2026-11-07 (Edge version 8)
+
+`lag-verification.json` contains the measured results, including failures/limitations rather than a latency guarantee.
+
+- 99 multiplayer/unit/database tests and 42 selected single-player tests pass.
+- Latest real-transport run: 184 movement packets, **29 ms median / 42 ms p95 / 98 ms maximum** transport latency. Rendering adds the documented 100 ms buffer. This is test infrastructure, not physical device Wi-Fi.
+- Matching 40-request sync samples: median **387 → 305 ms**, p95 **640 → 569 ms**. The artificial additional 200 ms wait is also removed. These short samples are not a guarantee of the same percentage on every network.
+- The latest complete transport run still had **317 ms median / 3,514 ms p95 / 6,650 ms max** HTTP requests including setup. A 65-request five-player check had **455 ms median / 5,945 ms p95 / 6,444 ms max**, zero busy errors, and rejected the sixth player.
+- Instrumented request example: **3,821 ms** client round trip, **363 ms** inside the handler. The excess is outside the instrumented game handler; this does not identify whether routing, startup, a proxy or the client network is responsible. Supabase Edge logs over 01:55–02:04 UTC reported 1,519 requests, 263 ms median, 574.5 ms p95, 1,465 ms maximum.
+- A fresh live 34-HP bottle fight awarded **7 XP to each of two damage contributors**. Both clients saw the shared HP reach zero. Replaying the same input sequence did not repeat the reward.
+- The final backend retained independent eight-second checkpoints (8.325 seconds observed), creator departure, continued guest movement, host transfer, reconnection and both heroes' earned XP.
+- Browser preview against the deployed backend rendered both heroes and independent movement; `lag-two-clients.png` captures the normal player view. Physical iPhone/iPad performance remains unmeasured.
+- Official V3 HTML retained SHA-256 `82fd7a2930e43caabab260fee5e84cebb3eca92d41b0034a4f5b28ca36eae0b0`. The original save function remained version 3 with the same hash. Main advanced independently to `470890d142a9b19889dd1db4c4b6005ce369e7f0`; this task only writes the multiplayer feature branch and isolated Site.
+
+## Initial prototype verification (before the lag update)
 
 - 91 multiplayer/unit/database checks and 42 targeted single-player checks passed.
 - Two independent browser sessions created/joined a six-digit room, started play, rendered both heroes, and showed one hero moving while the other remained still.
@@ -43,7 +59,7 @@ Test progress remains in this environment. It is not copied back to the original
 
 ## Measured limitations
 
-This is a functional playtest prototype, not a low-latency production certification. Live request medians were **479–550 ms**. Runs including initial connections and contention reached **4.7–5.9 seconds**; the five-client run had a **4.9-second p95** and one retry. Local prediction helps movement, but authoritative combat can visibly lag. These results measure this Edge/Postgres request design and this test network; they do not demonstrate an inherent failure of Supabase Realtime itself.
+Movement now bypasses the database request path, but authoritative combat can still visibly lag. The current HTTP outliers above mean this is not a low-latency production certification. Broadcast delivery itself was fast in these tests. The remaining HTTP delays measure this Edge/Postgres request design and this test network, not an inherent failure of Supabase Realtime. A paid plan or separate server has not been demonstrated to eliminate them.
 
 Physical iPhone/iPad Safari, mobile networks, extended five-player combat, large boss encounters and long reconnect/background cycles still need device playtesting. Progress is isolated while those checks continue. A separate paid server has not been shown necessary by these tests; the next comparison should measure sustained input-to-hit latency on the actual devices and evaluate a more continuous Supabase authority before any purchase.
 
@@ -57,4 +73,4 @@ node royale/multiplayer/supabase-test/build-test.mjs /path/to/isolated-site/dist
 
 The build copies the approved assets and patches only the output's storage namespace and transport configuration. It never edits `royale/app.mjs`, the official V3 wrapper, or GitHub Pages publication settings. The migration is additive. Bundle `edge.mjs` with esbuild for Deno, then deploy only the `royale-mp-test` function with its own token authentication. Regional requests target the existing database's `us-west-2` region.
 
-Opt-in live checks: `node royale/multiplayer/tests/supabase-live-test.mjs` and `node royale/multiplayer/tests/supabase-realtime-live.mjs`. They create disposable test identities only; session fixtures live in `/tmp` (or `MP_TEST_FIXTURES`) and must not be committed. Sanitized measured evidence is in `verification.json`.
+Opt-in live checks also include `supabase-movement-live.mjs` (shipped transport and rendering adapter) and `supabase-combat-live.mjs` (fresh two-player normal-input fight). Build the SDK first. Set `MP_TEST_FIXTURES=/tmp/royale-combat-fixtures.json` for an isolated combat run. Fixture credentials must never be committed. Initial measured evidence remains in `verification.json`; new results are in `lag-verification.json`.

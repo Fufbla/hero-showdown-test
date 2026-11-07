@@ -1,0 +1,645 @@
+{
+  "before": {
+    "samples": 40,
+    "median": 387.08056999999826,
+    "p95": 639.6879149999986,
+    "max": 3834.8643200000006
+  },
+  "after": {
+    "samples": 40,
+    "median": 305.19086900000184,
+    "p95": 569.3530719999999,
+    "max": 3478.308546,
+    "queued": 0
+  },
+  "movement": {
+    "movement": {
+      "samples": 184,
+      "medianMs": 29,
+      "p95Ms": 42,
+      "maxMs": 98
+    },
+    "authoritativeRequests": {
+      "samples": 97,
+      "medianMs": 317,
+      "p95Ms": 3514,
+      "maxMs": 6650
+    },
+    "inputTicks": 299,
+    "positions": [
+      638.9722222222229,
+      706.1666666666683
+    ],
+    "start": [
+      683.1111111111123,
+      705.1944444444459
+    ],
+    "errors": []
+  },
+  "trace": [
+    {
+      "ms": 313.80209599999944,
+      "timing": {
+        "totalMs": 187,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 81
+          },
+          {
+            "step": "commit",
+            "ms": 90
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 329.23859300000004,
+      "timing": {
+        "totalMs": 178,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 80
+          },
+          {
+            "step": "commit",
+            "ms": 81
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 419.18533600000046,
+      "timing": {
+        "totalMs": 285,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 186
+          },
+          {
+            "step": "commit",
+            "ms": 83
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 316.2682189999996,
+      "timing": {
+        "totalMs": 181,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 81
+          },
+          {
+            "step": "commit",
+            "ms": 86
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 319.68739900000037,
+      "timing": {
+        "totalMs": 174,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 74
+          },
+          {
+            "step": "commit",
+            "ms": 80
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 299.52966000000015,
+      "timing": {
+        "totalMs": 169,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 80
+          },
+          {
+            "step": "commit",
+            "ms": 76
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 320.4060329999993,
+      "timing": {
+        "totalMs": 177,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 77
+          },
+          {
+            "step": "commit",
+            "ms": 86
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 324.62533500000063,
+      "timing": {
+        "totalMs": 173,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 75
+          },
+          {
+            "step": "commit",
+            "ms": 81
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 298.50866399999904,
+      "timing": {
+        "totalMs": 166,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 69
+          },
+          {
+            "step": "commit",
+            "ms": 83
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 315.8903370000007,
+      "timing": {
+        "totalMs": 180,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 82
+          },
+          {
+            "step": "commit",
+            "ms": 87
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 308.5804769999995,
+      "timing": {
+        "totalMs": 174,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 70
+          },
+          {
+            "step": "commit",
+            "ms": 86
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 3820.997077,
+      "timing": {
+        "totalMs": 363,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 83
+          },
+          {
+            "step": "commit",
+            "ms": 68
+          },
+          {
+            "step": "sync_load",
+            "ms": 66
+          },
+          {
+            "step": "commit",
+            "ms": 120
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 507.2417659999992,
+      "timing": {
+        "totalMs": 374,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 96
+          },
+          {
+            "step": "commit",
+            "ms": 73
+          },
+          {
+            "step": "sync_load",
+            "ms": 75
+          },
+          {
+            "step": "commit",
+            "ms": 99
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 479.4515100000008,
+      "timing": {
+        "totalMs": 356,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 98
+          },
+          {
+            "step": "commit",
+            "ms": 78
+          },
+          {
+            "step": "sync_load",
+            "ms": 69
+          },
+          {
+            "step": "commit",
+            "ms": 75
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 248.97817399999985,
+      "timing": {
+        "totalMs": 158,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 70
+          },
+          {
+            "step": "commit",
+            "ms": 75
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 295.3606920000002,
+      "timing": {
+        "totalMs": 170,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 69
+          },
+          {
+            "step": "commit",
+            "ms": 88
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 299.5520660000002,
+      "timing": {
+        "totalMs": 171,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 69
+          },
+          {
+            "step": "commit",
+            "ms": 84
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 305.1400620000004,
+      "timing": {
+        "totalMs": 158,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 71
+          },
+          {
+            "step": "commit",
+            "ms": 75
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 306.5898469999993,
+      "timing": {
+        "totalMs": 160,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 70
+          },
+          {
+            "step": "commit",
+            "ms": 79
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 316.2301669999997,
+      "timing": {
+        "totalMs": 173,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 73
+          },
+          {
+            "step": "commit",
+            "ms": 83
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 289.47655699999996,
+      "timing": {
+        "totalMs": 162,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 72
+          },
+          {
+            "step": "commit",
+            "ms": 78
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 286.51506100000006,
+      "timing": {
+        "totalMs": 163,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 72
+          },
+          {
+            "step": "commit",
+            "ms": 79
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 296.75332900000103,
+      "timing": {
+        "totalMs": 169,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 69
+          },
+          {
+            "step": "commit",
+            "ms": 83
+          }
+        ]
+      },
+      "queued": false
+    },
+    {
+      "ms": 291.9701210000003,
+      "timing": {
+        "totalMs": 161,
+        "database": [
+          {
+            "step": "sync_load",
+            "ms": 70
+          },
+          {
+            "step": "commit",
+            "ms": 78
+          }
+        ]
+      },
+      "queued": false
+    }
+  ],
+  "combat": {
+    "monster": {
+      "type": "bottle",
+      "maxHp": 34
+    },
+    "initialXP": [
+      0,
+      0
+    ],
+    "finalXP": [
+      7,
+      7
+    ],
+    "share": 7,
+    "participants": 2,
+    "sharedHealth": [
+      [
+        34,
+        34
+      ],
+      [
+        34,
+        34
+      ],
+      [
+        34,
+        34
+      ],
+      [
+        34,
+        34
+      ],
+      [
+        34,
+        34
+      ],
+      [
+        34,
+        34
+      ],
+      [
+        29,
+        24
+      ],
+      [
+        19,
+        19
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "duplicateRewardPrevented": true
+  },
+  "recovery": {
+    "autosaves": [
+      {
+        "i": 0,
+        "at": "2026-11-07T02:05:05.334Z",
+        "revision": 12
+      },
+      {
+        "i": 1,
+        "at": "2026-11-07T02:05:13.659Z",
+        "revision": 12
+      }
+    ],
+    "rows": [
+      {
+        "revision": 13,
+        "xp": 7,
+        "savedAt": "2026-11-07T02:05:13.659+00:00"
+      },
+      {
+        "revision": 12,
+        "xp": 7,
+        "savedAt": "2026-11-07T02:05:13.659+00:00"
+      }
+    ],
+    "disconnectPreservedRoom": true,
+    "hostTransferred": true,
+    "remainingPlayerMoves": true,
+    "reconnectRestoresXP": true,
+    "duplicateRewardPrevented": true,
+    "rtt": [
+      3718.9994300000003,
+      171.7322979999999,
+      4231.1362260000005,
+      579.3911869999993,
+      303.1773489999996,
+      506.0672489999997,
+      497.9978090000004,
+      294.9019980000012,
+      466.2103210000023,
+      316.7012560000003,
+      260.93302100000074,
+      278.87664199999926,
+      478.40421499999866,
+      427.9155120000032,
+      561.179543000002,
+      494.5027599999994,
+      346.74908499999947,
+      337.0176680000004,
+      525.363139000001,
+      454.0054330000021,
+      466.3750179999988,
+      475.55642100000114,
+      282.27520500000173,
+      166.06014800000048,
+      410.9845299999979,
+      429.6685800000014,
+      775.3362540000016,
+      431.6086950000026,
+      429.22489399999995,
+      4907.309082,
+      1489.917512,
+      299.5933839999998,
+      487.4865030000001,
+      302.59972500000003,
+      305.2462060000016,
+      495.48930800000016,
+      478.3623570000018,
+      496.7602769999976,
+      543.8169149999994,
+      485.90400299999965,
+      275.8608999999997,
+      275.92879299999913,
+      365.6905680000018,
+      279.0023509999992,
+      552.1266529999994,
+      530.9675320000024,
+      270.2731309999981,
+      252.0005799999999,
+      277.90049799999906,
+      287.58873900000253,
+      462.8082089999989,
+      166.62232000000222,
+      291.8446760000006,
+      257.56864700000006,
+      271.46640200000184,
+      270.48083399999814,
+      699.3096670000014
+    ]
+  },
+  "fivePlayers": {
+    "fivePlayers": true,
+    "sixthBlocked": true,
+    "errors": [],
+    "requests": 65,
+    "medianMs": 455,
+    "p95Ms": 5945,
+    "maxMs": 6444
+  },
+  "verifiedAt": "2026-11-07T02:08:00Z",
+  "backendVersion": 8,
+  "backendHash": "ab29984371fb22268f534c837a0d75b3ef78692acba3208a81c174ac8b31a2f3",
+  "tests": {
+    "multiplayer": 99,
+    "selectedSinglePlayer": 42
+  },
+  "officialHtmlSha256": "82fd7a2930e43caabab260fee5e84cebb3eca92d41b0034a4f5b28ca36eae0b0",
+  "originalFunctionVersion": 3,
+  "officialBranchObserved": "470890d142a9b19889dd1db4c4b6005ce369e7f0",
+  "officialBranchNote": "Advanced independently of this task. No main ref or official Pages deployment was written by this update.",
+  "browserEvidence": "lag-two-clients.png",
+  "hostedGameplayVerification": "Private sign-in gate; exact built frontend verified using managed preview and the live backend.",
+  "limitations": [
+    "Network benchmarks use test infrastructure, not physical iPhone/iPad Wi-Fi.",
+    "Movement includes a separate 100 ms presentation buffer. Broadcasts are cosmetic and cannot award damage or XP.",
+    "Authoritative HTTP confirmations still have multi-second outliers. Paid infrastructure has not been proven necessary."
+  ]
+}
