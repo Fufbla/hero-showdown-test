@@ -2,16 +2,28 @@ import {createClient} from './realtime-sdk.mjs';
 import {decodeRuntime} from '../runtime.mjs';
 import {CLOUD_CONFIG} from '../../cloud-config.mjs';
 import {motionPacket,readMotion,movementHz,zoneOf} from './motion.mjs';
+import {EdgeSocketTransport} from './socket-client.mjs';
 
 export class SupabaseTestClient extends EventTarget {
   constructor(config,getToken){super();this.config=config;this.getToken=getToken;this.ready=false;this.closed=true;this.inputSeq=Date.now();this.unacked=[];this.localPrediction=true;this.fastMotion=true;this.generation=0;this.metrics={requests:0,rtt:[],realtimeFrames:0,movementFrames:0,conflicts:0};}
   emit(type,detail){this.dispatchEvent(new CustomEvent(type,{detail}));}
   async api(body){
-    const at=performance.now(),r=await fetch(this.config.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+this.token},body:JSON.stringify(body),signal:AbortSignal.timeout(15000)}),data=await r.json();
+    const at=performance.now();let status,data;
+    if(this.socket){const response=await this.socket.request(body);status=response.status;data=response.data;this.metrics.socketRequests=(this.metrics.socketRequests||0)+1;}
+    else {const r=await fetch(this.config.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+this.token},body:JSON.stringify(body),signal:AbortSignal.timeout(15000)});status=r.status;data=await r.json();this.metrics.httpRequests=(this.metrics.httpRequests||0)+1;}
     this.metrics.requests++;this.metrics.rtt.push(performance.now()-at);if(this.metrics.rtt.length>300)this.metrics.rtt.shift();
-    if(!r.ok){if(r.status===409)this.metrics.conflicts++;throw Error(data.error||'Test connection unavailable.');}return data;
+    if(body.action==='sync'){this.metrics.syncRtt??=[];this.metrics.syncRtt.push(performance.now()-at);if(this.metrics.syncRtt.length>300)this.metrics.syncRtt.shift();}
+    if(status>=400){if(status===409)this.metrics.conflicts++;throw Error(data.error||'Test connection unavailable.');}return data;
   }
-  async connect(){this.closed=false;this.generation++;this.emit('status','Connecting to multiplayer test…');const auth=await this.getToken();this.token=auth.token||auth;const data=await this.api({action:'hello'});this.emit('heroes',data.heroes);}
+  async connect(){
+    this.closed=false;this.generation++;this.emit('status','Connecting to multiplayer test…');const auth=await this.getToken();this.token=auth.token||auth;let data;
+    if(this.config.fastSocket!==false){
+      this.socket=new EdgeSocketTransport(this.config.socketEndpoint||this.config.endpoint.replace('/royale-mp-test','/royale-mp-stream-test'),this.token);
+      try{data=await this.socket.start();this.emit('status','Persistent combat connection ready');}
+      catch(error){this.socket.close();this.socket=null;if(error.status)throw error;this.emit('status','Standard connection · persistent connection unavailable');}
+    }
+    data??=await this.api({action:'hello'});this.emit('heroes',data.heroes);
+  }
   select(id){this.heroId=id;void this.exchange({action:'select'}).then(()=>this.schedule()).catch(e=>this.emit('error',e.message));}
   async exchange(body){
     const data=await this.api(body);if(this.closed)return data;
@@ -49,7 +61,7 @@ export class SupabaseTestClient extends EventTarget {
     if(!this.retryInput){this.retryInput={action:'sync',input:this.pendingInput||{},inputSeq:this.inputSeq};this.pendingInput=null;}
     try{await this.exchange(this.retryInput);this.retryInput=null;}
     catch(e){this.ready=performance.now()-(this.lastServerAt||0)<2500;this.emit('status','Reconnecting · '+e.message);}
-    finally{this.busy=false;this.schedule(Math.max(0,330-(performance.now()-started))+Math.random()*20);}
+    finally{this.busy=false;this.schedule(Math.max(0,(this.socket&&this.state.players.length<4?250:330)-(performance.now()-started))+Math.random()*20);}
   }
   async command(method,args=[]){
     // GameSession orders commands; wait for an in-flight sync so the sequence
@@ -74,6 +86,7 @@ export class SupabaseTestClient extends EventTarget {
   }
   close(){
     this.closed=true;this.ready=false;this.subscribed=false;clearTimeout(this.timer);
+    this.socket?.close();
     if(this.channel)void this.supa.removeChannel(this.channel).then(()=>{if(this.closed)this.supa.realtime.disconnect();});this.channel=null;
     if(this.token&&this.roomId)void fetch(this.config.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+this.token},body:JSON.stringify({action:'disconnect'}),keepalive:true}).catch(()=>{});
     this.roomId=null;

@@ -6,7 +6,7 @@ import {build} from 'esbuild';
 const source=fileURLToPath(new URL('../../',import.meta.url)),out=resolve(process.argv[2]||'/workspace/sites/royale-supabase-test/dist');
 await mkdir(out,{recursive:true});
 await build({entryPoints:[new URL('realtime-sdk.source.mjs',import.meta.url).pathname],bundle:true,minify:true,format:'esm',platform:'browser',target:'es2022',outfile:new URL('realtime-sdk.mjs',import.meta.url).pathname});
-await cp(source,resolve(out,'royale'),{recursive:true,filter:p=>!/(\/node_modules|\/tests|\/backend|\/\.git|\/qa|\/supabase-test\/edge\.mjs|\/supabase-test\/room-runtime\.mjs|\/supabase-test\/build-test\.mjs)(\/|$)/.test(p)});
+await cp(source,resolve(out,'royale'),{recursive:true,filter:p=>!/(\/node_modules|\/tests|\/backend|\/\.git|\/qa|\/supabase-test\/edge\.mjs|\/supabase-test\/socket-server\.mjs|\/supabase-test\/stream-edge\.mjs|\/supabase-test\/room-runtime\.mjs|\/supabase-test\/build-test\.mjs)(\/|$)/.test(p)});
 for(const dir of ['animation','shore','scorpion-rig','villain-motion'])await cp(resolve(source,'../assets',dir),resolve(out,'assets',dir),{recursive:true});
 for(const [from,to] of [['test-index.html','index.html'],['test-app.mjs','test-app.mjs']])await cp(new URL(from,import.meta.url),resolve(out,to));
 const app=resolve(out,'royale/app.mjs');await writeFile(app,(await readFile(app,'utf8')).replaceAll("'royale-v3-play:'","('royale-mp-test:'+(params.get('mpDevice')||'default').replace(/[^a-z0-9-]/gi,'').slice(0,30)+':')").replaceAll('Local heroes stay on this browser. Use Pause → Save Game before leaving.','Test progress saves separately. Use Test heroes above to copy or create another hero.').replace('renderer.draw(game,alpha,elapsed);','if(online())multiplayerMenu.session.drawGame(renderer,alpha,elapsed);else renderer.draw(game,alpha,elapsed);'));
@@ -14,7 +14,7 @@ const page=resolve(out,'royale/index.html');await writeFile(page,(await readFile
 await writeFile(resolve(out,'royale/multiplayer/config.json'),JSON.stringify({transport:'supabase-test',endpoint:'https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-mp-test?forceFunctionRegion=us-west-2'}));
 let html=await readFile(page,'utf8');
 const map=JSON.parse(html.match(/<script type="importmap">(.*?)<\/script>/s)[1]);
-for(const name of ['client','motion','realtime-sdk']){const path='./multiplayer/supabase-test/'+name+'.mjs';map.imports[path]=path;}
+for(const name of ['client','motion','socket-client','realtime-sdk']){const path='./multiplayer/supabase-test/'+name+'.mjs';map.imports[path]=path;}
 for(const path of Object.keys(map.imports))map.imports[path]=path+'?v='+createHash('sha256').update(await readFile(resolve(out,'royale',path))).digest('hex').slice(0,12);
 html=html.replace(/<script type="importmap">.*?<\/script>/s,'<script type="importmap">'+JSON.stringify(map)+'</script>').replace(/src="\.\/app\.mjs\?v=[^"]+"/,'src="'+map.imports['./app.mjs']+'"');await writeFile(page,html);
 const rootPage=resolve(out,'index.html'),wrapperHash=createHash('sha256').update(await readFile(resolve(out,'test-app.mjs'))).digest('hex').slice(0,12);

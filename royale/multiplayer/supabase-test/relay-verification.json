@@ -1,0 +1,210 @@
+{
+  "checkedAt": "2026-11-07T10:33:00Z",
+  "authority": {
+    "function": "royale-mp-test",
+    "version": 12,
+    "sha256": "22bd6adc235ed20d621b38f21ede5bd98a1dee29e27a7e60feeb9937de69d264"
+  },
+  "relay": {
+    "function": "royale-mp-stream-test",
+    "version": 1,
+    "sha256": "954971a7797691d95c568b8e4197b2728ebc5871857d916bc0e18d941b1c49c1"
+  },
+  "twoPlayerCombatAndRecovery": {
+    "combat": {
+      "type": "bottle",
+      "maxHp": 34,
+      "share": 7,
+      "participants": 2,
+      "health": [
+        [
+          34,
+          34
+        ],
+        [
+          34,
+          34
+        ],
+        [
+          34,
+          34
+        ],
+        [
+          34,
+          34
+        ],
+        [
+          34,
+          34
+        ],
+        [
+          24,
+          24
+        ],
+        [
+          24,
+          24
+        ],
+        [
+          14,
+          14
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "duplicateRewardPrevented": true
+    },
+    "latency": {
+      "samples": 126,
+      "medianMs": 510,
+      "p95Ms": 858,
+      "maxMs": 1653
+    },
+    "sockets": [
+      {
+        "connections": 1,
+        "requests": 2,
+        "renewals": 0,
+        "failures": 0
+      },
+      {
+        "connections": 5,
+        "requests": 84,
+        "renewals": 4,
+        "failures": 0
+      }
+    ],
+    "autosaveIntervals": [
+      [
+        47386
+      ],
+      [
+        10161,
+        8115,
+        8138,
+        8101,
+        8196
+      ]
+    ],
+    "creatorDisconnectContinues": true,
+    "reconnectPreservesXP": true,
+    "errors": []
+  },
+  "fivePlayers": {
+    "players": 5,
+    "sixthRejected": true,
+    "latency": {
+      "samples": 220,
+      "medianMs": 691,
+      "p95Ms": 1065,
+      "maxMs": 1485
+    },
+    "autosaveIntervals": [
+      [
+        8050,
+        8126,
+        8082
+      ],
+      [
+        8050,
+        8126,
+        8082
+      ],
+      [
+        8050,
+        8126,
+        8082
+      ],
+      [
+        8050,
+        8126,
+        8082
+      ],
+      [
+        8050,
+        8126,
+        8082
+      ]
+    ],
+    "sockets": [
+      {
+        "connections": 3,
+        "requests": 52,
+        "renewals": 2,
+        "failures": 0
+      },
+      {
+        "connections": 3,
+        "requests": 47,
+        "renewals": 2,
+        "failures": 0
+      },
+      {
+        "connections": 2,
+        "requests": 56,
+        "renewals": 1,
+        "failures": 0
+      },
+      {
+        "connections": 3,
+        "requests": 55,
+        "renewals": 2,
+        "failures": 0
+      },
+      {
+        "connections": 3,
+        "requests": 55,
+        "renewals": 2,
+        "failures": 0
+      }
+    ],
+    "httpFallbackRequests": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "errors": []
+  },
+  "actualClientMovement": {
+    "movement": {
+      "samples": 180,
+      "medianMs": 49,
+      "p95Ms": 68,
+      "maxMs": 130
+    },
+    "authoritativeRequests": {
+      "samples": 87,
+      "medianMs": 331,
+      "p95Ms": 707,
+      "maxMs": 1686
+    },
+    "inputTicks": 299,
+    "errors": []
+  },
+  "automatedTests": 106,
+  "officialHtmlSha256": "82fd7a2930e43caabab260fee5e84cebb3eca92d41b0034a4f5b28ca36eae0b0",
+  "limitations": [
+    "Cloud infrastructure measurements; physical iPhone/iPad frame rate and Wi-Fi not measured.",
+    "Two-player worst observed sync still 1686 ms; five-player median 691 ms. Combat is not certified low-latency.",
+    "The two-player script records only checkpoint responses written by that actor; gaps are not save intervals. The five-player actual-client observer records every confirmed cloud savedAt and confirms 8050\u20138126 ms saves for every hero.",
+    "Initial direct-simulation socket experiments hit the 2000 ms Edge CPU limit even with short socket rotation. These were replaced by the lightweight relay. Preliminary raw-socket startup timeouts occurred; the shipped client retains HTTP fallback.",
+    "One early combat test had only one actual damage contributor and correctly did not split XP; final test requires both to contribute before finishing the monster.",
+    "Final browser test used the exact packaged frontend through managed preview with live Supabase. Published private sign-in gate is not an authenticated hosted-gameplay check."
+  ],
+  "finalLogWindow": {
+    "start": "2026-11-07T10:29:00Z",
+    "end": "2026-11-07T10:33:00Z",
+    "observedRelayWorkerMaxCpuMs": 504,
+    "observedAuthorityWorkerMaxCpuMs": 1496,
+    "cpuLimitShutdownsObserved": 0
+  },
+  "browserEvidence": "relay-two-players.png"
+}

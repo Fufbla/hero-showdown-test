@@ -24,7 +24,7 @@ export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
   }
   return async req=>{
     if(req.method==='OPTIONS')return json({ok:true});
-    if(req.method!=='POST')return json({ok:true,prototype:'isolated-supabase-coop',version:1});
+    if(req.method!=='POST')return json({ok:true,prototype:'isolated-supabase-coop',version:2,transport:'websocket-relay-v1'});
     const started=performance.now(),trace=[],reply=(value,status=200)=>json({...value,timing:{totalMs:Math.round(performance.now()-started),database:trace}},status);
     try{
       const raw=await req.text();if(raw.length>20000)throw Error('Request too large.');const body=JSON.parse(raw),token=(req.headers.get('authorization')||'').replace(/^Bearer /,'');
@@ -58,6 +58,7 @@ export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
       let hero=loaded?.hero||await authenticate(token);
       if(body.action==='profile')return json({id:hero.id,slot:hero.slot,snapshot:hero.snapshot,revision:hero.revision,savedAt:hero.saved_at,roomId:hero.room_id});
       if(body.action==='hello')return json({heroes:[{id:hero.id,slot:hero.slot,name:hero.snapshot.look.name,level:hero.snapshot.level,commandSeq:hero.command_seq,room:hero.room_id}]});
+      if(body.action==='release'&&!hero.room_id)return json({slot:hero.slot,snapshot:hero.snapshot,revision:hero.revision,savedAt:hero.saved_at});
       if(!['sync','command','release','select','disconnect'].includes(body.action))throw Error('Unknown test request.');
       for(let attempt=0;attempt<10;attempt++){
         if(attempt){
@@ -125,5 +126,6 @@ export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
 }
 if(typeof Deno!=='undefined'){
   const secrets=JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS')||'{}');
-  Deno.serve(makeHandler({url:Deno.env.get('SUPABASE_URL'),key:secrets.default||Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}));
+  const handler=makeHandler({url:Deno.env.get('SUPABASE_URL'),key:secrets.default||Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')});
+  Deno.serve(handler);
 }
