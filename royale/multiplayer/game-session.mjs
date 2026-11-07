@@ -97,6 +97,10 @@ export class GameSession extends EventTarget {
       this.performanceSample={at:now,frames:0};
     }
     const view=Object.assign(Object.create(Game.prototype),this.game,{hero:this.presentHero(now),enemies:this.game.enemies.map(e=>{
+      // BossArt stores prepared poses in a WeakMap keyed by the authoritative
+      // enemy object. A presentation copy has no prepared artwork and can be
+      // invisible. Preserve identity for bosses and their animated helpers.
+      if(e.boss||e.legendaryHelper)return e;
       const p=this.enemyMotion.get(e.id);if(!p)return e;const t=Math.min(1,Math.max(0,(now-p.at)/p.duration)),x=p.fromX+(p.x-p.fromX)*t,y=p.fromY+(p.y-p.fromY)*t;return {...e,x,y,prevX:x,prevY:y};
     })});renderer.draw(view,1,elapsed);
   }

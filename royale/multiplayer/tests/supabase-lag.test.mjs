@@ -99,3 +99,12 @@ test('relay interruptions recover immediately through the same idempotent author
  globalThis.fetch=async(url,options)=>{seen.push(JSON.parse(options.body));return Response.json({result:true});};
  try{const body={action:'command',seq:42,method:'save',args:[]};assert.equal((await c.api(body)).result,true);assert.deepEqual(seen[0],seen[1]);assert.equal(c.metrics.transportFallbacks,1);status=401;await assert.rejects(()=>c.api(body));assert.equal(seen.length,3);}finally{globalThis.fetch=original;}
 });
+test('multiplayer presentation preserves prepared boss and helper artwork identities',()=>{
+ const client=new EventTarget();Object.assign(client,{fastMotion:true,localPrediction:true,unacked:[],generation:1});
+ const session=new GameSession({client,storage:{getItem:()=>null},onState(){},onError(){}}),{r,hs}=roomFixture();
+ const state=r.view(hs[0]);state.game=decodeRuntime(state.game);client.dispatchEvent(new CustomEvent('state',{detail:state}));
+ const boss={...session.game.enemies[0],boss:true},helper={...session.game.enemies[1],legendaryHelper:true};session.game.enemies=[boss,helper];session.trackEnemies(session.game.enemies);
+ const artwork=new WeakMap([[boss,'boss pose'],[helper,'helper pose']]),before=JSON.stringify(session.game.enemies);
+ session.drawGame({draw:view=>{assert.equal(artwork.get(view.enemies[0]),'boss pose');assert.equal(artwork.get(view.enemies[1]),'helper pose');}},1,1/60);
+ assert.equal(JSON.stringify(session.game.enemies),before,'Rendering never mutates combat state');
+});
