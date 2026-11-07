@@ -13,20 +13,32 @@ export class SaveConflict extends Error {}
 // The full exact runtime is also committed in SQLite, including active arenas.
 export function captureProgress(game){
   const copy=decodeRuntime(encodeRuntime(game));
+  if(copy.multiplayerSharedLoot){
+    // Shared drops belong to the room and cannot be exported into five solo saves.
+    copy.loot=copy.personalGroundLoot||[];
+    for(const e of [...copy.enemies,...(copy.arenaScene?.enemies||[])])if(e.coopBaseHp){e.hp=e.maxHp?e.hp/e.maxHp*e.coopBaseHp:0;e.maxHp=e.coopBaseHp;}
+  }
+  // The solo save format requires a living hero. Store the already-penalized
+  // checkpoint respawn in cloud while SQLite retains the exact death animation.
+  if(copy.hero.dead)Game.prototype.respawn.call(copy);
   copy.canSave=()=>true;
   return JSON.parse(Game.prototype.save.call(copy));
 }
 
-// Only the authority process has this credential. No schema changes or alternate
-// cloud slots: co-op continues the same V3 profile/slot and revision contract.
+// Only the authority process has this credential. Co-op continues the same V3
+// profile/slot; the reviewed lease migration fences concurrent solo writers.
 export class V3CloudBridge {
-  constructor({url=CLOUD_CONFIG.url,key=process.env.SUPABASE_SERVICE_ROLE_KEY,fetcher=fetch}={}){
+  constructor({url=process.env.ROYALE_V3_SUPABASE_URL||CLOUD_CONFIG.url,key=process.env.SUPABASE_SERVICE_ROLE_KEY,fetcher=fetch}={}){
     if(!key)throw Error('V3 multiplayer requires the server-only cloud credential.');
     Object.assign(this,{url,key,fetcher});
   }
   async request(path,options={}){
     const response=await this.fetcher(this.url+'/rest/v1/'+path,{...options,headers:{apikey:this.key,Authorization:'Bearer '+this.key,'Content-Type':'application/json',Prefer:'return=representation',...options.headers},signal:AbortSignal.timeout(7000)});
-    if(!response.ok)throw Error('Cloud saving is unavailable. Your confirmed server checkpoint is retained.');
+    if(!response.ok){
+      const error=await response.json().catch(()=>({}));
+      if(error.code==='P0001'&&/Revision conflict|lease changed/i.test(error.message||''))throw new SaveConflict('This hero changed on another connection. The newer cloud save and server recovery are preserved.');
+      throw Error('Cloud saving is unavailable. Your confirmed server checkpoint is retained.');
+    }
     return response.json();
   }
   async authenticate(token,{slot}={}){
@@ -44,14 +56,18 @@ export class V3CloudBridge {
     if(!rows[0]?.snapshot)throw Error('Create and save this hero before joining multiplayer.');
     return rows[0];
   }
-  async write(profile,slot,expected,snapshot){
+  async claim(profile,slot,leaseToken){
+    this.path(profile,slot);if(!uuid.test(leaseToken))throw Error('Invalid room lease.');
+    return this.request('rpc/royale_v3_claim_room',{method:'POST',body:JSON.stringify({p_profile:profile,p_slot:slot+1,p_token:leaseToken})});
+  }
+  async release(profile,slot,leaseToken){
+    this.path(profile,slot);if(!uuid.test(leaseToken))throw Error('Invalid room lease.');
+    return this.request('rpc/royale_v3_release_room',{method:'POST',body:JSON.stringify({p_profile:profile,p_slot:slot+1,p_token:leaseToken})});
+  }
+  async write(profile,slot,expected,snapshot,leaseToken){
     if(!Number.isSafeInteger(expected)||expected<0)throw Error('Invalid save revision.');
-    const rows=await this.request(this.path(profile,slot)+'&revision=eq.'+expected,{method:'PATCH',body:JSON.stringify({snapshot,revision:expected+1,updated_at:new Date().toISOString()})});
-    if(rows[0])return rows[0];
-    // Recover an applied PATCH whose response was lost; never replay rewards.
-    const current=await this.read(profile,slot);
-    if(current.revision===expected+1&&fingerprint(current.snapshot)===fingerprint(snapshot))return current;
-    throw new SaveConflict('This hero was saved on another device. Multiplayer paused; both the newer cloud save and server recovery are preserved.');
+    this.path(profile,slot);if(!uuid.test(leaseToken))throw Error('A verified room lease is required before saving.');
+    return this.request('rpc/royale_v3_save_room',{method:'POST',body:JSON.stringify({p_profile:profile,p_slot:slot+1,p_token:leaseToken,p_revision:expected,p_snapshot:snapshot})});
   }
 }
 
@@ -83,19 +99,22 @@ export class V3Checkpoints {
       this.archive(h);h=null;
     }
     if(h?.cloud?.pending)await this.saveHero(h);
-    const row=await this.bridge.read(account.profile,account.slot);
+    a.state.claims??=new Map();const claimKey=account.id+':'+account.slot;
+    const leaseToken=h?.cloud?.leaseToken||a.state.claims.get(claimKey)||randomUUID();
+    a.state.claims.set(claimKey,leaseToken);a.commit();
+    const row=this.bridge.claim?await this.bridge.claim(account.profile,account.slot,leaseToken):await this.bridge.read(account.profile,account.slot);
     // A read started before an in-flight checkpoint can return an older revision.
     // Only a newer cloud revision supersedes the current authority runtime.
     if(h&&(!h.cloud||row.revision>h.cloud.revision)){this.archive(h);h=null;}
     if(h)return h;
     const save=decodeSave(JSON.stringify(row.snapshot));if(!save)throw Error('This hero needs save recovery before multiplayer.');
     h=a.adopt(account.id,{id:randomUUID(),slot:account.slot,snapshot:save});
-    h.cloud={profile:account.profile,revision:row.revision,savedAt:row.updated_at,dueAt:this.now()+AUTOSAVE_MS};a.commit();return h;
+    h.cloud={profile:account.profile,leaseToken,revision:row.revision,savedAt:row.updated_at,dueAt:this.now()+AUTOSAVE_MS};a.commit();return h;
   }
-  saveHero(h){
+  saveHero(h,{latest=false}={}){
     if(!h.cloud)return Promise.resolve(null);
     if(h.cloud.conflict)return Promise.reject(new SaveConflict(h.cloud.error));
-    if(this.pending.has(h.id))return this.pending.get(h.id);
+    if(this.pending.has(h.id))return latest?this.pending.get(h.id).then(()=>this.saveHero(h,{latest:true})):this.pending.get(h.id);
     const promise=this.flush(h).catch(error=>{
       h.cloud.error=error.message;h.cloud.conflict=error instanceof SaveConflict;
       this.authority.commit();this.onError(h,error);throw error;
@@ -109,7 +128,7 @@ export class V3Checkpoints {
     for(const snapshot of snapshots){
       if(result&&fingerprint(result.snapshot)===fingerprint(snapshot))continue;
       c.pending??={snapshot,revision:c.revision};a.commit();
-      const row=await this.bridge.write(c.profile,h.slot,c.pending.revision,c.pending.snapshot);
+      const row=await this.bridge.write(c.profile,h.slot,c.pending.revision,c.pending.snapshot,c.leaseToken);
       result={slot:h.slot,snapshot:row.snapshot,revision:row.revision,savedAt:row.updated_at};
       c.revision=row.revision;c.savedAt=row.updated_at;c.error=null;c.pending=null;a.commit();
     }
@@ -125,9 +144,10 @@ export class V3Checkpoints {
   async release(h,connection){
     const a=this.authority;
     if(!h.game.canSave())throw Error('Leave combat for five seconds before returning to heroes. Eight-second autosave is still active.');
-    a.detach(h.id,connection);
-    await this.pending.get(h.id);
-    const result=await this.saveHero(h),room=a.state.rooms.get(h.room);
+    if(a.connections.get(h.id)!==connection)throw Error('This hero is active in another connection.');
+    h.releasing=true;a.detach(h.id,connection);
+    let result;try{await this.pending.get(h.id);result=await this.saveHero(h);if(this.bridge.release)await this.bridge.release(h.cloud.profile,h.slot,h.cloud.leaseToken);}catch(error){h.releasing=false;a.commit();throw error;}
+    const room=a.state.rooms.get(h.room);
     room.members.delete(h.id);for(const w of room.worlds.values())a.reconcileControls(room,w);
     if(!room.members.size)a.state.rooms.delete(room.id);
     a.state.heroes.delete(h.id);a.commit();return result;

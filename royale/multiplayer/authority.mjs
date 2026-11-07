@@ -2,12 +2,15 @@ import {randomInt,randomUUID,createHash} from 'node:crypto';
 import {MAX_ROOM_PLAYERS} from './room-rules.mjs';
 import {Game,STEP,decodeSave,overlaps} from '../core.mjs';
 import {TYPES} from '../world.mjs';
-import {RESPAWN} from '../progression.mjs';
+import {RESPAWN,regularLootOutcome} from '../progression.mjs';
+import {rollEquipment} from '../equipment.mjs';
+import {BOSSES} from '../boss-data.mjs';
+import {healthScale,splitXP} from './coop-rules.mjs';
 import {isBoss,segmentHit} from '../powers.mjs';
 import {stepEnemyProjectiles} from '../monsters.mjs';
 import {compactProjectiles,ProjectilePool} from '../projectiles.mjs';
 import {encodeRuntime,decodeRuntime} from './runtime.mjs';
-import {pickupLoot} from '../world-loot.mjs';
+import {pickupLoot,selectedInteraction,stepLoot,LOOT_LIFETIME_SECONDS} from '../world-loot.mjs';
 import {PROTOCOL,inputPacket,consumeEdges,roomCode,sequence} from './protocol.mjs';
 
 const key=g=>`${g.regionId}:${g.arenaScene?(g.arenaScene.legendary||'boss'):'world'}`;
@@ -19,7 +22,7 @@ export class Authority {
     if(!Number.isSafeInteger(capacity)||capacity<1||!Number.isSafeInteger(maxConnections)||maxConnections<capacity)throw Error('Set measured room and server capacities before starting.');
     this.store=store;this.state=store.initial;if(this.state.version!==1)throw Error('Unsupported authority schema. No state was overwritten.');this.allowLegacyImport=allowLegacyImport;this.capacity=capacity;this.maxConnections=maxConnections;this.now=now;this.graceMs=graceMs;this.inputs=new Map();this.connections=new Map();this.failed=false;this.overloaded=false;
     this.capacity=Math.min(capacity,MAX_ROOM_PLAYERS);
-    for(const h of this.state.heroes.values()){h.connected=false;h.disconnectedAt=now();this.hook(h);}
+    for(const h of this.state.heroes.values()){h.connected=false;h.releasing=false;h.disconnectedAt=now();this.hook(h);}
   }
   commit(){if(this.failed)throw Error('Authority unavailable.');try{const result=this.store.commit(this.state);this.dirty=false;return result;}catch(e){this.failed=true;throw e;}}
   owner(owner,id){const h=this.state.heroes.get(id);if(!h||h.owner!==owner)throw Error('Hero is not available to this account.');return h;}
@@ -53,10 +56,11 @@ export class Authority {
   newRoom(h,publicRoom) {
     let code=null;
     if(publicRoom)do {code=String(randomInt(1000000)).padStart(6,'0');}while([...this.state.rooms.values()].some(r=>r.code===code));
-    const r={id:randomUUID(),code,members:new Set([h.id]),worlds:new Map(),createdAt:this.now()};this.state.rooms.set(r.id,r);h.room=r.id;this.bind(h);return r;
+    const r={id:randomUUID(),code,leader:h.id,started:!publicRoom,members:new Set([h.id]),worlds:new Map(),loot:[],nextLootId:1,createdAt:this.now()};this.state.rooms.set(r.id,r);h.room=r.id;this.bind(h);return r;
   }
   attach(owner,id,connection) {
     const h=this.owner(owner,id);
+    if(h.releasing)throw Error('This hero is finishing a save. Reconnect shortly.');
     if(!this.connections.has(id)&&(this.connections.size>=this.maxConnections||this.overloaded))throw Error('Server capacity reached. Existing adventures remain connected. Please try again later.');
     const old=this.connections.get(id);if(old&&old!==connection)old.close(4001,'This hero resumed in another connection.');
     this.connections.set(id,connection);h.connected=true;h.disconnectedAt=null;this.inputs.set(id,{seq:0,input:{},at:this.now()});this.commit();return h;
@@ -99,25 +103,67 @@ export class Authority {
     if(n!==h.commandSeq+1)throw Error('Command conflict. Refresh authoritative state before retrying.');
     let result;
     if(method==='mode')result={code:this.mode(owner,id,args[0],args[1],false).code};
+    else if(method==='startRoom')result=this.startRoom(h);
     else if(method==='save')result={ok:true};
     else if(method==='pause'){if(typeof args[0]!=='boolean')throw Error('Invalid pause.');h.game.paused=args[0];result=true;}
     else {
       if(!METHODS.has(method))throw Error('Unsupported command.');
-      result=(method==='pickupLoot'?pickupLoot(h.game,...args):h.game[method](...args))??true;this.bind(h);
+      if(this.state.rooms.get(h.room).code&&!this.state.rooms.get(h.room).started)throw Error('Wait for the room to start.');
+      result=(method==='pickupLoot'?this.pickup(h,...args):h.game[method](...args))??true;this.bind(h);
     }
     h.commandSeq=n;h.lastCommand={signature,result};h.revision++;this.commit();return result;
   }
   bind(h) {
     const g=h.game,r=this.state.rooms.get(h.room),k=key(g);let w=r.worlds.get(k);
+    if(r.code){if(!g.multiplayerSharedLoot)g.personalGroundLoot=g.loot;g.multiplayerSharedLoot=true;g.loot=r.loot??=[];}
+    else if(g.multiplayerSharedLoot){g.loot=g.personalGroundLoot||[];delete g.personalGroundLoot;delete g.multiplayerSharedLoot;}
     if(!w){w={key:k,enemies:g.enemies,shots:g.enemyShots,pool:g.enemyShotPool,hazards:g.legendaryHazards,fight:g.bossEncounter,cleared:!!g.arenaScene?.cleared};r.worlds.set(k,w);}
     g.enemies=w.enemies;g.enemyShots=w.shots;g.enemyShotPool=w.pool;g.legendaryHazards=w.hazards;
     if(g.arenaScene){g.arenaScene.boss=w.enemies.find(isBoss);g.arenaScene.cleared=w.cleared;g.bossEncounter=w.cleared?null:w.fight;}
-    h.zone=k;return w;
+    h.zone=k;this.scaleWorld(r,w);return w;
+  }
+  leader(r){
+    if(!this.state.heroes.get(r.leader)?.connected||!r.members.has(r.leader))r.leader=[...r.members].find(id=>this.state.heroes.get(id)?.connected)||r.leader;
+    return r.leader;
+  }
+  startRoom(h){
+    const r=this.state.rooms.get(h.room);
+    if(!r.code)throw Error('Create a multiplayer room first.');
+    if(r.started)return true;
+    if(this.leader(r)!==h.id)throw Error('The room leader starts the game.');
+    if([...r.members].filter(id=>this.state.heroes.get(id)?.connected).length<2)throw Error('At least two players must join before starting.');
+    r.started=true;return true;
+  }
+  scaleWorld(r,w){
+    const count=r.code?[...r.members].filter(id=>{const p=this.state.heroes.get(id);return p?.connected&&key(p.game)===w.key;}).length:1;
+    for(const e of w.enemies){
+      e.coopBaseHp??=e.maxHp;
+      // Never reduce a wounded enemy's health by disconnecting a teammate.
+      const next=r.code?Math.max(e.coopScale||1,healthScale(count)):1;
+      if(next!==(e.coopScale||1)){const fraction=e.maxHp?e.hp/e.maxHp:0;e.maxHp=Math.round(e.coopBaseHp*next);e.hp=Math.max(0,e.maxHp*fraction);}
+      e.coopScale=next;
+    }
+  }
+  pickup(h,...args){
+    const g=h.game,r=this.state.rooms.get(h.room);if(!r.code)return pickupLoot(g,...args);
+    g.loot=r.loot;const o=g.loot.find(o=>o.id===args[0]);if(!o)return false;
+    const original=o.item;
+    if(original)o.item={...original,uid:`drop-${g.inventory.nextId}`};
+    const result=pickupLoot(g,...args);
+    if(result){if(original)g.inventory.nextId++;h.revision++;this.dirty=true;}else o.item=original;
+    return result;
   }
   hook(h) {
     const g=h.game;g.now=this.now;
     g.emit=(type,data={})=>{Game.prototype.emit.call(g,type,{...data,netId:h.eventSeq=(h.eventSeq||0)+1});if(['reward','level','camp','hurt','defeat','respawn','boss-victory','chest-claimed','legendary-clear-ready','equipment','purchase','upgrade','heal'].includes(type))this.dirty=true;};
     g.stepEnemy=()=>{};g.stepEncounter=()=>{};
+    g.interact=()=>{const r=this.state.rooms.get(h.room);if(r.code)g.loot=r.loot;const target=selectedInteraction(g,'loot');if(target)this.pickup(h,target.id);};
+    g.step=(dt,input)=>{
+      const r=this.state.rooms.get(h.room);
+      if(!r.code)return Game.prototype.step.call(g,dt,input);
+      // Shared ground physics runs once per zone, regardless of player count.
+      g.loot=[];try{return Game.prototype.step.call(g,dt,input);}finally{g.loot=r.loot;}
+    };
     // Leaving an arena must not clear everyone else's projectiles.
     g.clearEnemyShots=()=>{g.enemyShots=[];};
     g.damageEnemy=(e,amount,options)=>{
@@ -130,19 +176,29 @@ export class Authority {
   }
   reward(attacker,e) {
     if(e.rewarded||e.hp>0||e.state!=='dead')return;
-    e.rewarded=true;
-    for(const id of e.participants||[]) {
-      const p=this.state.heroes.get(id);if(!p||p.room!==attacker.room)continue;
-      // Existing calculation and individual drop rolls, with no split or bonus.
-      Game.prototype.reward.call(p.game,{...e,rewarded:false});p.revision++;this.dirty=true;
+    const r=this.state.rooms.get(attacker.room);
+    if(!r.code){Game.prototype.reward.call(attacker.game,e);attacker.revision++;this.dirty=true;return;}
+    e.rewarded=true;const info=TYPES[e.type];if(!info)return;
+    const eligible=[...(e.participants||[])].filter(id=>{const p=this.state.heroes.get(id);return p?.connected&&p.room===r.id;});
+    const awards=splitXP(info.xp,eligible);e.xpAwards=awards;
+    const regular=!isBoss(e)&&!e.summoned;
+    let drop=null;
+    if(regular&&awards.size){
+      const outcome=regularLootOutcome(attacker.game.random());
+      if(outcome){const n=r.nextLootId++;drop={id:`loot-${n}`,region:attacker.game.regionId,x:Math.max(16,Math.min(6144,e.x)),y:e.y-12,vy:0,kind:outcome,item:outcome==='equipment'?rollEquipment(info.region,attacker.game.random,n):null,expiresAt:this.now()+LOOT_LIFETIME_SECONDS*1000};if(outcome==='root'||drop.item)r.loot.push(drop);}
+    }
+    for(const [id,xp] of awards){const p=this.state.heroes.get(id),g=p.game;
+      g.kills++;g.species.add(e.type);g.world.kills[e.type]=(g.world.kills[e.type]||0)+1;
+      const coins=regular?(attacker.game.clock().night?2:1):0;g.hero.coins=Math.min(999999,g.hero.coins+coins);g.gainXP(xp);
+      g.emit('reward',{x:e.x,y:e.y-24,xp,coins,root:drop?.kind==='root',item:drop?.kind==='equipment',enemy:info.name});p.revision++;this.dirty=true;
     }
   }
-  active(r,k) {return [...r.members].map(id=>this.state.heroes.get(id)).filter(h=>h.connected&&h.zone===k&&!h.game.hero.dead&&!h.game.treeVisit&&(r.code||!h.game.paused));}
+  active(r,k) {return [...r.members].map(id=>this.state.heroes.get(id)).filter(h=>h.connected&&h.zone===k&&!h.game.hero.dead&&!h.game.treeVisit&&(!r.code||r.started)&&(r.code||!h.game.paused));}
   tick() {
     if(this.failed)return;
     this.state.tick++;
     for(const h of this.state.heroes.values()) {
-      if(!h.connected)continue;this.bind(h);
+      if(!h.connected)continue;this.bind(h);const currentRoom=this.state.rooms.get(h.room);if(currentRoom.code&&!currentRoom.started)continue;
       const g=h.game,k=key(g),shots=g.enemyShots;g.enemyShots=[];
       const pending=this.inputs.get(h.id),action=pending&&this.now()-pending.at<250?pending.input:{};
       // A menu cannot freeze recovery/invulnerability timers in a shared fight.
@@ -175,6 +231,7 @@ export class Authority {
   }
   stepWorld(r,w) {
     const players=this.active(r,w.key);if(!players.length)return;
+    this.scaleWorld(r,w);if(r.code)stepLoot(players[0].game,STEP);
     for(const e of [...w.enemies]) {
       const protectedPlayers=e.state==='dead'?players.filter(p=>Math.abs(p.game.hero.x-e.spawnX)<=RESPAWN.safeDistance&&Math.abs(p.game.hero.y-e.spawnSurface.y)<=160):[];
       const candidates=protectedPlayers.length?protectedPlayers:players;
@@ -189,7 +246,7 @@ export class Authority {
       g.heroBox=()=>Game.prototype.heroBox.call((hits()[0]||target).game);
       g.hurt=(amount,x,source)=>{let result=false;for(const p of hits()){contact?.hitHeroes.add(p.id);result=Game.prototype.hurt.call(p.game,amount,x,source)||result;}return result;};
       try{Game.prototype.stepEnemy.call(g,e,STEP);}finally{g.heroBox=oldBox;g.hurt=oldHurt;}
-      if(oldState==='dead'&&e.state!=='dead'){e.participants=new Set();}if(!e.pouncing&&e.hitHeroes)delete e.hitHeroes;
+      if(oldState==='dead'&&e.state!=='dead'){e.participants=new Set();e.xpAwards=null;e.coopScale=1;e.maxHp=e.coopBaseHp;e.hp=e.maxHp;this.scaleWorld(r,w);}if(!e.pouncing&&e.hitHeroes)delete e.hitHeroes;
     }
     // Sweep each projectile once, against the first eligible hero on its path.
     for(const shot of [...w.shots]) {
@@ -223,11 +280,17 @@ export class Authority {
   }
   completeWorld(r,w) {
     const participants=w.fight.boss.participants||new Set();
+    const eligible=[...r.members].filter(id=>{const h=this.state.heroes.get(id);return h.connected&&h.zone===w.key&&h.game.arenaScene&&participants.has(id)&&!h.game.hero.dead;});
+    const awards=splitXP(w.fight.legendary?0:BOSSES[w.fight.region].xp,eligible);
     for(const id of r.members) {
       const h=this.state.heroes.get(id),g=h.game;if(h.zone!==w.key||!g.arenaScene)continue;
-      if(participants.has(id)&&!g.hero.dead) {
+      if(eligible.includes(id)) {
         if(g.arenaScene.legendary){g.pendingLegendaryVictory=g.arenaScene.legendary;g.prepareLegendaryVictory();}
-        else Game.prototype.completeBoss.call(g);
+        else {
+          const gain=g.gainXP,emit=g.emit;
+          if(r.code){g.gainXP=()=>gain.call(g,awards.get(id));g.emit=(type,data)=>emit(type,type==='boss-victory'?{...data,xp:awards.get(id)}:data);}
+          try{Game.prototype.completeBoss.call(g);}finally{g.gainXP=gain;g.emit=emit;}
+        }
         h.revision++;
       }
       g.bossEncounter=null;g.arenaScene.cleared=true;g.pendingLegendaryVictory=null;g.paused=false;
@@ -244,7 +307,7 @@ export class Authority {
     Object.defineProperty(visual.powers,'game',{value:visual});
     visual.enemyShotPool=new ProjectilePool(64);visual.powers.projectilePool=new ProjectilePool(12);
     // Deliberately excludes other players' inventories, account IDs and saves.
-    return {protocol:PROTOCOL,commandResult:h.lastCommand?.result,tick:this.state.tick,revision:this.store.revision,heroRevision:h.revision,commandSeq:h.commandSeq,inputSeq:h.appliedInputSeq||0,id,code:r.code,capacity:this.capacity,cloud:h.cloud?{slot:h.slot,revision:h.cloud.revision,savedAt:h.cloud.savedAt||null,error:h.cloud.error||null}:null,
+    return {protocol:PROTOCOL,commandResult:h.lastCommand?.result,tick:this.state.tick,revision:this.store.revision,heroRevision:h.revision,commandSeq:h.commandSeq,inputSeq:h.appliedInputSeq||0,id,code:r.code,started:r.started,leader:this.leader(r),capacity:this.capacity,cloud:h.cloud?{slot:h.slot,revision:h.cloud.revision,savedAt:h.cloud.savedAt||null,error:h.cloud.error||null}:null,
       players:[...r.members].map(id=>this.state.heroes.get(id)).filter(p=>p.connected).map(p=>({id:p.id,name:p.game.look.name,region:p.game.regionId})),
       nearby:[...r.members].map(id=>this.state.heroes.get(id)).filter(p=>p.connected&&p.id!==id&&p.zone===h.zone&&Math.abs(p.game.hero.x-g.hero.x)<1500).map(p=>({id:p.id,hero:p.game.hero,look:p.game.look,outfit:p.game.visualOutfit(),powers:{active:p.game.powers.active,projectiles:p.game.powers.projectiles},mergeEffects:p.game.mergeEffects,mergeShots:p.game.mergeShots})),
       game:encodeRuntime(visual)};

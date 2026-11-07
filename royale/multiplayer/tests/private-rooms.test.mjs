@@ -13,6 +13,7 @@ import {V3Checkpoints,V3CloudBridge,SaveConflict,captureProgress} from '../v3-ch
 import {MAX_ROOM_PLAYERS,AUTOSAVE_MS} from '../room-rules.mjs';
 import {encodeRuntime} from '../runtime.mjs';
 import {MemoryV3Bridge} from './v3-fixture.mjs';
+import {decodeSave} from '../../core.mjs';
 
 const event=(target,name)=>new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Timeout: '+name)),5000);target.addEventListener(name,e=>{clearTimeout(timer);resolve(e.detail);},{once:true});});
 test('five real connections select saved heroes, create/join by six digits; a sixth is refused; every hero autosaves at eight seconds',async()=>{
@@ -71,11 +72,12 @@ test('disk restart resumes exact runtime and the same V3 slot; newer cloud progr
   }finally{rmSync(dir,{recursive:true,force:true});}
 });
 
-test('cloud revision recovery recognizes reordered JSON after a lost PATCH response',async()=>{
-  const profile='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',snapshot={coins:8,world:{location:{x:100,y:600}},look:{name:'Hero'}};
-  const bridge=new V3CloudBridge({key:'fixture-only',fetcher:async(url,options)=>({ok:true,json:async()=>options.method==='PATCH'?[]:[{revision:4,snapshot:{look:{name:'Hero'},world:{location:{y:600,x:100}},coins:8}}]})});
-  assert.equal((await bridge.write(profile,0,3,snapshot)).revision,4);
-  await assert.rejects(()=>bridge.write(profile,0,2,snapshot),SaveConflict);
+test('production cloud saving requires a server lease and uses the atomic RPC',async()=>{
+  const profile='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',lease='bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',snapshot={coins:8},calls=[];
+  const bridge=new V3CloudBridge({key:'fixture-only',fetcher:async(url,options)=>{calls.push({url,body:JSON.parse(options.body)});return {ok:true,json:async()=>({revision:4,snapshot})};}});
+  await assert.rejects(()=>bridge.write(profile,0,3,snapshot),/lease/);
+  assert.equal((await bridge.write(profile,0,3,snapshot,lease)).revision,4);
+  assert.ok(calls[0].url.endsWith('/rpc/royale_v3_save_room'));assert.equal(calls[0].body.p_slot,1);assert.equal(calls[0].body.p_token,lease);
 });
 
 test('rejoining after a newer solo save keeps that save and archives the old runtime without requiring a failed write',async()=>{
@@ -148,4 +150,32 @@ test('returning to heroes requires a safe exit, saves once confirmed, and allows
   assert.equal(result.snapshot.coins,27);assert.equal(a.state.heroes.has(h.id),false);assert.equal(a.connections.has(h.id),false);
   const row=bridge.rows.get(identity.account.profile+':0');row.snapshot.coins=31;row.revision++;
   const reopened=await c.open(identity.account);assert.equal(reopened.game.hero.coins,31);store.close();
+});
+
+test('region changes queue a fresh checkpoint behind an in-flight save in all seven regions',async()=>{
+  const bridge=new MemoryV3Bridge(),identity=bridge.identity('Travel Save'),store=new AuthorityStore(),a=new Authority(store,{capacity:5}),c=new V3Checkpoints(a,bridge),h=await c.open(identity.account);
+  const write=bridge.write.bind(bridge);let release,began;
+  const gate=new Promise(r=>release=r),started=new Promise(r=>began=r);
+  bridge.write=async(...args)=>{began();await gate;return write(...args);};
+  const first=c.saveHero(h);await started;
+  h.game.loadRegion(2);h.game.hero.x=312.125;const changed=c.saveHero(h,{latest:true});release();await Promise.all([first,changed]);
+  assert.equal((await bridge.read(identity.account.profile,0)).snapshot.world.region,2);
+  assert.equal((await bridge.read(identity.account.profile,0)).snapshot.world.location.x,312.125);
+  bridge.write=write;
+  for(let region=1;region<=7;region++){h.game.loadRegion(region);a.bind(h);await c.saveHero(h,{latest:true});const row=await bridge.read(identity.account.profile,0);assert.equal(row.snapshot.world.region,region);assert.ok(decodeSave(JSON.stringify(row.snapshot)));}
+  store.close();
+});
+
+test('death checkpoints retain the XP penalty, restore safely, and do not alter the live death state',async()=>{
+  const bridge=new MemoryV3Bridge(),identity=bridge.identity('Defeated Hero'),store=new AuthorityStore(),a=new Authority(store,{capacity:5}),c=new V3Checkpoints(a,bridge),h=await c.open(identity.account);
+  h.game.hero.xp=30;h.game.defeat();const before=encodeRuntime(h.game),snapshot=captureProgress(h.game);
+  assert.equal(snapshot.xp,h.game.hero.xp);assert.ok(decodeSave(JSON.stringify(snapshot)));assert.equal(encodeRuntime(h.game),before);assert.equal(h.game.hero.dead,true);
+  await c.saveHero(h);assert.equal((await bridge.read(identity.account.profile,0)).snapshot.world.location.hp,100);store.close();
+});
+
+test('a release in flight rejects a duplicate connection until its final save completes',async()=>{
+  const bridge=new MemoryV3Bridge(),identity=bridge.identity('Exit Race'),store=new AuthorityStore(),a=new Authority(store,{capacity:5}),c=new V3Checkpoints(a,bridge),h=await c.open(identity.account),connection={close(){}};
+  a.attach(h.owner,h.id,connection);let release,began;const write=bridge.write.bind(bridge),gate=new Promise(r=>release=r),started=new Promise(r=>began=r);
+  bridge.write=async(...args)=>{began();await gate;return write(...args);};
+  const exit=c.release(h,connection);await started;assert.throws(()=>a.attach(h.owner,h.id,{close(){}}),/finishing a save/);release();await exit;assert.equal(a.state.heroes.has(h.id),false);store.close();
 });

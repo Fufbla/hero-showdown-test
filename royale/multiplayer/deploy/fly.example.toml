@@ -1,0 +1,31 @@
+# Review template only. No app or paid resource has been provisioned.
+app = "REPLACE_WITH_APPROVED_APP"
+primary_region = "iad"
+kill_signal = "SIGTERM"
+kill_timeout = "15s"
+
+[build]
+  dockerfile = "royale/multiplayer/deploy/Dockerfile"
+[env]
+  HOST = "0.0.0.0"
+  PORT = "8080"
+  ROYALE_DATA = "/data/authority.sqlite"
+  # One initial five-player room; measure on this host before increasing.
+  ROYALE_SERVER_CAPACITY = "8"
+  ROYALE_ALLOWED_ORIGINS = "REPLACE_WITH_APPROVED_PREVIEW_ORIGIN"
+  ROYALE_V3_SUPABASE_URL = "https://YOUR_APPROVED_TEST_PROJECT.supabase.co"
+[mounts]
+  source = "royale_data"
+  destination = "/data"
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 2
+  memory = "512mb"
+# Keep exactly one authority instance. Do not add a second writer to this volume.
+# Set SUPABASE_SERVICE_ROLE_KEY using the provider's secret store, never this file.

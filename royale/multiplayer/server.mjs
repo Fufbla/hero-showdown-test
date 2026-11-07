@@ -1,6 +1,6 @@
 import http from 'node:http';
 import {PROTOCOL} from './protocol.mjs';
-import {MigrationService,SupabaseMigrationBridge} from './migration.mjs';
+import {MigrationService} from './migration.mjs';
 import {fileURLToPath} from 'node:url';
 import {resolve,dirname} from 'node:path';
 import {mkdirSync} from 'node:fs';
@@ -9,6 +9,7 @@ import {WebSocketServer} from 'ws';
 import {AuthorityStore} from './store.mjs';
 import {Authority} from './authority.mjs';
 import {runtimeDelta} from './delta.mjs';
+import {encodeRuntime} from './runtime.mjs';
 import {CLOUD_CONFIG} from '../cloud-config.mjs';
 import {V3CloudBridge,V3Checkpoints,SaveConflict} from './v3-checkpoints.mjs';
 import {MAX_ROOM_PLAYERS} from './room-rules.mjs';
@@ -38,7 +39,9 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity=MA
     if(req.url!=='/health'){if(serve){serve(req,res);return;}res.writeHead(404).end();return;}
     res.writeHead(authority.failed?503:200,{'content-type':'application/json','cache-control':'no-store'}).end(JSON.stringify({ready:!authority.failed,protocol:PROTOCOL}));
   });
-  const wss=new WebSocketServer({noServer:true,maxPayload:1024*1024,perMessageDeflate:false});
+  // Bound compression work and discard dictionaries between messages. Browsers
+  // negotiate this transparently; clients without it keep the same protocol.
+  const wss=new WebSocketServer({noServer:true,maxPayload:1024*1024,perMessageDeflate:{serverNoContextTakeover:true,clientNoContextTakeover:true,concurrencyLimit:4,threshold:1024,zlibDeflateOptions:{level:3,memLevel:4}}});
   server.on('upgrade',(req,socket,head)=>{
     if(req.url!=='/royale'||!origins.includes(req.headers.origin)||wss.clients.size>=maxConnections){socket.end('HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n');return;}
     wss.handleUpgrade(req,socket,head,ws=>wss.emit('connection',ws,req));
@@ -48,8 +51,10 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity=MA
     if(ws.bufferedAmount>2*1024*1024){ws.close(4008,'Connection too slow. Reconnect to resume.');return;}
     if(message.type==='state'){
       message={...message,cloudPending:ws.cloudCommand||null};
-      const {next,delta}=runtimeDelta(ws.stateSerial%200===0?null:ws.baseline,message.game);ws.baseline=next;
-      message={...message,game:undefined,delta,base:ws.stateSerial||0,serial:(ws.stateSerial||0)+1};ws.stateSerial=message.serial;
+      const reset=!ws.stateSerial||ws.stateSerial%200===0;
+      const {next,delta}=runtimeDelta(reset?null:ws.baseline,message.game);ws.baseline=next;
+      const peers=runtimeDelta(reset?null:ws.peerBaseline,encodeRuntime(message.nearby));ws.peerBaseline=peers.next;
+      message={...message,game:undefined,nearby:undefined,delta,peerDelta:peers.delta,base:ws.stateSerial||0,serial:(ws.stateSerial||0)+1};ws.stateSerial=message.serial;
     }
     const data=JSON.stringify(message);stats.bytesOut+=Buffer.byteLength(data);ws.send(data);
   }
@@ -60,7 +65,8 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity=MA
     for(const h of authority.state.heroes.values())h.game.drain();stats.frames++;
   }
   function step() {
-    const start=performance.now();authority.tick();stats.ticks++;
+    const start=performance.now(),zones=checkpoints?new Map([...authority.state.heroes.values()].map(h=>[h.id,h.zone])):null;authority.tick();stats.ticks++;
+    if(checkpoints)for(const h of authority.state.heroes.values())if(h.cloud&&h.zone!==zones.get(h.id))void checkpoints.saveHero(h,{latest:true}).catch(()=>{});
     if(authority.dirty||stats.ticks%6===0)save();
     if(stats.ticks%6===0)publish(false);
     const ms=performance.now()-start;stats.maxTickMs=Math.max(stats.maxTickMs,ms);stats.tickSamples.push(ms);if(stats.tickSamples.length>3600)stats.tickSamples.shift();
@@ -138,9 +144,10 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity=MA
             if(Date.now()-joinWindowAt>60000){joinWindowAt=Date.now();joinAttempts=0;}
             if(++joinAttempts>10)throw Error('Too many room-code attempts. Wait a minute and try again.');
           }
+          const beforeZone=authority.owner(account.id,heroId).zone;
           const result=authority.command(account.id,heroId,m.seq,m.method,m.args);
-          if(account.kind==='v3'&&['save','mode'].includes(m.method)){
-            ws.cloudCommand=m.seq;try{await checkpoints.saveHero(authority.owner(account.id,heroId));}finally{ws.cloudCommand=null;}
+          if(account.kind==='v3'&&(['save','mode'].includes(m.method)||beforeZone!==authority.owner(account.id,heroId).zone)){
+            ws.cloudCommand=m.seq;try{await checkpoints.saveHero(authority.owner(account.id,heroId),{latest:true});}finally{ws.cloudCommand=null;}
           }
           send(ws,{type:'ack',seq:m.seq,result});send(ws,{type:'state',...authority.view(account.id,heroId)});return;
         }
@@ -160,8 +167,9 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
   const capacity=MAX_ROOM_PLAYERS,maxConnections=Number(process.env.ROYALE_SERVER_CAPACITY);
   const origins=(process.env.ROYALE_ALLOWED_ORIGINS||'').split(',').filter(Boolean);
   if(!origins.length)throw Error('Set the exact allowed website origins.');
-  const path=resolve(process.env.ROYALE_DATA||'./data/authority.sqlite');mkdirSync(dirname(path),{recursive:true,mode:0o700});
-  const app=startServer({port:Number(process.env.PORT||8080),host:process.env.HOST||'127.0.0.1',path,capacity,maxConnections,origins,v3Bridge:process.env.SUPABASE_SERVICE_ROLE_KEY?new V3CloudBridge():null,migrationBridge:process.env.SUPABASE_SERVICE_ROLE_KEY?new SupabaseMigrationBridge():null});
+  if(!process.env.ROYALE_DATA||!process.env.ROYALE_V3_SUPABASE_URL||!process.env.SUPABASE_SERVICE_ROLE_KEY)throw Error('Set the durable data path, approved V3 backend URL and server-only cloud credential.');
+  const path=resolve(process.env.ROYALE_DATA);mkdirSync(dirname(path),{recursive:true,mode:0o700});
+  const app=startServer({port:Number(process.env.PORT||8080),host:process.env.HOST||'127.0.0.1',path,capacity,maxConnections,origins,v3Bridge:new V3CloudBridge(),authenticate:async()=>{throw Error('Use your existing V3 ten-digit code and select a hero.');}});
   app.server.on('listening',()=>console.log('Royale authority listening; room capacity '+capacity+'.'));
   for(const signal of ['SIGINT','SIGTERM'])process.once(signal,async()=>{await app.close();process.exit(0);});
 }

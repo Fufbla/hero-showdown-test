@@ -15,7 +15,7 @@ test('selected-hero menu exposes create/join, a numeric six-digit code, capacity
     menu.session={state:{code:'003456',players:[{name:'REXI'},{name:'Vee'}]},client:{ready:true},active:true,command:async(...args)=>calls.push(args)};
     menu.connect=async()=>{};await menu.mode('create');assert.equal(menu.dialog.open,true);assert.equal(menu.$('mp-code').textContent,'Room code: 003456');assert.match(menu.$('mp-players').textContent,/2\/5/);
     await assert.rejects(()=>menu.mode('join','123'),/six-digit/);assert.equal(calls.length,1);
-    await menu.mode('join','003456');assert.deepEqual(calls[1],['mode',['join','003456']]);assert.equal(menu.dialog.open,false);
+    menu.session.state.started=true;await menu.mode('join','003456');assert.deepEqual(calls[1],['mode',['join','003456']]);assert.equal(menu.dialog.open,false);
     menu.mark(ctx.local.id,true);assert.equal(menu.isLinked(ctx.local.id),true);menu.mark(ctx.local.id,false);assert.equal(menu.isLinked(ctx.local.id),false);
     await menu.checkpoint();assert.deepEqual(calls.at(-1),['save']);assert.deepEqual(errors,[]);
   }finally{globalThis.document=prior;}
@@ -36,4 +36,16 @@ test('checkpoint forwarding retains its parent message type and its own hero slo
     V3MultiplayerMenu.prototype.confirmCheckpoint.call(target,{type:'checkpoint',slot:0,revision:99,snapshot:{coins:999}});
     assert.equal(sent.length,1);assert.equal(sent[0].data.type,'royale-multiplayer-checkpoint');assert.equal(sent[0].data.slot,1);assert.equal(sent[0].data.revision,12);
   }finally{globalThis.window=prior;globalThis.location=priorLocation;}
+});
+
+test('returning to heroes waits for its own parent acknowledgement before reloading the roster',async()=>{
+  const priorWindow=globalThis.window,priorLocation=globalThis.location,win=new EventTarget(),sent=[],actions=[];
+  win.parent={postMessage:value=>sent.push(value)};globalThis.window=win;globalThis.location={origin:'https://game.example'};
+  const target={slot:0,localId:'hero',session:{active:true,client:{ready:true,request:async()=>({slot:0,snapshot:{coins:12}}),close:()=>actions.push('closed')}},confirmCheckpoint:V3MultiplayerMenu.prototype.confirmCheckpoint,mark:()=>actions.push('unlinked'),badge:{},dialog:{close:()=>actions.push('dialog')},onExit:async()=>actions.push('roster')};
+  try{
+    const exiting=V3MultiplayerMenu.prototype.release.call(target);await new Promise(r=>setImmediate(r));assert.deepEqual(actions,[]);
+    const request=sent[0],reply=(requestId,origin)=>{const event=new Event('message');Object.assign(event,{origin,source:win.parent,data:{type:'royale-checkpoint-confirmed',requestId}});win.dispatchEvent(event);};
+    reply('unrelated',location.origin);reply(request.requestId,'https://wrong.example');assert.deepEqual(actions,[]);
+    reply(request.requestId,location.origin);await exiting;assert.deepEqual(actions,['unlinked','closed','roster','dialog']);assert.equal(target.session,null);
+  }finally{globalThis.window=priorWindow;globalThis.location=priorLocation;}
 });

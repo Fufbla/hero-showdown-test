@@ -1,6 +1,7 @@
 import {GameSession} from './game-session.mjs';
 import {MAX_ROOM_PLAYERS, AUTOSAVE_MS} from './room-rules.mjs';
 import {roomCode} from './protocol.mjs';
+import {encodeRuntime} from './runtime.mjs';
 export const ROOM_RECEIPTS='healthia.royale.private-rooms.receipts.v1';
 
 export function requestV3Session({slot,snapshot,resume=false},win=window){
@@ -12,7 +13,7 @@ export function requestV3Session({slot,snapshot,resume=false},win=window){
       event.data.error?reject(Error(event.data.error)):resolve({token:event.data.access,slot,kind:'v3'});
     }
     win.addEventListener('message',receive);
-    win.parent.postMessage({type:'royale-room-session',requestId,slot,snapshot,resume},win.location.origin);
+    win.parent.postMessage({type:'royale-room-session',account:new URLSearchParams(win.location.search||'').get('cloudAccount'),requestId,slot,snapshot,resume},win.location.origin);
   });
 }
 
@@ -24,11 +25,13 @@ export class V3MultiplayerMenu {
 <p id="mp-selected"></p><p>2–${MAX_ROOM_PLAYERS} players · Your hero saves every ${AUTOSAVE_MS/1000} seconds.</p>
 <p id="mp-status" role="status" aria-live="polite"></p>
 <section id="mp-room"><p id="mp-code" hidden></p><button id="mp-copy" hidden>Copy room code</button><p id="mp-players"></p>
-<div class="mp-actions"><button id="mp-create">Create Multiplayer</button><form id="mp-join-form"><label for="mp-join-code">Six-digit room code</label><input id="mp-join-code" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" placeholder="123456" required><button id="mp-join" type="submit">Join Multiplayer</button></form>
+<div class="mp-actions"><button id="mp-create">Create Multiplayer Room</button><form id="mp-join-form"><label for="mp-join-code">Six-digit room code</label><input id="mp-join-code" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" placeholder="123456" required><button id="mp-join" type="submit">Join Multiplayer Room</button></form>
+<button id="mp-start" hidden>Start Playing</button>
 <button id="mp-leave" hidden>Leave Multiplayer</button><button id="mp-roster" hidden>Save &amp; Return to Heroes</button></div></section>`;
     document.body.append(this.dialog);this.$=id=>this.dialog.querySelector('#'+id);
     this.$('mp-close').onclick=()=>this.close();this.dialog.addEventListener('cancel',e=>{e.preventDefault();this.close();});
     this.$('mp-create').onclick=()=>this.run(()=>this.mode('create'));
+    this.$('mp-start').onclick=()=>this.run(async()=>{await this.session.command('startRoom');this.close(true);});
     this.$('mp-join-form').onsubmit=e=>{e.preventDefault();void this.run(()=>this.mode('join',this.$('mp-join-code').value.trim()));};
     this.$('mp-leave').onclick=()=>this.run(()=>this.mode('solo'));
     this.$('mp-roster').onclick=()=>this.run(()=>this.release());
@@ -62,7 +65,13 @@ export class V3MultiplayerMenu {
     this.session=session;session.privateRooms=true;
     session.addEventListener('heroes',event=>{const hero=event.detail.find(h=>h.slot===this.slot);if(!hero){this.note('Your selected hero could not be restored.');return;}this.mark(this.localId,true);session.select(hero.id);});
     session.addEventListener('checkpoint',event=>{this.confirmCheckpoint(event.detail);this.note('Saved · '+new Date(event.detail.savedAt).toLocaleTimeString());});
-    session.addEventListener('state',event=>this.renderState(event.detail));
+    session.addEventListener('state',event=>{
+      this.renderState(event.detail);
+      // Recovery only: never upload a browser runtime over a newer cloud save.
+      if(!this.lastRecovery||performance.now()-this.lastRecovery>=1000){
+        try{context.storage.setItem('healthia.royale.room-recovery.'+event.detail.id,JSON.stringify({slot:this.slot,revision:event.detail.revision,cloudRevision:event.detail.cloud?.revision,runtime:encodeRuntime(event.detail.game)}));this.lastRecovery=performance.now();}catch{this.note('Browser backup unavailable; the server still saves your hero.');}
+      }
+    });
     session.addEventListener('status',event=>{this.note(event.detail);if(session.active&&!session.client.ready)this.badge.textContent='Reconnecting…';});
     session.addEventListener('error',event=>this.note(event.detail));
     const ready=this.waitForState();await session.connect();await ready;
@@ -71,20 +80,35 @@ export class V3MultiplayerMenu {
     if(this.session.client.ready)return Promise.resolve();
     return new Promise((resolve,reject)=>{const s=this.session,timer=setTimeout(()=>{clean();reject(Error('Connection timed out. Your saved hero is retained.'));},20000);const done=()=>{clean();resolve();},error=e=>{clean();reject(Error(e.detail));};function clean(){clearTimeout(timer);s.removeEventListener('state',done);s.removeEventListener('error',error);}s.addEventListener('state',done);s.addEventListener('error',error);});
   }
-  confirmCheckpoint(checkpoint){
+  confirmCheckpoint(checkpoint,{wait=false}={}){
     if(checkpoint.slot!==this.slot)return;
-    window.parent.postMessage({...checkpoint,type:'royale-multiplayer-checkpoint'},location.origin);
+    const account=new URLSearchParams(location.search||'').get('cloudAccount');
+    if(!wait){window.parent.postMessage({...checkpoint,type:'royale-multiplayer-checkpoint',account},location.origin);return;}
+    return new Promise((resolve,reject)=>{
+      const requestId=crypto.randomUUID(),timer=setTimeout(()=>{window.removeEventListener('message',receive);reject(Error('Your cloud save is safe. Retry returning to heroes to confirm the local copy.'));},10000);
+      function receive(event){
+        if(event.origin!==location.origin||event.source!==window.parent||event.data?.type!=='royale-checkpoint-confirmed'||event.data.requestId!==requestId)return;
+        clearTimeout(timer);window.removeEventListener('message',receive);event.data.error?reject(Error(event.data.error)):resolve();
+      }
+      window.addEventListener('message',receive);
+      window.parent.postMessage({...checkpoint,type:'royale-multiplayer-checkpoint',account,requestId},location.origin);
+    });
   }
-  async mode(mode,code){if(mode==='join')roomCode(code);await this.connect();await this.session.command('mode',[mode,code]);this.renderState(this.session.state);if(mode!=='create')this.close(true);}
+  async mode(mode,code){if(mode==='join')roomCode(code);await this.connect();await this.session.command('mode',[mode,code]);this.renderState(this.session.state);if(mode==='solo'||this.session.state.started)this.close(true);}
   async checkpoint(){if(this.session?.active&&this.session.client.ready)return this.session.command('save');}
   async release(){
-    if(!this.session?.client.ready)throw Error('Reconnect before returning to your solo hero.');
-    const checkpoint=await this.session.client.request('release');this.confirmCheckpoint(checkpoint);this.mark(this.localId,false);
+    if(!this.releasedCheckpoint&&!this.session?.client.ready)throw Error('Reconnect before returning to your solo hero.');
+    const checkpoint=this.releasedCheckpoint??=await this.session.client.request('release');
+    await this.confirmCheckpoint(checkpoint,{wait:true});this.mark(this.localId,false);
     this.session.client.close();this.session.active=false;this.badge.hidden=true;
-    window.parent.postMessage({type:'royale-room-released',slot:this.slot},location.origin);
-    this.dialog.close();await this.onExit?.(checkpoint.snapshot);this.session=null;
+    window.parent.postMessage({type:'royale-room-released',account:new URLSearchParams(location.search||'').get('cloudAccount'),slot:this.slot},location.origin);
+    await this.onExit?.(checkpoint.snapshot);this.dialog.close();this.session=null;this.releasedCheckpoint=null;
   }
   renderState(state){
+    const waiting=!!state.code&&!state.started;
+    this.$('mp-start').hidden=!waiting;this.$('mp-start').disabled=state.players.length<2||state.leader!==state.id;
+    if(waiting){this.note(state.players.length<2?'Waiting for a friend to join.':state.leader===state.id?'Your room is ready. Start when everyone has joined.':'Waiting for the room leader to start.');if(!this.dialog.open)this.open();}
+    if(this.wasWaiting&&!waiting&&state.code&&this.dialog.open)this.close(true);this.wasWaiting=waiting;
     this.$('mp-code').hidden=!state.code;this.$('mp-code').textContent=state.code?'Room code: '+state.code:'';
     this.$('mp-copy').hidden=!state.code;this.$('mp-leave').hidden=!state.code;this.$('mp-roster').hidden=false;
     this.$('mp-roster').disabled=state.game?.canSave?!state.game.canSave():false;

@@ -13,12 +13,12 @@ test('four independent sockets share a room, move, survive creator exit and reco
     for(let i=0;i<4;i++){const c=await connect(url,'fixture-user-'+i);c.initial=await createAndSelect(c);clients.push(c);}
     const creator=clients[0],created=await creator.request({type:'command',seq:1,method:'mode',args:['create']},m=>m.type==='ack');const code=created.result.code;
     for(const c of clients.slice(1))await c.request({type:'command',seq:1,method:'mode',args:['join',code]},m=>m.type==='ack');
-    const room=[...app.authority.state.rooms.values()].find(r=>r.code===code);assert.equal(room.members.size,4);
+    const room=[...app.authority.state.rooms.values()].find(r=>r.code===code);assert.equal(room.members.size,4);app.authority.startRoom(app.authority.state.heroes.get(creator.initial.id));
     for(const c of clients)c.send({type:'input',seq:1,input:{move:1,run:true}});
     await new Promise(r=>setImmediate(r));await new Promise(r=>setImmediate(r));
     for(let i=0;i<30;i++)app.step();
     for(const c of clients)assert.ok(app.authority.state.heroes.get(c.initial.id).game.hero.x>200);
-    const next=clients[1].wait(m=>m.type==='state');app.publish();const frame=await next;assert.equal(frame.players.length,4);assert.equal(frame.nearby.length,3);
+    const tick=app.authority.state.tick,next=clients[1].wait(m=>m.type==='state'&&m.tick>=tick&&m.players.length===4);app.publish();const frame=await next;assert.equal(frame.players.length,4);assert.equal(frame.nearby.length,3);
     await creator.request({type:'command',seq:2,method:'mode',args:['solo']},m=>m.type==='ack');assert.equal(room.members.size,3);
     const id=clients[1].initial.id;clients[1].ws.terminate();await once(clients[1].ws,'close');await new Promise(r=>setImmediate(r));
     const reconnect=await connect(url,'fixture-user-1');clients.push(reconnect);const resumed=await reconnect.request({type:'select',id},m=>m.type==='state');assert.equal(resumed.id,id);assert.equal(resumed.code,code);assert.equal(new Set(resumed.players.map(p=>p.id)).size,resumed.players.length);

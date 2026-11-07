@@ -22,12 +22,12 @@ test('combat, current health, cooldowns and exact midair position persist withou
   for(const key of ['x','y','hp','vy','jumps'])assert.equal(g.hero[key],h.game.hero[key]);assert.equal(g.powers.cooldowns.fireball,3.25);assert.equal(g.hero.attack.kind,'punch');store.close();
 });
 test('disconnect grace expires into solo only for the disconnected hero',()=>{
-  let now=1000;const store=new AuthorityStore(),a=new Authority(store,{allowLegacyImport:true,capacity:16,now:()=>now,graceMs:1000});const one=a.create('a',{slot:0}),two=a.create('b',{slot:0});const c={close(){}};a.attach('a',one.id,c);a.attach('b',two.id,{close(){}});const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);a.detach(one.id,c);now+=500;a.tick();assert.equal(one.room,room.id);now+=501;a.tick();assert.notEqual(one.room,room.id);assert.equal(two.room,room.id);assert.equal(room.members.size,1);store.close();
+  let now=1000;const store=new AuthorityStore(),a=new Authority(store,{allowLegacyImport:true,capacity:16,now:()=>now,graceMs:1000});const one=a.create('a',{slot:0}),two=a.create('b',{slot:0});const c={close(){}};a.attach('a',one.id,c);a.attach('b',two.id,{close(){}});const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);a.startRoom(one);a.detach(one.id,c);now+=500;a.tick();assert.equal(one.room,room.id);now+=501;a.tick();assert.notEqual(one.room,room.id);assert.equal(two.room,room.id);assert.equal(room.members.size,1);store.close();
 });
 test('solo pause freezes enemies; pausing in a shared room cannot pause other heroes',()=>{
   const store=new AuthorityStore(),a=new Authority(store,{allowLegacyImport:true,capacity:16}),one=a.create('a',{slot:0}),two=a.create('b',{slot:0});a.attach('a',one.id,{close(){}});a.attach('b',two.id,{close(){}});
   a.command('a',one.id,1,'pause',[true]);const age=one.game.enemies[0].age;a.tick();assert.equal(one.game.enemies[0].age,age);
-  const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);const prior=one.game.enemies[0].age,invulnerable=one.game.hero.invulnerable;a.tick();assert.ok(one.game.enemies[0].age>prior);assert.ok(one.game.hero.invulnerable<invulnerable);assert.equal(one.game.paused,true);store.close();
+  const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);a.startRoom(one);const prior=one.game.enemies[0].age,invulnerable=one.game.hero.invulnerable;a.tick();assert.ok(one.game.enemies[0].age>prior);assert.ok(one.game.hero.invulnerable<invulnerable);assert.equal(one.game.paused,true);store.close();
 });
 test('duplicate creation/import requests cannot mint extra heroes in an occupied slot',()=>{
   const store=new AuthorityStore(),a=new Authority(store,{allowLegacyImport:true,capacity:16}),save=JSON.parse(new Game().save());

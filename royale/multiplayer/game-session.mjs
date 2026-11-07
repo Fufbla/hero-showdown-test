@@ -49,7 +49,9 @@ export class GameSession extends EventTarget {
       const visual={...p,time:this.game.time,enemies:[],powers:p.powers||{active:{},projectiles:[]},mergeEffects:p.mergeEffects||[],mergeShots:p.mergeShots||[]};
       drawPowerWorld(c,visual);drawMergeWorld(c,visual);const pose=drawHero(c,pos.x,pos.y,p.look,h,this.game.time,1,{outfit:p.outfit});drawPowerHero(c,visual,pos,pose);
       c.font='bold 13px system-ui';c.textAlign='center';c.lineWidth=3;c.strokeStyle='#122b32';c.fillStyle='#fff6d8';c.strokeText(p.look.name,pos.x,pos.y-112);c.fillText(p.look.name,pos.x,pos.y-112);
-    }c.restore();
+    }
+    const h=this.game.hero,x=h.prevX+(h.x-h.prevX)*alpha,y=h.prevY+(h.y-h.prevY)*alpha;
+    c.font='bold 13px system-ui';c.textAlign='center';c.lineWidth=3;c.strokeStyle='#122b32';c.fillStyle='#fff6d8';c.strokeText(this.game.look.name,x,y-112);c.fillText(this.game.look.name,x,y-112);c.restore();
   }
 }
 export function pickupForGame(game,...args){return game.pickupLoot?game.pickupLoot(...args):pickupLoot(game,...args);}

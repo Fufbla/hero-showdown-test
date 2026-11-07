@@ -4,8 +4,11 @@ import {MemoryV3Bridge} from './v3-fixture.mjs';
 import {readFile} from 'node:fs/promises';
 import {resolve,extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../../../',import.meta.url)),port=Number(process.env.PORT||4175),bridge=new MemoryV3Bridge();
+import {randomUUID} from 'node:crypto';
+const portFlag=process.argv.indexOf('--port');
+const root=fileURLToPath(new URL('../../../',import.meta.url)),port=Number(process.env.PORT||(portFlag>=0?process.argv[portFlag+1]:4175)),bridge=new MemoryV3Bridge();
 const identities=Array.from({length:6},(_,i)=>bridge.identity('Co-op Hero '+(i+1)));
+const reviewPrefix='royale-review-'+randomUUID()+':';
 const app=startServer({port,host:'127.0.0.1',capacity:5,maxConnections:12,origins:['http://localhost:'+port,'http://127.0.0.1:'+port],v3Bridge:bridge,serve:async(req,res)=>{
   const json=(body,status=200)=>res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify(body));
   try{
@@ -30,7 +33,9 @@ const app=startServer({port,host:'127.0.0.1',capacity:5,maxConnections:12,origin
     const types={'.mjs':'text/javascript','.js':'text/javascript','.html':'text/html','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.mp3':'audio/mpeg','.wav':'audio/wav'};
     if(!path.startsWith(root)||!types[extname(path)]||pathname.includes('/node_modules/')||pathname.includes('/backend/')||pathname.includes('/.')){res.writeHead(404).end();return;}
     let bytes=await readFile(path);
-    if(pathname==='/royale-v3-staging/app.mjs')bytes=Buffer.from(bytes.toString().replace('https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-v3-staging','/fixture-api'));
+    if(pathname==='/royale-v3-staging/app.mjs')bytes=Buffer.from(bytes.toString().replace('https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-v3-staging','/fixture-api').replaceAll('royale-v3-play:',reviewPrefix));
+    if(pathname==='/royale/app.mjs')bytes=Buffer.from(bytes.toString().replaceAll('royale-v3-play:',reviewPrefix));
+    if(pathname==='/royale-v3-staging/index.html')bytes=Buffer.from(bytes.toString().replace('V3 isolated test — original saves remain untouched.','LOCAL REVIEW · Disposable test heroes only. Codes 1111111111 through 6666666666. No live saves.'));
     res.writeHead(200,{'Content-Type':types[extname(path)],'Cache-Control':'no-store'}).end(bytes);
   }catch(error){json({error:error.message},409);}
 }});

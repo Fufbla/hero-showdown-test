@@ -1,0 +1,5 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Local mobile layout review</title><style>body{background:#102b30;color:white;font:16px system-ui}iframe{width:390px;height:844px;border:2px solid #95d2b2}button{padding:12px;margin:8px}</style></head><body>
+<p>Local layout review · disposable heroes only · codes 1111111111–6666666666</p>
+<button data-size="390,844">Phone portrait</button><button data-size="844,390">Phone landscape</button><button data-size="768,1024">Tablet portrait</button>
+<div><iframe id="device" title="Simulated device viewport" src="/royale-v3-staging/"></iframe></div>
+<script>for(const b of document.querySelectorAll('button'))b.onclick=()=>{const [w,h]=b.dataset.size.split(',');device.style.width=w+'px';device.style.height=h+'px';};</script></body></html>

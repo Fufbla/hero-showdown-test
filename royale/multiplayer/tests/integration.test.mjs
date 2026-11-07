@@ -29,7 +29,7 @@ test('actual game session: migration, room creation/join, creator exit, reconnec
  }finally{for(const s of sessions)s.client.close();await app.close();globalThis.WebSocket=Native;Object.defineProperty(globalThis,'crypto',nativeCrypto);}
 });
 test('overlapping roots remain attached when a different caster disconnects or switches modes',()=>{
- const store=new AuthorityStore(),a=new Authority(store,{capacity:4}),one=a.create('a',{slot:0}),two=a.create('b',{slot:0}),ca={close(){}},cb={close(){}};a.attach('a',one.id,ca);a.attach('b',two.id,cb);const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);
+ const store=new AuthorityStore(),a=new Authority(store,{capacity:4}),one=a.create('a',{slot:0}),two=a.create('b',{slot:0}),ca={close(){}},cb={close(){}};a.attach('a',one.id,ca);a.attach('b',two.id,cb);const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);a.startRoom(one);
  const e=one.game.enemies[0];for(const h of [one,two])h.game.powers.active.roots={targets:[e.id],cooldown:10,age:0};e.rooted=true;a.detach(one.id,ca);assert.equal(e.rooted,true);a.mode('b',two.id,'solo');assert.equal(e.rooted,false);assert.equal(two.game.powers.cooldowns.roots,10);store.close();
 });
 test('protocol mismatches are rejected before selecting or changing a hero',async()=>{
@@ -41,7 +41,7 @@ test('protocol mismatches are rejected before selecting or changing a hero',asyn
 test('a shared pounce can contact each hero once on different ticks',()=>{
  const store=new AuthorityStore(),a=new Authority(store,{capacity:4}),one=a.create('a',{slot:0}),two=a.create('b',{slot:0});
  try{
-  a.attach('a',one.id,{close(){}});a.attach('b',two.id,{close(){}});const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);
+  a.attach('a',one.id,{close(){}});a.attach('b',two.id,{close(){}});const room=a.mode('a',one.id,'create');a.mode('b',two.id,'join',room.code);a.startRoom(one);
   const world=room.worlds.get(one.zone),e=world.enemies[0];world.enemies.splice(1);
   Object.assign(e,{x:400,y:400,airborne:true,pouncing:true,airVx:0,vy:0,hit:false,state:'strike',protection:0});
   for(const h of [one,two])Object.assign(h.game.hero,{x:h===one?400:700,y:400,invulnerable:0});

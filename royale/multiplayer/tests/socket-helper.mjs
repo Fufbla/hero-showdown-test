@@ -1,8 +1,10 @@
 import {PROTOCOL} from '../protocol.mjs';
 import {WebSocket} from 'ws';
+import {applyRuntimeDelta} from '../delta.mjs';
+import {decodeRuntime} from '../runtime.mjs';
 export async function connect(url,token,origin='http://localhost') {
-  const ws=new WebSocket(url,{origin});const messages=[],waiters=[];
-  ws.on('message',data=>{const m=JSON.parse(data);messages.push(m);for(const w of [...waiters])if(w.predicate(m)){waiters.splice(waiters.indexOf(w),1);clearTimeout(w.timer);w.resolve(m);}});
+  const ws=new WebSocket(url,{origin});const messages=[],waiters=[];let peerBaseline=null;
+  ws.on('message',data=>{const m=JSON.parse(data);if(m.type==='state'){peerBaseline=applyRuntimeDelta(peerBaseline,m.peerDelta);m.nearby=decodeRuntime(JSON.stringify(peerBaseline));}messages.push(m);for(const w of [...waiters])if(w.predicate(m)){waiters.splice(waiters.indexOf(w),1);clearTimeout(w.timer);w.resolve(m);}});
   const wait=(predicate,timeout=5000)=>new Promise((resolve,reject)=>{const w={predicate,resolve,timer:setTimeout(()=>{waiters.splice(waiters.indexOf(w),1);reject(Error('Message timeout'));},timeout)};waiters.push(w);});
   await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject);});
   const response=wait(m=>m.type==='heroes'||m.type==='error');ws.send(JSON.stringify({type:'auth',token,protocol:PROTOCOL}));await response;
