@@ -22,7 +22,7 @@ export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
     const rows=await rest('royale_v3_sessions?token_hash=eq.'+digest(token)+'&expires_at=gt.'+encodeURIComponent(new Date(now()).toISOString())+'&select=profile_id');
     if(!rows[0])throw Error('Your existing save session expired.');return rows[0].profile_id;
   }
-  return async req=>{
+  const handle=async req=>{
     if(req.method==='OPTIONS')return json({ok:true});
     if(req.method!=='POST')return json({ok:true,prototype:'isolated-supabase-coop',version:2,transport:'websocket-relay-v1'});
     const started=performance.now(),trace=[],reply=(value,status=200)=>json({...value,timing:{totalMs:Math.round(performance.now()-started),database:trace}},status);
@@ -56,6 +56,27 @@ export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
         loaded=await rpc('sync_load',{p_token:digest(token),p_seq:body.input?body.inputSeq:0,p_input:body.input?inputPacket(body.input):null},trace);
       }
       let hero=loaded?.hero||await authenticate(token);
+      if(body.action==='fresh-session'){
+        // A fresh test session gets a separate identity. Old tabs cannot drive
+        // the new room, and the prior hero/session remains recoverable.
+        if(!/^[a-f0-9]{64}$/.test(body.nextAccess||'')||body.nextAccess===token||!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(body.freshId||''))throw Error('Invalid fresh-session request.');
+        const lookup=()=>rest(prefix+'heroes?token_hash=eq.'+digest(body.nextAccess)+'&select=*');
+        let fresh=(await lookup())[0];
+        if(!fresh){
+          if(hero.room_id){
+            const response=await handle(new Request(req.url,{method:'POST',headers:{Authorization:'Bearer '+token},body:JSON.stringify({action:'disconnect'})}));
+            if(!response.ok)throw Error((await response.json()).error);hero=await authenticate(token);
+          }
+          try{await rpc('new_hero',{p_id:body.freshId,p_token:digest(body.nextAccess),p_slot:hero.slot,p_snapshot:hero.snapshot,p_ip:hero.creation_ip});}
+          catch(error){if(!(await lookup())[0])throw error;}
+          fresh=(await lookup())[0];
+        }
+        if(fresh.id!==body.freshId||fresh.slot!==hero.slot)throw Error('Fresh-session identity conflict. Your previous session is retained.');
+        // Leave the fresh identity unbound until the player chooses Create or
+        // Join. Both devices can use this path without first leaving a lobby.
+        const room=fresh.room_id?(await rest(prefix+'rooms?id=eq.'+fresh.room_id+'&select=code'))[0]:null;
+        return json({id:fresh.id,access:body.nextAccess,slot:fresh.slot,snapshot:fresh.snapshot,revision:fresh.revision,savedAt:fresh.saved_at,roomId:fresh.room_id,code:room?.code||null,previous:{snapshot:hero.snapshot,revision:hero.revision,savedAt:hero.saved_at}});
+      }
       if(body.action==='profile')return json({id:hero.id,slot:hero.slot,snapshot:hero.snapshot,revision:hero.revision,savedAt:hero.saved_at,roomId:hero.room_id});
       if(body.action==='hello')return json({heroes:[{id:hero.id,slot:hero.slot,name:hero.snapshot.look.name,level:hero.snapshot.level,commandSeq:hero.command_seq,room:hero.room_id}]});
       if(body.action==='release'&&!hero.room_id)return json({slot:hero.slot,snapshot:hero.snapshot,revision:hero.revision,savedAt:hero.saved_at});
@@ -123,6 +144,7 @@ export function makeHandler({url,key,fetcher=fetch,now=Date.now}){
       return json({error:'Room is busy. Your confirmed progress is safe; retrying.'},409);
     }catch(error){return json({error:error.message},400);}
   };
+  return handle;
 }
 if(typeof Deno!=='undefined'){
   const secrets=JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS')||'{}');

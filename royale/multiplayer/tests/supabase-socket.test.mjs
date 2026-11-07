@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {WebSocketServer,WebSocket} from 'ws';
 import {serveSocket} from '../supabase-test/socket-server.mjs';
 import {EdgeSocketTransport} from '../supabase-test/socket-client.mjs';
+import {SupabaseTestClient} from '../supabase-test/client.mjs';
 const token='a'.repeat(64),wait=ms=>new Promise(r=>setTimeout(r,ms));
 async function server(handler,options={}){
  const wss=new WebSocketServer({port:0});await new Promise(r=>wss.once('listening',r));
@@ -41,4 +42,9 @@ test('lightweight relay forwards only the bound session to the fixed authority',
  const response=await relay(new Request('https://untrusted/override',{method:'POST',headers:{Authorization:'Bearer '+token,'X-Target':'https://untrusted'},body:JSON.stringify({action:'sync',inputSeq:7})}));
  assert.deepEqual(await response.json(),{state:{hp:12}});assert.equal(sent.url,'https://owned/functions/v1/royale-mp-test');assert.equal(sent.options.headers.Authorization,'Bearer '+token);assert.equal(sent.options.headers['X-Target'],undefined);
  const unavailable=relayHandler('https://owned',async()=>{throw Error('internal details');});const failed=await unavailable(new Request('https://owned',{method:'POST',body:'{}'}));assert.equal(failed.status,503);assert.ok(!(await failed.text()).includes('internal details'));
+});
+test('temporary relay failure falls back to HTTP but rejected credentials do not',async()=>{
+ const start=EdgeSocketTransport.prototype.start;let status=503,calls=0;
+ EdgeSocketTransport.prototype.start=async()=>{throw Object.assign(Error('Relay unavailable'),{status});};
+ try{const c=new SupabaseTestClient({endpoint:'https://fixture/royale-mp-test'},()=>token);c.api=async()=>{calls++;return {heroes:[]};};await c.connect();assert.equal(calls,1);assert.equal(c.socket,null);status=401;await assert.rejects(()=>c.connect());assert.equal(calls,1);c.close();}finally{EdgeSocketTransport.prototype.start=start;}
 });

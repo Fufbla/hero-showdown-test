@@ -1,0 +1,143 @@
+{
+  "date": "2026-11-07",
+  "authorityVersion": 14,
+  "authoritySHA256": "68f89c6aab940f03dca483c7499efdf03ffc9117938282f4579f5c7cab714e55",
+  "tests": 112,
+  "freshSessionAndShippedClient": {
+    "freshSession": true,
+    "retryKeepsIdentity": true,
+    "previousSessionRetained": true,
+    "progressCopiedExactly": true,
+    "oldRoomContinues": true,
+    "newCode": "030819",
+    "createJoin": true,
+    "independentMovement": true,
+    "peerCounts": [
+      1,
+      1
+    ],
+    "xp": [
+      7,
+      7
+    ],
+    "autosaveIntervals": [
+      [
+        8218,
+        8126
+      ],
+      [
+        8218,
+        8126
+      ]
+    ],
+    "latency": {
+      "samples": 108,
+      "medianMs": 323,
+      "p95Ms": 583,
+      "maxMs": 880
+    },
+    "httpRecovery": [
+      0,
+      0
+    ],
+    "errors": [],
+    "statuses": []
+  },
+  "rawSocketCheckBeforeFallback": {
+    "combat": {
+      "type": "bottle",
+      "maxHp": 34,
+      "share": 7,
+      "participants": 2,
+      "health": [
+        [
+          34,
+          34
+        ],
+        [
+          34,
+          34
+        ],
+        [
+          34,
+          34
+        ],
+        [
+          34,
+          34
+        ],
+        [
+          34,
+          34
+        ],
+        [
+          24,
+          24
+        ],
+        [
+          19,
+          24
+        ],
+        [
+          9,
+          14
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "duplicateRewardPrevented": true
+    },
+    "latency": {
+      "samples": 148,
+      "medianMs": 446,
+      "p95Ms": 630,
+      "maxMs": 727
+    },
+    "sockets": [
+      {
+        "connections": 1,
+        "requests": 2,
+        "renewals": 0,
+        "failures": 0
+      },
+      {
+        "connections": 5,
+        "requests": 94,
+        "renewals": 4,
+        "failures": 0
+      }
+    ],
+    "autosaveIntervals": [
+      [
+        24476,
+        16289
+      ],
+      [
+        9644,
+        8192,
+        16211
+      ]
+    ],
+    "creatorDisconnectContinues": true,
+    "reconnectPreservesXP": true,
+    "errors": [
+      "Combat connection interrupted. Retrying.",
+      "Combat connection interrupted. Retrying."
+    ]
+  },
+  "browser": {
+    "freshSessionButton": true,
+    "previousSessionsListed": true,
+    "createJoinStartAndTwoHeroesRendered": true,
+    "performanceBadge": true,
+    "environment": "Managed preview of the isolated build, using the live Supabase project",
+    "physicalIPhoneAndIPadTested": false
+  },
+  "limitations": [
+    "The earlier raw socket run reported two relay interruptions; the final client now falls back to the same authority over HTTP. The final shipped-client run saw no interruptions, so live exercise of that fallback is not claimed; its failure-path test passes.",
+    "Combat confirmation still incurs database and simulation round trips. These samples do not establish zero lag or a benefit from paid compute.",
+    "Final published Site requires the owner sign-in. UI checks used its packaged preview, not a physical iPhone or iPad."
+  ]
+}

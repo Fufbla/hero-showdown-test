@@ -9,8 +9,16 @@ export class SupabaseTestClient extends EventTarget {
   emit(type,detail){this.dispatchEvent(new CustomEvent(type,{detail}));}
   async api(body){
     const at=performance.now();let status,data;
-    if(this.socket){const response=await this.socket.request(body);status=response.status;data=response.data;this.metrics.socketRequests=(this.metrics.socketRequests||0)+1;}
-    else {const r=await fetch(this.config.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+this.token},body:JSON.stringify(body),signal:AbortSignal.timeout(15000)});status=r.status;data=await r.json();this.metrics.httpRequests=(this.metrics.httpRequests||0)+1;}
+    if(this.socket){
+      try{const response=await this.socket.request(body);status=response.status;data=response.data;this.metrics.socketRequests=(this.metrics.socketRequests||0)+1;}
+      catch(error){if(!error.transport&&(!error.status||error.status<500))throw error;}
+    }
+    // Relay/network failure does not mean the hero session expired. Recover
+    // through the same authority using the identical idempotent request.
+    if(!this.socket||status===undefined||status>=500){
+      if(this.socket)this.metrics.transportFallbacks=(this.metrics.transportFallbacks||0)+1;
+      const r=await fetch(this.config.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+this.token},body:JSON.stringify(body),signal:AbortSignal.timeout(15000)});status=r.status;data=await r.json();this.metrics.httpRequests=(this.metrics.httpRequests||0)+1;
+    }
     this.metrics.requests++;this.metrics.rtt.push(performance.now()-at);if(this.metrics.rtt.length>300)this.metrics.rtt.shift();
     if(body.action==='sync'){this.metrics.syncRtt??=[];this.metrics.syncRtt.push(performance.now()-at);if(this.metrics.syncRtt.length>300)this.metrics.syncRtt.shift();}
     if(status>=400){if(status===409)this.metrics.conflicts++;throw Error(data.error||'Test connection unavailable.');}return data;
@@ -20,7 +28,7 @@ export class SupabaseTestClient extends EventTarget {
     if(this.config.fastSocket!==false){
       this.socket=new EdgeSocketTransport(this.config.socketEndpoint||this.config.endpoint.replace('/royale-mp-test','/royale-mp-stream-test'),this.token);
       try{data=await this.socket.start();this.emit('status','Persistent combat connection ready');}
-      catch(error){this.socket.close();this.socket=null;if(error.status)throw error;this.emit('status','Standard connection · persistent connection unavailable');}
+      catch(error){this.socket.close();this.socket=null;if(error.status&&error.status<500)throw error;this.emit('status','Standard connection · persistent connection unavailable');}
     }
     data??=await this.api({action:'hello'});this.emit('heroes',data.heroes);
   }

@@ -84,3 +84,18 @@ test('menu commands get the next request slot ahead of an automatically schedule
  const seen=[];c.exchange=async body=>{seen.push(body);return {result:true};};const command=c.command('pause',[false]);
  await c.sync();assert.equal(seen.length,0);c.busy=false;await command;assert.equal(seen.length,1);assert.equal(seen[0].method,'pause');c.closed=true;
 });
+test('late snapshots do not replay movement time the server already simulated',()=>{
+ const client=new EventTarget();Object.assign(client,{fastMotion:true,localPrediction:true,unacked:[],generation:1,lastServerAt:performance.now(),input(input){this.unacked.push({input});}});
+ const session=new GameSession({client,storage:{getItem:()=>null},onState(){},onError(){}}),{r,hs}=roomFixture();
+ const first=r.view(hs[0]);first.game=decodeRuntime(first.game);client.dispatchEvent(new CustomEvent('state',{detail:first}));
+ for(let i=0;i<30;i++)session.input({move:1});const predicted=session.game.hero.x;assert.ok(client.unacked.every(p=>Number.isFinite(p.predictedTime)));
+ const confirmed=r.view(hs[0]);confirmed.game=decodeRuntime(confirmed.game);for(let i=0;i<15;i++)session.predict(confirmed.game,{move:1});
+ client.dispatchEvent(new CustomEvent('state',{detail:confirmed}));
+ assert.ok(Math.abs(session.game.time-1)<.00001,'Only 0.5s beyond the confirmed 0.5s is replayed');assert.ok(Math.abs(session.game.hero.x-predicted)<.00001,'No duplicate movement or corrective jump');
+});
+test('relay interruptions recover immediately through the same idempotent authority request',async()=>{
+ const original=globalThis.fetch,seen=[],c=new SupabaseTestClient({endpoint:'https://fixture'},()=>{});c.token='a'.repeat(64);let status=503;
+ c.socket={request:async body=>{seen.push(body);return {status,data:{error:'Interrupted'}};}};
+ globalThis.fetch=async(url,options)=>{seen.push(JSON.parse(options.body));return Response.json({result:true});};
+ try{const body={action:'command',seq:42,method:'save',args:[]};assert.equal((await c.api(body)).result,true);assert.deepEqual(seen[0],seen[1]);assert.equal(c.metrics.transportFallbacks,1);status=401;await assert.rejects(()=>c.api(body));assert.equal(seen.length,3);}finally{globalThis.fetch=original;}
+});

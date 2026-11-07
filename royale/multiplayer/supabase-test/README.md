@@ -48,6 +48,25 @@ The additional `royale-mp-stream-test` function is a lightweight WebSocket relay
 
 Reopen the test on both devices to load the new files. Keep browser storage: clearing it removes access to the local test session. Use the same existing test heroes, then create/join with the six-digit room code. Test progress is still isolated.
 
+## Fresh sessions and remaining lag (2026-11-07, Edge version 14)
+
+From **Test heroes**, choose **Start fresh session**. It captures the authoritative hero progress even during combat, retains the prior identity under **Previous test sessions**, and opens the Create/Join choices. On one device create a room; on the other enter that new six-digit code. **Continue session** resumes the current room. No browser-data clearing is required. This is a fresh world/session, not a level reset.
+
+Each fresh session uses a separate test identity so a stale tab cannot drive the new hero. A client-generated idempotency key is persisted before the request; interrupted responses and failed local writes retain access to both sessions. Only a confirmed server snapshot is copied. Existing test and official heroes are never deleted or overwritten.
+
+Local movement prediction now skips queued frames whose simulation time is already covered by the server response, preventing duplicate movement and subsequent snapback. The test header shows measured render FPS and the last combat sync round trip. Relay startup failures and transient relay/network failures can use the existing HTTP authority with the exact same input/command sequence; rejected credentials still fail closed.
+
+Verification is recorded in `fresh-verification.json` and `fresh-session.png`:
+
+- 112 multiplayer, authority, database and recovery tests pass. The delayed-snapshot regression preserves one second of movement instead of replaying it to 1.5 seconds.
+- Live fresh-session retries returned the same identity; previous progress matched exactly, both clients joined a different room and moved independently, and the old guest retained its room and host role.
+- Final shipped-client run: 108 combat sync responses, **323 ms median / 583 ms p95 / 880 ms max**, no reported reconnections. Both heroes retained **7 XP** and confirmed autosaves separated by **8.126–8.218 seconds**.
+- A live 34-HP bottle fight granted 7 XP to each of two contributors, with no reward on duplicated input. Creator disconnect, guest continuation and reconnect preservation passed. That earlier raw-socket soak also reported **two transient relay interruptions**; it failed its zero-error assertion. The new fallback path passes its failure-injection test, but was not needed in the final live sample. The earlier harness also lacked automatic heartbeats during setup; fresh-room verification now uses the actual shipped client.
+- Browser UI verified Create, Join, Start, both heroes rendered, the fresh-session path and retained-session list. The browser environment does not measure physical iPhone/iPad performance.
+- Official V3 HTML retained SHA-256 `82fd7a2930e43caabab260fee5e84cebb3eca92d41b0034a4f5b28ca36eae0b0`; the original saving function is still version 3. No schema, paid infrastructure or official publication changes.
+
+Reproduce the opt-in fresh-session check with `MP_TEST_FIXTURES=/tmp/royale-fresh-fixtures.json node royale/multiplayer/tests/supabase-fresh-live.mjs`. It uses disposable test identities and the shipped client. Keep its fixture credentials out of Git.
+
 ## Lag update verified on 2026-11-07 (Edge version 8)
 
 `lag-verification.json` contains the measured results, including failures/limitations rather than a latency guarantee.

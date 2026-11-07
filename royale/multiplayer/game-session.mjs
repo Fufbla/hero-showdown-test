@@ -12,7 +12,13 @@ export class GameSession extends EventTarget {
     super();this.client=client||new MultiplayerClient(url,getToken);this.storage=storage;this.onState=onState;this.onError=onError;this.active=false;this.queue=Promise.resolve();this.receivedAt=0;this.peerMotion=new PeerMotion();this.enemyMotion=new Map();
     this.client.addEventListener('state',({detail:s})=>{
       const before=this.game,previousHero=this.client.fastMotion&&before?this.presentHero():null,previousPeers=new Map((this.state?.nearby||[]).map(p=>[p.id,p]));
-      if(this.client.localPrediction&&s.phase==='playing'&&s.code)for(const packet of this.client.unacked)this.predict(s.game,packet.input);
+      // A stateless sync can already cover the time of inputs sent while its
+      // response was in flight. Replaying that entire queue advances movement
+      // twice and makes the next authoritative update pull the hero backwards.
+      const serverTime=s.game.time;
+      if(this.client.localPrediction&&s.phase==='playing'&&s.code)for(const packet of this.client.unacked){
+        if(!this.client.fastMotion||packet.predictedTime===undefined||packet.predictedTime>serverTime+STEP/2)this.predict(s.game,packet.input);
+      }
       s.game.events=s.game.events.filter(e=>e.netId>(this.eventSeq||0));for(const e of s.game.events)this.eventSeq=Math.max(this.eventSeq||0,e.netId);
       this.state=s;this.game=s.game;this.receivedAt=performance.now();
       // Interpolate presentation only; all physics/combat remain server-owned.
@@ -59,7 +65,7 @@ export class GameSession extends EventTarget {
   pause(paused){if(this.active&&this.desiredPause!==paused){this.desiredPause=paused;void this.command('pause',[paused]).catch(this.onError);}}
   input(action){
     if(this.client.fastMotion&&performance.now()-this.client.lastServerAt>2500){this.client.ready=false;this.client.emit('status','Reconnecting · waiting for confirmed progress');return;}
-    this.client.input(action);if(this.client.localPrediction&&this.state?.phase==='playing'&&this.state.code){this.predict(this.game,action);this.predictedAt=performance.now();this.client.present?.(this.game);}
+    this.client.input(action);if(this.client.localPrediction&&this.state?.phase==='playing'&&this.state.code){this.predict(this.game,action);const packet=this.client.unacked?.at(-1);if(this.client.fastMotion&&packet)packet.predictedTime=this.game.time;this.predictedAt=performance.now();this.client.present?.(this.game);}
   }
   predict(game,action){
     // Presentation only. Server snapshots alone grant HP, damage, XP and loot.
@@ -84,7 +90,13 @@ export class GameSession extends EventTarget {
   }
   drawGame(renderer,alpha,elapsed){
     if(!this.client.fastMotion){renderer.draw(this.game,alpha,elapsed);return;}
-    const now=performance.now(),view=Object.assign(Object.create(Game.prototype),this.game,{hero:this.presentHero(now),enemies:this.game.enemies.map(e=>{
+    const now=performance.now();this.performanceSample??={at:now,frames:0};this.performanceSample.frames++;
+    if(now-this.performanceSample.at>=1000){
+      const fps=this.performanceSample.frames*1000/(now-this.performanceSample.at),rtt=this.client.metrics?.syncRtt||[],syncMs=rtt.at(-1)||0;
+      if(typeof window!=='undefined'&&window.parent!==window)window.parent.postMessage({type:'royale-test-performance',fps,syncMs},location.origin);
+      this.performanceSample={at:now,frames:0};
+    }
+    const view=Object.assign(Object.create(Game.prototype),this.game,{hero:this.presentHero(now),enemies:this.game.enemies.map(e=>{
       const p=this.enemyMotion.get(e.id);if(!p)return e;const t=Math.min(1,Math.max(0,(now-p.at)/p.duration)),x=p.fromX+(p.x-p.fromX)*t,y=p.fromY+(p.y-p.fromY)*t;return {...e,x,y,prevX:x,prevY:y};
     })});renderer.draw(view,1,elapsed);
   }

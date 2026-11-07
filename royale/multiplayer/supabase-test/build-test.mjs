@@ -10,6 +10,7 @@ await cp(source,resolve(out,'royale'),{recursive:true,filter:p=>!/(\/node_module
 for(const dir of ['animation','shore','scorpion-rig','villain-motion'])await cp(resolve(source,'../assets',dir),resolve(out,'assets',dir),{recursive:true});
 for(const [from,to] of [['test-index.html','index.html'],['test-app.mjs','test-app.mjs']])await cp(new URL(from,import.meta.url),resolve(out,to));
 const app=resolve(out,'royale/app.mjs');await writeFile(app,(await readFile(app,'utf8')).replaceAll("'royale-v3-play:'","('royale-mp-test:'+(params.get('mpDevice')||'default').replace(/[^a-z0-9-]/gi,'').slice(0,30)+':')").replaceAll('Local heroes stay on this browser. Use Pause → Save Game before leaving.','Test progress saves separately. Use Test heroes above to copy or create another hero.').replace('renderer.draw(game,alpha,elapsed);','if(online())multiplayerMenu.session.drawGame(renderer,alpha,elapsed);else renderer.draw(game,alpha,elapsed);'));
+await writeFile(app,(await readFile(app,'utf8'))+`\nif(params.get('testFresh')==='1')continueHero(activeSlot);\n`);
 const page=resolve(out,'royale/index.html');await writeFile(page,(await readFile(page,'utf8')).replace('Three heroes. Three beginnings. Choose who takes the next step.','Choose a test hero to play together.').replace('Local heroes stay on this browser. Use Pause → Save Game before leaving.','Test progress saves separately. Use Test heroes above to copy or create another hero.').replace('</head>','<style>.hero-slot [data-action=\"create\"],.hero-slot [data-action=\"continue\"],.hero-slot .delete-hero{display:none}</style></head>'));
 await writeFile(resolve(out,'royale/multiplayer/config.json'),JSON.stringify({transport:'supabase-test',endpoint:'https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-mp-test?forceFunctionRegion=us-west-2'}));
 let html=await readFile(page,'utf8');
@@ -17,6 +18,7 @@ const map=JSON.parse(html.match(/<script type="importmap">(.*?)<\/script>/s)[1])
 for(const name of ['client','motion','socket-client','realtime-sdk']){const path='./multiplayer/supabase-test/'+name+'.mjs';map.imports[path]=path;}
 for(const path of Object.keys(map.imports))map.imports[path]=path+'?v='+createHash('sha256').update(await readFile(resolve(out,'royale',path))).digest('hex').slice(0,12);
 html=html.replace(/<script type="importmap">.*?<\/script>/s,'<script type="importmap">'+JSON.stringify(map)+'</script>').replace(/src="\.\/app\.mjs\?v=[^"]+"/,'src="'+map.imports['./app.mjs']+'"');await writeFile(page,html);
+const wrapper=resolve(out,'test-app.mjs'),book='./royale/multiplayer/supabase-test/session-book.mjs';await writeFile(wrapper,(await readFile(wrapper,'utf8')).replace(book,book+'?v='+createHash('sha256').update(await readFile(resolve(out,book))).digest('hex').slice(0,12)));
 const rootPage=resolve(out,'index.html'),wrapperHash=createHash('sha256').update(await readFile(resolve(out,'test-app.mjs'))).digest('hex').slice(0,12);
 await writeFile(rootPage,(await readFile(rootPage,'utf8')).replace('./test-app.mjs"','./test-app.mjs?v='+wrapperHash+'"'));
 console.log('Built isolated test:',out);
