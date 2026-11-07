@@ -352,5 +352,15 @@
       ],
       "frames": 5
     }
+  },
+  "singlePlayerChecks": 42,
+  "deployment": {
+    "url": "https://hero-showdown-royale-multiplayer-test.fufbla.chatgpt.site/",
+    "status": "succeeded",
+    "access": "owner-private",
+    "hostedGameplayVerified": false,
+    "pending": "Owner sign-in; final Apple credential request declined",
+    "testedFrontend": "Exact packaged build through managed preview with live Supabase backend",
+    "siteSourceSha": "19cda49da663033f740352bd4fb92aa6c7b42586"
   }
 }

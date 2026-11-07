@@ -2,6 +2,12 @@
 
 This extends `feature/royale-private-rooms`; it does not replace the existing WebSocket authority, lobby, tests, or single-player release. The test uses the existing Supabase project `adakwbhxiuatjvphutgo` and the separate `royale-mp-test` Edge Function. No paid hosting or plan upgrade was enabled.
 
+Test URL: https://hero-showdown-royale-multiplayer-test.fufbla.chatgpt.site/
+
+Deployment succeeded. The hosted URL's private sign-in gate loads, but gameplay behind that gate remains unverified in the cloud browser: the final Apple sign-in was declined. Do not describe the hosted end-to-end check as complete. The exact packaged frontend was checked through the managed preview with the deployed Supabase backend. `verified-two-clients.png` records that live-backend test, not an authenticated session on the published domain.
+
+Resume publication context: Site `appgprj_6aee76cfa5e0819194fd2c878b0c36f6`, deployment `appgdep_6aee7e92079481919ae9193247aea25d`, static source SHA `19cda49da663033f740352bd4fb92aa6c7b42586`. Source is in the Site's own repository. Its large asset upload was split into six fast-forward pushes under the 64 MiB per-push limit, with the final tree verified identical. Do not recreate the Site or purchase infrastructure.
+
 ## Playing on two devices
 
 1. Open the isolated test URL on each device. Its Site is private to the owner; sign into the same ChatGPT account if prompted.
