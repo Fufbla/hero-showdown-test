@@ -19,6 +19,31 @@
 <link rel="stylesheet" href="menu-navigation.css?v=1">
 <link rel="stylesheet" href="multiplayer/menu.css">
 <link rel="stylesheet" href="interface-controls.css">
+  <style>
+    .roster-card > .roster-cache-note {
+      box-sizing: border-box;
+      max-width: 720px;
+      margin: 0 auto 14px;
+      padding: 9px 12px;
+      border: 1px solid rgba(232, 210, 152, .45);
+      border-radius: 9px;
+      background: #123431;
+      color: #eee0b7;
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: center;
+      overflow-wrap: break-word;
+    }
+    .roster-cache-note > span {
+      display: block;
+      margin-top: 4px;
+      color: #c5d3bd;
+      font-size: 11px;
+    }
+    @media (max-height: 550px) and (orientation: landscape) {
+      .roster-card > .roster-cache-note { margin-bottom: 10px; padding: 7px 10px; }
+    }
+  </style>
 </head>
 <body>
 <div id="app">
@@ -46,9 +71,9 @@
       <output id="diagnostics" hidden></output><button id="measure-performance" hidden>Measure performance</button><output id="performance-result" hidden></output>
       <section id="roster" class="overlay" aria-label="Choose your hero">
         <div class="roster-card" role="dialog" aria-modal="true" aria-labelledby="roster-title">
-          <div class="eyebrow">HERO SHOWDOWN ROYALE · PLAYTEST</div>
+          <div class="eyebrow">HERO SHOWDOWN ROYALE</div>
           <h1 id="roster-title" tabindex="-1">My <em>Heroes.</em></h1>
-          <p>Three heroes. Three beginnings. Choose who takes the next step.</p>
+          <p class="roster-cache-note">⚠️ Recently replaced a hero? If your new character isn’t showing, close any old game tabs, clear your browser’s cache, and reload the page. ⚠️<span>Cached files only—keep cookies and saved website data to protect local heroes.</span></p>
           <div id="hero-slots" class="hero-slots"></div>
           <p class="storage-note" id="roster-note" role="status">Local heroes stay on this browser. Use Pause → Save Game before leaving.</p>
           <div class="practice-links"><a class="text-button practice-link" href="tests/monster-sprites.html">Approved monster sprite integration review →</a><a class="text-button practice-link" href="tests/phase10-browser.html">Phase 10 quality &amp; performance review →</a><a class="text-button practice-link" href="tests/showcase.html">Phase 9 art &amp; vertical exploration review →</a><a class="text-button practice-link" href="tests/legendary.html">Practice all eight Legendary bosses →</a><a class="text-button practice-link" href="tests/eris.html">Explore the Tree &amp; Costume Shop →</a><a class="text-button practice-link" href="tests/bosses.html">Practice all seven bosses →</a><a class="text-button practice-link" href="tests/world.html">Explore all seven regions →</a><a class="text-button practice-link" href="tests/powers.html">Practice all nine powers →</a></div>
