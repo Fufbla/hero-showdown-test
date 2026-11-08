@@ -92,7 +92,7 @@ export async function install(api){
    }
    for(let i=0;i<2;i++){const g=s.games[i];g.powers.data.equipped=['fireball','roots','whirlwind'];g.powers.cooldowns.fireball=i===0?4.5:0;}api.updateHUD();
    check('Each hero has three compact HUD icons',s.games.every((g,i)=>$('powers-'+i).querySelectorAll('.cooldown-icon:not([hidden])').length===3));
-   check('Cooldown labels are independent', $('powers-0').textContent.includes('5')&&!$('powers-1').textContent.includes('5'));
+   check('Cooldown labels are independent', $('powers-0').children[0].getAttribute('aria-label')==='Player 1 Slot 1 · Fireball · 5s'&&$('powers-1').children[0].getAttribute('aria-label')==='Player 2 Slot 1 · Fireball · Ready');
    check('HUD icons sit under their own health bars',s.games.every((g,i)=>$('powers-'+i).getBoundingClientRect().top>=$('hp-'+i).getBoundingClientRect().bottom));
    await record('Independent pause upgrades',2500);api.markReady(0);check('One Ready cannot resume',s.paused);api.markReady(0);check('Ready can be cancelled',!s.ready[0]);api.markReady(0);api.markReady(1);check('Both Ready resume together',!s.paused&&!$('menu').open);
    await record('Autosaves during combat',9000,n=>{pads.forEach(p=>{p.buttons[2].pressed=n%4===0;p.buttons[4].pressed=n%20===0;});});

@@ -3,6 +3,8 @@
 Scope: **two controllers on the same device only**, following the owner's correction. Publishing to the existing local co-op page is authorized. Online multiplayer source, transport, hosted Site and its Edge Functions are unchanged.
 
 Development branch: `feature/local-coop-menus-hud-heroes-rewards`.
+Initial deployed code commit: `01814e992fbdbc45fe274ff108f88ad0c14f1bb1`.
+GitHub Pages run: https://github.com/Fufbla/hero-showdown-test/actions/runs/42532632337 — build and deployment succeeded.
 Baseline: `1d5fa75aa996c635781b4abe8630e56051b64a7a` (the live fetch fix plus its verification record).
 Playable page: https://fufbla.github.io/hero-showdown-test/royale/local-coop/
 
@@ -18,9 +20,13 @@ Playable page: https://fufbla.github.io/hero-showdown-test/royale/local-coop/
 
 - **112 automated game/client/regression tests passed**, plus **2 Postgres/endpoint integration tests** covering authorization, archive atomicity, idempotent deletion, revision conflicts and replacement protection.
 - **37 browser checks passed with simulated standard gamepads**: independent movement, all three slots for both players, simultaneous upgrades, equip/unequip/sell, Back/tab navigation, cooldown isolation, two Ready, disconnect/reconnect, loot, teleport, save queues and leader departure.
-- **18 separate creator browser checks passed**, covering both controllers, full creator tabs, other-controller isolation, creation, named confirmation, cancellation and confirmed deletion of disposable practice heroes. Results are in `tests/hero-browser-results.json`. Ready/Start navigation is also tested with the actual application handler at both 16.7 ms and 1,000 ms frame intervals; the browser harness now uses one-frame button edges to avoid accidental repeats on throttled cloud frames.
+- **19 separate creator browser checks passed on the live release**, covering mouse-free Ready/Start, both controllers, full creator tabs, other-controller isolation, creation, named confirmation, cancellation and confirmed deletion of disposable practice heroes. Results are in `tests/hero-browser-results.json`. Ready/Start navigation is also tested with the actual application handler at both 16.7 ms and 1,000 ms frame intervals; the browser harness now uses one-frame button edges to avoid accidental repeats on throttled cloud frames.
 - **Real cloud checks passed on two newly created disposable accounts**: create/delete/cancel/retry, protected replacement, mixed boss eligibility, full-inventory pending rewards, restoration, active-session deletion rejection and departure saves. No pre-existing user accounts were read or changed. A preliminary test run also created two disposable accounts; it stopped at a test comparison that was sensitive to JSON property order.
+- **10 live native-browser cloud checks passed** on two additional disposable accounts: both logins, independent writes/restoration, unused-slot preservation, explicit deletion confirmation, scoped deletion and expired-session renewal. Native `Window.fetch` worked without an injected fetcher. Evidence: `tests/live-browser-cloud-results.json`.
+- All seven checked published HTML/module files match the release bytes; see `tests/published-files-results.json`.
 - New backend: `royale-local-heroes` version 1. Existing `royale-v3-staging` remains version 3; existing online endpoints were not deployed. New archive table has RLS and no public/authenticated read or direct function execution grants. No accounts or existing hero records were deleted by the migration.
+
+The initial live gameplay replay passed 29 checks before a broad cooldown assertion stopped it: the test looked for any “5” in Player 2’s full power bar, which also contained an independent five-second Ground Roots cooldown. DOM inspection confirmed Player 1 Fireball = 5s and Player 2 Fireball = Ready. The assertion now checks those specific slots.
 
 ## Measurements and limitations
 

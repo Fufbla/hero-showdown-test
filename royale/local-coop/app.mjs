@@ -275,7 +275,7 @@ window.addEventListener('blur',()=>{if(session)openMenu();});document.addEventLi
 requestAnimationFrame(frame);
 try{artReady=await prepareStyleCMaterials();if(!artReady)throw Error('Hero artwork did not load. Reload to try again.');}catch(e){note(e.message);}
 if(qa){
- const harness=await import('./tests/browser-harness.mjs?v=20261108-coop-menus');
+ const harness=await import('./tests/browser-harness.mjs?v=20261108-coop-menus2');
  await harness.install({players,input,manager,renderPanel,focusMenu,updateHUD,getSession:()=>session,getRenderer:()=>renderer,button,el,renderChoices,profileStatus,refreshControllers:()=>{lastControllers=-Infinity;padSignature='';refreshControllers(performance.now());},setPads:p=>testPads=p,updateStart,start,openMenu,act,markReady,leave,saveAll,renderPanels,metrics,autosaveTimes,measure:value=>measurement=value});
 }
 updateStart();

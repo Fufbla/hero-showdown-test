@@ -18,7 +18,8 @@
     "Player 2 sees named deletion confirmation",
     "Player 2 Back cancels deletion",
     "Player 2 explicit confirmation removes disposable hero",
-    "Player 2 other slots remain intact"
+    "Player 2 other slots remain intact",
+    "Both controllers can Ready and start without a mouse"
   ],
   "physicalControllers": false,
   "cloud": "Simulated profiles only; live account tests are separate."

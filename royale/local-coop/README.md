@@ -1,6 +1,6 @@
 # Hero Showdown Royale V3 — local two-player co-op
 
-Development branch: `feature/royale-v3-local-coop`. Stable baseline: `005ea3288f211e77496dce8d7b5a6910ba827304`. The online authority at `ce3fb34561d69a94b9a5ffa3d52995712502635e` supplies the existing shared combat logic, adapted locally. The owner approved adding this playtest to the live V3 site on November 8, 2026. No database migration or rewrite of existing heroes is required.
+Original co-op branch: `feature/royale-v3-local-coop`. The controller/HUD/hero/reward update uses `feature/local-coop-menus-hud-heroes-rewards`. Original stable baseline: `005ea3288f211e77496dce8d7b5a6910ba827304`. The online authority at `ce3fb34561d69a94b9a5ffa3d52995712502635e` supplies the existing shared combat logic, adapted locally. The owner approved adding this playtest to the live V3 site on November 8, 2026. The original build required no database migration; the current update adds only a private deletion archive and a dedicated management function. Existing heroes are not rewritten.
 
 ## Play on the website
 
@@ -17,7 +17,7 @@ Build that package from this branch with `python3 tools/build-local-coop-mac.py 
 Install Node.js 20 or newer, check out this branch, then run from the repository root:
 
 ```sh
-git switch feature/royale-v3-local-coop
+git switch feature/local-coop-menus-hud-heroes-rewards
 node tools/serve-local-coop.mjs
 ```
 
@@ -68,7 +68,7 @@ The original level cap (99), earned Power Points, ability cap (20), three normal
 - Serialization and snapshot validation for browser cloud requests run in a worker. The persisted graph excludes the shared transient AI graph. Cloud waits never run inside the simulation loop.
 - Unfinished boss battles restart on restoration, matching existing saves. No partial boss health is promoted into a victory. Defeated heroes checkpoint at their respawn state.
 
-Backend authorization was inspected: account ownership comes from the bearer session, not a caller-supplied profile identifier; saves require the current slot revision. This branch does not modify backend code or schemas.
+Backend authorization was inspected: account ownership comes from the bearer session, not a caller-supplied profile identifier; saves require the current slot revision. The current update adds a dedicated deletion endpoint and private archive; the existing account/login/save and online endpoints remain unchanged.
 
 ## Risks and limits identified before implementation
 
@@ -84,7 +84,7 @@ Run the automated suite:
 node --test royale/local-coop/tests/*.test.mjs royale/tests/v3-combat.test.mjs royale/tests/v3-loot.test.mjs royale/tests/menu-gamepad.test.mjs royale/tests/menu-navigation.test.mjs
 ```
 
-The browser harness at `?qa=1` uses two simulated gamepads and practice profiles; it never connects real hero accounts. Click Run automated playtest. It exercises the actual application loop, shared rendering, input polling, pause panels, worker serialization, rewards, teleportation, disconnects, saves, and departure. It measures all ten requested scenarios and emits JSON. This harness is only imported when the QA query is explicitly present.
+The browser gameplay and creator harness at `?qa=1` uses two simulated gamepads and practice profiles. The separate, explicitly labeled cloud button creates new disposable accounts; it never accepts existing player codes. Click Run automated playtest. It exercises the actual application loop, shared rendering, input polling, pause panels, worker serialization, rewards, teleportation, disconnects, saves, and departure. It measures all ten requested scenarios and emits JSON. This harness is only imported when the QA query is explicitly present.
 
 `tests/live-cloud.mjs` creates two NEW test accounts and refuses to seed any nonempty account. It checks independent real writes/restoration, equipment copies, authorization, and stale-save rejection. It never accepts an existing account code. Running it again creates two more test accounts; do not run it as an ordinary offline unit test.
 
