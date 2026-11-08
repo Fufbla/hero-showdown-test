@@ -2,6 +2,10 @@
 
 Date: November 8, 2026. Branch: `feature/royale-v3-local-coop`.
 
+## Approved website playtest
+
+After the isolated build and Mac package were delivered, the owner explicitly approved adding Local Co-op to the live V3 game to test directly on the website. The release keeps the existing single-player runtime and save backend unchanged and publishes the separate co-op entry from the welcome screen. The full release suite passed 100 tests (the previous 97 plus three artwork-cache checks). The existing cloud endpoint's preflight and validation responses allow `https://fufbla.github.io`, so website login and saves require no CORS or backend change. Earlier isolation statements below describe the original development verification, before this approval. Physical controllers and target-computer performance remain unverified.
+
 ## Change boundary
 
 The branch starts from stable V3 commit `005ea3288f211e77496dce8d7b5a6910ba827304`. Existing gameplay, renderer, artwork, save backend, online transport, and cloud schemas are unchanged. The only existing file edited is `royale-v3-staging/index.html`, adding the local co-op entry. All implementation is under `royale/local-coop/`, with the loopback-only test server in `tools/serve-local-coop.mjs`. No main merge or Pages deployment was performed.

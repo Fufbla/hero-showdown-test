@@ -1,6 +1,12 @@
 # Hero Showdown Royale V3 — local two-player co-op
 
-Review branch: `feature/royale-v3-local-coop`. Stable baseline: `005ea3288f211e77496dce8d7b5a6910ba827304`. The online authority at `ce3fb34561d69a94b9a5ffa3d52995712502635e` supplies the existing shared combat logic, adapted locally. No live deployment, merge, database migration, or change to existing heroes is part of this branch.
+Development branch: `feature/royale-v3-local-coop`. Stable baseline: `005ea3288f211e77496dce8d7b5a6910ba827304`. The online authority at `ce3fb34561d69a94b9a5ffa3d52995712502635e` supplies the existing shared combat logic, adapted locally. The owner approved adding this playtest to the live V3 site on November 8, 2026. No database migration or rewrite of existing heroes is required.
+
+## Play on the website
+
+Open [Hero Showdown Royale V3](https://fufbla.github.io/hero-showdown-test/royale-v3-staging/) and select **LOCAL CO-OP — 2 PLAYERS**, or open [Local Co-op directly](https://fufbla.github.io/hero-showdown-test/royale/local-coop/). No download, Node.js installation, or local server is needed. Connect two controllers to the same computer, press a button on each, then enter separate account codes, select heroes and controllers, and select Ready on both sides. Close other tabs using those heroes before starting. Progress saves to the selected real heroes.
+
+The website uses the existing cloud endpoint directly from its already allowed GitHub Pages origin. Solo play and the online multiplayer prototype keep their existing runtimes. Physical controller compatibility and desktop frame rates still require the owner's playtest.
 
 ## Play the isolated build
 
@@ -82,4 +88,4 @@ The browser harness at `?qa=1` uses two simulated gamepads and practice profiles
 
 `tests/live-cloud.mjs` creates two NEW test accounts and refuses to seed any nonempty account. It checks independent real writes/restoration, equipment copies, authorization, and stale-save rejection. It never accepts an existing account code. Running it again creates two more test accounts; do not run it as an ordinary offline unit test.
 
-Results and remaining hardware checks are recorded in `TEST-REPORT.md` and the JSON evidence files. The managed browser preview is internal QA, not a public URL. A public preview would need separately approved hosting/CORS configuration; the local test server works without changing the live backend.
+Results and remaining hardware checks are recorded in `TEST-REPORT.md` and the JSON evidence files. The managed browser preview is internal QA. The approved website playtest uses the existing GitHub Pages origin; the optional local server also works without changing the live backend.
