@@ -1,4 +1,6 @@
 import {Game,decodeSave} from '../../core.mjs';import {styleCDefault} from '../../style-c-defaults.mjs';import {serialize} from '../serialize.mjs';import {pickupLoot} from '../../world-loot.mjs';
+import {CloudProfile} from '../cloud.mjs?v=20261108-fetch';
+import {verifyBrowserCloudAccounts} from './browser-cloud.mjs';
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const frames=async(n=3)=>{for(let i=0;i<n;i++)await new Promise(requestAnimationFrame);};
 const percentile=(a,p)=>[...a].sort((x,y)=>x-y)[Math.min(a.length-1,Math.floor(a.length*p))]||0;
@@ -16,7 +18,17 @@ export async function install(api){
  const pulse=async(i,b)=>{pads[i].buttons[b].pressed=true;await frames();pads[i].buttons[b].pressed=false;await frames();};
  const bothPulse=async b=>{pads.forEach(p=>p.buttons[b].pressed=true);await frames();pads.forEach(p=>p.buttons[b].pressed=false);await frames();};
  const checks=[],scenarios=[];
- const cloudCheck=api.button('Check cloud connection',async()=>{const config=await fetch('./config.json').then(r=>r.json());try{const r=await fetch(config.endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify',code:'invalid'})});$('qa-cloud').textContent=JSON.stringify({passed:r.status===400,status:r.status,scope:'Invalid-format code only; no account read or changed.'});}catch(e){$('qa-cloud').textContent=JSON.stringify({passed:false,error:e.message});}}),cloudResult=api.el('p');cloudResult.id='qa-cloud';$('qa-tools').append(cloudCheck,cloudResult);
+ const cloudCheck=api.button('Check cloud connection',async()=>{
+  const config=await fetch('./config.json').then(r=>r.json()),profile=new CloudProfile({endpoint:config.endpoint});
+  try{await profile.request('verify',{code:'invalid'},false);$('qa-cloud').textContent=JSON.stringify({passed:false,error:'Invalid code unexpectedly accepted.'});}
+  catch(e){$('qa-cloud').textContent=JSON.stringify({passed:e.status===400,status:e.status,error:e.status===400?undefined:e.message,scope:'Actual CloudProfile with native browser fetch; invalid-format code only; no account read or changed.'});}
+ }),cloudResult=api.el('p');cloudResult.id='qa-cloud';$('qa-tools').append(cloudCheck,cloudResult);
+ const accountsResult=api.el('p');accountsResult.id='qa-cloud-accounts';
+ const accountsCheck=api.button('Verify login and saves with 2 new test accounts',async()=>{
+  accountsCheck.disabled=true;accountsResult.textContent='Verifying native browser login and separate saves…';
+  try{const config=await fetch('./config.json').then(r=>r.json());accountsResult.textContent=JSON.stringify(await verifyBrowserCloudAccounts(config.endpoint));}
+  catch(e){accountsResult.textContent=JSON.stringify({passed:false,error:e.message});}
+ });$('qa-tools').append(accountsCheck,accountsResult);
  const check=(name,condition)=>{if(!condition)throw Error(name);checks.push(name);};
  const safe=()=>{const s=api.getSession();for(const i of s.active){const g=s.games[i];g.hero.dead=false;g.hero.hp=g.hero.maxHp;g.hero.attack=null;g.hero.attackBuffer=null;g.combatTimer=0;g.powers.cancelEffects();g.cancelMergeEffects();g.enemyShots.length=0;g.hitRecovery.clear();}return s;};
  const record=async(name,ms,action)=>{

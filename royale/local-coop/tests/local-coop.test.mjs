@@ -31,6 +31,19 @@ function cloudFixture(){
  return {accounts,sessions,requests,store,fetcher,profile:()=>new CloudProfile({fetcher,storage:store}),lose(){loseResponse=true;},setOffline(v){offline=v;}};
 }
 
+test('default browser fetch keeps its Window receiver through login, renewal and independent saves',async t=>{
+ const f=cloudFixture();let calls=0;
+ t.mock.method(globalThis,'fetch',function(...args){
+  assert.equal(this,globalThis,'Can only call Window.fetch on instances of Window');calls++;return f.fetcher(...args);
+ });
+ const a=new CloudProfile({storage:f.store}),b=new CloudProfile({storage:f.store});
+ await Promise.all([a.login('1111111111'),b.login('2222222222')]);
+ assert.equal(a.slots.length,3);assert.equal(b.slots.length,3);assert.notEqual(a.access,b.access);
+ f.sessions.delete(a.access);const x=snapshot(),y=snapshot();x.coins=31;y.coins=72;
+ await Promise.all([a.save(1,x),b.save(1,y)]);await Promise.all([a.load(),b.load()]);
+ assert.equal(a.slots[0].snapshot.coins,31);assert.equal(b.slots[0].snapshot.coins,72);
+ assert(f.requests.some(r=>r.body.action==='renew'));assert(calls>=9);
+});
 test('both codes retain distinct sessions, heroes, revisions and journals',async()=>{
  const f=cloudFixture(),a=f.profile(),b=f.profile();await Promise.all([a.login('1111111111'),b.login('2222222222')]);
  assert.notEqual(a.access,b.access);assert.notEqual(a.key(1),b.key(1));

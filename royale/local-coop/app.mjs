@@ -1,4 +1,4 @@
-import {CloudProfile} from './cloud.mjs';
+import {CloudProfile} from './cloud.mjs?v=20261108-fetch';
 import {LocalSession,AUTOSAVE_MS} from './session.mjs';
 import {LocalInput,samplePad} from './input.mjs';
 import {Game,STEP,decodeSave,xpForLevel} from '../core.mjs';
@@ -241,7 +241,7 @@ window.addEventListener('blur',()=>{if(session)openMenu();});document.addEventLi
 requestAnimationFrame(frame);
 try{artReady=await prepareStyleCMaterials();if(!artReady)throw Error('Hero artwork did not load. Reload to try again.');}catch(e){note(e.message);}
 if(qa){
- const harness=await import('./tests/browser-harness.mjs');
+ const harness=await import('./tests/browser-harness.mjs?v=20261108-fetch');
  await harness.install({players,input,getSession:()=>session,getRenderer:()=>renderer,button,el,renderChoices,profileStatus,refreshControllers:()=>{lastControllers=-Infinity;padSignature='';refreshControllers(performance.now());},setPads:p=>testPads=p,updateStart,start,openMenu,act,markReady,leave,saveAll,renderPanels,metrics,autosaveTimes,measure:value=>measurement=value});
 }
 updateStart();

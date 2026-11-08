@@ -4,7 +4,8 @@ const PREFIX='healthia.royale.local-two.v1:';
 const canonical=v=>JSON.stringify(v,(_k,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.fromEntries(Object.keys(x).sort().map(k=>[k,x[k]])):x);
 export class SaveConflict extends Error{}
 export class CloudProfile {
-  constructor({fetcher=fetch,storage=globalThis.localStorage,onStatus=()=>{},endpoint=CLOUD_ENDPOINT}={}){
+  // Browser fetch must keep Window as its receiver, never this CloudProfile.
+  constructor({fetcher=(...args)=>globalThis.fetch(...args),storage=globalThis.localStorage,onStatus=()=>{},endpoint=CLOUD_ENDPOINT}={}){
     Object.assign(this,{fetcher,storage,onStatus,endpoint});this.slots=[];this.queues=new Map();this.desired=new Map();this.blocked=new Set();
   }
   async request(action,body={},auth=true){
