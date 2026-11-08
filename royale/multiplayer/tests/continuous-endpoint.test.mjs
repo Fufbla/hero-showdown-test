@@ -13,6 +13,7 @@ test('continuous entry point blocks original account auth and exposes only origi
  const url='http://127.0.0.1:'+app.server.address().port;let client;
  try{
   assert.equal((await fetch(url+'/health')).status,200);
+  assert.equal(app.metrics().snapshotHz,30);
   assert.equal((await fetch(url+'/test/copy',{method:'POST',body:'{}'})).status,403);assert.equal(calls.length,0);
   const r=await fetch(url+'/test/copy',{method:'POST',headers:{Origin:'http://localhost',Authorization:'Bearer fixture-source'},body:JSON.stringify({id:'fixture-id',token:'fixture-token'})});
   assert.equal(r.status,200);assert.deepEqual(calls,[['fixture-source',{id:'fixture-id',token:'fixture-token'}]]);

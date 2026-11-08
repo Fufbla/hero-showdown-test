@@ -9,7 +9,7 @@ export function startContinuousServer({bridge=new ContinuousTestBridge(),origins
  if(!origins.length||origins.some(o=>{try{return new URL(o).origin!==o;}catch{return true;}}))throw Error('Set exact allowed test website origins.');
  mkdirSync(dirname(resolve(path)),{recursive:true,mode:0o700});
  let windowAt=Date.now(),copies=0;
- return startServer({...options,path,host,port,origins,capacity:5,maxConnections:5,v3Bridge:bridge,allowNewHeroes:false,migrationBridge:null,
+ return startServer({...options,snapshotHz:30,path,host,port,origins,capacity:5,maxConnections:5,v3Bridge:bridge,allowNewHeroes:false,migrationBridge:null,
   authenticate:async()=>{throw Error('This endpoint accepts isolated continuous-test heroes only.');},
   serve:async(req,res)=>{
    const headers={'Content-Type':'application/json','Cache-Control':'no-store','Vary':'Origin'};

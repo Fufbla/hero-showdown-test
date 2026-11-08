@@ -53,3 +53,26 @@ Sources checked November 8, 2026:
 - https://render.com/docs/disks
 - https://render.com/docs/free
 - https://docs.railway.com/pricing/plans
+
+## Responsive controls and 30 Hz experiment
+
+The continuous WebSocket client now enables the existing local prediction and presentation smoothing. Movement and attack animation state advance without waiting for a network response. Authoritative snapshots still decide damage, health, XP, inventory and saves. The client keeps a bounded queue of inputs, removes acknowledged inputs, and replays only the remaining sequence numbers. This continuous simulation path intentionally does not use the stateless HTTP worker's timestamp-replay rule.
+
+Small position corrections use the existing smoothing. New rooms, heroes and connection generations reset presentation history. Remote heroes use authoritative snapshots in the existing interpolation buffer, with a 33 ms minimum for the continuous client. The Supabase client's existing 50 ms minimum is retained. Boss/helper object identities are preserved for artwork preparation. Disconnected input does not continue local prediction; excessive unacknowledged input triggers reconnect rather than unbounded replay.
+
+The isolated `continuous-server.mjs` entry point now publishes at 30 Hz (every 33.3 ms). Generic `startServer` keeps its 20 Hz default for comparison. Physics remains 60 Hz; disk commit and cloud-save schedules are unchanged. The performance badge reports input-confirmation timing, not pure network ping.
+
+`npm run benchmark:continuous --prefix royale/multiplayer` now compares 20 and 30 Hz and writes `qa/prediction-benchmark.json`. The previous 10/20 Hz evidence remains in `qa/continuous-benchmark.json`. Faster publication increases bandwidth. The two- and five-player results must be evaluated separately; a median below 75 ms is not a promise that slower responses or physical devices will meet that target.
+
+This work remains on the development branch. It does not deploy a paid host or change the current phone link. Hosted and physical-device validation are still outstanding.
+
+Clean comparison (synthetic 50 ms RTT, 24 seconds each, fixture cloud; 123 tests passed before the run):
+
+| Players | Updates/sec | Median confirmation | 95th percentile | Total outbound |
+|---|---|---|---|---|
+| 2 | 20 | 79.11 ms | 101.83 ms | 176.29 KB/s |
+| 2 | 30 | 63.18 ms | 86.55 ms | 263.51 KB/s |
+| 5 | 20 | 80.58 ms | 105.75 ms | 810.3 KB/s |
+| 5 | 30 | 88.17 ms | 97.9 ms | 1213.17 KB/s |
+
+All runs reported zero errors and four fixture checkpoint writes per hero. With five players, 30 Hz improved the 95th percentile and frame spacing but worsened median confirmation. This is a mixed result, not proof of universal latency improvement. Physical-device feel, bandwidth constraints and real hosted timing remain unverified.

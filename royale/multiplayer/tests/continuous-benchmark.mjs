@@ -55,6 +55,6 @@ async function run(players,snapshotHz,rttMs){
   }finally{clearInterval(timer);for(const s of sessions)s.client.close();for(const t of delays)clearTimeout(t);for(const s of sockets)s.destroy();await new Promise(r=>proxy.close(r));await app.close();globalThis.WebSocket=Native;await rm(dir,{recursive:true,force:true});}
 }
 const results=[];
-for(const players of [2,5])for(const hz of [10,20])results.push(await run(players,hz,50));
+for(const players of [2,5])for(const hz of [20,30])results.push(await run(players,hz,50));
 const report={kind:'local-continuous-authority-comparison',limitations:'Synthetic 50 ms round-trip TCP delay on loopback. Fixture cloud, real temporary SQLite. Not a hosted server, mobile rendering, or real Supabase save-latency test.',measuredAt:new Date().toISOString(),results};
-await mkdir(new URL('../qa/',import.meta.url),{recursive:true});await writeFile(new URL('../qa/continuous-benchmark.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
+await mkdir(new URL('../qa/',import.meta.url),{recursive:true});await writeFile(new URL('../qa/prediction-benchmark.json',import.meta.url),JSON.stringify(report,null,2)+'\n');

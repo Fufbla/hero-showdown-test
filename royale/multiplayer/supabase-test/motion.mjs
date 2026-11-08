@@ -13,13 +13,13 @@ export function readMotion(raw){
 }
 export const movementHz=players=>Math.min(20,Math.max(4,Math.floor(100/Math.max(2,players)**2)));
 export class PeerMotion {
-  constructor(){this.peers=new Map();}
+  constructor({minBuffer=50}={}){this.minBuffer=Math.max(16,Math.min(100,minBuffer));this.peers=new Map();}
   push(raw,known,zone,now=performance.now()){
     const p=readMotion(raw);if(!p||p.zone!==zone||!known.some(h=>h.id===p.id))return false;
     let track=this.peers.get(p.id);
     if(track?.zone!==zone){track={zone,seq:0,samples:[]};this.peers.set(p.id,track);}
     if(p.seq<=track.seq)return false;
-    const previous=track.samples.at(-1);if(previous){track.gaps??=[];track.gaps.push(Math.max(0,now-previous.at));if(track.gaps.length>5)track.gaps.shift();const gaps=[...track.gaps].sort((a,b)=>a-b);track.buffer=Math.max(50,Math.min(100,gaps[Math.floor(gaps.length/2)]));}
+    const previous=track.samples.at(-1);if(previous){track.gaps??=[];track.gaps.push(Math.max(0,now-previous.at));if(track.gaps.length>5)track.gaps.shift();const gaps=[...track.gaps].sort((a,b)=>a-b);track.buffer=Math.max(this.minBuffer,Math.min(100,gaps[Math.floor(gaps.length/2)]));}
     track.seq=p.seq;track.samples.push({...p.hero,at:now});if(track.samples.length>8)track.samples.shift();return true;
   }
   sample(peer,zone,now=performance.now()){

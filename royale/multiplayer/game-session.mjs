@@ -4,20 +4,23 @@ import {drawPowerHero,drawPowerWorld} from '../power-art.mjs';
 import {drawMergeWorld} from '../legendary-art.mjs';
 import {pickupLoot} from '../world-loot.mjs';
 import {Game,STEP} from '../core.mjs';
-import {PeerMotion,zoneOf} from './supabase-test/motion.mjs';
+import {PeerMotion,zoneOf,motionPacket} from './supabase-test/motion.mjs';
 export const REMOTE_METHODS=['travel','enterBoss','enterLegendary','visitTree','leaveTree','upgradePower','equipPower','equipItem','buyCostume','buyHealthRoot','useHealthRoot','applyMakeover','sellItem','discardItem','resolveReward','acceptReward','claimChest','claimMergeReward','equipMergeMix','activateMergeSet','returnNormalEquipment','returnCheckpoint','pickupLoot'];
 export const MIGRATION_KEY='healthia.royale.multiplayer.links.v1';
 export class GameSession extends EventTarget {
   constructor({url,getToken,storage=localStorage,onState,onError,client=null}){
-    super();this.client=client||new MultiplayerClient(url,getToken);this.storage=storage;this.onState=onState;this.onError=onError;this.active=false;this.queue=Promise.resolve();this.receivedAt=0;this.peerMotion=new PeerMotion();this.enemyMotion=new Map();
+    super();this.client=client||new MultiplayerClient(url,getToken);this.storage=storage;this.onState=onState;this.onError=onError;this.active=false;this.queue=Promise.resolve();this.receivedAt=0;this.peerMotion=new PeerMotion({minBuffer:this.client.replayBySequence?33:50});this.enemyMotion=new Map();
     this.client.addEventListener('state',({detail:s})=>{
-      const before=this.game,previousHero=this.client.fastMotion&&before?this.presentHero():null,previousPeers=new Map((this.state?.nearby||[]).map(p=>[p.id,p]));
+      const before=this.game,samePresentation=this.state?.id===s.id&&this.state?.code===s.code&&this.presentationGeneration===this.client.generation;
+      this.presentationGeneration=this.client.generation;
+      if(!samePresentation){this.peerMotion.peers.clear();this.enemyMotion.clear();this.correction=null;this.predictedAt=0;}
+      const previousHero=this.client.fastMotion&&before&&samePresentation?this.presentHero():null,previousPeers=new Map((this.state?.nearby||[]).map(p=>[p.id,p]));
       // A stateless sync can already cover the time of inputs sent while its
       // response was in flight. Replaying that entire queue advances movement
       // twice and makes the next authoritative update pull the hero backwards.
       const serverTime=s.game.time;
       if(this.client.localPrediction&&s.phase==='playing'&&s.code)for(const packet of this.client.unacked){
-        if(!this.client.fastMotion||packet.predictedTime===undefined||packet.predictedTime>serverTime+STEP/2)this.predict(s.game,packet.input);
+        if(this.client.replayBySequence||!this.client.fastMotion||packet.predictedTime===undefined||packet.predictedTime>serverTime+STEP/2)this.predict(s.game,packet.input);
       }
       s.game.events=s.game.events.filter(e=>e.netId>(this.eventSeq||0));for(const e of s.game.events)this.eventSeq=Math.max(this.eventSeq||0,e.netId);
       this.state=s;this.game=s.game;this.receivedAt=performance.now();
@@ -25,9 +28,10 @@ export class GameSession extends EventTarget {
       if(before&&before.regionId===s.game.regionId&&!!before.arenaScene===!!s.game.arenaScene){s.game.hero.prevX=before.hero.x;s.game.hero.prevY=before.hero.y;for(const e of s.game.enemies){const prior=before.enemies.find(p=>p.id===e.id);if(prior){e.prevX=prior.x;e.prevY=prior.y;}}}
       if(this.client.fastMotion){
         const h=s.game.hero,dx=(previousHero?.x??h.x)-h.x,dy=(previousHero?.y??h.y)-h.y;
-        this.correction=before&&zoneOf(before)===zoneOf(s.game)&&Math.hypot(dx,dy)<200&&before.hero.dead===h.dead?{x:dx,y:dy,at:performance.now()}:null;
+        this.correction=samePresentation&&before&&zoneOf(before)===zoneOf(s.game)&&Math.hypot(dx,dy)<200&&before.hero.dead===h.dead?{x:dx,y:dy,at:performance.now()}:null;
         h.prevX=h.x;h.prevY=h.y;this.trackEnemies(s.game.enemies);
       }
+      if(this.client.replayBySequence)for(const p of s.nearby)this.peerMotion.push(motionPacket(p.id,s.serial,zoneOf(s.game),p.hero),s.nearby,zoneOf(s.game));
       for(const p of s.nearby){const prev=previousPeers.get(p.id);p.hero.prevX=prev?.hero.x??p.hero.x;p.hero.prevY=prev?.hero.y??p.hero.y;}
       for(const method of REMOTE_METHODS)s.game[method]=(...args)=>this.command(method,args).catch(e=>{this.onError(e.message);return false;});
       this.active=true;if(this.pauseGeneration!==this.client.generation){this.pauseGeneration=this.client.generation;if(this.desiredPause!==undefined&&s.game.paused!==this.desiredPause)void this.command('pause',[this.desiredPause]).catch(this.onError);}
@@ -65,7 +69,7 @@ export class GameSession extends EventTarget {
   pause(paused){if(this.active&&this.desiredPause!==paused){this.desiredPause=paused;void this.command('pause',[paused]).catch(this.onError);}}
   input(action){
     if(this.client.fastMotion&&performance.now()-this.client.lastServerAt>2500){this.client.ready=false;this.client.emit('status','Reconnecting · waiting for confirmed progress');return;}
-    this.client.input(action);if(this.client.localPrediction&&this.state?.phase==='playing'&&this.state.code){this.predict(this.game,action);const packet=this.client.unacked?.at(-1);if(this.client.fastMotion&&packet)packet.predictedTime=this.game.time;this.predictedAt=performance.now();this.client.present?.(this.game);}
+    const accepted=this.client.input(action);if(accepted!==false&&this.client.localPrediction&&this.state?.phase==='playing'&&this.state.code){this.predict(this.game,action);const packet=this.client.unacked?.at(-1);if(this.client.fastMotion&&packet)packet.predictedTime=this.game.time;this.predictedAt=performance.now();this.client.present?.(this.game);}
   }
   predict(game,action){
     // Presentation only. Server snapshots alone grant HP, damage, XP and loot.

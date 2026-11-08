@@ -1,0 +1,81 @@
+{
+  "kind": "local-continuous-authority-comparison",
+  "limitations": "Synthetic 50 ms round-trip TCP delay on loopback. Fixture cloud, real temporary SQLite. Not a hosted server, mobile rendering, or real Supabase save-latency test.",
+  "measuredAt": "2026-11-08T08:21:00.906Z",
+  "results": [
+    {
+      "players": 2,
+      "snapshotHz": 20,
+      "syntheticRttMs": 50,
+      "seconds": 24.3,
+      "confirmedInputs": 1446,
+      "inputConfirmationMedianMs": 79.11,
+      "inputConfirmationP95Ms": 101.83,
+      "frameGapP95Ms": 57.33,
+      "tickP95Ms": 3.18,
+      "outboundKBps": 176.29,
+      "cloudWritesPerHero": [
+        4,
+        4
+      ],
+      "errors": []
+    },
+    {
+      "players": 2,
+      "snapshotHz": 30,
+      "syntheticRttMs": 50,
+      "seconds": 24.3,
+      "confirmedInputs": 1446,
+      "inputConfirmationMedianMs": 63.18,
+      "inputConfirmationP95Ms": 86.55,
+      "frameGapP95Ms": 40.35,
+      "tickP95Ms": 2.85,
+      "outboundKBps": 263.51,
+      "cloudWritesPerHero": [
+        4,
+        4
+      ],
+      "errors": []
+    },
+    {
+      "players": 5,
+      "snapshotHz": 20,
+      "syntheticRttMs": 50,
+      "seconds": 24.3,
+      "confirmedInputs": 3595,
+      "inputConfirmationMedianMs": 80.58,
+      "inputConfirmationP95Ms": 105.75,
+      "frameGapP95Ms": 56.56,
+      "tickP95Ms": 5.99,
+      "outboundKBps": 810.3,
+      "cloudWritesPerHero": [
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "errors": []
+    },
+    {
+      "players": 5,
+      "snapshotHz": 30,
+      "syntheticRttMs": 50,
+      "seconds": 24.31,
+      "confirmedInputs": 3585,
+      "inputConfirmationMedianMs": 88.17,
+      "inputConfirmationP95Ms": 97.9,
+      "frameGapP95Ms": 40.02,
+      "tickP95Ms": 5.97,
+      "outboundKBps": 1213.17,
+      "cloudWritesPerHero": [
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "errors": []
+    }
+  ]
+}

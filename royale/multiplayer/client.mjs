@@ -4,13 +4,13 @@ import {PROTOCOL} from './protocol.mjs';
 // Intent-only transport. A command resolves after its durable state, not an early
 // acknowledgement, so menus never render an unconfirmed inventory or upgrade.
 export class MultiplayerClient extends EventTarget {
-  constructor(url,getToken){super();Object.assign(this,{url,getToken,heroId:null,pending:null,closed:true,retry:0,requests:new Map(),generation:0});}
+  constructor(url,getToken){super();Object.assign(this,{url,getToken,heroId:null,pending:null,closed:true,retry:0,requests:new Map(),generation:0,localPrediction:true,fastMotion:true,replayBySequence:true,unacked:[],lastServerAt:0,metrics:{syncRtt:[]}});}
   emit(type,detail){this.dispatchEvent(new CustomEvent(type,{detail}));}
   async connect(){
     clearTimeout(this.timer);this.closed=false;const generation=++this.generation;this.emit('status','Connecting');
     try{
       const token=await this.getToken();if(this.closed||generation!==this.generation)return;
-      const ws=new WebSocket(this.url);this.socket=ws;this.baseline=null;this.serial=0;this.inputSeq=0;this.ready=false;
+      const ws=new WebSocket(this.url);this.socket=ws;this.baseline=null;this.serial=0;this.inputSeq=0;this.unacked=[];this.lastServerAt=performance.now();this.ready=false;
       ws.onopen=()=>ws.send(JSON.stringify({type:'auth',token:typeof token==='string'?token:token.token,kind:token?.kind,slot:token?.slot,protocol:PROTOCOL}));
       ws.onmessage=event=>{
         if(generation!==this.generation)return;
@@ -24,6 +24,10 @@ export class MultiplayerClient extends EventTarget {
             if(m.protocol!==PROTOCOL)throw Error('Game version changed. Reload to reconnect.');
             if(m.base!==this.serial)throw Error('State baseline lost.');
             const wasReady=this.ready,oldCode=this.state?.code;this.baseline=applyRuntimeDelta(this.baseline,m.delta);this.serial=m.serial;this.heroId=m.id;this.state=m;this.game=decodeRuntime(JSON.stringify(this.baseline));this.ready=true;
+            this.lastServerAt=performance.now();
+            const confirmed=this.unacked.filter(p=>p.seq<=m.inputSeq);
+            if(confirmed.length){this.metrics.syncRtt.push(this.lastServerAt-confirmed[0].sentAt);if(this.metrics.syncRtt.length>120)this.metrics.syncRtt.shift();}
+            this.unacked=this.unacked.filter(p=>p.seq>m.inputSeq);
             this.emit('state',{...m,game:this.game});if(!wasReady||oldCode!==m.code)this.emit('status',m.code?'Connected · '+m.code:'Playing solo · account saved');
             if(this.pending){if(m.commandSeq===this.pending.seq&&m.cloudPending!==this.pending.seq){this.pending.resolve(m.commandResult??this.pending.result??true);this.pending=null;}else if(m.commandSeq>this.pending.seq){this.pending.reject(Error('A newer session changed this hero.'));this.pending=null;}else if(this.pending.sentGeneration!==generation){this.send(this.pending.packet);this.pending.sentGeneration=generation;}}
           }else if(m.type==='checkpoint')this.emit('checkpoint',m);
@@ -50,7 +54,12 @@ export class MultiplayerClient extends EventTarget {
   }
   select(id){this.heroId=id;this.send({type:'select',id});}
   create(slot,look){this.send({type:'create',slot,look});}
-  input(input){if(this.ready)this.send({type:'input',seq:++this.inputSeq,input});}
+  input(input){
+    if(!this.ready)return false;
+    if(this.unacked.length>=90){this.ready=false;this.socket?.close();return false;}
+    const packet={seq:++this.inputSeq,input:structuredClone(input),sentAt:performance.now()};this.unacked.push(packet);
+    this.send({type:'input',seq:packet.seq,input:packet.input});return true;
+  }
   command(method,args=[]){
     if(this.pending)return Promise.reject(Error('Wait for the previous change to be confirmed.'));
     if(!this.ready)return Promise.reject(Error('Reconnect before changing your hero.'));
