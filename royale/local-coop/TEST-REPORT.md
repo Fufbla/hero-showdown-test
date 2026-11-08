@@ -95,3 +95,9 @@ The cloud browser often supplied animation frames about 1,016 ms apart despite m
 | `tools/serve-local-coop.mjs` | Local test server with restricted cloud relay |
 
 File paths in rows without a prefix are relative to `royale/local-coop/`.
+
+## Deployed website verification
+
+GitHub Pages successfully deployed `3c6535c264a513ec533546beb54e9b60cfe4a075`. The official V3 welcome screen opens the separate Local Co-op page with both account panels. The deployed browser run passed all 17 simulated-controller checks, including shared gameplay, separate input, equipment, teleportation, pause upgrades, both Ready, eight-second timers, and Player 1 departure. Both practice queues saved nine times; timer intervals were 7,961–8,030.1 ms. The browser cloud probe returned the expected HTTP 400 for an invalid-format code without reading an account. Results are in `tests/live-site-browser-results.json`.
+
+The first cold page load reported an artwork-load failure; reloading recovered, and the subsequent complete playtest and normal login-page check succeeded. No physical-controller or Mac performance claim is made. The cloud browser measured 4.71–25.49 FPS across scenarios and again showed intermittent one-second animation-frame gaps.
