@@ -51,3 +51,21 @@ test('concurrent departures remain paused until both final saves settle',async()
  const {s,profiles}=setup();const release=[];profiles.forEach((p,i)=>p.save=()=>new Promise(r=>release[i]=r));
  const a=s.leave(0),b=s.leave(1);assert(s.paused);release[0]();await a;assert(s.paused);assert.equal(s.markReady(1),false);release[1]();await b;assert.equal(s.active.size,0);
 });
+
+for(const claimed of [[false,false],[true,false],[false,true],[true,true]])test(`mixed boss chest eligibility ${claimed}: retries and restore retain each hero's claim`,async()=>{
+ const {s,profiles}=setup();
+ for(let i=0;i<2;i++)if(claimed[i]){s.games[i].world.bossVictories=[1];s.games[i].bossProgress.records[1]={wins:1,chest:{state:'claimed',coins:0,roots:0,items:[]}};}
+ const {room,world}=bossVictory(s);const before=s.games.map(g=>structuredClone(g.bossProgress));s.authority.completeWorld(room,world);assert.deepEqual(s.games.map(g=>g.bossProgress),before);
+ for(let i=0;i<2;i++){s.games[i].combatTimer=0;assert.equal(!!s.games[i].availableChest(),!claimed[i]);assert.equal(s.command(i,'claimChest'),!claimed[i]);assert.equal(s.command(i,'claimChest'),false);}
+ await s.saveAll();for(const p of profiles){const g=new Game({save:decodeSave(JSON.stringify(p.saved[0].snapshot))});assert.equal(g.bossProgress.records[1].chest.state,'claimed');assert.equal(g.claimChest(),false);}
+});
+test('companion in leader-only unlocked region earns own chest after actual shared victory',()=>{
+ const {s}=setup();s.games[0].world.unlocked=[1,2,3,4];s.command(0,'travel',[4]);s.games[1].world.unlocked=[1,2];
+ s.games[0].world.bossVictories=[4];s.games[0].bossProgress.records[4]={wins:1,chest:{state:'claimed',coins:0,roots:0,items:[]}};
+ bossVictory(s);assert.equal(s.games[0].availableChest(),null);assert(s.games[1].availableChest());assert(s.games[1].world.bossVictories.includes(4));assert.deepEqual(s.games.map(g=>g.hero.coins),[10,100]);
+});
+test('full inventory holds all chest equipment safely through save/restore',async()=>{
+ const {s,profiles}=setup();for(const g of s.games)for(let n=0;n<20;n++)g.inventory.items.push(createEquipment(1,'ordinary',0,g.inventory.nextId++));
+ bossVictory(s);for(let i=0;i<2;i++){const g=s.games[i];g.combatTimer=0;assert(s.command(i,'claimChest'));assert(g.inventory.pending.length>0);assert.equal(s.command(i,'acceptReward'),false);}
+ await s.saveAll();for(const p of profiles){const g=new Game({save:decodeSave(JSON.stringify(p.saved[0].snapshot))});assert.equal(g.inventory.items.length,20);assert(g.inventory.pending.length>0);assert.equal(g.claimChest(),false);}
+});

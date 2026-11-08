@@ -24,7 +24,7 @@ node tools/serve-local-coop.mjs
 Open `http://127.0.0.1:4173/royale/local-coop/` on that computer. No package installation is needed. The server binds only to loopback. It serves the game and forwards existing cloud requests to the unchanged V3 endpoint, whose CORS policy permits only the official GitHub Pages origin. It stores no codes, credentials, or snapshots. There is no movement or combat server.
 
 1. Connect two controllers by USB or pair them in the computer's Bluetooth settings. Press a button on each so the browser exposes them. Use a browser/controller combination with a standard Gamepad API mapping.
-2. Each player enters their own ten-digit code, loads their three hero slots, and selects a saved hero. Create a hero in the existing solo game first if needed. Codes are cleared after authentication.
+2. Each player enters their own ten-digit code, loads their three hero slots, and selects a saved hero. Empty slots now open the full character creator directly in local co-op. Codes are cleared after authentication.
 3. Assign a different detected controller to each player and select Ready. Start enables only when both accounts, heroes, and controllers are ready.
 4. Player 1 leads the camera. Player 2 has independent movement and returns to safe ground near Player 1 when fully offscreen beyond a 32-unit margin.
 5. Start/Options pauses the world and opens separate menus. Each controller has its own focus. Both must select Ready; either can cancel Ready. After one leaves, the remaining player can resume alone.
@@ -43,7 +43,7 @@ Open `http://127.0.0.1:4173/royale/local-coop/` on that computer. No package ins
 | D-pad up | Portal |
 | Left-stick click | Tree of Eris |
 | Right-stick click | Health Root |
-| Stick / D-pad in menus | Select controls; left/right changes a selector |
+| Stick / D-pad in menus | Move focus; A opens choices; B goes back; LB/RB switch tabs |
 
 Controller assignments never silently move to another index. Disconnect pauses both heroes. Reconnect the same device at its assigned index. Browser/OS reassignment to a different Gamepad index requires ending the session safely and assigning controllers again.
 
@@ -89,3 +89,15 @@ The browser harness at `?qa=1` uses two simulated gamepads and practice profiles
 `tests/live-cloud.mjs` creates two NEW test accounts and refuses to seed any nonempty account. It checks independent real writes/restoration, equipment copies, authorization, and stale-save rejection. It never accepts an existing account code. Running it again creates two more test accounts; do not run it as an ordinary offline unit test.
 
 Results and remaining hardware checks are recorded in `TEST-REPORT.md` and the JSON evidence files. The managed browser preview is internal QA. The approved website playtest uses the existing GitHub Pages origin; the optional local server also works without changing the live backend.
+
+## Same-device controller, hero and reward update (November 8)
+
+These improvements apply only to local co-op. In Pause → Superpowers, select an owned power and confirm Slot 1, 2 or 3. Selecting an already equipped power swaps slots. A/Cross opens selectors, B/Circle cancels or goes back, and LB/RB changes menu tabs. Each assigned controller operates only its own panel. Both Ready controls are still required.
+
+Each hero now has compact power icons below their own health bar, with independently calculated cooldown shading/countdowns. The fourth icon appears only for Villain Merge. The existing power glyph artwork is reused; icons update at the existing HUD cadence without network calls or per-frame DOM rebuilding.
+
+After code login, choose any empty hero slot to use the full existing creator. Confirm Create & Save to return to co-op selection. Delete Hero opens a named confirmation with Cancel selected first. Deletion is disabled during an active local session, revision-checked and account-scoped. The new `royale-local-heroes` endpoint archives the full snapshot before clearing that slot, atomically. It does not delete accounts or alter the existing login/save/online endpoints. Recovery archives are service-only; stale tabs cannot restore or erase a replacement with an old revision.
+
+A verified shared boss victory now also grants the companion their own first chest when they joined a region that only the leader had unlocked. Claimed and unclaimed chest records remain personal. Full inventory chest equipment stays in the existing pending-reward queue and is cloud-saved.
+
+See `MENU-UPDATE-REPORT.md` for verification and limitations.

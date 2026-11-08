@@ -1,6 +1,7 @@
 import {Game,decodeSave} from '../../core.mjs';import {styleCDefault} from '../../style-c-defaults.mjs';import {serialize} from '../serialize.mjs';import {pickupLoot} from '../../world-loot.mjs';
-import {CloudProfile} from '../cloud.mjs?v=20261108-fetch';
-import {verifyBrowserCloudAccounts} from './browser-cloud.mjs';
+import {CloudProfile} from '../cloud.mjs?v=20261108-coop-menus';
+import {installHeroChecks} from './browser-hero-management.mjs';
+import {verifyBrowserCloudAccounts} from './browser-cloud.mjs?v=20261108-coop-menus';
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const frames=async(n=3)=>{for(let i=0;i<n;i++)await new Promise(requestAnimationFrame);};
 const percentile=(a,p)=>[...a].sort((x,y)=>x-y)[Math.min(a.length-1,Math.floor(a.length*p))]||0;
@@ -11,13 +12,18 @@ export async function install(api){
  const saveTimes=[[],[]];
  api.players.forEach((p,i)=>{
   const g=new Game({look:{...styleCDefault(i?'female':'male'),name:i?'Nova':'Atlas'}});g.hero.level=14;g.hero.maxHp=295;g.hero.hp=295;g.powers.data.points=13;for(const id of ['fireball','roots','whirlwind']){g.powers.data.levels[id]=2;g.powers.data.points-=2;}g.powers.data.equipped=['fireball','roots','whirlwind'];
-  const snap=JSON.parse(g.save());p.profile={identity:'automated-'+i,slots:[1,2,3].map(n=>({slot_number:n,snapshot:n===1?snap:null,revision:0})),async save(slot,snapshot){await serialize({snapshot},{validate:true});saveTimes[i].push(performance.now());this.slots[slot-1].snapshot=structuredClone(snapshot);this.slots[slot-1].revision++;},forget(){}};p.slot=1;p.card.querySelector('form').hidden=true;api.profileStatus(i,'Practice hero · simulated input only');api.renderChoices(i);
+  const snap=JSON.parse(g.save());p.profile={identity:'automated-'+i,slots:[1,2,3].map(n=>({slot_number:n,snapshot:n===1?snap:null,revision:0})),async save(slot,snapshot){await serialize({snapshot},{validate:true});saveTimes[i].push(performance.now());this.slots[slot-1].snapshot=structuredClone(snapshot);this.slots[slot-1].revision++;},async create(slot,snapshot,revision){if(this.slots[slot-1].snapshot||this.slots[slot-1].revision!==revision)throw Error('Slot conflict');await this.save(slot,snapshot);},async remove(slot,{confirmed,revision,name}){const row=this.slots[slot-1];if(!confirmed||row.revision!==revision||row.snapshot.look.name!==name)throw Error('Confirm current hero');row.snapshot=null;row.revision++;},forget(){}};p.slot=1;p.card.querySelector('form').hidden=true;api.profileStatus(i,'Practice hero · simulated input only');api.renderChoices(i);
  });
  api.refreshControllers();api.updateStart();
  const neutral=()=>pads.forEach(p=>{p.axes.fill(0);p.buttons.forEach(b=>{b.pressed=false;b.value=0;});});
- const pulse=async(i,b)=>{pads[i].buttons[b].pressed=true;await frames();pads[i].buttons[b].pressed=false;await frames();};
- const bothPulse=async b=>{pads.forEach(p=>p.buttons[b].pressed=true);await frames();pads.forEach(p=>p.buttons[b].pressed=false);await frames();};
+ const pulse=async(i,b)=>{pads[i].buttons[b].pressed=true;await frames(1);pads[i].buttons[b].pressed=false;await frames(1);};
+ const bothPulse=async b=>{pads.forEach(p=>p.buttons[b].pressed=true);await frames(1);pads.forEach(p=>p.buttons[b].pressed=false);await frames(1);};
+ installHeroChecks(api,{pulse,frames});
  const checks=[],scenarios=[];
+ const controls=i=>[...(api.players[i].selectMenu||$('panel-'+i)).querySelectorAll('button,select,input')].filter(n=>!n.disabled&&n.getClientRects().length);
+ const focusPad=async(i,predicate)=>{for(let n=0;n<90;n++){const all=controls(i);if(predicate(all[api.players[i].focus]))return;await pulse(i,13);}throw Error('Controller could not reach requested control');};
+ const choosePad=async(i,predicate)=>{await focusPad(i,predicate);await pulse(i,0);};
+
  const cloudCheck=api.button('Check cloud connection',async()=>{
   const config=await fetch('./config.json').then(r=>r.json()),profile=new CloudProfile({endpoint:config.endpoint});
   try{await profile.request('verify',{code:'invalid'},false);$('qa-cloud').textContent=JSON.stringify({passed:false,error:'Invalid code unexpectedly accepted.'});}
@@ -26,7 +32,7 @@ export async function install(api){
  const accountsResult=api.el('p');accountsResult.id='qa-cloud-accounts';
  const accountsCheck=api.button('Verify login and saves with 2 new test accounts',async()=>{
   accountsCheck.disabled=true;accountsResult.textContent='Verifying native browser login and separate saves…';
-  try{const config=await fetch('./config.json').then(r=>r.json());accountsResult.textContent=JSON.stringify(await verifyBrowserCloudAccounts(config.endpoint));}
+  try{const config=await fetch('./config.json').then(r=>r.json());accountsResult.textContent=JSON.stringify(await verifyBrowserCloudAccounts(config.endpoint,config.heroEndpoint));}
   catch(e){accountsResult.textContent=JSON.stringify({passed:false,error:e.message});}
  });$('qa-tools').append(accountsCheck,accountsResult);
  const check=(name,condition)=>{if(!condition)throw Error(name);checks.push(name);};
@@ -66,6 +72,28 @@ export async function install(api){
    safe();s.games.forEach(g=>{g.combatTimer=0;});await api.act(0,'visitTree');await api.act(1,'visitTree');api.players.forEach(p=>p.tab='powers');api.renderPanels();
    for(let i=0;i<2;i++){const root=$('panel-'+i),controls=[...root.querySelectorAll('button,select,input')].filter(n=>!n.disabled&&n.getClientRects().length);api.players[i].focus=controls.findIndex(b=>b.textContent==='+1');}
    const points=s.games.map(g=>g.powers.data.points);await bothPulse(0);check('Each controller upgrades its own hero simultaneously',s.games.every((g,i)=>g.powers.data.points===points[i]-1));
+   // Exercise the real two-panel controller handlers, with no mouse clicks.
+   for(let i=0;i<2;i++){
+    const g=s.games[i],other=JSON.stringify(s.games[1-i].powers.data.equipped);
+    for(const slot of [0,1,2]){
+     await choosePad(i,b=>b?.dataset.menuKey==='power-choice-fireball');
+     await choosePad(i,b=>b?.dataset.menuKey==='assign-slot-'+slot);
+     check(`Controller ${i+1} assigns Fireball to Slot ${slot+1}`,g.powers.data.equipped[slot]==='fireball');
+    }
+    check(`Player ${i+1} assignments leave the other hero unchanged`,JSON.stringify(s.games[1-i].powers.data.equipped)===other);
+    await pulse(i,1);check(`Controller ${i+1} Back cancels power selection`,!api.players[i].selectedPower);
+   }
+   const stopped=s.games.map(g=>g.hero.x);pads.forEach(p=>p.axes[0]=1);await frames(5);neutral();check('Menu movement cannot move either hero',s.games.every((g,i)=>g.hero.x===stopped[i]));
+   for(let i=0;i<2;i++){
+    await pulse(i,5);check(`Controller ${i+1} changes to Equipment tab`,api.players[i].tab==='gear');
+    await choosePad(i,b=>b?.textContent==='Equip');check(`Controller ${i+1} equips own item`,Object.values(s.games[i].inventory.equipped).some(Boolean));
+    await choosePad(i,b=>b?.textContent==='Unequip');await choosePad(i,b=>b?.textContent.startsWith('Sell ·'));
+    check(`Controller ${i+1} sells eligible equipment`,s.games[i].inventory.items.length===0);
+   }
+   for(let i=0;i<2;i++){const g=s.games[i];g.powers.data.equipped=['fireball','roots','whirlwind'];g.powers.cooldowns.fireball=i===0?4.5:0;}api.updateHUD();
+   check('Each hero has three compact HUD icons',s.games.every((g,i)=>$('powers-'+i).querySelectorAll('.cooldown-icon:not([hidden])').length===3));
+   check('Cooldown labels are independent', $('powers-0').textContent.includes('5')&&!$('powers-1').textContent.includes('5'));
+   check('HUD icons sit under their own health bars',s.games.every((g,i)=>$('powers-'+i).getBoundingClientRect().top>=$('hp-'+i).getBoundingClientRect().bottom));
    await record('Independent pause upgrades',2500);api.markReady(0);check('One Ready cannot resume',s.paused);api.markReady(0);check('Ready can be cancelled',!s.ready[0]);api.markReady(0);api.markReady(1);check('Both Ready resume together',!s.paused&&!$('menu').open);
    await record('Autosaves during combat',9000,n=>{pads.forEach(p=>{p.buttons[2].pressed=n%4===0;p.buttons[4].pressed=n%20===0;});});
    check('Both save queues ran',saveTimes.every(a=>a.length>=3));check('Eight-second timer fired repeatedly',api.autosaveTimes.length>=3);const cadence=api.autosaveTimes.slice(1).map((x,i)=>round(x-api.autosaveTimes[i]));

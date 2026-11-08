@@ -1,4 +1,4 @@
-import {EqualXPAuthority} from './equal-xp-authority.mjs';
+import {EqualXPAuthority} from './equal-xp-authority.mjs?v=20261108-coop-menus';
 import {Game,decodeSave} from '../core.mjs';
 import {encodeRuntime,decodeRuntime} from '../multiplayer/runtime.mjs';
 import {expireLoot} from '../world-loot.mjs';
@@ -37,6 +37,7 @@ export class LocalSession {
   const land=safeLanding(b.game,a.game.hero,{x:Math.max(0,a.game.hero.x-500),y:a.game.hero.y-650,width:1000,height:850});
   if(land)Object.assign(b.game.hero,{x:land.x,y:land.y,prevX:land.x,prevY:land.y,vx:0,vy:0,grounded:true,jumps:0});
   this.heroes.forEach(h=>{h.game.paused=true;h.game.drain();});
+  selections.forEach(s=>{s.profile.activeSlots??=new Set();s.profile.activeSlots.add(s.slot);});
  }
  get games(){return this.heroes.map(h=>h.game);}
  setPaused(value){this.paused=value;for(const i of this.active)this.heroes[i].game.paused=value;}
@@ -85,6 +86,7 @@ export class LocalSession {
   if(!this.active.has(i))return {ok:true};this.leaving.add(i);this.pause();const saved=await this.saveOne(i);
   // On failure the player stays signed in with their pending checkpoint, allowing a safe retry.
   this.leaving.delete(i);if(!saved.ok)return saved;
+  this.selections[i].profile.activeSlots?.delete(this.selections[i].slot);
   const h=this.heroes[i],room=this.authority.state.rooms.get(h.room);this.authority.detach(h.id,this.authority.connections.get(h.id));room.members.delete(h.id);this.authority.state.heroes.delete(h.id);this.active.delete(i);this.ready[i]=false;
   if(this.leader===i)this.leader=[...this.active][0]??null;
   if(this.active.size){room.code=null;room.hostId=this.heroes[this.leader].id;room.phase='playing';this.setPaused(this.leaving.size>0);}return saved;

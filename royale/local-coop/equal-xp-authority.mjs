@@ -46,7 +46,15 @@ export class EqualXPAuthority extends Authority {
       const g=h.game,dead=g.hero.dead;g.hero.dead=false;
       try{
         if(g.arenaScene.legendary){g.pendingLegendaryVictory=g.arenaScene.legendary;g.prepareLegendaryVictory();}
-        else this.sharedXP(g,players.length,(i-offset+players.length)%players.length,()=>Game.prototype.completeBoss.call(g));
+        else {
+          // A companion can arrive in the leader's region before unlocking it
+          // in solo play. The verified shared victory belongs to both heroes.
+          // Keep each hero's chest record; never copy the leader's reward history.
+          const region=world.fight.region;
+          if(!g.world.unlocked.includes(region))g.world.unlocked.push(region);
+          g.bossEncounter=world.fight;
+          this.sharedXP(g,players.length,(i-offset+players.length)%players.length,()=>Game.prototype.completeBoss.call(g));
+        }
       }finally{g.hero.dead=dead;}
       g.bossEncounter=null;g.arenaScene.cleared=true;g.pendingLegendaryVictory=null;h.revision++;
     });}finally{this.pool=null;}

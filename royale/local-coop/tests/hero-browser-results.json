@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "checks": [
+    "Player 1 opens full existing creator",
+    "Other controller cannot alter Player 1 creator",
+    "Player 1 can navigate character tabs",
+    "Player 1 creates and saves hero in Slot 2",
+    "Player 1 original hero is unchanged",
+    "Player 1 sees named deletion confirmation",
+    "Player 1 Back cancels deletion",
+    "Player 1 explicit confirmation removes disposable hero",
+    "Player 1 other slots remain intact",
+    "Player 2 opens full existing creator",
+    "Other controller cannot alter Player 2 creator",
+    "Player 2 can navigate character tabs",
+    "Player 2 creates and saves hero in Slot 2",
+    "Player 2 original hero is unchanged",
+    "Player 2 sees named deletion confirmation",
+    "Player 2 Back cancels deletion",
+    "Player 2 explicit confirmation removes disposable hero",
+    "Player 2 other slots remain intact"
+  ],
+  "physicalControllers": false,
+  "cloud": "Simulated profiles only; live account tests are separate."
+}

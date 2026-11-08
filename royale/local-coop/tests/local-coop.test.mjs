@@ -26,6 +26,10 @@ function cloudFixture(){
    Object.assign(row,{revision:row.revision+1,snapshot:structuredClone(body.snapshot),updated_at:new Date().toISOString()});
    if(loseResponse){loseResponse=false;throw Error('Response lost');}return response(row);
   }
+  if(body.action==='delete-hero'){
+   const row=slots.find(r=>r.slot_number===body.slot);if(!body.confirmed||row.revision!==body.revision||row.snapshot?.look.name!==body.name)return response({error:'Revision conflict'},409);
+   Object.assign(row,{revision:row.revision+1,snapshot:null});if(loseResponse){loseResponse=false;throw Error('Response lost');}return response(row);
+  }
   throw Error('Unexpected action');
  };
  return {accounts,sessions,requests,store,fetcher,profile:()=>new CloudProfile({fetcher,storage:store}),lose(){loseResponse=true;},setOffline(v){offline=v;}};
@@ -127,4 +131,22 @@ test('stable controller indices prevent the remaining pad taking over after disc
  globalThis.window=new EventTarget();globalThis.document=new EventTarget();let pads=[0,1].map(()=>({connected:true,axes:[0,0],buttons:[]}));let disconnected=[];
  const input=new LocalInput({getPads:()=>pads,onDisconnect:i=>disconnected.push(i)});input.configure(['pad:0','pad:1']);input.enabled=true;input.poll();pads[1].axes[0]=1;input.poll();assert.equal(input.sample(0).move,0);assert.equal(input.sample(1).move,1);
  pads[0]=null;input.poll();assert.deepEqual(disconnected,[0]);assert.deepEqual(input.sources,['pad:0','pad:1']);assert.throws(()=>input.configure(['pad:1','pad:1']),/different controller/);input.destroy();
+});
+
+test('local hero creation uses empty slot CAS and preserves other heroes/accounts',async()=>{
+ const f=cloudFixture(),a=await f.profile().login('1111111111'),b=await f.profile().login('2222222222');
+ const original=structuredClone(f.accounts.get('1111111111').slice(0,2)),snap=snapshot();snap.look.name='New Co-op Hero';
+ await a.create(3,snap,4);assert.equal(a.slots[2].snapshot.look.name,'New Co-op Hero');assert.deepEqual(f.accounts.get('1111111111').slice(0,2),original);assert.equal(b.slots[2].snapshot,null);
+ await assert.rejects(a.create(3,snapshot(),5),/already has/);await assert.rejects(a.create(1,snapshot(),3),/changed/);
+});
+test('delete requires exact confirmation, is account isolated, and retries lost responses safely',async()=>{
+ const f=cloudFixture(),a=await f.profile().login('1111111111');const name=a.slots[0].snapshot.look.name;
+ await assert.rejects(a.remove(1,{revision:4,name}),/Confirm/);await assert.rejects(a.remove(1,{confirmed:true,revision:4,name:'Wrong hero'}),/changed/);
+ a.activeSlots.add(1);await assert.rejects(a.remove(1,{confirmed:true,revision:4,name}),/Leave/);a.activeSlots.delete(1);
+ f.lose();await a.remove(1,{confirmed:true,revision:4,name});assert.equal(a.slots[0].snapshot,null);assert.equal(a.slots[0].revision,5);assert(f.accounts.get('2222222222')[0].snapshot);assert(a.slots[1].snapshot);
+ await a.create(1,snapshot(),5);await assert.rejects(a.remove(1,{confirmed:true,revision:4,name}),/changed/);assert(a.slots[0].snapshot);
+});
+test('active heroes cannot be deleted until their final save completes',async()=>{
+ const f=cloudFixture(),a=await f.profile().login('1111111111'),b=await f.profile().login('2222222222'),s=new LocalSession([{profile:a,slot:1},{profile:b,slot:1}]);
+ assert(a.activeSlots.has(1));await assert.rejects(a.remove(1,{confirmed:true,revision:4,name:a.slots[0].snapshot.look.name}),/Leave/);await s.leave(0);assert(!a.activeSlots.has(1));assert(b.activeSlots.has(1));
 });

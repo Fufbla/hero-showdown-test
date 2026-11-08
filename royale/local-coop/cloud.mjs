@@ -1,23 +1,24 @@
 import {serialize} from './serialize.mjs';
 export const CLOUD_ENDPOINT='https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-v3-staging';
+export const HERO_ENDPOINT='https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-local-heroes';
 const PREFIX='healthia.royale.local-two.v1:';
 const canonical=v=>JSON.stringify(v,(_k,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.fromEntries(Object.keys(x).sort().map(k=>[k,x[k]])):x);
 export class SaveConflict extends Error{}
 export class CloudProfile {
   // Browser fetch must keep Window as its receiver, never this CloudProfile.
-  constructor({fetcher=(...args)=>globalThis.fetch(...args),storage=globalThis.localStorage,onStatus=()=>{},endpoint=CLOUD_ENDPOINT}={}){
-    Object.assign(this,{fetcher,storage,onStatus,endpoint});this.slots=[];this.queues=new Map();this.desired=new Map();this.blocked=new Set();
+  constructor({fetcher=(...args)=>globalThis.fetch(...args),storage=globalThis.localStorage,onStatus=()=>{},endpoint=CLOUD_ENDPOINT,heroEndpoint=HERO_ENDPOINT}={}){
+    Object.assign(this,{fetcher,storage,onStatus,endpoint,heroEndpoint});this.slots=[];this.queues=new Map();this.desired=new Map();this.blocked=new Set();this.activeSlots=new Set();this.mutating=new Set();
   }
-  async request(action,body={},auth=true){
-    const response=await this.fetcher(this.endpoint,{method:'POST',headers:{'Content-Type':'application/json',...(auth?{Authorization:'Bearer '+this.access}:{})},body:await serialize({action,...body},{validate:action==='save'}),cache:'no-store',signal:AbortSignal.timeout(15000)});
+  async request(action,body={},auth=true,endpoint=this.endpoint){
+    const response=await this.fetcher(endpoint,{method:'POST',headers:{'Content-Type':'application/json',...(auth?{Authorization:'Bearer '+this.access}:{})},body:await serialize({action,...body},{validate:action==='save'}),cache:'no-store',signal:AbortSignal.timeout(15000)});
     let data;try{data=await response.json();}catch{throw Error('The save service did not respond. Retry saving when connected.');}
     if(!response.ok){const e=Error(data.error||'Cloud request failed.');e.status=response.status;throw e;}return data;
   }
-  async call(action,body){
-    try{return await this.request(action,body);}catch(e){
+  async call(action,body,endpoint=this.endpoint){
+    try{return await this.request(action,body,true,endpoint);}catch(e){
       if(e.status!==401||!this.refresh)throw e;
       this.renewing??=this.request('renew',{refresh:this.refresh},false).then(r=>{this.access=r.access;this.refresh=r.refresh;}).finally(()=>this.renewing=null);
-      await this.renewing;return this.request(action,body);
+      await this.renewing;return this.request(action,body,true,endpoint);
     }
   }
   async login(code){
@@ -33,6 +34,45 @@ export class CloudProfile {
     this.slots=structuredClone(slots);return this.slots;
   }
   key(slot){return PREFIX+this.identity+':'+slot;}
+  async manage(slot,revision,action){
+    if(![1,2,3].includes(slot)||!Number.isSafeInteger(revision))throw Error('Choose a current hero slot.');
+    if(this.activeSlots.has(slot))throw Error('Leave Local Co-op before changing this hero slot.');
+    if(this.mutating.has(slot)||this.queues.has(slot)||this.desired.has(slot))throw Error('Wait for this hero’s pending save.');
+    this.mutating.add(slot);
+    try{
+      await this.load();const row=this.slots.find(r=>r.slot_number===slot);
+      if(row.revision!==revision)throw new SaveConflict('This slot changed. Review the refreshed hero list.');
+      const result=await action(row);this.blocked.delete(slot);return result;
+    }finally{this.mutating.delete(slot);}
+  }
+  create(slot,snapshot,revision){
+    return this.manage(slot,revision,async row=>{
+      if(row.snapshot)throw Error('That slot already has a hero. No progress was replaced.');
+      const pending={slot,revision,snapshot:structuredClone(snapshot)};
+      // Older journals cannot resurrect a deleted or replaced hero.
+      const old=this.storage?.getItem(this.key(slot));if(old)this.remember(this.key(slot)+':conflict:'+crypto.randomUUID(),JSON.parse(old));
+      this.archiveLatest(slot);this.remember(this.key(slot),pending);
+      return this.writePending(slot,pending);
+    });
+  }
+  remove(slot,{confirmed=false,revision,name}={}){
+    if(!confirmed)return Promise.reject(Error('Confirm the named hero before deleting.'));
+    return this.manage(slot,revision,async row=>{
+      if(!row.snapshot||row.snapshot.look.name!==name)throw new SaveConflict('The selected hero changed. Review the hero list.');
+      let result;
+      try{result=await this.call('delete-hero',{slot,revision,name,confirmed:true},this.heroEndpoint);}
+      catch(error){
+        // A lost response is safe to retry only when this precise revision is
+        // now empty. Never delete a replacement hero using a newer revision.
+        await this.load();const current=this.slots.find(r=>r.slot_number===slot);
+        if(current.revision!==revision+1||current.snapshot!==null)throw error;
+        result=current;
+      }
+      this.archiveLatest(slot);const raw=this.storage?.getItem(this.key(slot));if(raw){this.remember(this.key(slot)+':conflict:'+crypto.randomUUID(),JSON.parse(raw));this.storage.removeItem(this.key(slot));}
+      Object.assign(this.slots.find(r=>r.slot_number===slot),{snapshot:null,revision:result.revision,updated_at:result.updated_at});
+      return this.slots.find(r=>r.slot_number===slot);
+    });
+  }
   remember(key,value){
     if(!this.storage)throw Error('Enable browser storage before playing so interrupted saves can be recovered.');
     const raw=JSON.stringify(value);this.storage.setItem(key,raw);
@@ -70,6 +110,7 @@ export class CloudProfile {
     this.remember(key,latest);await this.writePending(slot,latest);
   }
   save(slot,snapshot){
+    if(this.mutating.has(slot))return Promise.reject(Error('Wait for the hero slot change to finish.'));
     if(![1,2,3].includes(slot)||!this.slots.some(r=>r.slot_number===slot&&r.snapshot))return Promise.reject(Error('Choose a saved hero.'));
     if(this.blocked.has(slot))return Promise.reject(new SaveConflict('This hero changed on another device. Reload the cloud hero to continue.'));
     // Journal every checkpoint, including progress made while an older request is offline.

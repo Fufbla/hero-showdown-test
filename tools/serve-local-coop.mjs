@@ -10,14 +10,14 @@ const server=http.createServer(async(req,res)=>{
   const origin=`http://${req.headers.host}`;
   if(![`127.0.0.1:${port}`,`localhost:${port}`].includes(req.headers.host)){res.writeHead(403);res.end('Local access only');return;}
   const url=new URL(req.url,origin);
-  if(url.pathname==='/__local-coop_cloud'){
+  if(['/__local-coop_cloud','/__local-coop_heroes'].includes(url.pathname)){
    if(req.method!=='POST'||req.headers.origin!==origin){res.writeHead(403);res.end('Local browser requests only');return;}
    let body='';for await(const chunk of req){body+=chunk;if(body.length>410000){res.writeHead(413);res.end();return;}}
-   const data=JSON.parse(body);if(!['verify','slots','renew','save'].includes(data.action)){res.writeHead(400);res.end('Unsupported action');return;}
-   const result=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://fufbla.github.io',...(req.headers.authorization?{Authorization:req.headers.authorization}:{})},body,signal:AbortSignal.timeout(20000)});
+   const data=JSON.parse(body);if(!(url.pathname==='/__local-coop_heroes'?['delete-hero']:['verify','slots','renew','save']).includes(data.action)){res.writeHead(400);res.end('Unsupported action');return;}
+   const result=await fetch(url.pathname==='/__local-coop_heroes'?endpoint.replace('royale-v3-staging','royale-local-heroes'):endpoint,{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://fufbla.github.io',...(req.headers.authorization?{Authorization:req.headers.authorization}:{})},body,signal:AbortSignal.timeout(20000)});
    res.writeHead(result.status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(await result.text());return;
   }
-  if(url.pathname==='/royale/local-coop/config.json'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify({endpoint:'/__local-coop_cloud'}));return;}
+  if(url.pathname==='/royale/local-coop/config.json'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify({endpoint:'/__local-coop_cloud',heroEndpoint:'/__local-coop_heroes'}));return;}
   if(url.pathname==='/'){res.writeHead(302,{Location:'/royale/local-coop/'});res.end();return;}
   const decoded=decodeURIComponent(url.pathname),file=path.resolve(root,'.'+decoded);if(!file.startsWith(root+path.sep)||decoded.split('/').some(p=>p.startsWith('.'))){res.writeHead(403);res.end();return;}
   let target=file,data;try{if((await stat(target)).isDirectory())target=path.join(target,'index.html');data=await readFile(target);}catch(e){if(e.code!=='ENOENT')throw e;data=await cachedAsset(path.relative(root,target));if(!data)throw e;}
