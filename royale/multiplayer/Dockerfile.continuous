@@ -1,0 +1,9 @@
+FROM node:24-bookworm-slim
+WORKDIR /app
+COPY royale/multiplayer/package.json royale/multiplayer/package-lock.json ./royale/multiplayer/
+RUN npm ci --prefix royale/multiplayer --omit=dev --ignore-scripts
+COPY royale/*.mjs ./royale/
+COPY royale/multiplayer/*.mjs ./royale/multiplayer/
+ENV NODE_ENV=production HOST=0.0.0.0 PORT=8080 ROYALE_DATA=/var/data/authority.sqlite
+EXPOSE 8080
+CMD ["node", "royale/multiplayer/continuous-server.mjs"]

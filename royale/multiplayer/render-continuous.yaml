@@ -1,0 +1,24 @@
+# Proposal only. Importing this Blueprint creates paid infrastructure.
+# Do not activate until the owner approves the quoted cost.
+services:
+  - type: web
+    name: hero-showdown-continuous-test
+    runtime: docker
+    repo: https://github.com/Fufbla/hero-showdown-test
+    branch: feature/royale-private-rooms
+    region: virginia
+    plan: 0.5c-512mb
+    numInstances: 1
+    autoDeployTrigger: off
+    dockerfilePath: ./royale/multiplayer/Dockerfile.continuous
+    dockerContext: .
+    healthCheckPath: /health
+    disk:
+      name: royale-test-authority
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: ROYALE_ALLOWED_ORIGINS
+        sync: false

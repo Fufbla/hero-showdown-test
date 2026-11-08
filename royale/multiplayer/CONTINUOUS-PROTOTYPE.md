@@ -29,3 +29,27 @@ The review server binds to loopback at `http://localhost:4175`. Open two browser
 A persistent WebSocket process with durable storage and TLS is still needed. The existing stateless Edge path is not silently switched, and this benchmark does not show that a paid Supabase tier would fix it. An isolated cloud-save adapter and exclusive session ownership must be verified before attaching the continuous process to test identities. Never let the HTTP authority and continuous authority write the same hero concurrently. Do not point this prototype's V3 bridge at original player saves.
 
 Then repeat two-device and five-player tests against the hosted endpoint, including real save delays, reconnects, boss visibility, fresh sessions, XP splitting, and restart recovery. Under-100-ms latency is a goal, not a guaranteed outcome. The official single-player files remain unchanged.
+
+## Isolated cloud connection and hosting proposal
+
+The additive `royale_continuous_test` migration is installed in the existing Supabase project. It creates one server-only, RLS-protected table and three SECURITY INVOKER RPCs. There are no grants to public, anon or authenticated. The security advisor's no-RLS-policy INFO is expected for a table intentionally restricted to service_role. Existing unrelated game advisories were not changed.
+
+`ContinuousTestBridge` copies a **confirmed HTTP-test snapshot** into a new identity, preserving the source. Clients retain a random destination ID and 64-hex token before calling `/test/copy`, so a lost response can retry the same receipt. Slot 3 is refused. The database serializes lease acquisition, grants one writer for 120 seconds, and rejects superseded or expired writers. Checkpoints renew leases every eight seconds during play. Revision checks reject stale saves; an identical retry returns the already-written checkpoint. A new process may need to wait up to 120 seconds after the previous process stops. Temporary database failures retain local SQLite recovery. Never reuse source credentials as destination credentials.
+
+`continuous-server.mjs` accepts only isolated test authentication; it disables original-account migration and new-hero creation. Its copy endpoint requires an allowed browser Origin and source test credentials. Use this entry point, **not** the original `server.mjs`, for the hosted prototype. Store the service-role credential only as a server environment secret, never in a build artifact, URL, browser, or chat message.
+
+Live database verification passed copy/retry, exclusive ownership, lease takeover, stale-writer rejection, unchanged source snapshot, and revoked public access. All temporary verification rows were rolled back. This verifies the SQL contract, not hosted HTTP round trips or phone saving. The adapter was separately tested against local PostgreSQL-compatible PGlite. End-to-end hosted checkpoint timing and restart recovery remain required.
+
+Proposed hosting: Render Virginia, one `0.5c-512mb` service ($7/month), 1 GB persistent disk ($0.25/month), approximately **$7.25/month base**, plus applicable bandwidth/other usage and taxes. This is a starting test size, not a guaranteed capacity or latency result. The checked Render docs list both Virginia and this compute plan. Free Render cannot attach this persistent disk and loses local data on restart; Railway Hobby is another option with a $5 minimum and usage-based charges. No service, subscription, or paid resource has been created.
+
+Deployment proposal: `render-continuous.yaml`, Dockerfile `Dockerfile.continuous`, repository root build context. Docker is unavailable in the development runtime, so image construction is still to be verified on the host. The Node entry point was tested locally. Set the exact isolated website origin and server secret in the provider dashboard. Keep one instance and one durable volume; do not enable autoscaling. `/health` verifies process/disk readiness only, not cloud-save readiness.
+
+After hosting approval, configure the frontend copy/profile workflow and WSS endpoint in a separate build, verify HTTPS/WSS, run real two-client saves and restart recovery, then phone/tablet testing. The existing phone URL remains on the Supabase prototype until these checks pass. No claim of a new playable deployment is made.
+
+Sources checked November 8, 2026:
+- https://render.com/pricing
+- https://render.com/docs/compute-plans
+- https://render.com/docs/regions
+- https://render.com/docs/disks
+- https://render.com/docs/free
+- https://docs.railway.com/pricing/plans
