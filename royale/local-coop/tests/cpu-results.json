@@ -1,0 +1,56 @@
+{
+  "at": "2026-11-08T21:02:54.013Z",
+  "runtime": "v24.22.1",
+  "scope": "Node.js CPU simulation only. No renderer, browser display, physical controllers or network. 300 warm-up and 1800 measured fixed ticks per scene.",
+  "results": [
+    {
+      "scene": "idle",
+      "ticks": 1800,
+      "meanMs": 0.081,
+      "p95Ms": 0.131,
+      "maxMs": 2.85
+    },
+    {
+      "scene": "running",
+      "ticks": 1800,
+      "meanMs": 0.079,
+      "p95Ms": 0.146,
+      "maxMs": 4.81
+    },
+    {
+      "scene": "jumping",
+      "ticks": 1800,
+      "meanMs": 0.064,
+      "p95Ms": 0.119,
+      "maxMs": 4.459
+    },
+    {
+      "scene": "enemies",
+      "ticks": 1800,
+      "meanMs": 0.063,
+      "p95Ms": 0.117,
+      "maxMs": 4.055
+    },
+    {
+      "scene": "powers",
+      "ticks": 1800,
+      "meanMs": 0.127,
+      "p95Ms": 0.221,
+      "maxMs": 7.829
+    },
+    {
+      "scene": "boss",
+      "ticks": 1800,
+      "meanMs": 0.045,
+      "p95Ms": 0.083,
+      "maxMs": 4.275
+    },
+    {
+      "scene": "checkpoint",
+      "ticks": 1800,
+      "meanMs": 0.089,
+      "p95Ms": 0.13,
+      "maxMs": 6.345
+    }
+  ]
+}
