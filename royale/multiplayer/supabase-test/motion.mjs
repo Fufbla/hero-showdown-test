@@ -11,7 +11,7 @@ export function readMotion(raw){
   if(typeof raw.hero.grounded!=='boolean')return null;hero.grounded=raw.hero.grounded;
   return {id:raw.id,seq:raw.seq,zone:raw.zone,hero,sentAt:raw.sentAt};
 }
-export const movementHz=players=>Math.min(10,Math.max(4,Math.floor(100/Math.max(2,players)**2)));
+export const movementHz=players=>Math.min(20,Math.max(4,Math.floor(100/Math.max(2,players)**2)));
 export class PeerMotion {
   constructor(){this.peers=new Map();}
   push(raw,known,zone,now=performance.now()){
@@ -19,6 +19,7 @@ export class PeerMotion {
     let track=this.peers.get(p.id);
     if(track?.zone!==zone){track={zone,seq:0,samples:[]};this.peers.set(p.id,track);}
     if(p.seq<=track.seq)return false;
+    const previous=track.samples.at(-1);if(previous){track.gaps??=[];track.gaps.push(Math.max(0,now-previous.at));if(track.gaps.length>5)track.gaps.shift();const gaps=[...track.gaps].sort((a,b)=>a-b);track.buffer=Math.max(50,Math.min(100,gaps[Math.floor(gaps.length/2)]));}
     track.seq=p.seq;track.samples.push({...p.hero,at:now});if(track.samples.length>8)track.samples.shift();return true;
   }
   sample(peer,zone,now=performance.now()){
@@ -26,7 +27,7 @@ export class PeerMotion {
     if(!last||track.zone!==zone||now-last.at>750)return null;
     // A short interpolation buffer hides arrival jitter. Bounded extrapolation
     // bridges one missed movement packet, then stops instead of drifting away.
-    const target=now-100;let a=s[0],b=last;
+    const target=now-(track.buffer||100);let a=s[0],b=last;
     for(let i=1;i<s.length;i++)if(s[i].at>=target){a=s[i-1];b=s[i];break;}else a=s[i];
     let x,y;
     if(target>=last.at){const dt=Math.min(120,target-last.at)/1000;x=last.x+last.vx*dt;y=last.y+(last.grounded?0:last.vy*dt);}

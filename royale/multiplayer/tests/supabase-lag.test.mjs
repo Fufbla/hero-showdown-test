@@ -108,3 +108,13 @@ test('multiplayer presentation preserves prepared boss and helper artwork identi
  session.drawGame({draw:view=>{assert.equal(artwork.get(view.enemies[0]),'boss pose');assert.equal(artwork.get(view.enemies[1]),'helper pose');}},1,1/60);
  assert.equal(JSON.stringify(session.game.enemies),before,'Rendering never mutates combat state');
 });
+
+ test('fast peer movement reduces buffering while slower rooms retain jitter protection',()=>{
+ const {hs}=roomFixture(),h=hs[0],peer={id:h.id,hero:h.game.hero},m=new PeerMotion(),zone=h.zone;
+ const send=(seq,x,at)=>m.push(motionPacket(h.id,seq,zone,{...h.game.hero,x,vx:100}),[peer],zone,at);
+ send(1,100,1000);send(2,105,1050);send(3,110,1100);
+ assert.equal(m.sample(peer,zone,1100).x,105);
+ for(let i=4;i<10;i++)send(i,100+i*10,1100+(i-3)*200);
+ assert.equal(m.peers.get(h.id).buffer,100);assert.equal(movementHz(2),20);
+ for(let n=2;n<=5;n++)assert.ok(movementHz(n)*n*n<=100);
+ });

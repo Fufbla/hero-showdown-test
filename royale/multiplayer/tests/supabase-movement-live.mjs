@@ -21,7 +21,7 @@ try{
  while(Date.now()<untilPlay){sessions.forEach((s,i)=>s.input({move:tick<60?(i?-1:1):tick<120?(i?1:-1):0}));tick++;await wait(1000/30);}
  assert.ok(samples.length>80,'Realtime must deliver motion throughout the run');
  assert.ok(sessions.every(s=>s.peerMotion.peers.size>0),'The shipped renderer must accept peer movement');
- const report={movement:quantiles(samples),authoritativeRequests:quantiles(sessions.flatMap(s=>s.client.metrics.rtt)),transports:sessions.map(s=>s.client.metrics),inputTicks:tick,positions:sessions.map(s=>s.game.hero.x),start,errors};
+ const report={buffersMs:sessions.flatMap(s=>[...s.peerMotion.peers.values()].map(t=>t.buffer||100)),movement:quantiles(samples),authoritativeRequests:quantiles(sessions.flatMap(s=>s.client.metrics.rtt)),transports:sessions.map(s=>s.client.metrics),inputTicks:tick,positions:sessions.map(s=>s.game.hero.x),start,errors};
  await writeFile('/tmp/royale-movement-result.json',JSON.stringify(report));console.log(JSON.stringify({...report,transports:report.transports.map(({rtt,...m})=>m)}));
  assert.equal(errors.length,0);
 }finally{for(const s of sessions)s.client.close();await wait(600);}

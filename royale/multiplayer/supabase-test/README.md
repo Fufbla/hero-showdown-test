@@ -111,3 +111,11 @@ The build copies the approved assets and patches only the output's storage names
 Opt-in live checks also include `supabase-movement-live.mjs` (shipped transport and rendering adapter) and `supabase-combat-live.mjs` (fresh two-player normal-input fight). Build the SDK first. Set `MP_TEST_FIXTURES=/tmp/royale-combat-fixtures.json` for an isolated combat run. Fixture credentials must never be committed. Initial measured evidence remains in `verification.json`; new results are in `lag-verification.json`.
 
 The socket checks are `tests/supabase-socket.test.mjs`, `tests/supabase-socket-live.mjs`, and `tests/supabase-socket-capacity-live.mjs`. The latter uses the shipped client with automatic heartbeats, not a replacement harness. Deploy `stream-edge.mjs` separately as `royale-mp-stream-test`; both functions authenticate the existing isolated test token.
+
+## Movement delivery update — November 8
+
+The small-room movement broadcast cap is now 20 Hz instead of 10 Hz. Actual sends still depend on input-frame timing. The existing conservative `players² × Hz <= 100` budget is retained through five players. Peer interpolation uses the median of five arrival intervals, bounded to 50–100 ms, instead of imposing 100 ms on every room. This is presentation-only; combat authority, difficulty, rewards, saves and boss identities are unchanged.
+
+All 114 automated tests pass. Two otherwise matching 10-second real-transport runs delivered 177 then 300 accepted movement packets, with 26/25 ms median and 43/44 ms p95 transport latency, respectively; neither reported errors. These numbers exclude rendering, send scheduling and interpolation. Authoritative request medians were 321/308 ms; that small difference is not evidence that this presentation change accelerates combat.
+
+Additional HTTP diagnostics recorded 140–179 ms in database calls on single-attempt requests, with retries taking longer and several requests stalling outside the instrumented handler. The existing database-per-update design has not met the under-100-ms combat target. A continuously running authoritative room simulation needs a separately measured comparison; buying capacity alone is not a demonstrated solution. Raw samples and limitations are in `movement-latency-verification.json`. No physical-device improvement or new boss/combat playtest is claimed for this update.
