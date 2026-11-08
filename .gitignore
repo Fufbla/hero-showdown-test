@@ -2,3 +2,5 @@
 /royale-v3-hair-preview/
 # Earlier creator exports contain repeated captures; preserve locally, not as QA evidence.
 /royale/qa/nine-hair-review/screenshots/
+/.local-coop-cache/
+/local-coop-assets.json

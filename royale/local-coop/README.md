@@ -4,6 +4,10 @@ Review branch: `feature/royale-v3-local-coop`. Stable baseline: `005ea3288f211e7
 
 ## Play the isolated build
 
+Mac download: extract `Hero-Showdown-Local-Coop-Mac.zip` and double-click `START-LOCAL-COOP.command`. The launcher opens the game and keeps its local server in a Terminal window. If Node.js is missing, it opens the official Node.js download page; install the macOS LTS package and launch again. Keep the Terminal window open while playing. The small package fetches artwork from its pinned game commit, checks each file's SHA-256, and caches verified bytes locally. It never fetches account data from GitHub. No Git installation is needed for the download.
+
+Build that package from this branch with `python3 tools/build-local-coop-mac.py /absolute/path/Hero-Showdown-Local-Coop-Mac.zip`. The archive contains source, an executable Mac launcher, and an artwork manifest. It does not contain codes, tokens, saves, or a Node.js installer.
+
 Install Node.js 20 or newer, check out this branch, then run from the repository root:
 
 ```sh
