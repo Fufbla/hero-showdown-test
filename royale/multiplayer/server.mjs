@@ -7,7 +7,7 @@ import {mkdirSync} from 'node:fs';
 import {performance,monitorEventLoopDelay} from 'node:perf_hooks';
 import {WebSocketServer} from 'ws';
 import {AuthorityStore} from './store.mjs';
-import {Authority} from './authority.mjs';
+import {EqualXPAuthority} from './equal-xp-authority.mjs';
 import {runtimeDelta} from './delta.mjs';
 import {CLOUD_CONFIG} from '../cloud-config.mjs';
 import {V3CloudBridge,V3Checkpoints,SaveConflict} from './v3-checkpoints.mjs';
@@ -25,8 +25,10 @@ export async function authenticateSupabase(token) {
   if(!Number.isFinite(claims.exp)||claims.exp*1000<=Date.now())throw Error('Session expired.');
   return {id:user.id,expiresAt:claims.exp*1000};
 }
-export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity=MAX_ROOM_PLAYERS,maxConnections=capacity,origins=[],authenticate=authenticateSupabase,autoTick=true,serve=null,migrationBridge=null,allowNewHeroes=false,v3Bridge=null,checkpointNow=Date.now}={}) {
-  const store=new AuthorityStore(path),authority=new Authority(store,{capacity,maxConnections});
+export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity=MAX_ROOM_PLAYERS,maxConnections=capacity,origins=[],authenticate=authenticateSupabase,autoTick=true,serve=null,migrationBridge=null,allowNewHeroes=false,v3Bridge=null,checkpointNow=Date.now,snapshotHz=20}={}) {
+  if(![10,20,30,60].includes(snapshotHz))throw Error('snapshotHz must divide the 60 Hz simulation: 10, 20, 30 or 60.');
+  const snapshotTicks=60/snapshotHz;
+  const store=new AuthorityStore(path),authority=new EqualXPAuthority(store,{capacity,maxConnections});
   const migrations=new MigrationService(authority,migrationBridge);
   const checkpoints=v3Bridge?new V3Checkpoints(authority,v3Bridge,{now:checkpointNow,
     onSaved:(h,result)=>{const ws=authority.connections.get(h.id);if(ws)send(ws,{type:'checkpoint',...result});},
@@ -62,7 +64,7 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity=MA
   function step() {
     const start=performance.now();authority.tick();stats.ticks++;
     if(authority.dirty||stats.ticks%6===0)save();
-    if(stats.ticks%6===0)publish(false);
+    if(stats.ticks%snapshotTicks===0)publish(false);
     const ms=performance.now()-start;stats.maxTickMs=Math.max(stats.maxTickMs,ms);stats.tickSamples.push(ms);if(stats.tickSamples.length>3600)stats.tickSamples.shift();
   }
   let last=performance.now(),lag=0,timer=null;
@@ -152,7 +154,7 @@ export function startServer({port=0,host='127.0.0.1',path=':memory:',capacity=MA
   });
   server.listen(port,host);
   return {server,wss,authority,stats,step,publish,checkpoints,
-    metrics(){const sorted=[...stats.tickSamples].sort((a,b)=>a-b);return {...stats,tickSamples:undefined,tickP95Ms:sorted[Math.floor(sorted.length*.95)]||0,eventLoopP99Ms:eventLoop.percentile(99)/1e6,rssBytes:process.memoryUsage().rss};},
+    metrics(){const sorted=[...stats.tickSamples].sort((a,b)=>a-b);return {...stats,snapshotHz,tickSamples:undefined,tickP95Ms:sorted[Math.floor(sorted.length*.95)]||0,eventLoopP99Ms:eventLoop.percentile(99)/1e6,rssBytes:process.memoryUsage().rss};},
     async close(){clearInterval(checkpointTimer);clearInterval(overloadWindow);clearInterval(timer);clearInterval(heartbeat);eventLoop.disable();for(const ws of wss.clients)ws.terminate();await new Promise(resolve=>server.close(resolve));if(checkpoints)await Promise.allSettled([...authority.state.heroes.values()].filter(h=>h.cloud).map(h=>checkpoints.saveHero(h)));if(!authority.failed)authority.commit();store.close();}
   };
 }
