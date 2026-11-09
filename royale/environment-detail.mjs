@@ -18,8 +18,8 @@ export function surfaceMaterial(s,region=1){
 
 export function paintLandscape(c,theme,near,night){
  const opacity=near?.75:.38;c.save();c.globalAlpha=opacity;
- for(let i=0;i<9;i++){
-  const x=i*192+35, y=near?590:510;
+ for(let tileIndex=-1;tileIndex<9;tileIndex++){
+  const i=(tileIndex%8+8)%8,x=tileIndex*192+35,y=near?590:510;
   if(theme==='coast'){
    if(!near){const h=35+noise(i)*60;box(c,x,y-h,58,h,'#668b91');poly(c,[[x-4,y-h],[x+30,y-h-25],[x+62,y-h]],'#bda987');for(let j=0;j<3;j++)box(c,x+8+j*16,y-h+12,8,12,night?'#ffdd9e':'#cde4d1');}
    else {line(c,[[x-45,y-40],[x+147,y-40]],'#82634d',13);for(let j=0;j<4;j++){const xx=x+j*45;line(c,[[xx,y-43],[xx-5,y+60]],'#5b5847',7);line(c,[[xx,y-70],[xx,y-40]],'#9e8e68',3);}line(c,[[x-40,y-66],[x+145,y-66]],'#c1b18b',3);}

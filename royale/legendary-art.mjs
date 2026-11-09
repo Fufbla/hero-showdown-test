@@ -1,22 +1,25 @@
+import {animateLivingWorld} from './environment-living.mjs';
 import {drawDangerZone,bossTheme} from './boss-effects.mjs';
 import { LEGENDARY } from './legendary-data.mjs';
 const line=(c,pts,color,w=2)=>{c.beginPath();pts.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.strokeStyle=color;c.lineWidth=w;c.lineJoin='round';c.lineCap='round';c.stroke();};
 const ellipse=(c,x,y,rx,ry,color)=>{c.fillStyle=color;c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);c.fill();};
 const polygon=(c,pts,color)=>{c.beginPath();pts.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.fillStyle=color;c.fill();};
 export function drawLegendarySky(c,g,width,camera){
- const id=g.arenaScene.legendary,d=LEGENDARY[id],gradient=c.createLinearGradient(0,0,0,720);gradient.addColorStop(0,'#111725');gradient.addColorStop(1,d.colors[0]);c.fillStyle=gradient;c.fillRect(0,0,width,720);
+ const id=g.arenaScene.legendary,d=LEGENDARY[id],time=g.time||0,gradient=c.createLinearGradient(0,0,0,720);gradient.addColorStop(0,'#111725');gradient.addColorStop(1,d.colors[0]);c.fillStyle=gradient;c.fillRect(0,0,width,720);
  c.save();c.translate(-camera*.25,0);
  for(let i=-1;i<12;i++){const x=i*220;
-  if(id==='lightning'){polygon(c,[[x,520],[x+30,150],[x+90,100],[x+145,170],[x+175,520]],'#252940');line(c,[[x+40,400],[x+60,210],[x+95,180],[x+130,410]],'#bca54d',3);}
-  else if(id==='air'){for(let j=0;j<4;j++)ellipse(c,x+j*35,270+j%2*55,130,48,'#2b373b80');}
+  if(id==='lightning'){c.globalAlpha=.82+.12*Math.sin(time*.7+i);polygon(c,[[x,520],[x+30,150],[x+90,100],[x+145,170],[x+175,520]],'#252940');line(c,[[x+40,400],[x+60,210],[x+95,180],[x+130,410]],'#bca54d',3);c.globalAlpha=1;}
+  else if(id==='air'){for(let j=0;j<4;j++)ellipse(c,x+j*35+Math.sin(time*.22+i)*18,270+j%2*55+Math.sin(time*.3+i)*4,130,48,'#2b373b80');}
   else if(id==='styrodog'){for(let j=0;j<5;j++)ellipse(c,x+j*26,510-j%3*18,42,32,'#93958c');}
-  else if(id==='sonic'){polygon(c,[[x,0],[x+52,260+i%3*60],[x+110,0]],'#352b3e');for(let j=0;j<3;j++){c.beginPath();c.arc(x+110,330,45+j*25,-1.5,1.5);c.strokeStyle='#ab86bd30';c.lineWidth=2;c.stroke();}}
+  else if(id==='sonic'){polygon(c,[[x,0],[x+52,260+i%3*60],[x+110,0]],'#352b3e');for(let j=0;j<3;j++){c.beginPath();c.arc(x+110,330,45+j*25+Math.sin(time*.8+j)*4,-1.5,1.5);c.strokeStyle='#ab86bd30';c.lineWidth=2;c.stroke();}}
   else if(id==='styro'){c.fillStyle='#243e41';c.fillRect(x,230,115,300);c.strokeStyle='#7caca3';c.strokeRect(x+18,260,79,135);line(c,[[x+50,230],[x+50,120],[x+150,120],[x+150,450]],'#6e8586',9);}
   else if(id==='wastelander'){polygon(c,[[x,520],[x+20,270],[x+65,290],[x+70,180],[x+120,220],[x+145,520]],'#273c3a');line(c,[[x+20,510],[x+45,320],[x+100,490]],'#597766',4);}
-  else if(id==='venomis'){line(c,[[x,520],[x+40,350],[x+20,250],[x+70,180]],'#244e3a',18);for(let j=0;j<5;j++)ellipse(c,x+20+j*20,230+j*35,42,18,'#37654a');}
+  else if(id==='venomis'){line(c,[[x,520],[x+40,350],[x+20,250],[x+70,180]],'#244e3a',18);for(let j=0;j<5;j++)ellipse(c,x+20+j*20+Math.sin(time*.8+i+j)*3,230+j*35,42,18,'#37654a');}
   else{c.fillStyle='#322e38';c.fillRect(x+20,170,105,350);c.strokeStyle='#a19167';c.lineWidth=5;c.strokeRect(x+20,170,105,350);for(let j=0;j<3;j++){c.strokeStyle='#d6b35c35';c.beginPath();c.ellipse(x+73,330,42+j*12,90+j*18,0,0,Math.PI*2);c.stroke();}}
  }
  c.restore();c.fillStyle='#101e2990';c.fillRect(0,540,width,180);
+ const theme={lightning:'energy',air:'energy',styrodog:'final',sonic:'cave',styro:'factory',wastelander:'factory',venomis:'mutant',atomdust:'energy'}[id]||'energy';
+ animateLivingWorld(c,{theme},width,720,camera,0,time,true);
 }
 // Decorative, non-interactive anatomy studies. They have no simulation entities.
 export function drawRemains(c,id,x=1180,y=600){

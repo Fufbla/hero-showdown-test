@@ -1,3 +1,4 @@
+import {chestLayer} from './equipment-fit.mjs';
 import {headwearFit} from './headwear-fit.mjs';
 import {FLIGHT_REGIONS} from './assets/power-armor/flight/regions.mjs';
 import {AGILITY_REGIONS} from './assets/power-armor/agility/regions.mjs';
@@ -66,7 +67,7 @@ export function drawArmorIcon(c,item,size) {
 // Registration is expressed in the posed hero's own coordinates. The shoe cap
 // follows the foot angle separately from the greave, especially during kicks.
 export function drawArmorPiece(c,part,item,pose,a,side) {
-  const s=sprite(item,part,a.back?2:a.profile?1:0);
+  const s=sprite(item,part==='shoulder'?'chest':part,a.back?2:a.profile?1:0);
   if (!s) return false;
   const [sx,sy,sw,sh]=s.rect;
   if (part==='helmet') {
@@ -75,10 +76,10 @@ export function drawArmorPiece(c,part,item,pose,a,side) {
     const x=-w*.50+a.faceWidth*fit.center;
     if(a.profile&&fit.mirrorProfile){c.translate(2*x+w,0);c.scale(-1,1);}
     c.drawImage(s.image,...s.rect,x,a.faceWidth*fit.bottom-h,w,h);
-  } else if(part==='chest') {
+  } else if(part==='chest'||part==='shoulder') {
     c.translate(...a.shoulder); c.rotate(a.torsoAngle);
     const w=a.bodyWidth*(a.profile?1.22:1.19), h=a.length*1.21;
-    c.drawImage(s.image,...s.rect,-w*.50,-a.length*.23,w,h);
+    chestLayer(c,pose,a,part==='shoulder'?side:null,[-w*.50,-a.length*.23,w,h],()=>c.drawImage(s.image,...s.rect,-w*.50,-a.length*.23,w,h));
   } else if(part==='gloves') {
     // Extend from the original elbow towards the hand, following the punching arm.
     const [,elbow,hand]=pose.arms[side],dx=hand[0]-elbow[0],dy=hand[1]-elbow[1];

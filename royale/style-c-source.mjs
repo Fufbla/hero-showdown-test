@@ -122,6 +122,7 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   if(customHair)drawHairLayer(c,look,p,motion,time,'rear',view);
   function limb(group,i){
     drawStyleCMotionLimb(c,p,group,i,faceLook,palette,pieces);
+    if(group==='arms')wear('shoulder',pieces.chest||pieces.suit,i);
     const part=group==='arms'?'gloves':'boots';
     if(pieces[part])wear(part,pieces[part],i);
   }

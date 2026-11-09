@@ -1,3 +1,4 @@
+import {fittedBodyWidth,chestLayer} from './equipment-fit.mjs';
 import {armorCollection, drawArmorPiece} from './power-armor-art.mjs';
 import {WEARABLE_REGIONS} from './assets/hero/style-c-accurate/equipment/regions.mjs';
 import {emblem} from './style-c-paint.mjs';
@@ -140,7 +141,7 @@ function anchors(p,look,view) {
   const shoulderSpan=p.arms?.length===2 ? distance(p.arms[0][0],p.arms[1][0]) : length*1.35;
   const faceWidth=p.faceWidth || (model?.face ? (Math.max(...model.face.map(a=>a[0]))-Math.min(...model.face.map(a=>a[0])))*(look.jaw||1) : (p.d?.headWidth ? p.d.headWidth*2 : length*1.98));
   const profile=['side','left','right'].includes(view);
-  const bodyWidth=profile ? Math.max(length*.80, Math.min(shoulderSpan*.96,length*1.10)) : Math.max(length*1.05,shoulderSpan*1.04);
+  const bodyWidth=fittedBodyWidth(p,look,profile,length,shoulderSpan);
   const face=p.faceCenter || p.head;
   const torsoAngle=Math.atan2(hip[1]-shoulder[1],hip[0]-shoulder[0])-Math.PI*.5;
   return {face,shoulder,hip,length,bodyWidth,faceWidth,torsoAngle,profile,back:view==='back'};
@@ -171,11 +172,12 @@ function wearHead(c, part, item, p, a, steel) {
   }
 }
 
-function wearChest(c, item, a, steel) {
+function wearChest(c, item, a, steel, pose, side=null) {
   c.translate(...a.shoulder); c.rotate(a.torsoAngle);
   const key=a.back?'back-chest':a.profile?'side-chest':'chest-'+theme(item);
   const width=a.bodyWidth*(a.profile?1.15:1.08), height=a.length*1.10;
-  stamp(c,key,item,steel,-width*.50,-a.length*.15,width,height);
+  chestLayer(c,pose,a,side,[-width*.50,-a.length*.15,width,height],()=>stamp(c,key,item,steel,-width*.50,-a.length*.15,width,height));
+  if(side!=null)return;
   if (a.back) fittedCrest(c,item,steel,0,a.length*.24,a.length*.34);
   else if (a.profile) fittedCrest(c,item,steel,-width*.17,a.length*.12,a.length*.33);
 }
@@ -228,7 +230,7 @@ function wearEmblem(c,item,a,look,steel) {
 // The original equipment system also exposes chest and helmet under legacy
 // aliases. Only a real equipped slot may paint a layer at its own depth.
 export function drawStyleCEquipment(c, part, item, pose, look, {view='game',side=0,steel=false}={}) {
-  if (!artwork || !item || (item.part && part!==item.part)) return false;
+  if (!artwork || !item || (item.part && part!==item.part && !(part==='shoulder'&&['chest','suit'].includes(item.part)))) return false;
   const a=anchors(pose,look,view);
   if (!a) return false;
   c.save();
@@ -239,7 +241,8 @@ export function drawStyleCEquipment(c, part, item, pose, look, {view='game',side
   }
   switch (part) {
     case 'helmet': case 'mask': wearHead(c,part,item,pose,a,steel); break;
-    case 'chest': case 'suit': wearChest(c,item,a,steel); break;
+    case 'chest': case 'suit': wearChest(c,item,a,steel,pose); break;
+    case 'shoulder': wearChest(c,item,a,steel,pose,side); break;
     case 'boots': case 'gloves': wearLimb(c,part,item,pose,a,side,steel); break;
     case 'belt': wearBelt(c,item,a,steel); break;
     case 'cape': wearCape(c,item,a,look,steel); break;

@@ -1,0 +1,85 @@
+COMPLETE · 84 browser checks passed across five viewports. Synthetic Gamepad API; no physical hardware verification.
+PASS Creator fits 568x320
+PASS 48 natural tones
+PASS Compact accessible square power targets
+PASS Three power slots in vertical order
+PASS Power column directly above Jump
+PASS All controls inside viewport
+PASS No control overlap
+PASS Empty slots show plus
+PASS Empty-slot direct equip
+PASS Custom skin saved in compatible profile
+PASS Existing hero reload
+PASS Equipped power icon
+PASS Cooldown overlay follows active power
+PASS Cooldown visibly progresses
+PASS Menu opens open-map
+PASS Menu opens open-inventory
+PASS Menu opens open-controls
+PASS Creator fits 667x375
+PASS 48 natural tones
+PASS Compact accessible square power targets
+PASS Three power slots in vertical order
+PASS Power column directly above Jump
+PASS All controls inside viewport
+PASS No control overlap
+PASS Empty slots show plus
+PASS Empty-slot direct equip
+PASS Custom skin saved in compatible profile
+PASS Existing hero reload
+PASS Equipped power icon
+PASS Cooldown overlay follows active power
+PASS Cooldown visibly progresses
+PASS Menu opens open-map
+PASS Menu opens open-inventory
+PASS Menu opens open-controls
+PASS Creator fits 844x390
+PASS 48 natural tones
+PASS Compact accessible square power targets
+PASS Three power slots in vertical order
+PASS Power column directly above Jump
+PASS All controls inside viewport
+PASS No control overlap
+PASS Empty slots show plus
+PASS Empty-slot direct equip
+PASS Custom skin saved in compatible profile
+PASS Existing hero reload
+PASS Equipped power icon
+PASS Cooldown overlay follows active power
+PASS Cooldown visibly progresses
+PASS Menu opens open-map
+PASS Menu opens open-inventory
+PASS Menu opens open-controls
+PASS Creator fits 932x430
+PASS 48 natural tones
+PASS Compact accessible square power targets
+PASS Three power slots in vertical order
+PASS Power column directly above Jump
+PASS All controls inside viewport
+PASS No control overlap
+PASS Empty slots show plus
+PASS Empty-slot direct equip
+PASS Custom skin saved in compatible profile
+PASS Existing hero reload
+PASS Equipped power icon
+PASS Cooldown overlay follows active power
+PASS Cooldown visibly progresses
+PASS Menu opens open-map
+PASS Menu opens open-inventory
+PASS Menu opens open-controls
+PASS Creator fits 390x844
+PASS 48 natural tones
+PASS Compact accessible square power targets
+PASS Three power slots in vertical order
+PASS All controls inside viewport
+PASS No control overlap
+PASS Empty slots show plus
+PASS Empty-slot direct equip
+PASS Custom skin saved in compatible profile
+PASS Existing hero reload
+PASS Equipped power icon
+PASS Cooldown overlay follows active power
+PASS Cooldown visibly progresses
+PASS Menu opens open-map
+PASS Menu opens open-inventory
+PASS Menu opens open-controls

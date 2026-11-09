@@ -1,3 +1,4 @@
+import {paintedCapeMotion,paintedCapeOffset} from './cape.mjs';
 import {skinShade} from './skin-color.mjs';
 import {headwearFit} from './headwear-fit.mjs';
 // Creator turnarounds use the supplied direction board for the neutral silhouettes.
@@ -187,7 +188,7 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
     c.drawImage(a.image,a.x,a.y,a.w,a.h,a.left-from[0][0],a.top-from[0][1],a.w,a.h);
     c.restore();
   };
-  const wear=(part,i=0)=>drawStyleCEquipment(c,part,pieces[part],pose,look,{view,side:i,steel:!!h.steel});
+  const wear=(part,i=0)=>drawStyleCEquipment(c,part,part==='shoulder'?(pieces.chest||pieces.suit):pieces[part],pose,look,{view,side:i,steel:!!h.steel});
   c.save(); c.translate(x,y);c.scale(sizeX*scale*(left?-1:1),sizeY*scale);c.rotate(pose.rotation||0);c.globalAlpha*=pose.opacity;
   if(h.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;
   look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
@@ -197,7 +198,25 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
   }
   drawStyleCEquipmentAura(c,pieces,pose,look,{view});
   const turn=angle(m.hip,m.shoulder)-angle(pose.hip,pose.shoulder);
-  const cloak=()=>withStyleCEquipmentGlow(c,pieces.cape,()=>draw('cape',m.shoulder,pose.shoulder,-turn+(pose.moving?Math.sin(time*8)*.025:0),look.shoulders,look.torso*.35+look.legs*.65));
+  const cloak=()=>withStyleCEquipmentGlow(c,pieces.cape,()=>{
+    const tile=materialFor(m,'cape',colors,base);if(!tile)return;
+    const motion=paintedCapeMotion(options.cloth||h,h,time,options.dt??1/60);
+    const px=96,py=48,w=tile.w+px*2,ht=tile.h+py*2;
+    const buffer=motion.turnaroundCanvas??=rasterCanvas(w,ht);
+    if(buffer.width!==w||buffer.height!==ht){buffer.width=w;buffer.height=ht;}
+    const ink=buffer.getContext('2d');ink.clearRect(0,0,w,ht);
+    const top=tile.top-m.shoulder[1],step=tile.h/16;
+    for(let i=0;i<16;i++){
+      const start=i*step,end=(i+1)*step;
+      const a=paintedCapeOffset(motion,(top+start)/(top+tile.h)),b=paintedCapeOffset(motion,(top+end)/(top+tile.h));
+      const from=py+Math.round(start+a.y),to=py+Math.round(end+b.y),shear=(b.x-a.x)/step,stretch=(to-from)/step;
+      ink.save();ink.beginPath();ink.rect(0,from,w,to-from);ink.clip();
+      ink.transform(1,0,shear,stretch,px+a.x-shear*start,from-stretch*start);
+      ink.drawImage(tile.image,tile.x,tile.y,tile.w,tile.h,0,0,tile.w,tile.h);ink.restore();
+    }
+    c.save();c.translate(...pose.shoulder);c.rotate(-turn);c.scale(look.shoulders,look.torso*.35+look.legs*.65);
+    c.drawImage(buffer,tile.left-m.shoulder[0]-px,top-py);c.restore();
+  });
   if(look.cape&&!back)cloak();
   const limb=(kind,i)=>{
     const isArm=kind==='arms', target=pose[kind][i], sourceIndex=!m.parts[(isArm?'upper':'thigh')+i]?0:i, orig=m[kind][sourceIndex];
@@ -209,6 +228,7 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
     segment(names[1]+sourceIndex,orig.slice(1),target.slice(1),width);
     const rot=isArm?angle(...target.slice(1))-angle(...orig.slice(1)):0;
     if(isArm || !pieces.boots || pose.sole===i)draw(names[2]+sourceIndex,orig[2],target[2],rot,width,1);
+    if(isArm)wear('shoulder',i);
     wear(isArm?'gloves':'boots',i);c.restore();
   };
   if(back||pose.state!=='idle'){limb('legs',1);limb('arms',1);}
