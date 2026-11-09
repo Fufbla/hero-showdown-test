@@ -7,37 +7,32 @@
       "collection": "original",
       "category": "set",
       "coinPrice": null,
-      "availability": "art-pending",
+      "availability": "fitting",
       "template": "universal-style-c-v1",
       "pieces": [
         {
           "id": "royal-kimono.headwear",
           "category": "headwear",
           "coinPrice": null,
-          "assetManifest": null
+          "assetManifest": "./assets/royal-kimono/headwear.json"
         },
         {
           "id": "royal-kimono.fullbody",
           "category": "fullbody",
           "coinPrice": null,
-          "assetManifest": null
+          "assetManifest": "./assets/royal-kimono/fullbody.json"
         },
         {
           "id": "royal-kimono.footwear",
           "category": "footwear",
           "coinPrice": null,
-          "assetManifest": null
-        },
-        {
-          "id": "royal-kimono.accessory",
-          "category": "accessory",
-          "coinPrice": null,
-          "assetManifest": null
+          "assetManifest": "./assets/royal-kimono/footwear.json"
         }
       ],
       "reference": {
         "poster": "original",
-        "design": "Purple floral kimono; pink/white crossover collar; gold obi bow and tails; wide sleeves; split skirt; thin purple sandals; small floral hair sprig."
+        "design": "Purple floral kimono; pink/white crossover collar; gold obi bow and tails; wide sleeves; split skirt; thin purple sandals; small floral hair sprig.",
+        "approval": "User approved corrected Kimono artwork on 2026-11-09; remaining fitting/animation gates remain open."
       },
       "directions": [
         "front",
@@ -70,7 +65,7 @@
         ]
       },
       "review": {
-        "referenceFidelity": false,
+        "referenceFidelity": true,
         "universalFit": false,
         "animations": false,
         "hairCompatibility": false

@@ -1,10 +1,10 @@
 # Outfit production inventory
 
-All 36 sets are registered as **art-pending**. Registration is not completed artwork, purchase availability, or in-game verification.
+35 sets are registered as **art-pending**; Royal Kimono is **fitting** with user-approved corrected artwork. Registration is not completed artwork, purchase availability, or in-game verification.
 
 | Collection | Set | Status |
 |---|---|---|
-| original | Royal Kimono Set | Not fitted / not released |
+| original | Royal Kimono Set | Artwork approved; fitting in progress / not released |
 | original | Ninja Warrior Set | Not fitted / not released |
 | original | Urban Hero Set | Not fitted / not released |
 | original | Street Style Set | Not fitted / not released |

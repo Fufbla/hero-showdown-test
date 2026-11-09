@@ -12,8 +12,10 @@ export function validateAsset(manifest){
   if(!VIEWS.includes(layer.view)||!PARTS.includes(layer.part)||!PASSES.includes(layer.pass))errors.push('Invalid layer '+key);
   if(layer.mirror===true)errors.push('Mirrored direction '+key);
   if(!Array.isArray(layer.rect)||layer.rect.length!==4||layer.rect.some(n=>!Number.isInteger(n))||layer.rect[0]<0||layer.rect[1]<0||layer.rect[2]<=0||layer.rect[3]<=0||layer.rect[0]+layer.rect[2]>manifest.atlas?.width||layer.rect[1]+layer.rect[3]>manifest.atlas?.height)errors.push('Out of atlas '+key);
+  if(layer.offset&&!point(layer.offset))errors.push('Invalid offset '+key);
   if(!point(layer.pivot)||!Object.hasOwn(MASTER_ANCHORS,layer.attach))errors.push('Invalid anchor '+key);
   if(!Number.isFinite(layer.scale)||layer.scale<=0||layer.scale>4)errors.push('Invalid scale '+key);
+  if(layer.joint&&(!layer.end||!Object.hasOwn(MASTER_ANCHORS,layer.joint.attach)||!(layer.joint.fraction>0&&layer.joint.fraction<1)))errors.push('Invalid elbow/knee '+key);
   if(layer.end&&(!point(layer.end.pivot)||!Object.hasOwn(MASTER_ANCHORS,layer.end.attach)||layer.end.pivot.every((x,i)=>x===layer.pivot?.[i])))errors.push('Invalid bone '+key);
  }
  for(const view of VIEWS)if(!directions.has(view))errors.push('Missing direction '+view);

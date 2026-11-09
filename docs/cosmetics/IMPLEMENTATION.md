@@ -5,7 +5,7 @@ Branch: `feature/universal-cosmetic-wardrobe`.
 
 ## Release decision
 
-Do not merge or deploy this branch yet. The user requires the costumes to look exactly like the two supplied mockups. Two Royal Kimono atlas attempts were inspected and rejected. The first added chunky floral sandals and changed the ornament; the correction improved sandals but retained a different flared skirt, floral pattern/ornament details and imperfect atlas transparency. Neither has been registered or used as game artwork. No cropped poster characters, placeholder colored costumes or unreviewed generated assets are sold.
+Do not merge or deploy this branch yet. The user approved the corrected Royal Kimono atlas on 2026-11-09. That exact PNG is now registered as three modular fitting manifests (full-body, footwear and headwear). Approval applies to the artwork; fitting, animation and release reviews remain open. The initial atlas remains rejected. No cropped poster characters or placeholder costumes are sold.
 
 The mockups show one three-quarter angle per costume, not modular orthographic layers. Right/back/left and animation layers still require faithful art production and comparison on the actual hero rig. No outfit is production-ready. This is a development checkpoint, not a complete integrated release.
 
@@ -19,7 +19,7 @@ The user chose **Use a fantasy harvest outfit** when asked about the generic “
 - Local co-op combat checkpoints also preserve cosmetics. Authoritative graph serialization already preserves the per-hero field.
 - Pure purchase/selection transactions: explicit confirmation, safe-state and wardrobe checks, revision checks, ownership checks, partial-set pricing, no double deductions, full-body/top/bottom exclusivity, hide without losing ownership.
 - A Game adapter that changes only the coin wallet, cosmetic state and existing economy journal. It does not change equipment or power calculations.
-- 36 catalog entries and their modular categories/design requirements, all marked `art-pending`. Prices are deliberately unset; no real purchase is enabled.
+- 36 catalog entries and their modular categories/design requirements, 35 marked `art-pending` and Royal Kimono marked `fitting`. Prices are deliberately unset; no real purchase is enabled.
 - Candidate fixed-proportion/attachment contract, independent directional asset validation, bounded lazy image cache and per-animation-layer painter. These are not wired into the current renderer; universal body fitting is NOT complete.
 - Save guard for older clients and ownership rollback. It is implemented/tested as a module but NOT deployed to Supabase.
 
@@ -27,7 +27,7 @@ The user chose **Use a fantasy harvest outfit** when asked about the generic “
 
 - Actual universal-body rendering and migration/creator control changes.
 - Re-fitting every existing armor/hair/accessory piece and visual regression testing.
-- Faithful registered artwork for the 36 sets. The two rejected pilot images are not runtime assets.
+- Completed artwork and fitting for all 36 sets. Only the approved corrected Kimono is registered for isolated fitting.
 - Clothing Store / My Clothing / Accessories screens, controller navigation, on-hero previews and renderer layer integration.
 - Cosmetic changes in the online wire protocol and live multiplayer visibility. Existing online mode remains disabled by the current release configuration.
 - Production save-guard installation, live cloud restore, real controllers, mobile/device performance.
@@ -39,9 +39,9 @@ The active `royale-v3-staging` Edge Function version 3 stores the full snapshot 
 
 ## Tests
 
-Focused run: **135 tests passed**, including **15 new cosmetic tests**. Coverage includes actual Game objects with seven equipped rare armor pieces, unchanged derived equipment/HP/hitboxes/powers/inventory, old save round trips, separate players, co-op combat checkpoints, duplicate confirmations, unavailable assets, ownership retention, and simulated lazy loading.
+Focused run: **137 tests passed**, including **17 cosmetic tests**. Coverage includes actual Game objects with seven equipped rare armor pieces, unchanged derived equipment/HP/hitboxes/powers/inventory, old save round trips, separate players, co-op combat checkpoints, duplicate confirmations, unavailable assets, ownership retention, and simulated lazy loading.
 
-A broad historical glob was also attempted. It failed on old baseline byte-identity tests and missing historical objects/fixtures in the shallow checkout; it also initially found the co-op checkpoint omission, now fixed and included in the passing focused run. Do not report the entire historical suite as green. No browser or live-cloud cosmetic tests have passed because no cosmetic renderer/UI is released.
+A broad historical glob was also attempted. It failed on old baseline byte-identity tests and missing historical objects/fixtures in the shallow checkout; it also initially found the co-op checkpoint omission, now fixed and included in the passing focused run. Do not report the entire historical suite as green. An isolated browser fitting review renders the approved Kimono on actual male/female heroes in four views. Face ornament and hem offsets were adjusted. Original armor still shows at shoulders/sides/boots; these are unresolved release blockers. This is not a live-cloud or multiplayer test.
 
 Commands:
 
@@ -52,3 +52,7 @@ node tools/cosmetics/validate.mjs --release
 ```
 
 The last command MUST fail until all requested costumes are released with passing reviews.
+
+## Kimono fitting checkpoint — 2026-11-09
+
+The isolated page `royale/tests/kimono-fitting.html` uses real hero pose anchors, three modular manifests and one lazily loaded atlas. Sleeves split at elbow joints; footwear and ornament have independent attachments. Idle was visually inspected in all four views for both presentations. Other animation controls are available, but their complete visual acceptance is outstanding. Existing body differences remain visible and universal conversion is still required. No live accounts or cloud writes were used.

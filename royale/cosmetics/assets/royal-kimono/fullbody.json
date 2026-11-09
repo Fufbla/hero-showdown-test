@@ -1,0 +1,387 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/royal-kimono/atlas.png",
+    "width": 1024,
+    "height": 1536
+  },
+  "reviewStatus": "fitting-in-progress",
+  "layers": [
+    {
+      "view": "front",
+      "part": "skirt",
+      "pass": "torso",
+      "rect": [
+        31,
+        827,
+        226,
+        227
+      ],
+      "pivot": [
+        113.0,
+        0
+      ],
+      "attach": "waist",
+      "scale": 0.15
+    },
+    {
+      "view": "right",
+      "part": "skirt",
+      "pass": "torso",
+      "rect": [
+        294,
+        827,
+        189,
+        226
+      ],
+      "pivot": [
+        94.5,
+        0
+      ],
+      "attach": "waist",
+      "scale": 0.15
+    },
+    {
+      "view": "back",
+      "part": "skirt",
+      "pass": "torso",
+      "rect": [
+        525,
+        828,
+        235,
+        226
+      ],
+      "pivot": [
+        117.5,
+        0
+      ],
+      "attach": "waist",
+      "scale": 0.15
+    },
+    {
+      "view": "left",
+      "part": "skirt",
+      "pass": "torso",
+      "rect": [
+        800,
+        827,
+        195,
+        227
+      ],
+      "pivot": [
+        97.5,
+        0
+      ],
+      "attach": "waist",
+      "scale": 0.15
+    },
+    {
+      "view": "front",
+      "part": "torso",
+      "pass": "torso",
+      "rect": [
+        55,
+        49,
+        180,
+        247
+      ],
+      "pivot": [
+        90.0,
+        12.350000000000001
+      ],
+      "attach": "neck",
+      "scale": 0.16,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "view": "front",
+      "part": "upperArmFar",
+      "pass": "farArm",
+      "rect": [
+        48,
+        326,
+        167,
+        216
+      ],
+      "pivot": [
+        83.5,
+        17.28
+      ],
+      "attach": "shoulderFar",
+      "scale": 0.15,
+      "end": {
+        "attach": "wristFar",
+        "pivot": [
+          83.5,
+          177.11999999999998
+        ]
+      },
+      "joint": {
+        "attach": "elbowFar",
+        "fraction": 0.5
+      }
+    },
+    {
+      "view": "front",
+      "part": "upperArmNear",
+      "pass": "nearArm",
+      "rect": [
+        90,
+        574,
+        161,
+        222
+      ],
+      "pivot": [
+        80.5,
+        17.76
+      ],
+      "attach": "shoulderNear",
+      "scale": 0.15,
+      "end": {
+        "attach": "wristNear",
+        "pivot": [
+          80.5,
+          182.04
+        ]
+      },
+      "joint": {
+        "attach": "elbowNear",
+        "fraction": 0.5
+      }
+    },
+    {
+      "view": "right",
+      "part": "torso",
+      "pass": "torso",
+      "rect": [
+        322,
+        49,
+        151,
+        247
+      ],
+      "pivot": [
+        75.5,
+        12.350000000000001
+      ],
+      "attach": "neck",
+      "scale": 0.16,
+      "offset": [
+        6,
+        0
+      ]
+    },
+    {
+      "view": "right",
+      "part": "upperArmFar",
+      "pass": "farArm",
+      "rect": [
+        316,
+        328,
+        123,
+        219
+      ],
+      "pivot": [
+        61.5,
+        17.52
+      ],
+      "attach": "shoulderFar",
+      "scale": 0.15,
+      "end": {
+        "attach": "wristFar",
+        "pivot": [
+          61.5,
+          179.57999999999998
+        ]
+      },
+      "joint": {
+        "attach": "elbowFar",
+        "fraction": 0.5
+      }
+    },
+    {
+      "view": "right",
+      "part": "upperArmNear",
+      "pass": "nearArm",
+      "rect": [
+        338,
+        577,
+        115,
+        222
+      ],
+      "pivot": [
+        57.5,
+        17.76
+      ],
+      "attach": "shoulderNear",
+      "scale": 0.15,
+      "end": {
+        "attach": "wristNear",
+        "pivot": [
+          57.5,
+          182.04
+        ]
+      },
+      "joint": {
+        "attach": "elbowNear",
+        "fraction": 0.5
+      }
+    },
+    {
+      "view": "back",
+      "part": "torso",
+      "pass": "torso",
+      "rect": [
+        556,
+        49,
+        177,
+        237
+      ],
+      "pivot": [
+        88.5,
+        11.850000000000001
+      ],
+      "attach": "neck",
+      "scale": 0.16,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "view": "back",
+      "part": "upperArmFar",
+      "pass": "farArm",
+      "rect": [
+        554,
+        328,
+        188,
+        214
+      ],
+      "pivot": [
+        94.0,
+        17.12
+      ],
+      "attach": "shoulderFar",
+      "scale": 0.15,
+      "end": {
+        "attach": "wristFar",
+        "pivot": [
+          94.0,
+          175.48
+        ]
+      },
+      "joint": {
+        "attach": "elbowFar",
+        "fraction": 0.5
+      }
+    },
+    {
+      "view": "back",
+      "part": "upperArmNear",
+      "pass": "nearArm",
+      "rect": [
+        546,
+        577,
+        193,
+        216
+      ],
+      "pivot": [
+        96.5,
+        17.28
+      ],
+      "attach": "shoulderNear",
+      "scale": 0.15,
+      "end": {
+        "attach": "wristNear",
+        "pivot": [
+          96.5,
+          177.11999999999998
+        ]
+      },
+      "joint": {
+        "attach": "elbowNear",
+        "fraction": 0.5
+      }
+    },
+    {
+      "view": "left",
+      "part": "torso",
+      "pass": "torso",
+      "rect": [
+        812,
+        49,
+        151,
+        247
+      ],
+      "pivot": [
+        75.5,
+        12.350000000000001
+      ],
+      "attach": "neck",
+      "scale": 0.16,
+      "offset": [
+        -6,
+        0
+      ]
+    },
+    {
+      "view": "left",
+      "part": "upperArmFar",
+      "pass": "farArm",
+      "rect": [
+        840,
+        327,
+        136,
+        220
+      ],
+      "pivot": [
+        68.0,
+        17.6
+      ],
+      "attach": "shoulderFar",
+      "scale": 0.15,
+      "end": {
+        "attach": "wristFar",
+        "pivot": [
+          68.0,
+          180.39999999999998
+        ]
+      },
+      "joint": {
+        "attach": "elbowFar",
+        "fraction": 0.5
+      }
+    },
+    {
+      "view": "left",
+      "part": "upperArmNear",
+      "pass": "nearArm",
+      "rect": [
+        833,
+        576,
+        118,
+        222
+      ],
+      "pivot": [
+        59.0,
+        17.76
+      ],
+      "attach": "shoulderNear",
+      "scale": 0.15,
+      "end": {
+        "attach": "wristNear",
+        "pivot": [
+          59.0,
+          182.04
+        ]
+      },
+      "joint": {
+        "attach": "elbowNear",
+        "fraction": 0.5
+      }
+    }
+  ]
+}
