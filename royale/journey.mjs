@@ -142,6 +142,26 @@ export const journeyMethods={
     this.world.visits[`${id}:${this.board}`]=(this.world.visits[`${id}:${this.board}`]||0)+1;
     this.emit('region',{name:this.getRegion().name});
   },
+  fastTravel(destination,revision){
+    if(revision!==this.economy.revision||!this.canTravel()||this.hero.coins<100)return false;
+    const {region,board=0,legendary}=destination||{};
+    if(legendary){
+      // Reserve the spend before the boss-entry snapshot so reopening cannot refund it.
+      const before=structuredClone(this.economy),coins=this.hero.coins;
+      this.hero.coins-=100;this.recordEconomy('purchase',-100);
+      if(!this.enterLegendary(legendary)){this.hero.coins=coins;this.economy=before;return false;}
+    }else{
+      if(!Number.isInteger(region)||region<1||region>7||!Number.isInteger(board)||board<0||board>2)return false;
+      if(!this.arenaScene&&region===this.regionId&&board===boardIndex(this.hero.x))return false;
+      const camp=regionCamps(region)[board];
+      this.loadRegion(region,{x:camp.x,y:camp.y});
+      this.checkpoint=board;this.world.checkpoint={region,index:board};
+      const key=`${region}:${board}`;if(!this.world.activated.includes(key))this.world.activated.push(key);
+      this.hero.coins-=100;this.recordEconomy('purchase',-100);
+    }
+    this.emit('fast-travel');return true;
+  },
+  portalTravel(id){if(!this.nearPortal())return false;return this.travel(id);},
   travel(id){
     if(!this.canTravel()||!Number.isInteger(id)||id<1||id>7)return false;
     this.loadRegion(id,{checkpoint:true});return true;
@@ -156,9 +176,8 @@ export const journeyMethods={
     if(Math.abs(x-GATES.arena)<110)return this.enterBoss();
     return false;
   },
-  returnCheckpoint(){
-    if(!this.canTravel())return false;this.respawn();return true;
-  },
+  // Retired menu command: only defeat may call respawn.
+  returnCheckpoint(){return false;},
   enterBoard(index){
     if(index===this.board)return;this.board=index;
     const key=`${this.regionId}:${index}`,returning=!!this.world.visits[key];this.world.visits[key]=(this.world.visits[key]||0)+1;

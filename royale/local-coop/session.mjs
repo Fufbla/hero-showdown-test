@@ -69,6 +69,8 @@ export class LocalSession {
  command(player,method,args=[]){
   if(!this.active.has(player))throw Error('This player has left.');
   const h=this.heroes[player];
+  if(method==='fastTravel'&&this.active.size>1)return {ok:false,error:'Individual fast travel is unavailable while sharing one screen. Use regular portals together for free.'};
+  if(method==='portalTravel'){if(!h.game.nearPortal())return false;method='travel';}
   if(['travel','enterBoss','enterLegendary','returnCheckpoint'].includes(method)&&this.active.size===2){
    if([...this.active].some(i=>!this.games[i].canTravel()))return false;
    if(method==='enterLegendary'&&[...this.active].some(i=>this.games[i].hero.level<99||!this.games[i].powers.data.equipped.some(Boolean)))return false;

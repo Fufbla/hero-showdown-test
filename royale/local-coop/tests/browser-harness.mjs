@@ -69,7 +69,7 @@ export async function install(api){
    await record('Offscreen teleport',3000,n=>{if(n===0){const r=api.getRenderer(),g=s.games[1];g.hero.x=r.camera+r.width+100;g.hero.prevX=g.hero.x;}});await frames();
    check('Follower returns inside camera bounds',s.games[1].hero.x<api.getRenderer().camera+api.getRenderer().width&&(s.games[1].localTeleportUntil||0)>previousTeleport);
    const beforeLeader=s.games[0].hero.x;pads[0].connected=false;await frames();check('Controller disconnect pauses world',s.paused&&$('menu').open);pads[0].connected=true;await frames();check('Reconnect preserves assignments',api.input.sources[0]==='pad:0'&&api.input.sources[1]==='pad:1');
-   safe();s.games.forEach(g=>{g.combatTimer=0;});await api.act(0,'visitTree');await api.act(1,'visitTree');api.players.forEach(p=>p.tab='powers');api.renderPanels();
+   safe();s.games.forEach(g=>{g.combatTimer=0;});await api.act(0,'visitTree');await api.act(1,'visitTree');api.players.forEach(p=>p.tab='tree');api.renderPanels();
    for(let i=0;i<2;i++){const root=$('panel-'+i),controls=[...root.querySelectorAll('button,select,input')].filter(n=>!n.disabled&&n.getClientRects().length);api.players[i].focus=controls.findIndex(b=>b.textContent==='+1');}
    const points=s.games.map(g=>g.powers.data.points);await bothPulse(0);check('Each controller upgrades its own hero simultaneously',s.games.every((g,i)=>g.powers.data.points===points[i]-1));
    // Exercise the real two-panel controller handlers, with no mouse clicks.

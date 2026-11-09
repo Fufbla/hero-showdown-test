@@ -10,7 +10,7 @@ const $=id=>document.getElementById(id);
 const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
 export function statsText(def){return STAT_KEYS.filter(k=>def.stats[k]).map(k=>`${STAT_LABELS[k]} +${formatStat(k,def.stats[k])}`).join(' · ');}
 export class JourneyMenu {
-  constructor(getGame,persist,say,resume,transaction=null){this.transaction=transaction;this.getGame=getGame;this.persist=persist;this.say=say;this.resume=resume;this.confirmation=null;}
+  constructor(getGame,persist,say,resume,transaction=null,travelCommit=null){this.travelCommit=travelCommit;this.transaction=transaction;this.getGame=getGame;this.persist=persist;this.say=say;this.resume=resume;this.confirmation=null;}
   async commit(action){if(this.transaction)return (await this.transaction(action)).ok;const ok=await action();if(ok)this.persist();return !!ok;}
   preview(item){const g=this.getGame(),def=itemDefinition(item),panel=el('section',undefined,'equipment-preview'),canvas=el('canvas');canvas.width=360;canvas.height=420;const inv=structuredClone(g.inventory);if(!inv.items.some(i=>i.uid===item.uid))inv.items.push(item);inv.equipped[def.part]=item.uid;const body=el('div');body.append(el('h3',def.name),el('p',`${def.rarity} · Level ${def.level||1} · Fixed colors`),el('p',statsText(def)));for(const view of ['front','back']){const b=el('button',view==='front'?'Front preview':'Back preview','secondary');b.onclick=()=>drawEquipmentPreview(canvas,g,inv,view);body.append(b);}panel.append(canvas,body);$('equipment-list').prepend(panel);drawEquipmentPreview(canvas,g,inv);panel.scrollIntoView({block:'nearest'});}
   shop(){
@@ -20,17 +20,41 @@ export class JourneyMenu {
     button.onclick=async()=>{if(await g.buyHealthRoot()){this.persist();this.shop();this.say('One Health Root added.');}};section.append(text,button);
   }
   updateClock(){const g=this.getGame();for(const region of WORLD_REGIONS){const n=document.querySelector(`[data-region="${region.id}"] small`);if(n)n.textContent=`RECOMMENDED ${region.levels.join('–')} · ${formatClock(worldClock(g.world.clockReference,g.now(),region.id))}`;}}
-  map(){
+  map(source=this.source||'map'){
+    this.source=source;
     const g=this.getGame(),list=$('region-cards');list.replaceChildren();
-    $('map-note').textContent='';
+    $('map-note').hidden=false;$('map-note').textContent=source==='portal'?'Regular portal travel is free.':'World Map fast travel costs 100 coins. Regular portals are free.';
     for(const region of WORLD_REGIONS){
       const open=true,current=region.id===g.regionId,card=el('article',undefined,'region-card');card.style.setProperty('--region-color',region.sky[0]);card.dataset.region=region.id;if(current)card.setAttribute('aria-current','location');
       const art=el('div',undefined,`region-art ${region.theme}`);art.append(el('span',String(region.id).padStart(2,'0'),'region-number'),el('b',['','≋','♧','▥','◇','❧','✧','✦'][region.id]));card.append(art);
       const body=el('div',undefined,'region-copy');
       body.append(el('h3',region.name),el('small',`LV ${region.levels.join('–')}`));
-      const button=el('button',current?'Travel':'Travel','secondary');button.disabled=!g.canTravel();button.dataset.travel=region.id;
-      button.onclick=async()=>{if(await g.travel(region.id)){this.persist();this.resume();this.say(`${region.name} · arrived at safe camp.`);}else{this.say('Portal travel requires five safe seconds outside combat.');this.map();}};body.append(button);card.append(body);list.append(card);
+      const boards=source==='portal'?[0]:[0,1,2];
+      for(const board of boards){
+        const here=current&&!g.arenaScene&&g.board===board;
+        const button=el('button',here?'Current location':source==='portal'?'Enter Portal · Free':`Phase ${board+1} · 100 Coins`,'secondary');button.disabled=here||!g.canTravel();button.dataset.travel=region.id;button.dataset.board=board;
+        button.onclick=async()=>{
+          if(source!=='portal'){this.confirmTravel({region:region.id,board});return;}
+          if(await g.portalTravel(region.id)){this.persist();this.resume();this.say(`${region.name} · arrived through a free portal.`);}else{this.say('Stand beside a regular portal outside combat.');this.map(source);}
+        };body.append(button);
+      }card.append(body);list.append(card);
     }
+  }
+  cancelTravel(){if(!this.travelDialog)return false;if(!this.travelBusy&&!this.travelPending)this.travelDialog.close();return true;}
+  confirmTravel(destination){
+    if(this.travelDialog)return;
+    const g=this.getGame(),revision=g.economy.revision,origin=document.activeElement,d=el('dialog',undefined,'sale-dialog');d.id='fast-travel-dialog';
+    const title=el('h3','Fast Travel — 100 Coins');title.id='fast-travel-title';d.setAttribute('aria-labelledby',title.id);
+    const status=el('p',g.hero.coins<100?'Not enough coins! Fast travel requires 100 coins. Use regular portals to travel for free.':'Teleport directly to this destination for 100 coins?');status.setAttribute('role','status');
+    const yes=el('button','Travel — 100 Coins','primary'),no=el('button','Cancel','secondary');yes.id='confirm-fast-travel';no.id='cancel-fast-travel';yes.disabled=g.hero.coins<100||!g.canTravel();
+    no.onclick=()=>this.cancelTravel();yes.onclick=async()=>{
+      if(this.travelBusy)return;this.travelBusy=true;yes.disabled=true;no.disabled=true;
+      try{const result=this.travelCommit?await this.travelCommit(()=>g.fastTravel(destination,revision)):{ok:await this.commit(()=>g.fastTravel(destination,revision))};this.travelPending=!!result.pending;if(result.ok){d.close();this.resume();this.say('Fast travel complete · 100 coins paid.');}else{status.textContent=result.error||'Travel was not completed. No fee was charged. Cancel and review the destination again.';}}
+      catch(error){status.textContent=error.message;}
+      finally{this.travelBusy=false;no.disabled=!!this.travelPending;if(this.travelPending){yes.textContent='Retry travel save';yes.disabled=false;}}
+    };
+    d.addEventListener('cancel',e=>{e.preventDefault();this.cancelTravel();});d.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();this.cancelTravel();}});
+    d.addEventListener('close',()=>{this.travelDialog=null;this.travelPending=false;d.remove();if(origin?.isConnected)origin.focus();});d.append(title,status,no,yes);document.body.append(d);this.travelDialog=d;d.showModal();no.focus();
   }
   inventory(){
     const g=this.getGame();this.confirmation=null;$('equipment-confirm').hidden=true;

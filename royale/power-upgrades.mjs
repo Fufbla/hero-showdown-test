@@ -10,7 +10,7 @@ export function hudEquipError(game, slot, id) {
   if (id !== null) {
     if (!POWER_IDS.includes(id) || POWERS[id].passive || !powers.data.levels[id]) return 'Choose a learned active power.';
     const other = powers.data.equipped.indexOf(id);
-    if (other !== -1) return `Equipped in slot ${other + 1}`;
+    if (other === slot) return `Equipped in slot ${other + 1}`;
   } else if (!current) return 'This slot is already empty.';
   if ([current, id].some(power => power && (powers.active[power] || powers.cooldowns[power] > 0 || game.disruptedPower === power))) {
     return 'Wait until the power is ready.';
@@ -22,8 +22,8 @@ function savePowerChange(store, index, heroId, region, snapshot) {
   return store.cloud ? store.commit(index, snapshot) :
     store.writeSlot(index, snapshot, {expectedId:heroId, region, requireDurable:true});
 }
-// Commit only earned level/XP and the permanent spend. An upgrade is not an
-// implicit manual save of the current position, inventory, coins or loadout.
+// Commit the complete current hero alongside the spend: an old partial snapshot
+// must never resurrect spent coins, older HP or a pre-travel position.
 export function powerUpgradeSnapshot(game,previous,id){
   const check=game.upgradePreview(id,1);
   if(!check.ok)return check;
@@ -35,7 +35,8 @@ export function powerUpgradeSnapshot(game,previous,id){
     !Number.isInteger(game.hero.level)||game.hero.level<saved.level||game.hero.level>99||
     game.powers.data.points!==game.hero.level-1-spent)
     return fail('Power progression changed. Reload the latest hero before upgrading.');
-  const next=structuredClone(saved);
+  const next=decodeSave(game.save());
+  if(!next)return fail('Current hero progress could not be captured.');
   next.level=game.hero.level;next.xp=game.hero.xp;
   next.powers.levels[id]++;next.powers.points=game.powers.data.points-1;
   next.economy.revision++;next.economy.recent.push({id:next.economy.revision,kind:'upgrade',coins:0});
@@ -56,9 +57,11 @@ export class InstantPowerUpgrades{
     if (reason || !game.paused) return fail(reason || 'Open the slot to choose a power.');
     const record = store.slot(index);
     if (!record || record.id !== heroId || !store.writable) return fail(store.message || 'Select a writable hero before equipping.');
-    const snapshot = structuredClone(store.cloud ? store.meta[index]?.snapshot : record.snapshot);
+    const snapshot = decodeSave(game.save());
     if (!snapshot) return fail('The saved hero is unavailable.');
     const equipped = [...game.powers.data.equipped];
+    const other=id===null?-1:equipped.indexOf(id);
+    if(other>=0&&other!==slot)equipped[other]=equipped[slot];
     equipped[slot] = id;
     if (equipped.some(power => power && !snapshot.powers.levels[power])) return fail('Reload the latest hero before equipping.');
     snapshot.powers.equipped = equipped;

@@ -14,7 +14,7 @@ import {PROTOCOL,inputPacket,consumeEdges,roomCode,sequence} from './protocol.mj
 
 const key=g=>`${g.regionId}:${g.arenaScene?(g.arenaScene.legendary||'boss'):'world'}`;
 const clone=o=>decodeRuntime(encodeRuntime(o));
-const METHODS=new Set(['travel','enterBoss','enterLegendary','visitTree','leaveTree','upgradePower','equipPower','equipItem','buyCostume','buyHealthRoot','useHealthRoot','pickupLoot','applyMakeover','sellItem','discardItem','resolveReward','acceptReward','claimChest','claimMergeReward','equipMergeMix','activateMergeSet','returnNormalEquipment','returnCheckpoint']);
+const METHODS=new Set(['fastTravel','portalTravel','travel','enterBoss','enterLegendary','visitTree','leaveTree','upgradePower','equipPower','equipItem','buyCostume','buyHealthRoot','useHealthRoot','pickupLoot','applyMakeover','sellItem','discardItem','resolveReward','acceptReward','claimChest','claimMergeReward','equipMergeMix','activateMergeSet','returnNormalEquipment','returnCheckpoint']);
 // Commands never leave this device; exact serialization is the retry signature.
 const hash=JSON.stringify;
 export class Authority {

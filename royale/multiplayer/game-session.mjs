@@ -3,7 +3,7 @@ import {drawHero} from '../hero-art.mjs';
 import {drawPowerHero,drawPowerWorld} from '../power-art.mjs';
 import {drawMergeWorld} from '../legendary-art.mjs';
 import {pickupLoot} from '../world-loot.mjs';
-export const REMOTE_METHODS=['travel','enterBoss','enterLegendary','visitTree','leaveTree','upgradePower','equipPower','equipItem','buyCostume','buyHealthRoot','useHealthRoot','applyMakeover','sellItem','discardItem','resolveReward','acceptReward','claimChest','claimMergeReward','equipMergeMix','activateMergeSet','returnNormalEquipment','returnCheckpoint','pickupLoot'];
+export const REMOTE_METHODS=['fastTravel','portalTravel','travel','enterBoss','enterLegendary','visitTree','leaveTree','upgradePower','equipPower','equipItem','buyCostume','buyHealthRoot','useHealthRoot','applyMakeover','sellItem','discardItem','resolveReward','acceptReward','claimChest','claimMergeReward','equipMergeMix','activateMergeSet','returnNormalEquipment','returnCheckpoint','pickupLoot'];
 export const MIGRATION_KEY='healthia.royale.multiplayer.links.v1';
 export class GameSession extends EventTarget {
   constructor({url,getToken,storage=localStorage,onState,onError}){

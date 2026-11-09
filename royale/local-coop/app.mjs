@@ -100,6 +100,7 @@ function toast(text){$('toast').textContent=text;$('toast').hidden=false;$('toas
 async function saveOne(i){
  const active=session;if(!active?.active.has(i))return {ok:true};
  const result=await active.saveOne(i);if(session!==active)return result;
+ if(result.ok&&players[i].travelPending){players[i].travelPending=false;renderPanel(i);}
  const label=$('save-'+i);label.textContent=result.ok?(qa?'Practice checkpoint':`Saved ${new Date().toLocaleTimeString()}`):'Save pending · retrying';label.dataset.error=String(!result.ok);
  if(!result.ok){panelNote(i,result.error);if(result.conflict){openMenu();panelNote(i,result.error);}}return result;
 }
@@ -110,6 +111,7 @@ function openMenu(){
  if(!$('menu').open)$('menu').showModal();renderPanels();audio.update('',false);
 }
 function markReady(i){
+ if(players.some(p=>p.travelPending))return;
  if(players[i].leaving)return;
  if(players[i].profile.blocked?.has(players[i].slot)){panelNote(i,'A newer cloud save exists. Reload before continuing. Your checkpoint is retained.');return;}
  const source=input.sources[i],pad=getPads()[+source.slice(4)];if(!pad?.connected){panelNote(i,'Reconnect your assigned controller before selecting Ready.');return;}
@@ -129,9 +131,10 @@ $('pause').onclick=openMenu;$('menu').addEventListener('cancel',e=>{e.preventDef
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('play').requestFullscreen();}catch{note('Full screen is unavailable in this browser.');}};
 $('frame-rate').onchange=()=>{frameCap=+$('frame-rate').value;};
 async function act(i,method,args=[]){
- if(!session.active.has(i)||session.ready[i]||players[i].leaving)return false;
+ if(!session.active.has(i)||session.ready[i]||players[i].leaving||players[i].travelPending)return false;
  try{const result=session.command(i,method,args);if(result===false||result?.ok===false){panelNote(i,result?.error||'Check this action’s requirements and leave combat first.');return false;}
-  renderPanel(i);updateHUD();void saveOne(i);return true;
+  if(method==='fastTravel')players[i].travelPending=true;
+  renderPanel(i);updateHUD();if(method==='fastTravel')await saveOne(i);else void saveOne(i);return true;
  }catch(e){panelNote(i,e.message);return false;}
 }
 function renderPanels(){$('pause-panels').classList.toggle('solo',session.active.size===1);$('menu').querySelector('.pause-header p').textContent=session.active.size===2?'D-pad / stick: move · A / Cross: select · B / Circle: back · LB / RB: tabs. Both select Ready to resume.':'Your hero continues solo. Select Ready to resume.';for(let i=0;i<2;i++)renderPanel(i);}
@@ -141,7 +144,7 @@ function renderPanel(i){
  if(session.ready[i]){const message=el('p',`PLAYER ${i+1} READY — WAITING FOR PLAYER ${i===0?2:1}`);message.className='ready-message';root.append(message);}
  else{
   const nav=el('nav');nav.className='menu-tabs';
-  for(const [id,label] of [['stats','Hero Stats'],['powers','Superpowers'],['gear','Equipment'],['travel','World'],['merge','Villain Merge']]){const b=button(label,()=>{p.tab=id;p.focus=0;renderPanel(i);});b.setAttribute('aria-pressed',String(p.tab===id));nav.append(b);}root.append(nav);
+  for(const [id,label] of [['stats','Hero Stats'],['tree','Tree of Eris'],['gear','Equipment'],['travel','World'],]){const b=button(label,()=>{p.tab=id;p.portal=false;p.focus=0;if(id==='tree')void act(i,'visitTree');else renderPanel(i);});b.setAttribute('aria-pressed',String(p.tab===id));nav.append(b);}root.append(nav);
   const content=el('div');content.className='menu-section';root.append(content);
   const row=(label,...controls)=>{const r=el('div');r.className='item-row';r.append(el('span',label),...controls);content.append(r);};
   if(p.tab==='stats'){
@@ -150,7 +153,10 @@ function renderPanel(i){
    content.append(button('Save My Hero',()=>void saveOne(i)),button('Use Health Root',()=>act(i,'useHealthRoot'),!g.healthRoots||g.hero.dead));
    content.append(el('p','Autosave every 8 seconds. If your controller disconnects, reconnect the same controller. Your assignment is retained.'));
   }
-  if(p.tab==='powers'){
+  if(p.tab==='tree'){
+   content.append(el('h4','Tree of Eris'),button('Upgrade Powers',()=>{p.treeSection='powers';renderPanel(i);}),button('Costume Wardrobe',()=>{p.treeSection='wardrobe';renderPanel(i);}));
+   if(p.treeSection==='wardrobe'){content.append(button('Equipment & wardrobe',()=>{p.tab='gear';renderPanel(i);}),button('Villain Merge',()=>{p.tab='merge';renderPanel(i);}));}
+   else{
    content.append(button(g.treeVisit?'At Tree of Eris':'Visit Tree of Eris',()=>act(i,'visitTree'),!g.canTravel()));
    if(!g.canSave())content.append(el('p','Resume and spend five seconds out of combat before changing powers.'));
    const slots=el('div');slots.className='slot-actions';content.append(el('p',p.selectedPower?`Assign ${POWERS[p.selectedPower].name} to a slot. An equipped power swaps places.`:'Select an owned power below, then choose a slot.'),slots);
@@ -171,6 +177,7 @@ function renderPanel(i){
    const merge=g.mergeAbility();if(merge)content.append(el('p',`Slot 4 · ${merge.icon} ${merge.name} · Villain Merge`));
    if(g.treeVisit)content.append(button('Buy Health Root · 50 coins',()=>act(i,'buyHealthRoot'),!g.canSave()));
   }
+  }
   if(p.tab==='gear'){
    content.append(el('p',`${g.inventory.items.length}/20 equipment. Sales use your own coin balance.`));
    for(const item of g.inventory.items){const def=itemDefinition(item),worn=Object.values(g.inventory.equipped).includes(item.uid),sale=g.salePreview(item.uid);row(`${def?.name||item.catalogId}${worn?' · equipped':''} · LV ${def?.level||1} · ${def?.rarity||''}\n${statText(def?.stats)}`,button(worn?'Unequip':'Equip',()=>act(i,'equipItem',[item.uid]),!g.canSave()),button(`Sell · ${sale.value||0} coins`,()=>act(i,'sellItem',[item.uid,{confirmed:true,revision:g.economy.revision}]),!sale.ok||worn));}
@@ -185,9 +192,10 @@ function renderPanel(i){
    content.append(button('Collect Boss Chest',()=>act(i,'claimChest'),!g.availableChest()||!g.canSave()));
   }
   if(p.tab==='travel'){
-   content.append(el('p','Travel moves the shared world for both heroes. Both must be out of combat.'));
-   content.append(button('Return to checkpoint',()=>act(i,'returnCheckpoint'),!g.canTravel()),button(g.treeVisit?'At Tree of Eris':'Visit Tree of Eris',()=>act(i,'visitTree'),!g.canTravel()));
-   for(const region of WORLD_REGIONS){const b=button(`${region.name} · LV ${region.levels.join('–')}`,()=>act(i,'travel',[region.id]),!g.canTravel());b.className='region-button';content.append(b);}
+   content.append(el('p',p.portal?'Regular portals move the shared world for free.':session.active.size>1?'Individual fast travel is unavailable while sharing one screen. Use regular portals together for free.':'World Map fast travel costs 100 coins.'));
+   if(g.treeVisit)content.append(button('Leave Tree to travel',()=>act(i,'leaveTree')));
+   for(const region of WORLD_REGIONS){const b=button(`${region.name} · ${p.portal?'Free':'100 Coins'}`,()=>{if(p.portal){void act(i,'portalTravel',[region.id]);return;}p.travelChoice={region:region.id,board:0,revision:g.economy.revision};renderPanel(i);},!g.canTravel()||!p.portal&&session.active.size>1||region.id===g.regionId&&g.board===0);b.className='region-button';content.append(b);}
+   if(p.travelChoice){const q=p.travelChoice;content.append(el('h4','Fast Travel — 100 Coins'),el('p',g.hero.coins<100?'Not enough coins! Fast travel requires 100 coins. Use regular portals to travel for free.':'Teleport directly to this destination for 100 coins?'),button('Travel — 100 Coins',()=>{delete p.travelChoice;void act(i,'fastTravel',[{region:q.region,board:q.board},q.revision]);},g.hero.coins<100),button('Cancel',()=>{delete p.travelChoice;renderPanel(i);}));}
   }
   if(p.tab==='merge'){
    const id=g.pendingMergeReward();
@@ -199,8 +207,9 @@ function renderPanel(i){
    for(const [id,record] of Object.entries(g.legendary.defeated))if(record.claimed)content.append(button('Activate '+LEGENDARY[id].name,()=>act(i,'activateMergeSet',[id]),!g.treeVisit||!g.canSave()));
   }
  }
+ if(p.travelPending)root.append(el('p','Fast travel save pending. Retry before resuming.'),button('Retry travel save',()=>void saveOne(i)));
  const status=el('p',p.statusText);status.className='menu-status';status.setAttribute('role','status');root.append(status);
- const footer=el('footer');footer.className='menu-actions';footer.append(button(session.ready[i]?'Cancel Ready':'Ready / Resume',()=>markReady(i),p.leaving),button(p.leaving?'Saving…':'Leave Local Co-op',()=>void leave(i),p.leaving));root.append(footer);const restored=menuItems(root).findIndex(n=>(n.dataset.menuKey||n.getAttribute('aria-label')||n.textContent)===focusKey);if(restored>=0)p.focus=restored;highlight(root,p);
+ const footer=el('footer');footer.className='menu-actions';footer.append(button(session.ready[i]?'Cancel Ready':'Ready / Resume',()=>markReady(i),p.leaving||p.travelPending),button(p.leaving?'Saving…':'Leave Local Co-op',()=>void leave(i),p.leaving));root.append(footer);const restored=menuItems(root).findIndex(n=>(n.dataset.menuKey||n.getAttribute('aria-label')||n.textContent)===focusKey);if(restored>=0)p.focus=restored;highlight(root,p);
 }
 const menuItems=root=>[...root.querySelectorAll('button,select,input'),...(!session&&root.classList.contains('player-card')&&!$('start').disabled?[$('start')]:[])].filter(n=>!n.disabled&&n.getClientRects().length);
 function highlight(root,p){const controls=menuItems(root);p.focus=Math.max(0,Math.min(p.focus,controls.length-1));root.querySelectorAll('.controller-focus').forEach(n=>n.classList.remove('controller-focus'));controls[p.focus]?.classList.add('controller-focus');return controls;}
@@ -223,7 +232,7 @@ function navigateController(i,now,managementHandled=false){
   if(p.selectMenu){closeSelector(i);return;}
   if(session){if(session.ready[i]){session.ready[i]=false;}else if(p.rewardChoice)p.rewardChoice=null;else if(p.selectedPower||p.chooseSlot!==undefined){p.selectedPower=null;delete p.chooseSlot;}else{p.tab='stats';p.focus=0;}renderPanel(i);}return;
  }
- if(session&&!p.selectMenu&&!session.ready[i]&&(state.edges.has('power0')||state.edges.has('power1'))){const tabs=['stats','powers','gear','travel','merge'];p.tab=tabs[(tabs.indexOf(p.tab)+tabs.length+(state.edges.has('power1')?1:-1))%tabs.length];p.focus=0;renderPanel(i);return;}
+ if(session&&!p.selectMenu&&!session.ready[i]&&(state.edges.has('power0')||state.edges.has('power1'))){const tabs=['stats','tree','gear','travel'];p.tab=tabs[(tabs.indexOf(p.tab)+tabs.length+(state.edges.has('power1')?1:-1))%tabs.length];p.focus=0;p.portal=false;if(p.tab==='tree')void act(i,'visitTree');else renderPanel(i);return;}
  if(state.edges.has('jump')){
   if(active.type==='checkbox'){active.checked=!active.checked;active.dispatchEvent(new Event('change'));}
   else if(active.tagName==='INPUT')manager.text(i,active);
@@ -250,7 +259,7 @@ function events(){
  for(const i of session.active){const g=session.games[i];for(const event of g.drain()){
   renderer.event(event);audio.effect(event.type);
   if(event.type==='tree'){session.command(i,'visitTree');players[i].tab='powers';openMenu();}
-  if(['world-portal','chest-preview'].includes(event.type)){players[i].tab=event.type==='chest-preview'?'gear':'travel';openMenu();}
+  if(['world-portal','chest-preview'].includes(event.type)){players[i].tab=event.type==='chest-preview'?'gear':'travel';players[i].portal=event.type==='world-portal';openMenu();}
   if(event.message)toast(`P${i+1}: ${event.message}`);
   if(event.type==='level')toast(`P${i+1}: Level ${event.level}!`);
   if(['level','loot-picked','equipment','boss-victory','chest-claimed','legendary-clear-ready'].includes(event.type))void saveOne(i);

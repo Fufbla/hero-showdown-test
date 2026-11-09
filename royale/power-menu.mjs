@@ -63,7 +63,7 @@ export class PowerMenu {
       const empty=node('option','Empty');empty.value='';select.append(empty);
       for(const id of POWER_IDS.filter(id=>!POWERS[id].passive&&g.powers.data.levels[id])){const option=node('option',`${POWERS[id].name} · ${g.powers.data.levels[id]}`);option.value=id;select.append(option);}
       select.value=g.powers.data.equipped[i]||'';select.disabled=!safe;
-      select.onchange=async()=>{if(this.busy)return;if(await g.equipPower(i,select.value||null)){this.persist();this.loadout();}else this.say('Leave combat to change your loadout.');};label.append(select);$('loadout-slots').append(label);
+      select.onchange=async()=>{if(this.busy)return;if((await this.upgrades.equip(i,select.value||null)).ok){this.persist();this.loadout();}else this.say('Leave combat to change your loadout.');};label.append(select);$('loadout-slots').append(label);
     }
     $('power-points').textContent=g.powers.data.points;
     $('tree-from-pause').disabled=!safe;
@@ -107,6 +107,7 @@ export class PowerMenu {
   }
   detail(){
     const g=this.getGame(),id=this.selected,def=POWERS[id],level=g.powers.data.levels[id],panel=$('power-detail');panel.replaceChildren();
+    if(level&&!def.passive){const actions=node('div',undefined,'slot-actions');for(let slot=0;slot<3;slot++){const b=node('button',`Assign to Slot ${slot+1}`,'secondary');b.disabled=!g.canSave()||this.busy;b.onclick=async()=>{if(this.busy)return;this.busy=true;const r=await this.upgrades.equip(slot,id);this.busy=false;this.message=r.ok?`${def.name} assigned to Slot ${slot+1}.`:r.error;if(r.ok)this.persist();this.open();};actions.append(b);}panel.append(actions);}
     panel.append(node('div',def.passive?'PASSIVE SUPERPOWER':'ACTIVE SUPERPOWER','eyebrow'),node('h3',def.name),node('p',def.summary));
     const preview=node('div');preview.id='upgrade-preview';panel.append(preview);
     const table=node('table'),head=node('tr');for(const label of ['Ability',`Level ${level}`])head.append(node('th',label));const thead=node('thead');thead.append(head);table.append(thead);
