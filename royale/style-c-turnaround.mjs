@@ -1,3 +1,4 @@
+import {clothingCoverage,drawClothingPass} from './cosmetics/renderer.mjs';
 import {paintedCapeMotion,paintedCapeOffset} from './cape.mjs';
 import {skinShade} from './skin-color.mjs';
 import {headwearFit} from './headwear-fit.mjs';
@@ -7,7 +8,7 @@ import {headwearFit} from './headwear-fit.mjs';
 import {sanitizeLook, costumePalette} from './appearance.mjs';
 import {STYLE_C_DEFAULTS} from './style-c-defaults.mjs';
 import {TURNAROUND_MODELS} from './assets/hero/style-c-accurate/turnaround/model.mjs';
-import {sampleStyleCMotion} from './style-c-motion.mjs';
+import {sampleStyleCMotion,drawStyleCMotionLimb} from './style-c-motion.mjs';
 import {drawStyleCHair} from './style-c-hair.mjs';
 import {drawStyleCEquipment, drawStyleCEquipmentAura, withStyleCEquipmentGlow} from './style-c-equipment.mjs';
 import {emblem} from './style-c-paint.mjs';
@@ -61,15 +62,16 @@ export function prepareTurnarounds({canvasFactory, imageLoader} = {}) {
 }
 export const turnaroundStatus = () => ({ready:!!artwork,error,views:Object.keys(TURNAROUND_MODELS),cachedLayers:materialCache.size});
 
-function materialFor(model, name, colors, base) {
+function materialFor(model, name, colors, base, bare=false) {
   const rect=model.parts[name]; if (!rect) return null;
   const [x,y,w,h,left,top]=rect;
   const changed=MATERIALS.map((key,id)=>id && colors[key]!==base[key] ? rgb(colors[key]) : null);
+  if(bare)for(const i of [1,3,4])changed[i]=rgb(colors.skin);
   const profile = model === TURNAROUND_MODELS['male-side'] || model === TURNAROUND_MODELS['female-side'];
   const sculpt = profile && (name==='head' || name==='bareHead') &&
     ['eyeShape','brows','nose','mouth'].some(k=>colors[k]!==base[k]);
   if(!changed.some(Boolean) && !sculpt) return {image:artwork, x,y,w,h,left,top};
-  const key=[x,y, ...MATERIALS.slice(1).map(k=>colors[k]), ...(sculpt?['eyeShape','brows','nose','mouth'].map(k=>colors[k]):[])].join('|');
+  const key=[x,y, ...MATERIALS.slice(1).map(k=>colors[k]), ...(sculpt?['eyeShape','brows','nose','mouth'].map(k=>colors[k]):[]),bare].join('|');
   if(materialCache.has(key)) return materialCache.get(key);
   const canvas=rasterCanvas(w,h), c=canvas.getContext('2d',{willReadFrequently:true});
   c.drawImage(artwork,x,y,w,h,0,0,w,h);
@@ -152,7 +154,10 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
   const left=options.view==='left', back=options.view==='back';
   if(!artwork || !['side','right','left','back'].includes(options.view))return false;
   const view=back?'back':'side', look=sanitizeLook(raw), base=STYLE_C_DEFAULTS[look.presentation];
-  const m=TURNAROUND_MODELS[look.presentation+'-'+view], fitted=styledModel(m,look);
+  const bodyLook=options.universalBody?{...look,presentation:'male'}:look;
+  const m=TURNAROUND_MODELS[bodyLook.presentation+'-'+view],headModel=TURNAROUND_MODELS[look.presentation+'-'+view], fitted=styledModel(m,bodyLook);
+  const clothing=options.clothing||[],covered=clothingCoverage(clothing);
+  const hidden=part=>covered.has(part)||(covered.has('torso')&&['suit','chest','shoulder','emblem','belt'].includes(part));
   const pieces=options.outfit?.pieces||{}, colors={...look,...costumePalette(look,options.outfit)};
   if(pieces.chest){colors.suit=pieces.chest.color;colors.trim=pieces.chest.accent||colors.trim;}
   for(const [part,field] of [['suit','suit'],['cape','capeColor'],['emblem','emblemColor']])if(pieces[part]?.color)colors[field]=pieces[part].color;
@@ -174,29 +179,33 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
   }
   const sizeX=UNIT*widthFor(look.build), sizeY=UNIT*look.height*(look.age==='teen'?.98:look.age==='older'?.99:1);
   const local=p=>[p[0]*sizeX*(left?-1:1),p[1]*sizeY];
-  const report={...pose,head:local(pose.head),hip:local(pose.hip),shoulder:local(pose.shoulder),arms:pose.arms.map(chain=>chain.map(local)),legs:pose.legs.map(chain=>chain.map(local))};
+  const report={...pose,head:local(pose.head),hip:local(pose.hip),shoulder:local(pose.shoulder),arms:pose.arms.map(chain=>chain.map(local)),legs:pose.legs.map(chain=>chain.map(local)),clothingRest:{hip:local(fitted.hip),legs:fitted.legs.map(chain=>chain.map(local))}};
   const draw=(part,from,to=from,rot=0,wide=1,tall=1)=>{
-    const a=materialFor(m,part,colors,base);if(!a)return;
+    const isHead=['head','bareHead'].includes(part),source=isHead?headModel:m;
+    const a=materialFor(source,part,colors,isHead?base:STYLE_C_DEFAULTS[bodyLook.presentation],!isHead&&covered.has('legs')&&/^(thigh|shin)/.test(part));if(!a)return;
     c.save();c.translate(...to);c.rotate(rot);c.scale(wide,tall);
     c.drawImage(a.image,a.x,a.y,a.w,a.h,a.left-from[0],a.top-from[1],a.w,a.h);c.restore();
   };
   const segment=(part,from,to,wide=1)=>{
-    const a=materialFor(m,part,colors,base);if(!a)return;
+    const isHead=['head','bareHead'].includes(part),source=isHead?headModel:m;
+    const a=materialFor(source,part,colors,isHead?base:STYLE_C_DEFAULTS[bodyLook.presentation],!isHead&&covered.has('legs')&&/^(thigh|shin)/.test(part));if(!a)return;
     c.save();c.translate(...to[0]);c.rotate(angle(...to)-Math.PI/2);
     c.scale(wide,distance(...to)/Math.max(1,distance(...from)));
     c.rotate(Math.PI/2-angle(...from));
     c.drawImage(a.image,a.x,a.y,a.w,a.h,a.left-from[0][0],a.top-from[0][1],a.w,a.h);
     c.restore();
   };
-  const wear=(part,i=0)=>drawStyleCEquipment(c,part,part==='shoulder'?(pieces.chest||pieces.suit):pieces[part],pose,look,{view,side:i,steel:!!h.steel});
+  const wear=(part,i=0)=>{if(!hidden(part))drawStyleCEquipment(c,part,part==='shoulder'?(pieces.chest||pieces.suit):pieces[part],pose,bodyLook,{view,side:i,steel:!!h.steel});};
+  const paint=pass=>{if(!clothing.length)return;c.save();c.scale((left?-1:1)/UNIT,1/UNIT);drawClothingPass(c,report,left?'left':back?'back':'right',pass,clothing);c.restore();};
   c.save(); c.translate(x,y);c.scale(sizeX*scale*(left?-1:1),sizeY*scale);c.rotate(pose.rotation||0);c.globalAlpha*=pose.opacity;
   if(h.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;
-  look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
+  look.headwearCoverage=headwearFit(covered.has('helmet')?null:pieces.helmet,view).hair;
   const regularHair=look.hair===base.hair&&look.headwearCoverage!=='tucked';
-  if (pose.state==='idle'&&neutralShape(look)&&neutralFace(look,base)&&regularHair&&look.cape&&!Object.keys(pieces).length&&look.emblem===base.emblem&&!h.steel) {
+  if (!options.universalBody&&!clothing.length&&pose.state==='idle'&&neutralShape(look)&&neutralFace(look,base)&&regularHair&&look.cape&&!Object.keys(pieces).length&&look.emblem===base.emblem&&!h.steel) {
     draw('source',[0,0]);c.restore();return report;
   }
-  drawStyleCEquipmentAura(c,pieces,pose,look,{view});
+  drawStyleCEquipmentAura(c,Object.fromEntries(Object.entries(pieces).filter(([part])=>!hidden(part))),pose,bodyLook,{view});
+  paint('behindBody');
   const turn=angle(m.hip,m.shoulder)-angle(pose.hip,pose.shoulder);
   const cloak=()=>withStyleCEquipmentGlow(c,pieces.cape,()=>{
     const tile=materialFor(m,'cape',colors,base);if(!tile)return;
@@ -217,37 +226,43 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
     c.save();c.translate(...pose.shoulder);c.rotate(-turn);c.scale(look.shoulders,look.torso*.35+look.legs*.65);
     c.drawImage(buffer,tile.left-m.shoulder[0]-px,top-py);c.restore();
   });
-  if(look.cape&&!back)cloak();
+  if(look.cape&&!covered.has('cape')&&!back)cloak();
   const limb=(kind,i)=>{
     const isArm=kind==='arms', target=pose[kind][i], sourceIndex=!m.parts[(isArm?'upper':'thigh')+i]?0:i, orig=m[kind][sourceIndex];
     const width=isArm?1+(look.muscle-.35)*.26:look.hips;
     const names=isArm?['upper','lower','hand']:['thigh','shin','boot'];
     c.save();
     if(!back&&sourceIndex!==i)c.filter='brightness(80%)';
-    segment(names[0]+sourceIndex,orig.slice(0,2),target.slice(0,2),width);
-    segment(names[1]+sourceIndex,orig.slice(1),target.slice(1),width);
+    if(!(isArm?covered.has('arms'):covered.has('legs'))){segment(names[0]+sourceIndex,orig.slice(0,2),target.slice(0,2),width);
+    segment(names[1]+sourceIndex,orig.slice(1),target.slice(1),width);}
     const rot=isArm?angle(...target.slice(1))-angle(...orig.slice(1)):0;
-    if(isArm || !pieces.boots || pose.sole===i)draw(names[2]+sourceIndex,orig[2],target[2],rot,width,1);
+    if(isArm&&covered.has('gloves'))drawStyleCMotionLimb(c,{...pose,m:fitted,clip:'turn',frame:1},'arms',i,bodyLook,colors,{}, {upper:false,lower:false,bareHand:true});
+    else if(isArm || (!covered.has('feet')&&(!pieces.boots || pose.sole===i)))draw(names[2]+sourceIndex,orig[2],target[2],rot,width,1);
+    paint(isArm?(i?'farArm':'nearArm'):(i?'farLeg':'nearLeg'));
     if(isArm)wear('shoulder',i);
     wear(isArm?'gloves':'boots',i);c.restore();
   };
   if(back||pose.state!=='idle'){limb('legs',1);limb('arms',1);}
   limb('legs',0);
-  segment('torso',[m.hip,m.shoulder],[pose.hip,pose.shoulder],look.waist*(.55*look.chest+.45*look.shoulders));
+  if(covered.has('torso')){c.save();c.beginPath();c.rect(pose.shoulder[0]-8,pose.shoulder[1]-30,35,35);c.clip();segment('torso',[m.hip,m.shoulder],[pose.hip,pose.shoulder]);c.restore();}
+  if(!covered.has('torso'))segment('torso',[m.hip,m.shoulder],[pose.hip,pose.shoulder],look.waist*(.55*look.chest+.45*look.shoulders));
+  paint('torso');
   wear('suit');wear('chest');wear('emblem');
-  if(!back && (look.emblem!==base.emblem||colors.emblemColor!==base.emblemColor) && !pieces.chest && !pieces.emblem) {
+  if(!covered.has('torso')&&!back && (look.emblem!==base.emblem||colors.emblemColor!==base.emblemColor) && !pieces.chest && !pieces.emblem) {
     c.save();c.translate(pose.shoulder[0]+29,pose.shoulder[1]+8);c.scale(.75,1);emblem(c,0,0,look.emblem,colors.emblemColor,1.23);c.restore();
   }
   wear('belt');limb('arms',0);
-  if(look.cape&&back)cloak();
+  if(look.cape&&!covered.has('cape')&&back)cloak();
   wear('cape');
-  const headWidth=look.jaw*(look.face==='round'?1.06:look.face==='angular'?.96:1);
-  const headHeight=look.age==='teen'?1.035:look.age==='older'?.98:1;
+  const headRatio=options.universalBody?m.faceWidth/headModel.faceWidth:1;
+  const headWidth=headRatio*look.jaw*(look.face==='round'?1.06:look.face==='angular'?.96:1);
+  const headHeight=headRatio*(look.age==='teen'?1.035:look.age==='older'?.98:1);
   const motion={wind:Math.sin(time*7)*pose.moving*2.8,bounce:Math.cos(time*12)*pose.moving};
+  paint('behindHead');
   c.save();c.translate(...pose.head);c.rotate(pose.headTilt||0);c.scale(headWidth,headHeight);
-  const head=(name)=>draw(name,m.head,[0,0]);
+  const head=(name)=>draw(name,headModel.head,[0,0]);
   const hair=layer=>{
-    c.save();const unit=m.faceWidth/36;c.scale(unit,unit);drawStyleCHair(c,look,motion,time,layer,left?'left':view);c.restore();
+    c.save();const unit=headModel.faceWidth/36;c.scale(unit,unit);drawStyleCHair(c,look,motion,time,layer,left?'left':view);c.restore();
   };
   if(regularHair)head('head');
   else { hair('rear');head('bareHead');hair('front'); }
@@ -263,6 +278,7 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
   // The overlay follows the exact jaw/age scale used for the head, not torso proportions.
   pose.faceWidth=m.faceWidth;pose.headScale=[headWidth,headHeight];
   wear('mask');wear('helmet');
+  paint('headwear');paint('accessory');
   c.restore();
   return report;
 }

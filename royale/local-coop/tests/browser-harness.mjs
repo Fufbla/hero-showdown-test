@@ -1,3 +1,4 @@
+import {installClothingChecks} from './browser-clothing.mjs';
 import {Game,decodeSave} from '../../core.mjs';import {styleCDefault} from '../../style-c-defaults.mjs';import {serialize} from '../serialize.mjs';import {pickupLoot} from '../../world-loot.mjs';
 import {CloudProfile} from '../cloud.mjs?v=20261108-coop-menus';
 import {installHeroChecks} from './browser-hero-management.mjs';
@@ -23,6 +24,8 @@ export async function install(api){
  const controls=i=>[...(api.players[i].selectMenu||$('panel-'+i)).querySelectorAll('button,select,input')].filter(n=>!n.disabled&&n.getClientRects().length);
  const focusPad=async(i,predicate)=>{for(let n=0;n<90;n++){const all=controls(i);if(predicate(all[api.players[i].focus]))return;await pulse(i,13);}throw Error('Controller could not reach requested control');};
  const choosePad=async(i,predicate)=>{await focusPad(i,predicate);await pulse(i,0);};
+
+ installClothingChecks(api,{choosePad,frames});
 
  const cloudCheck=api.button('Check cloud connection',async()=>{
   const config=await fetch('./config.json').then(r=>r.json()),profile=new CloudProfile({endpoint:config.endpoint});

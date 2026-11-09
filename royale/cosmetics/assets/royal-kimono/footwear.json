@@ -143,5 +143,9 @@
       "attach": "ankleNear",
       "scale": 0.14
     }
+  ],
+  "covers": [
+    "feet",
+    "boots"
   ]
 }

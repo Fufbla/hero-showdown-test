@@ -50,21 +50,29 @@ export async function prepareStyleCMotion({canvasFactory,imageLoader}={}){
 }
 const anchors=[0,127,75,174,139];
 const rgb=value=>[1,3,5].map(i=>parseInt(value.slice(i,i+2),16));
-function material(angle,part,look,palette,item) {
+function material(angle,part,look,palette,item,bare=false) {
   const tileIndex=(look.presentation==='female'?8:0)+CUTS[part],cell=art.get(angle)[tileIndex];
   const base=STYLE_C_DEFAULTS[look.presentation];
   const suit=palette.suit||base.suit,trim=palette.trim||base.trim;
   const colors=[null,look.skin===base.skin?null:look.skin,suit===base.suit?null:suit,
     item?.accent || (trim===base.trim?null:trim),item?.color||null];
-  if(!colors.some(Boolean))return cell.original;
+  if(bare===true)for(let i=1;i<5;i++)colors[i]=look.skin;
+  if(!colors.some(Boolean)&&!bare)return cell.original;
   if(item)colors[2]=item.color;
-  const key=angle+tileIndex+colors.join('|');
+  const key=angle+tileIndex+colors.join('|')+bare;
   if(tints.has(key)){const cached=tints.get(key);tints.delete(key);tints.set(key,cached);return cached;}
   const draw=makeCanvas(cell.original.width,cell.original.height),ctx=draw.getContext('2d'),im=ctx.createImageData(draw.width,draw.height);
   const data=im.data;data.set(cell.rgba.data);
   const paletteRGB=colors.map(c=>c&&rgb(c));
   for(let i=0;i<data.length;i+=4){
     if(!data[i+3])continue;
+    if(bare==='skin-only'){
+      let skin=Math.round(cell.zones[i]/32)===1;
+      // Retain the ink/antialiasing immediately surrounding the painted skin,
+      // while excluding the separate cuff/gauntlet material.
+      if(!skin&&cell.zones[i]===0){const x=i/4%draw.width,y=Math.floor(i/4/draw.width);for(let dy=-1;dy<=1&&!skin;dy++)for(let dx=-1;dx<=1;dx++)if(x+dx>=0&&x+dx<draw.width&&y+dy>=0&&y+dy<draw.height&&Math.round(cell.zones[((y+dy)*draw.width+x+dx)*4]/32)===1)skin=true;}
+      if(!skin){data[i+3]=0;continue;}
+    }
     const zone=Math.round(cell.zones[i]/32),target=paletteRGB[zone];if(!target)continue;
     if(zone===1){const skin=skinShade([data[i],data[i+1],data[i+2]],target);for(let k=0;k<3;k++)data[i+k]=skin[k];continue;}
     const y=data[i]*.2126+data[i+1]*.7152+data[i+2]*.0722,ref=anchors[zone];
@@ -135,7 +143,7 @@ function emergingSleeve(c,image,socket,elbow,width,baseColor) {
   c.drawImage(image,image.width*.23,image.height*.53,image.width*.43,image.height*.39,
     -width*.62,-2,width*1.24,len+6);c.restore();
 }
-export function drawStyleCMotionLimb(c,pose,kind,index,look,palette,pieces={}) {
+export function drawStyleCMotionLimb(c,pose,kind,index,look,palette,pieces={},visible={}) {
   if(art.size!==2)return false;
   const arm=kind==='arms',joints=pose[kind][index],old=pose.m[kind][index],clip=pose.clip;
   const upper=arm?'upper':'thigh',lower=arm?'forearm':'shin';
@@ -144,20 +152,21 @@ export function drawStyleCMotionLimb(c,pose,kind,index,look,palette,pieces={}) {
   const profile=turnover&&(index===1||pose.frame>0) || (clip==='walk'||clip==='agility')&&((pose.frame+2*index)%4===2);
   const angle=profile?'profile':'forward';
   const equipment=arm?pieces.gloves:pieces.boots;
-  const upperImage=material(angle,upper,look,palette,null);
-  const lowerImage=material(angle,lower,look,palette,equipment);
-  if(arm && index===1){
+  const upperImage=material(angle,upper,look,palette,null,visible.bare);
+  const lowerImage=material(angle,lower,look,palette,equipment,visible.bare);
+  if(visible.upper!==false){if(arm && index===1){
     const socket=drawShoulderSeat(c,pose,look,palette);
     // The chest art supplies this visible pauldron. Only the painted upper
     // arm emerges from it, so the backswing cannot introduce a second pad.
     const muscle=material('forward','upper',look,palette,null);
     emergingSleeve(c,muscle,socket,joints[1],distance(old[0],old[1])*.78*thick,
       look.presentation==='female'?palette.suit:look.skin);
-  }else bone(c,bindings[angle][upper],upperImage,joints[0],joints[1],thick*(arm?1.50:1.18));
-  bone(c,bindings[angle][lower],lowerImage,joints[1],joints[2],thick*(arm?1.65:1.24));
+  }else bone(c,bindings[angle][upper],upperImage,joints[0],joints[1],thick*(arm?1.50:1.18));}
+  if(visible.lower!==false)bone(c,bindings[angle][lower],lowerImage,joints[1],joints[2],thick*(arm?1.65:1.24));
+  if(visible.end===false)return true;
   if(arm){
     const open=pose.open==='both'||pose.open==='near'&&index===0;
-    const hand=open?'open':'fist',im=material(angle,hand,look,palette,equipment);
+    const hand=open?'open':'fist',im=material(angle,hand,look,palette,equipment,visible.bareHand?'skin-only':false);
     // The profile drawing's wrist-to-knuckle axis already slopes to the right.
     // Align that painted axis with the forearm when the hero extends a jab.
     const handAxis=angle==='profile' ? (open ? .31 : .29)*Math.PI : .47*Math.PI;

@@ -4,6 +4,7 @@ export function validateAsset(manifest){
  const errors=[];
  if(manifest?.template!==TEMPLATE_ID)errors.push('Unknown fitting template');
  if(!manifest?.atlas||typeof manifest.atlas.url!=='string'||!/^\.\/assets\/[a-zA-Z0-9/_-]+\.(png|webp)$/.test(manifest.atlas.url)||![manifest.atlas.width,manifest.atlas.height].every(n=>Number.isInteger(n)&&n>0&&n<=4096))errors.push('Invalid atlas');
+ if(manifest?.covers&&(!Array.isArray(manifest.covers)||manifest.covers.some(k=>!['torso','arms','legs','gloves','belt','emblem','feet','boots','helmet','cape','mask'].includes(k))))errors.push('Invalid coverage regions');
  if(!Array.isArray(manifest?.layers)||!manifest.layers.length)errors.push('Missing layers');
  const directions=new Set(),keys=new Set();
  for(const layer of manifest?.layers||[]){
@@ -13,6 +14,7 @@ export function validateAsset(manifest){
   if(layer.mirror===true)errors.push('Mirrored direction '+key);
   if(!Array.isArray(layer.rect)||layer.rect.length!==4||layer.rect.some(n=>!Number.isInteger(n))||layer.rect[0]<0||layer.rect[1]<0||layer.rect[2]<=0||layer.rect[3]<=0||layer.rect[0]+layer.rect[2]>manifest.atlas?.width||layer.rect[1]+layer.rect[3]>manifest.atlas?.height)errors.push('Out of atlas '+key);
   if(layer.offset&&!point(layer.offset))errors.push('Invalid offset '+key);
+  if(layer.drape&&(![0,1].includes(layer.drape.nearHalf)||layer.part!=='skirt'))errors.push('Invalid cloth binding '+key);
   if(!point(layer.pivot)||!Object.hasOwn(MASTER_ANCHORS,layer.attach))errors.push('Invalid anchor '+key);
   if(!Number.isFinite(layer.scale)||layer.scale<=0||layer.scale>4)errors.push('Invalid scale '+key);
   if(layer.joint&&(!layer.end||!Object.hasOwn(MASTER_ANCHORS,layer.joint.attach)||!(layer.joint.fraction>0&&layer.joint.fraction<1)))errors.push('Invalid elbow/knee '+key);

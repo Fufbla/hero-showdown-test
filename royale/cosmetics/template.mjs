@@ -1,5 +1,5 @@
-// Candidate fixed rig contract. Not activated in the live renderer until the
-// approved Style C body/head layers have been fitted and visually reviewed.
+// Fixed render-only contract on the wardrobe development branch. Saved body
+// choices are retained for backwards compatibility; the live release is gated.
 export const TEMPLATE_ID='universal-style-c-v1';
 export const VIEWS=Object.freeze(['front','right','back','left']);
 export const PARTS=Object.freeze(['headwear','torso','upperArmNear','upperArmFar','forearmNear','forearmFar','handNear','handFar','hips','thighNear','thighFar','shinNear','shinFar','footNear','footFar','skirt','accessory','cape']);
@@ -8,9 +8,9 @@ export function universalRenderLook(look){return {...look,...FIXED_PROPORTIONS};
 // Origin is floor between ankles; source texels are .35 world units. All
 // genders use these anchors. Face materials remain separate from body geometry.
 export const MASTER_ANCHORS=Object.freeze({
- head:[0,-201],neck:[0,-151],shoulderNear:[36,-142],shoulderFar:[-49,-144],
- elbowNear:[44,-116],elbowFar:[-54,-119],wristNear:[56,-103],wristFar:[-49,-97],
- waist:[0,-98],hipNear:[14,-96],hipFar:[-12,-96],kneeNear:[33,-50],kneeFar:[-24,-52],ankleNear:[44,-14],ankleFar:[-34,-15]
+ head:[0,-207],neck:[-1,-151],shoulderNear:[34,-148],shoulderFar:[-47,-150],
+ elbowNear:[47,-125],elbowFar:[-64,-124],wristNear:[65,-104],wristFar:[-54,-98],
+ waist:[0,-99],hipNear:[15,-97],hipFar:[-17,-97],kneeNear:[34,-54],kneeFar:[-40,-52],ankleNear:[44,-12],ankleFar:[-51,-14]
 });
 export const attachmentPoints=pose=>({head:pose.head,neck:pose.shoulder,waist:pose.hip,
  shoulderNear:pose.arms[0][0],shoulderFar:pose.arms[1][0],elbowNear:pose.arms[0][1],elbowFar:pose.arms[1][1],wristNear:pose.arms[0][2],wristFar:pose.arms[1][2],

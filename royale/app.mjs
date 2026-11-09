@@ -85,7 +85,7 @@ const powerUpgrades=new InstantPowerUpgrades(()=>({game,store,index:activeSlot,h
 const powerMenu=new PowerMenu(()=>game,persist,say,powerUpgrades),controlMenu=new ControlMenu(input,storage,say);
 const renderer=new Renderer($('game')),creator=new Creator(),powerButtons=[...document.querySelectorAll('.power-button')];
 const creatorHome=document.createComment('Character creator home');$('creator').before(creatorHome);
-const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,say,appearance:()=>openCreator(activeSlot,true),leave:returnAdventure,navigate:()=>{if(!canLeaveMenu())return false;if(screen==='creator'&&editing){abandonUnconfirmedAppearance();setScreen('tree');}return true;}});
+const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,clothingTransaction:confirmTravelSave,say,appearance:()=>openCreator(activeSlot,true),leave:returnAdventure,navigate:()=>{if(!canLeaveMenu())return false;if(screen==='creator'&&editing){abandonUnconfirmedAppearance();setScreen('tree');}return true;}});
 const legendaryMenu=new LegendaryMenu(()=>game,{transaction,say,enter:id=>journeyMenu.confirmTravel({legendary:id}),onClaim:resume});
 erisMenu.mergeMenu=legendaryMenu;
 let makeoverReview=null,remoteLoaded=false;
@@ -217,7 +217,7 @@ function renderRoster(){
     if(slot){const del=document.createElement('button');del.className='text-button delete-hero';del.textContent='Delete Hero';del.disabled=!store.writable||multiplayerMenu.isLinked(slot.id);del.onclick=()=>{deleteTarget={index:i,id:slot.id,name:slot.snapshot.look.name};$('delete-description').textContent=`Delete ${slot.snapshot.look.name}, level ${slot.snapshot.level}?`;setScreen('delete');$('cancel-delete').focus();};card.append(del);}
     container.append(card);
     const c=canvas.getContext('2d');c.fillStyle='#c4d4a41c';c.beginPath();c.ellipse(180,284,62,10,0,0,Math.PI*2);c.fill();
-    if(slot)drawHero(c,180,282,slot.snapshot.look,previewHero('idle',0),0,2.2,{view:'front',outfit:equipmentOutfit(slot.snapshot.inventory,slot.snapshot.outfit)});
+    if(slot)drawHero(c,180,282,slot.snapshot.look,previewHero('idle',0),0,2.2,{view:'front',outfit:equipmentOutfit(slot.snapshot.inventory,slot.snapshot.outfit),cosmetics:slot.snapshot.cosmetics});
     else{c.fillStyle='#b6cda77a';c.font='66px Georgia';c.textAlign='center';c.fillText('✦',180,190);}
   }
   $('back-to-patrol').hidden=!game.started;storageNotice();
@@ -262,6 +262,7 @@ function openConfirmation(){
  return !!overlay&&[...overlay.querySelectorAll('.upgrade-confirm:not([hidden]), #shop-confirm:not([hidden]), #equipment-confirm:not([hidden]), #makeover-confirm:not([hidden])')].some(node=>node.getClientRects().length>0);
 }
 function canLeaveMenu(){
+ if(erisMenu.clothingMenu.busy||erisMenu.clothingMenu.pending){say('Finish saving your wardrobe before leaving this menu.',7);return false;}
  if(criticalPending){say('Complete or retry the permanent save before leaving this menu.',7);return false;}
  if(powerUpgrades.busy){say('Finish the superpower upgrade before leaving this menu.',7);return false;}
  if(openConfirmation()){say('Confirm or cancel the pending action before leaving this menu.',7);return false;}
@@ -474,6 +475,7 @@ if (practiceHero) {
   document.querySelector('.phase-label').textContent = 'STYLE C PRACTICE';
 }
 renderRoster();setScreen('roster');
+window.addEventListener('clothing-ready',()=>{if(screen==='roster')renderRoster();});
 if (practiceHero && store.slot(0)) {
   continueHero(0);
   say('Practice patrol · Use ⇄ to change powers or tap + to fill an empty slot.', 7);

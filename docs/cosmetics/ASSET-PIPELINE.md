@@ -1,6 +1,6 @@
 # Adding a clothing collection
 
-This contract is under development. Do not enable sales until the universal renderer, UI and backend save guard are integrated and verified.
+This contract is under development. The shared renderer and wardrobe UI are integrated on the development branch. Production sales remain disabled pending complete artwork/fitting, backend save protection and device verification.
 
 1. Use `universal-style-c-v1` from `royale/cosmetics/template.mjs` as the fixed attachment contract. Keep saved presentation/face/color choices separate from the body rig. Validate the master body on actual Style C heroes before approving any clothing fit.
 2. Produce independent front/right/back/left modular art. Do not flatten the face, hair, hands or body into clothing. Do not crop collection posters into runtime costumes. Keep asymmetry and lighting correct; mirrored directional layers fail validation.
@@ -28,3 +28,11 @@ This contract is under development. Do not enable sales until the universal rend
 ```
 
 This shortened example intentionally fails directional validation. Supply genuine right/back/left layers and the measured part anchors; do not copy guessed rectangles into released assets.
+
+## Loaded-piece coverage and deformation
+
+A manifest's optional `covers` list conceals the corresponding base-art regions only while that piece is decoded: `torso`, `arms`, `legs`, `gloves`, `belt`, `emblem`, `feet`, `boots`, `helmet`, `cape`, `mask`. This changes painting only. Separate footwear must cover feet/boots itself; removing footwear must not hide or remove armor statistics.
+
+Bone-bound layers may set `fixedWidth: true` to keep the authored transverse scale while their length follows the bone. Sleeves can use `joint: {attach, fraction}` for a shared elbow seam. A skirt may use `drape: {nearHalf: 0 or 1}` to identify which atlas half follows the near leg; the actual renderer supplies rest-pose legs. Both deformation types still need visual review in all authored animation keys. They are not a substitute for proper directional artwork or finished cloth animation.
+
+`ClothingRuntime` loads IDs through the catalog and manifests. Normal gameplay accepts released entries only; the explicit review path accepts fitting entries. Never change the production catalog merely to run a practice purchase. See the isolated fixtures in `royale/tests/clothing-store-review.mjs` and `royale/local-coop/tests/browser-clothing.mjs`.

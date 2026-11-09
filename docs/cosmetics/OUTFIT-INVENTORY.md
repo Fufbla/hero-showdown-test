@@ -4,7 +4,7 @@
 
 | Collection | Set | Status |
 |---|---|---|
-| original | Royal Kimono Set | Artwork approved; fitting in progress / not released |
+| original | Royal Kimono Set | Artwork approved; shared-rig animation fitting / not released |
 | original | Ninja Warrior Set | Not fitted / not released |
 | original | Urban Hero Set | Not fitted / not released |
 | original | Street Style Set | Not fitted / not released |

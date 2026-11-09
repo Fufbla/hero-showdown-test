@@ -25,3 +25,12 @@ test('reconnecting with confirm held requires release before activation',()=>{
 });
 
 test('B cancels appearance rather than selecting the Back viewing direction',()=>{const f=fixture(),view=f.add('view-back'),cancel=f.add('cancel-look');view.textContent='Back';cancel.textContent='Back to heroes';f.menu.poll(0);f.press(1);assert.equal(view.clicks,0);assert.equal(cancel.clicks,1);});
+
+test('clothing controls remain reachable when a tall preview separates columns',()=>{
+ const f=fixture(),items=[f.add('Category'),f.add('Front'),f.add('Back'),f.add('Set'),f.add('Review purchase')];
+ f.root.querySelector=selector=>selector.includes('.clothing-menu')?{}:null;
+ items.forEach((item,i)=>{item.getBoundingClientRect=()=>({left:i<3?0:400,right:i<3?200:600,top:i<3?500+i*50:(i-3)*50,bottom:i<3?544+i*50:44+(i-3)*50});});
+ f.menu.poll(0);const seen=new Set([f.root.activeElement.id]);
+ for(let i=0;i<items.length;i++){f.press(13,10+i*500);seen.add(f.root.activeElement.id);}
+ assert.equal(seen.size,items.length);assert.equal(f.root.activeElement,items[0]);f.press(12,4000);assert.equal(f.root.activeElement,items.at(-1));
+});

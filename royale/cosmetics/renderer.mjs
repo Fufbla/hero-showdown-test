@@ -1,11 +1,19 @@
 import {attachmentPoints} from './template.mjs';
+// Only decoded, complete pieces may conceal the corresponding armor. A failed
+// texture load leaves the original character visible and never changes stats.
+export function clothingCoverage(layers=[]){
+ const covered=new Set();
+ for(const {manifest,image} of layers)if(image&&manifest?.layers?.length)
+  for(const region of manifest.covers||[])covered.add(region);
+ return covered;
+}
 const distance=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
 const angle=(a,b)=>Math.atan2(b[1]-a[1],b[0]-a[0]);
 function stamp(ctx,image,layer,at,pivot,end,sourceEnd,cut){
  const [sx,sy,w,h]=layer.rect;
  const scale=end?distance(at,end)/distance(pivot,sourceEnd):layer.scale;
  const rotation=end?angle(at,end)-angle(pivot,sourceEnd):0;
- ctx.save();ctx.translate(...at);ctx.rotate(rotation);ctx.scale(scale,scale);
+ ctx.save();ctx.translate(...at);ctx.rotate(rotation);ctx.scale(layer.fixedWidth?layer.scale:scale,scale);
  if(cut){
   // Split a sleeve at the animated elbow in source space. Both halves share
   // the exact seam, preserving artwork while bending with the same hero bones.
@@ -17,6 +25,36 @@ function stamp(ctx,image,layer,at,pivot,end,sourceEnd,cut){
  }
  ctx.drawImage(image,sx,sy,w,h,-pivot[0],-pivot[1],w,h);ctx.restore();
 }
+function drape(ctx,image,layer,pose,at){
+ const rest=pose.clothingRest;if(!rest)return false;
+ const [sx,sy,w,h]=layer.rect,scale=layer.scale,split=Math.round(w*.5),bands=20;
+ for(let half=0;half<2;half++){
+  const i=layer.drape.nearHalf===half?0:1,x=half?split:0,width=half?w-split:split;
+  const sample=t=>{
+   const q=Math.min(1,t)*2,j=Math.min(1,Math.floor(q)),f=q-j;
+   const current=pose.legs[i][j].map((n,k)=>n+(pose.legs[i][j+1][k]-n)*f);
+   const original=rest.legs[i][j].map((n,k)=>n+(rest.legs[i][j+1][k]-n)*f);
+   const delta=current.map((n,k)=>n-pose.hip[k]-(original[k]-rest.hip[k]));
+   const base=[at[0]+(x+width*.5-layer.pivot[0])*scale,at[1]+(t*h-layer.pivot[1])*scale];
+   // At an extended kick the hem meets the foot, while the cloth's width
+   // remains perpendicular to the leg instead of collapsing into a line.
+   const leg=pose.legs[i],dx=leg[2][0]-leg[0][0],dy=leg[2][1]-leg[0][1];
+   const horizontal=Math.min(1,Math.abs(dx)/Math.max(1,Math.hypot(dx,dy)));
+   const hemOffset=pose.legs[i][2][0]-(at[0]+(x+width*.5-layer.pivot[0])*scale+pose.legs[i][2][0]-pose.hip[0]-(rest.legs[i][2][0]-rest.hip[0]));
+   return [base[0]+delta[0]+hemOffset*horizontal*t,base[1]+delta[1]];
+  };
+  for(let b=0;b<bands;b++){
+   const y=Math.round(b*h/bands),end=Math.round((b+1)*h/bands),height=end-y;
+   const a=sample(y/h),z=sample(end/h),dx=z[0]-a[0],dy=z[1]-a[1],len=Math.hypot(dx,dy);
+   if(len<.001)continue;
+   const nx=dy/len,ny=-dx/len,span=height*scale,wide=width*scale;
+   ctx.save();ctx.translate(a[0]-nx*wide*.5,a[1]-ny*wide*.5);
+   ctx.transform(nx,ny,dx/span,dy/span,0,0);
+   ctx.drawImage(image,sx+x,sy+y,width,height,0,0,wide,span+.16);ctx.restore();
+  }
+ }
+ return true;
+}
 // Interleave these passes with the existing hero layers. This helper never
 // modifies the hero, simulation, inventory or equipped armor.
 export function drawClothingPass(ctx,pose,view,pass,loadedLayers){
@@ -27,6 +65,7 @@ export function drawClothingPass(ctx,pose,view,pass,loadedLayers){
    if(layer.view!==view||layer.pass!==pass)continue;
    const anchor=anchors[layer.attach];if(!anchor)continue;
    const at=anchor.map((n,i)=>n+(layer.offset?.[i]||0));
+   if(layer.drape&&drape(ctx,image,layer,pose,at))continue;
    if(layer.end){
     const end=anchors[layer.end.attach];if(!end||!distance(layer.pivot,layer.end.pivot))continue;
     if(layer.joint){

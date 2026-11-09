@@ -1,3 +1,4 @@
+import {ClothingMenu} from './cosmetics/menu.mjs';
 import {STYLE_C_VIEWS} from './style-c-defaults.mjs';
 import {itemIcon} from './item-art.mjs';
 import {FLIGHT_SUITS, WARDROBE_CATALOG as COSTUME_CATALOG, matchingFlightBonus} from './flight-armor.mjs';
@@ -55,12 +56,15 @@ function shopEntries(category){
     .map(piece=>({...piece,catalogId:piece.id,price:piece.catalogValue}));
 }
 export class ErisMenu{
-  constructor(getGame,{powerMenu,transaction,say,appearance,leave,navigate}){
-    Object.assign(this,{getGame,powerMenu,transaction,say,appearance,leave,navigate});this.panel='powers';this.mode='buy';this.category='sets';this.selected={setId:'shore-ordinary'};this.view='front';this.previewInventory=null;this.confirm=null;
+  constructor(getGame,{powerMenu,transaction,clothingTransaction=transaction,say,appearance,leave,navigate}){
+    Object.assign(this,{getGame,powerMenu,transaction,clothingTransaction,say,appearance,leave,navigate});this.panel='powers';this.mode='buy';this.category='sets';this.selected={setId:'shore-ordinary'};this.view='front';this.previewInventory=null;this.confirm=null;
     for(const b of document.querySelectorAll('[data-eris]'))b.onclick=()=>this.open(b.dataset.eris);
     $('eris-appearance').onclick=appearance;$('close-tree').onclick=leave;
     for(const view of STYLE_C_VIEWS)$(`gear-view-${view}`).onclick=()=>{this.view=view;this.draw();};
     for(const b of document.querySelectorAll('[data-wardrobe]'))b.onclick=()=>{this.mode=b.dataset.wardrobe;this.selected=null;this.wardrobe();};
+    this.wardrobeSection='armor';
+    this.clothingMenu=new ClothingMenu($('clothing-panel'),{getGame,transaction:clothingTransaction,onChange:()=>this.update()});
+    for(const b of document.querySelectorAll('[data-clothing-section]'))b.onclick=()=>this.openWardrobeSection(b.dataset.clothingSection);
     $('shop-category').onchange=()=>{this.category=$('shop-category').value;this.selected=null;this.wardrobe();};
   }
   open(panel='powers'){
@@ -72,9 +76,10 @@ export class ErisMenu{
     if(panel==='home')panel='powers';this.panel=panel;this.confirm=null;
     for(const n of document.querySelectorAll('[data-eris-panel]'))n.hidden=n.dataset.erisPanel!==panel;
     for(const b of document.querySelectorAll('[data-eris]'))b.setAttribute('aria-pressed',String(b.dataset.eris===panel));
-    this.update();if(panel==='merge')this.mergeMenu?.tree();if(panel==='powers')this.powerMenu.open();if(panel==='wardrobe')this.wardrobe();if(panel==='roots')this.roots();
+    this.update();if(panel==='merge')this.mergeMenu?.tree();if(panel==='powers')this.powerMenu.open();if(panel==='wardrobe')this.openWardrobeSection(this.wardrobeSection);if(panel==='roots')this.roots();
 
   }
+  openWardrobeSection(section){if(this.clothingMenu.busy||this.clothingMenu.pending){this.say('Finish saving your wardrobe first.');return;}this.wardrobeSection=section;const armor=section==='armor';$('armor-panel').hidden=!armor;$('clothing-panel').hidden=armor;for(const b of document.querySelectorAll('[data-clothing-section]'))b.setAttribute('aria-pressed',String(b.dataset.clothingSection===section));if(armor)this.wardrobe();else void this.clothingMenu.open(section);}
   update(){const g=this.getGame();$('eris-coins').textContent=g.hero.coins.toLocaleString();$('tree-points').textContent=g.powers.data.points;$('eris-capacity').textContent=`${g.inventory.items.length}/20 equipment`;$('eris-clock').textContent=`Adventure clock · ${formatClock(g.clock())}`;const r=g.sanctuary?.returnLocation;$('eris-return').textContent=r?`Return to ${g.getRegion().name} · board ${r.board+1}`:'Your adventure is waiting.';}
   draw(){const g=this.getGame();drawEquipmentPreview($('gear-preview'),g,this.previewInventory||g.inventory,this.view);for(const v of STYLE_C_VIEWS)$(`gear-view-${v}`).setAttribute('aria-pressed',String(v===this.view));}
   wardrobe(){
