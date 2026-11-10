@@ -247,12 +247,12 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
     if(isArm)wear('shoulder',i);
     wear(isArm?'gloves':'boots',i);c.restore();
   };
-  if(back||pose.state!=='idle')limb('legs',1);
+  if(back||pose.state!=='idle'||options.clothingActive)limb('legs',1);
   paintClothes('farLeg');
   limb('legs',0);paintClothes('nearLeg');
   segment('torso',[m.hip,m.shoulder],[pose.hip,pose.shoulder],look.waist*(.55*look.chest+.45*look.shoulders));
   paintClothes('torso');
-  if(back||pose.state!=='idle')limb('arms',1);
+  if(back||pose.state!=='idle'||options.clothingActive)limb('arms',1);
   paintClothes('farArm');
   wear('suit');wear('chest');wear('emblem');
   if(!back && (look.emblem!==base.emblem||colors.emblemColor!==base.emblemColor) && !pieces.chest && !pieces.emblem) {
