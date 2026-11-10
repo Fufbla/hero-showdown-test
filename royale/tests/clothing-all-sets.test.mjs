@@ -46,7 +46,7 @@ test('all 36 wardrobe sets and 153 manifests use the shared four-view fitting en
  }
  const anchor=attachmentPoints(poses[0]);
  let fittings=0;
- for(const {manifest} of manifests)
+ for(const {id,manifest} of manifests)
   for(const layer of manifest.layers){
     const end=layer.end&&anchor[layer.end.attach];
     const from=anchor[layer.attach];
@@ -54,9 +54,9 @@ test('all 36 wardrobe sets and 153 manifests use the shared four-view fitting en
     const source=layer.end?Math.hypot(layer.end.pivot[0]-layer.pivot[0],layer.end.pivot[1]-layer.pivot[1]):0;
     const scale=layer.end&&length&&source?length/source:layer.scale;
     const fit=fitClothingLayer(layer,poses[0],anchor,scale);
-    assert.ok(Number.isFinite(fit.width)&&fit.width>=.55&&fit.width<=2,piece.id);
-    assert.ok(Number.isFinite(fit.height)&&fit.height>0,piece.id);
-    assert.ok(fit.offset.length===2&&fit.offset.every(Number.isFinite),piece.id);
+    assert.ok(Number.isFinite(fit.width)&&fit.width>=.55&&fit.width<=2,id);
+    assert.ok(Number.isFinite(fit.height)&&fit.height>0,id);
+    assert.ok(fit.offset.length===2&&fit.offset.every(Number.isFinite),id);
     fittings++;
   }
  assert.ok(fittings>=1400,'Check every painted view and animated segment');
