@@ -1,3 +1,4 @@
+import {tuneClothingCategory} from './category-fit.mjs';
 // Phase A — shared, render-only garment fitting for every released clothing set.
 // Keep the original atlases and saved hero data unchanged. Fit to the *current*
 // animated pose, so idle, attacks and all four directions share one body rig.
@@ -7,7 +8,7 @@ const safe=(n,otherwise)=>Number.isFinite(n)&&n>0?n:otherwise;
 
 // A garment's registered pivot stays on its bone. Only its cross-sectional
 // width is tailored; changing length would pull sleeves/pants away from joints.
-export function fitClothingLayer(layer,pose,anchors,baseScale){
+export function fitClothingLayer(layer,pose,anchors,baseScale,piece={}){
  const measured=layer.fit||{};
  const shoulders=distance(anchors.shoulderNear,anchors.shoulderFar);
  const hips=distance(anchors.hipNear,anchors.hipFar);
@@ -35,11 +36,11 @@ export function fitClothingLayer(layer,pose,anchors,baseScale){
  // available for intentionally loose styles in future category tuning.
  const custom=Number.isFinite(measured.width)?measured.width:null;
  const width=custom===null?automatic:target?Math.min(custom,automatic*1.09):custom;
- return {
+ return tuneClothingCategory(layer,{
    width:clamp(safe(width,1),.55,2),
    height:safe(measured.height,1),
    offset:Array.isArray(measured.offset)?measured.offset:[0,0]
- };
+ },piece);
 }
 
 // Public for automated tests and future per-set art fitting. No gameplay,
