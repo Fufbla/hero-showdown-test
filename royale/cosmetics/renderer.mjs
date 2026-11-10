@@ -59,14 +59,15 @@ function drape(ctx,image,layer,pose,at,fit){
 // modifies the hero, simulation, inventory or equipped armor.
 export function drawClothingPass(ctx,pose,view,pass,loadedLayers){
  const anchors=attachmentPoints(pose);
- for(const {manifest,image}of loadedLayers){
+ for(const piece of loadedLayers){
+  const {manifest,image}=piece;
   if(!image)continue;
   for(const layer of manifest.layers){
    if(layer.view!==view||layer.pass!==pass)continue;
    const anchor=anchors[layer.attach];if(!anchor)continue;
    const target=layer.end?anchors[layer.end.attach]:null;
    const baseScale=target?distance(anchor,target)/Math.max(.0001,distance(layer.pivot,layer.end.pivot)):layer.scale;
-   const fit=fitClothingLayer(layer,pose,anchors,baseScale);
+   const fit=fitClothingLayer(layer,pose,anchors,baseScale,piece);
    const at=anchor.map((n,i)=>n+(layer.offset?.[i]||0)+fit.offset[i]);
    // Head wraps, hats and masks tilt with the skull instead of hovering
    // independently during attacks and idle head movement.
