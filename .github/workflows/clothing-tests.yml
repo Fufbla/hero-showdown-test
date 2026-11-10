@@ -2,7 +2,7 @@ name: Verify Clothing Store Transactions
 
 on:
   push:
-    branches: [main]
+    branches: [main, feature/global-clothing-fit-nov10]
     paths:
       - 'royale/**'
       - 'royale-v3-staging/**'
