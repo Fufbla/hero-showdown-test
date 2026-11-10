@@ -2,7 +2,7 @@ name: Verify Clothing Store Transactions
 
 on:
   push:
-    branches: [main, feature/clothing-category-fit-nov10]
+    branches: [main, feature/clothing-visual-polish-nov10]
     paths:
       - 'royale/**'
       - 'royale-v3-staging/**'
@@ -33,6 +33,8 @@ jobs:
           node --check royale/style-c-turnaround.mjs
           node --check royale/clothing-tryon.mjs
           node --check royale/cosmetics/renderer.mjs
+          node --check royale/cosmetics/polish.mjs
+          node --check royale/cosmetics/fabric-tone.mjs
           node --check royale/cosmetics/fitting.mjs
           node --check royale/cosmetics/category-fit.mjs
           node --check royale/cosmetics/visibility.mjs
@@ -42,4 +44,4 @@ jobs:
           node --check royale/clothing-purchase-ui.mjs
           node --check royale/cosmetics/state.mjs
       - name: Verify complete catalog and purchase rules
-        run: node --test royale/tests/clothing-purchases.test.mjs royale/tests/clothing-fit.test.mjs royale/tests/clothing-all-sets.test.mjs royale/tests/clothing-visibility.test.mjs royale/tests/clothing-category-fit.test.mjs
+        run: node --test royale/tests/clothing-purchases.test.mjs royale/tests/clothing-fit.test.mjs royale/tests/clothing-all-sets.test.mjs royale/tests/clothing-visibility.test.mjs royale/tests/clothing-category-fit.test.mjs royale/tests/clothing-polish.test.mjs
