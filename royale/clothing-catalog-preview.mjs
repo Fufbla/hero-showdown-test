@@ -1,4 +1,4 @@
-import {openTryOn,initializeTryOn} from './clothing-tryon.mjs';
+import {openTryOn,initializeTryOn} from './clothing-tryon.mjs?v=20f90ebd';
 // Read-only visual clothing catalog. Never changes hero, coins, equipment or saves.
 const root=document.getElementById('clothing-catalog');
 const status=document.getElementById('clothing-status');
