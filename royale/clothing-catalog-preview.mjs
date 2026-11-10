@@ -8,12 +8,12 @@ const node=(tag,value,cls)=>{const e=document.createElement(tag);if(value!==unde
 const manifestCache=new Map(),imageCache=new Map();
 async function manifest(path){
  if(!/^\.\/assets\/[a-z0-9/_-]+\.json$/i.test(path))throw Error('Invalid artwork reference');
- if(!manifestCache.has(path))manifestCache.set(path,fetch(new URL(path,'./cosmetics/')).then(r=>{if(!r.ok)throw Error('Artwork unavailable');return r.json();}));
+ if(!manifestCache.has(path))manifestCache.set(path,fetch(new URL(path,new URL('./cosmetics/',import.meta.url))).then(r=>{if(!r.ok)throw Error('Artwork unavailable');return r.json();}));
  return manifestCache.get(path);
 }
 async function atlas(url){
  if(!/^\.\/assets\/[a-z0-9/_-]+\.(png|webp)$/i.test(url))throw Error('Invalid artwork image');
- if(!imageCache.has(url))imageCache.set(url,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(Error('Artwork image unavailable'));img.src=new URL(url,'./cosmetics/').href;}));
+ if(!imageCache.has(url))imageCache.set(url,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(Error('Artwork image unavailable'));img.src=new URL(url,new URL('./cosmetics/',import.meta.url)).href;}));
  return imageCache.get(url);
 }
 async function drawArtwork(canvas,set){
