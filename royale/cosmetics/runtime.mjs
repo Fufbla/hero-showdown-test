@@ -26,7 +26,7 @@ export class ClothingRuntime {
    const {index}=await this.catalog();
    const parts=[...new Set(ids)].map(id=>index.get(id));
    if(parts.some(p=>!p?.assetManifest||!(p.availability==='released'||review&&p.availability==='fitting')))throw Error('This clothing is still being prepared.');
-   const layers=await Promise.all(parts.map(async p=>{const manifest=await this.manifest(p.assetManifest);return {id:p.id,manifest,image:await this.assets.load(manifest)};}));
+   const layers=await Promise.all(parts.map(async p=>{const manifest=await this.manifest(p.assetManifest);return {id:p.id,category:p.category,manifest,image:await this.assets.load(manifest)};}));
    entry.layers=layers;
    this.notify();return layers;
   })().catch(error=>{entry.error=error;throw error;}).finally(()=>{
