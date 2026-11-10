@@ -20,25 +20,28 @@ function paint(){
  const size=canvas.width,foot=canvas.height-18,scale=2;
  c.clearRect(0,0,size,canvas.height);
  c.fillStyle='rgba(150,210,170,.12)';c.beginPath();c.ellipse(size/2,foot,65,9,0,0,Math.PI*2);c.fill();
- const rawLook=universalRenderLook(hero.look);
- const p=drawHero(c,size/2,foot,rawLook,previewHero('idle',0),0,scale,{view,outfit:hero.outfit});
+ const rawLook=universalRenderLook({...hero.look,cape:false});
+ // Clothing is composited over an unarmored visual mannequin of the selected hero.
+ // This never changes the saved armor or appearance.
+ const p=drawHero(c,size/2,foot,rawLook,previewHero('idle',0),0,scale,{view,outfit:{pieces:{}}});
  if(!p?.arms||!p?.legs){active.note.textContent='Hero rendering unavailable; original outfit art remains visible.';return;}
  c.save();c.translate(size/2,foot);c.scale(scale,scale);
- for(const pass of passes)drawClothingPass(c,p,view,pass,layers);
+ try{for(const pass of passes)drawClothingPass(c,p,view,pass,layers);}catch(err){active.note.textContent='Preview rendering error: '+err.message;}
  c.restore();
 }
 export async function openTryOn(set,card){
  const id=++serial;
- if(active?.stage?.isConnected)active.stage.remove();
+ if(active?.stage?.isConnected){if(active.stage.open)active.stage.close();active.stage.remove();}
  active=null;
- const stage=make('section');stage.className='clothing-tryon';stage.setAttribute('aria-label',set.name+' virtual try-on');
+ const stage=make('dialog');stage.className='clothing-tryon clothing-tryon-dialog';stage.setAttribute('aria-label',set.name+' virtual try-on');
  const h=make('h4','Try On · '+set.name),note=make('p','Loading your hero and outfit artwork…');
  note.setAttribute('role','status');
  const controls=make('div');controls.className='clothing-tryon-controls';
  const canvas=make('canvas');canvas.width=340;canvas.height=430;canvas.setAttribute('role','img');canvas.setAttribute('aria-label','Read-only hero clothing preview');
- const close=make('button','Close preview');close.type='button';close.onclick=()=>{serial++;stage.remove();active=null;};
+ const close=make('button','Close preview');close.type='button';close.onclick=()=>stage.close();
+ stage.addEventListener('close',()=>{serial++;stage.remove();if(active?.stage===stage)active=null;});
  stage.append(h,controls,canvas,note,close);
- card.append(stage);
+ document.body.append(stage);stage.showModal();
  const hero=currentHero();
  if(!hero){note.textContent='Select and load a hero first, then open the Tree of Eris to try on clothes.';return;}
  try{
@@ -52,7 +55,7 @@ export async function openTryOn(set,card){
    button.onclick=()=>{if(!active||active.stage!==stage)return;active.view=view;for(const b of controls.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b===button));paint();};
    controls.append(button);
   }
-  note.textContent='Visual try-on only. Your outfit, armor, coins, and saves have not changed.';
+  note.textContent='Preview on your hero. Only the preview hides equipped armor; your actual gear, coins, and saves stay unchanged.';
   paint();
  }catch(error){if(id!==serial||!stage.isConnected)return;note.textContent='Try On unavailable: '+(error?.message||'Artwork loading failed')+'. Your hero is unchanged.';}
 }
