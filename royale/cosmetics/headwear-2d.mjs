@@ -2,10 +2,10 @@
 // Gameplay paints the front atlas then mirrors it for left/right movement.
 // Each value below calibrates that same moving sprite, including its bottom
 // edge relative to the hero's head anchor. No approved artwork is modified.
-const hat=(ratio,bottom,{right=0,left=0,height=1}={})=>Object.freeze({ratio,bottom,right,left,height});
+const hat=(ratio,bottom,{right=0,left=0,height=1,allowGrow=false}={})=>Object.freeze({ratio,bottom,right,left,height,allowGrow});
 export const HEADWEAR_2D=Object.freeze({
  'royal-kimono.headwear':hat(.44,-17,{right:-1,left:1}),
- 'ninja-warrior.headwear':hat(.81,-6,{right:0,left:0,height:.96}),
+ 'ninja-warrior.headwear':hat(1.12,-4,{right:0,left:0,height:1.05,allowGrow:true}),
  'urban-hero.headwear':hat(.90,-8,{right:0,left:0,height:.97}),
  'explorer.headwear':hat(1.22,-9,{right:0,left:0}),
  'festival.headwear':hat(1.00,-4,{right:0,left:0}),
@@ -52,7 +52,8 @@ export function fitGameplayHeadwear(layer,fit,piece,pose,facing){
  const desiredWidth=headWidth*profile.ratio;
  const paintedWidth=width*atlasScale*fit.width;
  // Never enlarge approved garments: this pass only corrects oversized hats.
- const ratio=paintedWidth>0?Math.min(1,desiredWidth/paintedWidth):1;
+ // Fitted wraps can widen to reach the temples; hard hats must never balloon.
+ const ratio=paintedWidth>0?Math.min(profile.allowGrow?1.35:1,desiredWidth/paintedWidth):1;
  const fittedWidth=fit.width*ratio;
  const fittedHeight=fit.height*profile.height;
  const bottomFromPivot=(height-layer.pivot[1])*atlasScale*fittedHeight;

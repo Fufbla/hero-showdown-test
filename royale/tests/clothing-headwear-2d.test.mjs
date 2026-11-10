@@ -56,7 +56,7 @@ test('matching left/right headwear is mirrored by the game once, never doubled',
  assert.equal(right.width,left.width);
  assert.equal(right.height,left.height);
  assert.equal(right.offset[1],left.offset[1]);
- assert.ok(right.width<=fit.width);
+ assert.ok(right.width<=fit.width*1.35,'Only fitted headwrap fabric may expand to the temples');
  assert.equal(fitGameplayHeadwear(layer,fit,item,neutral,0),fit,'Only live horizontal facings should be tailored');
 });
 
