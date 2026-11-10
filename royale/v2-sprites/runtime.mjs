@@ -1,11 +1,11 @@
 // Experimental V2-only generated character art. This renderer is opt-in for
 // the public 0000000000 local sandbox; production heroes never import it.
 // Source images are transparent registered atlases, not screenshot posters.
-export const V2_SPRITE_VERSION='generated-atlas-v1';
+export const V2_SPRITE_VERSION='grounded-run-padded-cape-v2';
 export const V2_SPRITE_ATLASES=Object.freeze({
  idle_run:Object.freeze({file:'idle_run.webp',cols:8,rows:4,cell:160}),
- jump:Object.freeze({file:'jump.webp',cols:6,rows:2,cell:160}),
- double_jump:Object.freeze({file:'double_jump.webp',cols:6,rows:2,cell:160})
+ jump:Object.freeze({file:'jump_fixed.webp',cols:6,rows:2,cell:192}),
+ double_jump:Object.freeze({file:'double_jump_fixed.webp',cols:6,rows:2,cell:192})
 });
 export const V2_SPRITE_SCENES=Object.freeze({
  idleRight:Object.freeze({atlas:'idle_run',row:0,count:8}),
@@ -19,6 +19,10 @@ export const V2_SPRITE_SCENES=Object.freeze({
 });
 const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
 const frameIndex=(cycle,count)=>((Math.floor(cycle)%count)+count)%count;
+// Original generated frames 1–3 show BOTH feet airborne. Playing those
+// continuously on the ground caused the backwards-skipping appearance.
+// These five frames retain a visible planted/transitioning foot.
+export const GROUNDED_RUN_FRAMES=Object.freeze([0,4,5,6,7]);
 export function chooseV2Frame(hero,time=0){
  const face=hero?.attack?.face||hero?.face||1;
  const suffix=face<0?'Left':'Right';
@@ -44,8 +48,12 @@ export function chooseV2Frame(hero,time=0){
  }
  const speed=Math.abs(hero?.vx||0);
  if(speed>25){
-  const fps=clamp(speed/28,7,15);
-  return {scene:'run'+suffix,index:frameIndex(time*fps,8)};
+  // h.cycle advances with actual travel distance in the physics engine.
+  // Tying sprite phase to distance prevents feet cycling while stationary
+  // or the same frames skipping backwards when frame-rate changes.
+  const distancePhase=Math.abs(hero?.cycle||0)*.12;
+  const frame=frameIndex(distancePhase,GROUNDED_RUN_FRAMES.length);
+  return {scene:'run'+suffix,index:GROUNDED_RUN_FRAMES[frame]};
  }
  return {scene:'idle'+suffix,index:frameIndex(time*2.7,8)};
 }
@@ -92,13 +100,13 @@ export class V2GeneratedSprites {
   const atlas=V2_SPRITE_ATLASES[clip.atlas],image=this.images.get(clip.atlas);
   if(!image||!(scale>0))return false;
   const cell=atlas.cell,col=clamp(clip.index,0,clip.count-1);
-  const drawSize=130*scale; // Visual only: existing collision boxes stay intact.
+  const drawSize=(atlas.cell===192?156:130)*scale; // Same visual hero size, larger cape-safe source frame.
   ctx.save();
   ctx.imageSmoothingEnabled=true;
   ctx.imageSmoothingQuality='high';
   // Place feet at the physics-controlled ground point.
   ctx.drawImage(image,col*cell,clip.row*cell,cell,cell,
-   x-drawSize*.50,y-drawSize*.96,drawSize,drawSize);
+   x-drawSize*.50,y-drawSize*(atlas.cell===192?173/192:.96),drawSize,drawSize);
   ctx.restore();
   return true;
  }
