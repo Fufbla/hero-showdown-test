@@ -13,11 +13,22 @@ test('all three actual generated WebP atlases have transparent WebP metadata and
   assert.ok(b.byteLength>20000,name+' source file is missing or empty');
   assert.equal(b.toString('ascii',0,4),'RIFF',name+' RIFF signature');
   assert.equal(b.toString('ascii',8,12),'WEBP',name+' WebP signature');
-  assert.equal(b.toString('ascii',12,16),'VP8X',name+' requires transparent VP8X support');
-  const width=b.readUIntLE(24,3)+1,height=b.readUIntLE(27,3)+1;
+  // Lossless WebP (VP8L) preserves cape-edge alpha more faithfully than
+  // the original VP8X files. Both are valid browser-decoded transparent WebP.
+  const kind=b.toString('ascii',12,16);
+  let width,height,alpha;
+  if(kind==='VP8X'){
+   width=b.readUIntLE(24,3)+1;height=b.readUIntLE(27,3)+1;
+   alpha=(b[20]&0x10)!==0;
+  }else if(kind==='VP8L'){
+   assert.equal(b[20],0x2f,'lossless WebP header signature');
+   const bits=b.readUInt32LE(21);
+   width=(bits&0x3fff)+1;height=((bits>>>14)&0x3fff)+1;
+   alpha=((bits>>>28)&1)===1;
+  }else assert.fail(name+' unsupported WebP chunk '+kind);
   assert.equal(width,meta.cols*meta.cell,name+' width not aligned');
   assert.equal(height,meta.rows*meta.cell,name+' height not aligned');
-  assert.ok((b[20]&0x10)!==0,'Alpha channel required: '+name);
+  assert.ok(alpha,'Alpha channel required: '+name);
  }
  assert.equal(Object.keys(V2_SPRITE_SCENES).length,8);
  assert.equal(V2_SPRITE_ATLASES.jump.cell,192);
