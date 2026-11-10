@@ -17,7 +17,7 @@
         211
       ],
       "pivot": [
-        47.0,
+        47,
         8.44
       ],
       "attach": "hipFar",
@@ -26,7 +26,7 @@
       "end": {
         "attach": "ankleFar",
         "pivot": [
-          47.0,
+          47,
           200.45
         ]
       },
@@ -34,7 +34,10 @@
         "attach": "kneeFar",
         "fraction": 0.51
       },
-      "pass": "farLeg"
+      "pass": "farLeg",
+      "fit": {
+        "width": 0.94
+      }
     },
     {
       "view": "front",
@@ -63,7 +66,10 @@
         "attach": "kneeNear",
         "fraction": 0.51
       },
-      "pass": "nearLeg"
+      "pass": "nearLeg",
+      "fit": {
+        "width": 0.94
+      }
     },
     {
       "view": "right",
@@ -75,7 +81,7 @@
         214
       ],
       "pivot": [
-        55.0,
+        55,
         8.56
       ],
       "attach": "hipFar",
@@ -84,7 +90,7 @@
       "end": {
         "attach": "ankleFar",
         "pivot": [
-          55.0,
+          55,
           203.29999999999998
         ]
       },
@@ -92,7 +98,10 @@
         "attach": "kneeFar",
         "fraction": 0.51
       },
-      "pass": "farLeg"
+      "pass": "farLeg",
+      "fit": {
+        "width": 0.94
+      }
     },
     {
       "view": "right",
@@ -104,7 +113,7 @@
         214
       ],
       "pivot": [
-        55.0,
+        55,
         8.56
       ],
       "attach": "hipNear",
@@ -113,7 +122,7 @@
       "end": {
         "attach": "ankleNear",
         "pivot": [
-          55.0,
+          55,
           203.29999999999998
         ]
       },
@@ -121,7 +130,10 @@
         "attach": "kneeNear",
         "fraction": 0.51
       },
-      "pass": "nearLeg"
+      "pass": "nearLeg",
+      "fit": {
+        "width": 0.94
+      }
     },
     {
       "view": "back",
@@ -133,7 +145,7 @@
         209
       ],
       "pivot": [
-        47.0,
+        47,
         8.36
       ],
       "attach": "hipFar",
@@ -142,7 +154,7 @@
       "end": {
         "attach": "ankleFar",
         "pivot": [
-          47.0,
+          47,
           198.54999999999998
         ]
       },
@@ -150,7 +162,10 @@
         "attach": "kneeFar",
         "fraction": 0.51
       },
-      "pass": "farLeg"
+      "pass": "farLeg",
+      "fit": {
+        "width": 0.94
+      }
     },
     {
       "view": "back",
@@ -162,7 +177,7 @@
         209
       ],
       "pivot": [
-        47.0,
+        47,
         8.36
       ],
       "attach": "hipNear",
@@ -171,7 +186,7 @@
       "end": {
         "attach": "ankleNear",
         "pivot": [
-          47.0,
+          47,
           198.54999999999998
         ]
       },
@@ -179,7 +194,10 @@
         "attach": "kneeNear",
         "fraction": 0.51
       },
-      "pass": "nearLeg"
+      "pass": "nearLeg",
+      "fit": {
+        "width": 0.94
+      }
     },
     {
       "view": "left",
@@ -191,7 +209,7 @@
         214
       ],
       "pivot": [
-        55.0,
+        55,
         8.56
       ],
       "attach": "hipFar",
@@ -200,7 +218,7 @@
       "end": {
         "attach": "ankleFar",
         "pivot": [
-          55.0,
+          55,
           203.29999999999998
         ]
       },
@@ -208,7 +226,10 @@
         "attach": "kneeFar",
         "fraction": 0.51
       },
-      "pass": "farLeg"
+      "pass": "farLeg",
+      "fit": {
+        "width": 0.94
+      }
     },
     {
       "view": "left",
@@ -220,7 +241,7 @@
         214
       ],
       "pivot": [
-        55.0,
+        55,
         8.56
       ],
       "attach": "hipNear",
@@ -229,7 +250,7 @@
       "end": {
         "attach": "ankleNear",
         "pivot": [
-          55.0,
+          55,
           203.29999999999998
         ]
       },
@@ -237,7 +258,10 @@
         "attach": "kneeNear",
         "fraction": 0.51
       },
-      "pass": "nearLeg"
+      "pass": "nearLeg",
+      "fit": {
+        "width": 0.94
+      }
     }
   ],
   "covers": [
