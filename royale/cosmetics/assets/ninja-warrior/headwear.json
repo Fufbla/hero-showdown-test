@@ -18,7 +18,7 @@
       ],
       "pivot": [
         82.5,
-        81.0
+        81
       ],
       "attach": "head",
       "scale": 0.23636363636363636,
@@ -26,7 +26,10 @@
         2,
         -16
       ],
-      "pass": "headwear"
+      "pass": "headwear",
+      "fit": {
+        "width": 0.89
+      }
     },
     {
       "view": "right",
@@ -47,7 +50,10 @@
         0,
         -16
       ],
-      "pass": "headwear"
+      "pass": "headwear",
+      "fit": {
+        "width": 0.89
+      }
     },
     {
       "view": "back",
@@ -59,8 +65,8 @@
         90
       ],
       "pivot": [
-        80.0,
-        81.0
+        80,
+        81
       ],
       "attach": "head",
       "scale": 0.24375,
@@ -68,7 +74,10 @@
         2,
         -16
       ],
-      "pass": "headwear"
+      "pass": "headwear",
+      "fit": {
+        "width": 0.89
+      }
     },
     {
       "view": "left",
@@ -80,7 +89,7 @@
         91
       ],
       "pivot": [
-        79.0,
+        79,
         81.9
       ],
       "attach": "head",
@@ -89,7 +98,10 @@
         0,
         -16
       ],
-      "pass": "headwear"
+      "pass": "headwear",
+      "fit": {
+        "width": 0.89
+      }
     }
   ],
   "covers": [
