@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/festival/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        25,
+        1396,
+        183,
+        156
+      ],
+      "pivot": [
+        91.5,
+        140.4
+      ],
+      "attach": "head",
+      "scale": 0.21311475409836064,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        244,
+        1397,
+        169,
+        160
+      ],
+      "pivot": [
+        84.5,
+        144.0
+      ],
+      "attach": "head",
+      "scale": 0.23076923076923078,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        461,
+        1396,
+        174,
+        161
+      ],
+      "pivot": [
+        87.0,
+        144.9
+      ],
+      "attach": "head",
+      "scale": 0.22413793103448276,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        685,
+        1398,
+        169,
+        159
+      ],
+      "pivot": [
+        84.5,
+        143.1
+      ],
+      "attach": "head",
+      "scale": 0.23076923076923078,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

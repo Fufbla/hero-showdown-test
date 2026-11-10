@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/harvest-scout/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        24,
+        1390,
+        178,
+        123
+      ],
+      "pivot": [
+        89.0,
+        110.7
+      ],
+      "attach": "head",
+      "scale": 0.21910112359550563,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        238,
+        1395,
+        188,
+        118
+      ],
+      "pivot": [
+        94.0,
+        106.2
+      ],
+      "attach": "head",
+      "scale": 0.2074468085106383,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        461,
+        1394,
+        178,
+        124
+      ],
+      "pivot": [
+        89.0,
+        111.60000000000001
+      ],
+      "attach": "head",
+      "scale": 0.21910112359550563,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        677,
+        1396,
+        186,
+        117
+      ],
+      "pivot": [
+        93.0,
+        105.3
+      ],
+      "attach": "head",
+      "scale": 0.20967741935483872,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/witch/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        14,
+        1426,
+        197,
+        157
+      ],
+      "pivot": [
+        98.5,
+        141.3
+      ],
+      "attach": "head",
+      "scale": 0.2436548223350254,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        238,
+        1426,
+        195,
+        157
+      ],
+      "pivot": [
+        97.5,
+        141.3
+      ],
+      "attach": "head",
+      "scale": 0.24615384615384617,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        453,
+        1426,
+        193,
+        157
+      ],
+      "pivot": [
+        96.5,
+        141.3
+      ],
+      "attach": "head",
+      "scale": 0.24870466321243523,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        676,
+        1426,
+        193,
+        158
+      ],
+      "pivot": [
+        96.5,
+        142.20000000000002
+      ],
+      "attach": "head",
+      "scale": 0.24870466321243523,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

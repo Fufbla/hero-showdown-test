@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/pilgrim-maid/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        19,
+        1378,
+        185,
+        159
+      ],
+      "pivot": [
+        92.5,
+        143.1
+      ],
+      "attach": "head",
+      "scale": 0.21081081081081082,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        243,
+        1380,
+        174,
+        160
+      ],
+      "pivot": [
+        87.0,
+        144.0
+      ],
+      "attach": "head",
+      "scale": 0.22413793103448276,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        461,
+        1380,
+        184,
+        163
+      ],
+      "pivot": [
+        92.0,
+        146.70000000000002
+      ],
+      "attach": "head",
+      "scale": 0.21195652173913043,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        690,
+        1381,
+        175,
+        158
+      ],
+      "pivot": [
+        87.5,
+        142.20000000000002
+      ],
+      "attach": "head",
+      "scale": 0.22285714285714286,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

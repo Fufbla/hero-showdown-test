@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/explorer/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        22,
+        1635,
+        184,
+        72
+      ],
+      "pivot": [
+        92.0,
+        36.0
+      ],
+      "attach": "waist",
+      "scale": 0.09722222222222222,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        259,
+        1633,
+        139,
+        83
+      ],
+      "pivot": [
+        69.5,
+        41.5
+      ],
+      "attach": "waist",
+      "scale": 0.08433734939759036,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        458,
+        1635,
+        182,
+        67
+      ],
+      "pivot": [
+        91.0,
+        33.5
+      ],
+      "attach": "waist",
+      "scale": 0.1044776119402985,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        699,
+        1633,
+        147,
+        81
+      ],
+      "pivot": [
+        73.5,
+        40.5
+      ],
+      "attach": "waist",
+      "scale": 0.08641975308641976,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

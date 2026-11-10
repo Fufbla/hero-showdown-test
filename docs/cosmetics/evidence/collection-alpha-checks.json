@@ -1,0 +1,362 @@
+[
+  {
+    "id": "athletic",
+    "sha256": "ee54337daa70674088793a330a5ef08af4bf13115705774a0bcb4e2b9a0c1101",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.7133,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "autumn-explorer",
+    "sha256": "21a9c5ee0ca0328f8dc9d758ce905d670856a29057d1cca677d413b753a45314",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6313,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "casual-hoodie",
+    "sha256": "b0600ff154b5815ab7bfcdf57ff28558dbab75fae6ab230f3840e80a10fccc54",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6574,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "cat-burglar",
+    "sha256": "6cb4ed2a0ea9eb054ca4d3ac8f7fa007a18ab9b69baf33bfe2831cedfd74b728",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.651,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "combat-casual",
+    "sha256": "0bf4c707ef2ee7e35d0fa65a79557fe6dd1093831dc0aaee358615796931483c",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6806,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "dark-reaper",
+    "sha256": "aa170d0a342031d4e1556d25ddbc207ee8adf55f021273bd566758289168562a",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.5942,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "elf-hero",
+    "sha256": "eb26edf171349f8e3b5823bbf1a70f7195146ba3ca3528f36ea820d852f49382",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6475,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "explorer",
+    "sha256": "d152d93616df2262515bccae53013b652ba3ca6df43ab848752fda1d9ba767e6",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6792,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "fantasy-harvest",
+    "sha256": "61ba4a99319e6a21f15e6942ccb5d0922d5b263015364198ec848ebfcd6bb2d5",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6463,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "festival",
+    "sha256": "999970b6e296e2927ba530a22b58db6952eb13b3696335cff8b765f4ef5fbfed",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.7509,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "gingerbread",
+    "sha256": "44d05fadeb3d9ade7deda145ad6c4699bff49cb95ba8793dc2a267abbf361fc9",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6626,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "harvest-festival",
+    "sha256": "9ce6a4b206cf7bf38df5044e32398fb7ffb4b908dd01a4068e35088aaeddcb8d",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6704,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "harvest-scout",
+    "sha256": "0caeefe4595580755feb24e0c8a7f0c52968c8f1ae30fd9949bd72ed652178d2",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6367,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "holiday-sweater",
+    "sha256": "a8f217b691b6b933f0d5b44a86039a0b813044b7048f2354c69d317881c154a8",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6714,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "mrs-claus",
+    "sha256": "b4eb5f7e4c3cc6d053301a5cdd4e33b6a0d51e2f78063a9c8aa2aebedfdb6890",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6361,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "mummy",
+    "sha256": "89cc8fc4ac12baa4bbd83a63a086e023e3fdef877061f481049d6569cae48fb0",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.7088,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "mystic-robe",
+    "sha256": "a7ff98b6a1280c2d000f3d966a9286ac764982613cff4d3b017b1d834f1cd58d",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6163,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "ninja-warrior",
+    "sha256": "ec37c97be0dbfe599b9e2d9b3c0e3f6d5723c3140c98ed2f886b6a74ded8735b",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6753,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "pilgrim-hero",
+    "sha256": "934fd02e9b75b0f12697cebe13b5e1a6b47e9cf5f42fd183e56520ad9de44f42",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6227,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "pilgrim-maid",
+    "sha256": "9d7a6c347d85eb5fbd09af0d34053e83e9f984a35379dc53a8aea56f9b17fd71",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6739,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "pumpkin-knight",
+    "sha256": "b017af5ebaaab8f241d52fa930fd7b6c7ebfbab74dd74eb4cdc96562664927fa",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6311,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "reindeer",
+    "sha256": "bba46eec37df08e7af8081c5d0174b86ff9ad0d3314f8c8ec200b893948e79b2",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6072,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "royal-gown",
+    "sha256": "1d3c27fc09174cd027f70b40d61e85046ea86b19159bfaaa5d562989b843fcea",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.7707,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "royal-kimono",
+    "sha256": "4d8fdb42b21656fbfa5e51c8cd9d0c3eed893b47f28fd500d3ce2dd5f69e5f46",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "effectiveTransparentFraction": 0.6906,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "santa-hero",
+    "sha256": "f1479d203303a08aea1d0207105a60010595d1b078060df85d3f5b6cacae5b67",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6321,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "scarecrow",
+    "sha256": "a899d03c3d6f58473be5f7c8b85ef7c3dcbfac19cf1d5030bebb5a617665d588",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6358,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "skeleton",
+    "sha256": "faa6f8630d965f0d2ea137038a00e238a65d8c0783294690bcd7135d57ff554d",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.7351,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "snow-hero",
+    "sha256": "5ace63dce077600124bb85464c814453d1f40faf239342ca39784c70c8bde6d5",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6975,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "street-style",
+    "sha256": "923d976049c30b578bad7d6b101c67130771d8a46cc72ebb01b37fc5a024d70b",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.668,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "tech-specialist",
+    "sha256": "a567e29b7da73907e186b73a03a3d8a4fd244b0594f08ec239c5cedb3e6e7465",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6971,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "toy-soldier",
+    "sha256": "458d42c5eef4871c13e13e1768546cedd5ec817b52886a68e5d89cf18664bb11",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6529,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "turkey-hero",
+    "sha256": "eca53aabc03fd1d235b08c90efcca5e6d61e282d2e61234bd11c9a0863a47283",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6578,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "urban-hero",
+    "sha256": "fbdc19d5019af277a80cbf013a81bbdcbb70d482f30177685b4791e6a8c3d690",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6733,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "vampire",
+    "sha256": "7e66c7cee426049552a0d66c204aa5000f16d1f9590f533a22362e6ba35ceddc",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6874,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "werewolf",
+    "sha256": "f1d88cea711f85208bc75096cef5c8da5a70452647259f52b2f4e16116c06eb3",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6357,
+    "visibleBorderPixels": 0
+  },
+  {
+    "id": "witch",
+    "sha256": "9f69e8557f0c3edd48285ab8913a11e9a9d77ce2ad217b4179aef429d63054cf",
+    "dimensions": [
+      887,
+      1774
+    ],
+    "effectiveTransparentFraction": 0.6586,
+    "visibleBorderPixels": 0
+  }
+]

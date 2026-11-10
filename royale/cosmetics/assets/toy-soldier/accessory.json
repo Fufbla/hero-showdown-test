@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/toy-soldier/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        38,
+        1640,
+        155,
+        70
+      ],
+      "pivot": [
+        77.5,
+        35.0
+      ],
+      "attach": "waist",
+      "scale": 0.1,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        263,
+        1636,
+        139,
+        71
+      ],
+      "pivot": [
+        69.5,
+        35.5
+      ],
+      "attach": "waist",
+      "scale": 0.09859154929577464,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        475,
+        1637,
+        156,
+        67
+      ],
+      "pivot": [
+        78.0,
+        33.5
+      ],
+      "attach": "waist",
+      "scale": 0.10447761194029852,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        703,
+        1636,
+        141,
+        71
+      ],
+      "pivot": [
+        70.5,
+        35.5
+      ],
+      "attach": "waist",
+      "scale": 0.09859154929577466,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

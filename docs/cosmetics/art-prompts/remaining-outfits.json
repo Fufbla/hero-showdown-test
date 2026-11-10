@@ -1,0 +1,852 @@
+[
+  {
+    "id": "urban-hero",
+    "dir": "urban-hero",
+    "name": "Urban Hero Set",
+    "collection": "original",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "White and green recycling baseball cap",
+    "accessory": "None; leave row 8 fully transparent",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "White and green recycling baseball cap",
+      "None; leave row 8 fully transparent"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for URBAN HERO SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY original collection Urban Hero Set; do not mix with neighboring outfits. Exact design: White/green recycling cap; white/green varsity jacket; white recycling shirt; dark cargo pants; green/white high-top shoes. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: White and green recycling baseball cap\nRow 8: None; leave row 8 fully transparent\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/9ED078E0-2EF0-48D8-A112-C02C664887CD.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "street-style",
+    "dir": "street-style",
+    "name": "Street Style Set",
+    "collection": "original",
+    "lower": "pants",
+    "sleeve": "short",
+    "head": "None; leave row 7 fully transparent",
+    "accessory": "Black sunglasses, wearable alone",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to elbow (short or rolled sleeve exactly as the reference), relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to elbow, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "None; leave row 7 fully transparent",
+      "Black sunglasses, wearable alone"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for STREET STYLE SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY original collection Street Style Set; do not mix with neighboring outfits. Exact design: Pink cropped jacket; white crop top; pink belted cargo pants; pink/white high-tops; dark sunglasses. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to elbow (short or rolled sleeve exactly as the reference), relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to elbow, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: None; leave row 7 fully transparent\nRow 8: Black sunglasses, wearable alone\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/9ED078E0-2EF0-48D8-A112-C02C664887CD.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "explorer",
+    "dir": "explorer",
+    "name": "Explorer Set",
+    "collection": "original",
+    "lower": "pants",
+    "sleeve": "short",
+    "head": "Tan brimmed explorer hat with goggles resting on the crown",
+    "accessory": "Brown utility belt with rectangular silver buckle and small pouches, alone",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.",
+      "Near-arm sleeve only, shoulder to elbow (short or rolled sleeve exactly as the reference), relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to elbow, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Tan brimmed explorer hat with goggles resting on the crown",
+      "Brown utility belt with rectangular silver buckle and small pouches, alone"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for EXPLORER SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY original collection Explorer Set; do not mix with neighboring outfits. Exact design: Tan brimmed hat with goggles; tan pocketed short-sleeve shirt; utility belt and cargo trousers; brown boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.\nRow 2: Near-arm sleeve only, shoulder to elbow (short or rolled sleeve exactly as the reference), relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to elbow, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Tan brimmed explorer hat with goggles resting on the crown\nRow 8: Brown utility belt with rectangular silver buckle and small pouches, alone\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/9ED078E0-2EF0-48D8-A112-C02C664887CD.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "festival",
+    "dir": "festival",
+    "name": "Festival Set",
+    "collection": "original",
+    "lower": "skirt",
+    "sleeve": "none",
+    "head": "Red yellow green patterned headwrap, hollow, no hair",
+    "accessory": "Pair of gold cuff bracelets, isolated side by side, no arms",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to elbow (short or rolled sleeve exactly as the reference), relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to elbow, relaxed downwards. No hand or skin.",
+      "Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Red yellow green patterned headwrap, hollow, no hair",
+      "Pair of gold cuff bracelets, isolated side by side, no arms"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for FESTIVAL SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY original collection Festival Set; do not mix with neighboring outfits. Exact design: Multicolor red/yellow/green patterned headwrap and asymmetric wrap dress; turquoise/gold bodice; gold cuffs and sandals. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to elbow (short or rolled sleeve exactly as the reference), relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to elbow, relaxed downwards. No hand or skin.\nRow 4: Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Red yellow green patterned headwrap, hollow, no hair\nRow 8: Pair of gold cuff bracelets, isolated side by side, no arms\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/9ED078E0-2EF0-48D8-A112-C02C664887CD.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "athletic",
+    "dir": "athletic",
+    "name": "Athletic Set",
+    "collection": "original",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Green and white forehead sweatband",
+    "accessory": "None; leave row 8 fully transparent",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Green and white forehead sweatband",
+      "None; leave row 8 fully transparent"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for ATHLETIC SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY original collection Athletic Set; do not mix with neighboring outfits. Exact design: Green/white headband; green zip tracksuit with white stripes; green/white trainers. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Green and white forehead sweatband\nRow 8: None; leave row 8 fully transparent\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/9ED078E0-2EF0-48D8-A112-C02C664887CD.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "casual-hoodie",
+    "dir": "casual-hoodie",
+    "name": "Casual Hoodie Set",
+    "collection": "original",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "None; leave row 7 fully transparent",
+    "accessory": "Purple over-ear headphones with pale star emblems, hollow, no head",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "None; leave row 7 fully transparent",
+      "Purple over-ear headphones with pale star emblems, hollow, no head"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for CASUAL HOODIE SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY original collection Casual Hoodie Set; do not mix with neighboring outfits. Exact design: Purple star hoodie with pale drawstrings; black cargo pants; purple/white high-tops; purple star headphones. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: None; leave row 7 fully transparent\nRow 8: Purple over-ear headphones with pale star emblems, hollow, no head\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/9ED078E0-2EF0-48D8-A112-C02C664887CD.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "royal-gown",
+    "dir": "royal-gown",
+    "name": "Royal Gown Set",
+    "collection": "original",
+    "lower": "skirt",
+    "sleeve": "none",
+    "head": "Gold tiara with blue gemstones",
+    "accessory": "Pair of white gloves with gold trim, no hands or skin",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to elbow (short or rolled sleeve exactly as the reference), relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to elbow, relaxed downwards. No hand or skin.",
+      "Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Gold tiara with blue gemstones",
+      "Pair of white gloves with gold trim, no hands or skin"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for ROYAL GOWN SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY original collection Royal Gown Set; do not mix with neighboring outfits. Exact design: Gold tiara with blue gems; white/gold gown and long layered skirt; gold waist ornament; white gloves. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to elbow (short or rolled sleeve exactly as the reference), relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to elbow, relaxed downwards. No hand or skin.\nRow 4: Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Gold tiara with blue gemstones\nRow 8: Pair of white gloves with gold trim, no hands or skin\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/9ED078E0-2EF0-48D8-A112-C02C664887CD.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "tech-specialist",
+    "dir": "tech-specialist",
+    "name": "Tech Specialist Set",
+    "collection": "original",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "None; leave row 7 fully transparent",
+    "accessory": "Cyan wraparound visor goggles, no face",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "None; leave row 7 fully transparent",
+      "Cyan wraparound visor goggles, no face"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for TECH SPECIALIST SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY original collection Tech Specialist Set; do not mix with neighboring outfits. Exact design: Black long tech coat with cyan piping; dark cargo pants; black/cyan boots; cyan wrap visor. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: None; leave row 7 fully transparent\nRow 8: Cyan wraparound visor goggles, no face\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/9ED078E0-2EF0-48D8-A112-C02C664887CD.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "combat-casual",
+    "dir": "combat-casual",
+    "name": "Combat Casual Set",
+    "collection": "original",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Backward black baseball cap with red brim and strap",
+    "accessory": "None; leave row 8 fully transparent",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Backward black baseball cap with red brim and strap",
+      "None; leave row 8 fully transparent"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for COMBAT CASUAL SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY original collection Combat Casual Set; do not mix with neighboring outfits. Exact design: Backwards black/red cap; red jacket and white red-emblem shirt; dark cargo pants; red/black boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Backward black baseball cap with red brim and strap\nRow 8: None; leave row 8 fully transparent\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/9ED078E0-2EF0-48D8-A112-C02C664887CD.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "mystic-robe",
+    "dir": "mystic-robe",
+    "name": "Mystic Robe Set",
+    "collection": "original",
+    "lower": "skirt",
+    "sleeve": "long",
+    "head": "Deep purple hood with exact gold border and glyphs, hollow open face",
+    "accessory": "Gold rope belt with dangling ends, separate from the torso",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Deep purple hood with exact gold border and glyphs, hollow open face",
+      "Gold rope belt with dangling ends, separate from the torso"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for MYSTIC ROBE SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY original collection Mystic Robe Set; do not mix with neighboring outfits. Exact design: Purple hood and long split purple robe with gold edging and symbols; blue teardrop clasp; gold rope belt. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Deep purple hood with exact gold border and glyphs, hollow open face\nRow 8: Gold rope belt with dangling ends, separate from the torso\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/9ED078E0-2EF0-48D8-A112-C02C664887CD.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "witch",
+    "dir": "witch",
+    "name": "Witch Set",
+    "collection": "halloween",
+    "lower": "skirt",
+    "sleeve": "long",
+    "head": "Bent pointed purple witch hat with gold buckle",
+    "accessory": "Black waist belt and square gold buckle, separate from torso",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Bent pointed purple witch hat with gold buckle",
+      "Black waist belt and square gold buckle, separate from torso"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for WITCH SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY halloween collection Witch Set; do not mix with neighboring outfits. Exact design: Bent purple witch hat with gold buckle; purple/gold coat dress and belt; purple boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Bent pointed purple witch hat with gold buckle\nRow 8: Black waist belt and square gold buckle, separate from torso\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "vampire",
+    "dir": "vampire",
+    "name": "Vampire Set",
+    "collection": "halloween",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "None; leave row 7 fully transparent",
+    "accessory": "Black flowing shoulder cape with rich red lining, no body",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "None; leave row 7 fully transparent",
+      "Black flowing shoulder cape with rich red lining, no body"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for VAMPIRE SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY halloween collection Vampire Set; do not mix with neighboring outfits. Exact design: Black suit with white shirt and high red collar; black boots; black cape with red lining. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: None; leave row 7 fully transparent\nRow 8: Black flowing shoulder cape with rich red lining, no body\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "mummy",
+    "dir": "mummy",
+    "name": "Mummy Set",
+    "collection": "halloween",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Ivory and gold-edged bandage forehead wrap, face remains uncovered",
+    "accessory": "None; leave row 8 fully transparent",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Ivory and gold-edged bandage forehead wrap, face remains uncovered",
+      "None; leave row 8 fully transparent"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for MUMMY SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY halloween collection Mummy Set; do not mix with neighboring outfits. Exact design: Ivory and gold-edged layered bandage wraps, with face exposed and matching wrapped footwear. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Ivory and gold-edged bandage forehead wrap, face remains uncovered\nRow 8: None; leave row 8 fully transparent\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "werewolf",
+    "dir": "werewolf",
+    "name": "Werewolf Set",
+    "collection": "halloween",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Gray wolf pelt hood with pointed wolf ears; hollow opening, no human or wolf face",
+    "accessory": "Gold fang necklace and clasp, no neck",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Gray wolf pelt hood with pointed wolf ears; hollow opening, no human or wolf face",
+      "Gold fang necklace and clasp, no neck"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for WEREWOLF SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY halloween collection Werewolf Set; do not mix with neighboring outfits. Exact design: Gray wolf-ear pelt hood; gray fur shoulder trim; dark brown belted clothing; furry cuffs and boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Gray wolf pelt hood with pointed wolf ears; hollow opening, no human or wolf face\nRow 8: Gold fang necklace and clasp, no neck\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "skeleton",
+    "dir": "skeleton",
+    "name": "Skeleton Set",
+    "collection": "halloween",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "None; leave row 7 fully transparent",
+    "accessory": "None; leave row 8 fully transparent",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "None; leave row 7 fully transparent",
+      "None; leave row 8 fully transparent"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for SKELETON SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY halloween collection Skeleton Set; do not mix with neighboring outfits. Exact design: Black fitted suit with white skeletal rib, arm and leg motifs; black/white footwear. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: None; leave row 7 fully transparent\nRow 8: None; leave row 8 fully transparent\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "pumpkin-knight",
+    "dir": "pumpkin-knight",
+    "name": "Pumpkin Knight Set",
+    "collection": "halloween",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Orange carved pumpkin helmet with leaf stem and open lower rim for visible hero face",
+    "accessory": "Green neck scarf, no face",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Orange carved pumpkin helmet with leaf stem and open lower rim for visible hero face",
+      "Green neck scarf, no face"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for PUMPKIN KNIGHT SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY halloween collection Pumpkin Knight Set; do not mix with neighboring outfits. Exact design: Carved orange pumpkin helmet; green scarf; orange/gold armor-shaped jacket and legs; black/orange boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Orange carved pumpkin helmet with leaf stem and open lower rim for visible hero face\nRow 8: Green neck scarf, no face\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "dark-reaper",
+    "dir": "dark-reaper",
+    "name": "Dark Reaper Set",
+    "collection": "halloween",
+    "lower": "skirt",
+    "sleeve": "long",
+    "head": "Purple-black hood, hollow open face",
+    "accessory": "Small ivory skull clasp, isolated",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Purple-black hood, hollow open face",
+      "Small ivory skull clasp, isolated"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for DARK REAPER SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY halloween collection Dark Reaper Set; do not mix with neighboring outfits. Exact design: Purple/black hooded long coat; skull clasp; purple belt; dark boots and gloves. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Purple-black hood, hollow open face\nRow 8: Small ivory skull clasp, isolated\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "cat-burglar",
+    "dir": "cat-burglar",
+    "name": "Cat Burglar Set",
+    "collection": "halloween",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Purple cat-ear headband with goggles mounted between the ears",
+    "accessory": "Purple utility belt, separate from the torso",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Purple cat-ear headband with goggles mounted between the ears",
+      "Purple utility belt, separate from the torso"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for CAT BURGLAR SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY halloween collection Cat Burglar Set; do not mix with neighboring outfits. Exact design: Purple cat ears and goggles; black/purple fitted clothing; utility belt; black boots and gloves. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Purple cat-ear headband with goggles mounted between the ears\nRow 8: Purple utility belt, separate from the torso\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "santa-hero",
+    "dir": "santa-hero",
+    "name": "Santa Hero Set",
+    "collection": "christmas",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Red Santa hat with white fur rim and white pompom",
+    "accessory": "Black waist belt with gold buckle, separate from torso",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Red Santa hat with white fur rim and white pompom",
+      "Black waist belt with gold buckle, separate from torso"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for SANTA HERO SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY christmas collection Santa Hero Set; do not mix with neighboring outfits. Exact design: Red Santa cap with white fur; red gold-trim jacket and pants; white cuffs; black belt; red boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Red Santa hat with white fur rim and white pompom\nRow 8: Black waist belt with gold buckle, separate from torso\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "mrs.-claus",
+    "dir": "mrs-claus",
+    "name": "Mrs. Claus Set",
+    "collection": "christmas",
+    "lower": "skirt",
+    "sleeve": "long",
+    "head": "Red and white ruffled bonnet from the exact reference",
+    "accessory": "Black waist belt with gold buckle, separate from torso",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Red and white ruffled bonnet from the exact reference",
+      "Black waist belt with gold buckle, separate from torso"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for MRS. CLAUS SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY christmas collection Mrs. Claus Set; do not mix with neighboring outfits. Exact design: White/red bonnet; red gold-scroll dress with white fur edging; black belt; red shoes. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Red and white ruffled bonnet from the exact reference\nRow 8: Black waist belt with gold buckle, separate from torso\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "elf-hero",
+    "dir": "elf-hero",
+    "name": "Elf Hero Set",
+    "collection": "christmas",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Green pointed elf hat with red zigzag brim and red pompom",
+    "accessory": "Black waist belt with gold buckle, separate from torso",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Green pointed elf hat with red zigzag brim and red pompom",
+      "Black waist belt with gold buckle, separate from torso"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for ELF HERO SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY christmas collection Elf Hero Set; do not mix with neighboring outfits. Exact design: Green/red pointed hat and tunic; gold belt; striped stockings; red/green curled shoes. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Green pointed elf hat with red zigzag brim and red pompom\nRow 8: Black waist belt with gold buckle, separate from torso\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "reindeer",
+    "dir": "reindeer",
+    "name": "Reindeer Set",
+    "collection": "christmas",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Brown reindeer hood with branching antlers, ears and open face",
+    "accessory": "Green and red neck bow and bell, isolated",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Brown reindeer hood with branching antlers, ears and open face",
+      "Green and red neck bow and bell, isolated"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for REINDEER SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY christmas collection Reindeer Set; do not mix with neighboring outfits. Exact design: Brown reindeer hood with antlers and ears; brown suit with cream fur; green/red neck accent; brown boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Brown reindeer hood with branching antlers, ears and open face\nRow 8: Green and red neck bow and bell, isolated\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "snow-hero",
+    "dir": "snow-hero",
+    "name": "Snow Hero Set",
+    "collection": "christmas",
+    "lower": "shorts",
+    "sleeve": "long",
+    "head": "None; leave row 7 fully transparent",
+    "accessory": "White and pale-blue snow goggles, hollow, no face",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: shorts from waist to knees, exactly as the reference. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "None; leave row 7 fully transparent",
+      "White and pale-blue snow goggles, hollow, no face"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for SNOW HERO SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY christmas collection Snow Hero Set; do not mix with neighboring outfits. Exact design: Blue/white snowflake jacket and shorts; dark leggings; blue/white boots; pale blue snow goggles. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: shorts from waist to knees, exactly as the reference. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: None; leave row 7 fully transparent\nRow 8: White and pale-blue snow goggles, hollow, no face\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "gingerbread",
+    "dir": "gingerbread",
+    "name": "Gingerbread Set",
+    "collection": "christmas",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Brown gingerbread hood with white icing piping and open face",
+    "accessory": "None; leave row 8 fully transparent",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Brown gingerbread hood with white icing piping and open face",
+      "None; leave row 8 fully transparent"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for GINGERBREAD SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY christmas collection Gingerbread Set; do not mix with neighboring outfits. Exact design: Gingerbread brown hood and suit; white icing piping; red/green candy buttons; brown shoes. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Brown gingerbread hood with white icing piping and open face\nRow 8: None; leave row 8 fully transparent\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "toy-soldier",
+    "dir": "toy-soldier",
+    "name": "Toy Soldier Set",
+    "collection": "christmas",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Tall red and black cylindrical hat with gold crest, exact shape from reference",
+    "accessory": "Black waist belt with gold buckle, separate from torso",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Tall red and black cylindrical hat with gold crest, exact shape from reference",
+      "Black waist belt with gold buckle, separate from torso"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for TOY SOLDIER SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY christmas collection Toy Soldier Set; do not mix with neighboring outfits. Exact design: Tall red/black hat with gold crest; red/black gold-trim military-style coat and pants; black/gold boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Tall red and black cylindrical hat with gold crest, exact shape from reference\nRow 8: Black waist belt with gold buckle, separate from torso\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "holiday-sweater",
+    "dir": "holiday-sweater",
+    "name": "Holiday Sweater Set",
+    "collection": "christmas",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Red green white knit pompom hat",
+    "accessory": "None; leave row 8 fully transparent",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Red green white knit pompom hat",
+      "None; leave row 8 fully transparent"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for HOLIDAY SWEATER SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY christmas collection Holiday Sweater Set; do not mix with neighboring outfits. Exact design: Red/green/white knit pompom hat; green patterned holiday sweater; dark green pants; red shoes. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Red green white knit pompom hat\nRow 8: None; leave row 8 fully transparent\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "pilgrim-hero",
+    "dir": "pilgrim-hero",
+    "name": "Pilgrim Hero Set",
+    "collection": "harvest",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Tall black pilgrim hat with gold buckle and brim",
+    "accessory": "Black shoulder cape, no body",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Tall black pilgrim hat with gold buckle and brim",
+      "Black shoulder cape, no body"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for PILGRIM HERO SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY harvest collection Pilgrim Hero Set; do not mix with neighboring outfits. Exact design: Tall black gold-buckle hat; black clothing with white collar and cuffs; gold buckle belt; black boots and cape. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Tall black pilgrim hat with gold buckle and brim\nRow 8: Black shoulder cape, no body\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "pilgrim-maid",
+    "dir": "pilgrim-maid",
+    "name": "Pilgrim Maid Set",
+    "collection": "harvest",
+    "lower": "skirt",
+    "sleeve": "long",
+    "head": "White bonnet with purple edging and folds",
+    "accessory": "None; leave row 8 fully transparent",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "White bonnet with purple edging and folds",
+      "None; leave row 8 fully transparent"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for PILGRIM MAID SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY harvest collection Pilgrim Maid Set; do not mix with neighboring outfits. Exact design: White/purple bonnet; purple dress with white apron and collar; gold buckle waist; dark shoes. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: White bonnet with purple edging and folds\nRow 8: None; leave row 8 fully transparent\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "fantasy-harvest",
+    "dir": "fantasy-harvest",
+    "name": "Fantasy Harvest Set",
+    "collection": "harvest",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Moss-green felt cap with two orange autumn leaves, no feathers",
+    "accessory": "Brown leather belt with round brass leaf buckle and seed pouch",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Moss-green felt cap with two orange autumn leaves, no feathers",
+      "Brown leather belt with round brass leaf buckle and seed pouch"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for FANTASY HARVEST SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY harvest collection Fantasy Harvest Set; do not mix with neighboring outfits. Exact design: A whimsical fantasy gardener/harvest adventurer: moss-green felt cap with two orange leaves, rust-orange quilted short jacket over cream shirt, moss-green cargo trousers, brown leather boots with brass buckles, brown belt with round brass leaf buckle and seed pouch. No ceremonial, indigenous-attributed, feathered, or tribal motifs. This is the user-approved replacement design. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Omit the waist belt here because it is a separate row-8 accessory. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Moss-green felt cap with two orange autumn leaves, no feathers\nRow 8: Brown leather belt with round brass leaf buckle and seed pouch\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "harvest-scout",
+    "dir": "harvest-scout",
+    "name": "Harvest Scout Set",
+    "collection": "harvest",
+    "lower": "shorts",
+    "sleeve": "short",
+    "head": "Brown and ochre flat cap",
+    "accessory": "Red and yellow scarf, separate from the torso",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to elbow (short or rolled sleeve exactly as the reference), relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to elbow, relaxed downwards. No hand or skin.",
+      "Lower garment only: shorts from waist to knees, exactly as the reference. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Brown and ochre flat cap",
+      "Red and yellow scarf, separate from the torso"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for HARVEST SCOUT SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY harvest collection Harvest Scout Set; do not mix with neighboring outfits. Exact design: Brown/ochre cap; red/yellow scarf; orange/green outdoor jacket; green cargo shorts; brown fur-trim boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to elbow (short or rolled sleeve exactly as the reference), relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to elbow, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: shorts from waist to knees, exactly as the reference. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Brown and ochre flat cap\nRow 8: Red and yellow scarf, separate from the torso\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "turkey-hero",
+    "dir": "turkey-hero",
+    "name": "Turkey Hero Set",
+    "collection": "harvest",
+    "lower": "shorts",
+    "sleeve": "long",
+    "head": "Small red orange yellow turkey feather crest headband",
+    "accessory": "Large fan of red orange yellow turkey tail feathers, full fan attached behind shoulders, no body",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: shorts from waist to knees, exactly as the reference. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Small red orange yellow turkey feather crest headband",
+      "Large fan of red orange yellow turkey tail feathers, full fan attached behind shoulders, no body"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for TURKEY HERO SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY harvest collection Turkey Hero Set; do not mix with neighboring outfits. Exact design: Orange/gold belted outfit; brown boots; fan of red/orange/yellow turkey feathers and matching crest. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: shorts from waist to knees, exactly as the reference. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Small red orange yellow turkey feather crest headband\nRow 8: Large fan of red orange yellow turkey tail feathers, full fan attached behind shoulders, no body\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "harvest-festival",
+    "dir": "harvest-festival",
+    "name": "Harvest Festival Set",
+    "collection": "harvest",
+    "lower": "skirt",
+    "sleeve": "long",
+    "head": "Sunflower and autumn-leaf crown",
+    "accessory": "Small sunflower pendant on brown cord, isolated",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Sunflower and autumn-leaf crown",
+      "Small sunflower pendant on brown cord, isolated"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for HARVEST FESTIVAL SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY harvest collection Harvest Festival Set; do not mix with neighboring outfits. Exact design: Sunflower and autumn-leaf crown; brown/gold bodice; layered red/yellow/orange leaf skirt; brown/gold boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Complete lower skirt/dress garment only from waist to hem; retain exact layers, splits, embroidery, panels and apron where present. No legs or shoes.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Sunflower and autumn-leaf crown\nRow 8: Small sunflower pendant on brown cord, isolated\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "scarecrow",
+    "dir": "scarecrow",
+    "name": "Scarecrow Set",
+    "collection": "harvest",
+    "lower": "pants",
+    "sleeve": "long",
+    "head": "Straw hat with red band and autumn leaves",
+    "accessory": "Straw wrist cuffs, isolated pair, no arms",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Straw hat with red band and autumn leaves",
+      "Straw wrist cuffs, isolated pair, no arms"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for SCARECROW SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY harvest collection Scarecrow Set; do not mix with neighboring outfits. Exact design: Straw hat with red band; checked orange shirt; blue patched overalls; straw cuffs; brown boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: trousers from waist to ankles. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Straw hat with red band and autumn leaves\nRow 8: Straw wrist cuffs, isolated pair, no arms\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  },
+  {
+    "id": "autumn-explorer",
+    "dir": "autumn-explorer",
+    "name": "Autumn Explorer Set",
+    "collection": "harvest",
+    "lower": "shorts",
+    "sleeve": "long",
+    "head": "Red and brown plaid cap with orange autumn leaf",
+    "accessory": "Red and yellow checked scarf with hanging ends, separate",
+    "rows": [
+      "Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.",
+      "Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.",
+      "Lower garment only: shorts from waist to knees, exactly as the reference. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.",
+      "ONE near-foot shoe/boot alone, no leg.",
+      "ONE far-foot shoe/boot alone, no leg.",
+      "Red and brown plaid cap with orange autumn leaf",
+      "Red and yellow checked scarf with hanging ends, separate"
+    ],
+    "prompt": "Use case: stylized-concept. Production game clothing sprite atlas for AUTUMN EXPLORER SET. Reference image 1 is the authoritative costume collection. Reproduce ONLY harvest collection Autumn Explorer Set; do not mix with neighboring outfits. Exact design: Red/brown plaid cap; red/yellow scarf; brown plaid jacket and shorts; brown fur-trim boots. Keep the illustrated glossy cartoon finish, dark clean outlines, color values, materials, closures, trim, emblems and small details of that outfit. Reference image 2 supplies ONLY the detached-component atlas layout and quality; DO NOT copy its ninja costume, colors, headband or boots.\n\nMake a transparent atlas, NOT a character or promotional sheet. Strict FOUR COLUMNS and EIGHT ROWS, portrait 1:2 ratio, requested 1024x2048 px. No skin, body, head, hair, face, labels, grid lines, text, backdrop, cast shadow, floor or glow. At least 20px empty transparent padding around every component and around all image edges. Keep components contained in distinct rows and columns, no overlap. Background must have genuine alpha transparency.\n\nEach row repeats its component in four independent orthographic views left-to-right: FRONT; true RIGHT-FACING PROFILE; BACK; true LEFT-FACING PROFILE. Front/back must be straight-on. Side profiles face opposite directions and have correct independently painted details and lighting. The camera never tilts. Four columns should align with the reference layout.\n\nRow 1: Sleeveless main torso garment only, collar to hips. Keep its reference waist details. No arms.\nRow 2: Near-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 3: Far-arm sleeve only, shoulder to wrist, relaxed downwards. No hand or skin.\nRow 4: Lower garment only: shorts from waist to knees, exactly as the reference. Front and back contain both legs separated by a transparent gap. Side views show the true side silhouette. No boots or skin.\nRow 5: ONE near-foot shoe/boot alone, no leg.\nRow 6: ONE far-foot shoe/boot alone, no leg.\nRow 7: Red and brown plaid cap with orange autumn leaf\nRow 8: Red and yellow checked scarf with hanging ends, separate\n\nAny row explicitly marked None must remain empty and fully transparent; preserve its spacing. Match exact garment shapes from the selected reference while separating them for animation on a single chibi body. Accessories stay separate. Do not invent weapons or extra garments. Preserve the supplied reference design.",
+    "refs": [
+      "/workspace/scratch/8dce065a12ba/outfit-references/47A6A7B5-CAA8-44C2-B7B6-F98A69B7C9D2.jpeg",
+      "/workspace/scratch/86eb0205a34e/game/royale/cosmetics/assets/ninja-warrior/atlas.png"
+    ]
+  }
+]

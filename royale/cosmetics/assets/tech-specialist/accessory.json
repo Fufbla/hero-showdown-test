@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/tech-specialist/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        24,
+        1639,
+        173,
+        72
+      ],
+      "pivot": [
+        86.5,
+        36.0
+      ],
+      "attach": "head",
+      "scale": 0.1791907514450867,
+      "offset": [
+        0,
+        4
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        259,
+        1637,
+        149,
+        74
+      ],
+      "pivot": [
+        74.5,
+        37.0
+      ],
+      "attach": "head",
+      "scale": 0.2080536912751678,
+      "offset": [
+        4,
+        4
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        468,
+        1634,
+        172,
+        68
+      ],
+      "pivot": [
+        86.0,
+        34.0
+      ],
+      "attach": "head",
+      "scale": 0.18023255813953487,
+      "offset": [
+        0,
+        4
+      ],
+      "pass": "behindHead"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        701,
+        1637,
+        150,
+        74
+      ],
+      "pivot": [
+        75.0,
+        37.0
+      ],
+      "attach": "head",
+      "scale": 0.20666666666666667,
+      "offset": [
+        -4,
+        4
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

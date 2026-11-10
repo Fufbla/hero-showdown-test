@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/mrs-claus/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        26,
+        1621,
+        171,
+        80
+      ],
+      "pivot": [
+        85.5,
+        40.0
+      ],
+      "attach": "waist",
+      "scale": 0.08750000000000001,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        256,
+        1619,
+        137,
+        76
+      ],
+      "pivot": [
+        68.5,
+        38.0
+      ],
+      "attach": "waist",
+      "scale": 0.09210526315789473,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        470,
+        1621,
+        163,
+        74
+      ],
+      "pivot": [
+        81.5,
+        37.0
+      ],
+      "attach": "waist",
+      "scale": 0.0945945945945946,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        703,
+        1619,
+        142,
+        76
+      ],
+      "pivot": [
+        71.0,
+        38.0
+      ],
+      "attach": "waist",
+      "scale": 0.09210526315789475,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/ninja-warrior/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        28,
+        1432,
+        165,
+        90
+      ],
+      "pivot": [
+        82.5,
+        81.0
+      ],
+      "attach": "head",
+      "scale": 0.23636363636363636,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        247,
+        1430,
+        159,
+        91
+      ],
+      "pivot": [
+        79.5,
+        81.9
+      ],
+      "attach": "head",
+      "scale": 0.24528301886792453,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        474,
+        1432,
+        160,
+        90
+      ],
+      "pivot": [
+        80.0,
+        81.0
+      ],
+      "attach": "head",
+      "scale": 0.24375,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        703,
+        1430,
+        158,
+        91
+      ],
+      "pivot": [
+        79.0,
+        81.9
+      ],
+      "attach": "head",
+      "scale": 0.2468354430379747,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

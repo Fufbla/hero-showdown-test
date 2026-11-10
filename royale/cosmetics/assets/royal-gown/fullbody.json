@@ -1,0 +1,218 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/royal-gown/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "torso",
+      "rect": [
+        47,
+        47,
+        144,
+        199
+      ],
+      "pivot": [
+        72.0,
+        9.950000000000001
+      ],
+      "attach": "neck",
+      "scale": 0.2222222222222222,
+      "offset": [
+        0,
+        -3
+      ],
+      "fixedWidth": true,
+      "end": {
+        "attach": "waist",
+        "pivot": [
+          72.0,
+          153.23
+        ]
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "front",
+      "part": "skirt",
+      "rect": [
+        13,
+        739,
+        209,
+        199
+      ],
+      "pivot": [
+        104.5,
+        0
+      ],
+      "attach": "waist",
+      "scale": 0.20095693779904306,
+      "drape": {
+        "nearHalf": 1
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "right",
+      "part": "torso",
+      "rect": [
+        279,
+        44,
+        127,
+        202
+      ],
+      "pivot": [
+        63.5,
+        10.100000000000001
+      ],
+      "attach": "neck",
+      "scale": 0.1889763779527559,
+      "offset": [
+        4,
+        -3
+      ],
+      "fixedWidth": true,
+      "end": {
+        "attach": "waist",
+        "pivot": [
+          63.5,
+          155.54
+        ]
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "right",
+      "part": "skirt",
+      "rect": [
+        241,
+        739,
+        179,
+        195
+      ],
+      "pivot": [
+        89.5,
+        0
+      ],
+      "attach": "waist",
+      "scale": 0.18994413407821228,
+      "drape": {
+        "nearHalf": 1
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "back",
+      "part": "torso",
+      "rect": [
+        481,
+        47,
+        143,
+        199
+      ],
+      "pivot": [
+        71.5,
+        9.950000000000001
+      ],
+      "attach": "neck",
+      "scale": 0.22377622377622378,
+      "offset": [
+        0,
+        -3
+      ],
+      "fixedWidth": true,
+      "end": {
+        "attach": "waist",
+        "pivot": [
+          71.5,
+          153.23
+        ]
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "back",
+      "part": "skirt",
+      "rect": [
+        445,
+        738,
+        216,
+        198
+      ],
+      "pivot": [
+        108.0,
+        0
+      ],
+      "attach": "waist",
+      "scale": 0.19444444444444445,
+      "drape": {
+        "nearHalf": 0
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "left",
+      "part": "torso",
+      "rect": [
+        703,
+        44,
+        125,
+        202
+      ],
+      "pivot": [
+        62.5,
+        10.100000000000001
+      ],
+      "attach": "neck",
+      "scale": 0.192,
+      "offset": [
+        -4,
+        -3
+      ],
+      "fixedWidth": true,
+      "end": {
+        "attach": "waist",
+        "pivot": [
+          62.5,
+          155.54
+        ]
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "left",
+      "part": "skirt",
+      "rect": [
+        686,
+        739,
+        179,
+        195
+      ],
+      "pivot": [
+        89.5,
+        0
+      ],
+      "attach": "waist",
+      "scale": 0.18994413407821228,
+      "drape": {
+        "nearHalf": 0
+      },
+      "pass": "torso"
+    }
+  ],
+  "covers": [
+    "torso",
+    "arms",
+    "gloves",
+    "belt",
+    "emblem",
+    "cape",
+    "bareUpperArms",
+    "bareForearms",
+    "legs"
+  ]
+}

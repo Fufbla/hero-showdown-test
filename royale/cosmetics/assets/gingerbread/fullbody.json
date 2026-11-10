@@ -1,0 +1,600 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/gingerbread/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "torso",
+      "rect": [
+        36,
+        26,
+        177,
+        211
+      ],
+      "pivot": [
+        88.5,
+        10.55
+      ],
+      "attach": "neck",
+      "scale": 0.1807909604519774,
+      "offset": [
+        0,
+        -3
+      ],
+      "fixedWidth": true,
+      "end": {
+        "attach": "waist",
+        "pivot": [
+          88.5,
+          162.47
+        ]
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "front",
+      "part": "upperArmNear",
+      "rect": [
+        72,
+        276,
+        86,
+        184
+      ],
+      "pivot": [
+        43.0,
+        14.72
+      ],
+      "attach": "shoulderNear",
+      "scale": 0.1511627906976744,
+      "fixedWidth": true,
+      "end": {
+        "attach": "wristNear",
+        "pivot": [
+          43.0,
+          165.6
+        ]
+      },
+      "joint": {
+        "attach": "elbowNear",
+        "fraction": 0.49
+      },
+      "pass": "nearArm"
+    },
+    {
+      "view": "front",
+      "part": "upperArmFar",
+      "rect": [
+        69,
+        498,
+        83,
+        184
+      ],
+      "pivot": [
+        41.5,
+        14.72
+      ],
+      "attach": "shoulderFar",
+      "scale": 0.1566265060240964,
+      "fixedWidth": true,
+      "end": {
+        "attach": "wristFar",
+        "pivot": [
+          41.5,
+          165.6
+        ]
+      },
+      "joint": {
+        "attach": "elbowFar",
+        "fraction": 0.49
+      },
+      "pass": "farArm"
+    },
+    {
+      "view": "front",
+      "part": "thighFar",
+      "rect": [
+        19,
+        724,
+        96,
+        193
+      ],
+      "pivot": [
+        48.0,
+        7.72
+      ],
+      "attach": "hipFar",
+      "scale": 0.16666666666666666,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleFar",
+        "pivot": [
+          48.0,
+          183.35
+        ]
+      },
+      "joint": {
+        "attach": "kneeFar",
+        "fraction": 0.51
+      },
+      "pass": "farLeg"
+    },
+    {
+      "view": "front",
+      "part": "thighNear",
+      "rect": [
+        115,
+        724,
+        96,
+        193
+      ],
+      "pivot": [
+        48.0,
+        7.72
+      ],
+      "attach": "hipNear",
+      "scale": 0.16666666666666666,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleNear",
+        "pivot": [
+          48.0,
+          183.35
+        ]
+      },
+      "joint": {
+        "attach": "kneeNear",
+        "fraction": 0.51
+      },
+      "pass": "nearLeg"
+    },
+    {
+      "view": "right",
+      "part": "torso",
+      "rect": [
+        269,
+        26,
+        147,
+        211
+      ],
+      "pivot": [
+        73.5,
+        10.55
+      ],
+      "attach": "neck",
+      "scale": 0.16326530612244897,
+      "offset": [
+        4,
+        -3
+      ],
+      "fixedWidth": true,
+      "end": {
+        "attach": "waist",
+        "pivot": [
+          73.5,
+          162.47
+        ]
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "right",
+      "part": "upperArmNear",
+      "rect": [
+        273,
+        277,
+        115,
+        187
+      ],
+      "pivot": [
+        57.5,
+        14.96
+      ],
+      "attach": "shoulderNear",
+      "scale": 0.09565217391304348,
+      "fixedWidth": true,
+      "end": {
+        "attach": "wristNear",
+        "pivot": [
+          57.5,
+          168.3
+        ]
+      },
+      "joint": {
+        "attach": "elbowNear",
+        "fraction": 0.49
+      },
+      "pass": "nearArm"
+    },
+    {
+      "view": "right",
+      "part": "upperArmFar",
+      "rect": [
+        273,
+        498,
+        107,
+        183
+      ],
+      "pivot": [
+        53.5,
+        14.64
+      ],
+      "attach": "shoulderFar",
+      "scale": 0.102803738317757,
+      "fixedWidth": true,
+      "end": {
+        "attach": "wristFar",
+        "pivot": [
+          53.5,
+          164.70000000000002
+        ]
+      },
+      "joint": {
+        "attach": "elbowFar",
+        "fraction": 0.49
+      },
+      "pass": "farArm"
+    },
+    {
+      "view": "right",
+      "part": "thighFar",
+      "rect": [
+        263,
+        724,
+        124,
+        193
+      ],
+      "pivot": [
+        62.0,
+        7.72
+      ],
+      "attach": "hipFar",
+      "scale": 0.11290322580645161,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleFar",
+        "pivot": [
+          62.0,
+          183.35
+        ]
+      },
+      "joint": {
+        "attach": "kneeFar",
+        "fraction": 0.51
+      },
+      "pass": "farLeg"
+    },
+    {
+      "view": "right",
+      "part": "thighNear",
+      "rect": [
+        263,
+        724,
+        124,
+        193
+      ],
+      "pivot": [
+        62.0,
+        7.72
+      ],
+      "attach": "hipNear",
+      "scale": 0.11290322580645161,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleNear",
+        "pivot": [
+          62.0,
+          183.35
+        ]
+      },
+      "joint": {
+        "attach": "kneeNear",
+        "fraction": 0.51
+      },
+      "pass": "nearLeg"
+    },
+    {
+      "view": "back",
+      "part": "torso",
+      "rect": [
+        471,
+        26,
+        173,
+        213
+      ],
+      "pivot": [
+        86.5,
+        10.65
+      ],
+      "attach": "neck",
+      "scale": 0.18497109826589594,
+      "offset": [
+        0,
+        -3
+      ],
+      "fixedWidth": true,
+      "end": {
+        "attach": "waist",
+        "pivot": [
+          86.5,
+          164.01
+        ]
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "back",
+      "part": "upperArmNear",
+      "rect": [
+        512,
+        276,
+        86,
+        185
+      ],
+      "pivot": [
+        43.0,
+        14.8
+      ],
+      "attach": "shoulderNear",
+      "scale": 0.1511627906976744,
+      "fixedWidth": true,
+      "end": {
+        "attach": "wristNear",
+        "pivot": [
+          43.0,
+          166.5
+        ]
+      },
+      "joint": {
+        "attach": "elbowNear",
+        "fraction": 0.49
+      },
+      "pass": "nearArm"
+    },
+    {
+      "view": "back",
+      "part": "upperArmFar",
+      "rect": [
+        509,
+        497,
+        88,
+        185
+      ],
+      "pivot": [
+        44.0,
+        14.8
+      ],
+      "attach": "shoulderFar",
+      "scale": 0.14772727272727273,
+      "fixedWidth": true,
+      "end": {
+        "attach": "wristFar",
+        "pivot": [
+          44.0,
+          166.5
+        ]
+      },
+      "joint": {
+        "attach": "elbowFar",
+        "fraction": 0.49
+      },
+      "pass": "farArm"
+    },
+    {
+      "view": "back",
+      "part": "thighFar",
+      "rect": [
+        556,
+        724,
+        94,
+        192
+      ],
+      "pivot": [
+        47.0,
+        7.68
+      ],
+      "attach": "hipFar",
+      "scale": 0.1702127659574468,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleFar",
+        "pivot": [
+          47.0,
+          182.39999999999998
+        ]
+      },
+      "joint": {
+        "attach": "kneeFar",
+        "fraction": 0.51
+      },
+      "pass": "farLeg"
+    },
+    {
+      "view": "back",
+      "part": "thighNear",
+      "rect": [
+        462,
+        724,
+        94,
+        192
+      ],
+      "pivot": [
+        47.0,
+        7.68
+      ],
+      "attach": "hipNear",
+      "scale": 0.1702127659574468,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleNear",
+        "pivot": [
+          47.0,
+          182.39999999999998
+        ]
+      },
+      "joint": {
+        "attach": "kneeNear",
+        "fraction": 0.51
+      },
+      "pass": "nearLeg"
+    },
+    {
+      "view": "left",
+      "part": "torso",
+      "rect": [
+        700,
+        26,
+        147,
+        211
+      ],
+      "pivot": [
+        73.5,
+        10.55
+      ],
+      "attach": "neck",
+      "scale": 0.16326530612244897,
+      "offset": [
+        -4,
+        -3
+      ],
+      "fixedWidth": true,
+      "end": {
+        "attach": "waist",
+        "pivot": [
+          73.5,
+          162.47
+        ]
+      },
+      "pass": "torso"
+    },
+    {
+      "view": "left",
+      "part": "upperArmNear",
+      "rect": [
+        723,
+        276,
+        113,
+        188
+      ],
+      "pivot": [
+        56.5,
+        15.040000000000001
+      ],
+      "attach": "shoulderNear",
+      "scale": 0.09734513274336283,
+      "fixedWidth": true,
+      "end": {
+        "attach": "wristNear",
+        "pivot": [
+          56.5,
+          169.20000000000002
+        ]
+      },
+      "joint": {
+        "attach": "elbowNear",
+        "fraction": 0.49
+      },
+      "pass": "nearArm"
+    },
+    {
+      "view": "left",
+      "part": "upperArmFar",
+      "rect": [
+        728,
+        498,
+        108,
+        184
+      ],
+      "pivot": [
+        54.0,
+        14.72
+      ],
+      "attach": "shoulderFar",
+      "scale": 0.10185185185185185,
+      "fixedWidth": true,
+      "end": {
+        "attach": "wristFar",
+        "pivot": [
+          54.0,
+          165.6
+        ]
+      },
+      "joint": {
+        "attach": "elbowFar",
+        "fraction": 0.49
+      },
+      "pass": "farArm"
+    },
+    {
+      "view": "left",
+      "part": "thighFar",
+      "rect": [
+        727,
+        720,
+        112,
+        198
+      ],
+      "pivot": [
+        56.0,
+        7.92
+      ],
+      "attach": "hipFar",
+      "scale": 0.125,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleFar",
+        "pivot": [
+          56.0,
+          188.1
+        ]
+      },
+      "joint": {
+        "attach": "kneeFar",
+        "fraction": 0.51
+      },
+      "pass": "farLeg"
+    },
+    {
+      "view": "left",
+      "part": "thighNear",
+      "rect": [
+        727,
+        720,
+        112,
+        198
+      ],
+      "pivot": [
+        56.0,
+        7.92
+      ],
+      "attach": "hipNear",
+      "scale": 0.125,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleNear",
+        "pivot": [
+          56.0,
+          188.1
+        ]
+      },
+      "joint": {
+        "attach": "kneeNear",
+        "fraction": 0.51
+      },
+      "pass": "nearLeg"
+    }
+  ],
+  "covers": [
+    "torso",
+    "arms",
+    "gloves",
+    "belt",
+    "emblem",
+    "cape",
+    "legs"
+  ]
+}

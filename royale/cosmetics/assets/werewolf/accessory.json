@@ -1,0 +1,98 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/werewolf/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "cape",
+      "rect": [
+        44,
+        1642,
+        135,
+        94
+      ],
+      "pivot": [
+        67.5,
+        84.60000000000001
+      ],
+      "attach": "waist",
+      "scale": 0.0851063829787234,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "behindBody"
+    },
+    {
+      "view": "right",
+      "part": "cape",
+      "rect": [
+        283,
+        1642,
+        106,
+        94
+      ],
+      "pivot": [
+        53.0,
+        84.60000000000001
+      ],
+      "attach": "waist",
+      "scale": 0.0851063829787234,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "behindBody"
+    },
+    {
+      "view": "back",
+      "part": "cape",
+      "rect": [
+        484,
+        1647,
+        135,
+        84
+      ],
+      "pivot": [
+        67.5,
+        75.60000000000001
+      ],
+      "attach": "waist",
+      "scale": 0.09523809523809525,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "behindBody"
+    },
+    {
+      "view": "left",
+      "part": "cape",
+      "rect": [
+        711,
+        1641,
+        112,
+        94
+      ],
+      "pivot": [
+        56.0,
+        84.60000000000001
+      ],
+      "attach": "waist",
+      "scale": 0.0851063829787234,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "behindBody"
+    }
+  ],
+  "covers": [
+    "cape"
+  ]
+}
