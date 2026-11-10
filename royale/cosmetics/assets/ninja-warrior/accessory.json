@@ -18,7 +18,7 @@
       ],
       "pivot": [
         80.5,
-        57.0
+        57
       ],
       "attach": "head",
       "scale": 0.13664596273291926,
@@ -26,7 +26,10 @@
         0,
         12
       ],
-      "pass": "accessory"
+      "pass": "accessory",
+      "fit": {
+        "width": 0.98
+      }
     },
     {
       "view": "right",
@@ -39,7 +42,7 @@
       ],
       "pivot": [
         65.5,
-        57.0
+        57
       ],
       "attach": "head",
       "scale": 0.16793893129770993,
@@ -47,7 +50,10 @@
         4,
         12
       ],
-      "pass": "accessory"
+      "pass": "accessory",
+      "fit": {
+        "width": 0.98
+      }
     },
     {
       "view": "back",
@@ -59,8 +65,8 @@
         120
       ],
       "pivot": [
-        79.0,
-        60.0
+        79,
+        60
       ],
       "attach": "head",
       "scale": 0.13924050632911392,
@@ -68,7 +74,10 @@
         0,
         12
       ],
-      "pass": "behindHead"
+      "pass": "behindHead",
+      "fit": {
+        "width": 0.98
+      }
     },
     {
       "view": "left",
@@ -81,7 +90,7 @@
       ],
       "pivot": [
         64.5,
-        57.0
+        57
       ],
       "attach": "head",
       "scale": 0.17054263565891473,
@@ -89,7 +98,10 @@
         -4,
         12
       ],
-      "pass": "accessory"
+      "pass": "accessory",
+      "fit": {
+        "width": 0.98
+      }
     }
   ],
   "covers": []
