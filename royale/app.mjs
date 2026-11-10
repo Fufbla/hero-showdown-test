@@ -11,6 +11,7 @@ import {text as hudText,html as hudHTML,attr as hudAttr} from './hud-dom.mjs';
 import {shouldWriteAdventure} from './save-policy.mjs';
 import {clockSynchronized} from './shared-clock.mjs';
 import {CloudAPI, CloudHeroStore} from './cloud-client.mjs';
+import {v2GeneratedSprites} from './v2-sprites/runtime.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
 import {cosmeticTransaction,normalizeCosmetics} from './cosmetics/state.mjs';
 import {isV2TestRoute,V2_TEST_STORAGE_PREFIX,v2TestLook} from './v2-test-hero.mjs';
@@ -171,6 +172,29 @@ const journeyMenu=new JourneyMenu(()=>game,persist,say,resume,transaction,confir
 const powerUpgrades=new InstantPowerUpgrades(()=>({game,store,index:activeSlot,heroId:activeId,blocked:!online()&&activeId&&multiplayerMenu.isLinked(activeId),remote:online()?multiplayerMenu.session:null}));
 const powerMenu=new PowerMenu(()=>game,persist,say,powerUpgrades),controlMenu=new ControlMenu(input,storage,say);
 const renderer=new Renderer($('game')),creator=new Creator(),powerButtons=[...document.querySelectorAll('.power-button')];
+if(v2TestHero){
+ renderer.v2SpriteTest=true;
+ const root=$('pause-primary');
+ if(root){
+  const button=document.createElement('button');
+  button.type='button';
+  button.id='v2-sprite-toggle';
+  button.className='secondary';
+  button.textContent='V2 Sprites: Loading…';
+  button.setAttribute('aria-label','Switch V2 test hero between generated and original artwork');
+  button.disabled=true;
+  root.append(button);
+  void v2GeneratedSprites.preload().then(ok=>{
+   button.disabled=!ok;
+   button.textContent=ok?'V2 Sprites: ON (tap for original)': 'V2 Sprites unavailable · Original art';
+   if(!ok){renderer.v2SpriteTest=false;console.warn('V2 generated sprite atlas not ready',v2GeneratedSprites.error);}
+  });
+  button.onclick=()=>{
+   renderer.v2SpriteTest=!renderer.v2SpriteTest;
+   button.textContent=renderer.v2SpriteTest?'V2 Sprites: ON (tap for original)':'V2 Sprites: OFF (tap for new)';
+  };
+ }else void v2GeneratedSprites.preload();
+}
 const creatorHome=document.createComment('Character creator home');$('creator').before(creatorHome);
 const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,say,appearance:()=>openCreator(activeSlot,true),leave:returnAdventure,navigate:()=>{if(!canLeaveMenu())return false;if(screen==='creator'&&editing){abandonUnconfirmedAppearance();setScreen('tree');}return true;}});
 const legendaryMenu=new LegendaryMenu(()=>game,{transaction,say,enter:id=>journeyMenu.confirmTravel({legendary:id}),onClaim:resume});
