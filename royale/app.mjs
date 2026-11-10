@@ -13,6 +13,7 @@ import {clockSynchronized} from './shared-clock.mjs';
 import {CloudAPI, CloudHeroStore} from './cloud-client.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
 import {cosmeticTransaction,normalizeCosmetics} from './cosmetics/state.mjs';
+import {isV2TestRoute,V2_TEST_STORAGE_PREFIX,v2TestLook} from './v2-test-hero.mjs';
 import {AccountMenu} from './account-ui.mjs';
 import { LegendaryMenu } from './legendary-ui.mjs';
 import { LEGENDARY, MERGE_POWERS } from './legendary-data.mjs';
@@ -50,8 +51,9 @@ window.visualViewport?.addEventListener('resize',sizeVisibleViewport);sizeVisibl
 // The visible QA harness uses its own session-storage namespace, never real hero slots.
 const testPrefix=params.has('qa')&&params.get('testSession')?`royale-test-${params.get('testSession')}:`:'';
 const practiceHero = ['male','female'].includes(params.get('practice')) && !testPrefix ? params.get('practice') : null;
+const v2TestHero=isV2TestRoute(params)&&window.parent!==window&&window.parent.location.origin===location.origin&&!testPrefix;
 const codePlay=['1','v3'].includes(params.get('codePlay'))&&window.parent!==window&&window.parent.location.origin===location.origin;
-const storagePrefix = testPrefix || (codePlay?(params.get('codePlay')==='v3'?'royale-v3-play:':'royale-code-play-v1:'):(practiceHero ? `style-c-trial-v1-${practiceHero}:` : ''));
+const storagePrefix = testPrefix || (v2TestHero?V2_TEST_STORAGE_PREFIX:(codePlay?(params.get('codePlay')==='v3'?'royale-v3-play:':'royale-code-play-v1:'):(practiceHero ? `style-c-trial-v1-${practiceHero}:` : '')));
 const storage={getItem:key=>(testPrefix||practiceHero?sessionStorage:localStorage).getItem(storagePrefix+key),setItem:(key,value)=>(testPrefix||practiceHero?sessionStorage:localStorage).setItem(storagePrefix+key,value)};
 $('hero-art-status').textContent='Opening saved heroes…';
 const localStore=new LocalHeroStore(storage);let store=localStore;
@@ -559,7 +561,22 @@ if (practiceHero) {
   }
   document.querySelector('.phase-label').textContent = 'STYLE C PRACTICE';
 }
+if(v2TestHero){
+ // A brand-new character generated only inside the dedicated V2 namespace.
+ // Never read the normal V3 store, and never send its gameplay to Supabase.
+ if(!store.slot(0)&&store.writable){
+  const hero=new Game({look:v2TestLook(styleCDefault('male'))});
+  const created=store.writeSlot(0,hero.save(),{expectedId:null,requireDurable:true});
+  if(!created.ok)throw Error('Unable to initialize isolated V2 Test Hero: '+created.error);
+ }
+ const phase=document.querySelector('.phase-label');
+ if(phase)phase.textContent='V2 TEST CHARACTER · 0000000000 · LOCAL SANDBOX';
+}
 renderRoster();setScreen('roster');
+if(v2TestHero&&store.slot(0)){
+ continueHero(0);
+ say('V2 Test Hero · This browser only. Your production cloud heroes are untouched.',8);
+}
 if (practiceHero && store.slot(0)) {
   continueHero(0);
   say('Practice patrol · Use ⇄ to change powers or tap + to fill an empty slot.', 7);
