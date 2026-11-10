@@ -1,0 +1,16 @@
+name: V2 Animation Regression
+on:
+  push:
+    branches:
+      - fix/v3-run-jump-cape-20261110
+  workflow_dispatch:
+jobs:
+  animation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check V2 animation selection
+        run: node royale/v2-sprites/tests/animation-selection.test.mjs
