@@ -1,9 +1,0 @@
-{
-  "tool": "built-in image_gen",
-  "input": [
-    "reference.jpeg",
-    "aligned-extraction.png"
-  ],
-  "transparent_background": true,
-  "prompt": "Use case: precise-object-edit / background-extraction. Asset: two registered cape-only underlays for 2D sprite animation. Input 1 is the definitive 1536x864 scene and exact placement reference. Input 2 isolates those same two heroes; it is only a segmentation guide. Return a transparent 1536x864 image containing ONLY the male's royal-blue cape and the female's purple cape at the same positions, scale, orientation and outline as input 1. Erase every head, face, hair, body, armor, hand, glove, leg and boot, and ALL scenery/HUD. Where the original body obscured the cape, reconstruct ONLY continuous cape cloth, matching the existing comic-book fabric shading, highlights and thick dark outline. No limb pixels or armor may remain anywhere. Male cape attaches around source (603,425), trails down-left to around (440,518), lowest visible tail around (465,562); fill behind his torso/arms/legs to create a complete connected blue cloak ending within roughly x438..675 and y416..566. Female cape attaches around (920,440), trails down-left toward (784,531), lowest visible tail around (817,571); complete connected purple cloth behind her body within roughly x781..990 y432..575. Preserve the exact visible left and bottom contours and visible original cloth panels; fill only the hidden right/top fabric. No gold clasps, no collar armor, no characters, no text, no numbers, no sketches. Both capes stay SMALL and in their original central frame positions with large transparent margins. Do not center or enlarge them. Genuine alpha outside the two cloth silhouettes."
-}
