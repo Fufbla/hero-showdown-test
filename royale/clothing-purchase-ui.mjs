@@ -5,7 +5,7 @@ let index=null,sets=[],rerender=()=>{},message=null,busy=false;
 const status=()=>{let snapshot=null;window.dispatchEvent(new CustomEvent('royale-clothing-snapshot-request',{detail:{receive(v){snapshot=v;}}}));return snapshot;};
 async function action(operation){
  if(busy)return;
- const state=status();if(!state?.ready){message.textContent='Please load your hero through V3 Cloud Login to buy or equip clothing.';return;}
+ const state=status();if(!state?.ready){message.textContent=state?.reason||'Please load your hero through V3 Cloud Login to buy or equip clothing.';return;}
  busy=true;message.textContent='Waiting for permanent V3 cloud confirmation…';
  try{
   const result=await new Promise(resolve=>window.dispatchEvent(new CustomEvent('royale-clothing-operation',{detail:{operation,receive:resolve}})));
@@ -60,7 +60,7 @@ export function storeControls(set){
   details.append(line);
  }
  wrap.append(details);
- if(!ready)wrap.append(node('small','Buying and equipping require your V3 cloud hero. The fitting room remains free to use.'));
+ if(!ready)wrap.append(node('small',state?.reason||'Waiting for a verified V3 cloud session. Your fitting room remains free to use.'));
  else wrap.append(node('small','Coins: '+coins.toLocaleString()+' · Purchases save before being confirmed.'));
  return wrap;
 }
@@ -70,7 +70,7 @@ export function myClothingPanel(holder){
  if(!panel){panel=node('section');panel.className='clothing-owned-summary';holder.prepend(panel);}
  panel.replaceChildren(node('h4','My Clothing · '+owned.size+' pieces'));
  if(!state?.ready){
-  const hint=node('p','Preview mode. To buy and save clothing across devices, launch your hero from V3 Cloud Login.');
+  const hint=node('p',state?.reason||'Preview mode. To buy and save clothing across devices, launch your hero from V3 Cloud Login.');
   const link=node('a','Open V3 Cloud Login');link.href='../royale-v3-staging/';hint.append(' ',link);panel.append(hint);
  }else if(!owned.size)panel.append(node('p','No clothing purchased yet. Try on any outfit for free, then buy when ready.'));
  else panel.append(node('p','Owned pieces stay attached to this cloud hero. Use Wear or Remove on an outfit card to change your look.'));
