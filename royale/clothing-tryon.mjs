@@ -1,4 +1,4 @@
-// Read-only Try On. Renders approved clothing on an in-memory portrait; never mutates game state.
+// Persistent read-only clothing fitting room. No state, wallet, or save mutations.
 import {drawHero} from './hero-art.mjs';
 import {previewHero} from './hero-rig.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
@@ -6,56 +6,74 @@ import {drawClothingPass} from './cosmetics/renderer.mjs';
 import {universalRenderLook} from './cosmetics/template.mjs';
 
 const passes=['behindBody','farLeg','nearLeg','torso','farArm','nearArm','overBody','behindHead','headwear','accessory'];
-let active=null,serial=0;
-const make=(tag,label)=>{const n=document.createElement(tag);if(label!=null)n.textContent=label;return n;};
+let serial=0, ui=null, selected=null, layers=[];
+const node=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 function currentHero(){
- let hero=null;
- window.dispatchEvent(new CustomEvent('royale-clothing-preview-request',{detail:{receive(value){hero=value;}}}));
- return hero;
+ let value=null;
+ window.dispatchEvent(new CustomEvent('royale-clothing-preview-request',{detail:{receive(v){value=v;}}}));
+ return value;
 }
-function paint(){
- if(!active||!active.layers||!active.hero)return;
- const {canvas,hero,layers,view}=active,c=canvas.getContext('2d');
+function draw(){
+ if(!ui)return;
+ const {canvas,note,view}=ui,c=canvas.getContext('2d');
  if(!c)return;
- const size=canvas.width,foot=canvas.height-18,scale=2;
- c.clearRect(0,0,size,canvas.height);
- c.fillStyle='rgba(150,210,170,.12)';c.beginPath();c.ellipse(size/2,foot,65,9,0,0,Math.PI*2);c.fill();
- const rawLook=universalRenderLook({...hero.look,cape:false});
- // Clothing is composited over an unarmored visual mannequin of the selected hero.
- // This never changes the saved armor or appearance.
- const p=drawHero(c,size/2,foot,rawLook,previewHero('idle',0),0,scale,{view,outfit:{pieces:{}}});
- if(!p?.arms||!p?.legs){active.note.textContent='Hero rendering unavailable; original outfit art remains visible.';return;}
- c.save();c.translate(size/2,foot);c.scale(scale,scale);
- try{for(const pass of passes)drawClothingPass(c,p,view,pass,layers);}catch(err){active.note.textContent='Preview rendering error: '+err.message;}
- c.restore();
-}
-export async function openTryOn(set,card){
- const id=++serial;
- if(active?.stage?.isConnected){if(active.stage.open)active.stage.close();active.stage.remove();}
- active=null;
- const stage=make('dialog');stage.className='clothing-tryon clothing-tryon-dialog';stage.setAttribute('aria-label',set.name+' virtual try-on');
- const h=make('h4','Try On · '+set.name),note=make('p','Loading your hero and outfit artwork…');
- note.setAttribute('role','status');
- const controls=make('div');controls.className='clothing-tryon-controls';
- const canvas=make('canvas');canvas.width=340;canvas.height=430;canvas.setAttribute('role','img');canvas.setAttribute('aria-label','Read-only hero clothing preview');
- const close=make('button','Close preview');close.type='button';close.onclick=()=>stage.close();
- stage.addEventListener('close',()=>{serial++;stage.remove();if(active?.stage===stage)active=null;});
- stage.append(h,controls,canvas,note,close);
- document.body.append(stage);stage.showModal();
+ c.clearRect(0,0,canvas.width,canvas.height);
+ c.fillStyle='rgba(150,210,170,.1)';c.beginPath();c.ellipse(180,390,65,10,0,0,Math.PI*2);c.fill();
  const hero=currentHero();
- if(!hero){note.textContent='Select and load a hero first, then open the Tree of Eris to try on clothes.';return;}
+ if(!hero?.look){
+  note.textContent='Load a hero before using Try On. Your original clothing stays unchanged.';
+  return;
+ }
  try{
-  const layers=await clothingRuntime.loadIds(set.pieces.map(p=>p.id),{review:true,retry:true});
-  if(id!==serial||!stage.isConnected)return;
-  if(!layers.length)throw Error('Outfit artwork not available');
-  active={stage,hero,layers,canvas,note,view:'front'};
-  for(const view of ['front','right','back','left']){
-   const button=make('button',view[0].toUpperCase()+view.slice(1));button.type='button';button.className='secondary';
-   button.setAttribute('aria-pressed',String(view==='front'));
-   button.onclick=()=>{if(!active||active.stage!==stage)return;active.view=view;for(const b of controls.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b===button));paint();};
-   controls.append(button);
+  const rawLook=universalRenderLook({...hero.look,cape:false});
+  const scale=1.7,x=180,y=392;
+  const pose=drawHero(c,x,y,rawLook,previewHero('idle',0),0,scale,{view,outfit:{pieces:{}}});
+  if(!pose?.arms?.length||!pose?.legs?.length){
+   note.textContent='Character artwork is loading. Try selecting the outfit again.';
+   return;
   }
-  note.textContent='Preview on your hero. Only the preview hides equipped armor; your actual gear, coins, and saves stay unchanged.';
-  paint();
- }catch(error){if(id!==serial||!stage.isConnected)return;note.textContent='Try On unavailable: '+(error?.message||'Artwork loading failed')+'. Your hero is unchanged.';}
+  if(layers.length){
+   c.save();c.translate(x,y);c.scale(scale,scale);
+   try{for(const pass of passes)drawClothingPass(c,pose,view,pass,layers);}
+   finally{c.restore();}
+  }
+ }catch(e){note.textContent='Cannot render this outfit: '+e.message;}
+}
+export function initializeTryOn(holder){
+ if(ui?.holder===holder)return;
+ const section=node('section');section.className='clothing-fitting-room';
+ const heading=node('h3','YOUR HERO · FITTING ROOM');
+ const title=node('p','Choose any outfit below to see your hero wearing it.');
+ const views=node('nav');views.className='clothing-fit-views';views.setAttribute('aria-label','View outfit from four sides');
+ const canvas=node('canvas');canvas.width=360;canvas.height=420;canvas.setAttribute('role','img');canvas.setAttribute('aria-label','Hero clothing fitting room');
+ const note=node('p','Preview only. No coins or saved clothing will change.');note.setAttribute('role','status');
+ section.append(heading,title,views,canvas,note);
+ holder.prepend(section);
+ ui={holder,section,title,views,canvas,note,view:'front'};
+ for(const view of ['front','right','back','left']){
+  const b=node('button',view[0].toUpperCase()+view.slice(1));b.type='button';b.className='secondary';
+  b.setAttribute('aria-pressed',String(view==='front'));
+  b.onclick=()=>{ui.view=view;for(const item of views.querySelectorAll('button'))item.setAttribute('aria-pressed',String(item===b));draw();};
+  views.append(b);
+ }
+ draw();
+}
+export async function openTryOn(set){
+ if(!ui){throw Error('Fitting room not initialized');}
+ const request=++serial;
+ selected=set;layers=[];ui.title.textContent='Trying on: '+set.name;
+ ui.note.textContent='Loading your hero and '+set.pieces.length+' clothing pieces…';
+ ui.section.scrollIntoView({block:'nearest',behavior:'smooth'});
+ draw();
+ try{
+  const result=await clothingRuntime.loadIds(set.pieces.map(p=>p.id),{review:true,retry:true});
+  if(request!==serial)return;
+  layers=result;
+  ui.note.textContent='Wearing '+set.name+' in preview only. No changes saved.';
+  draw();
+ }catch(e){
+  if(request!==serial)return;
+  layers=[];ui.note.textContent='Unable to load '+set.name+': '+e.message+'. No coins or saved progress changed.';
+  draw();
+ }
 }
