@@ -2,7 +2,7 @@ name: Verify Clothing Store Transactions
 
 on:
   push:
-    branches: [main, feature/phase-e-head-contour-2d-nov10]
+    branches: [main, feature/v2-test-character-code-0000000000]
     paths:
       - 'royale/**'
       - 'royale-v3-staging/**'
@@ -26,6 +26,7 @@ jobs:
       - name: Parse client and store modules
         run: |
           node --check royale/core.mjs
+          node --check royale/v2-test-hero.mjs
           node --check royale/app.mjs
           node --check royale-v3-staging/app.mjs
           node --check royale/style-c-hero.mjs
@@ -46,4 +47,4 @@ jobs:
           node --check royale/clothing-purchase-ui.mjs
           node --check royale/cosmetics/state.mjs
       - name: Verify complete catalog and purchase rules
-        run: node --test royale/tests/clothing-purchases.test.mjs royale/tests/clothing-fit.test.mjs royale/tests/clothing-all-sets.test.mjs royale/tests/clothing-visibility.test.mjs royale/tests/clothing-category-fit.test.mjs royale/tests/clothing-polish.test.mjs royale/tests/clothing-headwear-2d.test.mjs royale/tests/clothing-head-contour.test.mjs
+        run: node --test royale/tests/clothing-purchases.test.mjs royale/tests/clothing-fit.test.mjs royale/tests/clothing-all-sets.test.mjs royale/tests/clothing-visibility.test.mjs royale/tests/clothing-category-fit.test.mjs royale/tests/clothing-polish.test.mjs royale/tests/clothing-headwear-2d.test.mjs royale/tests/clothing-head-contour.test.mjs royale/tests/v2-test-hero-code.test.mjs
