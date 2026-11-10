@@ -22,8 +22,17 @@ const frameIndex=(cycle,count)=>((Math.floor(cycle)%count)+count)%count;
 export function chooseV2Frame(hero,time=0){
  const face=hero?.attack?.face||hero?.face||1;
  const suffix=face<0?'Left':'Right';
- if(hero?.dead||hero?.stun>0||hero?.attack?.kind||hero?.castAge<.24||
-   hero?.dodgeAge<.22)return null; // Retain fully animated existing combat/impact art.
+ if(hero?.dead||hero?.stun>0)return null;
+ // The power posters are storyboards, so these are temporary poses made from
+ // the clean V2 atlases while the original game supplies combat/projectile FX.
+ // Basic punch/kick still uses the original accurate combat pose as fallback.
+ if(hero?.attack?.kind){
+  if(hero.attack.power==='strength')return {scene:'run'+suffix,index:5};
+  if(hero.attack.power==='superKick')return {scene:'jump'+suffix,index:5};
+  return null;
+ }
+ if(hero?.castAge<.24)return {scene:'idle'+suffix,index:3};
+ if(hero?.dodgeAge<.22)return {scene:'run'+suffix,index:1};
  if(hero?.flying)return {scene:'jump'+suffix,index:3};
  if(hero?.grounded===false){
   const double=hero?.jumps>=2,scene=(double?'double':'jump')+suffix;
