@@ -1,5 +1,6 @@
 import {attachmentPoints} from './template.mjs';
 import {fitClothingLayer} from './fitting.mjs';
+import {fitGameplayHeadwear} from './headwear-2d.mjs';
 import {jointClipShift,drawContactShadow,garmentLight} from './polish.mjs';
 // Coverage is computed only for fully loaded garments, never preview state.
 export {clothingCoverage} from './visibility.mjs';
@@ -61,7 +62,7 @@ function drape(ctx,image,layer,pose,at,fit){
 }
 // Interleave these passes with the existing hero layers. This helper never
 // modifies the hero, simulation, inventory or equipped armor.
-export function drawClothingPass(ctx,pose,view,pass,loadedLayers){
+export function drawClothingPass(ctx,pose,view,pass,loadedLayers,options={}){
  const anchors=attachmentPoints(pose);
  for(const piece of loadedLayers){
   const {manifest,image}=piece;
@@ -71,12 +72,14 @@ export function drawClothingPass(ctx,pose,view,pass,loadedLayers){
    const anchor=anchors[layer.attach];if(!anchor)continue;
    const target=layer.end?anchors[layer.end.attach]:null;
    const baseScale=target?distance(anchor,target)/Math.max(.0001,distance(layer.pivot,layer.end.pivot)):layer.scale;
-   const fit=fitClothingLayer(layer,pose,anchors,baseScale,piece);
+   const baseFit=fitClothingLayer(layer,pose,anchors,baseScale,piece);
+   const fit=options.gameFacing===1||options.gameFacing===-1
+    ?fitGameplayHeadwear(layer,baseFit,piece,pose,options.gameFacing):baseFit;
    const at=anchor.map((n,i)=>n+(layer.offset?.[i]||0)+fit.offset[i]);
    // Head wraps, hats and masks tilt with the skull instead of hovering
    // independently during attacks and idle head movement.
    const followsHead=layer.attach==='head'&&Number.isFinite(pose.headTilt)&&pose.headTilt!==0;
-   if(followsHead){ctx.save();ctx.translate(...anchor);ctx.rotate(pose.headTilt);ctx.translate(-anchor[0],-anchor[1]);}
+   if(followsHead){const pivot=pose.faceCenter||anchor;ctx.save();ctx.translate(...pivot);ctx.rotate(pose.headTilt);ctx.translate(-pivot[0],-pivot[1]);}
    // Paint a low-opacity contact shadow behind the garment opening, avoiding
    // a hard sticker outline around the entire approved costume.
    drawContactShadow(ctx,layer,anchors,at,fit,piece);

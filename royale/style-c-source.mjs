@@ -63,7 +63,8 @@ function worldPose(p,width,height,artSource) {
     return [dx*ca-dy*sa,dx*sa+dy*ca];
   };
   return {...p,artSource,arms:p.arms.map(chain=>chain.map(project)),legs:p.legs.map(chain=>chain.map(project)),
-    hip:project(p.hip),head:project(p.head),shoulder:project(p.shoulder)};
+    hip:project(p.hip),head:project(p.head),shoulder:project(p.shoulder),
+    faceCenter:p.faceCenter?project(p.faceCenter):null};
 }
 function drawHairLayer(c,look,p,movement,time,layer,view) {
   const size=look.presentation==='male'?2.55:2.50;
@@ -103,7 +104,8 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
     if(!garmentPose)return;
     c.save();
     c.translate(...original.origin);c.scale(1/(UNIT*width),1/(UNIT*height));c.rotate(-p.rotation);
-    drawClothingPass(c,garmentPose,view==='game'?'front':view,pass,options.clothing);
+    drawClothingPass(c,garmentPose,view==='game'?'front':view,pass,options.clothing,
+      view==='game'?{gameFacing:facing}:{});
     c.restore();
   };
   const baseFor=region=>!h.steel&&options.clothingRegionBase?.[region]
