@@ -51,7 +51,7 @@ export function chooseV2Frame(hero,time=0){
   // h.cycle advances with actual travel distance in the physics engine.
   // Tying sprite phase to distance prevents feet cycling while stationary
   // or the same frames skipping backwards when frame-rate changes.
-  const distancePhase=Math.abs(hero?.cycle||0)*.12;
+  const distancePhase=Math.abs(hero?.cycle||0)*1.2;
   const frame=frameIndex(distancePhase,GROUNDED_RUN_FRAMES.length);
   return {scene:'run'+suffix,index:GROUNDED_RUN_FRAMES[frame]};
  }
