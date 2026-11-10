@@ -1,4 +1,5 @@
 import {openTryOn,initializeTryOn} from './clothing-tryon.mjs?v=20f90ebd';
+import {initializeStoreActions,storeControls,myClothingPanel} from './clothing-purchase-ui.mjs';
 // Read-only visual clothing catalog. Never changes hero, coins, equipment or saves.
 const root=document.getElementById('clothing-catalog');
 const status=document.getElementById('clothing-status');
@@ -32,6 +33,7 @@ async function drawArtwork(canvas,set){
 const observer=typeof IntersectionObserver==='function'?new IntersectionObserver(entries=>{for(const entry of entries){if(!entry.isIntersecting)continue;observer.unobserve(entry.target);const {canvas,set,note}=entry.target._clothingPreview;drawArtwork(canvas,set).then(()=>note.textContent='Approved artwork pieces · front view').catch(()=>note.textContent='Artwork preview unavailable');}}, {rootMargin:'200px'}):null;
 function render(){
  root.replaceChildren();
+ myClothingPanel(root.parentElement);
  const category=filter.value;
  const visible=sets.filter(s=>category==='all'||s.collection===category);
  count.textContent=`${visible.length} complete outfits · ${visible.reduce((n,s)=>n+s.pieces.length,0)} individual pieces`;
@@ -46,6 +48,7 @@ function render(){
   const artwork=node('div',undefined,'clothing-artwork-wrap');artwork.append(canvas,note);card.append(artwork);
   artwork._clothingPreview={canvas,set,note};if(observer)observer.observe(artwork);else drawArtwork(canvas,set).then(()=>note.textContent='Approved artwork pieces · front view').catch(()=>note.textContent='Artwork preview unavailable');
   card.append(node('p',`${set.coinPrice} coins · ${set.pieces.length} pieces · ${set.collection}`));
+  card.append(storeControls(set));
   const details=node('details');details.append(node('summary','View individual pieces'));
   const list=node('ul');for(const p of set.pieces)list.append(node('li',`${p.category}: ${p.coinPrice} coins`));
   details.append(list);card.append(details);root.append(card);
@@ -60,8 +63,9 @@ async function load(){
   if(!Array.isArray(data.sets)||data.sets.length!==36||data.sets.some(s=>!Array.isArray(s.pieces)||s.coinPrice!==700))throw Error('Catalog verification failed');
   sets=data.sets;
   for(const c of [...new Set(sets.map(s=>s.collection))].sort()){const option=node('option',c);option.value=c;filter.append(option);}
+  initializeStoreActions(sets,render,root.parentElement);
   initializeTryOn(root.parentElement);
-  status.textContent='Choose Try On on any of the 36 outfits. Your hero appears in the fitting room above the catalog. Purchases remain disabled.';
+  status.textContent='Choose Try On for a free preview, or use Buy and Wear with a loaded V3 cloud hero. Purchases require a successful cloud save.';
   render();
  }catch(e){status.textContent=`Clothing catalog unavailable: ${e.message}. Existing equipment and saves are unaffected.`;}
 }
