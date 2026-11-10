@@ -1,0 +1,37 @@
+name: Verify Clothing Store Transactions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'royale/**'
+      - 'royale-v3-staging/**'
+      - '.github/workflows/clothing-tests.yml'
+  pull_request:
+    paths:
+      - 'royale/**'
+      - 'royale-v3-staging/**'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse client and store modules
+        run: |
+          node --check royale/core.mjs
+          node --check royale/app.mjs
+          node --check royale-v3-staging/app.mjs
+          node --check royale/style-c-hero.mjs
+          node --check royale/renderer.mjs
+          node --check royale/clothing-catalog-preview.mjs
+          node --check royale/clothing-purchase-ui.mjs
+          node --check royale/cosmetics/state.mjs
+      - name: Verify complete catalog and purchase rules
+        run: node --test royale/tests/clothing-purchases.test.mjs
