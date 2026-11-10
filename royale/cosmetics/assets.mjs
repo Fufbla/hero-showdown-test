@@ -15,6 +15,14 @@ export function validateAsset(manifest){
   if(layer.mirror===true)errors.push('Mirrored direction '+key);
   if(!Array.isArray(layer.rect)||layer.rect.length!==4||layer.rect.some(n=>!Number.isInteger(n))||layer.rect[0]<0||layer.rect[1]<0||layer.rect[2]<=0||layer.rect[3]<=0||layer.rect[0]+layer.rect[2]>manifest.atlas?.width||layer.rect[1]+layer.rect[3]>manifest.atlas?.height)errors.push('Out of atlas '+key);
   if(layer.offset&&!point(layer.offset))errors.push('Invalid offset '+key);
+  if(layer.fit){
+    const fit=layer.fit;
+    if(!fit||typeof fit!=='object'||Array.isArray(fit)||
+      (fit.width!==undefined&&(!Number.isFinite(fit.width)||fit.width<0.6||fit.width>1.8))||
+      (fit.height!==undefined&&(!Number.isFinite(fit.height)||fit.height<0.6||fit.height>1.8))||
+      (fit.offset!==undefined&&(!point(fit.offset)||fit.offset.some(v=>Math.abs(v)>30))))
+      errors.push('Invalid clothing fit '+key);
+  }
   if(layer.faceOpening&&(!point(layer.faceOpening.center)||!point(layer.faceOpening.radius)||layer.faceOpening.radius.some(n=>n<=0||n>100)||layer.attach!=='head'))errors.push('Invalid face opening '+key);
   if(layer.followLeg!==undefined&&(layer.followLeg!==true||!['footNear','footFar'].includes(layer.part)))errors.push('Invalid footwear binding '+key);
   if(layer.drape&&(![0,1].includes(layer.drape.nearHalf)||layer.part!=='skirt'))errors.push('Invalid cloth binding '+key);
