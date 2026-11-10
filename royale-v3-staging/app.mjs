@@ -1,7 +1,9 @@
 import {LocalHeroStore} from '../royale/saves.mjs';
+import {V2_TEST_CODE,V2_TEST_QUERY_PARAM,isV2TestCode} from '../royale/v2-test-hero.mjs';
 const $=id=>document.getElementById(id),url='https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-v3-staging',prefix='royale-v3-play:';
 const storage={getItem:k=>localStorage.getItem(prefix+k),setItem:(k,v)=>localStorage.setItem(prefix+k,v)};
 let access='',refresh='',code='',slots=[],last=[null,null,null],busy=false,blocked=false,queue=Promise.resolve();
+let v2PrototypeSession=false;
 const clothingSavesPending=new Set(); // Pause ordinary autosaves while a purchase awaits durable cloud acknowledgement.
 function status(s){$('status').textContent=s;}
 async function api(action,body={},auth=true){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json',...(auth?{Authorization:'Bearer '+access}:{})},body:JSON.stringify({action,...body}),cache:'no-store'});const d=await r.json();if(!r.ok){const e=Error((d.error||'Cloud error')+' (HTTP '+r.status+', '+action+')');e.status=r.status;e.retryAfter=r.headers.get('Retry-After');throw e;}return d;}
@@ -9,6 +11,8 @@ async function renew(){const r=await api('renew',{refresh},false);access=r.acces
 async function call(action,body){try{return await api(action,body);}catch(e){if(e.status!==401||!refresh)throw e;await renew();return api(action,body);}}
 async function run(fn){if(busy)return;busy=true;try{await fn();}catch(e){status(e.message);}finally{busy=false;}}
 async function launch(){
+ v2PrototypeSession=false;
+ $('refresh').textContent='Reload Cloud Heroes';
  // Always resolve each slot by its server-assigned number, never by array order.
  const response=await call('slots');
  const incoming=response.slots;
@@ -24,6 +28,16 @@ next.slots[i]=snap?{id:'v3-slot-'+i,createdAt:new Date().toISOString(),updatedAt
 const original=storage.getItem('healthia.royale.profiles.v2');if(original){const backup=prefix+'backup:'+crypto.randomUUID();localStorage.setItem(backup,original);if(localStorage.getItem(backup)!==original)throw Error('Local backup failed');}
 const saved=store.flush(next,{atomic:true});if(!saved.ok)throw Error(saved.error||'Local restore failed');
 last=slots.map(x=>x.snapshot?JSON.stringify(x.snapshot):null);console.info('[V3 cloud restored]',slots.map(x=>({slot:x.slot_number,revision:x.revision,x:x.snapshot?.world?.location?.x,y:x.snapshot?.world?.location?.y,xp:x.snapshot?.xp,coins:x.snapshot?.coins})));$('welcome').hidden=true;$('new-code').hidden=true;$('roster').hidden=false;$('game-frame').src='../royale/?codePlay=v3&v=staging&cloudLoad='+Date.now();status('V3 cloud loaded. Choose a hero.');
+}
+// Fixed code 0000000000 is a public, isolated test mode, not a real Supabase
+// 10-digit account. Never verify, write, or renew the production cloud here.
+function launchV2Prototype(){
+ v2PrototypeSession=true;access='';refresh='';code=V2_TEST_CODE;
+ blocked=false;slots=[];last=[null,null,null];
+ $('welcome').hidden=true;$('new-code').hidden=true;$('roster').hidden=false;
+ $('refresh').textContent='Reload V2 Test Hero';
+ $('game-frame').src='../royale/?'+V2_TEST_QUERY_PARAM+'='+V2_TEST_CODE+'&v=v2-prototype-'+Date.now();
+ status('V2 TEST HERO · 0000000000 · Isolated on this browser. No production cloud saves.');
 }
 async function save(slot,snapshot,{clothingAction=false}={}){if(blocked||!access||![0,1,2].includes(slot)||!snapshot)return {ok:false,error:'Cloud saving is paused. Re-enter your code to reconcile progress.'};
  if(clothingSavesPending.has(slot)&&!clothingAction)return {ok:false,skipped:true,error:'Clothing purchase is being saved.'};const raw=JSON.stringify(snapshot);if(raw===last[slot])return {ok:true};const key=prefix+'journal:'+slot;const journal=JSON.stringify({snapshot,revision:slots[slot].revision});localStorage.setItem(key,journal);
@@ -73,9 +87,9 @@ window.addEventListener('message',async e=>{
 $('new').onclick=()=>void run(async()=>{const r=await api('create',{},false);access=r.access;refresh=r.refresh;code=r.code;$('code').textContent=code;$('welcome').hidden=true;$('new-code').hidden=false;});
 $('enter').onclick=()=>$('input-area').hidden=false;
 $('copy').onclick=()=>void navigator.clipboard.writeText(code).then(()=>status('Code copied. Keep it safe.'),()=>status('Copy the code displayed above.'));
-$('load').onclick=()=>void run(async()=>{code=$('input').value.trim();if(!/^\d{10}$/.test(code))throw Error('Enter 10 digits');const r=await api('verify',{code},false);access=r.access;refresh=r.refresh;await launch();});
+$('load').onclick=()=>void run(async()=>{code=$('input').value.trim();if(!/^\d{10}$/.test(code))throw Error('Enter 10 digits');if(isV2TestCode(code)){launchV2Prototype();return;}const r=await api('verify',{code},false);access=r.access;refresh=r.refresh;await launch();});
 $('continue').onclick=()=>void run(launch);
-$('refresh').onclick=()=>void run(launch);
+$('refresh').onclick=()=>void run(async()=>{if(v2PrototypeSession){launchV2Prototype();return;}await launch();});
 setInterval(()=>{if(refresh&&!blocked)void renew().catch(e=>status('Session renewal failed: '+e.message));},12*60000);
 
 window.addEventListener('message',async e=>{
