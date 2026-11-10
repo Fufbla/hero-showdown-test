@@ -19,7 +19,8 @@ export const HEAD_CONTOUR_VERSION='2d-skull-jaw-wrapping-v1';
 
 export function headContourMode(piece={},layer={}){
  if(layer.view!=='front'||layer.attach!=='head')return null;
- if(piece.category==='headwear'&&layer.part==='headwear'){
+ const category=piece.category||String(piece.id||'').split('.').pop();
+ if(category==='headwear'&&layer.part==='headwear'){
   const collection=String(piece.id||'').split('.')[0];
   if(wraps.has(collection))return 'wrap';
   if(hoods.has(collection)||layer.faceOpening)return 'hood';
