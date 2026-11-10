@@ -10,6 +10,9 @@ const hoods=collect('mystic-robe mummy werewolf dark-reaper reindeer gingerbread
 const wideBrims=collect('explorer witch scarecrow pilgrim-hero');
 const tallHats=collect('witch toy-soldier pilgrim-hero elf-hero santa-hero');
 const decorativeHeadwear=collect('royal-kimono royal-gown festival cat-burglar harvest-festival');
+const plushBoots=collect('snow-hero reindeer harvest-scout autumn-explorer');
+const curledShoes=collect('elf-hero');
+const armoredBoots=collect('ninja-warrior pumpkin-knight toy-soldier');
 
 // These are fabric-shape profiles, not character proportions. All heroes
 // retain the same approved body/head silhouette and face.
@@ -63,11 +66,8 @@ export function tuneClothingCategory(layer,fit,piece={}){
    // wide rather than being forced to the same pant-leg dimensions.
    width*=CATEGORY_PROFILES.fullbody.skirt;
  }else if(category==='footwear'&&part.startsWith('foot')){
-   const oversizedTrim=collect('snow-hero reindeer harvest-scout autumn-explorer');
-   const curledShoes=collect('elf-hero');
-   const armoredBoots=collect('ninja-warrior pumpkin-knight toy-soldier');
    const factor=curledShoes.has(collection)?.98:
-    oversizedTrim.has(collection)?.92:armoredBoots.has(collection)?.93:CATEGORY_PROFILES.footwear.width;
+    plushBoots.has(collection)?.92:armoredBoots.has(collection)?.93:CATEGORY_PROFILES.footwear.width;
    width*=factor;
    height*=curledShoes.has(collection)?.98:CATEGORY_PROFILES.footwear.height;
  }else if(category==='accessory'&&layer.attach==='head'){
