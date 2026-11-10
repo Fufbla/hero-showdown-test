@@ -1,25 +1,40 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {V2GeneratedSprites,V2_SPRITE_VERSION,V2_SPRITE_ATLASES,V2_SPRITE_SCENES,chooseV2Frame} from '../v2-sprites/runtime.mjs';
+import {V2GeneratedSprites,V2_SPRITE_VERSION,V2_SPRITE_ATLASES,V2_SPRITE_SCENES,GROUNDED_RUN_FRAMES,chooseV2Frame} from '../v2-sprites/runtime.mjs';
 import {V2_TEST_CODE,isV2TestCode} from '../v2-test-hero.mjs';
 import {v2PowerEffectFlags,drawV2PowerPreview,V2_POWER_PREVIEW_VERSION} from '../v2-sprites/power-preview.mjs';
 const root=new URL('../v2-sprites/',import.meta.url);
 
 test('all three actual generated WebP atlases have transparent WebP metadata and registered cell grids',async()=>{
- assert.equal(V2_SPRITE_VERSION,'generated-atlas-v1');
+ assert.equal(V2_SPRITE_VERSION,'grounded-run-padded-cape-v2');
  for(const [name,meta] of Object.entries(V2_SPRITE_ATLASES)){
   const b=await readFile(new URL(meta.file,root));
   assert.ok(b.byteLength>20000,name+' source file is missing or empty');
   assert.equal(b.toString('ascii',0,4),'RIFF',name+' RIFF signature');
   assert.equal(b.toString('ascii',8,12),'WEBP',name+' WebP signature');
-  assert.equal(b.toString('ascii',12,16),'VP8X',name+' requires transparent VP8X support');
-  const width=b.readUIntLE(24,3)+1,height=b.readUIntLE(27,3)+1;
+  // Lossless WebP (VP8L) preserves cape-edge alpha more faithfully than
+  // the original VP8X files. Both are valid browser-decoded transparent WebP.
+  const kind=b.toString('ascii',12,16);
+  let width,height,alpha;
+  if(kind==='VP8X'){
+   width=b.readUIntLE(24,3)+1;height=b.readUIntLE(27,3)+1;
+   alpha=(b[20]&0x10)!==0;
+  }else if(kind==='VP8L'){
+   assert.equal(b[20],0x2f,'lossless WebP header signature');
+   const bits=b.readUInt32LE(21);
+   width=(bits&0x3fff)+1;height=((bits>>>14)&0x3fff)+1;
+   alpha=((bits>>>28)&1)===1;
+  }else assert.fail(name+' unsupported WebP chunk '+kind);
   assert.equal(width,meta.cols*meta.cell,name+' width not aligned');
   assert.equal(height,meta.rows*meta.cell,name+' height not aligned');
-  assert.ok((b[20]&0x10)!==0,'Alpha channel required: '+name);
+  assert.ok(alpha,'Alpha channel required: '+name);
  }
  assert.equal(Object.keys(V2_SPRITE_SCENES).length,8);
+ assert.equal(V2_SPRITE_ATLASES.jump.cell,192);
+ assert.equal(V2_SPRITE_ATLASES.double_jump.cell,192);
+ assert.ok(V2_SPRITE_ATLASES.jump.file.includes('fixed'));
+ assert.ok(V2_SPRITE_ATLASES.double_jump.file.includes('fixed'));
 });
 test('hero state selects idle, run, jump, double jump in both horizontal directions',()=>{
  const base={face:1,grounded:true,vx:0,vy:0,cycle:0,jumps:0,jumpAge:0};
@@ -27,6 +42,19 @@ test('hero state selects idle, run, jump, double jump in both horizontal directi
  assert.equal(chooseV2Frame({...base,face:-1},0).scene,'idleLeft');
  assert.equal(chooseV2Frame({...base,vx:220},.5).scene,'runRight');
  assert.equal(chooseV2Frame({...base,face:-1,vx:-300},.5).scene,'runLeft');
+ assert.deepEqual(GROUNDED_RUN_FRAMES,[0,4,5,6,7]);
+ // No frames 1–3: those frames visibly put both feet in the air.
+ for(let cycle=0;cycle<30;cycle+=.12){
+  const right=chooseV2Frame({...base,vx:315,cycle},cycle);
+  const left=chooseV2Frame({...base,vx:-315,face:-1,cycle},cycle);
+  assert.ok(GROUNDED_RUN_FRAMES.includes(right.index));
+  assert.equal(right.index,left.index,'both facings have the same planted-foot phase');
+  assert.equal(chooseV2Frame({...base,vx:315,cycle},cycle+10).index,right.index,
+    'running phase must follow world distance, not wall-clock time');
+ }
+ assert.equal(chooseV2Frame({...base,vx:315,cycle:0},.2).index,0);
+ assert.equal(chooseV2Frame({...base,vx:315,cycle:1},.2).index,4);
+
  assert.equal(chooseV2Frame({...base,grounded:false,vy:-100,jumps:1,jumpAge:.15},.5).scene,'jumpRight');
  assert.equal(chooseV2Frame({...base,grounded:false,vy:-100,jumps:2,jumpAge:.15},.5).scene,'doubleRight');
  assert.equal(chooseV2Frame({...base,grounded:false,face:-1,vy:240,jumps:2,jumpAge:.35},.5).scene,'doubleLeft');
@@ -52,6 +80,13 @@ test('loader verifies every asset before drawing and falls back safely if decodi
  assert.ok(drawn&&drawn.length===9,'must use cropped atlas frame not show an entire storyboard poster');
  assert.equal(drawn[3],160);
  assert.equal(drawn[4],160);
+ // Jump uses the new 192px transparent safety cells, with no change to
+ // the in-world hero size, collision, health, or physics.
+ ops.length=0;
+ assert.equal(atlas.draw(ctx,300,550,{face:1,grounded:false,vy:-180,jumps:1,jumpAge:.18},.3),true);
+ const jumpDraw=ops.find(x=>Array.isArray(x));
+ assert.equal(jumpDraw[3],192);assert.equal(jumpDraw[4],192);
+ assert.equal(jumpDraw[7],156);assert.equal(jumpDraw[8],156);
  assert.equal(ops[0],'save');assert.equal(ops.at(-1),'restore');
  const broken=new V2GeneratedSprites({loader:async()=>{throw Error('broken atlas')}});
  assert.equal(await broken.preload(),false);
