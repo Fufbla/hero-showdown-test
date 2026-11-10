@@ -1,6 +1,7 @@
 import {attachmentPoints} from './template.mjs';
 import {fitClothingLayer} from './fitting.mjs';
 import {fitGameplayHeadwear} from './headwear-2d.mjs';
+import {fitHeadAccessory,drawContouredHead} from './head-contour.mjs';
 import {jointClipShift,drawContactShadow,garmentLight} from './polish.mjs';
 // Coverage is computed only for fully loaded garments, never preview state.
 export {clothingCoverage} from './visibility.mjs';
@@ -73,8 +74,9 @@ export function drawClothingPass(ctx,pose,view,pass,loadedLayers,options={}){
    const target=layer.end?anchors[layer.end.attach]:null;
    const baseScale=target?distance(anchor,target)/Math.max(.0001,distance(layer.pivot,layer.end.pivot)):layer.scale;
    const baseFit=fitClothingLayer(layer,pose,anchors,baseScale,piece);
-   const fit=options.gameFacing===1||options.gameFacing===-1
-    ?fitGameplayHeadwear(layer,baseFit,piece,pose,options.gameFacing):baseFit;
+   const gameFacing=options.gameFacing===1||options.gameFacing===-1;
+   const headFit=gameFacing?fitGameplayHeadwear(layer,baseFit,piece,pose,options.gameFacing):baseFit;
+   const fit=gameFacing?fitHeadAccessory(layer,headFit,piece,pose,options.gameFacing):headFit;
    const at=anchor.map((n,i)=>n+(layer.offset?.[i]||0)+fit.offset[i]);
    // Head wraps, hats and masks tilt with the skull instead of hovering
    // independently during attacks and idle head movement.
@@ -99,7 +101,9 @@ export function drawClothingPass(ctx,pose,view,pass,loadedLayers,options={}){
    }else{
     if(layer.followLeg&&pose.clothingRest){const i=layer.part==='footNear'?0:1,leg=pose.legs[i],rest=pose.clothingRest.legs[i];const tilt=Math.max(-1.1,Math.min(1.1,(angle(leg[1],leg[2])-angle(rest[1],rest[2]))*.7));ctx.save();ctx.translate(...at);ctx.rotate(tilt);ctx.translate(-at[0],-at[1]);}
     if(layer.faceOpening){const o=layer.faceOpening;ctx.save();ctx.beginPath();ctx.rect(-1000,-1000,2000,2000);ctx.ellipse(anchor[0]+o.center[0],anchor[1]+o.center[1],...o.radius,0,0,Math.PI*2);ctx.clip('evenodd');}
-    stamp(ctx,image,layer,at,layer.pivot,null,null,null,fit);
+    // Thin conforming bands hug the skull and jaw; hard brims keep their silhouette.
+    if(!gameFacing||!drawContouredHead(ctx,image,layer,at,fit,piece,pose))
+     stamp(ctx,image,layer,at,layer.pivot,null,null,null,fit);
     if(layer.faceOpening)ctx.restore();
     if(layer.followLeg&&pose.clothingRest)ctx.restore();
    }
