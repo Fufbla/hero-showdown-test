@@ -61,6 +61,11 @@ const cloudApi=null; // Review build: browser-local persistence; cloud backend u
 let cloudStore=null,accountReturn='roster';
 const audio=new GameAudio(storage);
 let game=new Game(),screen='roster',editing=false,activeSlot=store.data.activeSlot,activeId=null,creatorSlot=activeSlot,deleteTarget=null;
+// Read-only clothing preview bridge. Does not expose wallets, write to saves, or mutate a hero.
+window.addEventListener('royale-clothing-preview-request', event=>{
+  if(!game?.started||!game.look||typeof event.detail?.receive!=='function')return;
+  event.detail.receive({look:structuredClone(game.look),outfit:game.visualOutfit()});
+});
 let soundEnabled=false,toastUntil=0,regionName='',lastHud='',fps=60,drawMs=0,qaClock=0;
 // One accessible navigation bar follows the current nested overlay.
 const menuExitActions=document.createElement('nav');menuExitActions.id='menu-exit-actions';menuExitActions.className='menu-exit-actions';menuExitActions.setAttribute('aria-label','Return from current menu');menuExitActions.hidden=true;
