@@ -59,7 +59,7 @@ test('all 36 wardrobe sets and 153 manifests use the shared four-view fitting en
     assert.ok(fit.offset.length===2&&fit.offset.every(Number.isFinite),id);
     fittings++;
   }
- assert.ok(fittings>=1400,'Check every painted view and animated segment');
+ assert.ok(fittings>=pieces.length*4,'Check every painted view and animated segment');
  for(const pose of poses){
   const before=JSON.stringify(pose);
   const {ctx,numbers}=fakeCanvas();
