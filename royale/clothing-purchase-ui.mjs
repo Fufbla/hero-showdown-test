@@ -26,6 +26,8 @@ export function initializeStoreActions(catalog,render,holder){
  sets=catalog;index=catalogIndex({sets:catalog});rerender=render;
  if(!message){message=node('p');message.className='clothing-purchase-status';message.setAttribute('role','status');holder.prepend(message);}
  window.addEventListener('royale-clothing-updated',()=>rerender());
+ // Re-evaluate button eligibility when the selected hero enters the Tree of Eris.
+ window.addEventListener('royale-clothing-context-updated',()=>rerender());
 }
 export function storeControls(set){
  const wrap=node('div');wrap.className='clothing-store-controls';
