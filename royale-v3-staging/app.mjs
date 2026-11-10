@@ -2,6 +2,7 @@ import {LocalHeroStore} from '../royale/saves.mjs';
 const $=id=>document.getElementById(id),url='https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-v3-staging',prefix='royale-v3-play:';
 const storage={getItem:k=>localStorage.getItem(prefix+k),setItem:(k,v)=>localStorage.setItem(prefix+k,v)};
 let access='',refresh='',code='',slots=[],last=[null,null,null],busy=false,blocked=false,queue=Promise.resolve();
+const clothingSavesPending=new Set(); // Pause ordinary autosaves while a purchase awaits durable cloud acknowledgement.
 function status(s){$('status').textContent=s;}
 async function api(action,body={},auth=true){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json',...(auth?{Authorization:'Bearer '+access}:{})},body:JSON.stringify({action,...body}),cache:'no-store'});const d=await r.json();if(!r.ok){const e=Error((d.error||'Cloud error')+' (HTTP '+r.status+', '+action+')');e.status=r.status;e.retryAfter=r.headers.get('Retry-After');throw e;}return d;}
 async function renew(){const r=await api('renew',{refresh},false);access=r.access;refresh=r.refresh;}
@@ -24,14 +25,41 @@ const original=storage.getItem('healthia.royale.profiles.v2');if(original){const
 const saved=store.flush(next,{atomic:true});if(!saved.ok)throw Error(saved.error||'Local restore failed');
 last=slots.map(x=>x.snapshot?JSON.stringify(x.snapshot):null);console.info('[V3 cloud restored]',slots.map(x=>({slot:x.slot_number,revision:x.revision,x:x.snapshot?.world?.location?.x,y:x.snapshot?.world?.location?.y,xp:x.snapshot?.xp,coins:x.snapshot?.coins})));$('welcome').hidden=true;$('new-code').hidden=true;$('roster').hidden=false;$('game-frame').src='../royale/?codePlay=v3&v=staging&cloudLoad='+Date.now();status('V3 cloud loaded. Choose a hero.');
 }
-async function save(slot,snapshot){if(blocked||!access||![0,1,2].includes(slot)||!snapshot)return {ok:false,error:'Cloud saving is paused. Re-enter your code to reconcile progress.'};const raw=JSON.stringify(snapshot);if(raw===last[slot])return {ok:true};const key=prefix+'journal:'+slot;const journal=JSON.stringify({snapshot,revision:slots[slot].revision});localStorage.setItem(key,journal);
-queue=queue.then(async()=>{if(blocked)return {ok:false,error:'Cloud saving is paused. Re-enter your code.'};if(raw===last[slot])return {ok:true};try{const result=await call('save',{slot:slot+1,revision:slots[slot].revision,snapshot});slots[slot].revision=result.revision;slots[slot].snapshot=snapshot;last[slot]=raw;console.info('[V3 cloud confirmed]',{slot:slot+1,revision:result.revision,x:snapshot.world.location.x,y:snapshot.world.location.y,xp:snapshot.xp,coins:snapshot.coins});if(localStorage.getItem(key)===journal)localStorage.removeItem(key);status('Saved Slot '+(slot+1)+' · '+new Date().toLocaleTimeString());return {ok:true};}catch(e){blocked=true;status('Cloud saving paused: '+e.message+' Local recovery preserved. Re-enter your code to retry safely.');console.error('[V3 save rejected]',{slot:slot+1,revision:slots[slot].revision,status:e.status,reason:e.message});return {ok:false,error:e.message};}});return queue;}
+async function save(slot,snapshot,{clothingAction=false}={}){if(blocked||!access||![0,1,2].includes(slot)||!snapshot)return {ok:false,error:'Cloud saving is paused. Re-enter your code to reconcile progress.'};
+ if(clothingSavesPending.has(slot)&&!clothingAction)return {ok:false,skipped:true,error:'Clothing purchase is being saved.'};const raw=JSON.stringify(snapshot);if(raw===last[slot])return {ok:true};const key=prefix+'journal:'+slot;const journal=JSON.stringify({snapshot,revision:slots[slot].revision});localStorage.setItem(key,journal);
+queue=queue.then(async()=>{if(blocked)return {ok:false,error:'Cloud saving is paused. Re-enter your code.'};if(raw===last[slot])return {ok:true};
+ const savedCosmeticRevision=slots[slot].snapshot?.cosmetics?.revision||0;
+ const incomingCosmeticRevision=snapshot.cosmetics?.revision||0;
+ if(incomingCosmeticRevision<savedCosmeticRevision){
+   if(localStorage.getItem(key)===journal)localStorage.removeItem(key);
+   return {ok:false,skipped:true,error:'Stale clothing snapshot ignored; reload your hero.'};
+ }
+ try{const result=await call('save',{slot:slot+1,revision:slots[slot].revision,snapshot});slots[slot].revision=result.revision;slots[slot].snapshot=snapshot;last[slot]=raw;console.info('[V3 cloud confirmed]',{slot:slot+1,revision:result.revision,x:snapshot.world.location.x,y:snapshot.world.location.y,xp:snapshot.xp,coins:snapshot.coins});if(localStorage.getItem(key)===journal)localStorage.removeItem(key);status('Saved Slot '+(slot+1)+' · '+new Date().toLocaleTimeString());return {ok:true};}catch(e){blocked=true;status('Cloud saving paused: '+e.message+' Local recovery preserved. Re-enter your code to retry safely.');console.error('[V3 save rejected]',{slot:slot+1,revision:slots[slot].revision,status:e.status,reason:e.message});return {ok:false,error:e.message};}});return queue;}
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow||e.data?.type!=='royale-code-progress')return;try{
  const snapshot=typeof e.data.snapshot==='string'?JSON.parse(e.data.snapshot):e.data.snapshot;
  if(!snapshot||typeof snapshot!=='object'||!snapshot.world?.location){status('Gameplay snapshot missing location; cloud save not attempted.');return;}
  console.info('[V3 save outgoing]',{slot:e.data.slot,region:snapshot.world.region,x:snapshot.world.location.x,y:snapshot.world.location.y,level:snapshot.level,xp:snapshot.xp,coins:snapshot.coins});
  void save(e.data.slot,snapshot);
  }catch(error){status('Could not decode live gameplay snapshot.');}});
+// A purchase/Equip only becomes confirmed after the correct V3 slot acknowledges its revision.
+window.addEventListener('message',async e=>{
+ if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow||e.data?.type!=='royale-clothing-save'||typeof e.data.requestId!=='string')return;
+ const requestId=e.data.requestId,slot=e.data.slot;
+ let result;
+ try{
+   if(!Number.isInteger(slot)||slot<0||slot>2||clothingSavesPending.has(slot))throw Error('Clothing save already in progress.');
+   const snapshot=typeof e.data.snapshot==='string'?JSON.parse(e.data.snapshot):e.data.snapshot;
+   const previous=slots[slot]?.snapshot;
+   if(!previous||!snapshot?.world?.location||!snapshot.cosmetics||!Number.isSafeInteger(snapshot.coins)||snapshot.coins<0)throw Error('Invalid clothing save.');
+   const oldRevision=previous.cosmetics?.revision||0;
+   if(snapshot.cosmetics.revision!==oldRevision+1)throw Error('Clothing was modified by another game tab. Reload your hero.');
+   if(snapshot.coins>previous.coins)throw Error('Clothing cannot increase coins.');
+   clothingSavesPending.add(slot);
+   result=await save(slot,snapshot,{clothingAction:true});
+ }catch(error){result={ok:false,error:error.message};}
+ finally{clothingSavesPending.delete(slot);}
+ e.source.postMessage({type:'royale-clothing-saved',requestId,result},e.origin);
+});
 $('new').onclick=()=>void run(async()=>{const r=await api('create',{},false);access=r.access;refresh=r.refresh;code=r.code;$('code').textContent=code;$('welcome').hidden=true;$('new-code').hidden=false;});
 $('enter').onclick=()=>$('input-area').hidden=false;
 $('copy').onclick=()=>void navigator.clipboard.writeText(code).then(()=>status('Code copied. Keep it safe.'),()=>status('Copy the code displayed above.'));
