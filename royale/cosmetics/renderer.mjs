@@ -1,13 +1,7 @@
 import {attachmentPoints} from './template.mjs';
 import {fitClothingLayer} from './fitting.mjs';
-// Only decoded, complete pieces may conceal the corresponding armor. A failed
-// texture load leaves the original character visible and never changes stats.
-export function clothingCoverage(layers=[]){
- const covered=new Set();
- for(const {manifest,image} of layers)if(image&&manifest?.layers?.length)
-  for(const region of manifest.covers||[])covered.add(region);
- return covered;
-}
+// Coverage is computed only for fully loaded garments, never preview state.
+export {clothingCoverage} from './visibility.mjs';
 export const clothingHair=layers=>layers.some(({manifest,image})=>image&&manifest.hair==='hidden')?'hidden':layers.some(({manifest,image})=>image&&manifest.hair==='tucked')?'tucked':null;
 const distance=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
 const angle=(a,b)=>Math.atan2(b[1]-a[1],b[0]-a[0]);
