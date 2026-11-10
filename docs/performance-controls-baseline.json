@@ -1,0 +1,64 @@
+{
+  "source": "Browser review against animation-complete commit 67f694d",
+  "checks": [
+    {
+      "name": "Solo keyboard taps dispatch once between frames",
+      "pass": true
+    },
+    {
+      "name": "Touch tap and cancel release without a render tick",
+      "pass": true
+    },
+    {
+      "name": "Analog ignores another finger release and resets on lost capture",
+      "pass": true
+    },
+    {
+      "name": "Focus loss pauses and clears all held controls",
+      "pass": true
+    },
+    {
+      "name": "Disconnected active controller releases movement",
+      "pass": true
+    },
+    {
+      "name": "Local co-op keyboard taps dispatch between frames",
+      "pass": false,
+      "error": "0 observed punches"
+    },
+    {
+      "name": "Held controller Start keeps local co-op paused",
+      "pass": false,
+      "error": "pause state bounced"
+    },
+    {
+      "name": "Second controller can pause and resume without bouncing",
+      "pass": false,
+      "error": "pause state bounced"
+    },
+    {
+      "name": "One downed teammate does not end the round",
+      "pass": true
+    },
+    {
+      "name": "Win menu supports mouse selection then controller confirm",
+      "pass": true
+    },
+    {
+      "name": "Loss menu supports mouse selection then controller confirm",
+      "pass": true
+    },
+    {
+      "name": "Story entry remains public with chapter codes intact",
+      "pass": true
+    },
+    {
+      "name": "Story hero swap preserves health, power and held movement",
+      "pass": true
+    },
+    {
+      "name": "All three heroes launch against all nine opponents in all five venues",
+      "pass": true
+    }
+  ]
+}

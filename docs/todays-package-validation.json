@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-26",
+  "source_archives": {
+    "Hero-Showdown-Combined-Versus-Test.zip": "c896de766a025a488907553dc70b3a03e7101fec588e25f3f6705d0832af14bf",
+    "Hero-Showdown-Scorpion-Animation-Test-Update.zip": "e6affe102ee2a9f2c16c38cc586577ce2a343fe9dd1a4551e9afcf741f929715"
+  },
+  "base_files_verified": 328,
+  "scorpion_files_verified": 14,
+  "original_runtime_bytes_preserved": true,
+  "only_existing_file_rewritten": "START-HERE.txt",
+  "scorpion_installation_check": "passed",
+  "launcher_shell_syntax": "passed",
+  "production_entry_points_unchanged": true,
+  "notes": "Packaging verification. Original feature-test results remain in docs/ and dist/scorpion-test-qa/."
+}

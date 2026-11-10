@@ -4,7 +4,7 @@ import {animationState, previewHero, twoBone} from './hero-rig.mjs';
 import {ATTACKS} from './core.mjs';
 import {STYLE_C_MOTIONS} from './style-c-clips.mjs';
 export {STYLE_C_MOTIONS};
-export {prepareStyleCMotion, drawStyleCMotionLimb, drawBareSegment, styleCMotionStatus} from './style-c-motion-paint.mjs';
+export {prepareStyleCMotion, drawStyleCMotionLimb, styleCMotionStatus} from './style-c-motion-paint.mjs';
 
 const clamp=(v,min=0,max=1)=>Math.max(min,Math.min(max,v));
 const mix=(a,b,t)=>a+(b-a)*t;

@@ -1,0 +1,212 @@
+Run automated playtest
+
+Automated playtest passed. Player 2 continues solo.
+
+{
+  "at": "2026-11-09T03:03:24.265Z",
+  "passed": true,
+  "checks": [
+    "One gameplay canvas",
+    "Two distinct assigned gamepads",
+    "Controller 1 moves only Player 1",
+    "Controller 2 moves Player 2",
+    "Both heroes share the same boss object",
+    "One shared visual equipment drop",
+    "Both inventories receive an independent copy",
+    "Follower returns inside camera bounds",
+    "Controller disconnect pauses world",
+    "Reconnect preserves assignments",
+    "Each controller upgrades its own hero simultaneously",
+    "Controller 1 assigns Fireball to Slot 1",
+    "Controller 1 assigns Fireball to Slot 2",
+    "Controller 1 assigns Fireball to Slot 3",
+    "Player 1 assignments leave the other hero unchanged",
+    "Controller 1 Back cancels power selection",
+    "Controller 2 assigns Fireball to Slot 1",
+    "Controller 2 assigns Fireball to Slot 2",
+    "Controller 2 assigns Fireball to Slot 3",
+    "Player 2 assignments leave the other hero unchanged",
+    "Controller 2 Back cancels power selection",
+    "Menu movement cannot move either hero",
+    "Controller 1 changes to Equipment tab",
+    "Controller 1 equips own item",
+    "Controller 1 sells eligible equipment",
+    "Controller 2 changes to Equipment tab",
+    "Controller 2 equips own item",
+    "Controller 2 sells eligible equipment",
+    "Each hero has three compact HUD icons",
+    "Cooldown labels are independent",
+    "HUD icons sit under their own health bars",
+    "One Ready cannot resume",
+    "Ready can be cancelled",
+    "Both Ready resume together",
+    "Both save queues ran",
+    "Eight-second timer fired repeatedly",
+    "Player 1 leaves without restarting the shared world"
+  ],
+  "scenarios": [
+    {
+      "name": "Idle",
+      "durationMs": 2656.1,
+      "frames": 21,
+      "renderedFrames": 21,
+      "renderFPS": 7.91,
+      "frameP50Ms": 33.4,
+      "frameP95Ms": 1016.5,
+      "cpuP95Ms": 5,
+      "simulationP95Ms": 2,
+      "drawP95Ms": 3.3,
+      "heapStartMB": 31.48,
+      "heapEndMB": 31.97
+    },
+    {
+      "name": "Both running",
+      "durationMs": 3199.4,
+      "frames": 40,
+      "renderedFrames": 40,
+      "renderFPS": 12.5,
+      "frameP50Ms": 33.3,
+      "frameP95Ms": 1016.5,
+      "cpuP95Ms": 5,
+      "simulationP95Ms": 1.2,
+      "drawP95Ms": 3.6,
+      "heapStartMB": 33.54,
+      "heapEndMB": 34.71
+    },
+    {
+      "name": "Both jumping",
+      "durationMs": 3133.8,
+      "frames": 37,
+      "renderedFrames": 37,
+      "renderFPS": 11.81,
+      "frameP50Ms": 33.3,
+      "frameP95Ms": 1033.1,
+      "cpuP95Ms": 6.2,
+      "simulationP95Ms": 2.6,
+      "drawP95Ms": 3.9,
+      "heapStartMB": 34.71,
+      "heapEndMB": 34.39
+    },
+    {
+      "name": "Multiple enemies",
+      "durationMs": 3346.7,
+      "frames": 43,
+      "renderedFrames": 43,
+      "renderFPS": 12.85,
+      "frameP50Ms": 33.3,
+      "frameP95Ms": 50,
+      "cpuP95Ms": 4.1,
+      "simulationP95Ms": 1.1,
+      "drawP95Ms": 3.1,
+      "heapStartMB": 34.39,
+      "heapEndMB": 33.9
+    },
+    {
+      "name": "Simultaneous powers",
+      "durationMs": 3054.9,
+      "frames": 27,
+      "renderedFrames": 27,
+      "renderFPS": 8.84,
+      "frameP50Ms": 33.4,
+      "frameP95Ms": 1016.5,
+      "cpuP95Ms": 8.5,
+      "simulationP95Ms": 2.7,
+      "drawP95Ms": 6.2,
+      "heapStartMB": 33.9,
+      "heapEndMB": 35.2
+    },
+    {
+      "name": "Boss battle",
+      "durationMs": 3029,
+      "frames": 81,
+      "renderedFrames": 81,
+      "renderFPS": 26.74,
+      "frameP50Ms": 33.3,
+      "frameP95Ms": 50,
+      "cpuP95Ms": 28,
+      "simulationP95Ms": 0.9,
+      "drawP95Ms": 27.3,
+      "heapStartMB": 33.77,
+      "heapEndMB": 33.48
+    },
+    {
+      "name": "Equipment pickup",
+      "durationMs": 2026.6,
+      "frames": 24,
+      "renderedFrames": 24,
+      "renderFPS": 11.84,
+      "frameP50Ms": 49.9,
+      "frameP95Ms": 66.7,
+      "cpuP95Ms": 7.7,
+      "simulationP95Ms": 2.7,
+      "drawP95Ms": 6,
+      "heapStartMB": 36.68,
+      "heapEndMB": 33.08
+    },
+    {
+      "name": "Offscreen teleport",
+      "durationMs": 3003.7,
+      "frames": 55,
+      "renderedFrames": 55,
+      "renderFPS": 18.31,
+      "frameP50Ms": 33.3,
+      "frameP95Ms": 50.1,
+      "cpuP95Ms": 9.2,
+      "simulationP95Ms": 1.7,
+      "drawP95Ms": 8.3,
+      "heapStartMB": 35.6,
+      "heapEndMB": 34.33
+    },
+    {
+      "name": "Independent pause upgrades",
+      "durationMs": 2633.3,
+      "frames": 22,
+      "renderedFrames": 22,
+      "renderFPS": 8.35,
+      "frameP50Ms": 33.3,
+      "frameP95Ms": 1016.4,
+      "cpuP95Ms": 3.6,
+      "simulationP95Ms": 0,
+      "drawP95Ms": 3.2,
+      "heapStartMB": 33.79,
+      "heapEndMB": 33.73
+    },
+    {
+      "name": "Autosaves during combat",
+      "durationMs": 9125.4,
+      "frames": 104,
+      "renderedFrames": 104,
+      "renderFPS": 11.4,
+      "frameP50Ms": 33.3,
+      "frameP95Ms": 766.5,
+      "cpuP95Ms": 4.5,
+      "simulationP95Ms": 1.5,
+      "drawP95Ms": 3,
+      "heapStartMB": 33.73,
+      "heapEndMB": 35.38
+    }
+  ],
+  "autosaveIntervalsMs": [
+    7997.3,
+    8004.8,
+    7995.1,
+    8000,
+    8000,
+    8000
+  ],
+  "saveCounts": [
+    17,
+    17
+  ],
+  "physicalControllers": false,
+  "latency": "Hardware-to-display latency is not measured. Gamepad API is simulated; frame/CPU timings are measured in this browser.",
+  "viewport": {
+    "width": 1363,
+    "height": 936,
+    "dpr": 1
+  }
+}
+Test hero creation and deletion with simulated controllers
+Check cloud connection
+
+Verify login and saves with 2 new test accounts

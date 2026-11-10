@@ -1,0 +1,30 @@
+LOCAL BROWSER REVIEW — October 26, 2026
+Reviewed atomdust-review.html through the managed local preview.
+
+Observed:
+- New body layers render the complete original debris character while walking
+  and at rest, with planted feet in idle and alternating lifted legs in motion.
+- Summy smoke preview: windup, forward two-arm ready/release pose, persistent
+  smoke cloud, and recovery. Practice hero health remains protected.
+- Right-facing jump kick with Sadie: airborne body, extended leg and follow-through.
+- Vee sharp-cap preview reaches windup and recovery; the exact three releases
+  and projectile origins are verified by the automated checks.
+- Disperse uses the original scattered debris effect. Pausing freezes it;
+  Resume Fight allows the body to reform and return to idle.
+- Defeat preserves the original scattered-litter pile and victory screen.
+- Original Atomdust comparison loads and renders the old particle body.
+- All three hero selection controls, quarter speed, Face right, Practice,
+  Fight, move previews, pause and resume were exercised.
+- A normal-speed live fight with Summy reached the original hero-defeat
+  screen after 25 seconds, confirming that ordinary combat damage is active.
+- Final browser console check returned no game warnings or errors.
+
+Review-specific correction:
+Ordinary invulnerability does not block Atomdust's original inhalation damage.
+The optional Practice page now bypasses inhalation while practising and restores
+the original function for Fight. A regression test checks both behaviors.
+Production game entries never load this practice control code.
+
+The remote browser displayed variable FPS on both the original and candidate.
+The normal-body reduction from 694 tile draws to ten layer draws is verified
+directly in tests; physical-device frame rate is not certified by these checks.

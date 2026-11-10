@@ -1,0 +1,74 @@
+{
+  "source": "Browser review with direct scenery rendering and co-op input fixes",
+  "method": "100 timer-yielded frames per scene, 1/60 fixed simulation time; first 10 excluded. CPU elapsed time around draw(), instrumentation enabled. Not end-device FPS. All scenes quality 2.",
+  "samples": 90,
+  "records": [
+    {
+      "scene": "Air / Buckroe",
+      "meanDrawMs": 0.896,
+      "p95DrawMs": 1.9,
+      "meanReductionPercent": 73.5
+    },
+    {
+      "scene": "Styrodog / Virginia Beach",
+      "meanDrawMs": 0.839,
+      "p95DrawMs": 1.6,
+      "meanReductionPercent": 73.3
+    },
+    {
+      "scene": "Sonic / Scope",
+      "meanDrawMs": 0.903,
+      "p95DrawMs": 1.5,
+      "meanReductionPercent": 67.9
+    },
+    {
+      "scene": "Venomis / Harbor",
+      "meanDrawMs": 1.489,
+      "p95DrawMs": 2.4,
+      "meanReductionPercent": -2.5
+    },
+    {
+      "scene": "Dr Styro / Rooftop",
+      "meanDrawMs": 0.558,
+      "p95DrawMs": 1.1,
+      "meanReductionPercent": -48.4
+    },
+    {
+      "scene": "Wastelander / Buckroe",
+      "meanDrawMs": 0.841,
+      "p95DrawMs": 1.4,
+      "meanReductionPercent": 72.3
+    },
+    {
+      "scene": "Atomdust / Virginia Beach",
+      "meanDrawMs": 1.023,
+      "p95DrawMs": 1.8,
+      "meanReductionPercent": 72.5
+    },
+    {
+      "scene": "Spree / Scope",
+      "meanDrawMs": 0.913,
+      "p95DrawMs": 1.5,
+      "meanReductionPercent": 69.6
+    },
+    {
+      "scene": "Bushman / Harbor",
+      "meanDrawMs": 1.859,
+      "p95DrawMs": 2.9,
+      "meanReductionPercent": 43.7
+    },
+    {
+      "scene": "Air storm / Scope",
+      "meanDrawMs": 1.828,
+      "p95DrawMs": 2.4,
+      "meanReductionPercent": 47.8
+    },
+    {
+      "scene": "Local co-op Bushman / Buckroe",
+      "meanDrawMs": 1.226,
+      "p95DrawMs": 1.6,
+      "meanReductionPercent": 64.1
+    }
+  ],
+  "errors": []
+}

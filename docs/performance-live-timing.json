@@ -1,0 +1,25 @@
+{
+  "conclusion": "No end-device FPS claim. Cloud animation callbacks were intermittently spaced about one second apart, so the live comparison is not usable as an FPS benchmark. The separate timer-yielded CPU drawing samples remain reported as CPU time only.",
+  "samples": [
+    {
+      "scenery": "original",
+      "rawFrameSamples": 35,
+      "rawFrameMs": {
+        "mean": 164.251,
+        "p95": 1016.5,
+        "max": 1033.1
+      },
+      "drawP95Ms": 8.8
+    },
+    {
+      "scenery": "optimized",
+      "rawFrameSamples": 5,
+      "rawFrameMs": {
+        "mean": 1016.42,
+        "p95": 1016.4,
+        "max": 1016.5
+      },
+      "drawP95Ms": 4.3
+    }
+  ]
+}

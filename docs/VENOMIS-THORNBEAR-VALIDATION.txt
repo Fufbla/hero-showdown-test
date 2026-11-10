@@ -1,0 +1,43 @@
+VENOMIS & THORNBEAR — VALIDATION
+October 26, 2026
+
+Automated: 170 checks passed, zero failures or skips. This includes 28 paired
+actor checks and the 142 existing Supergirls, Wastelander, Dr. Styro, Styrodog,
+Sonic Tusk, Story Mode switch, and Bushman checks. The complete TAP result is
+venomis-thornbear-combined-validation.tap.
+
+The new checks run original and updated gameplay with identical inputs for
+swipe, seeds, and vines, each phase, difficulty paces 1 / 1.3 / 1.65, and
+30 / 60 / 120 / 144 Hz render schedules around the original 120 Hz simulation.
+They compare the bear, follower, hero health, projectile and vine data on
+every rendered step. Positions must remain finite after initialization.
+
+Other checks cover actual claw contact and three volley spawn thresholds,
+independent vine ageing during hitstun, both co-op heroes' vine hit flags,
+projectile jump clearance for all heroes, both actors' independent distance
+cycles and interpolation, pause/hitstop/cutscene/guest locks, round changes,
+immutable texture preparation with canvas fallback, mirrored facing, guard/counter and original defeat priorities, non-mutating
+rendering, missing-atlas fallback, original comparison, and move-preview setup.
+
+Static: 177 script occurrences and 45 distinct external scripts parse.
+Production entries are identical; their only change from the Sonic Tusk
+baseline is three script references. All 46 cumulative package files differ
+from the observed main tree, 41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28.
+Combat functions, original images, effects and Story Mode modules are unchanged.
+
+Art: all 48 selected crops have valid bounds and foot anchors. Four RGBA
+source PNGs remain byte-for-byte intact. Conservative runtime isolation masks
+avoid neighboring drawings. The complete braced scientist reaction comes
+from the first generated sheet because the revised last pose touches its
+bottom edge. Runtime uses only the selected complete drawings.
+
+Prepared sprites are converted to immutable ImageBitmap textures when supported,
+with the prepared canvas retained as a compatibility fallback.
+
+Local browser checks are recorded in venomis-thornbear-browser-review.txt.
+The remote browser's displayed frame rate varied during inspection; this is
+not a physical-device frame-rate certification. A full Story campaign,
+networked two-device session, and mobile/controller hardware were not retested.
+
+No game upload, remote source push, deployment, or publication was performed.
+The ZIP is for the owner to apply to the existing game and upload personally.

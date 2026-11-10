@@ -1,0 +1,13 @@
+{
+  "script_occurrences_checked": 189,
+  "unique_external_scripts": 52,
+  "production_entries_identical": true,
+  "only_entry_change": "Three Lightening Spree script references",
+  "combined_game_files": 56,
+  "production_game_files": 46,
+  "optional_review_files": 10,
+  "all_packaged_game_files_differ_from_observed_main": true,
+  "observed_main_sha": "41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28",
+  "prior_package_baseline_commit": "c095ad751d633b606d6a287fccf7b72f2da13e30",
+  "original_invisibility_beam_geometry_controller_damage_effects_defeat_art_and_story_unchanged": true
+}

@@ -1,0 +1,13 @@
+{
+  "script_occurrences_checked": 182,
+  "unique_external_scripts": 48,
+  "production_entries_identical": true,
+  "only_entry_change": "Two Atomdust script references",
+  "combined_game_files": 50,
+  "production_game_files": 42,
+  "optional_review_files": 8,
+  "all_packaged_game_files_differ_from_observed_main": true,
+  "observed_main_sha": "41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28",
+  "prior_package_baseline_commit": "1fff836",
+  "original_atom_skeleton_hit_positions_combat_effects_art_and_story_unchanged": true
+}

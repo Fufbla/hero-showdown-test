@@ -1,0 +1,13 @@
+{
+  "script_occurrences_checked": 276,
+  "unique_external_scripts": 58,
+  "production_entries_identical": true,
+  "only_entry_change": "Three Bushman animation script references",
+  "combined_game_files": 65,
+  "production_game_files": 53,
+  "optional_review_files": 12,
+  "all_packaged_game_files_differ_from_observed_main": true,
+  "observed_main_sha": "41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28",
+  "prior_package_baseline_commit": "5c24669001880d10c813da3580d319fb1c2a9972",
+  "native_bushman_controller_damage_charge_hazards_effects_and_original_art_unchanged": true
+}

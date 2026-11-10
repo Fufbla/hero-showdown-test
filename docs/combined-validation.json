@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-26",
+  "base_commit": "2d8c8dde9617795028f45fd2e5ebadbe87fc0426",
+  "baseline_dist_files_checked": 208,
+  "baseline_changed_files": [],
+  "production_entries_identical": true,
+  "test_entry_sha256": "b49548f88a156215015657e35759a5e29bad036612f5fac5bb7bbd2879ed9599",
+  "automated": {
+    "passed": 614,
+    "failed": 0,
+    "tap": "combined-all-tests.tap"
+  },
+  "browser": {
+    "passed": 40,
+    "failed": 0,
+    "render_states": 936,
+    "ordered_matchups": 144,
+    "source": "combined-versus-review.html",
+    "observed_via": "browser UI"
+  },
+  "visual_review": [
+    "12 punch mirror poses",
+    "12 special mirror poses"
+  ],
+  "limitations": [
+    "Physical devices and controllers not tested",
+    "No two-device internet co-op test",
+    "No minimum frame-rate claim"
+  ],
+  "deployment": "none",
+  "remote_push": "none",
+  "phone_layout_review": [
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "guide_client_width": 344,
+      "guide_scroll_width": 344,
+      "guide_height": 743,
+      "guide_scroll_height": 1270
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "guide_client_width": 800,
+      "guide_scroll_width": 800,
+      "guide_height": 342,
+      "guide_scroll_height": 787
+    }
+  ],
+  "browser_manual_flow": {
+    "mode": "Player vs CPU",
+    "difficulty": "medium",
+    "player": "styro",
+    "opponent": "bushman",
+    "arena": 0,
+    "result": "Selected through the visible menus; correct fighters and 100 HP rendered"
+  },
+  "portrait_controls": {
+    "viewport": [
+      390,
+      844
+    ],
+    "visible_buttons": 8,
+    "rightmost": 377,
+    "lowest": 483,
+    "all_within_viewport": true
+  }
+}

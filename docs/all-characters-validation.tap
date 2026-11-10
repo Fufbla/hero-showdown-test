@@ -1,0 +1,1696 @@
+TAP version 13
+# Subtest: sixteen complete transparent smoke bodies register within the intact source image
+ok 1 - sixteen complete transparent smoke bodies register within the intact source image
+  ---
+  duration_ms: 80.31304
+  type: 'test'
+  ...
+# Subtest: three hover poses and four glide phases animate a floating body without inventing footfalls
+ok 2 - three hover poses and four glide phases animate a floating body without inventing footfalls
+  ---
+  duration_ms: 5.377466
+  type: 'test'
+  ...
+# Subtest: punch contact appears only after the native strike; clouds channel before their damaging ground release
+ok 3 - punch contact appears only after the native strike; clouds channel before their damaging ground release
+  ---
+  duration_ms: 7.620075
+  type: 'test'
+  ...
+# Subtest: storm impact poses follow actual pulses and return to raised claws between strikes
+ok 4 - storm impact poses follow actual pulses and return to raised claws between strikes
+  ---
+  duration_ms: 0.717658
+  type: 'test'
+  ...
+# Subtest: cloud mouth registration exactly matches the original smoke origin in both facings and every charge pose
+ok 5 - cloud mouth registration exactly matches the original smoke origin in both facings and every charge pose
+  ---
+  duration_ms: 24.466774
+  type: 'test'
+  ...
+# Subtest: successful light and heavy hits remain private observations and leave native damage fields unchanged
+ok 6 - successful light and heavy hits remain private observations and leave native damage fields unchanged
+  ---
+  duration_ms: 19.607254
+  type: 'test'
+  ...
+# Subtest: blocked hits create no false recoil, and ending hitstun resumes the existing warning
+ok 7 - blocked hits create no false recoil, and ending hitstun resumes the existing warning
+  ---
+  duration_ms: 13.759352
+  type: 'test'
+  ...
+# Subtest: the original smoke counter and fading defeat keep their original body renderer
+ok 8 - the original smoke counter and fading defeat keep their original body renderer
+  ---
+  duration_ms: 15.75859
+  type: 'test'
+  ...
+# Subtest: missing or invalid artwork falls back atomically to the complete original body
+ok 9 - missing or invalid artwork falls back atomically to the complete original body
+  ---
+  duration_ms: 16.070179
+  type: 'test'
+  ...
+# Subtest: canvas-only preparation and failed bitmap creation still draw the complete new poses
+ok 10 - canvas-only preparation and failed bitmap creation still draw the complete new poses
+  ---
+  duration_ms: 26.048137
+  type: 'test'
+  ...
+# Subtest: Original comparison avoids loading the new PNG and all other sprites retain their original renderer
+ok 11 - Original comparison avoids loading the new PNG and all other sprites retain their original renderer
+  ---
+  duration_ms: 21.263713
+  type: 'test'
+  ...
+# Subtest: movement interpolation is visual only and is locked by pause, hit stop, cinematics and guest playback
+ok 12 - movement interpolation is visual only and is locked by pause, hit stop, cinematics and guest playback
+  ---
+  duration_ms: 22.195178
+  type: 'test'
+  ...
+# Subtest: teleports, changes of facing and new rounds cannot inherit stale movement or heavy reactions
+ok 13 - teleports, changes of facing and new rounds cannot inherit stale movement or heavy reactions
+  ---
+  duration_ms: 14.068198
+  type: 'test'
+  ...
+# Subtest: rendering preserves native combat data, random sequence and smoke-effect geometry
+ok 14 - rendering preserves native combat data, random sequence and smoke-effect geometry
+  ---
+  duration_ms: 18.217651
+  type: 'test'
+  ...
+# Subtest: punch matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+ok 15 - punch matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+  ---
+  duration_ms: 8154.811123
+  type: 'test'
+  ...
+# Subtest: cloud matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+ok 16 - cloud matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+  ---
+  duration_ms: 12039.317088
+  type: 'test'
+  ...
+# Subtest: storm matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+ok 17 - storm matches original native simulation for every phase, difficulty and 30/60/120/144 Hz rendering
+  ---
+  duration_ms: 8790.854164
+  type: 'test'
+  ...
+# Subtest: punch retains its original .28-second active contact and phase-dependent damage
+ok 18 - punch retains its original .28-second active contact and phase-dependent damage
+  ---
+  duration_ms: 58.21405
+  type: 'test'
+  ...
+# Subtest: cloud release keeps its marked target, radius, lifetime and bypass-block ground damage
+ok 19 - cloud release keeps its marked target, radius, lifetime and bypass-block ground damage
+  ---
+  duration_ms: 12.336462
+  type: 'test'
+  ...
+# Subtest: storm keeps all three original impact lanes and exactly three pulse releases
+ok 20 - storm keeps all three original impact lanes and exactly three pulse releases
+  ---
+  duration_ms: 30.11801
+  type: 'test'
+  ...
+# Subtest: native invulnerability and directional blocking retain their damage reduction
+ok 21 - native invulnerability and directional blocking retain their damage reduction
+  ---
+  duration_ms: 20.563544
+  type: 'test'
+  ...
+# Subtest: interrupted warnings pause while existing toxic hazards continue ageing and hurting
+ok 22 - interrupted warnings pause while existing toxic hazards continue ageing and hurting
+  ---
+  duration_ms: 23.24721
+  type: 'test'
+  ...
+# Subtest: pause, hit stop and cinematic locks freeze the actual simulation and release observation
+ok 23 - pause, hit stop and cinematic locks freeze the actual simulation and release observation
+  ---
+  duration_ms: 47.074091
+  type: 'test'
+  ...
+# Subtest: native co-op contact checks damage both heroes independently
+ok 24 - native co-op contact checks damage both heroes independently
+  ---
+  duration_ms: 18.630328
+  type: 'test'
+  ...
+# Subtest: all direct move previews use real native warning and attack states
+ok 25 - all direct move previews use real native warning and attack states
+  ---
+  duration_ms: 207.715889
+  type: 'test'
+  ...
+# Subtest: mirrored preview keeps stored strike and ground-cloud targets on the mirrored hero
+ok 26 - mirrored preview keeps stored strike and ground-cloud targets on the mirrored hero
+  ---
+  duration_ms: 17.730847
+  type: 'test'
+  ...
+# Subtest: impact hold observes the actual release then freezes, and clearing it resumes normal play
+ok 27 - impact hold observes the actual release then freezes, and clearing it resumes normal play
+  ---
+  duration_ms: 16.302181
+  type: 'test'
+  ...
+# Subtest: production entries match, keep Story Mode and never load optional preview controls
+ok 28 - production entries match, keep Story Mode and never load optional preview controls
+  ---
+  duration_ms: 4.836026
+  type: 'test'
+  ...
+# Subtest: eight gait keys alternate planted and lifted feet and interpolate continuously
+ok 29 - eight gait keys alternate planted and lifted feet and interpolate continuously
+  ---
+  duration_ms: 5.216285
+  type: 'test'
+  ...
+# Subtest: visual joint calculations never modify authoritative skeleton inputs
+ok 30 - visual joint calculations never modify authoritative skeleton inputs
+  ---
+  duration_ms: 4.175214
+  type: 'test'
+  ...
+# Subtest: breathing keeps foot anchors fixed while walking is driven by distance
+ok 31 - breathing keeps foot anchors fixed while walking is driven by distance
+  ---
+  duration_ms: 1.017648
+  type: 'test'
+  ...
+# Subtest: ten cached body layers replace hundreds of normal per-frame tile draws
+ok 32 - ten cached body layers replace hundreds of normal per-frame tile draws
+  ---
+  duration_ms: 15.162902
+  type: 'test'
+  ...
+# Subtest: canvas-only browsers and immutable-texture failures retain the enhanced body
+ok 33 - canvas-only browsers and immutable-texture failures retain the enhanced body
+  ---
+  duration_ms: 16.09881
+  type: 'test'
+  ...
+# Subtest: invalid preparation and Original comparison use the original renderer
+ok 34 - invalid preparation and Original comparison use the original renderer
+  ---
+  duration_ms: 10.845128
+  type: 'test'
+  ...
+# Subtest: other opponents never use Atomdust layers
+ok 35 - other opponents never use Atomdust layers
+  ---
+  duration_ms: 7.111061
+  type: 'test'
+  ...
+# Subtest: disperse, counter and defeat use the original complete particle renderer
+ok 36 - disperse, counter and defeat use the original complete particle renderer
+  ---
+  duration_ms: 8.611972
+  type: 'test'
+  ...
+# Subtest: hands and feet remain at authoritative attack positions in both facings
+ok 37 - hands and feet remain at authoritative attack positions in both facings
+  ---
+  duration_ms: 34.270505
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, scene locks and guests do not interpolate moving roots
+ok 38 - pause, hitstop, scene locks and guests do not interpolate moving roots
+  ---
+  duration_ms: 160.896872
+  type: 'test'
+  ...
+# Subtest: new rounds, direction changes and teleports discard stale interpolation
+ok 39 - new rounds, direction changes and teleports discard stale interpolation
+  ---
+  duration_ms: 4.512612
+  type: 'test'
+  ...
+# Subtest: rendering does not alter the boss, hazards, hit counters or either hand
+ok 40 - rendering does not alter the boss, hazards, hit counters or either hand
+  ---
+  duration_ms: 102.283626
+  type: 'test'
+  ...
+# Subtest: punch matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 41 - punch matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 3648.08756
+  type: 'test'
+  ...
+# Subtest: kick matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 42 - kick matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 2918.560779
+  type: 'test'
+  ...
+# Subtest: jumpkick matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 43 - jumpkick matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 3578.257087
+  type: 'test'
+  ...
+# Subtest: smoke matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 44 - smoke matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 3563.687593
+  type: 'test'
+  ...
+# Subtest: caps matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 45 - caps matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 2987.968607
+  type: 'test'
+  ...
+# Subtest: smoke launches once at .18 seconds from the two original hands
+ok 46 - smoke launches once at .18 seconds from the two original hands
+  ---
+  duration_ms: 10.106986
+  type: 'test'
+  ...
+# Subtest: the three sharp caps keep their exact release times and cooldown
+ok 47 - the three sharp caps keep their exact release times and cooldown
+  ---
+  duration_ms: 7.34868
+  type: 'test'
+  ...
+# Subtest: toxic inhalation bypasses block and invulnerability and retains half speed
+ok 48 - toxic inhalation bypasses block and invulnerability and retains half speed
+  ---
+  duration_ms: 6.60935
+  type: 'test'
+  ...
+# Subtest: smoke exposure affects each co-op hero independently
+ok 49 - smoke exposure affects each co-op hero independently
+  ---
+  duration_ms: 6.842962
+  type: 'test'
+  ...
+# Subtest: hitstun freezes attack timing while toxic clouds and sharp caps keep moving
+ok 50 - hitstun freezes attack timing while toxic clouds and sharp caps keep moving
+  ---
+  duration_ms: 8.78648
+  type: 'test'
+  ...
+# Subtest: the fourth hit still disperses for the original duration and reforms
+ok 51 - the fourth hit still disperses for the original duration and reforms
+  ---
+  duration_ms: 3.892075
+  type: 'test'
+  ...
+# Subtest: direct move previews initialize all five real attacks before simulation
+ok 52 - direct move previews initialize all five real attacks before simulation
+  ---
+  duration_ms: 177.415049
+  type: 'test'
+  ...
+# Subtest: production entries match and retain the original combat and Story Mode
+ok 53 - production entries match and retain the original combat and Story Mode
+  ---
+  duration_ms: 2.216026
+  type: 'test'
+  ...
+# Subtest: practice protects against smoke and Fight restores real inhalation damage
+ok 54 - practice protects against smoke and Fight restores real inhalation damage
+  ---
+  duration_ms: 5.555763
+  type: 'test'
+  ...
+# Subtest: Bushman registers thirty-two distinct complete crops from four intact transparent sources
+ok 55 - Bushman registers thirty-two distinct complete crops from four intact transparent sources
+  ---
+  duration_ms: 32.10337
+  type: 'test'
+  ...
+# Subtest: eight walking phases follow distance and remain independent of idle time
+ok 56 - eight walking phases follow distance and remain independent of idle time
+  ---
+  duration_ms: 0.762978
+  type: 'test'
+  ...
+# Subtest: every ordinary pose has a planted ground anchor and finite body scale
+ok 57 - every ordinary pose has a planted ground anchor and finite body scale
+  ---
+  duration_ms: 0.640578
+  type: 'test'
+  ...
+# Subtest: all five attacks wait for the authoritative release flag before showing contact
+ok 58 - all five attacks wait for the authoritative release flag before showing contact
+  ---
+  duration_ms: 0.436622
+  type: 'test'
+  ...
+# Subtest: punch, kick and projectile launch points match native reach and height in both facings
+ok 59 - punch, kick and projectile launch points match native reach and height in both facings
+  ---
+  duration_ms: 11.310094
+  type: 'test'
+  ...
+# Subtest: actual damage selects light or heavy recoil without adding authoritative boss fields
+ok 60 - actual damage selects light or heavy recoil without adding authoritative boss fields
+  ---
+  duration_ms: 10.575528
+  type: 'test'
+  ...
+# Subtest: guarded hits do not invent a reaction or cancel an attack
+ok 61 - guarded hits do not invent a reaction or cancel an attack
+  ---
+  duration_ms: 38.129231
+  type: 'test'
+  ...
+# Subtest: interrupting the charged blast cancels it without spending the four earned hits
+ok 62 - interrupting the charged blast cancels it without spending the four earned hits
+  ---
+  duration_ms: 5.857234
+  type: 'test'
+  ...
+# Subtest: original counter and kneeling defeat renderers remain active
+ok 63 - original counter and kneeling defeat renderers remain active
+  ---
+  duration_ms: 4.834882
+  type: 'test'
+  ...
+# Subtest: a missing sheet or invalid crop leaves the entire original body active
+ok 64 - a missing sheet or invalid crop leaves the entire original body active
+  ---
+  duration_ms: 10.053531
+  type: 'test'
+  ...
+# Subtest: canvas preparation works without immutable bitmaps and when bitmap creation fails
+ok 65 - canvas preparation works without immutable bitmaps and when bitmap creation fails
+  ---
+  duration_ms: 17.424552
+  type: 'test'
+  ...
+# Subtest: the original comparison loads no extra textures and other opponents use their original body
+ok 66 - the original comparison loads no extra textures and other opponents use their original body
+  ---
+  duration_ms: 10.8419
+  type: 'test'
+  ...
+# Subtest: walking interpolation is visual only and locks during pauses, hit stop, cinematics and guest playback
+ok 67 - walking interpolation is visual only and locks during pauses, hit stop, cinematics and guest playback
+  ---
+  duration_ms: 15.488891
+  type: 'test'
+  ...
+# Subtest: facing changes, teleports and new rounds discard stale position or reaction history
+ok 68 - facing changes, teleports and new rounds discard stale position or reaction history
+  ---
+  duration_ms: 6.230868
+  type: 'test'
+  ...
+# Subtest: repeated rendering never mutates combat data, hazards, charge, or effects
+ok 69 - repeated rendering never mutates combat data, hazards, charge, or effects
+  ---
+  duration_ms: 8.907758
+  type: 'test'
+  ...
+# Subtest: punch preserves original combat at 30/60/120/144 Hz and three difficulty paces
+ok 70 - punch preserves original combat at 30/60/120/144 Hz and three difficulty paces
+  ---
+  duration_ms: 466.487626
+  type: 'test'
+  ...
+# Subtest: kick preserves original combat at 30/60/120/144 Hz and three difficulty paces
+ok 71 - kick preserves original combat at 30/60/120/144 Hz and three difficulty paces
+  ---
+  duration_ms: 519.287001
+  type: 'test'
+  ...
+# Subtest: fireball preserves original combat at 30/60/120/144 Hz and three difficulty paces
+ok 72 - fireball preserves original combat at 30/60/120/144 Hz and three difficulty paces
+  ---
+  duration_ms: 496.029738
+  type: 'test'
+  ...
+# Subtest: scorch preserves original combat at 30/60/120/144 Hz and three difficulty paces
+ok 73 - scorch preserves original combat at 30/60/120/144 Hz and three difficulty paces
+  ---
+  duration_ms: 639.253069
+  type: 'test'
+  ...
+# Subtest: blast preserves original combat at 30/60/120/144 Hz and three difficulty paces
+ok 74 - blast preserves original combat at 30/60/120/144 Hz and three difficulty paces
+  ---
+  duration_ms: 470.489861
+  type: 'test'
+  ...
+# Subtest: only landed unblocked unique attacks earn one charge, including co-op contact
+ok 75 - only landed unblocked unique attacks earn one charge, including co-op contact
+  ---
+  duration_ms: 6.323127
+  type: 'test'
+  ...
+# Subtest: the blast consumes charge only on release and retains double damage and original fire effect
+ok 76 - the blast consumes charge only on release and retains double damage and original fire effect
+  ---
+  duration_ms: 4.580939
+  type: 'test'
+  ...
+# Subtest: fireballs retain their swept collision and advance during an interrupted attack
+ok 77 - fireballs retain their swept collision and advance during an interrupted attack
+  ---
+  duration_ms: 3.940491
+  type: 'test'
+  ...
+# Subtest: burning ground keeps its target, seven-second cooldown and uncharged damage
+ok 78 - burning ground keeps its target, seven-second cooldown and uncharged damage
+  ---
+  duration_ms: 7.759447
+  type: 'test'
+  ...
+# Subtest: all direct move previews initialize valid native combat and defeat state
+ok 79 - all direct move previews initialize valid native combat and defeat state
+  ---
+  duration_ms: 117.242198
+  type: 'test'
+  ...
+# Subtest: mirrored review moves stored attack targets, seeds, ground zones and flares with the fighters
+ok 80 - mirrored review moves stored attack targets, seeds, ground zones and flares with the fighters
+  ---
+  duration_ms: 7.227769
+  type: 'test'
+  ...
+# Subtest: contact hold freezes only after a real release and clearing it resumes normal simulation
+ok 81 - contact hold freezes only after a real release and clearing it resumes normal simulation
+  ---
+  duration_ms: 7.55836
+  type: 'test'
+  ...
+# Subtest: production entries match, retain Story Mode and do not load optional review controls
+ok 82 - production entries match, retain Story Mode and do not load optional review controls
+  ---
+  duration_ms: 3.641318
+  type: 'test'
+  ...
+# Subtest: blast deals exactly twice a regular hit
+ok 83 - blast deals exactly twice a regular hit
+  ---
+  duration_ms: 1.772974
+  type: 'test'
+  ...
+# Subtest: blast is locked at 0 landed hits
+ok 84 - blast is locked at 0 landed hits
+  ---
+  duration_ms: 0.2394
+  type: 'test'
+  ...
+# Subtest: blast is locked at 1 landed hits
+ok 85 - blast is locked at 1 landed hits
+  ---
+  duration_ms: 0.759283
+  type: 'test'
+  ...
+# Subtest: blast is locked at 2 landed hits
+ok 86 - blast is locked at 2 landed hits
+  ---
+  duration_ms: 0.259415
+  type: 'test'
+  ...
+# Subtest: blast is locked at 3 landed hits
+ok 87 - blast is locked at 3 landed hits
+  ---
+  duration_ms: 0.30816
+  type: 'test'
+  ...
+# Subtest: four distinct direct hits unlock blast and release consumes all four
+ok 88 - four distinct direct hits unlock blast and release consumes all four
+  ---
+  duration_ms: 2.763594
+  type: 'test'
+  ...
+# Subtest: misses, blocks, invulnerability, burns and the blast do not charge
+ok 89 - misses, blocks, invulnerability, burns and the blast do not charge
+  ---
+  duration_ms: 0.458511
+  type: 'test'
+  ...
+# Subtest: one swing hitting two teammates earns one credit
+ok 90 - one swing hitting two teammates earns one credit
+  ---
+  duration_ms: 0.518836
+  type: 'test'
+  ...
+# Subtest: blocked first target does not discard a real hit on second target
+ok 91 - blocked first target does not discard a real hit on second target
+  ---
+  duration_ms: 0.345675
+  type: 'test'
+  ...
+# Subtest: charge is capped at four and credit history is bounded
+ok 92 - charge is capped at four and credit history is bounded
+  ---
+  duration_ms: 0.404126
+  type: 'test'
+  ...
+# Subtest: interrupted windup retains charge; no delayed release occurs
+ok 93 - interrupted windup retains charge; no delayed release occurs
+  ---
+  duration_ms: 0.408178
+  type: 'test'
+  ...
+# Subtest: punch hits only once at contact and finishes recovery
+ok 94 - punch hits only once at contact and finishes recovery
+  ---
+  duration_ms: 3.489191
+  type: 'test'
+  ...
+# Subtest: kick hits only once at contact and finishes recovery
+ok 95 - kick hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.405948
+  type: 'test'
+  ...
+# Subtest: fireball hits only once at contact and finishes recovery
+ok 96 - fireball hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.108093
+  type: 'test'
+  ...
+# Subtest: scorch hits only once at contact and finishes recovery
+ok 97 - scorch hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.053318
+  type: 'test'
+  ...
+# Subtest: blast hits only once at contact and finishes recovery
+ok 98 - blast hits only once at contact and finishes recovery
+  ---
+  duration_ms: 0.356036
+  type: 'test'
+  ...
+# Subtest: projectile sweep does not tunnel and rejects jumping targets
+ok 99 - projectile sweep does not tunnel and rejects jumping targets
+  ---
+  duration_ms: 0.250866
+  type: 'test'
+  ...
+# Subtest: melee and blast respect facing, distance and height
+ok 100 - melee and blast respect facing, distance and height
+  ---
+  duration_ms: 0.160711
+  type: 'test'
+  ...
+# Subtest: ground fire covers one fixed spot and is avoidable by jumping
+ok 101 - ground fire covers one fixed spot and is avoidable by jumping
+  ---
+  duration_ms: 0.117426
+  type: 'test'
+  ...
+# Subtest: fresh round resets action, charge and hazardous effects
+ok 102 - fresh round resets action, charge and hazardous effects
+  ---
+  duration_ms: 1.558863
+  type: 'test'
+  ...
+# Subtest: network snapshots are detached and malformed attacks are rejected
+ok 103 - network snapshots are detached and malformed attacks are rejected
+  ---
+  duration_ms: 0.486238
+  type: 'test'
+  ...
+# Subtest: all three heroes load 32 separate registered drawings with true PNG bounds
+ok 104 - all three heroes load 32 separate registered drawings with true PNG bounds
+  ---
+  duration_ms: 37.88226
+  type: 'test'
+  ...
+# Subtest: same numeric pose resolves to each selected hero own sheet during co-op draws
+ok 105 - same numeric pose resolves to each selected hero own sheet during co-op draws
+  ---
+  duration_ms: 19.673713
+  type: 'test'
+  ...
+# Subtest: hero switches never inherit another hero previous position
+ok 106 - hero switches never inherit another hero previous position
+  ---
+  duration_ms: 11.868606
+  type: 'test'
+  ...
+# Subtest: guest interpolation, pause, hitstop and attacks render authoritative current position
+ok 107 - guest interpolation, pause, hitstop and attacks render authoritative current position
+  ---
+  duration_ms: 10.932474
+  type: 'test'
+  ...
+# Subtest: failed Vee sheet falls back without disabling Summy or Sadie
+ok 108 - failed Vee sheet falls back without disabling Summy or Sadie
+  ---
+  duration_ms: 9.455698
+  type: 'test'
+  ...
+# Subtest: original comparison mode makes no new texture requests and uses original renderer
+ok 109 - original comparison mode makes no new texture requests and uses original renderer
+  ---
+  duration_ms: 1.537142
+  type: 'test'
+  ...
+# Subtest: tag run animation uses the incoming hero sheet and automatic defeat keeps original handoff
+ok 110 - tag run animation uses the incoming hero sheet and automatic defeat keeps original handoff
+  ---
+  duration_ms: 8.598273
+  type: 'test'
+  ...
+# Subtest: extended sprite bounds remain inside both arena edges for both facings
+ok 111 - extended sprite bounds remain inside both arena edges for both facings
+  ---
+  duration_ms: 17.260952
+  type: 'test'
+  ...
+# Subtest: Sadie heavy special and Vee five-pass blitz have distinct recovery timing
+ok 112 - Sadie heavy special and Vee five-pass blitz have distinct recovery timing
+  ---
+  duration_ms: 0.410512
+  type: 'test'
+  ...
+# Subtest: regular attacks retain original impact drawings through their whole active windows
+ok 113 - regular attacks retain original impact drawings through their whole active windows
+  ---
+  duration_ms: 8.182506
+  type: 'test'
+  ...
+# Subtest: Summy original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+ok 114 - Summy original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+  ---
+  duration_ms: 48.260312
+  type: 'test'
+  ...
+# Subtest: Summy KKPP yields four contacts and existing 8% bonus at all draw rates
+ok 115 - Summy KKPP yields four contacts and existing 8% bonus at all draw rates
+  ---
+  duration_ms: 45.524938
+  type: 'test'
+  ...
+# Subtest: Summy buffers late stun input once, respects held block, then resumes
+ok 116 - Summy buffers late stun input once, respects held block, then resumes
+  ---
+  duration_ms: 5.134858
+  type: 'test'
+  ...
+# Subtest: Sadie original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+ok 117 - Sadie original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+  ---
+  duration_ms: 74.465241
+  type: 'test'
+  ...
+# Subtest: Sadie KKPP yields four contacts and existing 8% bonus at all draw rates
+ok 118 - Sadie KKPP yields four contacts and existing 8% bonus at all draw rates
+  ---
+  duration_ms: 36.380734
+  type: 'test'
+  ...
+# Subtest: Sadie buffers late stun input once, respects held block, then resumes
+ok 119 - Sadie buffers late stun input once, respects held block, then resumes
+  ---
+  duration_ms: 5.229451
+  type: 'test'
+  ...
+# Subtest: Vee original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+ok 120 - Vee original attack timings and one-hit damage survive 30/60/120/144 Hz drawing
+  ---
+  duration_ms: 46.71353
+  type: 'test'
+  ...
+# Subtest: Vee KKPP yields four contacts and existing 8% bonus at all draw rates
+ok 121 - Vee KKPP yields four contacts and existing 8% bonus at all draw rates
+  ---
+  duration_ms: 39.190163
+  type: 'test'
+  ...
+# Subtest: Vee buffers late stun input once, respects held block, then resumes
+ok 122 - Vee buffers late stun input once, respects held block, then resumes
+  ---
+  duration_ms: 5.428727
+  type: 'test'
+  ...
+# Subtest: knockdown and active specials cannot queue late-stun attacks
+ok 123 - knockdown and active specials cannot queue late-stun attacks
+  ---
+  duration_ms: 4.072
+  type: 'test'
+  ...
+# Subtest: all runtime assets and both entry points resolve to identical checked-in game content
+ok 124 - all runtime assets and both entry points resolve to identical checked-in game content
+  ---
+  duration_ms: 3.215976
+  type: 'test'
+  ...
+# Subtest: the intact transparent sheet registers sixteen complete body crops
+ok 125 - the intact transparent sheet registers sixteen complete body crops
+  ---
+  duration_ms: 13.995557
+  type: 'test'
+  ...
+# Subtest: idle breathes in place without inventing a walking state
+ok 126 - idle breathes in place without inventing a walking state
+  ---
+  duration_ms: 3.412242
+  type: 'test'
+  ...
+# Subtest: the body remains completely hidden throughout the full invisible interval
+ok 127 - the body remains completely hidden throughout the full invisible interval
+  ---
+  duration_ms: 6.388462
+  type: 'test'
+  ...
+# Subtest: arrival uses a brief solid brace then immediately resumes the real warning
+ok 128 - arrival uses a brief solid brace then immediately resumes the real warning
+  ---
+  duration_ms: 0.479944
+  type: 'test'
+  ...
+# Subtest: charge, ready, release and recovery have distinct poses for both attacks
+ok 129 - charge, ready, release and recovery have distinct poses for both attacks
+  ---
+  duration_ms: 0.366838
+  type: 'test'
+  ...
+# Subtest: no emitting pose appears before an actual beam exists
+ok 130 - no emitting pose appears before an actual beam exists
+  ---
+  duration_ms: 0.153324
+  type: 'test'
+  ...
+# Subtest: the phase-three second volley readies again and uses the live beam release
+ok 131 - the phase-three second volley readies again and uses the live beam release
+  ---
+  duration_ms: 0.161165
+  type: 'test'
+  ...
+# Subtest: both release palms register exactly to the original beam origins in either facing
+ok 132 - both release palms register exactly to the original beam origins in either facing
+  ---
+  duration_ms: 5.26132
+  type: 'test'
+  ...
+# Subtest: reaction observation distinguishes real light and heavy hits without adding boss fields
+ok 133 - reaction observation distinguishes real light and heavy hits without adding boss fields
+  ---
+  duration_ms: 11.537648
+  type: 'test'
+  ...
+# Subtest: blocked and invisible hits do not create a reaction or damage
+ok 134 - blocked and invisible hits do not create a reaction or damage
+  ---
+  duration_ms: 6.476053
+  type: 'test'
+  ...
+# Subtest: hit reactions end with authoritative hitstun and do not replace live warnings
+ok 135 - hit reactions end with authoritative hitstun and do not replace live warnings
+  ---
+  duration_ms: 7.483721
+  type: 'test'
+  ...
+# Subtest: generic prism counters and the original shatter keep their original renderer
+ok 136 - generic prism counters and the original shatter keep their original renderer
+  ---
+  duration_ms: 4.424158
+  type: 'test'
+  ...
+# Subtest: canvas-only and failed immutable-texture preparation keep the new animation
+ok 137 - canvas-only and failed immutable-texture preparation keep the new animation
+  ---
+  duration_ms: 9.260411
+  type: 'test'
+  ...
+# Subtest: missing art or invalid metadata falls back to the complete original character
+ok 138 - missing art or invalid metadata falls back to the complete original character
+  ---
+  duration_ms: 8.888534
+  type: 'test'
+  ...
+# Subtest: Original comparison avoids loading new textures and other opponents keep their renderer
+ok 139 - Original comparison avoids loading new textures and other opponents keep their renderer
+  ---
+  duration_ms: 6.851877
+  type: 'test'
+  ...
+# Subtest: rendering cannot change combat data, timer, beam geometry or random sequence
+ok 140 - rendering cannot change combat data, timer, beam geometry or random sequence
+  ---
+  duration_ms: 8.314589
+  type: 'test'
+  ...
+# Subtest: beam matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 141 - beam matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 1521.766859
+  type: 'test'
+  ...
+# Subtest: spark matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+ok 142 - spark matches original combat at 30/60/120/144 Hz, all phases and difficulty paces
+  ---
+  duration_ms: 2273.856909
+  type: 'test'
+  ...
+# Subtest: the primary beam releases once at .10 and keeps its original width and damage
+ok 143 - the primary beam releases once at .10 and keeps its original width and damage
+  ---
+  duration_ms: 4.476231
+  type: 'test'
+  ...
+# Subtest: spark fans retain five rays and phase three adds five more at .43
+ok 144 - spark fans retain five rays and phase three adds five more at .43
+  ---
+  duration_ms: 11.83412
+  type: 'test'
+  ...
+# Subtest: live beams keep ageing and damaging during an interrupted attack
+ok 145 - live beams keep ageing and damaging during an interrupted attack
+  ---
+  duration_ms: 3.380398
+  type: 'test'
+  ...
+# Subtest: blocking keeps the original directional damage reduction and invulnerability
+ok 146 - blocking keeps the original directional damage reduction and invulnerability
+  ---
+  duration_ms: 3.430451
+  type: 'test'
+  ...
+# Subtest: beam collision retains slab intersection and correctly misses above and behind
+ok 147 - beam collision retains slab intersection and correctly misses above and behind
+  ---
+  duration_ms: 4.157177
+  type: 'test'
+  ...
+# Subtest: co-op beams mark and damage each hero independently only once
+ok 148 - co-op beams mark and damage each hero independently only once
+  ---
+  duration_ms: 3.884836
+  type: 'test'
+  ...
+# Subtest: new round objects cannot inherit the previous round heavy reaction
+ok 149 - new round objects cannot inherit the previous round heavy reaction
+  ---
+  duration_ms: 4.637899
+  type: 'test'
+  ...
+# Subtest: all direct previews initialize actual attacks, invisibility and shatter without invalid state
+ok 150 - all direct previews initialize actual attacks, invisibility and shatter without invalid state
+  ---
+  duration_ms: 122.412033
+  type: 'test'
+  ...
+# Subtest: mirrored review transforms stored aim and teleport destinations with the fighters
+ok 151 - mirrored review transforms stored aim and teleport destinations with the fighters
+  ---
+  duration_ms: 5.905665
+  type: 'test'
+  ...
+# Subtest: optional release hold freezes only after firing and normal play clears it
+ok 152 - optional release hold freezes only after firing and normal play clears it
+  ---
+  duration_ms: 4.376407
+  type: 'test'
+  ...
+# Subtest: production entries match, retain Story Mode and never load review controls
+ok 153 - production entries match, retain Story Mode and never load review controls
+  ---
+  duration_ms: 2.593311
+  type: 'test'
+  ...
+# Subtest: walking advances through eight drawings with distance and stops at idle
+ok 154 - walking advances through eight drawings with distance and stops at idle
+  ---
+  duration_ms: 2.601637
+  type: 'test'
+  ...
+# Subtest: pulse cannot show release before its projectile threshold
+ok 155 - pulse cannot show release before its projectile threshold
+  ---
+  duration_ms: 0.498887
+  type: 'test'
+  ...
+# Subtest: stomp contact is held until the low waves spawn
+ok 156 - stomp contact is held until the low waves spawn
+  ---
+  duration_ms: 0.329304
+  type: 'test'
+  ...
+# Subtest: horn blast shows emission throughout the growing and sustained active cone
+ok 157 - horn blast shows emission throughout the growing and sustained active cone
+  ---
+  duration_ms: 0.913987
+  type: 'test'
+  ...
+# Subtest: hit reactions distinguish force and never cover resumed attacks
+ok 158 - hit reactions distinguish force and never cover resumed attacks
+  ---
+  duration_ms: 0.640817
+  type: 'test'
+  ...
+# Subtest: guard, counter and original defeat keep deliberate presentation
+ok 159 - guard, counter and original defeat keep deliberate presentation
+  ---
+  duration_ms: 1.282257
+  type: 'test'
+  ...
+# Subtest: interpolation handles stride wrap without blending turns, teleports or state changes
+ok 160 - interpolation handles stride wrap without blending turns, teleports or state changes
+  ---
+  duration_ms: 0.682668
+  type: 'test'
+  ...
+# Subtest: all transparent atlases register complete valid crops and anchors
+ok 161 - all transparent atlases register complete valid crops and anchors
+  ---
+  duration_ms: 40.180011
+  type: 'test'
+  ...
+# Subtest: missing any atlas or an invalid crop retains the complete original renderer
+ok 162 - missing any atlas or an invalid crop retains the complete original renderer
+  ---
+  duration_ms: 46.496479
+  type: 'test'
+  ...
+# Subtest: Original comparison loads no additional textures
+ok 163 - Original comparison loads no additional textures
+  ---
+  duration_ms: 7.025098
+  type: 'test'
+  ...
+# Subtest: other villains are unaffected by the Sonic Tusk renderer
+ok 164 - other villains are unaffected by the Sonic Tusk renderer
+  ---
+  duration_ms: 20.686567
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, cutscenes, guests and nonwalking states lock interpolation
+ok 165 - pause, hitstop, cutscenes, guests and nonwalking states lock interpolation
+  ---
+  duration_ms: 15.044901
+  type: 'test'
+  ...
+# Subtest: new round state and crossing the opponent reset visual facing without a slide
+ok 166 - new round state and crossing the opponent reset visual facing without a slide
+  ---
+  duration_ms: 13.352084
+  type: 'test'
+  ...
+# Subtest: drawing leaves gameplay and wave data untouched in both directions
+ok 167 - drawing leaves gameplay and wave data untouched in both directions
+  ---
+  duration_ms: 14.220235
+  type: 'test'
+  ...
+# Subtest: pulse matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 168 - pulse matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 1483.378722
+  type: 'test'
+  ...
+# Subtest: stomp matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 169 - stomp matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 1742.530704
+  type: 'test'
+  ...
+# Subtest: blast matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 170 - blast matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 1047.378113
+  type: 'test'
+  ...
+# Subtest: hitstun freezes attack timing while existing sound waves keep travelling
+ok 171 - hitstun freezes attack timing while existing sound waves keep travelling
+  ---
+  duration_ms: 18.837172
+  type: 'test'
+  ...
+# Subtest: actual projectile and bass-wave spawn steps match their contact drawings
+ok 172 - actual projectile and bass-wave spawn steps match their contact drawings
+  ---
+  duration_ms: 12.861594
+  type: 'test'
+  ...
+# Subtest: the growing horn cone can hurt both co-op heroes while its firing pose is shown
+ok 173 - the growing horn cone can hurt both co-op heroes while its firing pose is shown
+  ---
+  duration_ms: 6.627803
+  type: 'test'
+  ...
+# Subtest: jump clearance and facing preserve the original horn damage region
+ok 174 - jump clearance and facing preserve the original horn damage region
+  ---
+  duration_ms: 128.196201
+  type: 'test'
+  ...
+# Subtest: production entries match and contain no review controls or story restriction
+ok 175 - production entries match and contain no review controls or story restriction
+  ---
+  duration_ms: 2.940931
+  type: 'test'
+  ...
+# Subtest: Queued tag keeps attacks, movement and defense available against opponent 5
+ok 176 - Queued tag keeps attacks, movement and defense available against opponent 5
+  ---
+  duration_ms: 6.104808
+  type: 'test'
+  ...
+# Subtest: Both hero protection and opponent / hazard time remain frozen during opponent 5 tag
+ok 177 - Both hero protection and opponent / hazard time remain frozen during opponent 5 tag
+  ---
+  duration_ms: 3.272947
+  type: 'test'
+  ...
+# Subtest: keys movement and block hold survive opponent 5 switch
+ok 178 - keys movement and block hold survive opponent 5 switch
+  ---
+  duration_ms: 2.543267
+  type: 'test'
+  ...
+# Subtest: touchHeld movement and block hold survive opponent 5 switch
+ok 179 - touchHeld movement and block hold survive opponent 5 switch
+  ---
+  duration_ms: 3.571055
+  type: 'test'
+  ...
+# Subtest: padHeld movement and block hold survive opponent 5 switch
+ok 180 - padHeld movement and block hold survive opponent 5 switch
+  ---
+  duration_ms: 1.612266
+  type: 'test'
+  ...
+# Subtest: Queued tag keeps attacks, movement and defense available against opponent 0
+ok 181 - Queued tag keeps attacks, movement and defense available against opponent 0
+  ---
+  duration_ms: 2.30364
+  type: 'test'
+  ...
+# Subtest: Both hero protection and opponent / hazard time remain frozen during opponent 0 tag
+ok 182 - Both hero protection and opponent / hazard time remain frozen during opponent 0 tag
+  ---
+  duration_ms: 2.819825
+  type: 'test'
+  ...
+# Subtest: keys movement and block hold survive opponent 0 switch
+ok 183 - keys movement and block hold survive opponent 0 switch
+  ---
+  duration_ms: 2.564974
+  type: 'test'
+  ...
+# Subtest: touchHeld movement and block hold survive opponent 0 switch
+ok 184 - touchHeld movement and block hold survive opponent 0 switch
+  ---
+  duration_ms: 1.781974
+  type: 'test'
+  ...
+# Subtest: padHeld movement and block hold survive opponent 0 switch
+ok 185 - padHeld movement and block hold survive opponent 0 switch
+  ---
+  duration_ms: 2.797221
+  type: 'test'
+  ...
+# Subtest: All stage positions have a manual swap below 0.72 seconds
+ok 186 - All stage positions have a manual swap below 0.72 seconds
+  ---
+  duration_ms: 29.504346
+  type: 'test'
+  ...
+# Subtest: Incoming hero can attack on arrival and a late entrance press is buffered once
+ok 187 - Incoming hero can attack on arrival and a late entrance press is buffered once
+  ---
+  duration_ms: 3.148293
+  type: 'test'
+  ...
+# Subtest: Stale entrance actions are discarded and held attacks are not repeated
+ok 188 - Stale entrance actions are discarded and held attacks are not repeated
+  ---
+  duration_ms: 1.640423
+  type: 'test'
+  ...
+# Subtest: Health and special charge remain separate through repeated tags and defeated teammates are skipped
+ok 189 - Health and special charge remain separate through repeated tags and defeated teammates are skipped
+  ---
+  duration_ms: 12.469861
+  type: 'test'
+  ...
+# Subtest: Automatic replacement preserves the defeat pose and restores input within one second
+ok 190 - Automatic replacement preserves the defeat pose and restores input within one second
+  ---
+  duration_ms: 1.798286
+  type: 'test'
+  ...
+# Subtest: Pause freezes a swap; non-story combat still calls its original input handlers
+ok 191 - Pause freezes a swap; non-story combat still calls its original input handlers
+  ---
+  duration_ms: 1.917089
+  type: 'test'
+  ...
+# Subtest: walk resolves eight distinct distance-driven poses and stops on idle
+ok 192 - walk resolves eight distinct distance-driven poses and stops on idle
+  ---
+  duration_ms: 2.097065
+  type: 'test'
+  ...
+# Subtest: idle has a continuous four-pose breathing loop
+ok 193 - idle has a continuous four-pose breathing loop
+  ---
+  duration_ms: 1.844483
+  type: 'test'
+  ...
+# Subtest: crush full extension matches the damaging contact boundary
+ok 194 - crush full extension matches the damaging contact boundary
+  ---
+  duration_ms: 0.248883
+  type: 'test'
+  ...
+# Subtest: double full extension matches the damaging contact boundary
+ok 195 - double full extension matches the damaging contact boundary
+  ---
+  duration_ms: 0.455257
+  type: 'test'
+  ...
+# Subtest: spike release tracks each of the three actual volleys, never a fourth
+ok 196 - spike release tracks each of the three actual volleys, never a fourth
+  ---
+  duration_ms: 0.228013
+  type: 'test'
+  ...
+# Subtest: hit reactions distinguish light and heavy hits, then release resumed attacks
+ok 197 - hit reactions distinguish light and heavy hits, then release resumed attacks
+  ---
+  duration_ms: 0.411543
+  type: 'test'
+  ...
+# Subtest: split windup, merge, guard and breakout have explicit poses
+ok 198 - split windup, merge, guard and breakout have explicit poses
+  ---
+  duration_ms: 0.358619
+  type: 'test'
+  ...
+# Subtest: defeat keeps the four approved collapse poses and holds the final one
+ok 199 - defeat keeps the four approved collapse poses and holds the final one
+  ---
+  duration_ms: 0.19128
+  type: 'test'
+  ...
+# Subtest: all 32 whole-body crops fit actual transparent PNGs with grounded anchors
+ok 200 - all 32 whole-body crops fit actual transparent PNGs with grounded anchors
+  ---
+  duration_ms: 15.861696
+  type: 'test'
+  ...
+# Subtest: missing any new sheet falls back to the complete original character
+ok 201 - missing any new sheet falls back to the complete original character
+  ---
+  duration_ms: 14.771728
+  type: 'test'
+  ...
+# Subtest: Original comparison loads no new images
+ok 202 - Original comparison loads no new images
+  ---
+  duration_ms: 2.188702
+  type: 'test'
+  ...
+# Subtest: other characters always retain their own renderer
+ok 203 - other characters always retain their own renderer
+  ---
+  duration_ms: 5.600071
+  type: 'test'
+  ...
+# Subtest: drawing never mutates boss state or projectiles in either facing
+ok 204 - drawing never mutates boss state or projectiles in either facing
+  ---
+  duration_ms: 22.663143
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, cutscenes, guests and attacks lock interpolation to simulation
+ok 205 - pause, hitstop, cutscenes, guests and attacks lock interpolation to simulation
+  ---
+  duration_ms: 3.958248
+  type: 'test'
+  ...
+# Subtest: a new round or changed facing cannot inherit old interpolation
+ok 206 - a new round or changed facing cannot inherit old interpolation
+  ---
+  duration_ms: 6.994057
+  type: 'test'
+  ...
+# Subtest: crush gameplay is identical at 30/60/120/144 Hz drawing in every phase
+ok 207 - crush gameplay is identical at 30/60/120/144 Hz drawing in every phase
+  ---
+  duration_ms: 565.115344
+  type: 'test'
+  ...
+# Subtest: spikes gameplay is identical at 30/60/120/144 Hz drawing in every phase
+ok 208 - spikes gameplay is identical at 30/60/120/144 Hz drawing in every phase
+  ---
+  duration_ms: 991.083063
+  type: 'test'
+  ...
+# Subtest: double gameplay is identical at 30/60/120/144 Hz drawing in every phase
+ok 209 - double gameplay is identical at 30/60/120/144 Hz drawing in every phase
+  ---
+  duration_ms: 534.044819
+  type: 'test'
+  ...
+# Subtest: hitstun suspends attack clock and prevents premature damage
+ok 210 - hitstun suspends attack clock and prevents premature damage
+  ---
+  duration_ms: 5.858875
+  type: 'test'
+  ...
+# Subtest: split draws two complete mirrored figures and merges back to one
+ok 211 - split draws two complete mirrored figures and merges back to one
+  ---
+  duration_ms: 13.924664
+  type: 'test'
+  ...
+# Subtest: both entry points load the new module after combat without review code
+ok 212 - both entry points load the new module after combat without review code
+  ---
+  duration_ms: 4.048694
+  type: 'test'
+  ...
+# Subtest: eight walk drawings advance with distance and stop at idle
+ok 213 - eight walk drawings advance with distance and stop at idle
+  ---
+  duration_ms: 2.957258
+  type: 'test'
+  ...
+# Subtest: four idle drawings form a repeating loop
+ok 214 - four idle drawings form a repeating loop
+  ---
+  duration_ms: 0.475489
+  type: 'test'
+  ...
+# Subtest: claw reaches full extension at damage contact, never early
+ok 215 - claw reaches full extension at damage contact, never early
+  ---
+  duration_ms: 0.333577
+  type: 'test'
+  ...
+# Subtest: slam lands exactly at the shockwave and stays grounded through recovery
+ok 216 - slam lands exactly at the shockwave and stays grounded through recovery
+  ---
+  duration_ms: 0.488802
+  type: 'test'
+  ...
+# Subtest: roar release uses the same three-volley clock as projectiles
+ok 217 - roar release uses the same three-volley clock as projectiles
+  ---
+  duration_ms: 0.232627
+  type: 'test'
+  ...
+# Subtest: recoils distinguish light and heavy hits without hiding resumed attacks
+ok 218 - recoils distinguish light and heavy hits without hiding resumed attacks
+  ---
+  duration_ms: 0.509424
+  type: 'test'
+  ...
+# Subtest: guard and breakout have deliberate poses
+ok 219 - guard and breakout have deliberate poses
+  ---
+  duration_ms: 0.214943
+  type: 'test'
+  ...
+# Subtest: original defeat stages remain intact and hold the collapsed pose
+ok 220 - original defeat stages remain intact and hold the collapsed pose
+  ---
+  duration_ms: 0.26031
+  type: 'test'
+  ...
+# Subtest: walk interpolation handles stride wrap and never crosses a turn or teleport
+ok 221 - walk interpolation handles stride wrap and never crosses a turn or teleport
+  ---
+  duration_ms: 0.300356
+  type: 'test'
+  ...
+# Subtest: all 32 sprites have valid transparent PNG crops and foot anchors
+ok 222 - all 32 sprites have valid transparent PNG crops and foot anchors
+  ---
+  duration_ms: 33.055226
+  type: 'test'
+  ...
+# Subtest: either missing sheet or invalid crop preserves the complete original renderer
+ok 223 - either missing sheet or invalid crop preserves the complete original renderer
+  ---
+  duration_ms: 19.610465
+  type: 'test'
+  ...
+# Subtest: Original comparison loads no new sheets
+ok 224 - Original comparison loads no new sheets
+  ---
+  duration_ms: 6.555585
+  type: 'test'
+  ...
+# Subtest: all other villains retain their own renderer
+ok 225 - all other villains retain their own renderer
+  ---
+  duration_ms: 17.535857
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, special cutscenes, guests and nonidle states lock position
+ok 226 - pause, hitstop, special cutscenes, guests and nonidle states lock position
+  ---
+  duration_ms: 10.389477
+  type: 'test'
+  ...
+# Subtest: a new round cannot inherit previous interpolation or facing
+ok 227 - a new round cannot inherit previous interpolation or facing
+  ---
+  duration_ms: 7.366634
+  type: 'test'
+  ...
+# Subtest: drawing does not mutate combat state or projectiles in either facing
+ok 228 - drawing does not mutate combat state or projectiles in either facing
+  ---
+  duration_ms: 19.348488
+  type: 'test'
+  ...
+# Subtest: claw keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+ok 229 - claw keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+  ---
+  duration_ms: 277.975426
+  type: 'test'
+  ...
+# Subtest: slam keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+ok 230 - slam keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+  ---
+  duration_ms: 349.391903
+  type: 'test'
+  ...
+# Subtest: roar keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+ok 231 - roar keeps identical gameplay at 30/60/120/144 Hz rendering in every phase
+  ---
+  duration_ms: 394.641569
+  type: 'test'
+  ...
+# Subtest: hitstun freezes the attack clock and prevents premature damage
+ok 232 - hitstun freezes the attack clock and prevents premature damage
+  ---
+  duration_ms: 5.657559
+  type: 'test'
+  ...
+# Subtest: rendered landing and roar release match emitted hazards on the actual step
+ok 233 - rendered landing and roar release match emitted hazards on the actual step
+  ---
+  duration_ms: 5.092584
+  type: 'test'
+  ...
+# Subtest: two co-op heroes receive the same contact evaluation, unaffected by rendering
+ok 234 - two co-op heroes receive the same contact evaluation, unaffected by rendering
+  ---
+  duration_ms: 8.672342
+  type: 'test'
+  ...
+# Subtest: both production entries load matching modules without review controls
+ok 235 - both production entries load matching modules without review controls
+  ---
+  duration_ms: 1.690811
+  type: 'test'
+  ...
+# Subtest: each actor walks through eight distance-driven drawings and settles to its own idle
+ok 236 - each actor walks through eight distance-driven drawings and settles to its own idle
+  ---
+  duration_ms: 2.638594
+  type: 'test'
+  ...
+# Subtest: the claw contacts only at the original timer threshold
+ok 237 - the claw contacts only at the original timer threshold
+  ---
+  duration_ms: 0.307285
+  type: 'test'
+  ...
+# Subtest: flytrap releases follow the three actual volleys with recovery between them
+ok 238 - flytrap releases follow the three actual volleys with recovery between them
+  ---
+  duration_ms: 0.380795
+  type: 'test'
+  ...
+# Subtest: ground vines use their live age after an interrupted attack
+ok 239 - ground vines use their live age after an interrupted attack
+  ---
+  duration_ms: 0.510756
+  type: 'test'
+  ...
+# Subtest: Venomis keeps walking through commands and the bear reaction, then gestures when stationary
+ok 240 - Venomis keeps walking through commands and the bear reaction, then gestures when stationary
+  ---
+  duration_ms: 0.453147
+  type: 'test'
+  ...
+# Subtest: light and heavy reactions are distinct and give way immediately when hitstun ends
+ok 241 - light and heavy reactions are distinct and give way immediately when hitstun ends
+  ---
+  duration_ms: 0.379157
+  type: 'test'
+  ...
+# Subtest: counter overrides stale walking and both actors retain original defeat sequences
+ok 242 - counter overrides stale walking and both actors retain original defeat sequences
+  ---
+  duration_ms: 2.910106
+  type: 'test'
+  ...
+# Subtest: interpolation handles stride wrap without blending turns, teleports or state changes
+ok 243 - interpolation handles stride wrap without blending turns, teleports or state changes
+  ---
+  duration_ms: 0.420225
+  type: 'test'
+  ...
+# Subtest: all four transparent atlases register 48 complete crops and anchors
+ok 244 - all four transparent atlases register 48 complete crops and anchors
+  ---
+  duration_ms: 38.109228
+  type: 'test'
+  ...
+# Subtest: any missing atlas or invalid crop falls back to both original actors
+ok 245 - any missing atlas or invalid crop falls back to both original actors
+  ---
+  duration_ms: 100.473554
+  type: 'test'
+  ...
+# Subtest: Original comparison loads no additional textures
+ok 246 - Original comparison loads no additional textures
+  ---
+  duration_ms: 5.035316
+  type: 'test'
+  ...
+# Subtest: other villains and unrelated sprite sheets retain their original renderer
+ok 247 - other villains and unrelated sprite sheets retain their original renderer
+  ---
+  duration_ms: 27.209817
+  type: 'test'
+  ...
+# Subtest: two actor positions interpolate independently while the follower catches up
+ok 248 - two actor positions interpolate independently while the follower catches up
+  ---
+  duration_ms: 12.367305
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, cutscenes, guests and counters lock both interpolated positions
+ok 249 - pause, hitstop, cutscenes, guests and counters lock both interpolated positions
+  ---
+  duration_ms: 9.967912
+  type: 'test'
+  ...
+# Subtest: new rounds and mirrored facing never inherit another round position
+ok 250 - new rounds and mirrored facing never inherit another round position
+  ---
+  duration_ms: 8.527026
+  type: 'test'
+  ...
+# Subtest: drawing never changes combat, follower or hazard data in either direction
+ok 251 - drawing never changes combat, follower or hazard data in either direction
+  ---
+  duration_ms: 24.355256
+  type: 'test'
+  ...
+# Subtest: swipe matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 252 - swipe matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 2924.734698
+  type: 'test'
+  ...
+# Subtest: seeds matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 253 - seeds matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 3470.176531
+  type: 'test'
+  ...
+# Subtest: vines matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 254 - vines matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 2515.628856
+  type: 'test'
+  ...
+# Subtest: hitstun freezes the bear attack but follower, shots and vines continue
+ok 255 - hitstun freezes the bear attack but follower, shots and vines continue
+  ---
+  duration_ms: 13.485055
+  type: 'test'
+  ...
+# Subtest: the actual swipe hit and all three projectile spawns show contact and emission
+ok 256 - the actual swipe hit and all three projectile spawns show contact and emission
+  ---
+  duration_ms: 28.836971
+  type: 'test'
+  ...
+# Subtest: ground-vine damage and separate co-op hit flags preserve both heroes
+ok 257 - ground-vine damage and separate co-op hit flags preserve both heroes
+  ---
+  duration_ms: 12.602956
+  type: 'test'
+  ...
+# Subtest: jump clearance, hero heights and facing preserve original projectile collision
+ok 258 - jump clearance, hero heights and facing preserve original projectile collision
+  ---
+  duration_ms: 461.415992
+  type: 'test'
+  ...
+# Subtest: defeat draws the complete original bear and scientist in either direction
+ok 259 - defeat draws the complete original bear and scientist in either direction
+  ---
+  duration_ms: 53.809912
+  type: 'test'
+  ...
+# Subtest: production entries match and contain no review controls or story restriction
+ok 260 - production entries match and contain no review controls or story restriction
+  ---
+  duration_ms: 2.731204
+  type: 'test'
+  ...
+# Subtest: move-preview controls initialize real attack origins before advancing the fight
+ok 261 - move-preview controls initialize real attack origins before advancing the fight
+  ---
+  duration_ms: 59.961526
+  type: 'test'
+  ...
+# Subtest: immutable texture preparation completes before both actors use the new renderer
+ok 262 - immutable texture preparation completes before both actors use the new renderer
+  ---
+  duration_ms: 11.19012
+  type: 'test'
+  ...
+# Subtest: browsers unable to create immutable textures still draw both prepared actors
+ok 263 - browsers unable to create immutable textures still draw both prepared actors
+  ---
+  duration_ms: 14.246593
+  type: 'test'
+  ...
+# Subtest: walk uses eight poses by distance and remains still when the fighter stops
+ok 264 - walk uses eight poses by distance and remains still when the fighter stops
+  ---
+  duration_ms: 2.374016
+  type: 'test'
+  ...
+# Subtest: mallet contact pose starts exactly at the original damaging timer
+ok 265 - mallet contact pose starts exactly at the original damaging timer
+  ---
+  duration_ms: 0.259616
+  type: 'test'
+  ...
+# Subtest: throw release drawings follow the real two- and three-shot cadence
+ok 266 - throw release drawings follow the real two- and three-shot cadence
+  ---
+  duration_ms: 0.226604
+  type: 'test'
+  ...
+# Subtest: acid stream starts with the existing pool spawn and stops before return to guard
+ok 267 - acid stream starts with the existing pool spawn and stops before return to guard
+  ---
+  duration_ms: 0.358805
+  type: 'test'
+  ...
+# Subtest: hit recovery cannot conceal an active resumed attack
+ok 268 - hit recovery cannot conceal an active resumed attack
+  ---
+  duration_ms: 0.768786
+  type: 'test'
+  ...
+# Subtest: guard and counterattack have explicit body poses while defeat retains original collapse
+ok 269 - guard and counterattack have explicit body poses while defeat retains original collapse
+  ---
+  duration_ms: 0.207505
+  type: 'test'
+  ...
+# Subtest: all new drawings register within the real transparent PNG bounds
+ok 270 - all new drawings register within the real transparent PNG bounds
+  ---
+  duration_ms: 14.622217
+  type: 'test'
+  ...
+# Subtest: missing attack sheet uses the original full renderer, without partial figures
+ok 271 - missing attack sheet uses the original full renderer, without partial figures
+  ---
+  duration_ms: 4.951856
+  type: 'test'
+  ...
+# Subtest: original comparison skips every new image and retains the original renderer
+ok 272 - original comparison skips every new image and retains the original renderer
+  ---
+  duration_ms: 2.950084
+  type: 'test'
+  ...
+# Subtest: new renderer is restricted to Wastelander
+ok 273 - new renderer is restricted to Wastelander
+  ---
+  duration_ms: 6.59259
+  type: 'test'
+  ...
+# Subtest: presentation never mutates authoritative coordinates, including reversed facing
+ok 274 - presentation never mutates authoritative coordinates, including reversed facing
+  ---
+  duration_ms: 17.893746
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, attacks and network guests bypass the extra interpolation
+ok 275 - pause, hitstop, attacks and network guests bypass the extra interpolation
+  ---
+  duration_ms: 21.587195
+  type: 'test'
+  ...
+# Subtest: a fresh round never inherits the previous boss interpolation history
+ok 276 - a fresh round never inherits the previous boss interpolation history
+  ---
+  duration_ms: 9.714369
+  type: 'test'
+  ...
+# Subtest: mallet retains identical gameplay at every drawing rate
+ok 277 - mallet retains identical gameplay at every drawing rate
+  ---
+  duration_ms: 554.346837
+  type: 'test'
+  ...
+# Subtest: trash retains identical gameplay at every drawing rate
+ok 278 - trash retains identical gameplay at every drawing rate
+  ---
+  duration_ms: 382.634803
+  type: 'test'
+  ...
+# Subtest: acid retains identical gameplay at every drawing rate
+ok 279 - acid retains identical gameplay at every drawing rate
+  ---
+  duration_ms: 626.302487
+  type: 'test'
+  ...
+# Subtest: paused hitstun never advances a windup or releases a delayed mallet
+ok 280 - paused hitstun never advances a windup or releases a delayed mallet
+  ---
+  duration_ms: 5.522109
+  type: 'test'
+  ...
+# Subtest: both game entry points load the same complete Wastelander assets
+ok 281 - both game entry points load the same complete Wastelander assets
+  ---
+  duration_ms: 2.985036
+  type: 'test'
+  ...
+1..281
+# tests 281
+# suites 0
+# pass 281
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 76939.62721

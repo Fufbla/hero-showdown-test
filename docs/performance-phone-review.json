@@ -1,0 +1,19 @@
+{
+  "method": "Desktop browser iframe sized to phone CSS viewports with touch controls enabled; no physical touchscreen or controller connected",
+  "portrait": {
+    "width": 390,
+    "height": 844,
+    "controlsWithinViewport": true,
+    "smallestActionButtonPx": 55,
+    "jumpAndPauseClicked": true
+  },
+  "landscape": {
+    "width": 844,
+    "height": 390,
+    "controlsWithinViewport": true,
+    "smallestActionButtonPx": 52,
+    "resumeClicked": true,
+    "controlRegressionChecksPassed": 14
+  },
+  "productionConsoleErrors": []
+}

@@ -49,7 +49,7 @@ export class MenuGamepad {
     }
     if(edges.includes(9)&&this.editor?.current){this.finishAdjustment(true);this.editor.close(false);this.consumePause=true;return;}
     if(edges.includes(4)||edges.includes(5)){
-      const allTabs=items.filter(el=>el.matches('[role="tab"],[data-tab],[data-panel],.eris-nav [data-eris],.wardrobe-tabs [data-wardrobe],[data-clothing-section],.hair-categories button'));
+      const allTabs=items.filter(el=>el.matches('[role="tab"],[data-tab],[data-panel],.eris-nav [data-eris],.wardrobe-tabs [data-wardrobe],.hair-categories button'));
       const group=allTabs.find(el=>el.parentElement?.contains(focused))?.parentElement||allTabs[0]?.parentElement;
       const tabs=allTabs.filter(el=>el.parentElement===group);
       if(tabs.length){let i=tabs.indexOf(focused);if(i<0)i=tabs.findIndex(el=>el.getAttribute('aria-selected')==='true'||el.getAttribute('aria-pressed')==='true');const target=tabs[(i+tabs.length+(edges.includes(5)?1:-1))%tabs.length];this.focus(target);target.click();}return;
@@ -62,7 +62,6 @@ export class MenuGamepad {
     this.next=now+(direction===this.direction?160:380);this.direction=direction;
     if(this.adjusting&&(direction==='left'||direction==='right')){this.adjust(focused,direction==='right'?1:-1);return;}
     this.finishAdjustment(true);
-    if(['up','down'].includes(direction)&&scope.querySelector?.('.clothing-menu:not([hidden])')){const index=items.indexOf(focused);this.focus(items[(index+items.length+(direction==='down'?1:-1))%items.length]);return;}
     const next=spatialTarget(focused,items,direction);if(next)this.focus(next);
   }
 }

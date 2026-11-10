@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-26",
+  "character": "Air Pollution Monster",
+  "method": "Built-in image_gen followed by one spacing-only revision",
+  "reference": {
+    "file": "assets/images/art-03.webp",
+    "selected_subject": "bottom-right smoke monster only",
+    "sha256": "854df71b051d5674a10dd723963a7be499d717feb11ca7481ff23854b65b3d17",
+    "unchanged": true
+  },
+  "output": {
+    "file": "assets/animation/air-pollution-poses.png",
+    "source_generation_file": "exec-bdcab379-a2fa-4ef0-b49f-5fa43e8fdd33.png",
+    "sha256": "6c9f49363fa32e9654001faf86090952830e27a0375ec57bb4e02e58909aa9a9",
+    "size": [
+      1254,
+      1254
+    ],
+    "bytes": 1926817,
+    "complete_body_drawings": 16,
+    "source_png_preserved_byte_for_byte": true
+  },
+  "registration": "Full smoke-body crops and hover anchors in air-pollution-atlas.js. Cloud inhale/channel/release mouth coordinates align to the original bossAnchors mouth origin in both directions. No image pixels altered; runtime prepares canvas/ImageBitmap crops.",
+  "pose_order": [
+    "hover",
+    "inhale",
+    "exhale",
+    "glide anticipation",
+    "glide compression",
+    "glide extension",
+    "glide settle",
+    "punch windup",
+    "punch contact",
+    "recovery",
+    "cloud charge",
+    "cloud cast",
+    "storm gather",
+    "storm impact",
+    "light hit",
+    "heavy hit"
+  ],
+  "preserved_native_paths": [
+    "original updateStep opponent-zero controller",
+    "hitHero and hitBoss combat logic",
+    "bossAnchors",
+    "bossMotion",
+    "smokeStrand",
+    "smokyFist",
+    "ground cloud hazards",
+    "smoke counter",
+    "original fading defeat",
+    "portraits",
+    "Story Mode",
+    "network synchronization"
+  ],
+  "prompts": "air-pollution-image-prompts.json",
+  "baseline_commit": "152786c345c6f3e1b3ea3ff32301b1568eec760e"
+}

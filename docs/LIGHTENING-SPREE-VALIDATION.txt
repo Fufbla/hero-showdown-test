@@ -1,0 +1,50 @@
+LIGHTENING SPREE — VALIDATION
+October 26, 2026
+
+225 automated checks passed, with zero failures or skips: 29 Lightening
+Spree checks plus the 196 earlier animation and story checks. Full results
+are in lightening-spree-combined-validation.tap.
+
+The original and updated simulations were compared on every rendered frame
+for beam and spark, all three phases, difficulty paces 1 / 1.3 / 1.65,
+and 30 / 60 / 120 / 144 Hz rendering around the 120 Hz simulation. Each
+scenario runs for twelve seconds, including subsequent vanish cycles.
+Boss state, hero health, beams, rings, sounds and effects match exactly.
+
+Specific checks cover:
+- All sixteen transparent whole-body crops and ground anchors.
+- Planted idle, solid arrival, charge, ready, release and recovery poses.
+- No visible body throughout the full two-second invisible interval.
+- Exact release-hand alignment to both original beam origins, both facings.
+- Light/heavy reactions recorded privately only after actual damage.
+- Original generic counter and shatter rendering paths.
+- Missing-art and invalid-registration fallback; canvas/bitmap compatibility.
+- Rendering leaves authoritative combat data unchanged.
+- Beam release at .10 seconds, original width and damage.
+- Five spark rays and phase-three second volley at .43 seconds.
+- Beams continue ageing and damaging while an attack is interrupted.
+- Directional block reduction, invulnerability and slab collision misses.
+- Independent co-op hit flags and damage.
+- New-round reaction reset, direct move previews, mirrored aim/destination.
+- Optional release hold fires first, then freezes, and can be cleared.
+
+Static checks parsed 189 script occurrences and 52 distinct external scripts.
+Production index.html and hero-showdown.html are identical. Their only
+change from Atomdust commit c095ad751d633b606d6a287fccf7b72f2da13e30 is
+three Lightening Spree script references. All 56 cumulative package files
+differ from observed main tree 41cbc7ebe38b676b61a454fc1f3f1ccf7f63bd28.
+
+No original image, spreeOrigin, spreeVanish, spreeAttack, spreeFire,
+updateSpree, drawSpree, drawSpreeEffects, damage logic, Story Mode or
+network synchronization source was edited. The visual adapter replaces
+sprite drawing and observes successful hits using a private WeakMap.
+Optional review controls never load in the production entry points.
+
+Browser observations are recorded in lightening-spree-browser-review.txt.
+Remote-browser frame rates vary; these checks do not certify 60 FPS on
+physical devices. The full Story campaign, a networked two-device session,
+and mobile/controller hardware were not retested.
+
+Source artwork, generation method, registration and prompts are recorded
+in lightening-spree-art-provenance.json and lightening-spree-image-prompts.json.
+No remote source push, game upload, deployment or publication was performed.

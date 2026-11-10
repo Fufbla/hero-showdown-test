@@ -1,0 +1,16 @@
+✔ all scenery themes animate deterministically without mutating world data (6.608882ms)
+✔ warm scenery renders allocate no canvases and scene cache stays bounded while traveling (19.785972ms)
+✔ all portal themes and legendary skies animate with frozen inputs (4.486372ms)
+✔ cached horizon ridges join continuously across the repeat boundary (0.301155ms)
+✔ torso length and posed shoulders cannot inflate armor width (1.433497ms)
+✔ pauldron rotation follows its own upper arm, with no hero mutation (0.239001ms)
+✔ all 81 helmet designs use face-sized registration; open crowns keep hair (1.091561ms)
+✔ visual update preserves all source artwork, account/save/combat/inventory and multiplayer runtime files against its actual starting release (26.906362ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 139.075017

@@ -1,0 +1,178 @@
+TAP version 13
+# Subtest: each actor walks through eight distance-driven drawings and settles to its own idle
+ok 1 - each actor walks through eight distance-driven drawings and settles to its own idle
+  ---
+  duration_ms: 2.629624
+  type: 'test'
+  ...
+# Subtest: the claw contacts only at the original timer threshold
+ok 2 - the claw contacts only at the original timer threshold
+  ---
+  duration_ms: 0.832442
+  type: 'test'
+  ...
+# Subtest: flytrap releases follow the three actual volleys with recovery between them
+ok 3 - flytrap releases follow the three actual volleys with recovery between them
+  ---
+  duration_ms: 0.42815
+  type: 'test'
+  ...
+# Subtest: ground vines use their live age after an interrupted attack
+ok 4 - ground vines use their live age after an interrupted attack
+  ---
+  duration_ms: 0.523338
+  type: 'test'
+  ...
+# Subtest: Venomis keeps walking through commands and the bear reaction, then gestures when stationary
+ok 5 - Venomis keeps walking through commands and the bear reaction, then gestures when stationary
+  ---
+  duration_ms: 0.295476
+  type: 'test'
+  ...
+# Subtest: light and heavy reactions are distinct and give way immediately when hitstun ends
+ok 6 - light and heavy reactions are distinct and give way immediately when hitstun ends
+  ---
+  duration_ms: 0.417942
+  type: 'test'
+  ...
+# Subtest: counter overrides stale walking and both actors retain original defeat sequences
+ok 7 - counter overrides stale walking and both actors retain original defeat sequences
+  ---
+  duration_ms: 2.144412
+  type: 'test'
+  ...
+# Subtest: interpolation handles stride wrap without blending turns, teleports or state changes
+ok 8 - interpolation handles stride wrap without blending turns, teleports or state changes
+  ---
+  duration_ms: 0.598178
+  type: 'test'
+  ...
+# Subtest: all four transparent atlases register 48 complete crops and anchors
+ok 9 - all four transparent atlases register 48 complete crops and anchors
+  ---
+  duration_ms: 59.326438
+  type: 'test'
+  ...
+# Subtest: any missing atlas or invalid crop falls back to both original actors
+ok 10 - any missing atlas or invalid crop falls back to both original actors
+  ---
+  duration_ms: 93.500892
+  type: 'test'
+  ...
+# Subtest: Original comparison loads no additional textures
+ok 11 - Original comparison loads no additional textures
+  ---
+  duration_ms: 3.972491
+  type: 'test'
+  ...
+# Subtest: other villains and unrelated sprite sheets retain their original renderer
+ok 12 - other villains and unrelated sprite sheets retain their original renderer
+  ---
+  duration_ms: 9.58484
+  type: 'test'
+  ...
+# Subtest: two actor positions interpolate independently while the follower catches up
+ok 13 - two actor positions interpolate independently while the follower catches up
+  ---
+  duration_ms: 14.090716
+  type: 'test'
+  ...
+# Subtest: pause, hitstop, cutscenes, guests and counters lock both interpolated positions
+ok 14 - pause, hitstop, cutscenes, guests and counters lock both interpolated positions
+  ---
+  duration_ms: 16.073586
+  type: 'test'
+  ...
+# Subtest: new rounds and mirrored facing never inherit another round position
+ok 15 - new rounds and mirrored facing never inherit another round position
+  ---
+  duration_ms: 16.148974
+  type: 'test'
+  ...
+# Subtest: drawing never changes combat, follower or hazard data in either direction
+ok 16 - drawing never changes combat, follower or hazard data in either direction
+  ---
+  duration_ms: 37.162001
+  type: 'test'
+  ...
+# Subtest: swipe matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 17 - swipe matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 1917.641159
+  type: 'test'
+  ...
+# Subtest: seeds matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 18 - seeds matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 1722.90725
+  type: 'test'
+  ...
+# Subtest: vines matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+ok 19 - vines matches original simulation at 30/60/120/144 Hz, every phase and difficulty pace
+  ---
+  duration_ms: 2791.622147
+  type: 'test'
+  ...
+# Subtest: hitstun freezes the bear attack but follower, shots and vines continue
+ok 20 - hitstun freezes the bear attack but follower, shots and vines continue
+  ---
+  duration_ms: 12.62282
+  type: 'test'
+  ...
+# Subtest: the actual swipe hit and all three projectile spawns show contact and emission
+ok 21 - the actual swipe hit and all three projectile spawns show contact and emission
+  ---
+  duration_ms: 12.515201
+  type: 'test'
+  ...
+# Subtest: ground-vine damage and separate co-op hit flags preserve both heroes
+ok 22 - ground-vine damage and separate co-op hit flags preserve both heroes
+  ---
+  duration_ms: 26.163646
+  type: 'test'
+  ...
+# Subtest: jump clearance, hero heights and facing preserve original projectile collision
+ok 23 - jump clearance, hero heights and facing preserve original projectile collision
+  ---
+  duration_ms: 394.258883
+  type: 'test'
+  ...
+# Subtest: defeat draws the complete original bear and scientist in either direction
+ok 24 - defeat draws the complete original bear and scientist in either direction
+  ---
+  duration_ms: 15.918666
+  type: 'test'
+  ...
+# Subtest: production entries match and contain no review controls or story restriction
+ok 25 - production entries match and contain no review controls or story restriction
+  ---
+  duration_ms: 5.982494
+  type: 'test'
+  ...
+# Subtest: move-preview controls initialize real attack origins before advancing the fight
+ok 26 - move-preview controls initialize real attack origins before advancing the fight
+  ---
+  duration_ms: 81.572689
+  type: 'test'
+  ...
+# Subtest: immutable texture preparation completes before both actors use the new renderer
+ok 27 - immutable texture preparation completes before both actors use the new renderer
+  ---
+  duration_ms: 19.605356
+  type: 'test'
+  ...
+# Subtest: browsers unable to create immutable textures still draw both prepared actors
+ok 28 - browsers unable to create immutable textures still draw both prepared actors
+  ---
+  duration_ms: 12.163214
+  type: 'test'
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7490.245594

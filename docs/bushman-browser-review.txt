@@ -1,0 +1,22 @@
+BUSHMAN — BROWSER REVIEW
+October 26, 2026; managed local preview, Chrome.
+
+Observed with Summy, Sadie and Vee:
+- Walking body poses, including opposite-leg source drawings, remain
+  grounded and fully visible in both directions.
+- Summy: held punch makes contact at torso height.
+- Sadie: mirrored held kick extends into the opponent at waist height.
+- Vee: held fireball starts at the extended hand; release body is clear.
+- Mirrored crossed-arm blast: original fire cone, crossed forearms and
+  braced body remain visible; the charge meter returns to zero at release.
+- Mirrored burning-ground cast follows its target and leaves the original
+  fire zone under Vee. Original fire effects continue during body recovery.
+- Pause and Resume Fight controls remain usable.
+- Normal Fight Bushman uses normal health and damage, completing a
+  21-second loss against an idle Vee rather than retaining practice protection.
+- Defeat preview reaches the original victory result with the kneeling/fading
+  Bushman path, the correct wildfire text, and normal rematch/menu controls.
+- Browser console reports no game errors or warnings.
+
+The review is visual and functional; automated comparisons cover precise
+timing, collision, hazard durations, charge accounting and state preservation.

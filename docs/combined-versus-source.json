@@ -1,0 +1,91 @@
+{
+  "animation_performance_base": "2d8c8dd",
+  "competitive_source_commit": "faf12a4bf76b6c32b83c63c27e7fb49884720b9b",
+  "files": [
+    {
+      "source": "assets/competitive/animation-adapter.js",
+      "local": "dist/assets/competitive/animation-adapter.js",
+      "blob_sha": "60f89a0cf4f774ac2e1489d02281cfa14ef2b2c8"
+    },
+    {
+      "source": "assets/competitive/combat.js",
+      "local": "dist/assets/competitive/combat.js",
+      "blob_sha": "0b835eb9f8a951e385afbe004a9726844b548778"
+    },
+    {
+      "source": "assets/competitive/cpu.js",
+      "local": "dist/assets/competitive/cpu.js",
+      "blob_sha": "14a825ff4ae7b227fdc2eddf5ad5eac1e8941461"
+    },
+    {
+      "source": "assets/competitive/move-guide.js",
+      "local": "dist/assets/competitive/move-guide.js",
+      "blob_sha": "f7b34536a9a93318843892e2befb517afa74f573"
+    },
+    {
+      "source": "assets/competitive/roster.js",
+      "local": "dist/assets/competitive/roster.js",
+      "blob_sha": "317711c68009d10831386069c5bba635cd2db8aa"
+    },
+    {
+      "source": "assets/competitive/versus.css",
+      "local": "dist/assets/competitive/versus.css",
+      "blob_sha": "f0f9766dfba30c6edc4c35037b9d04b514fdbb0f"
+    },
+    {
+      "source": "assets/competitive/versus.js",
+      "local": "dist/assets/competitive/versus.js",
+      "blob_sha": "00dd8fe3741836cf9c8d72bd05793a6549bce3d9"
+    },
+    {
+      "source": "docs/playable-villains/AUDIT.md",
+      "local": "docs/playable-villains/AUDIT.md",
+      "blob_sha": "c2f5042b2bbf59fc2426d90d5188bc25f2e5c88d"
+    },
+    {
+      "source": "docs/playable-villains/BALANCE.md",
+      "local": "docs/playable-villains/BALANCE.md",
+      "blob_sha": "d3138da266aa4c882924f4c7bf91736f400a3d85"
+    },
+    {
+      "source": "docs/playable-villains/QA.md",
+      "local": "docs/playable-villains/QA.md",
+      "blob_sha": "1c4bd9816c61585845cf3588c42b51865e6ab680"
+    },
+    {
+      "source": "docs/playable-villains/build.json",
+      "local": "docs/playable-villains/build.json",
+      "blob_sha": "ae1d2b576a0265096f07bf2cb16cfd5b8f8768c7"
+    },
+    {
+      "source": "tests/competitive.test.cjs",
+      "local": "tests/competitive.test.cjs",
+      "blob_sha": "5d6673b2c5c9416d0c9a2190bb8d3ec595d38920"
+    },
+    {
+      "source": "tests/competitive.browser.cjs",
+      "local": "tests/competitive.browser.cjs",
+      "blob_sha": "d376eab043430a2d2f1f1a2c7bfed57bf081f228"
+    },
+    {
+      "source": "tools/build-playable-villains.py",
+      "local": "tools/build-playable-villains.py",
+      "blob_sha": "62054fec76f8e166de0e88e013f028bbd3b383fe"
+    },
+    {
+      "source": "tools/serve-playable-villains.py",
+      "local": "tools/serve-playable-villains.py",
+      "blob_sha": "69267bb0c1ebec5a0e25dd5cfb643a722d396d2d"
+    },
+    {
+      "source": "START-PLAYABLE-VILLAINS.bat",
+      "local": "START-PLAYABLE-VILLAINS.bat",
+      "blob_sha": "a662998fb0d81427c7ed113bcfda9dc325dd7733"
+    },
+    {
+      "source": "START-PLAYABLE-VILLAINS.command",
+      "local": "START-PLAYABLE-VILLAINS.command",
+      "blob_sha": "f45929401250889b18e9208380dfd86f9327cf70"
+    }
+  ]
+}

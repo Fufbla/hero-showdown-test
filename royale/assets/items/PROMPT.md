@@ -1,0 +1,2 @@
+# Equipment art
+Built-in image generation. Original transparent 2×2 atlas: helmet, chest armor, boots, Health Root. Neutral metal and cloth, bold comic ink, cel shading, seams, scuffs and silver highlights; natural brown root and green leaves. No lettering, backgrounds or external glow. Follow-up edit removed the human face from the helmet and retained an empty transparent opening. Runtime shading applies exact catalog base/accent colors and existing rarity glows. Source atlas is 1280×1280, four 640×640 cells; no monster or boss artwork was edited.
