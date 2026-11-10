@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/explorer/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        10,
+        1422,
+        208,
+        124
+      ],
+      "pivot": [
+        104.0,
+        111.60000000000001
+      ],
+      "attach": "head",
+      "scale": 0.23076923076923078,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        237,
+        1426,
+        193,
+        117
+      ],
+      "pivot": [
+        96.5,
+        105.3
+      ],
+      "attach": "head",
+      "scale": 0.24870466321243523,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        446,
+        1422,
+        207,
+        122
+      ],
+      "pivot": [
+        103.5,
+        109.8
+      ],
+      "attach": "head",
+      "scale": 0.2318840579710145,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        676,
+        1426,
+        198,
+        119
+      ],
+      "pivot": [
+        99.0,
+        107.10000000000001
+      ],
+      "attach": "head",
+      "scale": 0.24242424242424243,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

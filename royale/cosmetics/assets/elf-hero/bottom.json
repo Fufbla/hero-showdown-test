@@ -1,0 +1,246 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/elf-hero/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "thighFar",
+      "rect": [
+        36,
+        757,
+        86,
+        209
+      ],
+      "pivot": [
+        43.0,
+        8.36
+      ],
+      "attach": "hipFar",
+      "scale": 0.18604651162790697,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleFar",
+        "pivot": [
+          43.0,
+          198.54999999999998
+        ]
+      },
+      "joint": {
+        "attach": "kneeFar",
+        "fraction": 0.51
+      },
+      "pass": "farLeg"
+    },
+    {
+      "view": "front",
+      "part": "thighNear",
+      "rect": [
+        122,
+        757,
+        86,
+        209
+      ],
+      "pivot": [
+        43.0,
+        8.36
+      ],
+      "attach": "hipNear",
+      "scale": 0.18604651162790697,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleNear",
+        "pivot": [
+          43.0,
+          198.54999999999998
+        ]
+      },
+      "joint": {
+        "attach": "kneeNear",
+        "fraction": 0.51
+      },
+      "pass": "nearLeg"
+    },
+    {
+      "view": "right",
+      "part": "thighFar",
+      "rect": [
+        276,
+        752,
+        107,
+        217
+      ],
+      "pivot": [
+        53.5,
+        8.68
+      ],
+      "attach": "hipFar",
+      "scale": 0.1308411214953271,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleFar",
+        "pivot": [
+          53.5,
+          206.14999999999998
+        ]
+      },
+      "joint": {
+        "attach": "kneeFar",
+        "fraction": 0.51
+      },
+      "pass": "farLeg"
+    },
+    {
+      "view": "right",
+      "part": "thighNear",
+      "rect": [
+        276,
+        752,
+        107,
+        217
+      ],
+      "pivot": [
+        53.5,
+        8.68
+      ],
+      "attach": "hipNear",
+      "scale": 0.1308411214953271,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleNear",
+        "pivot": [
+          53.5,
+          206.14999999999998
+        ]
+      },
+      "joint": {
+        "attach": "kneeNear",
+        "fraction": 0.51
+      },
+      "pass": "nearLeg"
+    },
+    {
+      "view": "back",
+      "part": "thighFar",
+      "rect": [
+        558,
+        756,
+        87,
+        213
+      ],
+      "pivot": [
+        43.5,
+        8.52
+      ],
+      "attach": "hipFar",
+      "scale": 0.1839080459770115,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleFar",
+        "pivot": [
+          43.5,
+          202.35
+        ]
+      },
+      "joint": {
+        "attach": "kneeFar",
+        "fraction": 0.51
+      },
+      "pass": "farLeg"
+    },
+    {
+      "view": "back",
+      "part": "thighNear",
+      "rect": [
+        470,
+        756,
+        88,
+        213
+      ],
+      "pivot": [
+        44.0,
+        8.52
+      ],
+      "attach": "hipNear",
+      "scale": 0.18181818181818182,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleNear",
+        "pivot": [
+          44.0,
+          202.35
+        ]
+      },
+      "joint": {
+        "attach": "kneeNear",
+        "fraction": 0.51
+      },
+      "pass": "nearLeg"
+    },
+    {
+      "view": "left",
+      "part": "thighFar",
+      "rect": [
+        732,
+        751,
+        105,
+        217
+      ],
+      "pivot": [
+        52.5,
+        8.68
+      ],
+      "attach": "hipFar",
+      "scale": 0.13333333333333333,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleFar",
+        "pivot": [
+          52.5,
+          206.14999999999998
+        ]
+      },
+      "joint": {
+        "attach": "kneeFar",
+        "fraction": 0.51
+      },
+      "pass": "farLeg"
+    },
+    {
+      "view": "left",
+      "part": "thighNear",
+      "rect": [
+        732,
+        751,
+        105,
+        217
+      ],
+      "pivot": [
+        52.5,
+        8.68
+      ],
+      "attach": "hipNear",
+      "scale": 0.13333333333333333,
+      "fixedWidth": true,
+      "end": {
+        "attach": "ankleNear",
+        "pivot": [
+          52.5,
+          206.14999999999998
+        ]
+      },
+      "joint": {
+        "attach": "kneeNear",
+        "fraction": 0.51
+      },
+      "pass": "nearLeg"
+    }
+  ],
+  "covers": [
+    "legs"
+  ]
+}

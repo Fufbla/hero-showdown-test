@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/santa-hero/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        30,
+        1640,
+        162,
+        66
+      ],
+      "pivot": [
+        81.0,
+        33.0
+      ],
+      "attach": "waist",
+      "scale": 0.10606060606060608,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        251,
+        1639,
+        153,
+        67
+      ],
+      "pivot": [
+        76.5,
+        33.5
+      ],
+      "attach": "waist",
+      "scale": 0.1044776119402985,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        467,
+        1642,
+        164,
+        61
+      ],
+      "pivot": [
+        82.0,
+        30.5
+      ],
+      "attach": "waist",
+      "scale": 0.11475409836065574,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        698,
+        1639,
+        158,
+        67
+      ],
+      "pivot": [
+        79.0,
+        33.5
+      ],
+      "attach": "waist",
+      "scale": 0.1044776119402985,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

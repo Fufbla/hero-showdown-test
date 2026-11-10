@@ -1,4 +1,5 @@
 import {matchingFlightBonus,refreshFlightEffect} from './flight-armor.mjs';
+import {cosmeticAppearance} from './cosmetics/state.mjs';
 import {matchingAgilityBonus,refreshAgilityEffect} from './agility-armor.mjs';
 import {matchingSpeedBonus} from './speed-armor.mjs';
 import {matchingSuperKickBonus,refreshSuperKickEffect} from './super-kick-armor.mjs';
@@ -68,7 +69,7 @@ export const journeyMethods={
       this.hero.attack.stats=this.powers.stats('strength');
     }
   },
-  visualOutfit(){const e=this.inventory.equipped;if(this._outfitInventory!==this.inventory||this._outfitHelmet!==e.helmet||this._outfitChest!==e.chest||this._outfitBoots!==e.boots||this._outfitBase!==this.outfit){this._outfitInventory=this.inventory;this._outfitHelmet=e.helmet;this._outfitChest=e.chest;this._outfitBoots=e.boots;this._outfitBase=this.outfit;this._visualOutfit=equipmentOutfit(this.inventory,this.outfit);}return this._visualOutfit;},
+  visualOutfit(){const e=this.inventory.equipped;if(this._outfitInventory!==this.inventory||this._outfitHelmet!==e.helmet||this._outfitChest!==e.chest||this._outfitBoots!==e.boots||this._outfitBase!==this.outfit||this._outfitCosmetics!==this.cosmetics){this._outfitInventory=this.inventory;this._outfitHelmet=e.helmet;this._outfitChest=e.chest;this._outfitBoots=e.boots;this._outfitBase=this.outfit;this._outfitCosmetics=this.cosmetics;this._visualOutfit={...equipmentOutfit(this.inventory,this.outfit),cosmetics:cosmeticAppearance(this.cosmetics)};}return this._visualOutfit;},
   canSave(){return !this.hero.dead&&!this.inCombat();},
   canTravel(){return !this.treeVisit&&this.canSave()&&!this.bossEncounter&&this.inventory.pending.length===0&&!this.pendingMergeReward();},
   visitTree(){if(!this.canTravel())return false;this.treeVisit=true;return true;},

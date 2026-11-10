@@ -1,0 +1,14 @@
+Use case: stylized-concept. Create a production modular 2D game clothing sprite atlas for the NINJA WARRIOR SET, the SECOND outfit in the TOP ROW of reference image 1. Reference image 1 controls the exact costume: purple headband with small pale diamond symbol; black fitted wrap tunic with purple diagonal lapels and gold shoulder caps; purple waist sash with gold knot and dangling ends; black loose trouser legs with purple panel accents; black and purple chunky armored boots; separate dark-purple lower-face scarf. Keep the glossy hand-painted outlined cartoon finish, palette, seams, trims and shapes of that reference. Image 2 is only a style example of detached garment components, not its kimono design.
+
+The output is a transparent sprite atlas, NOT a poster or a dressed character. Make a strict 4-column by 8-row grid, 1024 px wide by 2048 px tall, each cell 256x256. No grid lines, labels, text, glow, shadows, floor, scenery, skin, faces, bodies or hair. Fully transparent background and transparent space between every component. Each cell must contain exactly its own single detached component, entirely inside the cell with at least 16 pixels of transparent padding. Each row has four independently drawn views in this exact order: FRONT, true RIGHT-facing profile, BACK, true LEFT-facing profile. Front/back are straight-on; never use a three-quarter view. Side views must face opposite directions with correct lighting, do not simply mirror.
+
+Row 1: sleeveless tunic torso including the exact purple waist sash and gold knot, from collar to hips.
+Row 2: complete near-arm sleeve with shoulder cap, from shoulder to wrist; relaxed straight downward, no hand.
+Row 3: complete far-arm sleeve from shoulder to wrist; relaxed straight downward, no hand.
+Row 4: complete lower garment from waist to ankles: two loose trouser legs with transparent gap between them; no boots.
+Row 5: ONE near-foot boot, ankle cuff to sole; no leg.
+Row 6: ONE far-foot boot, ankle cuff to sole; no leg.
+Row 7: purple forehead headband alone as a hollow wearable piece, no head or hair.
+Row 8: purple lower-face scarf alone as a hollow wearable piece, no head, skin or face.
+
+Fill useful area of each tile consistently. Torso height about 200 pixels, sleeves about 180, pants about 210, each boot about 160, headband about 100, scarf about 100. Preserve detached shapes so code can animate each component on a common chibi hero rig. Match the selected ninja clothing precisely; do not include swords or invented accessories.

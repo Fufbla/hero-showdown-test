@@ -1,3 +1,5 @@
+import {clothingCoverage,clothingHair,drawClothingPass} from './cosmetics/renderer.mjs';
+import {universalRenderLook} from './cosmetics/template.mjs';
 import {headwearFit} from './headwear-fit.mjs';
 import {sanitizeLook,costumePalette} from './appearance.mjs';
 import {STYLE_C_DEFAULTS} from './style-c-defaults.mjs';
@@ -43,8 +45,9 @@ function fitModel(l){
 }
 export const sourceArtStatus=()=>({...styleCBodyStatus(),source:'uploaded reference RGB',unitScale:UNIT});
 export function sourcePose(raw,h,time,options={}){
-  const look=sanitizeLook(raw);
-  return sampleStyleCMotion(fitModel(look),look,h,time,{...options,unit:UNIT});
+  const look=sanitizeLook(options.universalBody?universalRenderLook(raw):raw);
+  const bodyLook=options.universalBody?{...look,presentation:'male'}:look;
+  return sampleStyleCMotion(fitModel(bodyLook),bodyLook,h,time,{...options,unit:UNIT});
 }
 function materialPalette(look,pieces,outfit,steel){
   const p=costumePalette(look,outfit);
@@ -62,7 +65,7 @@ function worldPose(p,width,height,artSource) {
     return [dx*ca-dy*sa,dx*sa+dy*ca];
   };
   return {...p,artSource,arms:p.arms.map(chain=>chain.map(project)),legs:p.legs.map(chain=>chain.map(project)),
-    hip:project(p.hip),head:project(p.head),shoulder:project(p.shoulder)};
+    hip:project(p.hip),head:project(p.head),shoulder:project(p.shoulder),clothingRest:{hip:project(p.m.hip),legs:p.m.legs.map(chain=>chain.map(project))}};
 }
 function drawHairLayer(c,look,p,movement,time,layer,view) {
   const size=look.presentation==='male'?2.55:2.50;
@@ -72,14 +75,15 @@ function drawHairLayer(c,look,p,movement,time,layer,view) {
 }
 export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   if(!styleCBodyStatus().ready)return false;
-  const look=sanitizeLook(raw),original=models[look.presentation],base=STYLE_C_DEFAULTS[look.presentation];
+  const look=sanitizeLook(raw),bodyLook=options.universalBody?{...look,presentation:'male'}:look,original=models[bodyLook.presentation],headOriginal=models[look.presentation],base=STYLE_C_DEFAULTS[look.presentation];
+  const clothing=options.clothing||[],covered=clothingCoverage(clothing),hasClothing=covered.size>0;
   const pieces=options.outfit?.pieces||{}, palette=materialPalette(look,pieces,options.outfit,h.steel);
   const width=bodyWidths[look.build],height=look.height*(look.age==='teen'?.98:look.age==='older'?.99:1);
-  const p=sampleStyleCMotion(fitModel(look),look,h,time,{...options,unit:UNIT});
+  const p=sampleStyleCMotion(fitModel(bodyLook),bodyLook,h,time,{...options,unit:UNIT});
   const center=STYLE_C_FACE_ANCHORS[look.presentation].center;
-  p.faceCenter=[center[0]+p.head[0]-original.head[0],center[1]+p.head[1]-original.head[1]];
+  p.faceCenter=options.universalBody?[p.head[0]+14,p.head[1]+3]:[center[0]+p.head[0]-headOriginal.head[0],center[1]+p.head[1]-headOriginal.head[1]];
   // Forward face reshaping starts below the eyes; the scalp does not widen with the jaw.
-  p.faceWidth=look.presentation==='male'?90:94;
+  p.faceWidth=options.universalBody?90:look.presentation==='male'?90:94;
   const view=options.view||'game', facing=view==='game'?(h.attack?.face||h.face||1):1;
   c.save();c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';c.translate(x,y);c.scale(scale*facing,scale);
   if(!options.bake){
@@ -90,11 +94,12 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   const blink=p.clip==='idle'&&blinkClock>3.52&&blinkClock<3.70 ? Math.sin((blinkClock-3.52)/.18*Math.PI) : 0;
   const starter=(!options.outfit||options.outfit.origin==='starter')&&!Object.keys(pieces).length;
   const liveCape=look.cape&&view==='game'&&options.cloth&&!options.bake;
-  if(!liveCape&&view==='game'&&p.clip!=='idle'&&!options.bake&&!options.layered&&!blink&&scale<=1.35&&starter&&isDefaultLook(look)&&(!h.steel||p.clip==='steel')&&drawDefaultSprite(c,p,look)){
+  if(!options.universalBody&&!hasClothing&&!liveCape&&view==='game'&&p.clip!=='idle'&&!options.bake&&!options.layered&&!blink&&scale<=1.35&&starter&&isDefaultLook(look)&&(!h.steel||p.clip==='steel')&&drawDefaultSprite(c,p,look)){
     c.restore();return worldPose(p,width,height,'atlas');
   }
   c.rotate(p.rotation);c.scale(UNIT*width,UNIT*height);c.translate(-original.origin[0],-original.origin[1]);
-  look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
+  look.headwearCoverage=clothingHair(clothing)||headwearFit(covered.has('helmet')?null:pieces.helmet,view).hair;
+  if(look.headwearCoverage==='hidden')look.hair='none';
   const customHair=look.hair!==base.hair||look.headwearCoverage==='tucked';
   const differentJaw=look.jaw!==base.jaw||look.face!==base.face;
   const bareHead=customHair||differentJaw;
@@ -102,7 +107,7 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   const untouchedBody=look.build===base.build && ['waist','hips','chest','shoulders','torso','arms','legs','muscle'].every(k=>look[k]===base[k]);
   const referenceIdle=p.clip==='idle'&&untouchedBody&&!bareHead&&look.cape&&starter&&
     look.emblem===base.emblem&&palette.emblemColor===base.emblemColor&&!h.steel;
-  if(referenceIdle&&!liveCape){
+  if(!options.universalBody&&!hasClothing&&referenceIdle&&!liveCape){
     // Hold the original standing key, then breathe without reconstructing its
     // silhouette. Both the neutral source size and its opaque RGB are exact.
     const breath=p.phase<.13?0:Math.sin((p.phase-.13)/.87*Math.PI)**2;
@@ -116,27 +121,38 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   }
   const faceLook=h.steel?{...look,skin:'#a4b7ca'}:look;
   const motion=hairMotion(options.artState||options.cloth,h,time,look.hair,options.dt);
-  const wear=(part,item,side=0)=>drawStyleCEquipment(c,part,item,p,look,{view,side,steel:h.steel});
-  drawStyleCEquipmentAura(c,pieces,p,look,{view});
-  if(look.cape)withStyleCEquipmentGlow(c,pieces.cape,()=>drawStyleCCape(c,original,p,look,palette,time,liveCape?{owner:options.cloth,hero:h,dt:options.dt}:null));
+  const bodyFaceLook={...bodyLook,skin:faceLook.skin};
+  const hidden=part=>covered.has(part)||(covered.has('torso')&&['suit','chest','shoulder','emblem','belt'].includes(part));
+  const wear=(part,item,side=0)=>{if(!hidden(part))drawStyleCEquipment(c,part,item,p,bodyLook,{view,side,steel:h.steel});};
+  const visiblePieces=Object.fromEntries(Object.entries(pieces).filter(([part])=>!hidden(part)));
+  const paint=pass=>{if(!clothing.length)return;c.save();c.translate(...original.origin);c.scale(1/UNIT,1/UNIT);drawClothingPass(c,worldPose({...p,rotation:0},1,1,'layers'),view==='game'?'front':view,pass,clothing);c.restore();};
+  drawStyleCEquipmentAura(c,visiblePieces,p,bodyLook,{view});
+  paint('behindBody');
+  if(look.cape&&!covered.has('cape'))withStyleCEquipmentGlow(c,pieces.cape,()=>drawStyleCCape(c,original,p,look,palette,time,liveCape?{owner:options.cloth,hero:h,dt:options.dt}:null));
   if(customHair)drawHairLayer(c,look,p,motion,time,'rear',view);
   function limb(group,i){
-    drawStyleCMotionLimb(c,p,group,i,faceLook,palette,pieces);
-    if(group==='arms')wear('shoulder',pieces.chest||pieces.suit,i);
+    const arm=group==='arms',sleeves=arm&&covered.has('arms');
+    drawStyleCMotionLimb(c,p,group,i,bodyFaceLook,palette,visiblePieces,{upper:arm?(!sleeves||covered.has('bareUpperArms')):!covered.has('legs'),lower:arm?(!sleeves||covered.has('bareForearms')):(!covered.has('legs')||covered.has('bareShins')||covered.has('darkShins')),end:!(covered.has('feet')&&!arm),bare:arm?sleeves:covered.has('legs'),bareColor:!arm&&covered.has('darkShins')?'#182334':null,bareHand:arm&&covered.has('gloves')});
+    paint(arm?(i?'farArm':'nearArm'):(i?'farLeg':'nearLeg'));
+    if(arm)wear('shoulder',pieces.chest||pieces.suit,i);
     const part=group==='arms'?'gloves':'boots';
     if(pieces[part])wear(part,pieces[part],i);
   }
   limb('legs',1);limb('legs',0);
-  drawStyleCTorso(c,original,p,faceLook,palette,pieces.emblem?.part==='emblem');
+  if(covered.has('torso')){c.save();c.beginPath();c.rect(p.shoulder[0]-13,p.shoulder[1]-28,26,28);c.clip();drawStyleCTorso(c,original,p,bodyFaceLook,palette,true);c.restore();}
+  else drawStyleCTorso(c,original,p,bodyFaceLook,palette,pieces.emblem?.part==='emblem');
+  paint('torso');
   limb('arms',1);
   wear('suit',pieces.suit);wear('chest',pieces.chest);wear('belt',pieces.belt);
   if(look.cape)wear('cape',pieces.cape);
   wear('emblem',pieces.emblem);
   limb('arms',0);
+  paint('overBody');paint('behindHead');
   c.save();
+  if(options.universalBody&&look.presentation==='female'){c.translate(...p.faceCenter);c.scale(90/94,90/94);c.translate(-p.faceCenter[0],-p.faceCenter[1]);}
   if(p.headTilt){c.translate(...p.faceCenter);c.rotate(p.headTilt);c.translate(-p.faceCenter[0],-p.faceCenter[1]);}
   if(!bareHead && !h.steel && look.hairColor===base.hairColor && look.skin===base.skin){
-    drawRegisteredHead(c,original,p.head);
+    drawRegisteredHead(c,headOriginal,options.universalBody?[p.faceCenter[0]-(center[0]-headOriginal.head[0]),p.faceCenter[1]-(center[1]-headOriginal.head[1])]:p.head);
     if(faceEdited||blink)drawStyleCFace(c,look,{center:p.faceCenter,mode:'features',blink});
   }else{
     drawStyleCFace(c,faceLook,{center:p.faceCenter,mode:customHair?'head':'native-head',steel:h.steel,blink});
@@ -144,5 +160,6 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   if(customHair)drawHairLayer(c,look,p,motion,time,'front',view);
   c.restore();
   wear('mask',pieces.mask);wear('helmet',pieces.helmet);
+  paint('headwear');paint('accessory');
   c.restore();return worldPose(p,width,height,'layers');
 }

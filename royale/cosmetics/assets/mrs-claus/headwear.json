@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/mrs-claus/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        13,
+        1368,
+        200,
+        154
+      ],
+      "pivot": [
+        100.0,
+        138.6
+      ],
+      "attach": "head",
+      "scale": 0.195,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        236,
+        1367,
+        178,
+        171
+      ],
+      "pivot": [
+        89.0,
+        153.9
+      ],
+      "attach": "head",
+      "scale": 0.21910112359550563,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        453,
+        1367,
+        197,
+        170
+      ],
+      "pivot": [
+        98.5,
+        153.0
+      ],
+      "attach": "head",
+      "scale": 0.19796954314720813,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        683,
+        1367,
+        176,
+        171
+      ],
+      "pivot": [
+        88.0,
+        153.9
+      ],
+      "attach": "head",
+      "scale": 0.2215909090909091,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

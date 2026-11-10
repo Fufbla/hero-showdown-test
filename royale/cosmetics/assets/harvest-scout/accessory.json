@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/harvest-scout/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        43,
+        1571,
+        143,
+        174
+      ],
+      "pivot": [
+        71.5,
+        87.0
+      ],
+      "attach": "neck",
+      "scale": 0.15384615384615385,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        257,
+        1571,
+        146,
+        175
+      ],
+      "pivot": [
+        73.0,
+        87.5
+      ],
+      "attach": "neck",
+      "scale": 0.1506849315068493,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        478,
+        1572,
+        152,
+        77
+      ],
+      "pivot": [
+        76.0,
+        38.5
+      ],
+      "attach": "neck",
+      "scale": 0.14473684210526316,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        686,
+        1571,
+        153,
+        174
+      ],
+      "pivot": [
+        76.5,
+        87.0
+      ],
+      "attach": "neck",
+      "scale": 0.1437908496732026,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

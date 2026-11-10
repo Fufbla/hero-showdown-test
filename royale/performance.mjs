@@ -1,6 +1,0 @@
-export class FrameMetrics {
- constructor(start,{duration=30,heap=null}={}){this.start=start;this.duration=duration;this.heap=heap;this.frames=[];this.simulation=0;this.draw=0;this.hud=0;this.maxDraw=0;}
- record(now,{interval,simulation=0,draw=0,hud=0}){this.frames.push(interval);this.simulation+=simulation;this.draw+=draw;this.hud+=hud;this.maxDraw=Math.max(this.maxDraw,draw);return now-this.start>=this.duration*1000;}
- finish(now,extra={}){const sorted=[...this.frames].sort((a,b)=>a-b),n=sorted.length,seconds=(now-this.start)/1000,tail=sorted.slice(-Math.max(1,Math.ceil(n*.01)));return {seconds,frames:n,averageFPS:n/seconds,onePercentLowFPS:1000/(tail.reduce((a,b)=>a+b,0)/tail.length),p95FrameMs:sorted[Math.min(n-1,Math.floor(n*.95))],averageSimulationMs:this.simulation/n,averageDrawMs:this.draw/n,maxDrawMs:this.maxDraw,averageHudMs:this.hud/n,heapStartBytes:this.heap,...extra};}
-}
-export function performanceLabel(r){return `${r.seconds.toFixed(1)}s · ${r.averageFPS.toFixed(1)} rendered FPS · 1% low ${r.onePercentLowFPS.toFixed(1)} · p95 frame ${r.p95FrameMs.toFixed(1)}ms · sim ${r.averageSimulationMs.toFixed(2)}ms · draw ${r.averageDrawMs.toFixed(2)}ms (max ${r.maxDrawMs.toFixed(2)}) · HUD ${r.averageHudMs.toFixed(2)}ms · ${r.width}×${r.height}. This browser only.`;}

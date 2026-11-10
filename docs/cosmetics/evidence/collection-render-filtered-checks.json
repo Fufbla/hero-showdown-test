@@ -1,0 +1,14 @@
+{
+  "outfits": 1,
+  "animationFrames": 856,
+  "individualPieceViews": 16,
+  "hairstyleViews": 196,
+  "views": [
+    "front",
+    "right",
+    "back",
+    "left"
+  ],
+  "errors": [],
+  "note": "Render coverage is not a substitute for visual reference review or physical-device testing."
+}

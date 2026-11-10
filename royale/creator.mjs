@@ -8,7 +8,7 @@ import {styleCDefault,STYLE_C_VIEWS} from './style-c-defaults.mjs';
 const $=id=>document.getElementById(id);
 const labelFor={waist:'Waist shape',hips:'Hip width',chest:'Chest shape',jaw:'Jaw width',presentation:'Presentation',age:'Age appearance',skin:'Skin tone',eyes:'Eye color',hair:'Hairstyle',hairColor:'Hair color',face:'Face shape',eyeShape:'Eye shape',brows:'Eyebrows',nose:'Nose',mouth:'Mouth',facialHair:'Facial hair',build:'Body build',height:'Height',shoulders:'Shoulder width',muscle:'Muscularity',torso:'Torso proportion',arms:'Arm proportion',legs:'Leg proportion',suit:'Primary suit color',trim:'Secondary suit color',emblemColor:'Emblem color',emblem:'Superhero emblem',capeColor:'Cape color',cape:'Wear a cape'};
 const optionLabel={side:'Right',superKick:'Super Kick',male:'Male',female:'Female',teen:'Teenager',young:'Young adult',older:'Older adult',none:'None',leaf:'Leaf',bolt:'Lightning bolt',shield:'Shield',star:'Star',wave:'Wave',sun:'Sun'};
-export const FIELD_GROUPS={identity:['presentation','age','skin'],face:['hair','hairColor','eyes','face','eyeShape','brows','nose','mouth','facialHair','jaw'],body:['build','height','shoulders','muscle','torso','arms','legs','waist','hips','chest'],suit:['suit','trim','emblem','emblemColor','capeColor','cape']};
+export const FIELD_GROUPS={identity:['skin'],face:['hair','hairColor','eyes','eyeShape','nose','mouth'],body:[],suit:['suit','trim','emblemColor','capeColor']};
 const title=s=>optionLabel[s]||s[0].toUpperCase()+s.slice(1);
 export class Creator{
   constructor(){
@@ -24,18 +24,15 @@ export class Creator{
       if(control.type==='checkbox')label.classList.add('check-field');
       $(`${group}-fields`).append(label);
     }
+    $('tab-body').hidden=true;
     this.createSkinChoices();
     this.createHairGallery();
     for(const view of STYLE_C_VIEWS)$(`view-${view}`).onclick=()=>{this.view=view;for(const v of STYLE_C_VIEWS)$(`view-${v}`).setAttribute('aria-pressed',String(v===view));this.draw();this.refreshHairGallery();};
     for(const button of document.querySelectorAll('[data-tab]')){
       button.onclick=()=>this.tab(button.dataset.tab);
-      button.onkeydown=e=>{const order=Object.keys(FIELD_GROUPS),index=order.indexOf(button.dataset.tab);if(['ArrowRight','ArrowLeft','Home','End'].includes(e.key)){e.preventDefault();const target=e.key==='Home'?0:e.key==='End'?3:(index+(e.key==='ArrowRight'?1:3))%4;this.tab(order[target]);$(`tab-${order[target]}`).focus();}};
+      button.onkeydown=e=>{const order=Object.keys(FIELD_GROUPS).filter(k=>k!=='body'),index=order.indexOf(button.dataset.tab);if(['ArrowRight','ArrowLeft','Home','End'].includes(e.key)){e.preventDefault();const target=e.key==='Home'?0:e.key==='End'?order.length-1:(index+(e.key==='ArrowRight'?1:order.length-1))%order.length;this.tab(order[target]);$(`tab-${order[target]}`).focus();}};
     }
     $('creator-form').addEventListener('input',event=>{
-      if(this.newHero&&event.target.id==='presentation'){
-        const previous=styleCDefault(this.look.presentation),next=styleCDefault($('presentation').value);
-        for(const key of ['skin','eyes','hair','hairColor','suit','trim','emblemColor','emblem','capeColor','brows','mouth'])if(this.look[key]===previous[key])$(key).value=next[key];
-      }
       this.read();this.validate(false);this.draw();this.refreshHairGallery();
     });
   }
@@ -72,7 +69,7 @@ export class Creator{
     $('name-error').hidden=true;$('name').setAttribute('aria-invalid','false');this.tab('identity');this.read();this.draw();this.refreshHairGallery();
   }
   read(){
-    const values={name:$('name').value};
+    const values={...this.look,name:$('name').value};
     for(const field of Object.values(FIELD_GROUPS).flat()){const el=$(field);values[field]=el.type==='checkbox'?el.checked:el.type==='range'?Number(el.value):el.value;if(el.type==='range')$(`${field}-value`).textContent=`${Math.round(Number(el.value)*100)}%`;}
     if(!this.newHero)Object.assign(values,this.originalCostume);this.look=sanitizeLook(values);for(const b of document.querySelectorAll('[data-skin]'))b.setAttribute('aria-pressed',String(b.dataset.skin===this.look.skin));$('preview-name').textContent=$('name').value.trim()||'Your hero';return this.look;
   }

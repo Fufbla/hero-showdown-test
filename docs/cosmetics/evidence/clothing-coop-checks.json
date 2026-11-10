@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "checks": [
+    "Two practice heroes are active",
+    "Unacknowledged purchase stays pending with a single debit",
+    "Player 2 wallet and wardrobe are unchanged",
+    "Neither player resumes while a wardrobe save is pending",
+    "Retry acknowledges the same purchase without a second debit",
+    "Controller 1 equips its own three pieces",
+    "Controller 2 equips its own three pieces",
+    "Player 1 restores its own clothing and wallet",
+    "Player 1 armor, health and powers stay unchanged",
+    "Player 2 restores its own clothing and wallet",
+    "Player 2 armor, health and powers stay unchanged"
+  ],
+  "scope": "Practice profiles; simulated controller input; no cloud or physical-controller verification.",
+  "outfitPrice": 700,
+  "remainingCoinsPerHero": 800,
+  "checkedAt": "2026-11-09"
+}
