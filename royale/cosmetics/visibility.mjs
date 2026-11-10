@@ -16,7 +16,7 @@ export function clothingCoverage(layers=[]){
   for(const layer of manifest.layers){
    for(const region of visualCover[layer.part]||[])covered.add(region);
    // A face covering or headwear should replace conflicting armored face gear.
-   if(layer.attach==='head'&&(layer.part==='headwear'||layer.pass==='accessory'&&layer.faceOpening))
+   if(layer.attach==='head'&&(layer.part==='headwear'||layer.part==='accessory'&&layer.pass==='accessory'))
     covered.add('mask');
   }
  }
