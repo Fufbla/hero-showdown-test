@@ -8,6 +8,7 @@ import {drawStyleCMotionLimb,sampleStyleCMotion} from './style-c-motion.mjs';
 import {drawStyleCEquipment,drawStyleCEquipmentAura,withStyleCEquipmentGlow} from './style-c-equipment.mjs';
 import {drawSourceRest,drawRegisteredHead,drawStyleCCape,drawStyleCTorso,styleCBodyStatus} from './style-c-body.mjs';
 import {drawDefaultSprite,isDefaultLook} from './style-c-sprites.mjs';
+import {drawClothingPass} from './cosmetics/renderer.mjs';
 export {prepareStyleCMaterials as prepareSourceArt} from './style-c-materials.mjs';
 
 const UNIT=.35;
@@ -88,12 +89,25 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   }
   const blinkClock=time%3.9;
   const blink=p.clip==='idle'&&blinkClock>3.52&&blinkClock<3.70 ? Math.sin((blinkClock-3.52)/.18*Math.PI) : 0;
-  const starter=(!options.outfit||options.outfit.origin==='starter')&&!Object.keys(pieces).length;
+  const starter=!options.clothingActive&&(!options.outfit||options.outfit.origin==='starter')&&!Object.keys(pieces).length;
   const liveCape=look.cape&&view==='game'&&options.cloth&&!options.bake;
   if(!liveCape&&view==='game'&&p.clip!=='idle'&&!options.bake&&!options.layered&&!blink&&scale<=1.35&&starter&&isDefaultLook(look)&&(!h.steel||p.clip==='steel')&&drawDefaultSprite(c,p,look)){
     c.restore();return worldPose(p,width,height,'atlas');
   }
   c.rotate(p.rotation);c.scale(UNIT*width,UNIT*height);c.translate(-original.origin[0],-original.origin[1]);
+  // Paint fabric *between* original hero body parts, not pasted over the
+  // completed character. The inverse transform returns to local world units
+  // while preserving the precise animated bone anchors of the underlying rig.
+  const garmentPose=options.clothingActive?worldPose(p,width,height,'layers'):null;
+  const paintClothes=pass=>{
+    if(!garmentPose)return;
+    c.save();
+    c.translate(...original.origin);c.scale(1/(UNIT*width),1/(UNIT*height));c.rotate(-p.rotation);
+    drawClothingPass(c,garmentPose,view==='game'?'front':view,pass,options.clothing);
+    c.restore();
+  };
+  const baseFor=region=>options.clothingRegionBase?.[region]
+    ? {...palette,...options.clothingRegionBase[region]} :palette;
   look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
   const customHair=look.hair!==base.hair||look.headwearCoverage==='tucked';
   const differentJaw=look.jaw!==base.jaw||look.face!==base.face;
@@ -119,20 +133,24 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   const wear=(part,item,side=0)=>drawStyleCEquipment(c,part,item,p,look,{view,side,steel:h.steel});
   drawStyleCEquipmentAura(c,pieces,p,look,{view});
   if(look.cape)withStyleCEquipmentGlow(c,pieces.cape,()=>drawStyleCCape(c,original,p,look,palette,time,liveCape?{owner:options.cloth,hero:h,dt:options.dt}:null));
+  paintClothes('behindBody');
   if(customHair)drawHairLayer(c,look,p,motion,time,'rear',view);
   function limb(group,i){
-    drawStyleCMotionLimb(c,p,group,i,faceLook,palette,pieces);
+    drawStyleCMotionLimb(c,p,group,i,faceLook,baseFor(group==='arms'?'arms':'legs'),pieces);
     if(group==='arms')wear('shoulder',pieces.chest||pieces.suit,i);
     const part=group==='arms'?'gloves':'boots';
     if(pieces[part])wear(part,pieces[part],i);
   }
-  limb('legs',1);limb('legs',0);
-  drawStyleCTorso(c,original,p,faceLook,palette,pieces.emblem?.part==='emblem');
-  limb('arms',1);
+  limb('legs',1);paintClothes('farLeg');
+  limb('legs',0);paintClothes('nearLeg');
+  drawStyleCTorso(c,original,p,faceLook,baseFor('torso'),pieces.emblem?.part==='emblem');
+  paintClothes('torso');
+  limb('arms',1);paintClothes('farArm');
   wear('suit',pieces.suit);wear('chest',pieces.chest);wear('belt',pieces.belt);
   if(look.cape)wear('cape',pieces.cape);
   wear('emblem',pieces.emblem);
-  limb('arms',0);
+  limb('arms',0);paintClothes('nearArm');
+  paintClothes('overBody');paintClothes('behindHead');
   c.save();
   if(p.headTilt){c.translate(...p.faceCenter);c.rotate(p.headTilt);c.translate(-p.faceCenter[0],-p.faceCenter[1]);}
   if(!bareHead && !h.steel && look.hairColor===base.hairColor && look.skin===base.skin){
@@ -144,5 +162,6 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   if(customHair)drawHairLayer(c,look,p,motion,time,'front',view);
   c.restore();
   wear('mask',pieces.mask);wear('helmet',pieces.helmet);
-  c.restore();return worldPose(p,width,height,'layers');
+  paintClothes('headwear');paintClothes('accessory');
+  c.restore();return garmentPose||worldPose(p,width,height,'layers');
 }
