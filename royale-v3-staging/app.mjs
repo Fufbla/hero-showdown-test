@@ -35,6 +35,15 @@ queue=queue.then(async()=>{if(blocked)return {ok:false,error:'Cloud saving is pa
    return {ok:false,skipped:true,error:'Stale clothing snapshot ignored; reload your hero.'};
  }
  try{const result=await call('save',{slot:slot+1,revision:slots[slot].revision,snapshot});slots[slot].revision=result.revision;slots[slot].snapshot=snapshot;last[slot]=raw;console.info('[V3 cloud confirmed]',{slot:slot+1,revision:result.revision,x:snapshot.world.location.x,y:snapshot.world.location.y,xp:snapshot.xp,coins:snapshot.coins});if(localStorage.getItem(key)===journal)localStorage.removeItem(key);status('Saved Slot '+(slot+1)+' · '+new Date().toLocaleTimeString());return {ok:true};}catch(e){blocked=true;status('Cloud saving paused: '+e.message+' Local recovery preserved. Re-enter your code to retry safely.');console.error('[V3 save rejected]',{slot:slot+1,revision:slots[slot].revision,status:e.status,reason:e.message});return {ok:false,error:e.message};}});return queue;}
+// Confirm cloud-session status explicitly for the child Clothing Store.
+// Never reveal access tokens or allow standalone preview pages to authorize purchases.
+window.addEventListener('message',e=>{
+ if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow||e.data?.type!=='royale-clothing-session-check')return;
+ const slot=Number(e.data.slot);
+ const verified=Number.isInteger(slot)&&slot>=0&&slot<3&&!!access&&!blocked&&!!slots[slot]?.snapshot;
+ e.source.postMessage({type:'royale-clothing-session-status',slot,verified,
+  reason:verified?'Cloud hero verified':!access?'V3 cloud login required':blocked?'Cloud saving paused':!slots[slot]?.snapshot?'Cloud hero slot not loaded':'Cloud session unavailable'},e.origin);
+});
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow||e.data?.type!=='royale-code-progress')return;try{
  const snapshot=typeof e.data.snapshot==='string'?JSON.parse(e.data.snapshot):e.data.snapshot;
  if(!snapshot||typeof snapshot!=='object'||!snapshot.world?.location){status('Gameplay snapshot missing location; cloud save not attempted.');return;}
