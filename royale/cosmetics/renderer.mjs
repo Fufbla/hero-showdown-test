@@ -14,7 +14,12 @@ function stamp(ctx,image,layer,at,pivot,end,sourceEnd,cut){
  const [sx,sy,w,h]=layer.rect;
  const scale=end?distance(at,end)/distance(pivot,sourceEnd):layer.scale;
  const rotation=end?angle(at,end)-angle(pivot,sourceEnd):0;
- ctx.save();ctx.translate(...at);ctx.rotate(rotation);ctx.scale(layer.fixedWidth?layer.scale:scale,scale);
+ const fit=layer.fit||{};
+ // Adjust the painted fabric's cross-section around its registered bone.
+ // Bone length remains matched to the animated joints, so seams stay joined.
+ const width=(layer.fixedWidth?layer.scale:scale)*(fit.width||1);
+ const height=scale*(layer.end?1:(fit.height||1));
+ ctx.save();ctx.translate(...at);ctx.rotate(rotation);ctx.scale(width,height);
  if(cut){
   // Split a sleeve at the animated elbow in source space. Both halves share
   // the exact seam, preserving artwork while bending with the same hero bones.
@@ -66,7 +71,7 @@ export function drawClothingPass(ctx,pose,view,pass,loadedLayers){
   for(const layer of manifest.layers){
    if(layer.view!==view||layer.pass!==pass)continue;
    const anchor=anchors[layer.attach];if(!anchor)continue;
-   const at=anchor.map((n,i)=>n+(layer.offset?.[i]||0));
+   const at=anchor.map((n,i)=>n+(layer.offset?.[i]||0)+(layer.fit?.offset?.[i]||0));
    if(layer.drape&&drape(ctx,image,layer,pose,at))continue;
    if(layer.end){
     const end=anchors[layer.end.attach];if(!end||!distance(layer.pivot,layer.end.pivot))continue;
