@@ -1,3 +1,4 @@
+import {garmentLining} from './fabric-tone.mjs';
 // Phase B — visual-only outfit/armor separation shared by all 36 collections.
 // Never remove items, alter equipment stats, or write any save data here.
 const visualCover={
@@ -49,9 +50,9 @@ export function clothingAppearance(outfit,look,layers=[]){
   const scheme=customLinings[String(piece.id||'').split('.')[0]]||clothLining;
   const regions=new Set([...(piece.manifest.covers||[])]);
   for(const layer of piece.manifest.layers)for(const r of visualCover[layer.part]||[])regions.add(r);
-  if(regions.has('torso'))regionBase.torso=scheme;
-  if(regions.has('arms'))regionBase.arms=scheme;
-  if(regions.has('legs'))regionBase.legs=scheme;
+  if(regions.has('torso'))regionBase.torso=garmentLining(piece,'torso',scheme);
+  if(regions.has('arms'))regionBase.arms=garmentLining(piece,'arms',scheme);
+  if(regions.has('legs'))regionBase.legs=garmentLining(piece,'legs',scheme);
  }
  return {
   coverage,
