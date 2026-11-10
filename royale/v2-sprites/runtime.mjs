@@ -1,7 +1,7 @@
 // Experimental V2-only generated character art. This renderer is opt-in for
 // the public 0000000000 local sandbox; production heroes never import it.
 // Source images are transparent registered atlases, not screenshot posters.
-export const V2_SPRITE_VERSION='grounded-run-cape-edge-guard-v3';
+export const V2_SPRITE_VERSION='grounded-run-cape-edge-guard-v4';
 export const V2_SPRITE_ATLASES=Object.freeze({
  idle_run:Object.freeze({file:'idle_run.webp',cols:8,rows:4,cell:160}),
  jump:Object.freeze({file:'jump_fixed.webp',cols:6,rows:2,cell:192}),
@@ -36,7 +36,9 @@ export function chooseV2Frame(hero,time=0){
   return null;
  }
  if(hero?.castAge<.24)return {scene:'idle'+suffix,index:3};
- if(hero?.dodgeAge<.22)return {scene:'run'+suffix,index:1};
+ // A dodge is not a running step. Frame 1 is an airborne storyboard pose;
+ // avoid injecting it into the grounded run sequence.
+ if(hero?.dodgeAge<.22)return null;
  if(hero?.flying)return {scene:'jump'+suffix,index:3};
  if(hero?.grounded===false){
   const double=hero?.jumps>=2,scene=(double?'double':'jump')+suffix;
@@ -51,7 +53,7 @@ export function chooseV2Frame(hero,time=0){
   // h.cycle advances with actual travel distance in the physics engine.
   // Tying sprite phase to distance prevents feet cycling while stationary
   // or the same frames skipping backwards when frame-rate changes.
-  const distancePhase=Math.abs(hero?.cycle||0)*1.2;
+  const distancePhase=Math.max(0,Math.abs(hero?.cycle||0))*1.2;
   const frame=frameIndex(distancePhase,GROUNDED_RUN_FRAMES.length);
   return {scene:'run'+suffix,index:GROUNDED_RUN_FRAMES[frame]};
  }
@@ -99,11 +101,11 @@ export class V2GeneratedSprites {
      for(let row=0;row<meta.rows;row++)for(let col=0;col<meta.cols;col++){
       const x=col*meta.cell,y=row*meta.cell,n=meta.cell;
       let clipped=false;
-      // Scan a two-pixel safety perimeter; any opaque pixels there indicate
+      // Scan the two-pixel safety perimeter; any opaque pixels there indicate
       // that the silhouette may have been cut off by the sprite exporter.
-      for(let k=0;k<n&&!clipped;k++)for(let edge=0;edge<4;edge++){
-       const px=edge===0?x+1:edge===1?x+n-2:x+k;
-       const py=edge===2?y+1:edge===3?y+n-2:y+k;
+      for(let k=0;k<n&&!clipped;k++)for(let edge=0;edge<8;edge++){
+       const px=edge<2?x+edge:edge<4?x+n-2+(edge-2):x+k;
+       const py=edge<4?y+k:edge<6?y+(edge-4):y+n-2+(edge-6);
        if(data[(py*canvas.width+px)*4+3]>24){clipped=true;break;}
       }
       if(clipped)this.unsafeFrames.add(name+':'+row+':'+col);
