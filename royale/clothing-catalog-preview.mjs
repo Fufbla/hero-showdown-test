@@ -1,3 +1,4 @@
+import {openTryOn} from './clothing-tryon.mjs';
 // Read-only visual clothing catalog. Never changes hero, coins, equipment or saves.
 const root=document.getElementById('clothing-catalog');
 const status=document.getElementById('clothing-status');
@@ -37,6 +38,9 @@ function render(){
  for(const set of visible){
   const card=node('article',undefined,'clothing-catalog-card');
   card.append(node('h3',set.name));
+  const tryButton=node('button','Try On');tryButton.type='button';tryButton.className='secondary clothing-tryon-button';
+  tryButton.addEventListener('click',()=>{tryButton.disabled=true;Promise.resolve(openTryOn(set,card)).finally(()=>{tryButton.disabled=false;});});
+  card.append(tryButton);
   const canvas=node('canvas',undefined,'clothing-artwork');canvas.width=360;canvas.height=240;canvas.setAttribute('role','img');canvas.setAttribute('aria-label',set.name+' original clothing artwork pieces');
   const note=node('p','Loading artwork…','clothing-artwork-note');
   const artwork=node('div',undefined,'clothing-artwork-wrap');artwork.append(canvas,note);card.append(artwork);
