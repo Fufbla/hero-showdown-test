@@ -2,10 +2,8 @@
 import {drawHero} from './hero-art.mjs';
 import {previewHero} from './hero-rig.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
-import {drawClothingPass} from './cosmetics/renderer.mjs';
 import {universalRenderLook} from './cosmetics/template.mjs';
 
-const passes=['behindBody','farLeg','nearLeg','torso','farArm','nearArm','overBody','behindHead','headwear','accessory'];
 let serial=0, ui=null, selected=null, layers=[];
 const node=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 function currentHero(){
@@ -27,15 +25,10 @@ function draw(){
  try{
   const rawLook=universalRenderLook({...hero.look,cape:false});
   const scale=1.7,x=180,y=392;
-  const pose=drawHero(c,x,y,rawLook,previewHero('idle',0),0,scale,{view,outfit:{pieces:{}}});
+  const pose=drawHero(c,x,y,rawLook,previewHero('idle',0),0,scale,{view,outfit:{pieces:{}},clothing:layers});
   if(!pose?.arms?.length||!pose?.legs?.length){
    note.textContent='Character artwork is loading. Try selecting the outfit again.';
    return;
-  }
-  if(layers.length){
-   c.save();c.translate(x,y);c.scale(scale,scale);
-   try{for(const pass of passes)drawClothingPass(c,pose,view,pass,layers);}
-   finally{c.restore();}
   }
  }catch(e){note.textContent='Cannot render this outfit: '+e.message;}
 }
