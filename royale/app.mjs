@@ -257,6 +257,7 @@ function setScreen(next){
   if(criticalPending||powerUpgrades.busy)return;
   if(next==='play'&&screen!=='play')input.waitForNeutralPad=true;
   screen=next;if(online())multiplayerMenu.session.pause(next!=='play');input.enabled=next==='play';input.clear();game.paused=next!=='play';
+  if(next==='tree')queueMicrotask(()=>window.dispatchEvent(new Event('royale-clothing-context-updated')));
   const embeddedAppearance=next==='creator'&&editing&&game.treeVisit;
   if(embeddedAppearance)$('eris-appearance-panel').append($('creator'));else creatorHome.after($('creator'));
   $('creator').classList.toggle('overlay',!embeddedAppearance);
