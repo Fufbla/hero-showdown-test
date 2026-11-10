@@ -85,8 +85,26 @@ function saveClothingToAccount(snapshot){
   parent.postMessage({type:'royale-clothing-save',requestId,slot:activeSlot,snapshot},location.origin);
  });
 }
+let clothingCloudVerified=false,clothingCloudReason='Checking your V3 cloud session…';
+window.addEventListener('message',e=>{
+ if(e.origin!==location.origin||e.source!==parent||e.data?.type!=='royale-clothing-session-status')return;
+ if(e.data.slot!==activeSlot)return;
+ clothingCloudVerified=e.data.verified===true;
+ clothingCloudReason=typeof e.data.reason==='string'?e.data.reason:'Cloud session unavailable';
+ window.dispatchEvent(new Event('royale-clothing-context-updated'));
+});
+function requestClothingSession(){
+ clothingCloudVerified=false;
+ clothingCloudReason='Checking V3 cloud session…';
+ if(codePlay&&params.get('codePlay')==='v3'&&parent!==window){
+  parent.postMessage({type:'royale-clothing-session-check',slot:activeSlot},location.origin);
+ }else clothingCloudReason='Open this hero through V3 Cloud Login, not the standalone Royale page';
+}
 function currentClothingStatus(){
- return {cosmetics:normalizeCosmetics(game.cosmetics),coins:game.hero.coins,ready:codePlay&&params.get('codePlay')==='v3'&&game.started&&!!activeId&&!online()&&game.treeVisit};
+ const ready=clothingCloudVerified&&game.started&&game.treeVisit&&!online()&&game.canSave();
+ return {cosmetics:normalizeCosmetics(game.cosmetics),coins:game.hero.coins,ready,
+  reason:ready?'V3 cloud hero verified':clothingCloudReason,
+  checks:{cloudSession:clothingCloudVerified,heroLoaded:game.started,atTree:game.treeVisit,safe:game.canSave()}};
 }
 window.addEventListener('royale-clothing-snapshot-request',e=>{
  if(typeof e.detail?.receive==='function')e.detail.receive(currentClothingStatus());
@@ -257,7 +275,7 @@ function setScreen(next){
   if(criticalPending||powerUpgrades.busy)return;
   if(next==='play'&&screen!=='play')input.waitForNeutralPad=true;
   screen=next;if(online())multiplayerMenu.session.pause(next!=='play');input.enabled=next==='play';input.clear();game.paused=next!=='play';
-  if(next==='tree')queueMicrotask(()=>window.dispatchEvent(new Event('royale-clothing-context-updated')));
+  if(next==='tree')queueMicrotask(()=>{requestClothingSession();window.dispatchEvent(new Event('royale-clothing-context-updated'));});
   const embeddedAppearance=next==='creator'&&editing&&game.treeVisit;
   if(embeddedAppearance)$('eris-appearance-panel').append($('creator'));else creatorHome.after($('creator'));
   $('creator').classList.toggle('overlay',!embeddedAppearance);
