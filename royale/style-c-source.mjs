@@ -106,7 +106,7 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
     drawClothingPass(c,garmentPose,view==='game'?'front':view,pass,options.clothing);
     c.restore();
   };
-  const baseFor=region=>options.clothingRegionBase?.[region]
+  const baseFor=region=>!h.steel&&options.clothingRegionBase?.[region]
     ? {...palette,...options.clothingRegionBase[region]} :palette;
   look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
   const customHair=look.hair!==base.hair||look.headwearCoverage==='tucked';
@@ -143,7 +143,7 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   }
   limb('legs',1);paintClothes('farLeg');
   limb('legs',0);paintClothes('nearLeg');
-  drawStyleCTorso(c,original,p,faceLook,baseFor('torso'),pieces.emblem?.part==='emblem');
+  drawStyleCTorso(c,original,p,faceLook,baseFor('torso'),pieces.emblem?.part==='emblem'||!!options.clothingRegionBase?.torso);
   paintClothes('torso');
   limb('arms',1);paintClothes('farArm');
   wear('suit',pieces.suit);wear('chest',pieces.chest);wear('belt',pieces.belt);
