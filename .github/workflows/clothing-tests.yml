@@ -2,7 +2,7 @@ name: Verify Clothing Store Transactions
 
 on:
   push:
-    branches: [main, feature/phase-e-2d-headwear-nov10]
+    branches: [main, feature/phase-e-head-contour-2d-nov10]
     paths:
       - 'royale/**'
       - 'royale-v3-staging/**'
@@ -34,6 +34,7 @@ jobs:
           node --check royale/clothing-tryon.mjs
           node --check royale/cosmetics/renderer.mjs
           node --check royale/cosmetics/headwear-2d.mjs
+          node --check royale/cosmetics/head-contour.mjs
           node --check royale/cosmetics/polish.mjs
           node --check royale/cosmetics/fabric-tone.mjs
           node --check royale/cosmetics/fitting.mjs
@@ -45,4 +46,4 @@ jobs:
           node --check royale/clothing-purchase-ui.mjs
           node --check royale/cosmetics/state.mjs
       - name: Verify complete catalog and purchase rules
-        run: node --test royale/tests/clothing-purchases.test.mjs royale/tests/clothing-fit.test.mjs royale/tests/clothing-all-sets.test.mjs royale/tests/clothing-visibility.test.mjs royale/tests/clothing-category-fit.test.mjs royale/tests/clothing-polish.test.mjs royale/tests/clothing-headwear-2d.test.mjs
+        run: node --test royale/tests/clothing-purchases.test.mjs royale/tests/clothing-fit.test.mjs royale/tests/clothing-all-sets.test.mjs royale/tests/clothing-visibility.test.mjs royale/tests/clothing-category-fit.test.mjs royale/tests/clothing-polish.test.mjs royale/tests/clothing-headwear-2d.test.mjs royale/tests/clothing-head-contour.test.mjs
