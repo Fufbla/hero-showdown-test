@@ -1,4 +1,5 @@
 import {attachmentPoints} from './template.mjs';
+import {fitClothingLayer} from './fitting.mjs';
 // Only decoded, complete pieces may conceal the corresponding armor. A failed
 // texture load leaves the original character visible and never changes stats.
 export function clothingCoverage(layers=[]){
@@ -10,15 +11,13 @@ export function clothingCoverage(layers=[]){
 export const clothingHair=layers=>layers.some(({manifest,image})=>image&&manifest.hair==='hidden')?'hidden':layers.some(({manifest,image})=>image&&manifest.hair==='tucked')?'tucked':null;
 const distance=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
 const angle=(a,b)=>Math.atan2(b[1]-a[1],b[0]-a[0]);
-function stamp(ctx,image,layer,at,pivot,end,sourceEnd,cut){
+function stamp(ctx,image,layer,at,pivot,end,sourceEnd,cut,fit){
  const [sx,sy,w,h]=layer.rect;
  const scale=end?distance(at,end)/distance(pivot,sourceEnd):layer.scale;
  const rotation=end?angle(at,end)-angle(pivot,sourceEnd):0;
- const fit=layer.fit||{};
- // Adjust the painted fabric's cross-section around its registered bone.
- // Bone length remains matched to the animated joints, so seams stay joined.
- const width=(layer.fixedWidth?layer.scale:scale)*(fit.width||1);
- const height=scale*(layer.end?1:(fit.height||1));
+ // Cross-section follows the animated hero; length follows the actual bone.
+ const width=(layer.fixedWidth?layer.scale:scale)*fit.width;
+ const height=scale*(layer.end?1:fit.height);
  ctx.save();ctx.translate(...at);ctx.rotate(rotation);ctx.scale(width,height);
  if(cut){
   // Split a sleeve at the animated elbow in source space. Both halves share
@@ -31,9 +30,9 @@ function stamp(ctx,image,layer,at,pivot,end,sourceEnd,cut){
  }
  ctx.drawImage(image,sx,sy,w,h,-pivot[0],-pivot[1],w,h);ctx.restore();
 }
-function drape(ctx,image,layer,pose,at){
+function drape(ctx,image,layer,pose,at,fit){
  const rest=pose.clothingRest;if(!rest)return false;
- const [sx,sy,w,h]=layer.rect,scale=layer.scale,split=Math.round(w*.5),bands=20;
+ const [sx,sy,w,h]=layer.rect,scale=layer.scale,fitWidth=scale*fit.width,split=Math.round(w*.5),bands=20;
  for(let half=0;half<2;half++){
   const i=layer.drape.nearHalf===half?0:1,x=half?split:0,width=half?w-split:split;
   const sample=t=>{
@@ -41,20 +40,20 @@ function drape(ctx,image,layer,pose,at){
    const current=pose.legs[i][j].map((n,k)=>n+(pose.legs[i][j+1][k]-n)*f);
    const original=rest.legs[i][j].map((n,k)=>n+(rest.legs[i][j+1][k]-n)*f);
    const delta=current.map((n,k)=>n-pose.hip[k]-(original[k]-rest.hip[k]));
-   const base=[at[0]+(x+width*.5-layer.pivot[0])*scale,at[1]+(t*h-layer.pivot[1])*scale];
+   const base=[at[0]+(x+width*.5-layer.pivot[0])*fitWidth,at[1]+(t*h-layer.pivot[1])*scale];
    // At an extended kick the hem meets the foot, while the cloth's width
    // remains perpendicular to the leg instead of collapsing into a line.
    const leg=pose.legs[i],dx=leg[2][0]-leg[0][0],dy=leg[2][1]-leg[0][1];
    const restDx=rest.legs[i][2][0]-rest.legs[i][0][0];
    const horizontal=Math.min(1,Math.abs(dx-restDx)/Math.max(1,Math.hypot(dx,dy)));
-   const hemOffset=pose.legs[i][2][0]-(at[0]+(x+width*.5-layer.pivot[0])*scale+pose.legs[i][2][0]-pose.hip[0]-(rest.legs[i][2][0]-rest.hip[0]));
+   const hemOffset=pose.legs[i][2][0]-(at[0]+(x+width*.5-layer.pivot[0])*fitWidth+pose.legs[i][2][0]-pose.hip[0]-(rest.legs[i][2][0]-rest.hip[0]));
    return [base[0]+delta[0]+hemOffset*horizontal*t,base[1]+delta[1]];
   };
   for(let b=0;b<bands;b++){
    const y=Math.round(b*h/bands),end=Math.round((b+1)*h/bands),height=end-y;
    const a=sample(y/h),z=sample(end/h),dx=z[0]-a[0],dy=z[1]-a[1],len=Math.hypot(dx,dy);
    if(len<.001)continue;
-   const nx=dy/len,ny=-dx/len,span=height*scale,wide=width*scale;
+   const nx=dy/len,ny=-dx/len,span=height*scale,wide=width*fitWidth;
    ctx.save();ctx.translate(a[0]-nx*wide*.5,a[1]-ny*wide*.5);
    ctx.transform(nx,ny,dx/span,dy/span,0,0);
    ctx.drawImage(image,sx+x,sy+y,width,height,0,0,wide,span+.16);ctx.restore();
@@ -71,23 +70,32 @@ export function drawClothingPass(ctx,pose,view,pass,loadedLayers){
   for(const layer of manifest.layers){
    if(layer.view!==view||layer.pass!==pass)continue;
    const anchor=anchors[layer.attach];if(!anchor)continue;
-   const at=anchor.map((n,i)=>n+(layer.offset?.[i]||0)+(layer.fit?.offset?.[i]||0));
-   if(layer.drape&&drape(ctx,image,layer,pose,at))continue;
+   const target=layer.end?anchors[layer.end.attach]:null;
+   const baseScale=target?distance(anchor,target)/Math.max(.0001,distance(layer.pivot,layer.end.pivot)):layer.scale;
+   const fit=fitClothingLayer(layer,pose,anchors,baseScale);
+   const at=anchor.map((n,i)=>n+(layer.offset?.[i]||0)+fit.offset[i]);
+   // Head wraps, hats and masks tilt with the skull instead of hovering
+   // independently during attacks and idle head movement.
+   const followsHead=layer.attach==='head'&&Number.isFinite(pose.headTilt)&&pose.headTilt!==0;
+   if(followsHead){ctx.save();ctx.translate(...anchor);ctx.rotate(pose.headTilt);ctx.translate(-anchor[0],-anchor[1]);}
+   try{
+   if(layer.drape&&drape(ctx,image,layer,pose,at,fit))continue;
    if(layer.end){
     const end=anchors[layer.end.attach];if(!end||!distance(layer.pivot,layer.end.pivot))continue;
     if(layer.joint){
      const elbow=anchors[layer.joint.attach];if(!elbow)continue;
      const sourceJoint=layer.pivot.map((n,i)=>n+(layer.end.pivot[i]-n)*layer.joint.fraction);
-     stamp(ctx,image,layer,at,layer.pivot,elbow,sourceJoint,'upper');
-     stamp(ctx,image,layer,elbow,sourceJoint,end,layer.end.pivot,'lower');
-    }else stamp(ctx,image,layer,at,layer.pivot,end,layer.end.pivot);
+     stamp(ctx,image,layer,at,layer.pivot,elbow,sourceJoint,'upper',fit);
+     stamp(ctx,image,layer,elbow,sourceJoint,end,layer.end.pivot,'lower',fit);
+    }else stamp(ctx,image,layer,at,layer.pivot,end,layer.end.pivot,null,fit);
    }else{
     if(layer.followLeg&&pose.clothingRest){const i=layer.part==='footNear'?0:1,leg=pose.legs[i],rest=pose.clothingRest.legs[i];const tilt=Math.max(-1.1,Math.min(1.1,(angle(leg[1],leg[2])-angle(rest[1],rest[2]))*.7));ctx.save();ctx.translate(...at);ctx.rotate(tilt);ctx.translate(-at[0],-at[1]);}
     if(layer.faceOpening){const o=layer.faceOpening;ctx.save();ctx.beginPath();ctx.rect(-1000,-1000,2000,2000);ctx.ellipse(anchor[0]+o.center[0],anchor[1]+o.center[1],...o.radius,0,0,Math.PI*2);ctx.clip('evenodd');}
-    stamp(ctx,image,layer,at,layer.pivot);
+    stamp(ctx,image,layer,at,layer.pivot,null,null,null,fit);
     if(layer.faceOpening)ctx.restore();
     if(layer.followLeg&&pose.clothingRest)ctx.restore();
    }
+   }finally{if(followsHead)ctx.restore();}
   }
  }
 }
