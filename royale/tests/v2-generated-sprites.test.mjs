@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {V2GeneratedSprites,V2_SPRITE_VERSION,V2_SPRITE_ATLASES,V2_SPRITE_SCENES,chooseV2Frame} from '../v2-sprites/runtime.mjs';
 import {V2_TEST_CODE,isV2TestCode} from '../v2-test-hero.mjs';
+import {v2PowerEffectFlags,drawV2PowerPreview,V2_POWER_PREVIEW_VERSION} from '../v2-sprites/power-preview.mjs';
 const root=new URL('../v2-sprites/',import.meta.url);
 
 test('all three actual generated WebP atlases have transparent WebP metadata and registered cell grids',async()=>{
@@ -31,7 +32,9 @@ test('hero state selects idle, run, jump, double jump in both horizontal directi
  assert.equal(chooseV2Frame({...base,grounded:false,face:-1,vy:240,jumps:2,jumpAge:.35},.5).scene,'doubleLeft');
  assert.equal(chooseV2Frame({...base,flying:true},0).scene,'jumpRight');
  assert.equal(chooseV2Frame({...base,attack:{kind:'punch',age:0.07}},0),null,'existing combat animation remains available');
- assert.equal(chooseV2Frame({...base,castAge:.06},0),null,'existing power casting artwork remains available');
+ assert.equal(chooseV2Frame({...base,castAge:.06},0).scene,'idleRight','generated body remains during power casting');
+ assert.equal(chooseV2Frame({...base,attack:{kind:'punch',power:'strength'}},0).scene,'runRight','power punch can show the V2 hero');
+ assert.equal(chooseV2Frame({...base,attack:{kind:'kick',power:'superKick'}},0).scene,'jumpRight','super kick can show the V2 hero');
 });
 test('loader verifies every asset before drawing and falls back safely if decoding fails',async()=>{
  const loaded=[];
@@ -53,6 +56,24 @@ test('loader verifies every asset before drawing and falls back safely if decodi
  const broken=new V2GeneratedSprites({loader:async()=>{throw Error('broken atlas')}});
  assert.equal(await broken.preload(),false);
  assert.equal(broken.draw(ctx,0,0,{},0),false);
+});
+test('V2-only ability overlays cover all nine powers plus villain merge without affecting simulation',()=>{
+ assert.equal(V2_POWER_PREVIEW_VERSION,'v2-power-vfx-prototype-v1');
+ const hero={face:1,castAge:.01,steel:true,agile:true,flying:true,vx:350,attack:{kind:'punch',power:'strength'}};
+ const game={hero,powers:{active:{roots:{},whirlwind:{}},speed:.5},legendary:{active:'venomis'},mergeEffects:[{id:'venomis'}]};
+ const before=JSON.stringify(game);
+ const flags=v2PowerEffectFlags(game);
+ for(const k of ['fireball','strength','steel','roots','whirlwind','agility','flight','speed','villainMerge'])assert.equal(flags[k],true,k);
+ assert.equal(flags.superKick,false);
+ const ops=[];
+ const ctx={save(){ops.push('save')},restore(){ops.push('restore')},beginPath(){},moveTo(){},lineTo(){},stroke(){ops.push('stroke')},ellipse(){ops.push('ellipse')},arc(){ops.push('arc')},fill(){ops.push('fill')}};
+ const result=drawV2PowerPreview(ctx,game,{x:100,y:170},2);
+ assert.equal(result.fireball,true);
+ assert.ok(ops.length>15,'V2-specific ability effects must be drawn');
+ assert.equal(ops[0],'save');assert.equal(ops.at(-1),'restore');
+ assert.equal(JSON.stringify(game),before,'Effects never change health, powers or saves');
+ const kick=v2PowerEffectFlags({hero:{attack:{power:'superKick'}}});
+ assert.equal(kick.superKick,true);
 });
 test('sprite test route is limited to the isolated public 0000000000 code',async()=>{
  assert.equal(V2_TEST_CODE,'0000000000');
