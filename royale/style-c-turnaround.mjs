@@ -175,13 +175,19 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
   const sizeX=UNIT*widthFor(look.build), sizeY=UNIT*look.height*(look.age==='teen'?.98:look.age==='older'?.99:1);
   const local=p=>[p[0]*sizeX*(left?-1:1),p[1]*sizeY];
   const report={...pose,head:local(pose.head),hip:local(pose.hip),shoulder:local(pose.shoulder),arms:pose.arms.map(chain=>chain.map(local)),legs:pose.legs.map(chain=>chain.map(local))};
+  const garmentColors=part=>{
+    if(h.steel)return colors;
+    const category=part==='torso'?'torso':/^(upper|lower|hand)/.test(part)?'arms':/^(thigh|shin|boot)/.test(part)?'legs':null;
+    return category&&options.clothingRegionBase?.[category]
+      ? {...colors,...options.clothingRegionBase[category]}:colors;
+  };
   const draw=(part,from,to=from,rot=0,wide=1,tall=1)=>{
-    const a=materialFor(m,part,colors,base);if(!a)return;
+    const a=materialFor(m,part,garmentColors(part),base);if(!a)return;
     c.save();c.translate(...to);c.rotate(rot);c.scale(wide,tall);
     c.drawImage(a.image,a.x,a.y,a.w,a.h,a.left-from[0],a.top-from[1],a.w,a.h);c.restore();
   };
   const segment=(part,from,to,wide=1)=>{
-    const a=materialFor(m,part,colors,base);if(!a)return;
+    const a=materialFor(m,part,garmentColors(part),base);if(!a)return;
     c.save();c.translate(...to[0]);c.rotate(angle(...to)-Math.PI/2);
     c.scale(wide,distance(...to)/Math.max(1,distance(...from)));
     c.rotate(Math.PI/2-angle(...from));
