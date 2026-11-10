@@ -183,7 +183,7 @@ if(v2TestHero){
   button.textContent='V2 Sprites: Loading…';
   button.setAttribute('aria-label','Switch V2 test hero between generated and original artwork');
   button.disabled=true;
-  root.append(button);
+  root.prepend(button);
   void v2GeneratedSprites.preload().then(ok=>{
    button.disabled=!ok;
    button.textContent=ok?'V2 Sprites: ON (tap for original)': 'V2 Sprites unavailable · Original art';
