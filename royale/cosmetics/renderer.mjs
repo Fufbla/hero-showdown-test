@@ -1,5 +1,6 @@
 import {attachmentPoints} from './template.mjs';
 import {fitClothingLayer} from './fitting.mjs';
+import {jointClipShift,drawContactShadow,garmentLight} from './polish.mjs';
 // Coverage is computed only for fully loaded garments, never preview state.
 export {clothingCoverage} from './visibility.mjs';
 export const clothingHair=layers=>layers.some(({manifest,image})=>image&&manifest.hair==='hidden')?'hidden':layers.some(({manifest,image})=>image&&manifest.hair==='tucked')?'tucked':null;
@@ -19,7 +20,10 @@ function stamp(ctx,image,layer,at,pivot,end,sourceEnd,cut,fit){
   const start=layer.pivot,finish=layer.end.pivot,theta=angle(start,finish),dx=Math.cos(theta),dy=Math.sin(theta),nx=-dy,ny=dx;
   const mid=[start[0]+(finish[0]-start[0])*layer.joint.fraction, start[1]+(finish[1]-start[1])*layer.joint.fraction];
   const extent=Math.max(w,h)*4,sign=cut==='upper'?-1:1;
-  const points=[[-extent,0],[extent,0],[extent,sign*extent],[-extent,sign*extent]].map(([normal,axial])=>[mid[0]+normal*nx+axial*dx-pivot[0],mid[1]+normal*ny+axial*dy-pivot[1]]);
+  // Paint 1–2 shared source pixels on either side of the bend so a sharp
+  // kick/punch cannot reveal a transparent seam between sleeve halves.
+  const shift=jointClipShift(layer,cut);
+  const points=[[-extent,shift],[extent,shift],[extent,sign*extent+shift],[-extent,sign*extent+shift]].map(([normal,axial])=>[mid[0]+normal*nx+axial*dx-pivot[0],mid[1]+normal*ny+axial*dy-pivot[1]]);
   ctx.beginPath();ctx.moveTo(...points[0]);for(const p of points.slice(1))ctx.lineTo(...p);ctx.closePath();ctx.clip();
  }
  ctx.drawImage(image,sx,sy,w,h,-pivot[0],-pivot[1],w,h);ctx.restore();
@@ -73,6 +77,12 @@ export function drawClothingPass(ctx,pose,view,pass,loadedLayers){
    // independently during attacks and idle head movement.
    const followsHead=layer.attach==='head'&&Number.isFinite(pose.headTilt)&&pose.headTilt!==0;
    if(followsHead){ctx.save();ctx.translate(...anchor);ctx.rotate(pose.headTilt);ctx.translate(-anchor[0],-anchor[1]);}
+   // Paint a low-opacity contact shadow behind the garment opening, avoiding
+   // a hard sticker outline around the entire approved costume.
+   drawContactShadow(ctx,layer,anchors,at,fit,piece);
+   const light=garmentLight(view,pass,layer);
+   const canFilter=typeof ctx.filter==='string'&&light<.999;
+   if(canFilter){ctx.save();ctx.filter='brightness('+light.toFixed(3)+')';}
    try{
    if(layer.drape&&drape(ctx,image,layer,pose,at,fit))continue;
    if(layer.end){
@@ -90,7 +100,7 @@ export function drawClothingPass(ctx,pose,view,pass,loadedLayers){
     if(layer.faceOpening)ctx.restore();
     if(layer.followLeg&&pose.clothingRest)ctx.restore();
    }
-   }finally{if(followsHead)ctx.restore();}
+   }finally{if(canFilter)ctx.restore();if(followsHead)ctx.restore();}
   }
  }
 }
