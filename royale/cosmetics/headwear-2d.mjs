@@ -5,7 +5,7 @@
 const hat=(ratio,bottom,{right=0,left=0,height=1}={})=>Object.freeze({ratio,bottom,right,left,height});
 export const HEADWEAR_2D=Object.freeze({
  'royal-kimono.headwear':hat(.44,-17,{right:-1,left:1}),
- 'ninja-warrior.headwear':hat(.81,-6,{right:0,left:0,height:.96}),
+ 'ninja-warrior.headwear':hat(1.12,-4,{right:0,left:0,height:1.05}),
  'urban-hero.headwear':hat(.90,-8,{right:0,left:0,height:.97}),
  'explorer.headwear':hat(1.22,-9,{right:0,left:0}),
  'festival.headwear':hat(1.00,-4,{right:0,left:0}),
