@@ -1,4 +1,4 @@
-import {openTryOn} from './clothing-tryon.mjs';
+import {openTryOn,initializeTryOn} from './clothing-tryon.mjs';
 // Read-only visual clothing catalog. Never changes hero, coins, equipment or saves.
 const root=document.getElementById('clothing-catalog');
 const status=document.getElementById('clothing-status');
@@ -39,7 +39,7 @@ function render(){
   const card=node('article',undefined,'clothing-catalog-card');
   card.append(node('h3',set.name));
   const tryButton=node('button','Try On');tryButton.type='button';tryButton.className='secondary clothing-tryon-button';
-  tryButton.addEventListener('click',()=>{tryButton.disabled=true;Promise.resolve(openTryOn(set,card)).finally(()=>{tryButton.disabled=false;});});
+  tryButton.addEventListener('click',()=>{tryButton.disabled=true;Promise.resolve(openTryOn(set)).catch(e=>{status.textContent='Try On error: '+e.message;}).finally(()=>{tryButton.disabled=false;});});
   card.append(tryButton);
   const canvas=node('canvas',undefined,'clothing-artwork');canvas.width=360;canvas.height=240;canvas.setAttribute('role','img');canvas.setAttribute('aria-label',set.name+' original clothing artwork pieces');
   const note=node('p','Loading artwork…','clothing-artwork-note');
@@ -60,7 +60,8 @@ async function load(){
   if(!Array.isArray(data.sets)||data.sets.length!==36||data.sets.some(s=>!Array.isArray(s.pieces)||s.coinPrice!==700))throw Error('Catalog verification failed');
   sets=data.sets;
   for(const c of [...new Set(sets.map(s=>s.collection))].sort()){const option=node('option',c);option.value=c;filter.append(option);}
-  status.textContent='Approved clothing artwork preview. Purchases and equipping remain disabled until cloud-save verification.';
+  initializeTryOn(root.parentElement);
+  status.textContent='Choose Try On on any of the 36 outfits. Your hero appears in the fitting room above the catalog. Purchases remain disabled.';
   render();
  }catch(e){status.textContent=`Clothing catalog unavailable: ${e.message}. Existing equipment and saves are unaffected.`;}
 }
