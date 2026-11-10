@@ -11,6 +11,8 @@ import {text as hudText,html as hudHTML,attr as hudAttr} from './hud-dom.mjs';
 import {shouldWriteAdventure} from './save-policy.mjs';
 import {clockSynchronized} from './shared-clock.mjs';
 import {CloudAPI, CloudHeroStore} from './cloud-client.mjs';
+import {clothingRuntime} from './cosmetics/runtime.mjs';
+import {cosmeticTransaction,normalizeCosmetics} from './cosmetics/state.mjs';
 import {AccountMenu} from './account-ui.mjs';
 import { LegendaryMenu } from './legendary-ui.mjs';
 import { LEGENDARY, MERGE_POWERS } from './legendary-data.mjs';
@@ -66,6 +68,66 @@ window.addEventListener('royale-clothing-preview-request', event=>{
   if(!game?.started||!game.look||typeof event.detail?.receive!=='function')return;
   event.detail.receive({look:structuredClone(game.look),outfit:game.visualOutfit()});
 });
+// V3 clothing saves must be confirmed by the parent account session BEFORE
+// any coins or ownership are applied to the running hero.
+const clothingReplies=new Map();
+let clothingBusy=false;
+window.addEventListener('message',e=>{
+ if(e.origin!==location.origin||e.source!==parent||e.data?.type!=='royale-clothing-saved')return;
+ const finish=clothingReplies.get(e.data.requestId);
+ if(finish){clothingReplies.delete(e.data.requestId);finish(e.data.result);}
+});
+function saveClothingToAccount(snapshot){
+ return new Promise(resolve=>{
+  const requestId=crypto.randomUUID();
+  const timer=setTimeout(()=>{const pending=clothingReplies.get(requestId);if(pending){clothingReplies.delete(requestId);resolve({ok:false,error:'Cloud acknowledgement timed out. Reload your hero before retrying.'});}},20000);
+  clothingReplies.set(requestId,result=>{clearTimeout(timer);resolve(result);});
+  parent.postMessage({type:'royale-clothing-save',requestId,slot:activeSlot,snapshot},location.origin);
+ });
+}
+function currentClothingStatus(){
+ return {cosmetics:normalizeCosmetics(game.cosmetics),coins:game.hero.coins,ready:codePlay&&params.get('codePlay')==='v3'&&game.started&&!!activeId&&!online()&&game.treeVisit};
+}
+window.addEventListener('royale-clothing-snapshot-request',e=>{
+ if(typeof e.detail?.receive==='function')e.detail.receive(currentClothingStatus());
+});
+window.addEventListener('royale-clothing-operation',e=>{
+ const complete=typeof e.detail?.receive==='function'?e.detail.receive:()=>{};
+ void (async()=>{
+  if(clothingBusy)return complete({ok:false,error:'Another clothing save is in progress.'});
+  const status=currentClothingStatus();
+  if(!status.ready)return complete({ok:false,error:'Purchases require a loaded V3 cloud hero at the Tree of Eris. Open the game through V3 login.'});
+  if(!game.paused||!game.canSave())return complete({ok:false,error:'Wait until the hero is safely outside combat.'});
+  const slot=activeSlot,heroId=activeId,revision=game.cosmetics.revision;
+  clothingBusy=true;
+  try{
+   const {index}=await clothingRuntime.catalog();
+   const operation={...e.detail.operation,revision};
+   const result=cosmeticTransaction({state:game.cosmetics,coins:game.hero.coins,index,operation,safe:true,atWardrobe:true});
+   if(!result.ok)return complete(result);
+   const snapshotText=game.save();
+   if(!snapshotText)return complete({ok:false,error:'Hero snapshot is unavailable.'});
+   const snapshot=JSON.parse(snapshotText),economy=structuredClone(game.economy);
+   const debit=result.debit||0;
+   economy.revision++;
+   if(debit>0){economy.purchased++;economy.coinsSpent+=debit;}
+   economy.recent.push({id:economy.revision,kind:debit?'purchase':'equip',coins:-debit});
+   economy.recent=economy.recent.slice(-20);
+   snapshot.cosmetics=result.state;snapshot.coins=result.coins;snapshot.economy=economy;
+   const ack=await saveClothingToAccount(snapshot);
+   if(!ack?.ok)return complete({ok:false,error:ack?.error||'The cloud did not confirm this transaction. No local purchase was applied.'});
+   if(activeSlot!==slot||activeId!==heroId||game.cosmetics.revision!==revision)
+    return complete({ok:false,error:'Cloud saved the clothing, but the active hero changed. Reload that hero to synchronize.'});
+   game.cosmetics=result.state;game.hero.coins=result.coins;game.economy=economy;
+   const localSave=persistSnapshot(game.save(),true);
+   sendCodeProgress(true);
+   window.dispatchEvent(new Event('royale-clothing-updated'));
+   complete({...result,cloudConfirmed:true,localSaved:!!localSave?.ok});
+  }catch(error){complete({ok:false,error:error?.message||'Could not complete clothing transaction.'});}
+  finally{clothingBusy=false;}
+ })();
+});
+
 let soundEnabled=false,toastUntil=0,regionName='',lastHud='',fps=60,drawMs=0,qaClock=0;
 // One accessible navigation bar follows the current nested overlay.
 const menuExitActions=document.createElement('nav');menuExitActions.id='menu-exit-actions';menuExitActions.className='menu-exit-actions';menuExitActions.setAttribute('aria-label','Return from current menu');menuExitActions.hidden=true;
