@@ -47,8 +47,8 @@ test('loader verifies every asset before drawing and falls back safely if decodi
  assert.equal(atlas.draw(ctx,300,550,{face:-1,grounded:true,vx:-185},.3),true);
  const drawn=ops.find(x=>Array.isArray(x));
  assert.ok(drawn&&drawn.length===9,'must use cropped atlas frame not show an entire storyboard poster');
+ assert.equal(drawn[3],160);
  assert.equal(drawn[4],160);
- assert.equal(drawn[5],160);
  assert.equal(ops[0],'save');assert.equal(ops.at(-1),'restore');
  const broken=new V2GeneratedSprites({loader:async()=>{throw Error('broken atlas')}});
  assert.equal(await broken.preload(),false);
