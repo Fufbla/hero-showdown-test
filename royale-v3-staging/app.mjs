@@ -53,7 +53,8 @@ window.addEventListener('message',async e=>{
    if(!previous||!snapshot?.world?.location||!snapshot.cosmetics||!Number.isSafeInteger(snapshot.coins)||snapshot.coins<0)throw Error('Invalid clothing save.');
    const oldRevision=previous.cosmetics?.revision||0;
    if(snapshot.cosmetics.revision!==oldRevision+1)throw Error('Clothing was modified by another game tab. Reload your hero.');
-   if(snapshot.coins>previous.coins)throw Error('Clothing cannot increase coins.');
+   // Coins may have increased legitimately since the last eight-second autosave.
+   // The child applies the catalog quote before sending this authenticated save.
    clothingSavesPending.add(slot);
    result=await save(slot,snapshot,{clothingAction:true});
  }catch(error){result={ok:false,error:error.message};}
