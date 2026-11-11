@@ -1,0 +1,76 @@
+name: Install and verify Action Chibi test
+on:
+  push:
+    branches: [chibi-12-frame-test]
+    paths: [.github/workflows/chibi-install.yml]
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: chibi-12-frame-test
+      - name: Reconstruct and verify approved build
+        env:
+          TRANSFER_PARTS: >-
+            [{"url":"https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/CEQhYzzoBjeBnJxfBC5N/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=DylAhBpBCNt6ZcfRunuJ9WfUCZU=","bytes":1048576,"sha256":"2bfde4cd5c06e19d68487d99aa5afc7c3e21e3f8baf1c3155e2be6de56da3f05"},{"url":"https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/FBPZVfo3BQSj33loDh1g/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=x1WTr722UJ1_1bCduKi68nw6bgk=","bytes":1048576,"sha256":"6d04b85cf412b1c30224481f67a8253f987e7111ee8d671b540d687b1410ba8a"},{"url":"https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/BIqjxyUliXwHR5mbeRCV/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=SNhJx0dwMybqfXYiCMduIOGKfxo=","bytes":1048576,"sha256":"9f68b60d7497511ff620edf513aa6c460aa94a4393f3fc112543c5126524343a"},{"url":"https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/bDq68OTX4jCcuUReAuEJ/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=GcaeacU5bLRXhGs2ft9fhT_yykc=","bytes":1048576,"sha256":"e03ad42965b715eab92d8c615e3816d9c9a8fedc810ef6eddeee06202573a791"},{"url":"https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/HiOk8wLsCPMXcE3u8FbD/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=yV4yYgvWVpNblbr_1GMFTbC2UmE=","bytes":1048576,"sha256":"fee592281a6739f6105c455f2ba39263357df5135a119d97f0d66633088a65c4"},{"url":"https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/if5g2GvobMrQhny6PYk0/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=lr1Y2fdDnYYE4V226kQp7JoRDdE=","bytes":1048576,"sha256":"148ced0023828a86164696bd304df4d774e4950346caa4d2e4139c1941ca565a"},{"url":"https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/uzgdv3ZkxYsqniSN1f7m/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=knCnKXOlWAtenD5jOTs-sP4k7-o=","bytes":1048576,"sha256":"d0c7c950c750c5e5fb16af2f9c5cd4c766b4d876014d459e3de6cf5a2da46ffb"},{"url":"https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/sKuqfZ86Q8STCyReS2dC/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=HsoX3LAIQKVAEB2KPKNp4_CnNYE=","bytes":903398,"sha256":"bdafdcd1c14ef5de7be5a4f2472b0dad61c14e0c83a87ccfedf33f08662b98ac"}]
+        run: |
+          python -m pip install --quiet Pillow
+          python - <<'PY'
+          import os,json,io,hashlib,urllib.request,zipfile
+          from pathlib import Path
+          from PIL import Image
+          parts=[]
+          for i,p in enumerate(json.loads(os.environ['TRANSFER_PARTS'])):
+              print('::add-mask::'+p['url'])
+              im=Image.open(io.BytesIO(urllib.request.urlopen(p['url'],timeout=60).read())).convert('RGBA')
+              assert im.size==(1024,1024)
+              data=im.getchannel('A').tobytes()[:p['bytes']]
+              assert hashlib.sha256(data).hexdigest()==p['sha256'], 'Part checksum mismatch'
+              parts.append(data)
+              print('Verified transfer part',i+1)
+          data=b''.join(parts)
+          assert len(data)==8243430
+          assert hashlib.sha256(data).hexdigest()=='3e74cddfa8ae04a766e99b0f909babb217dd3d424c7c41ef347b53f26c6e6f9e'
+          with zipfile.ZipFile(io.BytesIO(data)) as z:
+              for member in z.infolist():
+                  path=Path(member.filename)
+                  assert path.as_posix().startswith('royale-v3-staging/character-test/') and '..' not in path.parts
+                  path.parent.mkdir(parents=True,exist_ok=True)
+                  path.write_bytes(z.read(member))
+          root=Path('royale-v3-staging/character-test')
+          m=json.loads((root/'manifest.json').read_text())
+          assert m['frames']==12 and len(m['actions'])==6
+          for action,a in m['actions'].items():
+              raw=(root/a['src']).read_bytes()
+              assert hashlib.sha256(raw).hexdigest()==a['sha256']
+              im=Image.open(io.BytesIO(raw)); assert im.size==(3600,724) and im.mode=='RGBA'
+          print('All six 24-pose atlases verified at full resolution with transparency')
+          PY
+      - name: JavaScript syntax check
+        run: node --check royale-v3-staging/character-test/test-game.mjs
+      - name: Browser verification
+        run: |
+          python -m pip install --quiet playwright
+          python -m playwright install --with-deps chromium
+          python royale-v3-staging/character-test/qa/browser_test.py
+      - name: Save verified test build on test branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add royale-v3-staging/character-test
+          git commit -m 'Add verified 12-frame Action Chibi movement sandbox for test 0000000000'
+          git push origin HEAD:chibi-12-frame-test
+          git rev-parse HEAD
+      - name: Browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chibi-test-browser-evidence
+          path: |
+            chibi-test-results.json
+            chibi-*-verified.png
+          retention-days: 7
