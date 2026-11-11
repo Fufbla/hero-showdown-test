@@ -50,6 +50,6 @@ test('one atlas frame is drawn for each targeted enemy, not at the hero',()=>{
   }
 });
 test('art sources use game-local transparent atlases',()=>{
-  assert.match(ENEMY_CONTROL_VFX_SOURCES.roots,/ground-roots-trap\\.avif$/);
-  assert.match(ENEMY_CONTROL_VFX_SOURCES.whirlwind,/whirlwind-hit\\.avif$/);
+  assert.match(ENEMY_CONTROL_VFX_SOURCES.roots,/ground-roots-trap[.]avif$/);
+  assert.match(ENEMY_CONTROL_VFX_SOURCES.whirlwind,/whirlwind-hit[.]avif$/);
 });
