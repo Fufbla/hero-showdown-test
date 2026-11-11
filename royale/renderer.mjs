@@ -86,7 +86,9 @@ export class Renderer {
     oval(c,pos.x,pos.y+2,24,5,'#284f4b2f');
     // Only the 0000000000 sandbox can enable the generated atlas renderer.
     // Every other hero continues through the original Style C renderer.
-    const generated=this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,visualHero,t,1);
+    // Attach a read-only view of active powers only for the isolated sprite test.
+    const spriteHero=this.v2SpriteTest?{...visualHero,v2Active:game.powers?.active}:visualHero;
+    const generated=this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1);
     const pose=generated?poseFor(game.look,visualHero,t,'game'):
       drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{
         outfit:game.visualOutfit(),clothing:clothingRuntime.layers(game.cosmetics),

@@ -1,7 +1,7 @@
 // V2 TEST ONLY: lightweight effects accompanying imported generated body poses.
 // Combat hitboxes, cooldowns, projectiles, player movement and equipment remain
 // owned by the original simulation. None of this changes gameplay outcomes.
-export const V2_POWER_PREVIEW_VERSION='v2-power-vfx-prototype-v1';
+export const V2_POWER_PREVIEW_VERSION='v2-power-vfx-prototype-v2';
 const pi=Math.PI;
 function stroke(ctx,points,color,width=2){
  ctx.beginPath();ctx.moveTo(...points[0]);
@@ -49,42 +49,59 @@ export function drawV2PowerPreview(ctx,game,pos,time=0){
    }
   }
   if(flags.fireball){
-   const fx=x+face*28,fy=y-67;
-   const r=5+Math.sin(time*22)*1.5;
+   const age=Math.max(0,h.castAge||0),charge=Math.max(0,1-age/.24);
+   const fx=x+face*(39+charge*10),fy=y-44;
+   const r=4+charge*4+Math.sin(time*22)*1.2;
    ctx.fillStyle='#ffc34e';ctx.beginPath();ctx.arc(fx,fy,r,0,2*pi);ctx.fill();
-   ring(ctx,fx,fy,r+3,r+3,'#ff6c24',time*14,1.5);
+   ring(ctx,fx,fy,r+3,r+3,'#ff6c24',time*14,1.5+charge);
+   for(let i=0;i<3;i++){
+    const a=time*12+i*2*pi/3;
+    stroke(ctx,[[fx+Math.cos(a)*r,fy+Math.sin(a)*r],
+     [fx+Math.cos(a)*(r+6+charge*7),fy+Math.sin(a)*(r+6+charge*7)]],
+     '#ffdd70',1+charge);
+   }
   }
   if(flags.strength){
-   const px=x+face*42,py=y-61;
+   const age=Math.max(0,h.attack?.age||0),strike=Math.min(1,age/.24);
+   const px=x+face*(42+strike*13),py=y-45;
    for(let i=0;i<4;i++)stroke(ctx,[[px-face*(5+i*3),py-13+i*4],
-     [px+face*(4+i*3),py-3+i*4],[px+face*(12+i*3),py-15+i*5]],'#ffe45a',2.4);
+     [px+face*(4+i*3),py-3+i*4],[px+face*(12+i*3),py-15+i*5]],'#ffe45a',1.8+strike*1.4);
+   ring(ctx,px,py,6+strike*15,9+strike*12,'#ffe45a',time*10,1+strike*2);
   }
   if(flags.superKick){
-   ctx.beginPath();ctx.arc(x+face*24,y-27,27,-.95,.65);
-   ctx.strokeStyle='#ffd54d';ctx.lineWidth=4;ctx.stroke();
+   const age=Math.max(0,h.attack?.age||0),combo=h.attack?.comboIndex||0;
+   const sweep=Math.sin(age*13+combo*1.5)*.4;
+   ctx.beginPath();ctx.arc(x+face*(23+sweep*6),y-27,27,-1.15+sweep,.55+sweep);
+   ctx.strokeStyle='#ffd54d';ctx.lineWidth=3.5;ctx.stroke();
+   ring(ctx,x+face*32,y-30,12+Math.abs(sweep)*10,15,'#fff1a5',time*7,1.6);
   }
   if(flags.steel){
+   const pulse=Math.sin(time*5)*2;
    ctx.globalAlpha=.48;
-   ring(ctx,x,y-58,40,59,'#6dd5ff',time*.8,2.5);
-   ring(ctx,x,y-58,32,50,'#c9f6ff',time*.8+pi,1.5);
+   ring(ctx,x,y-58,40+pulse,59+pulse,'#6dd5ff',time*.8,2.5);
+   ring(ctx,x,y-58,32-pulse,50-pulse,'#c9f6ff',time*.8+pi,1.5);
    ctx.globalAlpha=1;
   }
   if(flags.roots){
    for(let i=-2;i<=2;i++){
-    const bx=x+i*15;
-    stroke(ctx,[[bx,y],[bx+Math.sin(time*3+i)*5,y-16],[bx+i*3,y-28]],'#75d84b',2.7);
+    const bx=x+i*15,reach=22+5*Math.sin(time*2+i*.8);
+    stroke(ctx,[[bx,y],[bx+Math.sin(time*3+i)*5,y-reach*.55],
+      [bx+i*3,y-reach]],'#75d84b',2.7);
    }
   }
   if(flags.whirlwind){
    for(let i=0;i<4;i++){
-    const ry=9+i*6,offset=Math.sin(time*5+i)*7;
-    ring(ctx,x+offset,y-12-i*20,22+i*4,ry,'#52bdff',time*7+i,2);
+    const ry=9+i*6,offset=Math.sin(time*6+i)*9;
+    ring(ctx,x+offset,y-12-i*20,22+i*4+Math.sin(time*8+i)*2,
+      ry,'#52bdff',time*7+i,2);
    }
   }
   if(flags.agility){
-   ctx.globalAlpha=.45;
+   const dodge=Math.max(0,1-(h.dodgeAge??1)/.24);
+   ctx.globalAlpha=.25+.5*dodge;
    for(let i=1;i<=3;i++){
-    stroke(ctx,[[x-face*i*16,y-30],[x-face*i*23,y-74]],'#4cbaff',2);
+    const trail=16+i*7+dodge*15;
+    stroke(ctx,[[x-face*trail,y-30],[x-face*(trail+7),y-74]],'#4cbaff',2);
    }
    ctx.globalAlpha=1;
   }

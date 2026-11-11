@@ -7,7 +7,7 @@ import {v2PowerEffectFlags,drawV2PowerPreview,V2_POWER_PREVIEW_VERSION} from '..
 const root=new URL('../v2-sprites/',import.meta.url);
 
 test('all three actual generated WebP atlases have transparent WebP metadata and registered cell grids',async()=>{
- assert.equal(V2_SPRITE_VERSION,'grounded-run-cape-edge-guard-v4');
+ assert.equal(V2_SPRITE_VERSION,'power-motion-preview-v5');
  for(const [name,meta] of Object.entries(V2_SPRITE_ATLASES)){
   const b=await readFile(new URL(meta.file,root));
   assert.ok(b.byteLength>20000,name+' source file is missing or empty');
@@ -64,6 +64,36 @@ test('hero state selects idle, run, jump, double jump in both horizontal directi
  assert.equal(chooseV2Frame({...base,attack:{kind:'punch',power:'strength'}},0).scene,'runRight','power punch can show the V2 hero');
  assert.equal(chooseV2Frame({...base,attack:{kind:'kick',power:'superKick'}},0).scene,'jumpRight','super kick can show the V2 hero');
 });
+test('V2-only powers advance through distinct cast and combo poses without altering hero state',()=>{
+ const base={face:1,grounded:true,vx:0,cycle:0,castAge:1,dodgeAge:1};
+ const immutable={...base,attack:{kind:'punch',power:'strength',age:.16}};
+ const original=JSON.stringify(immutable);
+ assert.equal(chooseV2Frame(immutable,0).scene,'runRight');
+ assert.equal(JSON.stringify(immutable),original,'pose selection must not mutate gameplay state');
+ const strength=[0,.09,.16,.24,.36].map(age=>
+  chooseV2Frame({...base,attack:{kind:'punch',power:'strength',age}},0).index);
+ assert.deepEqual(strength,[0,4,5,6,7],'strength winds up and follows through across five planted poses');
+ const kicks=[0,.09,.17,.25].map(age=>
+  chooseV2Frame({...base,attack:{kind:'kick',power:'superKick',age,comboIndex:0}},0).index);
+ assert.deepEqual(kicks,[0,1,2,3],'super kick uses sequential frames');
+ assert.equal(chooseV2Frame({...base,attack:{kind:'kick',power:'superKick',age:0,comboIndex:1}},0).index,1,
+  'consecutive combo kicks begin at alternating frames');
+ const casting=[.01,.08,.13,.2].map(castAge=>
+  chooseV2Frame({...base,castAge},0).index);
+ assert.deepEqual(casting,[0,2,3,4],'fireball advances through wind-up, charge, release and recovery poses');
+ assert.equal(chooseV2Frame({...base,face:-1,v2Active:{roots:{}}},0).scene,'idleLeft');
+ assert.equal(chooseV2Frame({...base,v2Active:{roots:{}}},0).index,2);
+ assert.equal(chooseV2Frame({...base,v2Active:{whirlwind:{}}},0).index,4);
+ assert.equal(chooseV2Frame({...base,v2Active:{roots:{}},vx:220},0).scene,'runRight',
+  'active powers must not freeze running');
+ assert.deepEqual(chooseV2Frame({...base,agile:true,dodgeAge:.05},0),
+  {scene:'idleRight',index:4},'stationary agility dodge must keep its hero silhouette');
+ assert.deepEqual(chooseV2Frame({...base,face:-1,vx:-280,agile:true,dodgeAge:.05},0),
+  {scene:'runLeft',index:4},'moving agility dodge must use planted frames');
+ assert.equal(chooseV2Frame({...base,attack:{kind:'punch',power:'unknown'}},0),null,
+  'unknown attacks preserve original renderer fallback');
+});
+
 test('loader verifies every asset before drawing and falls back safely if decoding fails',async()=>{
  const loaded=[];
  const atlas=new V2GeneratedSprites({loader:async file=>{
@@ -93,7 +123,7 @@ test('loader verifies every asset before drawing and falls back safely if decodi
  assert.equal(broken.draw(ctx,0,0,{},0),false);
 });
 test('V2-only ability overlays cover all nine powers plus villain merge without affecting simulation',()=>{
- assert.equal(V2_POWER_PREVIEW_VERSION,'v2-power-vfx-prototype-v1');
+ assert.equal(V2_POWER_PREVIEW_VERSION,'v2-power-vfx-prototype-v2');
  const hero={face:1,castAge:.01,steel:true,agile:true,flying:true,vx:350,attack:{kind:'punch',power:'strength'}};
  const game={hero,powers:{active:{roots:{},whirlwind:{}},speed:.5},legendary:{active:'venomis'},mergeEffects:[{id:'venomis'}]};
  const before=JSON.stringify(game);

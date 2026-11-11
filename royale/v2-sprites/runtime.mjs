@@ -1,7 +1,7 @@
 // Experimental V2-only generated character art. This renderer is opt-in for
 // the public 0000000000 local sandbox; production heroes never import it.
 // Source images are transparent registered atlases, not screenshot posters.
-export const V2_SPRITE_VERSION='grounded-run-cape-edge-guard-v4';
+export const V2_SPRITE_VERSION='power-motion-preview-v5';
 export const V2_SPRITE_ATLASES=Object.freeze({
  idle_run:Object.freeze({file:'idle_run.webp',cols:8,rows:4,cell:160}),
  jump:Object.freeze({file:'jump_fixed.webp',cols:6,rows:2,cell:192}),
@@ -31,14 +31,34 @@ export function chooseV2Frame(hero,time=0){
  // the clean V2 atlases while the original game supplies combat/projectile FX.
  // Basic punch/kick still uses the original accurate combat pose as fallback.
  if(hero?.attack?.kind){
-  if(hero.attack.power==='strength')return {scene:'run'+suffix,index:5};
-  if(hero.attack.power==='superKick')return {scene:'jump'+suffix,index:5};
+  // The original atlas contains only idle/run/jump, not bespoke combat art.
+  // Play a short, deterministic sequence of compatible poses instead of
+  // freezing on one poster frame for the entire strike. Combat is untouched.
+  const attack=hero.attack,age=clamp(attack.age??.16,0,.48);
+  if(attack.power==='strength'){
+   const stage=Math.min(GROUNDED_RUN_FRAMES.length-1,Math.floor(age/.075));
+   return {scene:'run'+suffix,index:GROUNDED_RUN_FRAMES[stage]};
+  }
+  if(attack.power==='superKick'){
+   const stage=Math.min(5,Math.floor(age/.08));
+   const alternate=Math.max(0,Math.floor(attack.comboIndex||0))%2;
+   return {scene:'jump'+suffix,index:(stage+alternate)%6};
+  }
   return null;
  }
- if(hero?.castAge<.24)return {scene:'idle'+suffix,index:3};
+ if(hero?.castAge<.24){
+  // Wind-up -> charge -> release -> follow-through; never modify the actual
+  // fireball spawn or timing in the simulation.
+  const cast=clamp(hero.castAge??0,0,.239);
+  return {scene:'idle'+suffix,index:[0,2,3,4][Math.min(3,Math.floor(cast/.06))]};
+ }
  // A dodge is not a running step. Frame 1 is an airborne storyboard pose;
  // avoid injecting it into the grounded run sequence.
- if(hero?.dodgeAge<.22)return null;
+ if(hero?.dodgeAge<.22){
+  // Stay inside the registered painted silhouette during an agility dodge.
+  // Use a planted run frame rather than the airborne storyboard frame.
+  return {scene:(Math.abs(hero?.vx||0)>25?'run':'idle')+suffix,index:4};
+ }
  if(hero?.flying)return {scene:'jump'+suffix,index:3};
  if(hero?.grounded===false){
   const double=hero?.jumps>=2,scene=(double?'double':'jump')+suffix;
@@ -49,6 +69,10 @@ export function chooseV2Frame(hero,time=0){
   return {scene,index};
  }
  const speed=Math.abs(hero?.vx||0);
+ // Temporary stationary power stances, using existing registered character
+ // art rather than new unverified sprite sheets.
+ if(speed<=25&&hero?.v2Active?.roots)return {scene:'idle'+suffix,index:2};
+ if(speed<=25&&hero?.v2Active?.whirlwind)return {scene:'idle'+suffix,index:4};
  if(speed>25){
   // h.cycle advances with actual travel distance in the physics engine.
   // Tying sprite phase to distance prevents feet cycling while stationary
