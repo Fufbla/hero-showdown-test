@@ -86,6 +86,10 @@ test('V2-only powers advance through distinct cast and combo poses without alter
  assert.equal(chooseV2Frame({...base,v2Active:{whirlwind:{}}},0).index,4);
  assert.equal(chooseV2Frame({...base,v2Active:{roots:{}},vx:220},0).scene,'runRight',
   'active powers must not freeze running');
+ assert.deepEqual(chooseV2Frame({...base,agile:true,dodgeAge:.05},0),
+  {scene:'idleRight',index:4},'stationary agility dodge must keep its hero silhouette');
+ assert.deepEqual(chooseV2Frame({...base,face:-1,vx:-280,agile:true,dodgeAge:.05},0),
+  {scene:'runLeft',index:4},'moving agility dodge must use planted frames');
  assert.equal(chooseV2Frame({...base,attack:{kind:'punch',power:'unknown'}},0),null,
   'unknown attacks preserve original renderer fallback');
 });
