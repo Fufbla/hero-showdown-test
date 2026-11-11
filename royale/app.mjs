@@ -14,7 +14,7 @@ import {CloudAPI, CloudHeroStore} from './cloud-client.mjs';
 import {v2GeneratedSprites} from './v2-sprites/runtime.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
 import {cosmeticTransaction,normalizeCosmetics} from './cosmetics/state.mjs';
-import {isV2TestRoute,V2_TEST_STORAGE_PREFIX,v2TestLook} from './v2-test-hero.mjs';
+import {isV2TestRoute,V2_TEST_STORAGE_PREFIX,v2TestLook,maxV2TestPowers,hasMaxV2TestPowers} from './v2-test-hero.mjs';
 import {AccountMenu} from './account-ui.mjs';
 import { LegendaryMenu } from './legendary-ui.mjs';
 import { LEGENDARY, MERGE_POWERS } from './legendary-data.mjs';
@@ -57,7 +57,7 @@ const codePlay=['1','v3'].includes(params.get('codePlay'))&&window.parent!==wind
 const storagePrefix = testPrefix || (v2TestHero?V2_TEST_STORAGE_PREFIX:(codePlay?(params.get('codePlay')==='v3'?'royale-v3-play:':'royale-code-play-v1:'):(practiceHero ? `style-c-trial-v1-${practiceHero}:` : '')));
 const storage={getItem:key=>(testPrefix||practiceHero?sessionStorage:localStorage).getItem(storagePrefix+key),setItem:(key,value)=>(testPrefix||practiceHero?sessionStorage:localStorage).setItem(storagePrefix+key,value)};
 $('hero-art-status').textContent='Opening saved heroes…';
-const localStore=new LocalHeroStore(storage);let store=localStore;
+const localStore=new LocalHeroStore(storage,{allowOverBudgetPowers:v2TestHero});let store=localStore;
 let ledger=null,ledgerError='',criticalPending=null,fixtureSaveFailures=0,fixtureOrdinaryFailures=0;
 try{ledger=await LegendaryLedger.open(window.indexedDB,storagePrefix?storagePrefix+'permanent':'healthia.royale.permanent.v1');await reconcileLegendaryStore(store,ledger);}catch(error){ledger?.close();ledger=null;ledgerError=error.message||'Permanent storage is unavailable.';}
 $('hero-art-status').textContent='Preparing hero artwork…';
@@ -338,7 +338,7 @@ function openRoster(){if(online()){multiplayerMenu.open();return;}if(!game.canSa
 function continueHero(index){
   const linked=localStore.slot(index);if(linked&&multiplayerMenu.isLinked(linked.id)){activeSlot=index;multiplayerMenu.open();void multiplayerMenu.run(()=>multiplayerMenu.connect());return;}
   const slot=store.slot(index);if(!slot)return;if(slot.snapshot.legendary.revision&&!ledger){say('This hero needs its permanent progress record. '+ledgerError,9);return;}
-  activeSlot=index;activeId=slot.id;game=new Game({save:slot.snapshot});startPatrol(true);
+  activeSlot=index;activeId=slot.id;game=new Game({save:slot.snapshot,testPowers:v2TestHero});startPatrol(true);
 }
 async function openCreator(index=activeSlot,isEdit=true){
   if(isEdit&&!canLeaveMenu())return;
@@ -363,7 +363,7 @@ async function begin(){
   const validation=creator.validate();if(!validation.ok)return;
   const look=creator.read();look.name=validation.name;
   if(editing){const q=game.makeoverPreview(look);if(!q.ok){say(q.error);return;}makeoverReview=q;$('makeover-confirm-text').textContent=`Apply these changes for ${q.cost} coins? ${q.makeover?'Complete makeover price applied.':'Your level, equipment and progress stay the same.'}`;$('makeover-confirm').hidden=false;$('confirm-makeover').focus();}
-  else{activeSlot=creatorSlot;activeId=null;game=new Game({look});if(store.cloud){$('begin').disabled=true;try{await store.create(activeSlot,game.save());activeId=store.slot(activeSlot).id;}catch(e){say(e.message,8);return;}finally{$('begin').disabled=false;}}startPatrol(false);}
+  else{activeSlot=creatorSlot;activeId=null;game=new Game({look});if(v2TestHero)game=new Game({save:maxV2TestPowers(JSON.parse(game.save()),{starterLoadout:true}),testPowers:true});if(store.cloud){$('begin').disabled=true;try{await store.create(activeSlot,game.save());activeId=store.slot(activeSlot).id;}catch(e){say(e.message,8);return;}finally{$('begin').disabled=false;}}startPatrol(false);}
 }
 function pause(){if(!game.started||screen!=='play')return;if(codePlay)sendCodeProgress(true);showPause();persist();}
 function showPause(){pausePanel('home');$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero','manual-save'])$(id).disabled=!game.canSave();$('safe-save-note').textContent=game.canSave()?(online()?'Server saving is active. Save Game confirms your current position.':store.cloud?'Manual cloud saving is available.':'Saving is available · browser-local only.'):'Saving is locked. Resume and spend five seconds without attacking or taking damage.';$('resume').focus();}
@@ -590,8 +590,16 @@ if(v2TestHero){
  // Never read the normal V3 store, and never send its gameplay to Supabase.
  if(!store.slot(0)&&store.writable){
   const hero=new Game({look:v2TestLook(styleCDefault('male'))});
-  const created=store.writeSlot(0,hero.save(),{expectedId:null,requireDurable:true});
+  const created=store.writeSlot(0,maxV2TestPowers(JSON.parse(hero.save()),{starterLoadout:true}),{expectedId:null,requireDurable:true});
   if(!created.ok)throw Error('Unable to initialize isolated V2 Test Hero: '+created.error);
+ }
+ // Existing 0000000000 heroes keep their saves and loadouts while gaining all powers.
+ for(let slotIndex=0;slotIndex<3;slotIndex++){
+  const current=store.slot(slotIndex);
+  if(current&&!hasMaxV2TestPowers(current.snapshot)){
+   const upgraded=store.writeSlot(slotIndex,maxV2TestPowers(current.snapshot),{expectedId:current.id,region:current.lastRegion,requireDurable:true});
+   if(!upgraded.ok)throw Error('Unable to max test powers in Slot '+(slotIndex+1)+': '+upgraded.error);
+  }
  }
  const phase=document.querySelector('.phase-label');
  if(phase)phase.textContent='V2 TEST CHARACTER · 0000000000 · LOCAL SANDBOX';
@@ -599,7 +607,7 @@ if(v2TestHero){
 renderRoster();setScreen('roster');
 if(v2TestHero&&store.slot(0)){
  continueHero(0);
- say('V2 Test Hero · This browser only. Your production cloud heroes are untouched.',8);
+ say('V2 Test Hero · All nine powers are Level 20. Edit your three skill slots at the Tree of Eris.',8);
 }
 if (practiceHero && store.slot(0)) {
   continueHero(0);

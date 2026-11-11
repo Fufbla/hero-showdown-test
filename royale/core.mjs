@@ -28,14 +28,14 @@ export const ATTACKS = Object.freeze({
   kick: { startup: .10, active: .13, duration: .39, reach: 76, damage: 8 },
 });
 export { DEFAULT_LOOK, sanitizeLook } from './appearance.mjs';
-export function decodeSave(text) {
+export function decodeSave(text,{allowOverBudgetPowers=false}={}) {
   try {
     const data = JSON.parse(text);
     if (!data || ![1,2,3,4,5,6,7,8].includes(data.version) || (data.version>=2 && (!data.look || typeof data.look!=='object'))) return null;
     if(data.version>=6&&(!data.economy||data.inventory?.retired==null||!Object.hasOwn(data,'sanctuary')))return null;
     const integer = (value, max) => clamp(Math.floor(Number(value) || 0), 0, max);
     const level = Math.max(1, integer(data.level, LEVEL_CAP));
-    const powers=normalizePowers(data.version>=3?data.powers:null,level,{strict:data.version>=3});
+    const powers=normalizePowers(data.version>=3?data.powers:null,level,{strict:data.version>=3,allowOverBudget:allowOverBudgetPowers});
     if(!powers)return null;
     const checkpoint=integer(data.checkpoint,CAMPS.length-1);
     const world=normalizeWorld(data.version>=4?data.world:null,checkpoint),inventory=data.version>=4?normalizeInventory(data.inventory):emptyInventory();
@@ -63,7 +63,8 @@ export function decodeSave(text) {
   } catch { return null; }
 }
 export class Game {
-  constructor({ look, save = null, surfaces = null, random = Math.random, equipment = {}, now = sharedNow } = {}) {
+  constructor({ look, save = null, surfaces = null, random = Math.random, equipment = {}, now = sharedNow, testPowers = false } = {}) {
+    this.testPowers=testPowers===true;
     this.look = sanitizeLook(look ?? save?.look); this.outfit = sanitizeOutfit(save?.outfit); this.cosmetics=normalizeCosmetics(save?.cosmetics)??emptyCosmetics(); this.surfaces = surfaces||regionSurfaces(save?.world?.region||1); this.time = 0; this.paused = false;
     this.checkpoint = save?.checkpoint || 0; this.kills = save?.kills || 0;
     this.species = new Set(save?.species || []); this.reachedEnd = save?.reachedEnd || false;
@@ -79,7 +80,7 @@ export class Game {
       maxHp: 100 + (level - 1) * 15, invulnerable: 1.7, attack: null, attackBuffer: null,
       pose: 'idle', cycle: 0, landing: 0, stun: 0, dead: false, jumpAge: 100, hurtAge: 100, defeatAge: 0, respawnAge: 100 };
     this.refreshEquipment();
-    this.powers=new PowerSystem(this,normalizePowers(save?.powers,level)||normalizePowers(null,level));this.refreshEquipment();
+    this.powers=new PowerSystem(this,normalizePowers(save?.powers,level,{allowOverBudget:this.testPowers})||normalizePowers(null,level));this.refreshEquipment();
     this.enemies = regionSpawns(this.regionId).map(([type, x, surface], id) => this.makeEnemy(type, x, surface, id));
     const location=save?.world?.location;
     if(location){Object.assign(this.hero,{x:location.x,y:location.y,prevX:location.x,prevY:location.y,face:location.face,hp:clamp(location.hp||this.hero.maxHp,Number.EPSILON,this.hero.maxHp),vx:location.vx||0,vy:location.vy||0,jumps:location.jumps||0,grounded:this.surfaces.some(s=>location.x>=s.x&&location.x<=s.x+s.w&&Math.abs(location.y-s.y)<.01)});}

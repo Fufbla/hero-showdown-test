@@ -58,15 +58,15 @@ export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
     default: throw new Error('Unknown power');
   }
 }
-export function normalizePowers(raw,heroLevel,{strict=false}={}) {
+export function normalizePowers(raw,heroLevel,{strict=false,allowOverBudget=false}={}) {
   const levels=Object.fromEntries(POWER_IDS.map(id=>[id,integer(raw?.levels?.[id],0,20)]));
   const spent=Object.values(levels).reduce((a,b)=>a+b,0),earned=Math.max(0,heroLevel-1);
   // Never silently refund or redistribute an invalid ledger.
-  if(spent>earned || (strict && (!raw || !raw.levels || POWER_IDS.some(id=>!Number.isInteger(raw.levels[id])||raw.levels[id]<0||raw.levels[id]>20)))) return null;
+  if((!allowOverBudget&&spent>earned) || (strict && (!raw || !raw.levels || POWER_IDS.some(id=>!Number.isInteger(raw.levels[id])||raw.levels[id]<0||raw.levels[id]>20)))) return null;
   const used=new Set(),equipped=Array.from({length:ACTIVE_SLOTS},(_,i)=>{
     const id=raw?.equipped?.[i];if(!POWER_IDS.includes(id)||POWERS[id].passive||!levels[id]||used.has(id))return null;used.add(id);return id;
   });
-  return {levels,equipped,points:earned-spent,recovery:Object.fromEntries(POWER_IDS.map(id=>[id,clamp(Number(raw?.recovery?.[id])||0,0,120)]))};
+  return {levels,equipped,points:Math.max(0,earned-spent),recovery:Object.fromEntries(POWER_IDS.map(id=>[id,clamp(Number(raw?.recovery?.[id])||0,0,120)]))};
 }
 export function attackRate(level,equipment={}) {return 1+Math.min(.5,(level?powerStats('speed',level,{equipment}).attackBonus:0)+equipmentStats(equipment).attackSpeed);}
 export const isBoss = e => e?.boss === true || e?.legendary === true;

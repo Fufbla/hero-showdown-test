@@ -57,7 +57,7 @@ export class InstantPowerUpgrades{
     if (reason || !game.paused) return fail(reason || 'Open the slot to choose a power.');
     const record = store.slot(index);
     if (!record || record.id !== heroId || !store.writable) return fail(store.message || 'Select a writable hero before equipping.');
-    const snapshot = decodeSave(game.save());
+    const snapshot = decodeSave(game.save(),{allowOverBudgetPowers:game.testPowers===true});
     if (!snapshot) return fail('The saved hero is unavailable.');
     const equipped = [...game.powers.data.equipped];
     const other=id===null?-1:equipped.indexOf(id);

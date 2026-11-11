@@ -5,7 +5,7 @@ export const PROFILE_KEY='healthia.royale.profiles.v2';
 export const SLOT_COUNT=3;
 const blank=()=>({version:2,revision:0,activeSlot:0,legacyImported:false,slots:[null,null,null]});
 const copy=value=>JSON.parse(JSON.stringify(value));
-export function parseProfiles(text){
+export function parseProfiles(text,{allowOverBudgetPowers=false}={}){
   try{
     const data=JSON.parse(text);
     if(data?.version!==2||!Array.isArray(data.slots)||data.slots.length!==SLOT_COUNT)return null;
@@ -13,7 +13,7 @@ export function parseProfiles(text){
     result.activeSlot=[0,1,2].includes(data.activeSlot)?data.activeSlot:0;result.legacyImported=data.legacyImported===true;
     for(let i=0;i<3;i++){
       const slot=data.slots[i];if(slot===null)continue;
-      const snapshot=decodeSave(JSON.stringify(slot?.snapshot));
+      const snapshot=decodeSave(JSON.stringify(slot?.snapshot),{allowOverBudgetPowers});
       if(!snapshot||typeof slot.id!=='string'||!slot.id) return null; // Preserve damaged envelopes for recovery; never silently drop a hero.
       result.slots[i]={id:slot.id,createdAt:typeof slot.createdAt==='string'?slot.createdAt:null,updatedAt:typeof slot.updatedAt==='string'?slot.updatedAt:null,
         lastRegion:typeof slot.lastRegion==='string'?slot.lastRegion.slice(0,100):'Coastal Beginnings',snapshot};
@@ -22,15 +22,16 @@ export function parseProfiles(text){
   }catch{return null;}
 }
 export class LocalHeroStore{
-  constructor(storage,{now=()=>new Date().toISOString(),id=()=>globalThis.crypto?.randomUUID?.()||`local-${Date.now()}-${Math.random().toString(36).slice(2)}`}={}){
+  constructor(storage,{now=()=>new Date().toISOString(),id=()=>globalThis.crypto?.randomUUID?.()||`local-${Date.now()}-${Math.random().toString(36).slice(2)}`,allowOverBudgetPowers=false}={}){
+    this.allowOverBudgetPowers=allowOverBudgetPowers===true;
     this.storage=storage;this.now=now;this.id=id;this.data=blank();this.writable=true;this.durable=true;this.message='';this.lastRaw=null;this.load();
   }
   load(){
     this.writable=true;this.durable=true;this.message='';
     try{
       const raw=this.storage.getItem(PROFILE_KEY);this.lastRaw=raw;
-      if(raw!==null){const parsed=parseProfiles(raw);if(!parsed){this.writable=false;this.durable=false;this.message='Stored hero data needs recovery. It has been left untouched. This session will not overwrite it.';return;}this.data=parsed;return;}
-      const legacy=this.storage.getItem(SAVE_KEY),snapshot=decodeSave(legacy);
+      if(raw!==null){const parsed=parseProfiles(raw,{allowOverBudgetPowers:this.allowOverBudgetPowers});if(!parsed){this.writable=false;this.durable=false;this.message='Stored hero data needs recovery. It has been left untouched. This session will not overwrite it.';return;}this.data=parsed;return;}
+      const legacy=this.storage.getItem(SAVE_KEY),snapshot=decodeSave(legacy,{allowOverBudgetPowers:this.allowOverBudgetPowers});
       if(legacy!==null&&!snapshot){this.writable=false;this.durable=false;this.message='An older save could not be read. It has been left untouched.';return;}
       if(snapshot){this.data.slots[0]={id:this.id(),createdAt:null,updatedAt:null,lastRegion:`Coastal Beginnings · ${regionAt(CAMPS[snapshot.checkpoint].x).name}`,snapshot};this.data.legacyImported=true;this.message='Your Phase 1 hero is in slot 1. The original save is retained.';this.flush(this.data);}
     }catch{this.durable=false;this.message='Browser storage is unavailable. Heroes will last for this session only.';}
@@ -47,7 +48,7 @@ export class LocalHeroStore{
   }
   writeSlot(index,snapshot,{region='Coastal Beginnings',expectedId,requireDurable=false}={}){
     if(![0,1,2].includes(index))throw Error('Invalid hero slot');
-    const state=decodeSave(typeof snapshot==='string'?snapshot:JSON.stringify(snapshot));if(!state)throw Error('Invalid hero snapshot');
+    const state=decodeSave(typeof snapshot==='string'?snapshot:JSON.stringify(snapshot),{allowOverBudgetPowers:this.allowOverBudgetPowers});if(!state)throw Error('Invalid hero snapshot');
     const current=this.data.slots[index];
     if(expectedId!==undefined&&(current?.id??null)!==expectedId)return {ok:false,error:'This hero slot changed. Select it again before saving.'};
     if(current){
