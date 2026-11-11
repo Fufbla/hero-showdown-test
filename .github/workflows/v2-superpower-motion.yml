@@ -21,3 +21,19 @@ jobs:
         run: |
           node --test royale/tests/v2-generated-sprites.test.mjs
           node royale/v2-sprites/tests/animation-selection.test.mjs
+
+      - name: Install browser review dependencies
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install chromium --with-deps
+      - name: Run visual review with actual sprite atlases and test hero
+        run: |
+          python3 -m http.server 8174 --bind 127.0.0.1 > /tmp/v2-preview-server.log 2>&1 &
+          node royale/v2-sprites/tests/browser-visual-review.cjs
+      - name: Upload animation review screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v2-superpower-visual-review
+          path: visual-artifacts/
+          if-no-files-found: warn
