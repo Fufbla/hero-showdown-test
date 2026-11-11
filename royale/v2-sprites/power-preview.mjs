@@ -50,7 +50,7 @@ export function drawV2PowerPreview(ctx,game,pos,time=0){
   }
   if(flags.fireball){
    const age=Math.max(0,h.castAge||0),charge=Math.max(0,1-age/.24);
-   const fx=x+face*(20+charge*13),fy=y-67;
+   const fx=x+face*(39+charge*10),fy=y-44;
    const r=4+charge*4+Math.sin(time*22)*1.2;
    ctx.fillStyle='#ffc34e';ctx.beginPath();ctx.arc(fx,fy,r,0,2*pi);ctx.fill();
    ring(ctx,fx,fy,r+3,r+3,'#ff6c24',time*14,1.5+charge);
@@ -63,7 +63,7 @@ export function drawV2PowerPreview(ctx,game,pos,time=0){
   }
   if(flags.strength){
    const age=Math.max(0,h.attack?.age||0),strike=Math.min(1,age/.24);
-   const px=x+face*(25+strike*20),py=y-61;
+   const px=x+face*(42+strike*13),py=y-45;
    for(let i=0;i<4;i++)stroke(ctx,[[px-face*(5+i*3),py-13+i*4],
      [px+face*(4+i*3),py-3+i*4],[px+face*(12+i*3),py-15+i*5]],'#ffe45a',1.8+strike*1.4);
    ring(ctx,px,py,6+strike*15,9+strike*12,'#ffe45a',time*10,1+strike*2);
