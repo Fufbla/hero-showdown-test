@@ -14,7 +14,7 @@ jobs:
       - name: Prepare verified browser test
         run: |
           python -m pip install --quiet Pillow playwright
-          python -m playwright install --with-deps chromium
+          python -m playwright install chromium
           python - <<'PY'
           import base64,gzip,hashlib,pathlib
           data=gzip.decompress(base64.b64decode(pathlib.Path('tools/motion-preview-build.b64').read_text()))
@@ -44,7 +44,7 @@ jobs:
           import urllib.request,time,pathlib,hashlib,json
           base='https://fufbla.github.io/hero-showdown-test/royale-v3-motion-preview/'
           root=pathlib.Path('royale-v3-motion-preview')
-          files=['index.html','app.mjs','entry.mjs','motion-sprites.mjs','motion-safety.mjs','motion-assets/manifest.json']+[str(p.relative_to(root)) for p in (root/'motion-assets').glob('*.webp')]
+          files=['index.html','app.mjs','entry.mjs','motion-sprites.mjs','motion-safety.mjs','motion-manifest.json']+[str(p.relative_to(root)) for p in (root/'motion-assets').glob('*.webp')]
           report={}
           for name in files:
             expected=hashlib.sha256((root/name).read_bytes()).hexdigest()
