@@ -25,7 +25,7 @@ export function v2PowerEffectFlags(game){
   whirlwind:!!active.whirlwind,
   agility:!!h.agile,
   flight:!!h.flying,
-  speed:Number(powers.speed)>0&&Math.abs(h.vx||0)>180,
+  speed:Number(powers.speed)>0&&Math.abs(h.vx||0)>160,
   villainMerge:!!game?.legendary?.active&&!!(game?.mergeEffects?.length||game?.mergeShots?.length)
  };
 }
@@ -36,11 +36,28 @@ export function drawV2PowerPreview(ctx,game,pos,time=0){
  ctx.save();
  try{
   if(flags.speed){
-   ctx.globalAlpha=.42;
-   for(let i=0;i<4;i++)stroke(ctx,[
-    [x-face*(20+i*13),y-40-i*11],
-    [x-face*(56+i*13),y-40-i*11]
-   ],i%2?'#4bd7ff':'#b3ecff',2.2);
+   // Short-lived streaks sweep backwards from the actual feet. Direction
+   // comes from movement velocity, so left/right both show proper trailing.
+   const direction=Math.sign(h.vx||0)||face;
+   for(let i=0;i<7;i++){
+    const phase=((time*12.5+i*.23)%1+1)%1;
+    const back=11+i*10+phase*39;
+    const sy=y-(5+i*5.1);
+    const sx=x-direction*back;
+    ctx.globalAlpha=(.12+.47*(1-phase))*(1-i*.055);
+    stroke(ctx,[
+      [sx,sy],[sx-direction*(15+17*phase),sy-1.7]
+    ],i%2?'#53dafa':'#b4f8ce',1.5+(1-phase)*1.8);
+   }
+   // Dust puffs remain on the platform, not floating at chest height.
+   for(let i=0;i<3;i++){
+    const phase=((time*9.5+i*.37)%1+1)%1;
+    ctx.globalAlpha=.32*(1-phase);
+    ctx.beginPath();
+    ctx.ellipse(x-direction*(9+phase*(24+i*8)),y-3-phase*5,
+      2.1+phase*4,1.2+phase*2.2,0,0,pi*2);
+    ctx.fillStyle=i%2?'#a3f4cd':'#e3d5ac';ctx.fill();
+   }
    ctx.globalAlpha=1;
   }
   if(flags.flight){

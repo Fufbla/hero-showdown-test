@@ -95,9 +95,15 @@ export class Renderer {
     // Do not let the single static Speed poster replace a moving hero.
     // While genuinely running, paint the *same saved Style C character* with
     // eight articulated poses. Every other action keeps its original renderer.
-    const v2Running=useV2RunCycle(spriteHero,game,this.v2SpriteTest);
+    // Keep the animated Speed run available if an unrelated image atlas fails
+    // to load; deliberately turning V2 sprites OFF still selects original art.
+    const v2Running=useV2RunCycle(spriteHero,game,this.v2SpriteTest||!v2GeneratedSprites.ready);
     const approved=!v2Running&&this.v2SpriteTest&&approvedMotionSprites.draw(c,pos.x,pos.y,spriteHero,game,1);
     const generated=approved||(!v2Running&&this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1));
+    // The new eight-frame run previously bypassed Speed power imagery
+    // entirely. Paint its animated trails behind the running feet, without
+    // replacing or freezing the hero body.
+    if(v2Running)drawV2PowerPreview(c,game,pos,t);
     const pose=generated?poseFor(game.look,visualHero,t,'game'):
       drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{
         outfit:game.visualOutfit(),clothing:clothingRuntime.layers(game.cosmetics),

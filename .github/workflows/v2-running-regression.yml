@@ -8,6 +8,7 @@ on:
       - 'royale/style-c-motion.mjs'
       - 'royale/style-c-motion-paint.mjs'
       - 'royale/v2-sprites/run-motion.mjs'
+      - 'royale/v2-sprites/power-preview.mjs'
       - 'royale/tests/v2-run-motion.test.mjs'
       - '.github/workflows/v2-running-regression.yml'
   workflow_dispatch:
@@ -26,6 +27,7 @@ jobs:
           node --check royale/style-c-motion.mjs
           node --check royale/style-c-motion-paint.mjs
           node --check royale/v2-sprites/run-motion.mjs
+          node --check royale/v2-sprites/power-preview.mjs
       - name: Verify eight running poses and unchanged other actions
         run: |
           node --test royale/tests/v2-run-motion.test.mjs
