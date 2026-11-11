@@ -99,8 +99,19 @@ export class Renderer {
     // Keep the animated Speed run available if an unrelated image atlas fails
     // to load; deliberately turning V2 sprites OFF still selects original art.
     const v2Running=useV2RunCycle(spriteHero,game,this.v2SpriteTest||!v2GeneratedSprites.ready);
-    const approved=!v2Running&&this.v2SpriteTest&&approvedMotionSprites.draw(c,pos.x,pos.y,spriteHero,game,1);
-    const generated=approved||(!v2Running&&this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1));
+    // V2 makeover: use one articulated Style C body for walking, running and
+    // both jumps. The old full-body atlases are still available for other
+    // actions, but cannot abruptly replace the hero mid-stride or in the air.
+    // This does not affect cloud characters, other saved looks or physics.
+    const v2MoveEligible=this.v2SpriteTest&&game.testPowers===true&&!spriteHero.dead&&
+      spriteHero.stun<=0&&!spriteHero.attack&&!spriteHero.flying&&
+      (spriteHero.castAge??1)>=.24&&(spriteHero.respawnAge??1)>=.6;
+    const vx=Math.abs(spriteHero.vx||0);
+    const v2Walking=v2MoveEligible&&spriteHero.grounded===true&&vx>5&&vx<=240;
+    const v2Airborne=v2MoveEligible&&spriteHero.grounded===false;
+    const unifiedMotion=v2Running||v2Walking||v2Airborne;
+    const approved=!unifiedMotion&&this.v2SpriteTest&&approvedMotionSprites.draw(c,pos.x,pos.y,spriteHero,game,1);
+    const generated=approved||(!unifiedMotion&&this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1));
     // The new eight-frame run previously bypassed Speed power imagery
     // entirely. Paint its animated trails behind the running feet, without
     // replacing or freezing the hero body.
@@ -109,7 +120,7 @@ export class Renderer {
       drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{
         outfit:game.visualOutfit(),clothing:clothingRuntime.layers(game.cosmetics),
         cloth:this.cloth,dt:game.paused?0:dt,
-        ...(v2Running?{poseName:'v2-run'}:{})
+        ...(v2Running?{poseName:'v2-run'}:v2Walking?{poseName:'v2-walk'}:{})
       });
     drawPowerHero(c,game,pos,pose);
     // Composites the 8-cel metallic shield over the original, moving hero.
