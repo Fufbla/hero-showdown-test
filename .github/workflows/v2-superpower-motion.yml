@@ -1,0 +1,23 @@
+name: V2 Superpower Motion
+on:
+  push:
+    branches:
+      - feature/v3-test-hero-superpower-motion-nov10
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify motion renderer parses
+        run: |
+          node --check royale/v2-sprites/runtime.mjs
+          node --check royale/v2-sprites/power-preview.mjs
+          node --check royale/renderer.mjs
+      - name: Run original and new V2 sprite tests
+        run: |
+          node --test royale/tests/v2-generated-sprites.test.mjs
+          node royale/v2-sprites/tests/animation-selection.test.mjs
