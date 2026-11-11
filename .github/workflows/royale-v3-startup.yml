@@ -1,0 +1,29 @@
+name: Royale V3 real browser startup diagnostic
+on:
+  push:
+    branches: [main]
+    paths: 
+      - '.github/workflows/royale-v3-startup.yml'
+      - 'royale/renderer.mjs'
+      - 'royale/app.mjs'
+      - 'royale-v3-staging/index.html'
+      - 'royale-v3-staging/app.mjs'
+      - 'royale/qa/staging-startup.cjs'
+  workflow_dispatch:
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium and WebKit
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install chromium webkit --with-deps
+      - name: Probe staging launch and log browser errors
+        run: |
+          python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/v3-browser-server.log 2>&1 &
+          node royale/qa/staging-startup.cjs
