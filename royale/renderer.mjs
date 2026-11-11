@@ -14,7 +14,6 @@ import { clamp, ATTACKS } from './core.mjs';
 import { drawHero } from './hero-art.mjs';
 import {poseFor} from './style-c-rig.mjs';
 import {v2GeneratedSprites} from './v2-sprites/runtime.mjs';
-import {useV2RunCycle} from './v2-sprites/run-motion.mjs';
 import {approvedMotionSprites} from './v2-sprites/approved-motion.mjs';
 import {drawV2PowerPreview} from './v2-sprites/power-preview.mjs';
 import {drawSteelBodyOverlay} from './v2-sprites/steel-body-overlay.mjs';
@@ -91,41 +90,37 @@ export class Renderer {
     // Every other hero continues through the original Style C renderer.
     // Attach a read-only view of active powers only for the isolated sprite test.
     const spriteHero=this.v2SpriteTest?{...visualHero,v2Active:game.powers?.active}:visualHero;
-    // Approved 24-pose art takes priority when installed. The old atlas keeps
-    // true multi-frame running and remains fallback if the new asset is absent.
-    // Do not let the single static Speed poster replace a moving hero.
-    // While genuinely running, paint the *same saved Style C character* with
-    // eight articulated poses. Every other action keeps its original renderer.
-    // Keep the animated Speed run available if an unrelated image atlas fails
-    // to load; deliberately turning V2 sprites OFF still selects original art.
-    const v2Running=useV2RunCycle(spriteHero,game,this.v2SpriteTest||!v2GeneratedSprites.ready);
-    // V2 makeover: use one articulated Style C body for walking, running and
-    // both jumps. The old full-body atlases are still available for other
-    // actions, but cannot abruptly replace the hero mid-stride or in the air.
-    // This does not affect cloud characters, other saved looks or physics.
-    const v2MoveEligible=this.v2SpriteTest&&game.testPowers===true&&!spriteHero.dead&&
-      spriteHero.stun<=0&&!spriteHero.attack&&!spriteHero.flying&&
-      (spriteHero.castAge??1)>=.24&&(spriteHero.respawnAge??1)>=.6;
-    const vx=Math.abs(spriteHero.vx||0);
-    const v2Walking=v2MoveEligible&&spriteHero.grounded===true&&vx>5&&vx<=240;
-    const v2Airborne=v2MoveEligible&&spriteHero.grounded===false;
-    const unifiedMotion=v2Running||v2Walking||v2Airborne;
-    const approved=!unifiedMotion&&this.v2SpriteTest&&approvedMotionSprites.draw(c,pos.x,pos.y,spriteHero,game,1);
-    const generated=approved||(!unifiedMotion&&this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1));
-    // The new eight-frame run previously bypassed Speed power imagery
-    // entirely. Paint its animated trails behind the running feet, without
-    // replacing or freezing the hero body.
-    if(v2Running)drawV2PowerPreview(c,game,pos,t);
+    // Preserve the detailed full-body character captured in the Nov 10 4:48 PM
+    // recording. The V2 test hero uses the original illustrated atlas for
+    // idle, walking, running, jumping and double-jumping. Do not substitute
+    // the articulated Style C body for ordinary movement.
+    // Later approved illustrations remain available for actual power casts.
+    // This changes artwork selection ONLY; simulation and cloud heroes are
+    // intentionally untouched.
+    const active=game.powers?.active||{};
+    const specialArt=this.v2SpriteTest&&(
+      !!spriteHero.attack?.power ||
+      (spriteHero.castAge??100)<.24 ||
+      (!!spriteHero.grounded && (!!active.roots||!!active.whirlwind)) ||
+      (spriteHero.dodgeAge??100)<.30 ||
+      !!(game.legendary?.active && (game.mergeEffects?.length||game.mergeShots?.length))
+    );
+    const approved=!!specialArt&&approvedMotionSprites.draw(c,pos.x,pos.y,spriteHero,game,1);
+    // Speed particles belong behind the painted hero; never swap to a static
+    // full-body Speed poster when they are active.
+    const speedTrail=this.v2SpriteTest&&!approved&&Number(game.powers?.speed)>0&&
+      Math.abs(spriteHero.vx||0)>160;
+    if(speedTrail)drawV2PowerPreview(c,game,pos,t);
+    const generated=approved||(this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1));
     const pose=generated?poseFor(game.look,visualHero,t,'game'):
       drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{
         outfit:game.visualOutfit(),clothing:clothingRuntime.layers(game.cosmetics),
-        cloth:this.cloth,dt:game.paused?0:dt,
-        ...(v2Running?{poseName:'v2-run'}:v2Walking?{poseName:'v2-walk'}:{})
+        cloth:this.cloth,dt:game.paused?0:dt
       });
     drawPowerHero(c,game,pos,pose);
     // Composites the 8-cel metallic shield over the original, moving hero.
     if(this.v2SpriteTest&&h.steel)drawSteelBodyOverlay(c,game,pos);
-    if(generated&&!approved)drawV2PowerPreview(c,game,pos,t); // Approved artwork already includes painted VFX.
+    if(generated&&!approved&&!speedTrail)drawV2PowerPreview(c,game,pos,t); // Preserve painted power overlays.
     if(h.attack&&h.attack.power!=='superKick'){const a=h.attack,d=ATTACKS[a.kind];if(a.age>=d.startup&&a.age<d.startup+d.active){c.save();c.translate(h.x,h.y-43);c.scale(a.face,1);c.strokeStyle='#fff7d8c9';c.lineWidth=3;c.beginPath();c.arc(24,-8,a.kind==='kick'?48:35,-.7,.7);c.stroke();c.restore();}}
     for(const p of this.particles){if(p.life<=0)continue;if(!game.paused){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=210*dt;}c.globalAlpha=Math.max(0,p.life/p.max);oval(c,p.x,p.y,p.size,p.size,p.color);}c.globalAlpha=1;
     // Small foreground details give continuous ground a readable silhouette.
