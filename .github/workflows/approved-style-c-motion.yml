@@ -1,0 +1,33 @@
+name: Approved Style C Motion Atlas
+on:
+  push:
+    branches:
+      - feature/approved-24-motion-atlas-nov11
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check renderer and loader syntax
+        run: |
+          node --check royale/v2-sprites/approved-motion.mjs
+          node --check royale/renderer.mjs
+          node --check royale/app.mjs
+      - name: Verify approved frame mapping and fallback
+        run: node --test royale/tests/approved-motion.test.mjs
+      - name: Check installed atlas dimensions when present
+        run: |
+          if [ -f royale/v2-sprites/approved/approved-action-atlas.webp ]; then
+            python3 - <<'PY'
+          from pathlib import Path
+          p=Path('royale/v2-sprites/approved/approved-action-atlas.webp')
+          assert p.stat().st_size > 100000, 'Uploaded atlas appears incomplete'
+          print('Approved atlas asset present:',p.stat().st_size,'bytes')
+          PY
+          else
+            echo 'Approved binary sprite atlas not yet installed; old in-game art remains fallback'
+          fi
