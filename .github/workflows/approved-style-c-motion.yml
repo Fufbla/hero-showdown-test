@@ -41,6 +41,7 @@ jobs:
         run: |
           python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/approved-atlas-server.log 2>&1 &
           node royale/v2-sprites/tests/approved-motion-browser.cjs
+          node royale/v2-sprites/tests/browser-visual-review.cjs
       - name: Upload visual preview
         if: always()
         uses: actions/upload-artifact@v4
