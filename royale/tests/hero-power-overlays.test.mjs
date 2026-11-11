@@ -10,7 +10,7 @@ const make=(kind,age=1)=>({hero,powers:{active:{[kind]:{age,duration:2}}}});
 test('approved artwork layout is two six-frame transparent sheets',()=>{
  assert.equal(HERO_OVERLAY_VERSION,'approved-character-wrap-v1');
  for(const spec of Object.values(HERO_OVERLAY_ASSETS))
-   assert.deepEqual([spec.cols,spec.rows,spec.cell],[3,2,512]);
+   assert.deepEqual([spec.cols,spec.rows,spec.cell],[3,2,256]);
  assert.notEqual(HERO_OVERLAY_ASSETS.roots.file,HERO_OVERLAY_ASSETS.whirlwind.file);
 });
 test('state and frame selection read powers but never alter them',()=>{
@@ -31,7 +31,7 @@ test('render draws approved art behind and in front of an unchanged hero',async(
  const loads=[];
  assert.equal(await prepareHeroPowerOverlays(async url=>{
   loads.push(url.href);
-  return {width:1536,height:1024};
+  return {width:768,height:512};
  }),true);
  assert.equal(loads.length,2);
  assert.deepEqual(heroPowerOverlayStatus(),{roots:true,whirlwind:true});
@@ -43,7 +43,7 @@ test('render draws approved art behind and in front of an unchanged hero',async(
   assert.equal(drawHeroPowerOverlays(c,game,{x:240,y:500},1,'front'),true);
   assert.equal(drawn.length,2,kind+' must surround rather than replace hero');
   assert.ok(drawn.every(args=>args.length===9));
-  assert.ok(drawn.every(args=>args[3]===512&&args[4]===512));
+  assert.ok(drawn.every(args=>args[3]===256&&args[4]===256));
   assert.equal(JSON.stringify(game),before,'overlay cannot mutate physics or saves');
  }
 });
