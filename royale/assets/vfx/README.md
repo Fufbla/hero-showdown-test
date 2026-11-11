@@ -13,11 +13,11 @@ Before merging, confirm both image files are uploaded with exactly these names a
 
 The shared VFX renderer is [../../v2-sprites/hero-power-overlays.mjs](../../v2-sprites/hero-power-overlays.mjs). It draws Ground Roots and Whirlwind **around the existing character** in two passes, so every customized hero can use the same animation without replacement full-body images.
 
-Two approved transparent PNGs are required to enable the illustrated six-frame versions:
+Two approved transparent WebP sheets are now committed and enable the illustrated six-frame versions:
 
-- `ground-root-overlay.png` — 1536 x 1024, 3 columns x 2 rows of 512px frames
-- `whirlwind-overlay.png` — 1536 x 1024, 3 columns x 2 rows of 512px frames
+- `ground-root-overlay.webp` — 768 x 512, 3 columns x 2 rows of 256px frames
+- `whirlwind-overlay.webp` — 768 x 512, 3 columns x 2 rows of 256px frames
 
-Place both files **directly in `royale/assets/vfx/`**. Until present, the renderer displays a character-independent canvas fallback; it does not display the previous oversized whole-character power poster. The monster hit effects above remain separate and unchanged.
+Both files live **directly in `royale/assets/vfx/`**. The full-resolution approved 1536 x 1024 PNG source masters are preserved in the companion download. If loading fails, the renderer displays a character-independent canvas fallback instead of the previous oversized whole-character power poster. The monster hit effects above remain separate and unchanged.
 
 Only art rendering changes. Do not change gameplay durations, cooldowns, damage, hero appearances, cloud saves, or multiplayer networking.
