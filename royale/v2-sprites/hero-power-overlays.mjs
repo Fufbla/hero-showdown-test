@@ -1,12 +1,13 @@
 // Character-independent Ground Roots / Whirlwind: art is composited around
 // the EXISTING hero (never a replacement hero pose). Purely visual: reads
 // active power state and interpolated feet, never modifies combat or saves.
-// Approved sheets: 3 columns x 2 rows, 512px source cells, transparent PNG.
-// The procedural fallback is temporary until the approved artwork is uploaded.
+// Approved sheets: 3 columns x 2 rows, 256px optimized WebP cells, transparent.
+// Full-resolution 512px-per-cell PNG masters remain in the source asset pack.
+// The procedural fallback is used only if the approved artwork cannot load.
 export const HERO_OVERLAY_VERSION='approved-character-wrap-v1';
 export const HERO_OVERLAY_ASSETS=Object.freeze({
- roots:Object.freeze({file:'../assets/vfx/ground-root-overlay.png',cols:3,rows:2,cell:512}),
- whirlwind:Object.freeze({file:'../assets/vfx/whirlwind-overlay.png',cols:3,rows:2,cell:512})
+ roots:Object.freeze({file:'../assets/vfx/ground-root-overlay.webp',cols:3,rows:2,cell:256}),
+ whirlwind:Object.freeze({file:'../assets/vfx/whirlwind-overlay.webp',cols:3,rows:2,cell:256})
 });
 const loaded=new Map();
 let pending=null;
@@ -60,7 +61,7 @@ function imageLayer(c,img,meta,effect,x,y,layer){
  const [sx,sy]=[(index%meta.cols)*meta.cell,Math.floor(index/meta.cols)*meta.cell];
  const kind=effect.id,range=kind==='roots'?170:174;
  // A foot-pinned animation uses identical dimensions for every hero appearance.
- // Source cells have a 40px bottom inset; compensate so roots touch the floor.
+ // Source cells include a small bottom inset; anchor the drawn image at the feet.
  const top=y-range+14, left=x-range*.56, width=range*1.12, height=range;
  c.save();
  // Behind: all vines/wind. In front: edge ribbons and ground contact only.
