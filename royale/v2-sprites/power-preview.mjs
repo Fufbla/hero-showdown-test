@@ -93,20 +93,8 @@ export function drawV2PowerPreview(ctx,game,pos,time=0){
    ring(ctx,x+face*32,y-30,12+Math.abs(sweep)*10,15,'#fff1a5',time*7,1.6);
   }
   // Steel uses the reusable sprite overlay; avoid the old duplicate ring.
-  if(flags.roots){
-   for(let i=-2;i<=2;i++){
-    const bx=x+i*15,reach=22+5*Math.sin(time*2+i*.8);
-    stroke(ctx,[[bx,y],[bx+Math.sin(time*3+i)*5,y-reach*.55],
-      [bx+i*3,y-reach]],'#75d84b',2.7);
-   }
-  }
-  if(flags.whirlwind){
-   for(let i=0;i<4;i++){
-    const ry=9+i*6,offset=Math.sin(time*6+i)*9;
-    ring(ctx,x+offset,y-12-i*20,22+i*4+Math.sin(time*8+i)*2,
-      ry,'#52bdff',time*7+i,2);
-   }
-  }
+  // Ground Roots and Whirlwind are now layered around any character by
+  // hero-power-overlays.mjs. Never duplicate these effects in this preview.
   if(flags.agility){
    const dodge=Math.max(0,1-(h.dodgeAge??1)/.24);
    ctx.globalAlpha=.25+.5*dodge;
