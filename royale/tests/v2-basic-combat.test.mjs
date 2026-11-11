@@ -67,8 +67,12 @@ test('facing, airborne strikes and cancellation preserve gameplay ownership',()=
  assert.equal(selectBasicCombatFrame(h).direction,'left','strike keeps its captured hitbox direction');
  assert.equal(selectBasicCombatFrame({...h,attack:{...h.attack,age:0}}).index,0,'held next strike restarts');
  for(const interrupted of [{...h,dead:true},{...h,stun:.1},{...h,attack:null},
-  {...h,attack:{...h.attack,power:'strength'}},{...h,attack:{kind:'kick',power:'superKick'}},
-  {...h,attack:{kind:'unknown',age:0}}])assert.equal(selectBasicCombatFrame(interrupted),null);
+  {...h,attack:{...h.attack,power:'other'}},{...h,attack:{kind:'unknown',age:0}}])
+   assert.equal(selectBasicCombatFrame(interrupted),null);
+ assert.equal(selectBasicCombatFrame({...h,attack:{...h.attack,power:'strength'}}).kind,'punch',
+   'Super Strength uses the same polished animated blue-cape punch under the golden VFX');
+ assert.equal(selectBasicCombatFrame({...h,attack:{kind:'kick',face:-1,age:.08,power:'superKick'}}).kind,'kick',
+   'Super Kick uses the same polished animated blue-cape kick under the golden VFX');
  assert.deepEqual(h,before,'render selection must never change position, physics, or attacks');
 });
 
