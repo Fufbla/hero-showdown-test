@@ -10,6 +10,7 @@ on:
       - 'royale/v2-sprites/approved-effects.mjs'
       - 'royale/tests/v2-consistent-motion.test.mjs'
       - 'royale/tests/v2-approved-effects.test.mjs'
+      - 'royale/v2-sprites/tests/approved-fx-browser.cjs'
       - 'royale/tests/v2-generated-sprites.test.mjs'
       - 'royale/tests/v2-control-effects.test.mjs'
       - '.github/workflows/v2-canonical-hero.yml'
@@ -34,3 +35,18 @@ jobs:
           node --test royale/tests/v2-approved-effects.test.mjs
           node --test royale/tests/v2-control-effects.test.mjs
           node --test royale/tests/v2-generated-sprites.test.mjs
+      - name: Install real-browser render test dependencies
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install chromium --with-deps
+      - name: Inspect actual painted sprite atlas in Chromium
+        run: |
+          python3 -m http.server 8174 --bind 127.0.0.1 > /tmp/royale-v2-fx-server.log 2>&1 &
+          node royale/v2-sprites/tests/approved-fx-browser.cjs
+      - name: Upload painted animation visual proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: restored-approved-power-fx
+          path: visual-artifacts/restored-approved-power-fx.png
+          if-no-files-found: warn
