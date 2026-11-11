@@ -78,6 +78,44 @@ test('Steel Body draws transformed chrome sprite, not original character art',()
   else globalThis.document=oldDocument;
  }
 });
+test('all power and steel kick frames retain finite drawing coordinates',()=>{
+ const invalid=[];
+ const g=()=>({addColorStop(){}});
+ const ctx=new Proxy({},{
+  get(_target,key){
+   if(key==='createLinearGradient'||key==='createRadialGradient')return (...args)=>{
+    if(args.some(v=>typeof v==='number'&&!Number.isFinite(v)))invalid.push(key);
+    return g();
+   };
+   return (...args)=>{
+    if(args.some(v=>typeof v==='number'&&!Number.isFinite(v)))invalid.push(key);
+   };
+  },
+  set(target,key,value){target[key]=value;return true;}
+ });
+ const previous=globalThis.document;
+ globalThis.document={createElement:()=>({width:0,height:0,getContext:()=>ctx})};
+ try{
+  for(const amount of [0,.12,.25,.40,.55,.72,.80,.91,.96,.99]){
+   for(const [id,hero] of Object.entries({
+    fireball:{castAge:Math.min(.249,.249*amount)},
+    strength:{attack:{kind:'punch',power:'strength',age:amount*.27}},
+    superKick:{attack:{kind:'kick',power:'superKick',age:amount*.39}},
+    agility:{agile:true},flight:{flying:true},speed:{vx:340,cycle:amount*4}
+   })){
+    const game={hero,powers:{active:{},speed:.5},time:amount*3};
+    drawUniversalPowerFX(ctx,game,{x:250,y:590},amount*3,'back');
+    drawUniversalPowerFX(ctx,game,{x:250,y:590},amount*3,'front');
+   }
+   const hero={steel:true,grounded:true,attack:{kind:'kick',age:amount*.39},face:1};
+   drawSteelSilhouette(ctx,{hero,powers:{active:{steel:{age:1,duration:8}}}},{x:250,y:590},1,hero);
+  }
+ }finally{
+  if(previous===undefined)delete globalThis.document;
+  else globalThis.document=previous;
+ }
+ assert.deepEqual(invalid,[], 'all animation poses must be drawable on mobile Safari');
+});
 test('only 0000000000 receives current test renderer changes',async()=>{
  const renderer=await readFile(new URL('../renderer.mjs',import.meta.url),'utf8');
  assert.ok(renderer.includes('const steelMode=this.v2SpriteTest&&!!spriteHero.steel'));
