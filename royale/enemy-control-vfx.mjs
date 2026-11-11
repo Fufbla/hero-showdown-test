@@ -33,7 +33,7 @@ export function enemyControlAnchor(enemy,kind){
     :Math.min(225,Math.max(90,(Number(enemy.w)||45)*2.1));
   const height=kind==='roots'
     ?Math.min(135,Math.max(68,(Number(enemy.h)||65)*.96))
-    :Math.min(170,Math.max(88,(Number(enemy.h)||65)*1.22));
+    :Math.min(240,Math.max(160,(Number(enemy.h)||65)*1.9));
   return {x,groundY,width,height};
 }
 function drawFrame(c,entry,frame,anchor,kind,age){
