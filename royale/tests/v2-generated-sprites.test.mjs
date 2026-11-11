@@ -146,10 +146,8 @@ test('sprite test route is limited to the isolated public 0000000000 code',async
  assert.ok(!isV2TestCode('1234567890'));
  const app=await readFile(new URL('../app.mjs',import.meta.url),'utf8');
  const renderer=await readFile(new URL('../renderer.mjs',import.meta.url),'utf8');
- assert.ok(app.includes('renderer.v2VisualConsistency=true;'),'consistent style enabled only for isolated prototype');
- assert.ok(!app.includes("button.id='v2-sprite-toggle'"),'no outfit-switching atlas toggle');
- assert.ok(!renderer.includes('approvedMotionSprites.draw('),'poster sprites no longer replace the hero');
- assert.ok(!renderer.includes('v2GeneratedSprites.draw('),'generated sprites no longer replace the hero');
- assert.ok(renderer.includes('const pose=drawHero(c,pos.x,pos.y'),'one canonical live hero renderer');
- assert.ok(renderer.includes('this.v2SpeedTrail.draw('),'speed echoes sit behind that hero');
+ assert.ok(app.includes('if(v2TestHero){\n renderer.v2SpriteTest=true;'));
+ assert.ok(app.includes("button.id='v2-sprite-toggle'"),'compare button available only to test hero');
+ assert.ok(renderer.includes('this.v2SpriteTest&&v2GeneratedSprites.draw('));
+ assert.ok(renderer.includes("drawHero(c,pos.x,pos.y"),'existing game renderer remains as fallback');
 });
