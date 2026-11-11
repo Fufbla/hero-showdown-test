@@ -22,6 +22,19 @@ export const STYLE_C_MOTIONS = Object.freeze({
    f([0,1,1.5], [23,-44],[-25,-40], [-9,-4],[13,-4]),
    f([.5,2,1], [13,-46],[-13,-38], [-6,-13],[1,-4])
  ]),
+ // V2 test-only eight-key walk: two grounded contacts, controlled weight
+ // transfer, counter-swinging arms, softly flexed knees and continuous cape-safe
+ // silhouette. Never replace a live character with unrelated storyboard art.
+ 'v2-walk':clip(.50,true,[
+   f([0,0,1.0], [9,-40],[-23,-43], [19,-4],[-18,-9],{headTilt:-.012}),
+   f([-.3,2.1,1.5], [5,-39],[-19,-45], [11,-4],[-15,-14],{headTilt:.006}),
+   f([0,3.2,1.8], [14,-41],[-14,-45], [0,-4],[-11,-15],{headTilt:.014}),
+   f([.3,1.2,1.1], [22,-45],[-7,-41], [-15,-9],[9,-4],{headTilt:0}),
+   f([0,0,1.0], [23,-43],[-9,-40], [-18,-9],[19,-4],{headTilt:-.012}),
+   f([-.3,2.1,1.5], [19,-45],[-5,-39], [-15,-14],[11,-4],{headTilt:.006}),
+   f([0,3.2,1.8], [14,-45],[-14,-41], [-11,-15],[0,-4],{headTilt:.014}),
+   f([.3,1.2,1.1], [7,-41],[-22,-45], [9,-4],[-15,-9],{headTilt:0})
+ ]),
  run:clip(.33,true,[
    f([1,1,5], [2,-47],[6,-55], [19,-4],[-19,-13]),
    f([1,4.5,6], [9,-40],[-1,-52], [7,-4],[-19,-22]),
