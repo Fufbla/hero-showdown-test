@@ -7,7 +7,8 @@ export const STEEL_SILHOUETTE_CELLS=Object.freeze({
  idle:8, walk:12, run:14, jump:8, doubleJump:10, fall:6,
  land:6, punch:10, kick:12, hurt:6, flight:8
 });
-const CELL=192,TAU=Math.PI*2;
+// Wide transparent padding prevents the extended kick and punch poses clipping.
+const CELL=224,TAU=Math.PI*2;
 const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
 const fract=x=>((x%1)+1)%1;
 const sin=Math.sin,cos=Math.cos;
