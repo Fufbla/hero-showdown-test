@@ -54,7 +54,11 @@ export function chooseV2Frame(hero,time=0){
  }
  // A dodge is not a running step. Frame 1 is an airborne storyboard pose;
  // avoid injecting it into the grounded run sequence.
- if(hero?.dodgeAge<.22)return null;
+ if(hero?.dodgeAge<.22){
+  // Stay inside the registered painted silhouette during an agility dodge.
+  // Use a planted run frame rather than the airborne storyboard frame.
+  return {scene:(Math.abs(hero?.vx||0)>25?'run':'idle')+suffix,index:4};
+ }
  if(hero?.flying)return {scene:'jump'+suffix,index:3};
  if(hero?.grounded===false){
   const double=hero?.jumps>=2,scene=(double?'double':'jump')+suffix;
