@@ -17,6 +17,7 @@ import {v2GeneratedSprites} from './v2-sprites/runtime.mjs';
 import {approvedMotionSprites} from './v2-sprites/approved-motion.mjs';
 import {drawV2PowerPreview} from './v2-sprites/power-preview.mjs';
 import {drawSteelBodyOverlay} from './v2-sprites/steel-body-overlay.mjs';
+import {drawHeroPowerOverlays,heroPowerOverlayStates} from './v2-sprites/hero-power-overlays.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
 export { drawHero } from './hero-art.mjs';
 const PI = Math.PI;
@@ -98,14 +99,18 @@ export class Renderer {
     // This changes artwork selection ONLY; simulation and cloud heroes are
     // intentionally untouched.
     const active=game.powers?.active||{};
+    const wrappingPower=heroPowerOverlayStates(game).length>0;
     const specialArt=this.v2SpriteTest&&(
       !!spriteHero.attack?.power ||
       (spriteHero.castAge??100)<.24 ||
-      (!!spriteHero.grounded && (!!active.roots||!!active.whirlwind)) ||
       (spriteHero.dodgeAge??100)<.30 ||
       !!(game.legendary?.active && (game.mergeEffects?.length||game.mergeShots?.length))
     );
-    const approved=!!specialArt&&approvedMotionSprites.draw(c,pos.x,pos.y,spriteHero,game,1);
+    // Ground Roots and Whirlwind never display the old full-body posters.
+    // Their reusable VFX are drawn around the original hero, with separate
+    // back and foreground passes that work for EVERY customized appearance.
+    const approved=!wrappingPower&&!!specialArt&&approvedMotionSprites.draw(c,pos.x,pos.y,spriteHero,game,1);
+    drawHeroPowerOverlays(c,game,pos,t,'back');
     // Speed particles belong behind the painted hero; never swap to a static
     // full-body Speed poster when they are active.
     const speedTrail=this.v2SpriteTest&&!approved&&Number(game.powers?.speed)>0&&
@@ -118,6 +123,7 @@ export class Renderer {
         cloth:this.cloth,dt:game.paused?0:dt
       });
     drawPowerHero(c,game,pos,pose);
+    drawHeroPowerOverlays(c,game,pos,t,'front');
     // Composites the 8-cel metallic shield over the original, moving hero.
     if(this.v2SpriteTest&&h.steel)drawSteelBodyOverlay(c,game,pos);
     if(generated&&!approved&&!speedTrail)drawV2PowerPreview(c,game,pos,t); // Preserve painted power overlays.
