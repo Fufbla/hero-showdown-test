@@ -18,7 +18,13 @@ export const BASIC_COMBAT_TIMES=Object.freeze({punch:poseTimes('punch'),kick:pos
 
 export function selectBasicCombatFrame(hero={}){
  const attack=hero.attack;
- if(hero.dead||hero.stun>0||!attack||attack.power||!Object.hasOwn(BASIC_COMBAT_ART,attack.kind))return null;
+ // Special Strength and Super Kick share the approved eight-frame painted
+ // punches/kicks. Their reusable power VFX supply the extra gold energy;
+ // never swap the hero into the unrelated running/jumping poster frames.
+ const empowered=attack?.power==='strength'&&attack.kind==='punch'||
+   attack?.power==='superKick'&&attack.kind==='kick';
+ if(hero.dead||hero.stun>0||!attack||(attack.power&&!empowered)||
+    !Object.hasOwn(BASIC_COMBAT_ART,attack.kind))return null;
  const kind=attack.kind,age=Number.isFinite(attack.age)?Math.max(0,attack.age):0;
  if(age>=ATTACKS[kind].duration)return null;
  // Facing is locked when a strike starts, even if movement turns the hero.
