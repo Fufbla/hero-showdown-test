@@ -12,6 +12,7 @@ import {shouldWriteAdventure} from './save-policy.mjs';
 import {clockSynchronized} from './shared-clock.mjs';
 import {CloudAPI, CloudHeroStore} from './cloud-client.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
+import {approvedPaintedPowerFX} from './v2-sprites/approved-effects.mjs';
 import {cosmeticTransaction,normalizeCosmetics} from './cosmetics/state.mjs';
 import {isV2TestRoute,V2_TEST_STORAGE_PREFIX,v2TestLook,maxV2TestPowers,hasMaxV2TestPowers} from './v2-test-hero.mjs';
 import {AccountMenu} from './account-ui.mjs';
@@ -175,6 +176,12 @@ if(v2TestHero){
  // The isolated prototype always uses one live, customisable hero appearance.
  // No optional sprite switch can replace its outfit between action frames.
  renderer.v2VisualConsistency=true;
+ // Restore the approved 24-pose painted power effects without reintroducing
+ // the alternate costume/body frames that caused the outfit switching.
+ void approvedPaintedPowerFX.preload().then(ok=>{
+  if(ok)console.info('[V2 approved painted FX] restored over consistent live hero');
+  else console.warn('[V2 approved painted FX] unavailable; live hero still works',approvedPaintedPowerFX.error);
+ });
 }
 const creatorHome=document.createComment('Character creator home');$('creator').before(creatorHome);
 const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,say,appearance:()=>openCreator(activeSlot,true),leave:returnAdventure,navigate:()=>{if(!canLeaveMenu())return false;if(screen==='creator'&&editing){abandonUnconfirmedAppearance();setScreen('tree');}return true;}});

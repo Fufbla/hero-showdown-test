@@ -13,6 +13,7 @@ import { SURFACES, WORLD_WIDTH, CAMPS, TYPES } from './world.mjs';
 import { clamp, ATTACKS } from './core.mjs';
 import { drawHero } from './hero-art.mjs';
 import {V2SpeedTrail} from './v2-sprites/consistent-motion.mjs';
+import {approvedPaintedPowerFX} from './v2-sprites/approved-effects.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
 export { drawHero } from './hero-art.mjs';
 const PI = Math.PI;
@@ -91,6 +92,8 @@ export class Renderer {
     if(this.v2VisualConsistency)
       this.v2SpeedTrail.draw(c,game,pos,visualHero,t,game.look,appearance);
     const pose=drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,appearance);
+    // Show only approved painted VFX, never the alternate poster hero/outfit.
+    if(this.v2VisualConsistency)approvedPaintedPowerFX.draw(c,game,pos,t);
     drawPowerHero(c,game,pos,pose);
     if(h.attack&&h.attack.power!=='superKick'){const a=h.attack,d=ATTACKS[a.kind];if(a.age>=d.startup&&a.age<d.startup+d.active){c.save();c.translate(h.x,h.y-43);c.scale(a.face,1);c.strokeStyle='#fff7d8c9';c.lineWidth=3;c.beginPath();c.arc(24,-8,a.kind==='kick'?48:35,-.7,.7);c.stroke();c.restore();}}
     for(const p of this.particles){if(p.life<=0)continue;if(!game.paused){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=210*dt;}c.globalAlpha=Math.max(0,p.life/p.max);oval(c,p.x,p.y,p.size,p.size,p.color);}c.globalAlpha=1;
