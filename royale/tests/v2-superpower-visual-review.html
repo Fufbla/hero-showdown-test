@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>V2 Superpower Motion Visual QA — Isolated test hero</title>
+<style>
+body{margin:0;background:#102a31;color:#f5efde;font:15px system-ui}
+header{padding:12px 20px}
+canvas{max-width:100%;height:auto;display:block;background:#14373a}
+</style>
+<header><strong>HERO SHOWDOWN ROYALE — V2 POWER MOTION CONTACT SHEET</strong><p>Visual-only QA; uses original transparent atlas. No game state or saves are written.</p></header>
+<canvas id="sheet" width="1500" height="1160"></canvas>
+<script type="module">
+import {v2GeneratedSprites,chooseV2Frame,V2_SPRITE_VERSION} from '../v2-sprites/runtime.mjs';
+import {drawV2PowerPreview,v2PowerEffectFlags} from '../v2-sprites/power-preview.mjs';
+const canvas=document.querySelector('#sheet'),ctx=canvas.getContext('2d'),w=250,h=232;
+const samples=[
+ ['idle right',{}],['idle left',{face:-1}],['run right',{vx:240,cycle:1.2}],['run left',{face:-1,vx:-240,cycle:1.2}],['jump right',{grounded:false,jumps:1,jumpAge:.16,vy:-130}],
+ ['jump left',{face:-1,grounded:false,jumps:1,jumpAge:.16,vy:-130}],['double right',{grounded:false,jumps:2,jumpAge:.24,vy:-110}],['double left',{face:-1,grounded:false,jumps:2,jumpAge:.24,vy:-110}],['strength windup',{attack:{kind:'punch',power:'strength',age:.01}}],['strength impact',{attack:{kind:'punch',power:'strength',age:.23}}],
+ ['kick windup',{attack:{kind:'kick',power:'superKick',age:.02,comboIndex:0}}],['kick impact',{attack:{kind:'kick',power:'superKick',age:.25,comboIndex:1}}],['fireball charge',{castAge:.04}],['fireball release',{castAge:.17}],['steel',{steel:true}],
+ ['roots',{v2Active:{roots:{}},roots:true}],['whirlwind',{v2Active:{whirlwind:{}},whirlwind:true}],['agility',{agile:true,dodgeAge:.05}],['flight',{flying:true,grounded:false}],['speed',{vx:350,cycle:4,speed:true}],
+ ['villain merge',{merge:true}],['strength left',{face:-1,attack:{kind:'punch',power:'strength',age:.16}}],['kick left',{face:-1,attack:{kind:'kick',power:'superKick',age:.16,comboIndex:1}}],['fireball left',{face:-1,castAge:.13}]
+];
+function draw(){
+ ctx.fillStyle='#12333c';ctx.fillRect(0,0,canvas.width,canvas.height);
+ const report=[];
+ for(let i=0;i<samples.length;i++){
+  const [label,custom]=samples[i],col=i%6,row=Math.floor(i/6),ox=col*w,oy=row*h;
+  const hero={face:1,grounded:true,vx:0,vy:0,cycle:0,jumps:0,jumpAge:100,castAge:100,dodgeAge:100,
+   attack:null,...custom};
+  ctx.fillStyle=row%2?'#204c50':'#1b4147';ctx.fillRect(ox+2,oy+2,w-4,h-4);
+  ctx.fillStyle='#afc4bc';ctx.fillRect(ox+12,oy+195,w-24,2);
+  ctx.save();ctx.translate(ox,oy);
+  const generated=v2GeneratedSprites.draw(ctx,125,195,hero,1.5+i*.09,1);
+  const active=hero.v2Active||{};
+  const game={hero,powers:{active,speed:hero.speed?1:0},
+   legendary:{active:hero.merge?'venomis':null},mergeEffects:hero.merge?[{id:'venomis'}]:[]};
+  const flags=drawV2PowerPreview(ctx,game,{x:125,y:195},1.5+i*.09);
+  ctx.fillStyle=generated?'#ebf4e3':'#ff997f';ctx.font='bold 14px system-ui';
+  ctx.fillText(label+(generated?'':' [fallback]'),12,20);
+  ctx.restore();
+  report.push({label,generated,frame:chooseV2Frame(hero,1.5+i*.09),powers:Object.keys(flags).filter(k=>flags[k])});
+ }
+ window.__v2VisualReport={version:V2_SPRITE_VERSION,ready:v2GeneratedSprites.ready,
+  unsafeFrames:[...v2GeneratedSprites.unsafeFrames],samples:report,
+  rendered:report.filter(x=>x.generated).length,total:report.length};
+}
+window.__v2VisualReady=false;
+v2GeneratedSprites.preload().then(ok=>{draw();window.__v2VisualReady=ok;}).catch(e=>{window.__v2VisualError=e.stack;});
+</script>
+</html>
