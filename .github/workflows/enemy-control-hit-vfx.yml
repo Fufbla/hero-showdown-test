@@ -1,0 +1,32 @@
+name: Enemy Control Hit VFX
+on:
+  push:
+    branches:
+      - fix/enemy-control-hit-vfx-20261110
+  pull_request:
+    paths:
+      - royale/enemy-control-vfx.mjs
+      - royale/power-art.mjs
+      - royale/tests/enemy-control-vfx.test.mjs
+      - royale/assets/vfx/**
+      - .github/workflows/enemy-control-hit-vfx.yml
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check updated renderer and tests parse
+        run: |
+          node --check royale/power-art.mjs
+          node --check royale/enemy-control-vfx.mjs
+          node --check royale/tests/enemy-control-vfx.test.mjs
+      - name: Verify enemy power visuals
+        run: node --test royale/tests/enemy-control-vfx.test.mjs
+      - name: Confirm transparent art atlases were committed
+        run: |
+          test -s royale/assets/vfx/ground-roots-trap.avif
+          test -s royale/assets/vfx/whirlwind-hit.avif
