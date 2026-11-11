@@ -9,9 +9,9 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Inspect approved image
+      - name: Verify lossless alpha transport
         env:
-          ASSET_URL: 'https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/uS2IvTzxwGHgvR2lINDy/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=ji0DxjNwNLfg_F1utKWmT0G6zy4='
+          ASSET_URL: 'https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/u8hehT9jtjz1tILKUOT1/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=Sd5zYjnKiFwTYBdtSOGyOQVCcWE='
         run: |
           python -m pip install --quiet Pillow
           python - <<'PY'
@@ -20,12 +20,10 @@ jobs:
           url=os.environ['ASSET_URL']
           print('::add-mask::'+url)
           data=urllib.request.urlopen(url,timeout=40).read()
-          im=Image.open(io.BytesIO(data))
-          print({'bytes':len(data),'format':im.format,'size':im.size,'mode':im.mode,'sha256':hashlib.sha256(data).hexdigest()})
-          open('sprite-transfer.webp','wb').write(data)
+          im=Image.open(io.BytesIO(data)).convert('RGBA')
+          digest=hashlib.sha256(im.getchannel('A').tobytes()).hexdigest()
+          print({'size':im.size,'alphaSha256':digest})
+          assert im.size == (1024,1024), 'Transport changed dimensions'
+          assert digest == '4587a930b98394d09ca145416867ef677e45f4b14804e176518c351a036ae317', 'Transport altered data'
+          print('PASS: lossless byte-for-byte transfer verified')
           PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: approved-sprite-transfer-check
-          path: sprite-transfer.webp
-          retention-days: 1
