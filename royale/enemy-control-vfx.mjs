@@ -43,7 +43,7 @@ function drawFrame(c,entry,frame,anchor,kind,age){
   const width=anchor.width*scale,height=anchor.height*scale;
   const dx=anchor.x-width/2,dy=anchor.groundY-height*.90;
   c.save();
-  c.globalAlpha*=kind==='whirlwind'?.78:.94;
+  c.globalAlpha *= (kind === 'whirlwind' ? .78 : .94);
   // Four isolated frame cells; never draw the entire sprite sheet at once.
   c.drawImage(image,(frame%2)*fw,Math.floor(frame/2)*fh,fw,fh,dx,dy,width,height);
   c.restore();return true;
