@@ -55,7 +55,10 @@ export function selectApprovedPose(hero={},game={}){
   if(game?.legendary?.active&&(game?.mergeEffects?.length||game?.mergeShots?.length))return idx.merge;
   if(active.steel||hero.steel)return idx.steel;
   // Ground powers cannot turn an airborne hero into a floating static poster.
-  if(hero.grounded===false)return left?idx[hero.jumps>=2?'double-left':'jump-left']:idx[hero.jumps>=2?'double-right':'jump-right'];
+  // The approved sheet has only one static pose per jump direction.
+  // Return control to the existing six-frame jump/double-jump atlases,
+  // which retain the cape-safe corrected artwork and real airborne motion.
+  if(hero.grounded===false)return null;
   // Movement always retains its matching directional run/speed animation,
   // including during the two-second root/whirlwind action.
   if(Math.abs(hero.vx||0)>25){
