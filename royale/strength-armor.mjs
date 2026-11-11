@@ -1,4 +1,4 @@
-import {COSTUME_PARTS} from './costume-catalog.mjs';
+import {COSTUME_PARTS,matchingArmorSet} from './costume-catalog.mjs';
 import {ROOTS_SUITS, ROOTS_PIECES, WARDROBE_CATALOG as priorCatalog} from './roots-armor.mjs';
 
 const designs = [
@@ -19,14 +19,11 @@ export const STRENGTH_PIECES = Object.freeze(Object.fromEntries(STRENGTH_SUITS.f
     const {catalogValue}=ROOTS_PIECES[ROOTS_SUITS[i].setId+'-'+part];
     return [id,{id,setId:suit.setId,setName:suit.name,name:suit.name+' '+labels[part],art:suit.art,part,
       level:suit.level,color:suit.color,accent:suit.accent,rarity:suit.rarity,
-      strengthLevels:suit.strengthLevels,catalogValue,shop:true,sellable:true,stats:{}}];
+      strengthLevels:suit.strengthLevels,catalogValue,shop:part!=='helmet',sellable:true,stats:{}}];
   })
 )));
 export const WARDROBE_CATALOG = Object.freeze({...priorCatalog,...STRENGTH_PIECES});
 
 export function matchingStrengthBonus(inventory,level){
-  const worn=COSTUME_PARTS.map(part=>STRENGTH_PIECES[inventory.items.find(item=>item.uid===inventory.equipped[part])?.catalogId]);
-  const helmet=worn[0];
-  return helmet && level>=helmet.level && worn.every((item,i)=>item?.part===COSTUME_PARTS[i] && item.setId===helmet.setId)
-    ? helmet.strengthLevels : 0;
+  return matchingArmorSet(inventory,STRENGTH_PIECES,level)?.[0]?.strengthLevels||0;
 }

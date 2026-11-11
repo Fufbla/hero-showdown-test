@@ -16,7 +16,7 @@ for(const order of [[0,1],[1,0]])test(`one loot roll; matching independent copie
  assert.deepEqual({...a.loot[0].item,uid:''},{...b.loot[0].item,uid:''});
  for(const i of order){const g=s.games[i],drop=g.loot[0];g.hero.x=drop.x;g.hero.y=drop.y;assert(pickupLoot(g,drop.id));assert.equal(pickupLoot(g,drop.id),false);s.authority.reconcileDrops();}
  assert.equal(s.visualLoot().length,0);assert.equal(s.authority.sharedDrops.size,0);assert.equal(a.inventory.items.length,1);assert.equal(b.inventory.items.length,1);
- a.inventory.items[0].stats??={};assert.notEqual(a.inventory.items[0],b.inventory.items[0]);
+ assert.notEqual(a.inventory.items[0],b.inventory.items[0]);
  for(const g of [a,b])assert(decodeSave(JSON.stringify(captureProgress(g))));
 });
 test('equipment drop rate is rolled once, without a second player random roll',()=>{const {s}=setup();s.games[1].random=()=>{throw Error('Second independent roll');};kill(s,0,()=>.9);assert.equal(s.visualLoot().length,0);});

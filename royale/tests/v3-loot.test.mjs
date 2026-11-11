@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Game,decodeSave,STEP} from '../core.mjs';
-import {createEquipment,emptyInventory,itemDefinition,normalizeInventory,equipmentBonuses,rollEquipment} from '../equipment.mjs';
+import {emptyInventory,itemDefinition,normalizeInventory,equipmentBonuses,armorOutfitStats,rollEquipment} from '../equipment.mjs';
 import {COSTUME_CATALOG,STAT_KEYS,costumeDrop} from '../costume-catalog.mjs';
 import {helmetStatRanges,rollHelmetStats} from '../helmet-rolls.mjs';
 import {spawnLoot,stepLoot,pickupLoot,nearbyInteractions,normalizeLoot,expireLoot,drawLoot} from '../world-loot.mjs';
@@ -14,8 +14,9 @@ import {paintedCapeMotion,paintedCapeOffset} from '../cape.mjs';
 const seedRandom=(seed=20261106)=>()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
 const fixture=(random=seedRandom())=>{let now=Date.now();const g=new Game({random,now:()=>now});g.enemies=[];return {g,advance:ms=>now+=ms};};
 const defeat=g=>({type:'bottle',state:'dead',hp:0,x:g.hero.x,y:g.hero.y});
-const helmet=(serial=1,random=()=>.5)=>rollHelmetStats(costumeDrop(1,'ordinary',0,serial),random);
-const fill=(g,count)=>{while(g.inventory.items.length<count)g.inventory.items.push(helmet(g.inventory.nextId++,g.random));};
+const armorPiece=(serial=1,index=0)=>costumeDrop(1,'ordinary',index,serial);
+const historicalHelmet=(serial=1,random=()=>.5)=>rollHelmetStats({uid:`drop-${serial}`,catalogId:'eris-shore-ordinary-helmet'},random);
+const fill=(g,count)=>{while(g.inventory.items.length<count){const serial=g.inventory.nextId++;g.inventory.items.push(armorPiece(serial,(serial-1)%2));}};
 
 test('10,000 actual regular defeats: independent, exclusive 2/4/94 distribution',()=>{
  const {g}=fixture(),counts={equipment:0,root:0,nothing:0};
@@ -39,7 +40,7 @@ test('exact probability boundaries; no pity drops or item allocation on misses',
 });
 test('Roots and equipment expire at exactly 20 seconds; no stale pickup or effects',()=>{
  for(const kind of ['root','equipment']){
-  const {g,advance}=fixture();const item=kind==='equipment'?helmet(g.inventory.nextId++):null;
+  const {g,advance}=fixture();const item=kind==='equipment'?armorPiece(g.inventory.nextId++):null;
   spawnLoot(g,g.hero,kind,item);const id=g.loot[0].id;g.interactionTarget=id;
   advance(19999);stepLoot(g,STEP);assert.equal(g.loot.length,1);assert.ok(nearbyInteractions(g).some(o=>o.id===id));
   advance(1);assert.ok(!nearbyInteractions(g).some(o=>o.id===id));
@@ -49,11 +50,11 @@ test('Roots and equipment expire at exactly 20 seconds; no stale pickup or effec
  }
 });
 test('collected/equipped items and roots survive expiration without timer callbacks',()=>{
- const {g,advance}=fixture(),item=helmet(g.inventory.nextId++);
+ const {g,advance}=fixture(),item=armorPiece(g.inventory.nextId++),boots=armorPiece(g.inventory.nextId++,1);
  spawnLoot(g,g.hero,'equipment',item);const id=g.loot[0].id;
  advance(19999);assert.ok(pickupLoot(g,id));assert.equal(pickupLoot(g,id),false);
- g.paused=true;assert.ok(g.equipItem(item.uid));spawnLoot(g,g.hero,'root');assert.ok(pickupLoot(g,g.loot[0].id));
- advance(60000);expireLoot(g);assert.deepEqual(g.inventory.items,[item]);assert.equal(g.inventory.equipped.helmet,item.uid);assert.equal(g.healthRoots,1);
+ g.inventory.items.push(boots);g.paused=true;assert.ok(g.equipItem(item.uid));spawnLoot(g,g.hero,'root');assert.ok(pickupLoot(g,g.loot[0].id));
+ advance(60000);expireLoot(g);assert.deepEqual(g.inventory.items,[item,boots]);assert.deepEqual(g.inventory.equipped,{chest:item.uid,boots:boots.uid});assert.equal(g.healthRoots,1);
 });
 test('expiry continues through pause, travel and saving; deadlines never reset on reload',()=>{
  const {g,advance}=fixture();spawnLoot(g,g.hero,'root');const deadline=g.loot[0].expiresAt;
@@ -62,18 +63,18 @@ test('expiry continues through pause, travel and saving; deadlines never reset o
  g.paused=true;g.travel(2);advance(20000);assert.equal(expireLoot(g),1);assert.equal(JSON.parse(g.save()).loot.length,0);
  const old={...raw.loot[0]};delete old.expiresAt;assert.equal(normalizeLoot([old],g.now())[0].expiresAt,g.now()+20000);
 });
-test('unopened boss chests and pending rewards never despawn, and chest rolls persist',()=>{
+test('unopened boss chests and pending rewards never despawn, and chest selections persist',()=>{
  const {g,advance}=fixture(()=>0);g.world.bossVictories=[1];g.bossProgress.records[1]={wins:1,chest:rollChest(1,()=>0)};g.arenaScene={cleared:true,region:1,returnLocation:{x:g.hero.x,y:g.hero.y,face:1}};
  const chest=structuredClone(g.availableChest());advance(86400000);stepLoot(g,STEP);assert.deepEqual(g.availableChest(),chest);
  assert.deepEqual(decodeSave(g.save()).bossProgress.records[1].chest,chest);
  g.healthRoots=9;assert.ok(g.claimChest());assert.equal(g.healthRoots,10);
- assert.deepEqual(g.inventory.pending[0].stats,chest.items[0].stats);advance(86400000);expireLoot(g);assert.equal(g.inventory.pending.length,chest.items.length);
- assert.ok(g.acceptReward());assert.deepEqual(g.inventory.items[0].stats,chest.items[0].stats);assert.equal(g.claimChest(),false);
+ assert.deepEqual(g.inventory.pending.map(i=>i.catalogId),chest.items.map(i=>i.catalogId));advance(86400000);expireLoot(g);assert.equal(g.inventory.pending.length,chest.items.length);
+ assert.ok(g.acceptReward());assert.equal(g.inventory.items[0].catalogId,chest.items[0].catalogId);assert.equal(g.claimChest(),false);
 });
 test('all 20 equipment spaces remain distinct; 21st drop leaves inventory intact',()=>{
- const {g}=fixture();fill(g,19);spawnLoot(g,g.hero,'equipment',helmet(g.inventory.nextId++));assert.ok(pickupLoot(g,g.loot[0].id));
+ const {g}=fixture();fill(g,19);spawnLoot(g,g.hero,'equipment',armorPiece(g.inventory.nextId++));assert.ok(pickupLoot(g,g.loot[0].id));
  assert.equal(new Set(g.inventory.items.map(i=>i.uid)).size,20);
- const before=JSON.stringify(g.inventory.items);spawnLoot(g,g.hero,'equipment',helmet(g.inventory.nextId++));assert.equal(pickupLoot(g,g.loot[0].id),false);assert.equal(JSON.stringify(g.inventory.items),before);
+ const before=JSON.stringify(g.inventory.items);spawnLoot(g,g.hero,'equipment',armorPiece(g.inventory.nextId++));assert.equal(pickupLoot(g,g.loot[0].id),false);assert.equal(JSON.stringify(g.inventory.items),before);
  assert.equal(decodeSave(g.save()).inventory.items.length,20);
 });
 test('Health Root carrying limit and shop restocking are exactly 10',()=>{
@@ -83,25 +84,26 @@ test('Health Root carrying limit and shop restocking are exactly 10',()=>{
  assert.equal(validateSnapshot(g.save()).healthRoots,10);
 });
 test('shop purchases and pending chest acceptance use all 20 equipment spaces',()=>{
- const {g}=fixture();fill(g,19);g.hero.coins=9999;g.visitTree();
+ const {g}=fixture();fill(g,18);g.hero.coins=9999;g.visitTree();
  const selection={catalogId:'eris-shore-ordinary-boots'},q=g.costumePreview(selection);assert.ok(q.ok);assert.equal(q.needed,0);
+ assert.deepEqual(q.definitions.map(d=>d.part),['chest','boots']);
  assert.ok(g.buyCostume(selection,{confirmed:true,revision:q.revision}).ok);assert.equal(g.inventory.items.length,20);
- const next=g.costumePreview(selection);assert.equal(next.needed,1);
- g.inventory.pending.push(helmet(g.inventory.nextId++));assert.equal(g.acceptReward(),false);
+ const next=g.costumePreview(selection);assert.equal(next.needed,2);
+ g.inventory.pending.push(armorPiece(g.inventory.nextId++));assert.equal(g.acceptReward(),false);
  g.discardItem(g.inventory.items[0].uid,true);assert.ok(g.acceptReward());assert.equal(g.inventory.items.length,20);
 });
-test('Legendary progression rewards remain permanent and fit slots 18–20',()=>{
- const {g,advance}=fixture();g.gainXP(1e9);fill(g,17);
- const pieces=['helmet','chest','boots'].map(part=>({uid:`drop-${g.inventory.nextId++}`,catalogId:`merge-lightning-${part}`,state:'unclaimed'}));
+test('Legendary progression rewards remain permanent and fit slots 19–20',()=>{
+ const {g,advance}=fixture();g.gainXP(1e9);fill(g,18);
+ const pieces=['chest','boots'].map(part=>({uid:`drop-${g.inventory.nextId++}`,catalogId:`merge-lightning-${part}`,state:'unclaimed'}));
  g.legendary.defeated.lightning={claimed:false,pieces};g.legendary.revision++;
  const before=JSON.stringify(g.legendary);advance(86400000);expireLoot(g);assert.equal(JSON.stringify(g.legendary),before);
  assert.ok(g.claimMergeReward('lightning',pieces.map(p=>p.uid),[],{confirmed:true,revision:g.legendary.revision}));
- assert.equal(g.inventory.items.length,20);assert.ok(g.inventory.items.slice(-3).every(i=>!Object.hasOwn(i,'stats')));
+ assert.equal(g.inventory.items.length,20);assert.ok(g.inventory.items.slice(-2).every(i=>!Object.hasOwn(i,'stats')));
  advance(86400000);expireLoot(g);assert.equal(g.inventory.items.length,20);
  assert.equal(g.claimMergeReward('lightning',pieces.map(p=>p.uid),[],{confirmed:true,revision:g.legendary.revision}),false);
  assert.ok(decodeSave(g.save()));
 });
-test('all existing helmet tiers roll within bounds and below every next-level minimum',()=>{
+test('archived helmet tiers retain valid historical rolls below every next-level minimum',()=>{
  const random=seedRandom(47),defs=Object.values(COSTUME_CATALOG).filter(d=>d.part==='helmet');
  for(const def of defs){
   const range=helmetStatRanges(def.id),nextLevel=Math.min(...defs.filter(d=>d.level>def.level).map(d=>d.level));
@@ -112,35 +114,34 @@ test('all existing helmet tiers roll within bounds and below every next-level mi
   const seen=new Set();
   for(let i=0;i<100;i++){
    const item=rollHelmetStats({uid:`drop-${i+1}`,catalogId:def.id},random);seen.add(JSON.stringify(item.stats));
-   const inv={...emptyInventory(),items:[item]};assert.ok(normalizeInventory(inv));
+   const inv={...emptyInventory(),items:[item]};assert.ok(normalizeInventory(inv,{legacy:true}));assert.equal(normalizeInventory(inv),null);
    for(const k of STAT_KEYS){assert.ok(item.stats[k]>=range[k].min&&item.stats[k]<=range[k].max);if(!def.stats[k])assert.equal(item.stats[k],0);}
   }
   assert.ok(seen.size>1,def.id);
  }
 });
-test('equipment selection retains existing region, level, rarity and parts',()=>{
+test('equipment selection retains existing region and rarity while dropping only active outfit parts',()=>{
  for(let region=1;region<=7;region++)for(const roll of [0,.999999]){
-  const item=rollEquipment(region,()=>roll,1),d=itemDefinition(item);assert.equal(d.region,region);assert.ok(['helmet','chest','boots'].includes(d.part));assert.equal(d.rarity,region>=4&&roll===0?'rare':'ordinary');
+  const item=rollEquipment(region,()=>roll,1),d=itemDefinition(item);assert.equal(d.region,region);assert.ok(['chest','boots'].includes(d.part));assert.equal(d.rarity,region>=4&&roll===0?'rare':'ordinary');
  }
 });
-test('old helmets retain exact catalog stats; new rolls survive equip, save, load, and sale review',()=>{
- const {g}=fixture(),old=costumeDrop(1,'ordinary',0,g.inventory.nextId++),a=helmet(g.inventory.nextId++,()=>0),b=helmet(g.inventory.nextId++,()=>.999999);
- g.inventory.items.push(old,a,b);g.paused=true;assert.notDeepEqual(a.stats,b.stats);
+test('old fixed and rolled helmets retain exact archived history after migration and cannot be worn or sold',()=>{
+ const {g}=fixture(),old={uid:'drop-1',catalogId:'eris-shore-ordinary-helmet'},a=historicalHelmet(2,()=>0),b=historicalHelmet(3,()=>.999999),body=armorPiece(4),boots=armorPiece(5,1);
+ const raw=JSON.parse(g.save());raw.version=8;raw.legendary.configuration=1;raw.inventory.items=[old,a,b,body,boots];raw.inventory.equipped={helmet:a.uid,chest:body.uid,boots:boots.uid};raw.inventory.nextId=6;assert.notDeepEqual(a.stats,b.stats);
+ const copy=decodeSave(JSON.stringify(raw));assert(copy);assert.deepEqual(copy.inventory.items,[body,boots]);
  for(const item of [old,a,b]){
-  assert.ok(g.equipItem(item.uid));assert.deepEqual(equipmentBonuses(g.inventory),item.stats||COSTUME_CATALOG[item.catalogId].stats);
-  assert.equal(g.equipment.strength,(item.stats||COSTUME_CATALOG[item.catalogId].stats).strength);
-  const copy=decodeSave(g.save());assert.deepEqual(copy.inventory.items,g.inventory.items);
-  assert.deepEqual(validateSnapshot(g.save()).inventory.items,g.inventory.items);
-  assert.ok(g.equipItem(item.uid));
+  const archived=copy.inventory.headwearArchive.find(i=>i.uid===item.uid);assert.deepEqual(archived,{...item,source:'inventory'});assert.equal(copy.inventory.retired[item.uid],'discarded');
  }
- g.visitTree();const preview=g.salePreview(a.uid);assert.deepEqual(preview.def.stats,a.stats);assert.ok(g.sellItem(a.uid,{confirmed:true,revision:preview.revision}).ok);
- assert.deepEqual(g.inventory.items,[old,b]);assert.equal(Object.hasOwn(g.inventory.items[0],'stats'),false);
+ assert.equal(Object.hasOwn(copy.inventory.headwearArchive[0],'stats'),false);assert.deepEqual(equipmentBonuses(copy.inventory),armorOutfitStats(body));
+ const loaded=new Game({save:copy});loaded.visitTree();
+ for(const item of [old,a,b]){assert.equal(loaded.equipItem(item.uid),false);assert.equal(loaded.salePreview(item.uid).ok,false);}
+ assert.deepEqual(decodeSave(loaded.save()).inventory,copy.inventory);assert.deepEqual(validateSnapshot(loaded.save()).inventory,copy.inventory);
 });
 test('invalid stat payloads fail closed; no legacy reroll, duplicate identity, or new stat type',()=>{
- const item=helmet(),make=i=>({...emptyInventory(),items:[i]});
- for(const stats of [null,{}, {...item.stats,strength:999}, {...item.stats,roots:.1},{...item.stats,extra:1},{...item.stats,strength:NaN}])assert.equal(normalizeInventory(make({...item,stats})),null);
- const old=costumeDrop(1,'ordinary',0,1);assert.deepEqual(normalizeInventory(make(old)).items,[old]);
- assert.equal(normalizeInventory({...emptyInventory(),items:[item,item]}),null);
+ const item=historicalHelmet(),make=i=>({...emptyInventory(),items:[i]});
+ for(const stats of [null,{}, {...item.stats,strength:999}, {...item.stats,roots:.1},{...item.stats,extra:1},{...item.stats,strength:NaN}])assert.equal(normalizeInventory(make({...item,stats}),{legacy:true}),null);
+ const old={uid:'drop-1',catalogId:'eris-shore-ordinary-helmet'};assert.deepEqual(normalizeInventory(make(old),{legacy:true}).items,[old]);assert.equal(normalizeInventory(make(old)),null);
+ assert.equal(normalizeInventory({...emptyInventory(),items:[item,item]},{legacy:true}),null);
  assert.equal(rollHelmetStats(item,()=>{throw Error('Rerolled');}),item);
 });
 test('both visible slots round-trip independently; stored third slot remains untouched',()=>{

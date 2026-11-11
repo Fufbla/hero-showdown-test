@@ -11,10 +11,11 @@ import {spawnLoot,normalizeLoot} from './world-loot.mjs';
 import { matchingMerge, mergeEntitlement } from './legendary-state.mjs';
 import { WORLD_REGIONS, TYPES, regionDefinition, regionCamps, regionSpawns, regionSurfaces, boardIndex, GATES } from './world.mjs';
 import { LOOT, RESPAWN, worldClock, monsterXP, xpForLevel, maximumHP, regularLootOutcome } from './progression.mjs';
-import { emptyInventory, equipmentBonuses, equipmentOutfit, itemDefinition, rollEquipment } from './equipment.mjs';
+import { emptyInventory, equipmentBonuses, equipmentOutfit, itemDefinition, rollEquipment, armorOutfitForItem, equippedArmorOutfit, isRetiredHeadwear } from './equipment.mjs';
 import { initialWorld } from './world-state.mjs';
 import { equipmentStats, isBoss } from './powers.mjs';
 import {ProjectilePool,clearProjectiles,compactProjectiles} from './projectiles.mjs';
+import {cosmeticAppearance} from './cosmetics/state.mjs';
 
 export function initializeJourney(g,save,now){
   g.loot=normalizeLoot(save?.loot||[],now());g.now=now;g.world=structuredClone(save?.world||initialWorld(now()));g.regionId=g.world.region;
@@ -68,7 +69,7 @@ export const journeyMethods={
       this.hero.attack.stats=this.powers.stats('strength');
     }
   },
-  visualOutfit(){const e=this.inventory.equipped;if(this._outfitInventory!==this.inventory||this._outfitHelmet!==e.helmet||this._outfitChest!==e.chest||this._outfitBoots!==e.boots||this._outfitBase!==this.outfit){this._outfitInventory=this.inventory;this._outfitHelmet=e.helmet;this._outfitChest=e.chest;this._outfitBoots=e.boots;this._outfitBase=this.outfit;this._visualOutfit=equipmentOutfit(this.inventory,this.outfit);}return this._visualOutfit;},
+  visualOutfit(){const e=this.inventory.equipped;if(this._outfitInventory!==this.inventory||this._outfitSuit!==e.suit||this._outfitChest!==e.chest||this._outfitBoots!==e.boots||this._outfitBase!==this.outfit){this._outfitInventory=this.inventory;this._outfitSuit=e.suit;this._outfitChest=e.chest;this._outfitBoots=e.boots;this._outfitBase=this.outfit;this._visualOutfit=equipmentOutfit(this.inventory,this.outfit);}return {...this._visualOutfit,cosmetics:cosmeticAppearance(this.cosmetics)};},
   canSave(){return !this.hero.dead&&!this.inCombat();},
   canTravel(){return !this.treeVisit&&this.canSave()&&!this.bossEncounter&&this.inventory.pending.length===0&&!this.pendingMergeReward();},
   visitTree(){if(!this.canTravel())return false;this.treeVisit=true;return true;},
@@ -83,9 +84,10 @@ export const journeyMethods={
   },
   equipItem(uid){
     if(!this.canSave()||!this.paused)return false;
-    const item=this.inventory.items.find(i=>i.uid===uid),def=itemDefinition(item);if(!def||this.hero.level<(def.level||1))return false;
-    const paired={mask:'helmet',helmet:'mask',suit:'chest',chest:'suit'};const worn=itemDefinition(this.inventory.items.find(i=>i.uid===(this.inventory.equipped[def.part]||this.inventory.equipped[paired[def.part]])));if((def.rarity==='legendary'||worn?.rarity==='legendary')&&!this.treeVisit)return false;
-    if(this.inventory.equipped[def.part]===uid)delete this.inventory.equipped[def.part];else{if(def.part==='helmet')delete this.inventory.equipped.mask;if(def.part==='mask')delete this.inventory.equipped.helmet;if(def.part==='chest')delete this.inventory.equipped.suit;if(def.part==='suit')delete this.inventory.equipped.chest;this.inventory.equipped[def.part]=uid;}
+    const item=this.inventory.items.find(i=>i.uid===uid);if(!item||isRetiredHeadwear(item))return false;
+    const next=armorOutfitForItem(this.inventory,uid,this.hero.level),worn=equippedArmorOutfit(this.inventory,this.hero.level);
+    if(!next.ok||((next.rarity==='legendary'||worn?.rarity==='legendary')&&!this.treeVisit))return false;
+    this.inventory.equipped=next.equipped?{}:{...next.selection};
     this.recordEconomy('equip');this.refreshEquipment();return true;
   },
   discardItem(uid,confirmed=false){
@@ -96,10 +98,9 @@ export const journeyMethods={
   },
   resolveReward(uid,confirmed=false){
     // Pending boss rewards remain unclaimed, outside the carried equipment limit.
-    if(!confirmed||!this.canSave()||!this.inventory.pending.length)return false;
+    if(!confirmed||!this.canSave()||!this.inventory.pending.length||isRetiredHeadwear(this.inventory.pending[0]))return false;
     if(uid===null){this.retireItem(this.inventory.pending[0].uid);this.recordEconomy('discard');this.inventory.pending.shift();return true;}
     const index=this.inventory.items.findIndex(i=>i.uid===uid);if(index<0)return false;
-    for(const [part,id] of Object.entries(this.inventory.equipped))if(id===uid)delete this.inventory.equipped[part];
     this.retireItem(uid);this.recordEconomy('reward');this.inventory.items.splice(index,1,this.inventory.pending.shift());this.refreshEquipment();return true;
   },
   gainXP(amount){

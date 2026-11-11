@@ -354,7 +354,7 @@ async function openCreator(index=activeSlot,isEdit=true){
   if(isEdit&&!canLeaveMenu())return;
   if(isEdit&&!game.treeVisit&&!await game.visitTree()){say('Visit Eris after five safe seconds to change appearance.');return;}
   if(isEdit&&!game.canSave()){say('Leave combat before customizing.');return;}editing=isEdit;creatorSlot=index;
-  creator.fill(editing?game.look:styleCDefault('male'),editing?game.visualOutfit():STARTER_OUTFIT,!editing);
+  creator.fill(editing?game.look:styleCDefault('male'),editing?game.visualOutfit():STARTER_OUTFIT,!editing,editing?game.cosmetics:null);
   $('name').disabled=editing;makeoverReview=null;$('makeover-confirm').hidden=true;$('makeover-cost').hidden=!editing;
   $('creator-slot').textContent=`${editing?'CUSTOMIZE':'CREATE'} · HERO SLOT 0${index+1}`;
   $('begin').textContent=editing?'REVIEW APPEARANCE COST →':'BEGIN YOUR ADVENTURE →';$('cancel-look').textContent=editing?'Cancel appearance changes':'Back to heroes';
@@ -629,6 +629,10 @@ void prepareStyleCMaterials().then(ready=>{
   if(!ready)notice.textContent='Hero artwork could not load. Reload the game to try again.';
   if(screen==='roster')renderRoster();
   if(screen==='creator'){creator.draw();creator.refreshHairGallery();}
+});
+window.addEventListener('clothing-ready',()=>{
+ if(screen==='roster')renderRoster();
+ if(screen==='creator')creator.draw();
 });
 for(const link of document.querySelectorAll('#roster a[href^="tests/"]'))link.hidden=!params.has('qa');
 let last=performance.now(),accumulator=0,measurement=null,backgroundSignature='';

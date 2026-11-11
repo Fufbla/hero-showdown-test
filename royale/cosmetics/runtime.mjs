@@ -1,10 +1,20 @@
-import {ClothingAssets} from './assets.mjs';
-import {catalogIndex} from './state.mjs';
+import {ClothingAssets,bodyClothingLayers} from './assets.mjs';
+import {catalogIndex,outfitSelection,selectedOutfit,isRetiredCosmeticId} from './state.mjs';
+import {outfitForPiece} from './outfit-policy.mjs';
+
+function completeIds(ids){
+ const active=[...new Set(ids)].filter(id=>!isRetiredCosmeticId(id));
+ if(!active.length)return [];
+ const set=outfitForPiece(active[0]),expected=Object.values(outfitSelection(set));
+ if(!set||active.length!==expected.length||active.some(id=>!expected.includes(id)))
+  throw Error('Choose a complete matching outfit.');
+ return expected;
+}
 
 // One decoded cache for all heroes and previews. No network work is performed
 // for an empty/hidden wardrobe, or on each animation frame after a failure.
 export class ClothingRuntime {
- constructor({assets=new ClothingAssets(),readJSON,notify=()=>{},limit=4}={}){
+ constructor({assets=new ClothingAssets(),readJSON,notify=()=>{},limit=8}={}){
   this.assets=assets;this.readJSON=readJSON|| (async path=>{const r=await fetch(new URL(path,import.meta.url),{cache:'no-cache'});if(!r.ok)throw Error('Clothing artwork unavailable.');return r.json();});
   this.notify=notify;this.limit=limit;this.selections=new Map();this.manifests=new Map();
  }
@@ -18,7 +28,16 @@ export class ClothingRuntime {
   return this.manifests.get(path);
  }
  key(ids,review){return (review?'review:':'play:')+[...new Set(ids)].sort().join('|');}
+ async loadOutfit(set,options={}){
+  const ids=Object.values(outfitSelection(set));
+  if(!ids.length)throw Error('Choose a complete matching outfit.');
+  return this.loadIds(ids,options);
+ }
  async loadIds(ids,{review=false,retry=false}={}){
+  // Reject mixed/partial requests before even opening the catalog. Retired
+  // hats and face accessories cannot make an otherwise complete outfit fail.
+  ids=completeIds(ids);
+  if(!ids.length)return [];
   const key=this.key(ids,review),old=this.selections.get(key);
   if(old&&!retry){if(old.error)throw old.error;return old.promise;}
   const entry={layers:[],promise:null,error:null};this.selections.set(key,entry);
@@ -26,7 +45,13 @@ export class ClothingRuntime {
    const {index}=await this.catalog();
    const parts=[...new Set(ids)].map(id=>index.get(id));
    if(parts.some(p=>!p?.assetManifest||!(p.availability==='released'||review&&p.availability==='fitting')))throw Error('This clothing is still being prepared.');
-   const layers=await Promise.all(parts.map(async p=>{const manifest=await this.manifest(p.assetManifest);return {id:p.id,category:p.category,manifest,image:await this.assets.load(manifest)};}));
+   const layers=await Promise.all(parts.map(async p=>{
+    const source=await this.manifest(p.assetManifest);
+    const body=bodyClothingLayers({id:p.id,category:p.category,manifest:source});
+    if(!body.length)throw Error('Outfit body artwork is unavailable.');
+    const manifest={...source,layers:body,hair:'preserved',covers:source.covers?.filter(region=>region!=='helmet'&&region!=='mask')};
+    return {id:p.id,category:p.category,manifest,image:await this.assets.load(manifest)};
+   }));
    entry.layers=layers;
    this.notify();return layers;
   })().catch(error=>{entry.error=error;throw error;}).finally(()=>{
@@ -38,7 +63,11 @@ export class ClothingRuntime {
  }
  layers(state){
   if(!state?.visible)return [];
-  const ids=Object.values(state.equipped||{});if(!ids.length)return [];
+  // Compact network appearances carry no ownership ledger. They may render
+  // only the complete selection actually present in that appearance packet.
+  const selection=Array.isArray(state.owned)?state:{...state,owned:Object.values(state.equipped||{})};
+  const set=selectedOutfit(selection);if(!set)return [];
+  const ids=Object.values(outfitSelection(set));
   const key=this.key(ids,false),entry=this.selections.get(key);
   if(entry){this.selections.delete(key);this.selections.set(key,entry);return entry.layers;}
   void this.loadIds(ids).catch(()=>{});return [];

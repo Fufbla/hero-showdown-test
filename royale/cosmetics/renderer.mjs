@@ -3,9 +3,10 @@ import {fitClothingLayer} from './fitting.mjs';
 import {fitGameplayHeadwear} from './headwear-2d.mjs';
 import {fitHeadAccessory,drawContouredHead} from './head-contour.mjs';
 import {jointClipShift,drawContactShadow,garmentLight} from './polish.mjs';
+import {bodyClothingLayers} from './assets.mjs';
 // Coverage is computed only for fully loaded garments, never preview state.
 export {clothingCoverage} from './visibility.mjs';
-export const clothingHair=layers=>layers.some(({manifest,image})=>image&&manifest.hair==='hidden')?'hidden':layers.some(({manifest,image})=>image&&manifest.hair==='tucked')?'tucked':null;
+export const clothingHair=()=>null;
 const distance=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
 const angle=(a,b)=>Math.atan2(b[1]-a[1],b[0]-a[0]);
 function stamp(ctx,image,layer,at,pivot,end,sourceEnd,cut,fit){
@@ -68,7 +69,7 @@ export function drawClothingPass(ctx,pose,view,pass,loadedLayers,options={}){
  for(const piece of loadedLayers){
   const {manifest,image}=piece;
   if(!image)continue;
-  for(const layer of manifest.layers){
+  for(const layer of bodyClothingLayers(piece)){
    if(layer.view!==view||layer.pass!==pass)continue;
    const anchor=anchors[layer.attach];if(!anchor)continue;
    const target=layer.end?anchors[layer.end.attach]:null;

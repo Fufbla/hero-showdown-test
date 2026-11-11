@@ -4,7 +4,7 @@ import {pickupLoot} from './world-loot.mjs';
 import { drawEquipmentPreview, statComparison } from './eris-ui.mjs';
 import { STAT_KEYS, STAT_LABELS, formatStat } from './costume-catalog.mjs';
 import { WORLD_REGIONS } from './world.mjs';
-import { EQUIPMENT_PARTS, EQUIPMENT_NAMES, itemDefinition } from './equipment.mjs';
+import { EQUIPMENT_NAMES, itemDefinition, armorOutfitForItem, equipmentItemActive } from './equipment.mjs';
 import { LOOT, worldClock, formatClock } from './progression.mjs';
 const $=id=>document.getElementById(id);
 const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
@@ -12,7 +12,16 @@ export function statsText(def){return STAT_KEYS.filter(k=>def.stats[k]).map(k=>`
 export class JourneyMenu {
   constructor(getGame,persist,say,resume,transaction=null,travelCommit=null){this.travelCommit=travelCommit;this.transaction=transaction;this.getGame=getGame;this.persist=persist;this.say=say;this.resume=resume;this.confirmation=null;}
   async commit(action){if(this.transaction)return (await this.transaction(action)).ok;const ok=await action();if(ok)this.persist();return !!ok;}
-  preview(item){const g=this.getGame(),def=itemDefinition(item),panel=el('section',undefined,'equipment-preview'),canvas=el('canvas');canvas.width=360;canvas.height=420;const inv=structuredClone(g.inventory);if(!inv.items.some(i=>i.uid===item.uid))inv.items.push(item);inv.equipped[def.part]=item.uid;const body=el('div');body.append(el('h3',def.name),el('p',`${def.rarity} · Level ${def.level||1} · Fixed colors`),el('p',statsText(def)));for(const view of ['front','back']){const b=el('button',view==='front'?'Front preview':'Back preview','secondary');b.onclick=()=>drawEquipmentPreview(canvas,g,inv,view);body.append(b);}panel.append(canvas,body);$('equipment-list').prepend(panel);drawEquipmentPreview(canvas,g,inv);panel.scrollIntoView({block:'nearest'});}
+  preview(item){
+    if(!equipmentItemActive(item))return;
+    const g=this.getGame(),def=itemDefinition(item),panel=el('section',undefined,'equipment-preview'),canvas=el('canvas');canvas.width=360;canvas.height=420;
+    const inv=structuredClone(g.inventory);if(!inv.items.some(i=>i.uid===item.uid))inv.items.push(item);
+    const outfit=armorOutfitForItem(inv,item.uid,99);
+    inv.equipped=outfit.ok?Object.fromEntries(outfit.items.map(i=>[itemDefinition(i).part,i.uid])):{};
+    const body=el('div');body.append(el('h3',outfit.name||def.name),el('p',`${def.rarity} · Level ${def.level||1} · Matching outfit`),el('p',outfit.ok?statsText({stats:outfit.stats}):outfit.error));
+    for(const view of ['front','back']){const b=el('button',view==='front'?'Front preview':'Back preview','secondary');b.onclick=()=>drawEquipmentPreview(canvas,g,inv,view);body.append(b);}
+    panel.append(canvas,body);$('equipment-list').prepend(panel);drawEquipmentPreview(canvas,g,inv);panel.scrollIntoView({block:'nearest'});
+  }
   shop(){
     const g=this.getGame(),section=$('root-shop');section.replaceChildren();
     const text=el('div');text.append(el('strong','Health Roots'),el('p',`Restore 25% HP anywhere. ${g.healthRoots} / 10 carried · 50 coins each.`));
@@ -65,15 +74,17 @@ export class JourneyMenu {
     if(pending){const def=itemDefinition(pending);reward.append(el('div',g.inventory.items.length>=20?'INVENTORY FULL · CHOOSE YOUR REWARD':'CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`${def.rarity==='rare'?'Constant white glow.':'No glow.'} Choose a carried item below to compare and replace, or leave this item.`));
       if(g.inventory.items.length<20){const keep=el('button','Keep this equipment','primary');keep.id='accept-reward';keep.disabled=!g.canSave();keep.onclick=async()=>{if(await this.commit(()=>ground?pickupForGame(g,ground.id):g.acceptReward()))this.inventory();};reward.append(keep);}
       const decline=el('button',ground?'Leave orb on the ground':'Discard new reward','secondary');decline.id='discard-reward';decline.onclick=()=>{if(ground){this.groundReward=null;this.resume();}else this.confirm(null,true);};reward.append(decline);}
-    for(const item of g.inventory.items){
+    for(const item of g.inventory.items.filter(equipmentItemActive)){
       const def=itemDefinition(item),equipped=g.inventory.equipped[def.part]===item.uid,card=el('article',undefined,`equipment-card ${def.rarity}`);card.dataset.item=item.uid;
       card.append(itemIcon(def));
       const body=el('div');body.append(el('small',`${def.rarity.toUpperCase()} · ${EQUIPMENT_NAMES[def.part]}${equipped?' · EQUIPPED':''}`),el('h3',def.name),el('p',statsText(def)));card.append(body);
       const actions=el('div',undefined,'equipment-actions');
       if(pending){const compare=el('button','Compare & replace','secondary');compare.onclick=()=>this.confirm(item.uid,true);actions.append(compare);}
       else{
-        const wear=el('button',equipped?'✓':'+','wardrobe-quick-equip');wear.setAttribute('aria-label',equipped?`${def.name} equipped`:`Equip ${def.name}`);wear.title=equipped?'Equipped':`Equip ${def.name}`;wear.disabled=equipped||!g.canSave()||g.hero.level<(def.level||1)||!g.treeVisit&&(def.rarity==='legendary'||itemDefinition(g.inventory.items.find(i=>i.uid===(g.inventory.equipped[def.part]||g.inventory.equipped[{mask:'helmet',helmet:'mask',suit:'chest',chest:'suit'}[def.part]])))?.rarity==='legendary');wear.onclick=async()=>{if(await this.commit(()=>g.equipItem(item.uid)))this.inventory();};
-        if(def.rarity==='legendary')body.append(el('p','Equip or change this piece at the Tree of Eris.'));
+        const outfit=armorOutfitForItem(g.inventory,item.uid,g.hero.level),changingMerge=def.rarity==='legendary'||Object.values(g.inventory.equipped).some(uid=>itemDefinition(g.inventory.items.find(i=>i.uid===uid))?.rarity==='legendary');
+        const wear=el('button',equipped?'✓':'+','wardrobe-quick-equip');wear.setAttribute('aria-label',equipped?`${outfit.name||def.name} equipped`:`Equip matching ${outfit.name||def.name} outfit`);wear.title=equipped?'Equipped':outfit.ok?'Equip matching outfit':outfit.error;wear.disabled=equipped||!g.canSave()||!outfit.ok||!g.treeVisit&&changingMerge;wear.onclick=async()=>{if(await this.commit(()=>g.equipItem(item.uid)))this.inventory();};
+        if(!outfit.ok)body.append(el('p',outfit.error));
+        if(def.rarity==='legendary')body.append(el('p','Equip or change this matching outfit at the Tree of Eris.'));
         const discard=el('button','Discard','text-button');discard.disabled=!g.canSave();discard.onclick=()=>this.confirm(item.uid,false);card.append(wear);actions.append(discard);
       }
       const preview=el('button','Preview','secondary');preview.onclick=()=>this.preview(item);actions.append(preview);card.append(actions);list.append(card);

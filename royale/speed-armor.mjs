@@ -1,4 +1,4 @@
-import {COSTUME_PARTS} from './costume-catalog.mjs';
+import {COSTUME_PARTS,matchingArmorSet} from './costume-catalog.mjs';
 import {SUPER_KICK_SUITS, SUPER_KICK_PIECES, WARDROBE_CATALOG as priorCatalog} from './super-kick-armor.mjs';
 
 const designs = [
@@ -19,14 +19,11 @@ export const SPEED_PIECES = Object.freeze(Object.fromEntries(SPEED_SUITS.flatMap
     const {catalogValue}=SUPER_KICK_PIECES[SUPER_KICK_SUITS[i].setId+'-'+part];
     return [id,{id,setId:suit.setId,setName:suit.name,name:suit.name+' '+labels[part],art:suit.art,part,
       level:suit.level,color:suit.color,accent:suit.accent,rarity:suit.rarity,
-      speedLevels:suit.speedLevels,catalogValue,shop:true,sellable:true,stats:{}}];
+      speedLevels:suit.speedLevels,catalogValue,shop:part!=='helmet',sellable:true,stats:{}}];
   })
 )));
 export const WARDROBE_CATALOG = Object.freeze({...priorCatalog,...SPEED_PIECES});
 
 export function matchingSpeedBonus(inventory,level){
-  const worn=COSTUME_PARTS.map(part=>SPEED_PIECES[inventory.items.find(item=>item.uid===inventory.equipped[part])?.catalogId]);
-  const helmet=worn[0];
-  return helmet && level>=helmet.level && worn.every((item,i)=>item?.part===COSTUME_PARTS[i] && item.setId===helmet.setId)
-    ? helmet.speedLevels : 0;
+  return matchingArmorSet(inventory,SPEED_PIECES,level)?.[0]?.speedLevels||0;
 }

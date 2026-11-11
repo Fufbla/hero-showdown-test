@@ -13,7 +13,9 @@ import {drawPowerWorld,drawPowerHero} from '../power-art.mjs';
 import {drawMergeWorld} from '../legendary-art.mjs';
 import {WORLD_REGIONS} from '../world.mjs';
 import {POWERS} from '../powers.mjs';
-import {itemDefinition} from '../equipment.mjs';
+import {itemDefinition,ownedArmorOutfits,equipmentItemActive} from '../equipment.mjs';
+import {clothingRuntime} from '../cosmetics/runtime.mjs';
+import {selectedOutfit} from '../cosmetics/state.mjs';
 import {STAT_KEYS,STAT_LABELS,formatStat} from '../costume-catalog.mjs';
 import {LEGENDARY,MERGE_POWERS} from '../legendary-data.mjs';
 import {BOSSES} from '../boss-data.mjs';
@@ -52,7 +54,13 @@ function renderChoices(i){
  for(const row of p.profile.slots){
   const snap=row.snapshot,holder=el('div'),choice=button(snap?'':`Slot ${row.slot_number} · Create New Hero`,()=>{if(!snap){manager.open(i,row.slot_number,'create');return;}p.slot=row.slot_number;p.ready=false;renderChoices(i);updateStart();});holder.className='hero-slot';
   choice.className='hero-choice';choice.setAttribute('aria-pressed',String(p.slot===row.slot_number));
-  if(snap){const canvas=el('canvas');canvas.width=240;canvas.height=180;choice.append(canvas);const g=new Game({save:decodeSave(JSON.stringify(snap))});drawHero(canvas.getContext('2d'),120,170,g.look,g.hero,0,1.45,{outfit:g.visualOutfit()});choice.append(el('span',snap.look.name),el('small',`Slot ${row.slot_number} · Level ${snap.level}`));}holder.append(choice);if(snap){const remove=button('Delete Hero',()=>manager.open(i,row.slot_number,'delete'));remove.className='delete-hero';remove.setAttribute('aria-label',`Delete ${snap.look.name} from Player ${i+1} Slot ${row.slot_number}`);holder.append(remove);}p.choices.append(holder);
+  if(snap){
+   const canvas=el('canvas');canvas.width=240;canvas.height=180;choice.append(canvas);const g=new Game({save:decodeSave(JSON.stringify(snap))});
+   const draw=clothing=>{const c=canvas.getContext('2d');c.clearRect(0,0,canvas.width,canvas.height);drawHero(c,120,170,g.look,g.hero,0,1.45,{outfit:g.visualOutfit(),clothing});};
+   draw(clothingRuntime.layers(g.cosmetics));
+   const outfit=selectedOutfit(g.cosmetics);if(outfit&&g.cosmetics.visible)void clothingRuntime.loadOutfit(outfit).then(layers=>{if(canvas.isConnected)draw(layers);}).catch(()=>{});
+   choice.append(el('span',snap.look.name),el('small',`Slot ${row.slot_number} · Level ${snap.level}`));
+  }holder.append(choice);if(snap){const remove=button('Delete Hero',()=>manager.open(i,row.slot_number,'delete'));remove.className='delete-hero';remove.setAttribute('aria-label',`Delete ${snap.look.name} from Player ${i+1} Slot ${row.slot_number}`);holder.append(remove);}p.choices.append(holder);
  }
 }
 for(let i=0;i<2;i++){
@@ -180,7 +188,10 @@ function renderPanel(i){
   }
   if(p.tab==='gear'){
    content.append(el('p',`${g.inventory.items.length}/20 equipment. Sales use your own coin balance.`));
-   for(const item of g.inventory.items){const def=itemDefinition(item),worn=Object.values(g.inventory.equipped).includes(item.uid),sale=g.salePreview(item.uid);row(`${def?.name||item.catalogId}${worn?' · equipped':''} · LV ${def?.level||1} · ${def?.rarity||''}\n${statText(def?.stats)}`,button(worn?'Unequip':'Equip',()=>act(i,'equipItem',[item.uid]),!g.canSave()),button(`Sell · ${sale.value||0} coins`,()=>act(i,'sellItem',[item.uid,{confirmed:true,revision:g.economy.revision}]),!sale.ok||worn));}
+   content.append(el('h4','Matching outfits'));
+   for(const outfit of ownedArmorOutfits(g.inventory,g.hero.level))row(`${outfit.name}${outfit.equipped?' · equipped':outfit.ok?' · complete':' · '+outfit.error}\n${statText(outfit.stats)}`,button(outfit.equipped?'Remove outfit':'Wear outfit',()=>act(i,'equipItem',[outfit.uid]),!g.canSave()||!outfit.ok));
+   content.append(el('h4','Owned equipment'));
+   for(const item of g.inventory.items.filter(equipmentItemActive)){const def=itemDefinition(item),worn=Object.values(g.inventory.equipped).includes(item.uid),sale=g.salePreview(item.uid);row(`${def?.name||item.catalogId}${worn?' · equipped':''} · LV ${def?.level||1} · ${def?.rarity||''}\n${statText(def?.stats)}`,button(`Sell · ${sale.value||0} coins`,()=>act(i,'sellItem',[item.uid,{confirmed:true,revision:g.economy.revision}]),!sale.ok||worn));}
    for(const hit of nearbyInteractions(g).filter(x=>x.kind==='loot'))row(hit.label,button('Pick up my copy',()=>act(i,'pickupLoot',[hit.id]),hit.loot.kind==='equipment'&&g.inventory.items.length>=20));
    if(g.inventory.pending.length){
     const reward=g.inventory.pending[0];content.append(el('p',`${g.inventory.pending.length} boss rewards waiting. Next: ${itemDefinition(reward)?.name||reward.catalogId}.`),button('Keep next reward',()=>act(i,'acceptReward'),g.inventory.items.length>=20||!g.canSave()));
@@ -251,7 +262,7 @@ function updateHUD(){
  if(+$('toast').dataset.until<performance.now())$('toast').hidden=true;
 }
 function drawFollower(g,dt,alpha){
- const c=renderer.c,h=g.hero,pos={x:h.prevX+(h.x-h.prevX)*alpha,y:h.prevY+(h.y-h.prevY)*alpha};c.save();c.setTransform(renderer.dpr*renderer.scale,0,0,renderer.dpr*renderer.scale,0,0);c.translate(-renderer.camera,-renderer.cameraY);drawPowerWorld(c,g);drawMergeWorld(c,g);const pose=drawHero(c,pos.x,pos.y,g.look,h,g.time,1,{outfit:g.visualOutfit(),cloth,dt:session.paused?0:dt});drawPowerHero(c,g,pos,pose);
+ const c=renderer.c,h=g.hero,pos={x:h.prevX+(h.x-h.prevX)*alpha,y:h.prevY+(h.y-h.prevY)*alpha};c.save();c.setTransform(renderer.dpr*renderer.scale,0,0,renderer.dpr*renderer.scale,0,0);c.translate(-renderer.camera,-renderer.cameraY);drawPowerWorld(c,g);drawMergeWorld(c,g);const pose=drawHero(c,pos.x,pos.y,g.look,h,g.time,1,{outfit:g.visualOutfit(),clothing:clothingRuntime.layers(g.cosmetics),cloth,dt:session.paused?0:dt});drawPowerHero(c,g,pos,pose);
  if(g.teleportEffectUntil>g.time){const t=(g.teleportEffectUntil-g.time)/.3;c.strokeStyle=`rgba(90,255,150,${t})`;c.lineWidth=4;c.beginPath();c.ellipse(h.x,h.y-h.h/2,25+(1-t)*28,60,0,0,Math.PI*2);c.stroke();}
  c.font='bold 13px system-ui';c.textAlign='center';c.lineWidth=3;c.strokeStyle='#132f29';c.fillStyle='#fff1bb';c.strokeText('P2 · '+g.look.name,pos.x,pos.y-112);c.fillText('P2 · '+g.look.name,pos.x,pos.y-112);c.restore();
 }

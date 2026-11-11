@@ -1,7 +1,6 @@
 import {LOOT} from './progression.mjs';
-import {WARDROBE_CATALOG as COSTUME_CATALOG} from './flight-armor.mjs';
-import { COSTUME_PARTS, resaleValue } from './costume-catalog.mjs';
-import { itemDefinition } from './equipment.mjs';
+import { resaleValue } from './costume-catalog.mjs';
+import { itemDefinition, activeArmorShopDefinitions, armorOutfitPrice, isRetiredHeadwear } from './equipment.mjs';
 import { sanitizeLook } from './appearance.mjs';
 import { boardIndex } from './world.mjs';
 export const APPEARANCE_PRICES=Object.freeze({hair:100,eyes:100,skin:150,face:200,body:300,age:300,makeover:750});
@@ -38,7 +37,7 @@ export const erisMethods={
   retireItem(uid,reason='discarded'){
     this.inventory.retired[uid]=reason;
     for(const r of Object.values(this.legendary?.defeated||{})){const p=r.pieces.find(p=>p.uid===uid);if(p){p.state='discarded';this.legendary.revision++;}}
-    for(const [part,id] of Object.entries(this.inventory.equipped))if(id===uid)delete this.inventory.equipped[part];
+    if(Object.values(this.inventory.equipped).includes(uid))this.inventory.equipped={};
     if(reason==='sold')this.economy.sold++;else this.economy.discarded++;
   },
   visitTree(){
@@ -58,10 +57,10 @@ export const erisMethods={
   shopReady(){return this.treeVisit&&this.canSave()&&!this.bossEncounter&&this.inventory.pending.length===0;},
   costumePreview(selection,discardUids=[]){
     if(!this.shopReady())return failed('Visit the Tree of Eris safely and resolve pending rewards first.');
-    const definitions=selection?.catalogId?[COSTUME_CATALOG[selection.catalogId]]:Object.values(COSTUME_CATALOG).filter(d=>d.setId===selection?.setId&&d.shop);
-    if(!definitions.length||definitions.some(d=>!d?.shop)||(!selection.catalogId&&definitions.length!==3))return failed('That costume is not sold here.');
+    const definitions=activeArmorShopDefinitions(selection);
+    if(definitions.length!==2)return failed('That outfit is not sold here.');
     if(definitions.some(d=>d.level>this.hero.level))return failed(`Requires hero level ${Math.max(...definitions.map(d=>d.level))}.`);
-    const cost=definitions.reduce((s,d)=>s+d.catalogValue,0),needed=Math.max(0,this.inventory.items.length+definitions.length-LOOT.inventoryLimit);
+    const cost=armorOutfitPrice(definitions),needed=Math.max(0,this.inventory.items.length+definitions.length-LOOT.inventoryLimit);
     if(this.hero.coins<cost)return failed(`Need ${cost} coins. Your balance is ${this.hero.coins}.`);
     if(new Set(discardUids).size!==discardUids.length||discardUids.some(uid=>!this.inventory.items.some(i=>i.uid===uid)))return failed('Choose distinct owned items to discard.');
     if(discardUids.length!==needed)return {ok:false,error:`Choose ${needed} owned item${needed===1?'':'s'} to discard before buying.`,needed,cost,definitions};
@@ -80,7 +79,7 @@ export const erisMethods={
     const item=this.inventory.items.find(i=>i.uid===uid),def=itemDefinition(item),value=resaleValue(def);
     if(!this.shopReady())return failed('Selling is available only at the central Costume Shop.');
     if(Object.values(this.inventory.equipped).includes(uid))return failed('Unequip this item before selling it.');
-    if(!def||value===null)return failed('This item cannot be sold. Legendary equipment has no resale.');
+    if(!def||isRetiredHeadwear(def)||value===null)return failed('This item cannot be sold. Legendary equipment has no resale.');
     if(this.hero.coins+value>999999)return failed('Coin balance is full. Spend some coins before selling.');
     return {ok:true,uid,value,def,revision:this.economy.revision};
   },

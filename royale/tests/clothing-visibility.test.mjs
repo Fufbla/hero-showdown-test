@@ -28,11 +28,20 @@ test('every released clothing collection preserves armor data while concealing c
   if(visual.coverage.has('legs')||visual.coverage.has('feet'))assert.equal(visual.outfit.pieces.boots,undefined,set.id+' has armored boots');
   if(visual.coverage.has('helmet'))assert.equal(visual.outfit.pieces.helmet,undefined,set.id+' has armored helmet');
   if(visual.coverage.has('mask'))assert.equal(visual.outfit.pieces.mask,undefined,set.id+' has armored face gear');
-  if(visual.coverage.has('cape'))assert.equal(visual.look.cape,false,set.id+' has original cape through outfit');
+  assert.equal(visual.look.cape,false,set.id+' has original cape through outfit');
+  assert.equal(visual.outfit.pieces.cape,undefined,set.id+' has unrelated armor cape');
   assert.equal(JSON.stringify({armor,hero,entries}),before,'No live armor or save mutation allowed');
   checked+=entries.length;
  }
- assert.equal(checked,153);
+ assert.equal(checked,118);
+});
+
+test('matching armor without a cape suppresses the starter cape without cosmetic layers',()=>{
+ const outfit={origin:'equipment',hideBaseCape:true,pieces:{chest:armor.chest}};
+ const result=clothingAppearance(outfit,hero,[]);
+ assert.equal(result.look.cape,false);
+ assert.equal(result.outfit,outfit);
+ assert.equal(hero.cape,true,'saved appearance must remain unchanged');
 });
 
 test('removing clothing restores armor and missing artwork never conceals it',async()=>{

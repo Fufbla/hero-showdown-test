@@ -3,8 +3,8 @@ import {armorCollection, drawArmorPiece} from './power-armor-art.mjs';
 import {WEARABLE_REGIONS} from './assets/hero/style-c-accurate/equipment/regions.mjs';
 import {emblem} from './style-c-paint.mjs';
 
-// Temporary visual policy: retain equipped helmets and their bonuses while
-// keeping the player's face and full hairstyle visible.
+// Headwear is retired. Keep this renderer guard for stale appearance packets
+// so the player's face and full hairstyle remain visible.
 export const ARMOR_HELMETS_VISIBLE = false;
 
 const atlasURL = new URL('./assets/hero/style-c-accurate/equipment/worn.png', import.meta.url);

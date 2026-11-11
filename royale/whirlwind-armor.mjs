@@ -1,4 +1,4 @@
-import {COSTUME_PARTS} from './costume-catalog.mjs';
+import {COSTUME_PARTS,matchingArmorSet} from './costume-catalog.mjs';
 import {STRENGTH_SUITS, STRENGTH_PIECES, WARDROBE_CATALOG as priorCatalog} from './strength-armor.mjs';
 
 const designs = [
@@ -19,16 +19,13 @@ export const WHIRLWIND_PIECES = Object.freeze(Object.fromEntries(WHIRLWIND_SUITS
     const {catalogValue}=STRENGTH_PIECES[STRENGTH_SUITS[i].setId+'-'+part];
     return [id,{id,setId:suit.setId,setName:suit.name,name:suit.name+' '+labels[part],art:suit.art,part,
       level:suit.level,color:suit.color,accent:suit.accent,rarity:suit.rarity,
-      whirlwindLevels:suit.whirlwindLevels,catalogValue,shop:true,sellable:true,stats:{}}];
+      whirlwindLevels:suit.whirlwindLevels,catalogValue,shop:part!=='helmet',sellable:true,stats:{}}];
   })
 )));
 export const WARDROBE_CATALOG = Object.freeze({...priorCatalog,...WHIRLWIND_PIECES});
 
 export function matchingWhirlwindBonus(inventory,level){
-  const worn=COSTUME_PARTS.map(part=>WHIRLWIND_PIECES[inventory.items.find(item=>item.uid===inventory.equipped[part])?.catalogId]);
-  const helmet=worn[0];
-  return helmet && level>=helmet.level && worn.every((item,i)=>item?.part===COSTUME_PARTS[i] && item.setId===helmet.setId)
-    ? helmet.whirlwindLevels : 0;
+  return matchingArmorSet(inventory,WHIRLWIND_PIECES,level)?.[0]?.whirlwindLevels||0;
 }
 
 // Keep the original tick clock and acquisition order if the outfit changes mid-cast.

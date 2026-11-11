@@ -3,6 +3,7 @@ import {drawHero} from '../hero-art.mjs';
 import {drawPowerHero,drawPowerWorld} from '../power-art.mjs';
 import {drawMergeWorld} from '../legendary-art.mjs';
 import {pickupLoot} from '../world-loot.mjs';
+import {clothingRuntime} from '../cosmetics/runtime.mjs';
 export const REMOTE_METHODS=['fastTravel','portalTravel','travel','enterBoss','enterLegendary','visitTree','leaveTree','upgradePower','equipPower','equipItem','buyCostume','buyHealthRoot','useHealthRoot','applyMakeover','sellItem','discardItem','resolveReward','acceptReward','claimChest','claimMergeReward','equipMergeMix','activateMergeSet','returnNormalEquipment','returnCheckpoint','pickupLoot'];
 export const MIGRATION_KEY='healthia.royale.multiplayer.links.v1';
 export class GameSession extends EventTarget {
@@ -47,7 +48,7 @@ export class GameSession extends EventTarget {
     if(!this.active)return;const c=renderer.c;c.save();c.setTransform(renderer.dpr*renderer.scale,0,0,renderer.dpr*renderer.scale,0,0);c.translate(-renderer.camera,-renderer.cameraY);
     for(const p of this.state?.nearby||[]){const h=p.hero,pos={x:h.prevX+(h.x-h.prevX)*alpha,y:h.prevY+(h.y-h.prevY)*alpha};
       const visual={...p,time:this.game.time,enemies:[],powers:p.powers||{active:{},projectiles:[]},mergeEffects:p.mergeEffects||[],mergeShots:p.mergeShots||[]};
-      drawPowerWorld(c,visual);drawMergeWorld(c,visual);const pose=drawHero(c,pos.x,pos.y,p.look,h,this.game.time,1,{outfit:p.outfit});drawPowerHero(c,visual,pos,pose);
+      drawPowerWorld(c,visual);drawMergeWorld(c,visual);const pose=drawHero(c,pos.x,pos.y,p.look,h,this.game.time,1,{outfit:p.outfit,clothing:clothingRuntime.layers(p.cosmetics||p.outfit?.cosmetics)});drawPowerHero(c,visual,pos,pose);
       c.font='bold 13px system-ui';c.textAlign='center';c.lineWidth=3;c.strokeStyle='#122b32';c.fillStyle='#fff6d8';c.strokeText(p.look.name,pos.x,pos.y-112);c.fillText(p.look.name,pos.x,pos.y-112);
     }c.restore();
   }

@@ -1,4 +1,5 @@
 import {garmentLining} from './fabric-tone.mjs';
+import {bodyClothingLayers} from './assets.mjs';
 // Phase B — visual-only outfit/armor separation shared by all 36 collections.
 // Never remove items, alter equipment stats, or write any save data here.
 const visualCover={
@@ -12,13 +13,11 @@ export function clothingCoverage(layers=[]){
  const covered=new Set();
  for(const piece of layers||[]){
   const {manifest,image}=piece||{};
-  if(!image||!Array.isArray(manifest?.layers)||!manifest.layers.length)continue;
-  for(const region of manifest.covers||[])covered.add(region);
-  for(const layer of manifest.layers){
+  const body=bodyClothingLayers(piece);
+  if(!image||!body.length)continue;
+  for(const region of manifest.covers||[])if(region!=='helmet'&&region!=='mask')covered.add(region);
+  for(const layer of body){
    for(const region of visualCover[layer.part]||[])covered.add(region);
-   // A face covering or headwear should replace conflicting armored face gear.
-   if(layer.attach==='head'&&(layer.part==='headwear'||layer.part==='accessory'&&layer.pass==='accessory'))
-    covered.add('mask');
   }
  }
  return covered;
@@ -30,15 +29,14 @@ const customLinings=Object.freeze({
 export function clothingAppearance(outfit,look,layers=[]){
  const coverage=clothingCoverage(layers);
  const pieces=outfit?.pieces||{};
- if(!coverage.size)return {coverage,outfit,look,regionBase:{}};
+ if(!coverage.size)return {coverage,outfit,look:outfit?.hideBaseCape?{...look,cape:false}:look,regionBase:{}};
  const concealed={
   suit:coverage.has('torso'),chest:coverage.has('torso'),
   belt:coverage.has('belt')||coverage.has('torso'),
   emblem:coverage.has('emblem')||coverage.has('torso'),
   gloves:coverage.has('gloves')||coverage.has('arms'),
   boots:coverage.has('boots')||coverage.has('feet')||coverage.has('legs'),
-  helmet:coverage.has('helmet'),mask:coverage.has('mask'),
-  cape:coverage.has('cape')
+  helmet:true,mask:true,accessory:true,cape:true
  };
  const visible=Object.fromEntries(Object.entries(pieces).filter(([part])=>!concealed[part]));
  const regionBase={};
@@ -46,10 +44,11 @@ export function clothingAppearance(outfit,look,layers=[]){
  // at garment seams without changing the actual equipped gear. The original
  // full-color clothing atlas paints over this backing in its normal passes.
  for(const piece of layers||[]){
-  if(!piece?.image||!piece.manifest?.layers?.length)continue;
+  const body=bodyClothingLayers(piece);
+  if(!piece?.image||!body.length)continue;
   const scheme=customLinings[String(piece.id||'').split('.')[0]]||clothLining;
   const regions=new Set([...(piece.manifest.covers||[])]);
-  for(const layer of piece.manifest.layers)for(const r of visualCover[layer.part]||[])regions.add(r);
+  for(const layer of body)for(const r of visualCover[layer.part]||[])regions.add(r);
   if(regions.has('torso'))regionBase.torso=garmentLining(piece,'torso',scheme);
   if(regions.has('arms'))regionBase.arms=garmentLining(piece,'arms',scheme);
   if(regions.has('legs'))regionBase.legs=garmentLining(piece,'legs',scheme);
@@ -57,7 +56,7 @@ export function clothingAppearance(outfit,look,layers=[]){
  return {
   coverage,
   outfit:{...outfit,pieces:visible},
-  look:coverage.has('cape')?{...look,cape:false}:look,
+  look:{...look,cape:false},
   regionBase
  };
 }

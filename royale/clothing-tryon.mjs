@@ -1,10 +1,8 @@
 // Persistent read-only clothing fitting room. No state, wallet, or save mutations.
-import {drawHero} from './hero-art.mjs';
-import {previewHero} from './hero-rig.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
-import {universalRenderLook} from './cosmetics/template.mjs';
+import {drawOutfitPreview} from './cosmetics/preview.mjs';
 
-let serial=0, ui=null, selected=null, layers=[], frameHandle=0, lastFrame=0;
+let serial=0, ui=null, layers=[], frameHandle=0, lastFrame=0;
 const node=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 function currentHero(){
  let value=null;
@@ -16,20 +14,13 @@ function draw(time=0){
  const {canvas,note,direction,motion}=ui,c=canvas.getContext('2d');
  if(!c)return;
  c.clearRect(0,0,canvas.width,canvas.height);
- c.fillStyle='rgba(150,210,170,.1)';c.beginPath();c.ellipse(180,390,65,10,0,0,Math.PI*2);c.fill();
  const hero=currentHero();
  if(!hero?.look){
   note.textContent='Load a hero before using Try On. Your original clothing stays unchanged.';
   return;
  }
  try{
-  const rawLook=universalRenderLook({...hero.look,cape:false});
-  const scale=1.7,x=180,y=392;
-  const animated=previewHero(motion,time);
-  animated.face=direction;
-  if(motion!=='idle')animated.vx=Math.abs(animated.vx)*direction;
-  const pose=drawHero(c,x,y,rawLook,animated,time,scale,
-    {view:'game',outfit:{pieces:{}},clothing:layers});
+  const pose=drawOutfitPreview(canvas,{look:hero.look,layers,view:'game',motion,direction,time,scale:1.7});
   if(!pose?.arms?.length||!pose?.legs?.length){
    note.textContent='Character artwork is loading. Try selecting the outfit again.';
    return;
@@ -81,12 +72,12 @@ export function initializeTryOn(holder){
 export async function openTryOn(set){
  if(!ui){throw Error('Fitting room not initialized');}
  const request=++serial;
- selected=set;layers=[];ui.title.textContent='Trying on: '+set.name;
- ui.note.textContent='Loading your hero and '+set.pieces.length+' clothing pieces…';
+ layers=[];ui.title.textContent='Trying on: '+set.name;
+ ui.note.textContent='Loading your hero and the complete outfit…';
  ui.section.scrollIntoView({block:'nearest',behavior:'smooth'});
  draw();
  try{
-  const result=await clothingRuntime.loadIds(set.pieces.map(p=>p.id),{review:true,retry:true});
+  const result=await clothingRuntime.loadOutfit(set,{review:true,retry:true});
   if(request!==serial)return;
   layers=result;
   ui.note.textContent='Wearing '+set.name+' in preview only. No changes saved.';

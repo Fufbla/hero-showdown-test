@@ -1,4 +1,4 @@
-import {COSTUME_PARTS} from './costume-catalog.mjs';
+import {COSTUME_PARTS,matchingArmorSet} from './costume-catalog.mjs';
 import {STEEL_SUITS, STEEL_PIECES, WARDROBE_CATALOG as priorCatalog} from './steel-armor.mjs';
 
 const designs = [
@@ -18,16 +18,13 @@ export const ROOTS_PIECES = Object.freeze(Object.fromEntries(ROOTS_SUITS.flatMap
     const label={helmet:'Helmet',chest:'Chest Armor',boots:'Boots'}[part];
     return [id,{id, setId:suit.setId, setName:suit.name, name:suit.name+' '+label, art:suit.art, part,
       level:suit.level, color:suit.color, accent:suit.accent, rarity:suit.rarity,
-      rootsLevels:suit.rootsLevels, catalogValue:peer.catalogValue, shop:true, sellable:true, stats:{}}];
+      rootsLevels:suit.rootsLevels, catalogValue:peer.catalogValue, shop:part!=='helmet', sellable:true, stats:{}}];
   })
 )));
 export const WARDROBE_CATALOG = Object.freeze({...priorCatalog,...ROOTS_PIECES});
 
 export function matchingRootsBonus(inventory,level){
-  const worn=COSTUME_PARTS.map(part=>ROOTS_PIECES[inventory.items.find(i=>i.uid===inventory.equipped[part])?.catalogId]);
-  const helmet=worn[0];
-  return helmet && level>=helmet.level && worn.every((p,i)=>p?.part===COSTUME_PARTS[i] && p.setId===helmet.setId)
-    ? helmet.rootsLevels : 0;
+  return matchingArmorSet(inventory,ROOTS_PIECES,level)?.[0]?.rootsLevels||0;
 }
 export function groundedForRoots(enemy){
   return !enemy.flying && !enemy.airborne && Math.abs(enemy.y-enemy.surface.y)<1;

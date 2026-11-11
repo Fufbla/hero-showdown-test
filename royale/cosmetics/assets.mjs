@@ -1,5 +1,12 @@
 import {TEMPLATE_ID,VIEWS,PARTS,PASSES,MASTER_ANCHORS} from './template.mjs';
+import {isRetiredCosmeticId} from './state.mjs';
 const point=p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite);
+// Historical head manifests may remain in shared atlases. They are never live
+// garments, including when an older preview passes already-decoded layers.
+export function bodyClothingLayers(piece){
+ if(piece?.category==='headwear'||isRetiredCosmeticId(piece?.id))return [];
+ return (piece?.manifest?.layers||[]).filter(layer=>layer.attach!=='head'&&layer.end?.attach!=='head'&&layer.part!=='headwear');
+}
 export function validateAsset(manifest){
  const errors=[];
  if(manifest?.template!==TEMPLATE_ID)errors.push('Unknown fitting template');

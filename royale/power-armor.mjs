@@ -1,6 +1,6 @@
 // Each ID identifies one permanent catalog design in saved inventories.
 // Prices are whole coins. For a half-coin quarter the boots take the remainder.
-import {COSTUME_CATALOG, COSTUME_PARTS} from './costume-catalog.mjs';
+import {COSTUME_CATALOG, COSTUME_PARTS, matchingArmorSet} from './costume-catalog.mjs';
 
 const designs = [
   ['ember', 'Ember Scout', 500],
@@ -27,18 +27,12 @@ export const FIREBALL_PIECES = Object.freeze(Object.fromEntries(FIREBALL_SUITS.f
     return [id, {id, setId:suit.setId, art:suit.art, setName:suit.name,
       name:suit.name+' '+({helmet:'Helmet',chest:'Chest Armor',boots:'Boots'})[part], part,
       level:suit.level, color:suit.color, accent:suit.accent, rarity:suit.rarity,
-      fireballLevels:suit.fireballLevels, catalogValue:prices[part], shop:true, sellable:true,
+      fireballLevels:suit.fireballLevels, catalogValue:prices[part], shop:part!=='helmet', sellable:true,
       stats:{fireball:part==='chest'?2:1}}];
   });
 })));
 export const WARDROBE_CATALOG = Object.freeze({...COSTUME_CATALOG, ...FIREBALL_PIECES});
 
-export function matchingFireballBonus(inventory, level) {
-  const worn = COSTUME_PARTS.map(part => {
-    const item = inventory.items.find(i => i.uid === inventory.equipped[part]);
-    return FIREBALL_PIECES[item?.catalogId];
-  });
-  const helmet = worn[0];
-  return helmet && level >= helmet.level && worn.every((d,i) => d?.setId === helmet.setId && d.part === COSTUME_PARTS[i])
-    ? helmet.fireballLevels : 0;
+export function matchingFireballBonus(inventory,level){
+  return matchingArmorSet(inventory,FIREBALL_PIECES,level)?.[0]?.fireballLevels||0;
 }

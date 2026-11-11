@@ -1,10 +1,13 @@
 // Stable catalog IDs are save references. Never reuse an ID for different colors or stats.
 export const COSTUME_PARTS = ['helmet', 'chest', 'boots'];
+// Historical catalog parts remain stable so older saves can be validated.
+// Active outfits have no headwear and are always worn as a matching pair.
+export const ARMOR_OUTFIT_PARTS = Object.freeze(['chest', 'boots']);
 export const COSTUME_WEIGHTS = Object.freeze({helmet: .33, chest: .33, boots: .34});
 export const STAT_KEYS = ['strength','damage','defense','moveSpeed','attackSpeed','fireball','roots','whirlwind'];
 export const STAT_LABELS = {strength:'Physical strength',damage:'Physical damage',defense:'Damage reduction',moveSpeed:'Running speed',attackSpeed:'Attack speed',fireball:'Fireball damage',roots:'Root damage per tick',whirlwind:'Wind damage per tick'};
 export const PERCENT_STATS = new Set(['defense','moveSpeed','attackSpeed']);
-export const LEGENDARY_POLICY = Object.freeze({enabled:true,rarity:'legendary',glow:'#65ff7a',sellable:false,requiredPieces:3,fourthSlot:3,cooldownMultiplier:.5,discardIsPermanent:true,reearnable:false});
+export const LEGENDARY_POLICY = Object.freeze({enabled:true,rarity:'legendary',glow:'#65ff7a',sellable:false,requiredPieces:2,fourthSlot:3,cooldownMultiplier:.5,discardIsPermanent:true,reearnable:false});
 const rows = [
   ['shore', 'Shore Guardian', 1, 1, '#368a89','#edc77d','wave'],
   ['beacon', 'Beacon Knight', 10, 1, '#365d87','#f0d8a0','shield'],
@@ -25,15 +28,25 @@ export const COSTUME_SETS=Object.freeze(Object.fromEntries(rows.map(([id,name,le
 })));
 export const COSTUME_CATALOG=Object.freeze(Object.fromEntries(Object.values(COSTUME_SETS).flatMap(set=>['ordinary',...(set.region>=4?['rare']:[])].flatMap(rarity=>COSTUME_PARTS.map((part,index)=>{
   const rare=rarity==='rare',id=`eris-${set.id}-${rarity}-${part}`,weight=COSTUME_WEIGHTS[part],value=part==='boots'?set.value-2*Math.floor(set.value*.33):Math.floor(set.value*.33);
-  return [id,{id,setId:`${set.id}-${rarity}`,setName:`${rare?'Radiant ':''}${set.name}`,name:`${rare?'Radiant ':''}${set.name} ${part==='chest'?'Chest Piece':part==='helmet'?'Helmet':'Boots'}`,part,region:set.region,rarity,level:set.level,color:set.color,accent:set.accent,emblem:set.emblem,style:index,weight,catalogValue:rare?value*2:value,shop:!rare,sellable:true,stats:Object.fromEntries(STAT_KEYS.map(k=>{const total=rounded(set.stats[k]*(rare?1.35:1)),third=rounded(total*.33);return [k,part==='boots'?rounded(total-2*third):third];}))}];
+  return [id,{id,setId:`${set.id}-${rarity}`,setName:`${rare?'Radiant ':''}${set.name}`,name:`${rare?'Radiant ':''}${set.name} ${part==='chest'?'Chest Piece':part==='helmet'?'Helmet':'Boots'}`,part,region:set.region,rarity,level:set.level,color:set.color,accent:set.accent,emblem:set.emblem,style:index,weight,catalogValue:rare?value*2:value,shop:!rare&&part!=='helmet',sellable:true,stats:Object.fromEntries(STAT_KEYS.map(k=>{const total=rounded(set.stats[k]*(rare?1.35:1)),third=rounded(total*.33);return [k,part==='boots'?rounded(total-2*third):third];}))}];
 })))));
 export const DROP_SETS={1:'shore',2:'briar',3:'foundry',4:'cavern',5:'wild',6:'aether',7:'vanguard'};
 // Region is the drop origin. Higher-level drops can be kept and previewed until their required level.
 export function costumeDrop(region,rarity,index,serial){
   if(rarity==='rare'&&region<4)return null;
   const set=DROP_SETS[region];
-  const catalogId=`eris-${set}-${rarity}-${COSTUME_PARTS[Math.abs(Math.floor(index))%3]}`;
+  const catalogId=`eris-${set}-${rarity}-${ARMOR_OUTFIT_PARTS[Math.abs(Math.floor(index))%ARMOR_OUTFIT_PARTS.length]}`;
   return COSTUME_CATALOG[catalogId]?{uid:`drop-${serial}`,catalogId}:null;
 }
 export function formatStat(key,value){return `${Number((value*(PERCENT_STATS.has(key)?100:1)).toFixed(3))}${PERCENT_STATS.has(key)?'%':''}`;}
 export const resaleValue=def=>def?.rarity==='legendary'||def?.sellable===false?null:Math.floor((def?.catalogValue||0)*.25);
+
+// Catalog-only helper: power collections can use it without importing the
+// inventory module that in turn assembles all of those collections.
+export function matchingArmorSet(inventory,catalog,level=99){
+  const equipped=inventory?.equipped||{};
+  if(Object.keys(equipped).some(part=>!ARMOR_OUTFIT_PARTS.includes(part)))return null;
+  const pieces=ARMOR_OUTFIT_PARTS.map(part=>catalog[inventory?.items?.find(item=>item.uid===equipped[part])?.catalogId]);
+  const first=pieces[0];
+  return first&&pieces.every((piece,i)=>piece?.part===ARMOR_OUTFIT_PARTS[i]&&piece.setId===first.setId&&level>=(piece.level||1))?pieces:null;
+}

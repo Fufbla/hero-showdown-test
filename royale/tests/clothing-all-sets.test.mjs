@@ -29,13 +29,13 @@ function fakeCanvas(){
  return {ctx,numbers};
 }
 
-test('all 36 wardrobe sets and 153 manifests use the shared four-view fitting engine',async()=>{
+test('all 36 wardrobe sets and 118 body manifests use the shared four-view fitting engine',async()=>{
  assert.equal(FITTING_VERSION,'all-outfits-body-fit-v1');
  assert.equal(catalog.sets.length,36);
  const pieces=catalog.sets.flatMap(s=>s.pieces);
- assert.equal(pieces.length,153);
+ assert.equal(pieces.length,118);
  const unique=new Set(pieces.map(x=>x.id));
- assert.equal(unique.size,153,'All pieces must remain individually addressable');
+ assert.equal(unique.size,118,'Body artwork IDs must remain stable and unique');
  const manifests=[];
  for(const piece of pieces){
   const location=piece.assetManifest.replace(/^\.\//,'');

@@ -1,4 +1,4 @@
-import {COSTUME_PARTS} from './costume-catalog.mjs';
+import {COSTUME_PARTS,matchingArmorSet} from './costume-catalog.mjs';
 import {SPEED_SUITS, SPEED_PIECES, WARDROBE_CATALOG as priorCatalog} from './speed-armor.mjs';
 
 const designs = [
@@ -25,16 +25,13 @@ export const AGILITY_PIECES = Object.freeze(Object.fromEntries(AGILITY_SUITS.fla
     const {catalogValue}=SPEED_PIECES[SPEED_SUITS[i].setId+'-'+part];
     return [id,{id,setId:suit.setId,setName:suit.name,name:suit.name+' '+labels[part],art:suit.art,part,
       level:suit.level,color:suit.color,accent:suit.accent,rarity:suit.rarity,
-      agilityLevels:suit.agilityLevels,catalogValue,shop:true,sellable:true,stats:{}}];
+      agilityLevels:suit.agilityLevels,catalogValue,shop:part!=='helmet',sellable:true,stats:{}}];
   })
 )));
 export const WARDROBE_CATALOG = Object.freeze({...priorCatalog,...AGILITY_PIECES});
 
 export function matchingAgilityBonus(inventory,level){
-  const worn=COSTUME_PARTS.map(part=>AGILITY_PIECES[inventory.items.find(item=>item.uid===inventory.equipped[part])?.catalogId]);
-  const helmet=worn[0];
-  return helmet && level>=helmet.level && worn.every((item,i)=>item?.part===COSTUME_PARTS[i] && item.setId===helmet.setId)
-    ? helmet.agilityLevels : 0;
+  return matchingArmorSet(inventory,AGILITY_PIECES,level)?.[0]?.agilityLevels||0;
 }
 
 export function refreshAgilityEffect(powers) {

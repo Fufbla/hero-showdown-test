@@ -52,7 +52,8 @@ export class LocalHeroStore{
     const current=this.data.slots[index];
     if(expectedId!==undefined&&(current?.id??null)!==expectedId)return {ok:false,error:'This hero slot changed. Select it again before saving.'};
     if(current){
-      const old=current.snapshot;
+      const old=decodeSave(JSON.stringify(current.snapshot),{allowOverBudgetPowers:this.allowOverBudgetPowers});
+      if(!old)return {ok:false,error:'The previous hero snapshot requires recovery.'};
       if(!legendaryDominates(state.legendary,old.legendary)||state.economy.revision<old.economy.revision||state.inventory.nextId<old.inventory.nextId||Object.keys(old.inventory.retired).some(uid=>!state.inventory.retired[uid])||state.level<old.level||Object.keys(old.powers.levels).some(id=>state.powers.levels[id]<old.powers.levels[id]))return {ok:false,error:'This snapshot predates permanent progress. Reload the latest hero before saving.'};
     }
     const next=copy(this.data),now=this.now();

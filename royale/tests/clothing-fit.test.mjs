@@ -50,8 +50,8 @@ test('fitted Ninja artwork follows animated bone anchors on all four sides',asyn
  for(const view of ['front','right','back','left'])
   for(const pass of ['behindBody','farLeg','nearLeg','torso','farArm','nearArm','overBody','behindHead','headwear','accessory'])
    drawClothingPass(context,pose,view,pass,layers);
- assert.ok(counts.draw>50,'must draw multiple fitted segments across the four views');
- assert.ok(counts.scale>50,'must apply fit transforms');
+ assert.ok(counts.draw>30,'must draw the body garment segments across all four views');
+ assert.ok(counts.scale>30,'must apply body garment fit transforms');
  assert.ok(counts.clip>0,'must joint-split sleeves and pants');
  assert.equal(JSON.stringify(pose),poseBefore,'rendering must never mutate the hero pose');
 });

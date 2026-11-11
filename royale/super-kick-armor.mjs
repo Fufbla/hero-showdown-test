@@ -1,4 +1,4 @@
-import {COSTUME_PARTS} from './costume-catalog.mjs';
+import {COSTUME_PARTS,matchingArmorSet} from './costume-catalog.mjs';
 import {WHIRLWIND_SUITS, WHIRLWIND_PIECES, WARDROBE_CATALOG as priorCatalog} from './whirlwind-armor.mjs';
 
 const designs = [
@@ -19,16 +19,13 @@ export const SUPER_KICK_PIECES = Object.freeze(Object.fromEntries(SUPER_KICK_SUI
     const {catalogValue}=WHIRLWIND_PIECES[WHIRLWIND_SUITS[i].setId+'-'+part];
     return [id,{id,setId:suit.setId,setName:suit.name,name:suit.name+' '+labels[part],art:suit.art,part,
       level:suit.level,color:suit.color,accent:suit.accent,rarity:suit.rarity,
-      superKickLevels:suit.superKickLevels,catalogValue,shop:true,sellable:true,stats:{}}];
+      superKickLevels:suit.superKickLevels,catalogValue,shop:part!=='helmet',sellable:true,stats:{}}];
   })
 )));
 export const WARDROBE_CATALOG = Object.freeze({...priorCatalog,...SUPER_KICK_PIECES});
 
 export function matchingSuperKickBonus(inventory,level){
-  const worn=COSTUME_PARTS.map(part=>SUPER_KICK_PIECES[inventory.items.find(item=>item.uid===inventory.equipped[part])?.catalogId]);
-  const helmet=worn[0];
-  return helmet && level>=helmet.level && worn.every((item,i)=>item?.part===COSTUME_PARTS[i] && item.setId===helmet.setId)
-    ? helmet.superKickLevels : 0;
+  return matchingArmorSet(inventory,SUPER_KICK_PIECES,level)?.[0]?.superKickLevels||0;
 }
 
 // The attack and combo share this state. Update a pending strike without

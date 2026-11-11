@@ -1,8 +1,7 @@
-import { costumeDrop } from './costume-catalog.mjs';
+import { costumeDrop,ARMOR_OUTFIT_PARTS } from './costume-catalog.mjs';
 import { itemDefinition,normalizeEquipmentItem } from './equipment.mjs';
-import {rollHelmetStats} from './helmet-rolls.mjs';
 export function initialBossProgress(victories=[]){return {records:Object.fromEntries(victories.map(id=>[id,{wins:1,chest:{state:'legacy',coins:0,roots:0,items:[]}}]))};}
-export function normalizeBossProgress(raw,victories,{strict=false}={}){
+export function normalizeBossProgress(raw,victories,{strict=false,legacy=false}={}){
   if(!raw)return strict?null:initialBossProgress(victories);
   if(!raw.records||typeof raw.records!=='object'||Array.isArray(raw.records))return null;
   const records={};
@@ -10,18 +9,15 @@ export function normalizeBossProgress(raw,victories,{strict=false}={}){
   for(const region of victories){
     const r=raw.records[region],c=r?.chest;
     if(!r||!Number.isSafeInteger(r.wins)||r.wins<1||!c||!['available','claimed','legacy'].includes(c.state)||!Number.isInteger(c.coins)||c.coins<0||c.coins>100||!Number.isInteger(c.roots)||c.roots<0||c.roots>2||!Array.isArray(c.items)||c.items.length>2)return null;
-    if(!c.items.every(i=>normalizeEquipmentItem(i)&&itemDefinition(i)?.region===region&&(region>=4||itemDefinition(i)?.rarity==='ordinary')&&/^chest-[1-7]-[01]$/.test(i.uid)))return null;
+    if(!c.items.every(i=>normalizeEquipmentItem(i,{allowRetired:legacy})&&itemDefinition(i)?.region===region&&(region>=4||itemDefinition(i)?.rarity==='ordinary')&&/^chest-[1-7]-[01]$/.test(i.uid)))return null;
     if(new Set(c.items.map(i=>i.uid)).size!==c.items.length)return null;
-    records[region]={wins:r.wins,chest:{state:c.state,coins:c.coins,roots:c.roots,items:c.items.map(normalizeEquipmentItem)}};
+    records[region]={wins:r.wins,chest:{state:c.state,coins:c.coins,roots:c.roots,items:c.items.map(i=>normalizeEquipmentItem(i,{allowRetired:legacy}))}};
   }
   return {records};
 }
 export function rollChest(region,random=Math.random){
   const coins=20+Math.floor(random()*21),roots=1+Math.floor(random()*2),count=random()<.35?2:1,items=[];
-  for(let i=0;i<count;i++){const rarity=region>=4&&random()<.3?'rare':'ordinary',item=costumeDrop(region,rarity,Math.floor(random()*3),1);item.uid=`chest-${region}-${i}`;items.push(item);}
-  // Roll after reward selection, so stat sampling cannot affect chest counts,
-  // rarity, equipment type, coins, or Roots.
-  for(let i=0;i<items.length;i++)items[i]=rollHelmetStats(items[i],random);
+  for(let i=0;i<count;i++){const rarity=region>=4&&random()<.3?'rare':'ordinary',item=costumeDrop(region,rarity,Math.floor(random()*ARMOR_OUTFIT_PARTS.length),1);item.uid=`chest-${region}-${i}`;items.push(item);}
   return {state:'available',coins,roots,items};
 }
 export function normalizeArena(raw,world,bosses){

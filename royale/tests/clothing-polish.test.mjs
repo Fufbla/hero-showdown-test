@@ -70,10 +70,10 @@ test('fabric swatch comes only from opaque approved artwork; transparent fallbac
  const piece={id:'test.top',image:{},manifest:{layers:[]}};
  assert.equal(garmentLining(piece,'torso',fallback),fallback);
 });
-test('all 153 pieces render polished across four views without changing saves or atlas data',async()=>{
+test('all 118 body pieces render polished across four views without changing saves or atlas data',async()=>{
  assert.equal(catalog.sets.length,36);
  const pieces=catalog.sets.flatMap(s=>s.pieces);
- assert.equal(pieces.length,153);
+ assert.equal(pieces.length,118);
  const layers=[];
  for(const piece of pieces){
   const manifest=await load(new URL('../cosmetics/'+piece.assetManifest.slice(2),import.meta.url));

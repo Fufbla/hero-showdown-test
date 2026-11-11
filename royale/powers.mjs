@@ -5,7 +5,7 @@ import {ProjectilePool,clearProjectiles,compactProjectiles} from './projectiles.
 // Phase 3 rules. Values not specified by the design are collected here for balancing.
 export const POWER_CAP = 20;
 export const ACTIVE_SLOTS = 3;
-export const FUTURE_MERGE_SLOT = Object.freeze({ index: 3, requiredPieces: 3, cooldownMultiplier: .5 });
+export const FUTURE_MERGE_SLOT = Object.freeze({ index: 3, requiredPieces: 2, cooldownMultiplier: .5 });
 // Villain Merge adapter remains reserved; production has no merge entitlement.
 export function resolveAbilitySlots(data,merge=null) {
   const slots=Array.from({length:ACTIVE_SLOTS},(_,index)=>({id:data.equipped[index],level:data.levels[data.equipped[index]]||0,cooldownMultiplier:1}));

@@ -5,6 +5,7 @@ import { DEFAULT_LOOK, LOOK_OPTIONS, LOOK_RANGES, COLOR_FIELDS, sanitizeLook, va
 import { drawHero } from './hero-art.mjs';
 import { previewHero } from './hero-rig.mjs';
 import {styleCDefault,STYLE_C_VIEWS} from './style-c-defaults.mjs';
+import {clothingRuntime} from './cosmetics/runtime.mjs';
 const $=id=>document.getElementById(id);
 const labelFor={waist:'Waist shape',hips:'Hip width',chest:'Chest shape',jaw:'Jaw width',presentation:'Presentation',age:'Age appearance',skin:'Skin tone',eyes:'Eye color',hair:'Hairstyle',hairColor:'Hair color',face:'Face shape',eyeShape:'Eye shape',brows:'Eyebrows',nose:'Nose',mouth:'Mouth',facialHair:'Facial hair',build:'Body build',height:'Height',shoulders:'Shoulder width',muscle:'Muscularity',torso:'Torso proportion',arms:'Arm proportion',legs:'Leg proportion',suit:'Primary suit color',trim:'Secondary suit color',emblemColor:'Emblem color',emblem:'Superhero emblem',capeColor:'Cape color',cape:'Wear a cape'};
 const optionLabel={side:'Right',superKick:'Super Kick',male:'Male',female:'Female',teen:'Teenager',young:'Young adult',older:'Older adult',none:'None',leaf:'Leaf',bolt:'Lightning bolt',shield:'Shield',star:'Star',wave:'Wave',sun:'Sun'};
@@ -12,7 +13,7 @@ export const FIELD_GROUPS={identity:['presentation','age','skin'],face:['hair','
 const title=s=>optionLabel[s]||s[0].toUpperCase()+s.slice(1);
 export class Creator{
   constructor(){
-    this.look={...DEFAULT_LOOK};this.view='front';this.outfit=null;
+    this.look={...DEFAULT_LOOK};this.view='front';this.outfit=null;this.cosmetics=null;
     for(const [group,fields] of Object.entries(FIELD_GROUPS))for(const key of fields){
       const label=document.createElement('label');label.className='field';label.textContent=labelFor[key];
       const control=document.createElement(LOOK_OPTIONS[key]?'select':'input');control.id=key;control.name=key;
@@ -62,8 +63,9 @@ export class Creator{
     for(const style of choices){const b=document.createElement('button');b.type='button';b.setAttribute('aria-pressed',String(style.id===this.look.hair));b.setAttribute('aria-label',style.name);const canvas=document.createElement('canvas');canvas.width=100;canvas.height=110;canvas.setAttribute('aria-hidden','true');const c=canvas.getContext('2d');c.fillStyle='#203641';c.fillRect(0,0,100,110);drawHero(c,50,215,{...this.look,hair:style.id,cape:false},previewHero('idle',0),0,1.7,{view:this.view});const label=document.createElement('span');label.textContent=style.name;b.append(canvas,label);b.onclick=()=>{$('hair').value=style.id;$('hair').dispatchEvent(new Event('input',{bubbles:true}));};grid.append(b);}
   }
   tab(key){for(const name of Object.keys(FIELD_GROUPS)){const selected=key===name;$(`panel-${name}`).hidden=!selected;$(`tab-${name}`).setAttribute('aria-selected',String(selected));$(`tab-${name}`).tabIndex=selected?0:-1;}document.querySelector('.creator-fields').scrollTop=0;}
-  fill(value,outfit,newHero=false){
+  fill(value,outfit,newHero=false,cosmetics=null){
     this.newHero=newHero;
+    this.cosmetics=cosmetics;
     this.look=sanitizeLook(value);this.outfit=outfit;this.originalCostume=Object.fromEntries(['suit','trim','emblemColor','capeColor','emblem','cape'].map(key=>[key,this.look[key]]));this.view='front';for(const v of STYLE_C_VIEWS)$(`view-${v}`).setAttribute('aria-pressed',String(v===this.view));
     $('name').value=this.look.name;
     for(const field of Object.values(FIELD_GROUPS).flat()){$(field)[$(field).type==='checkbox'?'checked':'value']=this.look[field];}
@@ -80,7 +82,7 @@ export class Creator{
   draw(now=performance.now()){
     const canvas=$('hero-preview'),c=canvas.getContext('2d'),time=now/1000,h=previewHero('idle',time);
     c.clearRect(0,0,480,480);c.fillStyle='#112f3933';c.beginPath();c.ellipse(240,430,70,9,0,0,Math.PI*2);c.fill();
-    drawHero(c,240,428,this.look,h,time,3.05,{view:this.view,outfit:this.outfit});
+    drawHero(c,240,428,this.look,h,time,3.05,{view:this.view,outfit:this.outfit,clothing:clothingRuntime.layers(this.cosmetics)});
     canvas.setAttribute('aria-label',`${title(this.view)} view of ${this.look.name}, Idle`);
   }
 }

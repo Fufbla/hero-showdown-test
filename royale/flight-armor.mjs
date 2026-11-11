@@ -1,4 +1,4 @@
-import {COSTUME_PARTS} from './costume-catalog.mjs';
+import {COSTUME_PARTS,matchingArmorSet} from './costume-catalog.mjs';
 import {AGILITY_SUITS, AGILITY_PIECES, WARDROBE_CATALOG as priorCatalog} from './agility-armor.mjs';
 
 const designs = [
@@ -25,16 +25,13 @@ export const FLIGHT_PIECES = Object.freeze(Object.fromEntries(FLIGHT_SUITS.flatM
     const {catalogValue}=AGILITY_PIECES[AGILITY_SUITS[i].setId+'-'+part];
     return [id,{id,setId:suit.setId,setName:suit.name,name:suit.name+' '+labels[part],art:suit.art,part,
       level:suit.level,color:suit.color,accent:suit.accent,rarity:suit.rarity,
-      flightLevels:suit.flightLevels,catalogValue,shop:true,sellable:true,stats:{}}];
+      flightLevels:suit.flightLevels,catalogValue,shop:part!=='helmet',sellable:true,stats:{}}];
   })
 )));
 export const WARDROBE_CATALOG = Object.freeze({...priorCatalog,...FLIGHT_PIECES});
 
 export function matchingFlightBonus(inventory,level){
-  const worn=COSTUME_PARTS.map(part=>FLIGHT_PIECES[inventory.items.find(item=>item.uid===inventory.equipped[part])?.catalogId]);
-  const helmet=worn[0];
-  return helmet && level>=helmet.level && worn.every((item,i)=>item?.part===COSTUME_PARTS[i] && item.setId===helmet.setId)
-    ? helmet.flightLevels : 0;
+  return matchingArmorSet(inventory,FLIGHT_PIECES,level)?.[0]?.flightLevels||0;
 }
 
 export function refreshFlightEffect(powers) {

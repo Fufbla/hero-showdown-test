@@ -3,6 +3,7 @@
 import {decodeSave, xpForLevel} from './core.mjs';
 import {legendaryDominates} from './legendary-state.mjs';
 import {WORLD_CLOCK_REFERENCE} from './world-state.mjs';
+import {armorRetirementHistoryPreserved} from './armor-migration.mjs';
 const stable=v=>JSON.stringify(v,(_k,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.fromEntries(Object.keys(x).sort().map(k=>[k,x[k]])):x);
 const fail=message=>{throw Error(message);};
 export const MAX_SAVE_BYTES=1000000;
@@ -19,9 +20,12 @@ export function validateSnapshot(raw,{migration=false}={}){
  state.world.clockReference=WORLD_CLOCK_REFERENCE;return state;
 }
 export function validateProgress(previous,next,{kind='manual'}={}){
- const old=previous;if(!old)return next;
+ if(!previous)return next;
+ const old=decodeSave(JSON.stringify(previous));
+ if(!old)fail('Previous progress requires recovery.');
+ if(next.version!==9){next=decodeSave(JSON.stringify(next));if(!next)fail('Invalid next progress.');}
  if(!legendaryDominates(next.legendary,old.legendary))fail('Permanent Legendary progress cannot be rolled back.');
- for(const [uid,reason] of Object.entries(old.inventory.retired))if(next.inventory.retired[uid]!==reason)fail('Destroyed equipment cannot be restored.');
+ if(!armorRetirementHistoryPreserved(previous,old,next))fail('Destroyed equipment cannot be restored.');
  if(next.level<old.level||next.economy.revision<old.economy.revision||next.inventory.nextId<old.inventory.nextId)fail('This save predates recorded progression.');
  for(const [id,n] of Object.entries(old.powers.levels))if(next.powers.levels[id]<n)fail('Spent Power Points cannot be refunded.');
  for(const item of [...old.inventory.items,...old.inventory.pending]){const n=[...next.inventory.items,...next.inventory.pending].find(i=>i.uid===item.uid);if(n&&n.catalogId!==item.catalogId)fail('An existing item cannot change identity.');}

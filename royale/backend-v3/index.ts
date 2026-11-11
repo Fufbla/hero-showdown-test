@@ -55,6 +55,8 @@ Deno.serve(async req=>{
    const current=await db.from('royale_v3_hero_slots').select('snapshot,revision').eq('profile_id',profile).eq('slot_number',slot).maybeSingle();
    if(current.error)throw Error('Save read failed');
    if(!current.data||current.data.revision!==revision)return out({error:'Revision conflict'},409);
+   // The shared guard also blocks pre-v9 tabs from overwriting an upgraded
+   // hero and checks the raw matching-outfit selection before storing it.
    const clothing=checkCosmeticSave(current.data.snapshot,snapshot);
    if(!clothing.ok)return out({error:clothing.error},409);
    const r=await db.from('royale_v3_hero_slots').update({snapshot,revision:revision+1,updated_at:new Date().toISOString()}).eq('profile_id',profile).eq('slot_number',slot).eq('revision',revision).select('revision,updated_at').maybeSingle();

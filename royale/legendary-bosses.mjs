@@ -1,7 +1,8 @@
 import {LOOT} from './progression.mjs';
-import { LEGENDARY, LEGENDARY_ATTACKS, LEGENDARY_HP, MERGE_CATALOG } from './legendary-data.mjs';
+import { LEGENDARY, LEGENDARY_ATTACKS, LEGENDARY_HP } from './legendary-data.mjs';
 import { ARENA, bossPhase } from './boss-data.mjs';
-import { itemDefinition } from './equipment.mjs';
+import { itemDefinition, equippedArmorOutfit } from './equipment.mjs';
+import {ARMOR_OUTFIT_PARTS} from './costume-catalog.mjs';
 import { arenaSurfaces } from './bosses.mjs';
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const overlaps=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
@@ -92,12 +93,13 @@ export const legendaryMethods={
  prepareLegendaryVictory(){
   const id=this.pendingLegendaryVictory,fight=this.bossEncounter;
   if(!id||!fight?.legendary||this.hero.dead||fight.boss.hp>0||this.enemies.some(e=>e.state!=='dead')||this.legendary.defeated[id])return false;
-  this.legendary.defeated[id]={claimed:false,pieces:['helmet','chest','boots'].map(part=>({uid:`drop-${this.inventory.nextId++}`,catalogId:`merge-${id}-${part}`,state:'unclaimed'}))};
+  this.legendary.defeated[id]={claimed:false,pieces:ARMOR_OUTFIT_PARTS.map(part=>({uid:`drop-${this.inventory.nextId++}`,catalogId:`merge-${id}-${part}`,state:'unclaimed'}))};
   this.legendary.revision++;this.recordEconomy('legendary');this.bossEncounter=null;this.arenaScene.cleared=true;this.disruptedPower=null;this.powers.cancelEffects();this.cancelMergeEffects();this.clearEnemyShots();this.legendaryHazards=[];this.hero.attack=null;this.hero.attackBuffer=null;this.combatTimer=0;this.pendingLegendaryVictory=null;return true;
  },
  pendingMergeReward(){return Object.entries(this.legendary.defeated).find(([,r])=>!r.claimed)?.[0]||null;},
  claimMergeReward(id,keepUids,discardUids,{confirmed=false,revision}={}){
   const record=this.legendary.defeated[id];if(!confirmed||revision!==this.legendary.revision||!this.canSave()||!record||record.claimed||!Array.isArray(keepUids)||!Array.isArray(discardUids))return false;
+  if(!Array.isArray(record.pieces)||record.pieces.length!==ARMOR_OUTFIT_PARTS.length||!ARMOR_OUTFIT_PARTS.every(part=>record.pieces.some(p=>p.catalogId===`merge-${id}-${part}`&&p.state==='unclaimed')))return false;
   if(new Set(keepUids).size!==keepUids.length||new Set(discardUids).size!==discardUids.length||keepUids.some(uid=>!record.pieces.some(p=>p.uid===uid))||discardUids.some(uid=>!this.inventory.items.some(p=>p.uid===uid))||this.inventory.items.length-discardUids.length+keepUids.length>LOOT.inventoryLimit)return false;
   for(const uid of discardUids)this.retireItem(uid);this.inventory.items=this.inventory.items.filter(i=>!discardUids.includes(i.uid));
   record.claimed=true;
@@ -105,21 +107,24 @@ export const legendaryMethods={
   this.legendary.revision++;this.recordEconomy('legendary');this.refreshEquipment();return true;
  },
  equipMergeMix(selection){
-  if(!this.treeVisit||!this.canSave()||!selection)return false;
-  const parts=['helmet','chest','boots'];
-  for(const part of parts){const uid=selection[part];if(uid&&!this.inventory.items.some(i=>i.uid===uid&&itemDefinition(i)?.part===part))return false;}
-  for(const part of parts){if(selection[part])this.inventory.equipped[part]=selection[part];else delete this.inventory.equipped[part];}delete this.inventory.equipped.mask;delete this.inventory.equipped.suit;
+  if(!this.treeVisit||!this.canSave()||!selection||typeof selection!=='object'||Array.isArray(selection))return false;
+  if(Object.entries(selection).some(([part,uid])=>uid&&!ARMOR_OUTFIT_PARTS.includes(part)))return false;
+  const equipped=Object.fromEntries(ARMOR_OUTFIT_PARTS.filter(part=>selection[part]).map(part=>[part,selection[part]]));
+  if(Object.keys(equipped).length&&!equippedArmorOutfit({...this.inventory,equipped},this.hero.level))return false;
+  this.inventory.equipped=equipped;
   this.recordEconomy('equip');this.refreshEquipment();return true;
  },
  activateMergeSet(id){
-  if(!this.treeVisit||!this.canSave())return false;
-  const pieces=['helmet','chest','boots'].map(part=>this.inventory.items.find(i=>i.catalogId===`merge-${id}-${part}`));if(pieces.some(p=>!p))return false;
-  for(const [i,part] of ['helmet','chest','boots'].entries())this.inventory.equipped[part]=pieces[i].uid;delete this.inventory.equipped.mask;delete this.inventory.equipped.suit;
+  if(this.hero.level!==99||!this.treeVisit||!this.canSave())return false;
+  const pieces=ARMOR_OUTFIT_PARTS.map(part=>this.inventory.items.find(i=>i.catalogId===`merge-${id}-${part}`));if(pieces.some(p=>!p))return false;
+  const equipped=Object.fromEntries(ARMOR_OUTFIT_PARTS.map((part,i)=>[part,pieces[i].uid]));
+  if(!equippedArmorOutfit({...this.inventory,equipped},this.hero.level))return false;
+  this.inventory.equipped=equipped;
   this.recordEconomy('equip');this.refreshEquipment();return true;
  },
  returnNormalEquipment(){
   if(!this.treeVisit||!this.canSave())return false;
-  for(const [part,uid] of Object.entries(this.inventory.equipped))if(this.inventory.items.find(i=>i.uid===uid)?.catalogId.startsWith('merge-'))delete this.inventory.equipped[part];
+  if(Object.values(this.inventory.equipped).some(uid=>this.inventory.items.find(i=>i.uid===uid)?.catalogId.startsWith('merge-')))this.inventory.equipped={};
   this.recordEconomy('equip');this.refreshEquipment();return true;
  },
 };

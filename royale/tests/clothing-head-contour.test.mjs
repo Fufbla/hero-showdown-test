@@ -6,12 +6,15 @@ import {fitGameplayHeadwear} from '../cosmetics/headwear-2d.mjs';
 import {fitClothingLayer} from '../cosmetics/fitting.mjs';
 import {drawClothingPass} from '../cosmetics/renderer.mjs';
 import {attachmentPoints} from '../cosmetics/template.mjs';
+import {RETIRED_COSMETIC_IDS,historicalPiece} from '../cosmetics/outfit-policy.mjs';
 
 const json=async file=>JSON.parse(await readFile(file,'utf8'));
 const catalog=await json(new URL('../cosmetics/catalog.json',import.meta.url));
-const headPieces=catalog.sets.flatMap(s=>s.pieces.filter(p=>p.category==='headwear'));
-const facePieces=catalog.sets.flatMap(s=>s.pieces.filter(p=>p.category==='accessory'&&
- ['ninja-warrior.accessory','street-style.accessory','tech-specialist.accessory','snow-hero.accessory','casual-hoodie.accessory'].includes(p.id)));
+const retiredPieces=RETIRED_COSMETIC_IDS.map(id=>{
+ const piece=historicalPiece(id);return {...piece,assetManifest:'./assets/'+piece.setId.replace('mrs.-claus','mrs-claus')+'/'+piece.category+'.json'};
+});
+const headPieces=retiredPieces.filter(piece=>piece.category==='headwear');
+const facePieces=retiredPieces.filter(piece=>piece.category==='accessory');
 const manifest=async piece=>json(new URL('../cosmetics/'+piece.assetManifest.slice(2),import.meta.url));
 const pose={
  faceWidth:90,unitScale:.35,head:[0,-72],faceCenter:[5,-71],headTilt:.12,
@@ -30,10 +33,11 @@ function canvas(){
  };
  return ctx;
 }
-test('all 30 released hats and five facial wear pieces use an actual 2D contour profile',async()=>{
+test('archived hat and face-accessory contour data remains intact outside the active catalog',async()=>{
  assert.equal(HEAD_CONTOUR_VERSION,'2d-skull-jaw-wrapping-v1');
  assert.equal(headPieces.length,30);
  assert.equal(facePieces.length,5);
+ assert.equal(catalog.sets.flatMap(set=>set.pieces).some(piece=>RETIRED_COSMETIC_IDS.includes(piece.id)),false);
  for(const piece of [...headPieces,...facePieces]){
   const m=await manifest(piece);
   const layer=m.layers.find(l=>l.view==='front');
@@ -76,9 +80,9 @@ test('ninja fabric wrap extends around skull and jaw scarf tapers below cheeks',
  assert.ok(contourRowWidth('wrap',.5)>contourRowWidth('wrap',0),'Forehead wrap follows skull bulge');
  assert.equal(fitHeadAccessory(maskLayer,baseMask,scarf,pose,0),baseMask,'Only live 2D character affected');
 });
-test('animated left/right gameplay uses curved head + mask geometry without altering the hero',async()=>{
+test('animated left/right gameplay suppresses archived masks and hats without altering the hero',async()=>{
  const ids=['ninja-warrior.headwear','ninja-warrior.accessory','mystic-robe.headwear'];
- const pieces=ids.map(id=>catalog.sets.flatMap(s=>s.pieces).find(p=>p.id===id));
+ const pieces=ids.map(id=>retiredPieces.find(p=>p.id===id));
  const loaded=[];
  for(const p of pieces)loaded.push({id:p.id,category:p.category,manifest:await manifest(p),image:{}});
  for(const facing of [1,-1]){
@@ -86,8 +90,7 @@ test('animated left/right gameplay uses curved head + mask geometry without alte
   const before=JSON.stringify(moving),ctx=canvas();
   for(const pass of ['behindHead','headwear','accessory'])
     drawClothingPass(ctx,moving,'front',pass,loaded,{gameFacing:facing});
-  assert.ok(ctx.calls.length>=40,'Draw the headwrap and scarf as fitted strips');
-  assert.ok(ctx.calls.some(call=>call[0]&&call.length===9));
+  assert.equal(ctx.calls.length,0,'Archived headwraps and masks cannot be drawn');
   assert.equal(JSON.stringify(moving),before,'No physics or save mutation');
   ctx.balance();
  }

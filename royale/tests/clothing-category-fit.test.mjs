@@ -47,10 +47,10 @@ test('category tuning seats headwear and narrows sleeves and boots without short
  assert.deepEqual(base,{width:1,height:1,offset:[0,0]},'Category fitting must not mutate original fit');
 });
 
-test('all 153 purchasable pieces get safe four-view category transforms',async()=>{
+test('all 118 active outfit pieces get safe four-view category transforms',async()=>{
  assert.equal(catalog.sets.length,36);
  const pieces=catalog.sets.flatMap(x=>x.pieces);
- assert.equal(pieces.length,153);
+ assert.equal(pieces.length,118);
  const stats={};
  for(const piece of pieces){
   const manifest=await readJSON(piece.assetManifest);
@@ -70,20 +70,21 @@ test('all 153 purchasable pieces get safe four-view category transforms',async()
   }
   assert.equal(JSON.stringify(manifest),original,'No changes to approved artwork '+piece.id);
  }
- assert.deepEqual(stats,{headwear:30,fullbody:12,footwear:36,top:24,bottom:24,accessory:25,cape:2});
+ assert.deepEqual(stats,{fullbody:12,footwear:36,top:24,bottom:24,accessory:20,cape:2});
 });
 
 test('live and try-on runtime retain category identity for fitting and keep original catalog safe',async()=>{
- const parts=catalog.sets.slice(0,6).flatMap(s=>s.pieces);
  const assets={load:async m=>({width:m.atlas.width,height:m.atlas.height})};
  const runtime=new ClothingRuntime({assets,readJSON});
- const loaded=await runtime.loadIds(parts.map(x=>x.id),{review:true});
- assert.equal(loaded.length,parts.length);
- for(const item of loaded){
-  const entry=parts.find(x=>x.id===item.id);
-  assert.equal(item.category,entry.category);
-  assert.equal(item.manifest.layers.length>0,true);
+ for(const set of catalog.sets.slice(0,6)){
+  const loaded=await runtime.loadOutfit(set,{review:true});
+  assert.equal(loaded.length,set.pieces.length);
+  for(const item of loaded){
+   const entry=set.pieces.find(x=>x.id===item.id);
+   assert.equal(item.category,entry.category);
+   assert.equal(item.manifest.layers.length>0,true);
+  }
+  const reloaded=await runtime.loadOutfit(set,{review:true});
+  assert.equal(reloaded,loaded,'repeat views must use cached loaded fit layers');
  }
- const reloaded=await runtime.loadIds(parts.map(x=>x.id),{review:true});
- assert.equal(reloaded,loaded,'repeat views must use cached loaded fit layers');
 });

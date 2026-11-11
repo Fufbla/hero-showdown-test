@@ -11,12 +11,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "royal-kimono.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/royal-kimono/headwear.json"
-        },
-        {
           "id": "royal-kimono.fullbody",
           "category": "fullbody",
           "coinPrice": 500,
@@ -81,12 +75,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "ninja-warrior.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/ninja-warrior/headwear.json"
-        },
-        {
           "id": "ninja-warrior.top",
           "category": "top",
           "coinPrice": 300,
@@ -103,12 +91,6 @@
           "category": "footwear",
           "coinPrice": 100,
           "assetManifest": "./assets/ninja-warrior/footwear.json"
-        },
-        {
-          "id": "ninja-warrior.accessory",
-          "category": "accessory",
-          "coinPrice": 100,
-          "assetManifest": "./assets/ninja-warrior/accessory.json"
         }
       ],
       "reference": {
@@ -161,12 +143,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "urban-hero.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/urban-hero/headwear.json"
-        },
         {
           "id": "urban-hero.top",
           "category": "top",
@@ -253,12 +229,6 @@
           "category": "footwear",
           "coinPrice": 100,
           "assetManifest": "./assets/street-style/footwear.json"
-        },
-        {
-          "id": "street-style.accessory",
-          "category": "accessory",
-          "coinPrice": 100,
-          "assetManifest": "./assets/street-style/accessory.json"
         }
       ],
       "reference": {
@@ -311,12 +281,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "explorer.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/explorer/headwear.json"
-        },
         {
           "id": "explorer.top",
           "category": "top",
@@ -393,12 +357,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "festival.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/festival/headwear.json"
-        },
-        {
           "id": "festival.fullbody",
           "category": "fullbody",
           "coinPrice": 400,
@@ -467,12 +425,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "athletic.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/athletic/headwear.json"
-        },
         {
           "id": "athletic.top",
           "category": "top",
@@ -559,12 +511,6 @@
           "category": "footwear",
           "coinPrice": 100,
           "assetManifest": "./assets/casual-hoodie/footwear.json"
-        },
-        {
-          "id": "casual-hoodie.accessory",
-          "category": "accessory",
-          "coinPrice": 100,
-          "assetManifest": "./assets/casual-hoodie/accessory.json"
         }
       ],
       "reference": {
@@ -617,12 +563,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "royal-gown.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/royal-gown/headwear.json"
-        },
         {
           "id": "royal-gown.fullbody",
           "category": "fullbody",
@@ -709,12 +649,6 @@
           "category": "footwear",
           "coinPrice": 100,
           "assetManifest": "./assets/tech-specialist/footwear.json"
-        },
-        {
-          "id": "tech-specialist.accessory",
-          "category": "accessory",
-          "coinPrice": 100,
-          "assetManifest": "./assets/tech-specialist/accessory.json"
         }
       ],
       "reference": {
@@ -767,12 +701,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "combat-casual.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/combat-casual/headwear.json"
-        },
         {
           "id": "combat-casual.top",
           "category": "top",
@@ -843,12 +771,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "mystic-robe.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/mystic-robe/headwear.json"
-        },
-        {
           "id": "mystic-robe.fullbody",
           "category": "fullbody",
           "coinPrice": 400,
@@ -917,12 +839,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "witch.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/witch/headwear.json"
-        },
         {
           "id": "witch.fullbody",
           "category": "fullbody",
@@ -1068,12 +984,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "mummy.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/mummy/headwear.json"
-        },
-        {
           "id": "mummy.fullbody",
           "category": "fullbody",
           "coinPrice": 500,
@@ -1136,12 +1046,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "werewolf.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/werewolf/headwear.json"
-        },
         {
           "id": "werewolf.top",
           "category": "top",
@@ -1281,12 +1185,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "pumpkin-knight.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/pumpkin-knight/headwear.json"
-        },
-        {
           "id": "pumpkin-knight.top",
           "category": "top",
           "coinPrice": 300,
@@ -1362,12 +1260,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "dark-reaper.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/dark-reaper/headwear.json"
-        },
-        {
           "id": "dark-reaper.fullbody",
           "category": "fullbody",
           "coinPrice": 400,
@@ -1436,12 +1328,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "cat-burglar.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/cat-burglar/headwear.json"
-        },
         {
           "id": "cat-burglar.top",
           "category": "top",
@@ -1518,12 +1404,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "santa-hero.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/santa-hero/headwear.json"
-        },
-        {
           "id": "santa-hero.top",
           "category": "top",
           "coinPrice": 300,
@@ -1599,12 +1479,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "mrs.-claus.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/mrs-claus/headwear.json"
-        },
-        {
           "id": "mrs.-claus.fullbody",
           "category": "fullbody",
           "coinPrice": 400,
@@ -1673,12 +1547,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "elf-hero.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/elf-hero/headwear.json"
-        },
         {
           "id": "elf-hero.top",
           "category": "top",
@@ -1754,12 +1622,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "reindeer.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/reindeer/headwear.json"
-        },
         {
           "id": "reindeer.top",
           "category": "top",
@@ -1852,12 +1714,6 @@
           "category": "footwear",
           "coinPrice": 100,
           "assetManifest": "./assets/snow-hero/footwear.json"
-        },
-        {
-          "id": "snow-hero.accessory",
-          "category": "accessory",
-          "coinPrice": 100,
-          "assetManifest": "./assets/snow-hero/accessory.json"
         }
       ],
       "reference": {
@@ -1910,12 +1766,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "gingerbread.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/gingerbread/headwear.json"
-        },
         {
           "id": "gingerbread.fullbody",
           "category": "fullbody",
@@ -1979,12 +1829,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "toy-soldier.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/toy-soldier/headwear.json"
-        },
         {
           "id": "toy-soldier.top",
           "category": "top",
@@ -2061,12 +1905,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "holiday-sweater.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/holiday-sweater/headwear.json"
-        },
-        {
           "id": "holiday-sweater.top",
           "category": "top",
           "coinPrice": 400,
@@ -2135,12 +1973,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "pilgrim-hero.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/pilgrim-hero/headwear.json"
-        },
         {
           "id": "pilgrim-hero.top",
           "category": "top",
@@ -2217,12 +2049,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "pilgrim-maid.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/pilgrim-maid/headwear.json"
-        },
-        {
           "id": "pilgrim-maid.fullbody",
           "category": "fullbody",
           "coinPrice": 500,
@@ -2285,12 +2111,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "fantasy-harvest.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/fantasy-harvest/headwear.json"
-        },
         {
           "id": "fantasy-harvest.top",
           "category": "top",
@@ -2367,12 +2187,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "harvest-scout.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/harvest-scout/headwear.json"
-        },
-        {
           "id": "harvest-scout.top",
           "category": "top",
           "coinPrice": 300,
@@ -2447,12 +2261,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "turkey-hero.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/turkey-hero/headwear.json"
-        },
         {
           "id": "turkey-hero.top",
           "category": "top",
@@ -2529,12 +2337,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "harvest-festival.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/harvest-festival/headwear.json"
-        },
-        {
           "id": "harvest-festival.fullbody",
           "category": "fullbody",
           "coinPrice": 400,
@@ -2603,12 +2405,6 @@
       "availability": "released",
       "template": "universal-style-c-v1",
       "pieces": [
-        {
-          "id": "scarecrow.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/scarecrow/headwear.json"
-        },
         {
           "id": "scarecrow.top",
           "category": "top",
@@ -2685,12 +2481,6 @@
       "template": "universal-style-c-v1",
       "pieces": [
         {
-          "id": "autumn-explorer.headwear",
-          "category": "headwear",
-          "coinPrice": 100,
-          "assetManifest": "./assets/autumn-explorer/headwear.json"
-        },
-        {
           "id": "autumn-explorer.top",
           "category": "top",
           "coinPrice": 300,
@@ -2756,5 +2546,6 @@
         "hairCompatibility": true
       }
     }
-  ]
+  ],
+  "wearPolicy": "matching-outfits-no-headwear-v1"
 }

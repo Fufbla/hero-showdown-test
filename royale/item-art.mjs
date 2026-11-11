@@ -15,6 +15,8 @@ function painted(c,def,size){
 // Catalog colors remain authoritative. Layered ink, enamel and metal highlights
 // are drawn at display resolution; the icon canvas retains transparency.
 export function drawItem(c,def,size=96){
+ // Outfit cards and archived head-item references use body artwork only.
+ if(['helmet','mask','headwear','set'].includes(def.part))def={...def,part:'chest'};
  if(armorCollection(def) && drawArmorIcon(c,def,size))return;
  if(painted(c,def,size))return;
  c.save();c.scale(size/96,size/96);c.translate(48,48);const color=def.color||'#b88147',accent=def.accent||'#c9e493';

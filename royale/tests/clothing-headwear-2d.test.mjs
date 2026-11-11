@@ -5,10 +5,13 @@ import {HEADWEAR_2D,HEADWEAR_2D_VERSION,fitGameplayHeadwear} from '../cosmetics/
 import {fitClothingLayer} from '../cosmetics/fitting.mjs';
 import {drawClothingPass} from '../cosmetics/renderer.mjs';
 import {attachmentPoints} from '../cosmetics/template.mjs';
+import {RETIRED_COSMETIC_IDS,historicalPiece} from '../cosmetics/outfit-policy.mjs';
 
 const json=async url=>JSON.parse(await readFile(url,'utf8'));
 const catalog=await json(new URL('../cosmetics/catalog.json',import.meta.url));
-const headPieces=catalog.sets.flatMap(set=>set.pieces.filter(part=>part.category==='headwear'));
+const headPieces=RETIRED_COSMETIC_IDS.filter(id=>id.endsWith('.headwear')).map(id=>{
+ const piece=historicalPiece(id);return {...piece,assetManifest:'./assets/'+piece.setId.replace('mrs.-claus','mrs-claus')+'/headwear.json'};
+});
 const neutral={
  faceWidth:90,unitScale:.35,head:[0,-72],faceCenter:[1,-71],headTilt:.18,
  shoulder:[0,-52],hip:[0,-32],
@@ -17,9 +20,10 @@ const neutral={
 };
 const load=async part=>json(new URL('../cosmetics/'+part.assetManifest.slice(2),import.meta.url));
 
-test('Phase E targets actual 2D gameplay moving left and right for all thirty hats',async()=>{
+test('archived fitting metadata stays intact while all thirty hats leave the active catalog',async()=>{
  assert.equal(HEADWEAR_2D_VERSION,'phase-e-gameplay-headwear-v1');
  assert.equal(headPieces.length,30);
+ assert.equal(catalog.sets.flatMap(set=>set.pieces).filter(piece=>piece.category==='headwear').length,0);
  assert.deepEqual(Object.keys(HEADWEAR_2D).sort(),headPieces.map(x=>x.id).sort());
  let adjusted=0;
  for(const piece of headPieces){
@@ -60,7 +64,7 @@ test('matching left/right headwear is mirrored by the game once, never doubled',
  assert.equal(fitGameplayHeadwear(layer,fit,item,neutral,0),fit,'Only live horizontal facings should be tailored');
 });
 
-test('running and turning keep hat attached at face rotation centre',async()=>{
+test('running and turning never draw a retired hat supplied by an older cached preview',async()=>{
  const item=headPieces.find(x=>x.id==='urban-hero.headwear');
  const m=await load(item);
  const layers=[{id:item.id,category:item.category,manifest:m,image:{}}];
@@ -73,9 +77,7 @@ test('running and turning keep hat attached at face rotation centre',async()=>{
    scale(...xs){calls.push(['scale',...xs]);},drawImage(){calls.push(['image']);}};
   const before=JSON.stringify(pose);
   drawClothingPass(ctx,pose,'front','headwear',layers,{gameFacing:facing});
-  assert.ok(calls.some(x=>x[0]==='translate'&&x[1]===pose.faceCenter[0]&&x[2]===pose.faceCenter[1]),
-   'Head wrap should rotate at face centre during movement');
-  assert.ok(calls.some(x=>x[0]==='image'),'Hat should render in both directions');
+  assert.deepEqual(calls,[],'Retired headwear must never enter live rendering');
   assert.equal(JSON.stringify(pose),before,'No changes to physics or hero data');
  }
 });

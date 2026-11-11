@@ -47,5 +47,18 @@ jobs:
           node --check royale/clothing-catalog-preview.mjs
           node --check royale/clothing-purchase-ui.mjs
           node --check royale/cosmetics/state.mjs
+          node --check royale/cosmetics/outfit-policy.mjs
+          node --check royale/cosmetics/preview.mjs
+          node --check royale/armor-migration.mjs
+          node --check royale/equipment.mjs
+          node --check royale/eris-ui.mjs
+          node --check royale/legendary-ui.mjs
+          node --check royale/journey-menu.mjs
       - name: Verify complete catalog and purchase rules
-        run: node --test royale/tests/clothing-purchases.test.mjs royale/tests/clothing-fit.test.mjs royale/tests/clothing-all-sets.test.mjs royale/tests/clothing-visibility.test.mjs royale/tests/clothing-category-fit.test.mjs royale/tests/clothing-polish.test.mjs royale/tests/clothing-headwear-2d.test.mjs royale/tests/clothing-head-contour.test.mjs royale/tests/v2-test-hero-code.test.mjs royale/tests/v2-generated-sprites.test.mjs royale/tests/v2-basic-combat.test.mjs
+        run: |
+          node tools/cosmetics/validate.mjs --release
+          node --test royale/tests/cosmetics.test.mjs royale/tests/clothing-purchases.test.mjs royale/tests/clothing-outfit-ui.test.mjs royale/tests/clothing-fit.test.mjs royale/tests/clothing-all-sets.test.mjs royale/tests/clothing-visibility.test.mjs royale/tests/clothing-category-fit.test.mjs royale/tests/clothing-polish.test.mjs royale/tests/clothing-headwear-2d.test.mjs royale/tests/clothing-head-contour.test.mjs royale/tests/v2-test-hero-code.test.mjs royale/tests/v2-generated-sprites.test.mjs royale/tests/v2-basic-combat.test.mjs
+      - name: Verify matching armor and historical save migration
+        run: node --test royale/tests/armor-outfits.test.mjs royale/tests/armor-outfit-ui.test.mjs royale/tests/armor-icons.test.mjs royale/tests/equipment-fit.test.mjs royale/tests/v3-loot.test.mjs royale/tests/travel-cloud.test.mjs
+      - name: Verify independent co-op wardrobes and rewards
+        run: node --test royale/local-coop/tests/local-coop.test.mjs royale/local-coop/tests/requirements.test.mjs

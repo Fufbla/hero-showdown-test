@@ -3,13 +3,16 @@
 // synchronization is recoverable. There is no periodic ledger write.
 import { decodeSave } from './core.mjs';
 import { legendaryDominates } from './legendary-state.mjs';
+import { armorRetirementHistoryPreserved } from './armor-migration.mjs';
 export function validateLedgerWrite(previous,heroId,expectedRevision,snapshot){
  if(previous?.deleted)throw Error('This hero was permanently deleted.');
  const state=decodeSave(typeof snapshot==='string'?snapshot:JSON.stringify(snapshot));
+ const prior=previous&&!previous.deleted?decodeSave(JSON.stringify(previous.snapshot)):null;
  if(typeof heroId!=='string'||!heroId||heroId.length>160||!state||state.version<7)throw Error('Invalid permanent-progress transaction.');
+ if(previous&&!prior)throw Error('The previous permanent record requires recovery.');
  if((previous?.revision||0)!==expectedRevision)throw Error('Permanent progress changed in another tab. Reload the latest hero.');
- if(state.legendary.revision<=expectedRevision||previous&&!legendaryDominates(state.legendary,previous.snapshot.legendary))throw Error('This transaction would restore permanently lost progress.');
- if(previous&&Object.keys(previous.snapshot.inventory.retired).some(uid=>!state.inventory.retired[uid]))throw Error('A destroyed item cannot be restored.');
+ if(state.legendary.revision<=expectedRevision||prior&&!legendaryDominates(state.legendary,prior.legendary))throw Error('This transaction would restore permanently lost progress.');
+ if(prior&&!armorRetirementHistoryPreserved(previous.snapshot,prior,state))throw Error('A destroyed item cannot be restored.');
  return {heroId,revision:state.legendary.revision,snapshot:state};
 }
 export function deletionRecord(previous,heroId,expectedRevision){

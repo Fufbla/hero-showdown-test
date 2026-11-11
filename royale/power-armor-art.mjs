@@ -57,7 +57,8 @@ function sprite(item,part,view) {
 }
 
 export function drawArmorIcon(c,item,size) {
-  const s=sprite(item,item.part||'chest',0);
+  const part=['helmet','mask','headwear','set'].includes(item.part)?'chest':item.part||'chest';
+  const s=sprite(item,part,0);
   if (!s) return false;
   const [, ,w,h]=s.rect, scale=.9*size/Math.max(w,h);
   c.drawImage(s.image,...s.rect,(size-w*scale)/2,(size-h*scale)/2,w*scale,h*scale);
