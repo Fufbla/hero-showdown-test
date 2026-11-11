@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8">
+<title>Approved Style C Art Atlas Browser Review</title>
+<style>body{background:#142b33;color:#e8f5e4;font:14px system-ui;margin:12px} canvas{display:block;max-width:100%;background:#677b7c}p{max-width:900px}</style>
+<h2>Approved Hero — 24 pose browser review</h2>
+<p>Real SVG asset decoded by the browser. Grey background makes unwanted scenery pixels visible. Only the public test-hero asset is used.</p>
+<canvas width="1536" height="1024" id="atlas"></canvas>
+<script type="module">
+import {approvedMotionSprites,APPROVED_POSES,APPROVED_MOTION_ATLAS} from '../v2-sprites/approved-motion.mjs';
+const canvas=document.getElementById('atlas'),ctx=canvas.getContext('2d');
+ctx.fillStyle='#748787';ctx.fillRect(0,0,canvas.width,canvas.height);
+window.__reviewDone=false;
+window.__reviewError=null;
+void approvedMotionSprites.preload().then(ok=>{
+ if(!ok)throw Error('Approved SVG atlas failed: '+approvedMotionSprites.error);
+ const image=approvedMotionSprites.image;
+ const cell=APPROVED_MOTION_ATLAS.cell;
+ for(let i=0;i<24;i++)ctx.drawImage(image,(i%6)*cell,Math.floor(i/6)*cell,cell,cell,
+    (i%6)*cell,Math.floor(i/6)*cell,cell,cell);
+ window.__review={loaded:ok,dimensions:[image.width,image.height],
+   poses:APPROVED_POSES.length,src:APPROVED_MOTION_ATLAS.file};
+ window.__reviewDone=true;
+}).catch(error=>{window.__reviewError=error.message;window.__reviewDone=true;});
+</script>
