@@ -1,0 +1,51 @@
+name: Build and verify real-game motion preview
+on:
+  push:
+    branches: [action-chibi-motion-preview]
+    paths:
+      - '.github/workflows/motion-preview-build.yml'
+      - 'tools/motion-preview-build.b64'
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare tooling
+        run: |
+          python -m pip install --quiet Pillow playwright
+          python -m playwright install --with-deps chromium
+      - name: Build isolated preview
+        run: |
+          python - <<'PY'
+          import base64,gzip,hashlib,pathlib
+          data=gzip.decompress(base64.b64decode(pathlib.Path('tools/motion-preview-build.b64').read_text()))
+          assert hashlib.sha256(data).hexdigest()=='efdf761c61cab5ee3ce950baddfe3fce32ba79d53e5b07f49f0340c0a3e08301','Builder integrity mismatch'
+          pathlib.Path('/tmp/build_motion.py').write_bytes(data)
+          PY
+          python /tmp/build_motion.py
+          for f in app.mjs entry.mjs motion-safety.mjs motion-sprites.mjs hero-art.mjs; do node --check "royale-v3-motion-preview/$f"; done
+          git diff --exit-code -- royale royale-v3-staging assets
+      - name: Browser test real gameplay and storage isolation
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/motion-http.log 2>&1 &
+          python tools/motion-preview-browser.py
+      - name: Commit verified preview on isolated branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add royale-v3-motion-preview
+          git diff --cached --quiet || git commit -m 'Add verified real-game Action Chibi motion preview with isolated local progress'
+          git push origin HEAD:action-chibi-motion-preview
+      - name: Browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-preview-browser-evidence
+          path: |
+            motion-evidence/
+            /tmp/motion-http.log
+          if-no-files-found: warn
+          retention-days: 3
