@@ -53,7 +53,7 @@ export function selectApprovedPose(hero={},game={}){
     return left?idx['fireball-left']:(seconds(hero.castAge)<.12?idx['fireball-charge']:idx['fireball-release']);
   if(hero.flying||active.flight)return idx.flight;
   if(game?.legendary?.active&&(game?.mergeEffects?.length||game?.mergeShots?.length))return idx.merge;
-  if(active.steel||hero.steel)return idx.steel;
+  // Steel Body uses a transparent overlay, never a frozen full-body pose.
   // Ground powers cannot turn an airborne hero into a floating static poster.
   // The approved sheet has only one static pose per jump direction.
   // Return control to the existing six-frame jump/double-jump atlases,

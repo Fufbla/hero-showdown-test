@@ -17,6 +17,7 @@ import {v2GeneratedSprites} from './v2-sprites/runtime.mjs';
 import {useV2RunCycle} from './v2-sprites/run-motion.mjs';
 import {approvedMotionSprites} from './v2-sprites/approved-motion.mjs';
 import {drawV2PowerPreview} from './v2-sprites/power-preview.mjs';
+import {drawSteelBodyOverlay} from './v2-sprites/steel-body-overlay.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
 export { drawHero } from './hero-art.mjs';
 const PI = Math.PI;
@@ -111,6 +112,8 @@ export class Renderer {
         ...(v2Running?{poseName:'v2-run'}:{})
       });
     drawPowerHero(c,game,pos,pose);
+    // Composites the 8-cel metallic shield over the original, moving hero.
+    if(this.v2SpriteTest&&h.steel)drawSteelBodyOverlay(c,game,pos);
     if(generated&&!approved)drawV2PowerPreview(c,game,pos,t); // Approved artwork already includes painted VFX.
     if(h.attack&&h.attack.power!=='superKick'){const a=h.attack,d=ATTACKS[a.kind];if(a.age>=d.startup&&a.age<d.startup+d.active){c.save();c.translate(h.x,h.y-43);c.scale(a.face,1);c.strokeStyle='#fff7d8c9';c.lineWidth=3;c.beginPath();c.arc(24,-8,a.kind==='kick'?48:35,-.7,.7);c.stroke();c.restore();}}
     for(const p of this.particles){if(p.life<=0)continue;if(!game.paused){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=210*dt;}c.globalAlpha=Math.max(0,p.life/p.max);oval(c,p.x,p.y,p.size,p.size,p.color);}c.globalAlpha=1;

@@ -92,13 +92,7 @@ export function drawV2PowerPreview(ctx,game,pos,time=0){
    ctx.strokeStyle='#ffd54d';ctx.lineWidth=3.5;ctx.stroke();
    ring(ctx,x+face*32,y-30,12+Math.abs(sweep)*10,15,'#fff1a5',time*7,1.6);
   }
-  if(flags.steel){
-   const pulse=Math.sin(time*5)*2;
-   ctx.globalAlpha=.48;
-   ring(ctx,x,y-58,40+pulse,59+pulse,'#6dd5ff',time*.8,2.5);
-   ring(ctx,x,y-58,32-pulse,50-pulse,'#c9f6ff',time*.8+pi,1.5);
-   ctx.globalAlpha=1;
-  }
+  // Steel uses the reusable sprite overlay; avoid the old duplicate ring.
   if(flags.roots){
    for(let i=-2;i<=2;i++){
     const bx=x+i*15,reach=22+5*Math.sin(time*2+i*.8);
