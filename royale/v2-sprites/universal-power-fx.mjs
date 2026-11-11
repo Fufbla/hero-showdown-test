@@ -98,7 +98,7 @@ function superKick(c,x,y,s,layer,t,face){
  }
 }
 function fireball(c,x,y,s,layer,t,face){
- const colors=P.fireball,phase=s.phase,charge=Math.sin(Math.PI*clamp(phase*1.08))**.6;
+ const colors=P.fireball,phase=s.phase,charge=Math.max(0,Math.sin(Math.PI*clamp(phase*1.08)))**.6;
  const fx=x+face*(30+Math.max(0,phase-.46)*34),fy=y-69;
  if(layer==='back'){
   for(let i=0;i<4;i++)arc(c,x+face*4,y-61,28+i*8,16+i*3,t*5+i,t*5+i+1.35,colors[i%2],2.5,10);
