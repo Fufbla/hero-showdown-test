@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f3ef">
+  <title>New character · Hero Showdown</title>
+  <link rel="stylesheet" href="./styles.css?v=953fe5c42b04">
+</head>
+<body>
+  <header class="page-header">
+    <div>
+      <p class="test-label">Test 0000000000</p>
+      <h1>New character</h1>
+    </div>
+    <a class="back-link" href="../" target="_top">Back to start</a>
+  </header>
+
+  <main id="character-stage" class="character-stage" aria-label="Character preview" aria-busy="true">
+    <img id="character-art" src="./hero.png?v=6dd1fa4eaefa" width="1024" height="1536" decoding="async" fetchpriority="high"
+      alt="A new hero with short curly dark hair, a plain gray training outfit, and matching boots, shown from head to toe.">
+    <section id="image-error" class="image-error" hidden>
+      <p>The character image couldn’t load.</p>
+      <button id="retry-image" type="button">Try again</button>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p id="image-status" role="status" aria-live="polite">Loading character…</p>
+  </footer>
+  <script type="importmap">{"imports":{"./reset.mjs":"./reset.mjs?v=9ce092c16a1b"}}</script>
+  <script type="module" src="./preview.mjs?v=a531e648e6d3"></script>
+</body>
+</html>

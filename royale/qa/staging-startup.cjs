@@ -6,7 +6,8 @@ async function check(browserType, origin) {
   try {
     const ctx=await browser.newContext({viewport:{width:1200,height:800},ignoreHTTPSErrors:true});
     page=await ctx.newPage();
-    const errors=[],failures=[],responses=[];
+    const errors=[],failures=[],responses=[],requests=[];
+    page.on('request',r=>requests.push(r.url()));
     page.on('pageerror',e=>errors.push('PAGE '+e.message+'\n'+e.stack));
     page.on('console',m=>{if(m.type()==='error')errors.push('CONSOLE '+m.text());});
     page.on('requestfailed',r=>failures.push(r.url()+' '+(r.failure()?.errorText||'')));
@@ -39,9 +40,9 @@ async function check(browserType, origin) {
         const state=await frame.evaluate(()=>({
           url:location.href,
           screen:[...document.querySelectorAll('section')].filter(x=>!x.hidden).map(x=>x.id).slice(0,15),
-          canvas:!!document.querySelector('#game'),
-          canvasWidth:document.querySelector('#game')?.width,
-          canvasHeight:document.querySelector('#game')?.height,
+          character:!!document.querySelector('#character-art'),
+          imageWidth:document.querySelector('#character-art')?.naturalWidth,
+          imageHeight:document.querySelector('#character-art')?.naturalHeight,
           text:(document.body.innerText||'').slice(0,600)
         }));
         console.log('IFRAME UI',JSON.stringify(state));
@@ -51,8 +52,15 @@ async function check(browserType, origin) {
     console.log('FAILED REQUESTS',JSON.stringify(failures.slice(0,20)));
     console.log('HTTP ERRORS',JSON.stringify(responses.slice(0,20)));
     if(origin.startsWith('http://127.')){
-      if(hud.roster!==false)throw Error('V2 test code failed to launch roster; '+JSON.stringify(hud));
-      if(!frames.some(f=>f.url().includes('v2TestCharacter=0000000000')))throw Error('V2 test iframe did not open');
+      if(hud.roster!==false)throw Error('Test code failed to open the fresh character; '+JSON.stringify(hud));
+      const fresh=frames.find(f=>f.url().includes('/royale-v3-staging/character-test/'));
+      if(!fresh)throw Error('The fresh character iframe did not open');
+      const art=await fresh.locator('#character-art').evaluate(async image=>{
+        await image.decode();return {width:image.naturalWidth,height:image.naturalHeight};
+      });
+      if(!art.width||!art.height)throw Error('The new character image did not load');
+      if(requests.some(url=>/\/royale\/(?:app\.mjs|core\.mjs|renderer\.mjs|cosmetics\/|v2-sprites\/)|supabase\.co\/functions\//.test(url)))throw Error('Fresh character loaded an old game system or cloud account endpoint');
+      if(await fresh.locator('canvas').count())throw Error('Old game canvas is present in the character preview');
       if(errors.length)throw Error('Game Javascript errors: '+errors.join('\n'));
       if(responses.length)throw Error('Game HTTP errors: '+responses.join('\n'));
     }

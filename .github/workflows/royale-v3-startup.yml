@@ -6,8 +6,11 @@ on:
       - '.github/workflows/royale-v3-startup.yml'
       - 'royale/renderer.mjs'
       - 'royale/app.mjs'
+      - 'royale/index.html'
+      - 'royale/entry.mjs'
       - 'royale-v3-staging/index.html'
       - 'royale-v3-staging/app.mjs'
+      - 'royale-v3-staging/character-test/**'
       - 'royale/qa/staging-startup.cjs'
   workflow_dispatch:
 jobs:

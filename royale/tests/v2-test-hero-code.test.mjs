@@ -1,6 +1,5 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
 import {V2_TEST_CODE,V2_TEST_HERO_NAME,V2_TEST_STORAGE_PREFIX,V2_TEST_QUERY_PARAM,isV2TestCode,isV2TestRoute,v2TestLook} from '../v2-test-hero.mjs';
 import {styleCDefault} from '../style-c-defaults.mjs';
 import {Game} from '../core.mjs';
@@ -49,19 +48,5 @@ test('sandbox hero preserves default style and cannot mutate production namespac
  assert.equal(refreshed.slot(2),null);
 });
 
-test('V3 entry recognizes test code before cloud verification and uses non-cloud iframe route',async()=>{
- const parent=await readFile(new URL('../../royale-v3-staging/app.mjs',import.meta.url),'utf8');
- const child=await readFile(new URL('../app.mjs',import.meta.url),'utf8');
- assert.ok(parent.includes('if(isV2TestCode(code)){launchV2Prototype();return;}'));
- assert.ok(parent.includes("access='';refresh='';code=V2_TEST_CODE;"));
- assert.ok(parent.includes("V2 TEST HERO · 0000000000"));
- assert.ok(parent.includes("'../royale/?'+V2_TEST_QUERY_PARAM+'='+V2_TEST_CODE"));
- assert.ok(child.includes("const v2TestHero=isV2TestRoute(params)"));
- assert.ok(child.includes("v2TestHero?V2_TEST_STORAGE_PREFIX"));
- assert.ok(child.includes("if(v2TestHero&&store.slot(0))"));
- assert.ok(child.includes("continueHero(0)"));
- assert.ok(child.includes("if(codePlay)setInterval(sendCodeProgress,8000)"));
- // The fixed test code must NEVER become part of a real cloud session.
- assert.ok(parent.indexOf('if(isV2TestCode(code)){launchV2Prototype();return;}')<
-   parent.indexOf("api('verify',{code},false)"));
-});
+// The old auto-start iframe behavior was retired. The isolated replacement
+// and ordinary cloud login are covered by fresh-character-reset.test.mjs.

@@ -26,6 +26,9 @@ jobs:
       - name: Parse client and store modules
         run: |
           node --check royale/core.mjs
+          node --check royale/entry.mjs
+          node --check royale-v3-staging/character-test/reset.mjs
+          node --check royale-v3-staging/character-test/preview.mjs
           node --check royale/v2-test-hero.mjs
           node --check royale/v2-sprites/runtime.mjs
           node --check royale/app.mjs
@@ -62,3 +65,5 @@ jobs:
         run: node --test royale/tests/armor-outfits.test.mjs royale/tests/armor-outfit-ui.test.mjs royale/tests/armor-icons.test.mjs royale/tests/equipment-fit.test.mjs royale/tests/v3-loot.test.mjs royale/tests/travel-cloud.test.mjs
       - name: Verify independent co-op wardrobes and rewards
         run: node --test royale/local-coop/tests/local-coop.test.mjs royale/local-coop/tests/requirements.test.mjs
+      - name: Verify isolated fresh character reset
+        run: node --test royale/tests/fresh-character-reset.test.mjs royale/tests/fresh-character-entry.test.mjs
