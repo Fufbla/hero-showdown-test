@@ -141,7 +141,7 @@ export function drawStyleCMotionLimb(c,pose,kind,index,look,palette,pieces={}) {
   const upper=arm?'upper':'thigh',lower=arm?'forearm':'shin';
   const thick=arm?1+(look.muscle-.35)*.35:1+(look.hips-1)*.45;
   const turnover=arm?narrowArms.has(clip):fastLegs.has(clip);
-  const profile=turnover&&(index===1||pose.frame>0) || (clip==='walk'||clip==='agility')&&((pose.frame+2*index)%4===2);
+  const profile=turnover&&(index===1||pose.frame>0) || (clip==='walk'||clip==='v2-walk'||clip==='agility')&&((pose.frame+2*index)%4===2);
   const angle=profile?'profile':'forward';
   const equipment=arm?pieces.gloves:pieces.boots;
   const upperImage=material(angle,upper,look,palette,null);
