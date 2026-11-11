@@ -19,17 +19,19 @@ jobs:
           node --check royale/app.mjs
       - name: Verify approved frame mapping and safe fallback
         run: node --test royale/tests/approved-motion.test.mjs
-      - name: Verify committed SVG is substantial and well formed
+      - name: Verify cleaned PNG image is present and RGBA
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import xml.etree.ElementTree as ET
-          p=Path('royale/v2-sprites/approved/approved-action-atlas.svg')
-          assert p.stat().st_size>300000,'Approved sprite sheet missing/incomplete'
-          root=ET.parse(p).getroot()
-          assert root.attrib['width']=='1536' and root.attrib['height']=='1024'
-          assert len(root)==1
-          print('Approved SVG atlas checked:',p.stat().st_size,'bytes')
+          import struct
+          p=Path('royale/v2-sprites/approved/approved-action-atlas-clean.png')
+          image=p.read_bytes()
+          assert len(image)>100000,'Clean atlas missing/incomplete'
+          assert image[:8]==bytes.fromhex('89504e470d0a1a0a'),'Not a PNG'
+          assert image[12:16]==b'IHDR'
+          width,height,depth,color=struct.unpack('>IIBB',image[16:26])
+          assert (width,height,depth,color)==(1536,1024,8,6),(width,height,depth,color)
+          print('Clean RGBA PNG checked:',len(image),'bytes')
           PY
       - name: Install browser dependencies
         run: |
@@ -43,6 +45,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: approved-style-c-svg-visual-review
+          name: approved-style-c-png-visual-review
           path: visual-artifacts/
           if-no-files-found: warn
