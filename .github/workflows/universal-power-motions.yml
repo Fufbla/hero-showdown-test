@@ -10,6 +10,8 @@ on:
       - 'royale/tests/universal-power-motions.test.mjs'
       - 'royale/tests/hero-power-overlays.test.mjs'
       - 'royale/tests/v2-run-motion.test.mjs'
+      - 'royale/v2-sprites/basic-combat.mjs'
+      - 'royale/tests/v2-basic-combat.test.mjs'
       - 'royale/tests/v2-steel-body-overlay.test.mjs'
       - '.github/workflows/universal-power-motions.yml'
   workflow_dispatch:
@@ -26,6 +28,7 @@ jobs:
           node --check royale/renderer.mjs
           node --check royale/v2-sprites/universal-power-fx.mjs
           node --check royale/v2-sprites/steel-silhouette.mjs
+          node --check royale/v2-sprites/basic-combat.mjs
       - name: Check motions, player physics isolation and backwards compatibility
         run: |
           node --test royale/tests/universal-power-motions.test.mjs
@@ -33,3 +36,4 @@ jobs:
           node --test royale/tests/v2-steel-body-overlay.test.mjs
           node --test royale/tests/v2-run-motion.test.mjs
           node --test royale/tests/v2-generated-sprites.test.mjs
+          node --test royale/tests/v2-basic-combat.test.mjs
