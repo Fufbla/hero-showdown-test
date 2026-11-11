@@ -26,3 +26,7 @@ jobs:
           node --check royale/tests/enemy-control-vfx.test.mjs
       - name: Verify enemy power visuals
         run: node --test royale/tests/enemy-control-vfx.test.mjs
+      - name: Confirm transparent art atlases were committed
+        run: |
+          test -s royale/assets/vfx/ground-roots-trap.avif
+          test -s royale/assets/vfx/whirlwind-hit.avif
