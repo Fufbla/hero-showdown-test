@@ -122,6 +122,22 @@ test('loader verifies every asset before drawing and falls back safely if decodi
  assert.equal(await broken.preload(),false);
  assert.equal(broken.draw(ctx,0,0,{},0),false);
 });
+test('recorded character atlas never swaps to a different body on edge warnings',async()=>{
+ const sprites=new V2GeneratedSprites({loader:async file=>{
+  const meta=Object.values(V2_SPRITE_ATLASES).find(x=>x.file===file);
+  return {width:meta.cols*meta.cell,height:meta.rows*meta.cell};
+ }});
+ assert.equal(await sprites.preload(),true);
+ const drawn=[],ctx={save(){},restore(){},drawImage(...args){drawn.push(args)},
+  set imageSmoothingEnabled(value){},set imageSmoothingQuality(value){}};
+ sprites.unsafeFrames.add('idle_run:2:4');
+ const hero={face:1,grounded:true,vx:315,cycle:1,castAge:10,dodgeAge:10};
+ assert.deepEqual(chooseV2Frame(hero,1),{scene:'runRight',index:4});
+ assert.equal(sprites.draw(ctx,300,550,hero,1),true,
+  'the illustrated frame must remain visible instead of changing body models');
+ assert.equal(drawn.length,1);
+});
+
 test('V2-only ability overlays cover all nine powers plus villain merge without affecting simulation',()=>{
  assert.equal(V2_POWER_PREVIEW_VERSION,'v2-power-vfx-prototype-v2');
  const hero={face:1,castAge:.01,steel:true,agile:true,flying:true,vx:350,attack:{kind:'punch',power:'strength'}};
