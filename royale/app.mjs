@@ -11,8 +11,6 @@ import {text as hudText,html as hudHTML,attr as hudAttr} from './hud-dom.mjs';
 import {shouldWriteAdventure} from './save-policy.mjs';
 import {clockSynchronized} from './shared-clock.mjs';
 import {CloudAPI, CloudHeroStore} from './cloud-client.mjs';
-import {v2GeneratedSprites} from './v2-sprites/runtime.mjs';
-import {approvedMotionSprites} from './v2-sprites/approved-motion.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
 import {cosmeticTransaction,normalizeCosmetics} from './cosmetics/state.mjs';
 import {isV2TestRoute,V2_TEST_STORAGE_PREFIX,v2TestLook,maxV2TestPowers,hasMaxV2TestPowers} from './v2-test-hero.mjs';
@@ -174,33 +172,9 @@ const powerUpgrades=new InstantPowerUpgrades(()=>({game,store,index:activeSlot,h
 const powerMenu=new PowerMenu(()=>game,persist,say,powerUpgrades),controlMenu=new ControlMenu(input,storage,say);
 const renderer=new Renderer($('game')),creator=new Creator(),powerButtons=[...document.querySelectorAll('.power-button')];
 if(v2TestHero){
- renderer.v2SpriteTest=true;
- // Optional approved sprite atlas: failures safely keep the original art.
- // Preload only inside the isolated 0000000000 sandbox, never for cloud heroes.
- void approvedMotionSprites.preload().then(ok=>{
-  if(ok)console.info('[V2 approved Style C sprites] 24 approved poses loaded');
-  else console.info('[V2 approved Style C sprites] original fallback active',approvedMotionSprites.error);
- });
- const root=$('pause-primary');
- if(root){
-  const button=document.createElement('button');
-  button.type='button';
-  button.id='v2-sprite-toggle';
-  button.className='secondary';
-  button.textContent='V2 Sprites: Loading…';
-  button.setAttribute('aria-label','Switch V2 test hero between generated and original artwork');
-  button.disabled=true;
-  root.prepend(button);
-  void v2GeneratedSprites.preload().then(ok=>{
-   button.disabled=!ok;
-   button.textContent=ok?'V2 Sprites: ON (tap for original)': 'V2 Sprites unavailable · Original art';
-   if(!ok){renderer.v2SpriteTest=false;console.warn('V2 generated sprite atlas not ready',v2GeneratedSprites.error);}
-  });
-  button.onclick=()=>{
-   renderer.v2SpriteTest=!renderer.v2SpriteTest;
-   button.textContent=renderer.v2SpriteTest?'V2 Sprites: ON (tap for original)':'V2 Sprites: OFF (tap for new)';
-  };
- }else void v2GeneratedSprites.preload();
+ // The isolated prototype always uses one live, customisable hero appearance.
+ // No optional sprite switch can replace its outfit between action frames.
+ renderer.v2VisualConsistency=true;
 }
 const creatorHome=document.createComment('Character creator home');$('creator').before(creatorHome);
 const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,say,appearance:()=>openCreator(activeSlot,true),leave:returnAdventure,navigate:()=>{if(!canLeaveMenu())return false;if(screen==='creator'&&editing){abandonUnconfirmedAppearance();setScreen('tree');}return true;}});

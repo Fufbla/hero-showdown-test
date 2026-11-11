@@ -1,0 +1,32 @@
+name: V2 Canonical Hero and Ground Speed Regression
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'royale/renderer.mjs'
+      - 'royale/app.mjs'
+      - 'royale/index.html'
+      - 'royale/v2-sprites/consistent-motion.mjs'
+      - 'royale/tests/v2-consistent-motion.test.mjs'
+      - 'royale/tests/v2-generated-sprites.test.mjs'
+      - 'royale/tests/v2-control-effects.test.mjs'
+      - '.github/workflows/v2-canonical-hero.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse changed modules
+        run: |
+          node --check royale/app.mjs
+          node --check royale/renderer.mjs
+          node --check royale/v2-sprites/consistent-motion.mjs
+      - name: Verify V2 renderer, ground motion and power timing
+        run: |
+          node --test royale/tests/v2-consistent-motion.test.mjs
+          node --test royale/tests/v2-control-effects.test.mjs
+          node --test royale/tests/v2-generated-sprites.test.mjs
