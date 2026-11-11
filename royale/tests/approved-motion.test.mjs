@@ -13,10 +13,10 @@ test('approved poses are chosen only from the isolated hero state without mutati
  assert.equal(selectApprovedPose(right),0);
  assert.equal(selectApprovedPose({...right,face:-1}),1);
  assert.equal(selectApprovedPose({...right,vx:220}),null,'actual multi-frame running stays on original renderer');
- assert.equal(selectApprovedPose({...right,grounded:false,jumps:1}),4);
- assert.equal(selectApprovedPose({...right,face:-1,grounded:false,jumps:1}),5);
- assert.equal(selectApprovedPose({...right,grounded:false,jumps:2}),6);
- assert.equal(selectApprovedPose({...right,face:-1,grounded:false,jumps:2}),7);
+ assert.equal(selectApprovedPose({...right,grounded:false,jumps:1}),null,'normal jump uses animated atlas');
+ assert.equal(selectApprovedPose({...right,face:-1,grounded:false,jumps:1}),null,'left jump uses animated atlas');
+ assert.equal(selectApprovedPose({...right,grounded:false,jumps:2}),null,'double jump uses animated atlas');
+ assert.equal(selectApprovedPose({...right,face:-1,grounded:false,jumps:2}),null,'left double jump uses animated atlas');
  assert.equal(selectApprovedPose({...right,attack:{kind:'punch',power:'strength',age:.03}}),8);
  assert.equal(selectApprovedPose({...right,attack:{kind:'punch',power:'strength',age:.24}}),9);
  assert.equal(selectApprovedPose({...right,face:-1,attack:{kind:'punch',power:'strength',age:.2}}),21);
@@ -80,10 +80,25 @@ test('ground effect artwork uses visible ground anchor and speed mirrors only to
   assert.equal(calls.some(c=>c[0]==='scale'),false,'rightward speed is not mirrored');
   assert.equal(selectApprovedPose({...hero,vx:290},{powers:{active:{roots:{age:1}},speed:.6}}),19,
     'running must not be frozen in the roots pose');
-  assert.equal(selectApprovedPose({...hero,grounded:false,jumps:1},{powers:{active:{whirlwind:{age:1}}}}),4,
-    'jumping must not render an airborne ground-power poster');
+  assert.equal(selectApprovedPose({...hero,grounded:false,jumps:1},{powers:{active:{whirlwind:{age:1}}}}),null,
+    'jumping must retain animated atlas, never an airborne ground-power poster');
  }finally{
   if(previousDocument===undefined)delete globalThis.document;
   else globalThis.document=previousDocument;
+ }
+});
+
+test('jump and double jump retain both directions and animated progression without changing power or combat art',async()=>{
+ const {chooseV2Frame,V2_SPRITE_SCENES}=await import('../v2-sprites/runtime.mjs');
+ const base={face:1,grounded:false,vy:-250,jumps:1,jumpAge:0,castAge:100,dodgeAge:100,stun:0,attack:null};
+ for(const jumps of [1,2])for(const face of [-1,1]){
+  const hero={...base,jumps,face};
+  assert.equal(selectApprovedPose(hero),null,'single-pose atlas must yield to animation');
+  const frames=[0,.08,.16,.24,.32].map(jumpAge=>chooseV2Frame({...hero,jumpAge},jumpAge));
+  const scene=(jumps===2?'double':'jump')+(face===1?'Right':'Left');
+  assert.ok(frames.every(frame=>frame.scene===scene));
+  assert.deepEqual(frames.map(frame=>frame.index),[0,1,2,3,4],scene+' moves through airborne frames');
+  assert.equal(V2_SPRITE_SCENES[scene].count,6);
+  assert.equal(chooseV2Frame({...hero,vy:210,jumpAge:.5},.5).index,5,'falling frame available');
  }
 });
