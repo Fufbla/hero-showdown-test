@@ -1,0 +1,571 @@
+{
+  "name": "Giant Scorpion",
+  "design": "Venom Crawler",
+  "cell": 512,
+  "anchor": [
+    256,
+    480
+  ],
+  "referenceHeight": 165,
+  "states": [
+    "idle",
+    "walk",
+    "claw",
+    "clawCombo",
+    "sting",
+    "stingPattern",
+    "hit",
+    "defeat"
+  ],
+  "file": "royale/assets/boss-sprites/atlases/regional-giant-scorpion.png",
+  "columns": 4,
+  "rows": 8,
+  "sha256": "889cd217c801c003aef598c6f9461cf68127866de35b76ec26bc79fe9b9c9766",
+  "frames": [
+    {
+      "id": 0,
+      "state": "idle",
+      "crop": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        422,
+        490
+      ],
+      "pixelHash": "cb7976f181ac3b0abd7388d8257a6bf33f2fd53a3ceca404f49f00d578a91b5b"
+    },
+    {
+      "id": 1,
+      "state": "idle",
+      "crop": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        422,
+        490
+      ],
+      "pixelHash": "8f13996797bfa90cbba729acfa1bc695045f1c861ae01d318c11c7c5c56fdfe8"
+    },
+    {
+      "id": 2,
+      "state": "idle",
+      "crop": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        422,
+        490
+      ],
+      "pixelHash": "d243691576bf646ab122160410a414631961daee4d3a338065b7f0799d9c6df4"
+    },
+    {
+      "id": 3,
+      "state": "idle",
+      "crop": [
+        1536,
+        0,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        422,
+        490
+      ],
+      "pixelHash": "f5a5e7b27a87f6e8da8c77ce7f3cf09c9d36e8b58b641e9d481b9cc3354b2d4d"
+    },
+    {
+      "id": 4,
+      "state": "walk",
+      "crop": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        422,
+        490
+      ],
+      "pixelHash": "a1309b87338bd9ba8d0dc73e4a96fa591945ed326da71973edd5d74f2bee2cd8"
+    },
+    {
+      "id": 5,
+      "state": "walk",
+      "crop": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        422,
+        490
+      ],
+      "pixelHash": "56f4a4c23f4cc82467c6105352df8ce555c061a0a8809d544407db4747d94245"
+    },
+    {
+      "id": 6,
+      "state": "walk",
+      "crop": [
+        1024,
+        512,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        422,
+        490
+      ],
+      "pixelHash": "1da8792d59aa0b1f0f64121bfd16640e1a10b63a04aa23e156fbb40fccb88bb0"
+    },
+    {
+      "id": 7,
+      "state": "walk",
+      "crop": [
+        1536,
+        512,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        422,
+        490
+      ],
+      "pixelHash": "e68cb6fb1001071f3a6cc651f0c86b1005362a68524131a85daf769991577533"
+    },
+    {
+      "id": 8,
+      "state": "claw",
+      "crop": [
+        0,
+        1024,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        422,
+        490
+      ],
+      "pixelHash": "cb7976f181ac3b0abd7388d8257a6bf33f2fd53a3ceca404f49f00d578a91b5b"
+    },
+    {
+      "id": 9,
+      "state": "claw",
+      "crop": [
+        512,
+        1024,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        426,
+        490
+      ],
+      "pixelHash": "6e68053abafeae3fff7f6ed89a0bb92e983fe42b2df7ba31f1e641a0adc55bde"
+    },
+    {
+      "id": 10,
+      "state": "claw",
+      "crop": [
+        1024,
+        1024,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        377,
+        495
+      ],
+      "pixelHash": "8222055bc7385a01f99affca509004acf6f954505a52d3148c2c3e32a3f06588"
+    },
+    {
+      "id": 11,
+      "state": "claw",
+      "crop": [
+        1536,
+        1024,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        377,
+        492
+      ],
+      "pixelHash": "4dd333e961c685035555c873d79832926e599299f8db846a5b51a92d331871a2"
+    },
+    {
+      "id": 12,
+      "state": "clawCombo",
+      "crop": [
+        0,
+        1536,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        250,
+        422,
+        490
+      ],
+      "pixelHash": "cb7976f181ac3b0abd7388d8257a6bf33f2fd53a3ceca404f49f00d578a91b5b"
+    },
+    {
+      "id": 13,
+      "state": "clawCombo",
+      "crop": [
+        512,
+        1536,
+        512,
+        512
+      ],
+      "bounds": [
+        85,
+        250,
+        426,
+        490
+      ],
+      "pixelHash": "6b4ed7a51688114afc5600400daa0a1b955dd08ac0a18567a69f45a710078f93"
+    },
+    {
+      "id": 14,
+      "state": "clawCombo",
+      "crop": [
+        1024,
+        1536,
+        512,
+        512
+      ],
+      "bounds": [
+        134,
+        250,
+        377,
+        495
+      ],
+      "pixelHash": "5b97cf8a2bd8d60c52131a6e450c74dd356b7df0c18ab6b9288a3aa49845272f"
+    },
+    {
+      "id": 15,
+      "state": "clawCombo",
+      "crop": [
+        1536,
+        1536,
+        512,
+        512
+      ],
+      "bounds": [
+        134,
+        250,
+        377,
+        492
+      ],
+      "pixelHash": "3528354b97d0577d9f592113f06e37904d1c2e34f5a1223319abb9148732b39e"
+    },
+    {
+      "id": 16,
+      "state": "sting",
+      "crop": [
+        0,
+        2048,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        244,
+        422,
+        490
+      ],
+      "pixelHash": "ba2f587d889edad6eafe2ca60cf7af1347515dd8a5e4cbdab2212cb0a54a153d"
+    },
+    {
+      "id": 17,
+      "state": "sting",
+      "crop": [
+        512,
+        2048,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        261,
+        445,
+        490
+      ],
+      "pixelHash": "c90d26d360e324c625d62545d74899d1d0d165963e70f59be21f6931226869dd"
+    },
+    {
+      "id": 18,
+      "state": "sting",
+      "crop": [
+        1024,
+        2048,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        310,
+        445,
+        490
+      ],
+      "pixelHash": "3e6bcbee9224275218b566a0b37ff61cdf2bd5c6666f81b34a4196ba8f981df7"
+    },
+    {
+      "id": 19,
+      "state": "sting",
+      "crop": [
+        1536,
+        2048,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        272,
+        422,
+        490
+      ],
+      "pixelHash": "d3d77b3800b5c8b5efdbd871459503833eb1bbd347367732ea818b64a9c455a9"
+    },
+    {
+      "id": 20,
+      "state": "stingPattern",
+      "crop": [
+        0,
+        2560,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        244,
+        422,
+        490
+      ],
+      "pixelHash": "ba2f587d889edad6eafe2ca60cf7af1347515dd8a5e4cbdab2212cb0a54a153d"
+    },
+    {
+      "id": 21,
+      "state": "stingPattern",
+      "crop": [
+        512,
+        2560,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        261,
+        445,
+        490
+      ],
+      "pixelHash": "c90d26d360e324c625d62545d74899d1d0d165963e70f59be21f6931226869dd"
+    },
+    {
+      "id": 22,
+      "state": "stingPattern",
+      "crop": [
+        1024,
+        2560,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        310,
+        445,
+        490
+      ],
+      "pixelHash": "3e6bcbee9224275218b566a0b37ff61cdf2bd5c6666f81b34a4196ba8f981df7"
+    },
+    {
+      "id": 23,
+      "state": "stingPattern",
+      "crop": [
+        1536,
+        2560,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        272,
+        422,
+        490
+      ],
+      "pixelHash": "d3d77b3800b5c8b5efdbd871459503833eb1bbd347367732ea818b64a9c455a9"
+    },
+    {
+      "id": 24,
+      "state": "hit",
+      "crop": [
+        0,
+        3072,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        300,
+        422,
+        490
+      ],
+      "pixelHash": "9367f33b18d5792bb566d2c6252eb16f511a522e33d415538aafce008973dcff"
+    },
+    {
+      "id": 25,
+      "state": "hit",
+      "crop": [
+        512,
+        3072,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        299,
+        422,
+        490
+      ],
+      "pixelHash": "ee72b47680a9c5ac60f4b54bc9e13aa9ac241909ff0d67ffdf3a5e6e06e66e45"
+    },
+    {
+      "id": 26,
+      "state": "hit",
+      "crop": [
+        1024,
+        3072,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        299,
+        422,
+        490
+      ],
+      "pixelHash": "039cd8fecd7e566f7ce3877562cc6f5fee7ed86b83c127505ef2dc959e3d9d47"
+    },
+    {
+      "id": 27,
+      "state": "hit",
+      "crop": [
+        1536,
+        3072,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        299,
+        422,
+        490
+      ],
+      "pixelHash": "44879962b16c35e11027258b7aa69d6e7233914364f3163cd67b5f5bb8eb3657"
+    },
+    {
+      "id": 28,
+      "state": "defeat",
+      "crop": [
+        0,
+        3584,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        251,
+        422,
+        490
+      ],
+      "pixelHash": "019b1bff5cad3ebc81f05d4d62a185156da6d0468417e106d27ceb7fe86d121b"
+    },
+    {
+      "id": 29,
+      "state": "defeat",
+      "crop": [
+        512,
+        3584,
+        512,
+        512
+      ],
+      "bounds": [
+        90,
+        290,
+        422,
+        490
+      ],
+      "pixelHash": "9e7addce4cbe16c597cb2dfc7ab803d1d5e08670aafe8cc586266a0d49f6f8ed"
+    },
+    {
+      "id": 30,
+      "state": "defeat",
+      "crop": [
+        1024,
+        3584,
+        512,
+        512
+      ],
+      "bounds": [
+        89,
+        324,
+        423,
+        490
+      ],
+      "pixelHash": "e8ec8cd6c4a1ac9a1c0112e2d472e5e2e3e85b2d0cfc80e9818e2bf96e8d678d"
+    },
+    {
+      "id": 31,
+      "state": "defeat",
+      "crop": [
+        1536,
+        3584,
+        512,
+        512
+      ],
+      "bounds": [
+        89,
+        329,
+        423,
+        490
+      ],
+      "pixelHash": "e70d5581ea893eb280c87ec67ab6e80dd5bb37dff5bad250db99f7a4b1768708"
+    }
+  ],
+  "runtime": "Continuous eight-leg IK rig using the transparent component atlas; these pose frames are exported for inspection at a fixed sample target."
+}

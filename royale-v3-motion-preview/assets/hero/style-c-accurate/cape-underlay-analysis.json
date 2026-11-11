@@ -1,0 +1,52 @@
+{
+  "file": "cape-underlay.png",
+  "width": 1672,
+  "height": 941,
+  "mode": "RGBA",
+  "alphaUniqueValues": 256,
+  "scaleToSource": [
+    0.9186602870813397,
+    0.9181721572794899
+  ],
+  "sha256": "a45fc8dc04f86b39546b1aec02ee8ff4b467ed74eb1117f9440a3fe3fcb9a3c5",
+  "alphaBounds": {
+    "male": {
+      "generated": [
+        467,
+        450,
+        722,
+        623
+      ],
+      "sourceNormalized": [
+        429.0143540669857,
+        413.1774707757704,
+        663.2727272727273,
+        572.0212539851221
+      ]
+    },
+    "female": {
+      "generated": [
+        836,
+        474,
+        1072,
+        634
+      ],
+      "sourceNormalized": [
+        768.0,
+        435.2136025504782,
+        984.8038277511962,
+        582.1211477151966
+      ]
+    }
+  },
+  "inspection": {
+    "noBodiesOrLimbs": true,
+    "usableAsHiddenClothUnderlay": true,
+    "exactReproduction": false,
+    "deviations": [
+      "Visible cloth folds and bottom scallop curvature are subtly resynthesized; use original visible cape pixels on top where possible.",
+      "Both cape left edges sit around 10 source pixels farther left than source; registration requires alignment at neck anchor or clipping.",
+      "Hidden top/right cloth is reconstructed because it is not visible in the source."
+    ]
+  }
+}

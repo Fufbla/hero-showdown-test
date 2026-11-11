@@ -1,0 +1,67 @@
+{
+  "reference": "Hero Showdown Royale Reference Pack.png",
+  "referenceSHA256": "95482ba87c2d6af0b42cdf3f4fec6366d78454c1affa77786da9d1f32a710918",
+  "neutralFrames": {
+    "source": "Section 2, Turnaround (character model reference)",
+    "panelOrigin": [
+      676,
+      38
+    ],
+    "panelSampleRectangles": {
+      "male-side": [
+        124,
+        7,
+        88,
+        138
+      ],
+      "male-back": [
+        225,
+        7,
+        100,
+        138
+      ],
+      "female-side": [
+        122,
+        170,
+        90,
+        151
+      ],
+      "female-back": [
+        226,
+        170,
+        100,
+        151
+      ]
+    },
+    "left": "Horizontal mirror of the right-facing profile"
+  },
+  "illustrationMethod": "Built-in image generation referenced the original standing portraits and supplied turnaround panel. Component sheets were separated, registered at eye, shoulder, hip and foot landmarks, and packed onto a transparent atlas with a matching material index.",
+  "paintedSheets": [
+    {
+      "purpose": "Exposed scalp, neck, body, hips, reverse armor, gloves and boots under removable hair and cape",
+      "brief": "Two rows, Guardian above Sentinel. Draw each character bald and capeless in an exact right-facing profile and straight rear orthographic stance. Retain head-to-body proportions, skin, armor, metallic color blocking and comic shading. Keep all figures isolated on transparency."
+    },
+    {
+      "purpose": "Reference-matched default locs and the unobstructed parts of both capes for articulated poses",
+      "brief": "Place original swept short locs and blue cape on Guardian, and the high gold-tied curly loc ponytail and violet cape on Sentinel. Use the matching side and back underlay as registration and preserve the distinct source silhouettes."
+    },
+    {
+      "purpose": "Rib cage and hips exposed by arm motion",
+      "brief": "Four continuous torso pieces with neck, fitted rib cage, belt and hip underpainting, facing right and rear for each hero. Match the original armor. Leave off arms, head, legs and cape so joint motion can expose the covered side of the rib cage."
+    }
+  ],
+  "materials": {
+    "0": "retained ink or metal",
+    "1": "skin",
+    "2": "hair",
+    "3": "suit",
+    "4": "trim",
+    "5": "cape",
+    "6": "iris"
+  },
+  "assetChecksums": {
+    "layers.png": "cdd62904631d80b087d2ae14b8f34f8c7a5766c38c9c0ebb4f39ec9fcc043565",
+    "materials.png": "5a4dffbfe1af37edf84820274aed3484a98bffc134c1dfc9530c722582583847",
+    "model.mjs": "c9b3ddcb4b423076d5593c0a440a9f8b63fdf94bf91321e1c7643dce89055fc2"
+  }
+}

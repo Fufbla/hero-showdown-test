@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/harvest-festival/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        18,
+        1386,
+        204,
+        140
+      ],
+      "pivot": [
+        102.0,
+        126.0
+      ],
+      "attach": "head",
+      "scale": 0.19117647058823528,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        222,
+        1387,
+        202,
+        141
+      ],
+      "pivot": [
+        101.0,
+        126.9
+      ],
+      "attach": "head",
+      "scale": 0.19306930693069307,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        453,
+        1387,
+        200,
+        132
+      ],
+      "pivot": [
+        100.0,
+        118.8
+      ],
+      "attach": "head",
+      "scale": 0.195,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        683,
+        1390,
+        170,
+        138
+      ],
+      "pivot": [
+        85.0,
+        124.2
+      ],
+      "attach": "head",
+      "scale": 0.22941176470588234,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

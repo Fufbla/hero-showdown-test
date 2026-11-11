@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/fantasy-harvest/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        23,
+        1627,
+        183,
+        99
+      ],
+      "pivot": [
+        91.5,
+        49.5
+      ],
+      "attach": "waist",
+      "scale": 0.0707070707070707,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        254,
+        1627,
+        157,
+        102
+      ],
+      "pivot": [
+        78.5,
+        51.0
+      ],
+      "attach": "waist",
+      "scale": 0.06862745098039216,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        470,
+        1627,
+        166,
+        60
+      ],
+      "pivot": [
+        83.0,
+        30.0
+      ],
+      "attach": "waist",
+      "scale": 0.11666666666666667,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        696,
+        1627,
+        159,
+        102
+      ],
+      "pivot": [
+        79.5,
+        51.0
+      ],
+      "attach": "waist",
+      "scale": 0.06862745098039216,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

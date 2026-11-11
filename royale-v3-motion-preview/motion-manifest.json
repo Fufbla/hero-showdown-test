@@ -1,0 +1,107 @@
+{
+  "version": "motion-plan-4-8-6-v1",
+  "sourceCommit": "79375945adde95f8dee1187f1646791a828e4b26",
+  "cellWidth": 300,
+  "cellHeight": 362,
+  "anchorX": 150,
+  "anchorY": 340,
+  "actions": {
+    "idle": {
+      "frames": 4,
+      "src": "motion-assets/idle.webp",
+      "indices": [
+        0,
+        7,
+        5,
+        7
+      ],
+      "sha256": "534e1e477aed093503f657ec9dc0042ba562f219d4f30e3161b930d8a729d1c0"
+    },
+    "run": {
+      "frames": 8,
+      "src": "motion-assets/run.webp",
+      "indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "sha256": "42241ac89d0fec1d5218f76b240d96a459651261056d9e66735b0ff587c8e363"
+    },
+    "jump": {
+      "frames": 6,
+      "src": "motion-assets/jump.webp",
+      "indices": [
+        3,
+        5,
+        6,
+        7,
+        9,
+        10
+      ],
+      "sha256": "4ff39081d8a5fdf64d421c0e61bc8c878f393bc95bc66223ad140aa556b18d0b"
+    },
+    "doubleJump": {
+      "frames": 6,
+      "src": "motion-assets/doubleJump.webp",
+      "indices": [
+        2,
+        4,
+        5,
+        7,
+        9,
+        11
+      ],
+      "sha256": "0265e79b5863249ebe241854f327be21ee128234eeb571f33a43c6c22f5e3a1f"
+    },
+    "punch": {
+      "frames": 6,
+      "src": "motion-assets/punch.webp",
+      "indices": [
+        1,
+        3,
+        6,
+        8,
+        9,
+        11
+      ],
+      "sha256": "3e93ac5ca5789d1f0cfccf304435ae63be9a23bd01b13ae0dff42ebe31656d4c"
+    },
+    "kick": {
+      "frames": 6,
+      "src": "motion-assets/kick.webp",
+      "indices": [
+        1,
+        4,
+        7,
+        8,
+        9,
+        11
+      ],
+      "sha256": "41bbd645f3fdc9e912642f48650e5471ab8fc770c8c61dc62502362b91f3f18c"
+    },
+    "start": {
+      "frames": 2,
+      "src": "motion-assets/start.webp",
+      "indices": [
+        0,
+        1
+      ],
+      "sha256": "b075bfc4589e27828450e4f6d1b60fdea226c0edee1293bb11e4479b0ea05aba"
+    },
+    "settle": {
+      "frames": 3,
+      "src": "motion-assets/settle.webp",
+      "indices": [
+        1,
+        0,
+        0
+      ],
+      "sha256": "a2615ccfc4cdda595d6a49cdb3117acf8341cecc8e62c70f29f1c19370e44067"
+    }
+  }
+}

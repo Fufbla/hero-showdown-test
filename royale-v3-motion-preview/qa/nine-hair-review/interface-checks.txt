@@ -1,0 +1,18 @@
+✔ four-direction geometry chooses corresponding grid neighbors regardless of DOM order (1.159575ms)
+✔ irregular rectangles favor the aligned beam; layout changes are sampled anew; edges do not wrap (0.194104ms)
+✔ same-row variable heights do not turn Down into horizontal movement (0.128585ms)
+✔ a scrolled grid returns to the row above before a fixed header, then exits at its edge (0.21768ms)
+✔ virtual keyboard preserves edits, selection replacement, Unicode, shifting and maximum length (0.718087ms)
+✔ 48 unique natural tones cover eight depths and six undertones; HSV spans fantasy colors (0.54813ms)
+✔ all preset and arbitrary colors survive existing game and three-slot save codecs without affecting combat (81.704107ms)
+✔ HUD progress reflects gameplay state and cannot mutate cooldown or ability balance (1.015227ms)
+✔ skin transfer preserves luminance detail for neutral, dark and fantasy targets (0.342268ms)
+✔ approved resting-pose hands and arms recolor in place without changing original bitmap assets (339.659009ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 542.432153

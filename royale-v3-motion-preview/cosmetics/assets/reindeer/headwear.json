@@ -1,0 +1,129 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/reindeer/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        17,
+        1381,
+        204,
+        207
+      ],
+      "pivot": [
+        102.0,
+        103.5
+      ],
+      "attach": "head",
+      "scale": 0.29411764705882354,
+      "offset": [
+        2,
+        -12
+      ],
+      "faceOpening": {
+        "center": [
+          5,
+          0
+        ],
+        "radius": [
+          15,
+          19
+        ]
+      },
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        273,
+        1379,
+        139,
+        210
+      ],
+      "pivot": [
+        69.5,
+        105.0
+      ],
+      "attach": "head",
+      "scale": 0.4316546762589928,
+      "offset": [
+        0,
+        -12
+      ],
+      "faceOpening": {
+        "center": [
+          12,
+          0
+        ],
+        "radius": [
+          14,
+          19
+        ]
+      },
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        452,
+        1384,
+        192,
+        199
+      ],
+      "pivot": [
+        96.0,
+        99.5
+      ],
+      "attach": "head",
+      "scale": 0.3125,
+      "offset": [
+        2,
+        -12
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        706,
+        1378,
+        141,
+        211
+      ],
+      "pivot": [
+        70.5,
+        105.5
+      ],
+      "attach": "head",
+      "scale": 0.425531914893617,
+      "offset": [
+        0,
+        -12
+      ],
+      "faceOpening": {
+        "center": [
+          -12,
+          0
+        ],
+        "radius": [
+          14,
+          19
+        ]
+      },
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "hidden"
+}

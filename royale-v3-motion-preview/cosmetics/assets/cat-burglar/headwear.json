@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/cat-burglar/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        24,
+        1425,
+        185,
+        160
+      ],
+      "pivot": [
+        92.5,
+        144.0
+      ],
+      "attach": "head",
+      "scale": 0.21081081081081082,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        261,
+        1423,
+        144,
+        162
+      ],
+      "pivot": [
+        72.0,
+        145.8
+      ],
+      "attach": "head",
+      "scale": 0.2708333333333333,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        461,
+        1427,
+        183,
+        157
+      ],
+      "pivot": [
+        91.5,
+        141.3
+      ],
+      "attach": "head",
+      "scale": 0.21311475409836064,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        702,
+        1423,
+        144,
+        162
+      ],
+      "pivot": [
+        72.0,
+        145.8
+      ],
+      "attach": "head",
+      "scale": 0.2708333333333333,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

@@ -1,0 +1,5 @@
+
+#motion-preview-badge{position:fixed;z-index:120;pointer-events:none;left:50%;bottom:calc(env(safe-area-inset-bottom) + 3px);transform:translateX(-50%);max-width:68vw;white-space:nowrap;font:10px/1.25 system-ui,sans-serif;letter-spacing:.03em;color:#e6f1ff;background:#071628d9;padding:4px 8px;border:1px solid #5b8197;border-radius:9px}
+@media(max-width:600px){#motion-preview-badge{font-size:8px;max-width:95vw}}
+#hero-slots{grid-template-columns:minmax(230px,420px);justify-content:center}
+#gear-view-front,#gear-view-back,.practice-links{display:none!important}

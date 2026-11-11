@@ -1,0 +1,2551 @@
+{
+  "schemaVersion": 1,
+  "sets": [
+    {
+      "id": "royal-kimono",
+      "name": "Royal Kimono Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "royal-kimono.fullbody",
+          "category": "fullbody",
+          "coinPrice": 500,
+          "assetManifest": "./assets/royal-kimono/fullbody.json"
+        },
+        {
+          "id": "royal-kimono.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/royal-kimono/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Purple floral kimono; pink/white crossover collar; gold obi bow and tails; wide sleeves; split skirt; thin purple sandals; small floral hair sprig.",
+        "approval": "User approved corrected Kimono artwork on 2026-11-09; preserved byte-for-byte. Fitting reviewed in the shared renderer."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "ninja-warrior",
+      "name": "Ninja Warrior Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "ninja-warrior.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/ninja-warrior/top.json"
+        },
+        {
+          "id": "ninja-warrior.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/ninja-warrior/bottom.json"
+        },
+        {
+          "id": "ninja-warrior.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/ninja-warrior/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Purple headband and face scarf; black/purple wrap tunic; gold belt knot; loose black pants; purple armored boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "urban-hero",
+      "name": "Urban Hero Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "urban-hero.top",
+          "category": "top",
+          "coinPrice": 400,
+          "assetManifest": "./assets/urban-hero/top.json"
+        },
+        {
+          "id": "urban-hero.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/urban-hero/bottom.json"
+        },
+        {
+          "id": "urban-hero.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/urban-hero/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "White/green recycling cap; white/green varsity jacket; white recycling shirt; dark cargo pants; green/white high-top shoes."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "street-style",
+      "name": "Street Style Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "street-style.top",
+          "category": "top",
+          "coinPrice": 400,
+          "assetManifest": "./assets/street-style/top.json"
+        },
+        {
+          "id": "street-style.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/street-style/bottom.json"
+        },
+        {
+          "id": "street-style.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/street-style/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Pink cropped jacket; white crop top; pink belted cargo pants; pink/white high-tops; dark sunglasses."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "explorer",
+      "name": "Explorer Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "explorer.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/explorer/top.json"
+        },
+        {
+          "id": "explorer.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/explorer/bottom.json"
+        },
+        {
+          "id": "explorer.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/explorer/footwear.json"
+        },
+        {
+          "id": "explorer.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/explorer/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Tan brimmed hat with goggles; tan pocketed short-sleeve shirt; utility belt and cargo trousers; brown boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "festival",
+      "name": "Festival Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "festival.fullbody",
+          "category": "fullbody",
+          "coinPrice": 400,
+          "assetManifest": "./assets/festival/fullbody.json"
+        },
+        {
+          "id": "festival.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/festival/footwear.json"
+        },
+        {
+          "id": "festival.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/festival/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Multicolor red/yellow/green patterned headwrap and asymmetric wrap dress; turquoise/gold bodice; gold cuffs and sandals."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "athletic",
+      "name": "Athletic Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "athletic.top",
+          "category": "top",
+          "coinPrice": 400,
+          "assetManifest": "./assets/athletic/top.json"
+        },
+        {
+          "id": "athletic.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/athletic/bottom.json"
+        },
+        {
+          "id": "athletic.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/athletic/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Green/white headband; green zip tracksuit with white stripes; green/white trainers."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "casual-hoodie",
+      "name": "Casual Hoodie Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "casual-hoodie.top",
+          "category": "top",
+          "coinPrice": 400,
+          "assetManifest": "./assets/casual-hoodie/top.json"
+        },
+        {
+          "id": "casual-hoodie.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/casual-hoodie/bottom.json"
+        },
+        {
+          "id": "casual-hoodie.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/casual-hoodie/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Purple star hoodie with pale drawstrings; black cargo pants; purple/white high-tops; purple star headphones."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "royal-gown",
+      "name": "Royal Gown Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "royal-gown.fullbody",
+          "category": "fullbody",
+          "coinPrice": 400,
+          "assetManifest": "./assets/royal-gown/fullbody.json"
+        },
+        {
+          "id": "royal-gown.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/royal-gown/footwear.json"
+        },
+        {
+          "id": "royal-gown.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/royal-gown/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Gold tiara with blue gems; white/gold gown and long layered skirt; gold waist ornament; white gloves."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "tech-specialist",
+      "name": "Tech Specialist Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "tech-specialist.top",
+          "category": "top",
+          "coinPrice": 400,
+          "assetManifest": "./assets/tech-specialist/top.json"
+        },
+        {
+          "id": "tech-specialist.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/tech-specialist/bottom.json"
+        },
+        {
+          "id": "tech-specialist.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/tech-specialist/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Black long tech coat with cyan piping; dark cargo pants; black/cyan boots; cyan wrap visor."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "combat-casual",
+      "name": "Combat Casual Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "combat-casual.top",
+          "category": "top",
+          "coinPrice": 400,
+          "assetManifest": "./assets/combat-casual/top.json"
+        },
+        {
+          "id": "combat-casual.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/combat-casual/bottom.json"
+        },
+        {
+          "id": "combat-casual.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/combat-casual/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Backwards black/red cap; red jacket and white red-emblem shirt; dark cargo pants; red/black boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "mystic-robe",
+      "name": "Mystic Robe Set",
+      "collection": "original",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "mystic-robe.fullbody",
+          "category": "fullbody",
+          "coinPrice": 400,
+          "assetManifest": "./assets/mystic-robe/fullbody.json"
+        },
+        {
+          "id": "mystic-robe.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/mystic-robe/footwear.json"
+        },
+        {
+          "id": "mystic-robe.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/mystic-robe/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "original",
+        "design": "Purple hood and long split purple robe with gold edging and symbols; blue teardrop clasp; gold rope belt."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "witch",
+      "name": "Witch Set",
+      "collection": "halloween",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "witch.fullbody",
+          "category": "fullbody",
+          "coinPrice": 400,
+          "assetManifest": "./assets/witch/fullbody.json"
+        },
+        {
+          "id": "witch.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/witch/footwear.json"
+        },
+        {
+          "id": "witch.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/witch/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Bent purple witch hat with gold buckle; purple/gold coat dress and belt; purple boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "vampire",
+      "name": "Vampire Set",
+      "collection": "halloween",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "vampire.top",
+          "category": "top",
+          "coinPrice": 400,
+          "assetManifest": "./assets/vampire/top.json"
+        },
+        {
+          "id": "vampire.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/vampire/bottom.json"
+        },
+        {
+          "id": "vampire.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/vampire/footwear.json"
+        },
+        {
+          "id": "vampire.cape",
+          "category": "cape",
+          "coinPrice": 100,
+          "assetManifest": "./assets/vampire/cape.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Black suit with white shirt and high red collar; black boots; black cape with red lining."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "mummy",
+      "name": "Mummy Set",
+      "collection": "halloween",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "mummy.fullbody",
+          "category": "fullbody",
+          "coinPrice": 500,
+          "assetManifest": "./assets/mummy/fullbody.json"
+        },
+        {
+          "id": "mummy.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/mummy/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Ivory and gold-edged layered bandage wraps, with face exposed and matching wrapped footwear."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "werewolf",
+      "name": "Werewolf Set",
+      "collection": "halloween",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "werewolf.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/werewolf/top.json"
+        },
+        {
+          "id": "werewolf.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/werewolf/bottom.json"
+        },
+        {
+          "id": "werewolf.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/werewolf/footwear.json"
+        },
+        {
+          "id": "werewolf.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/werewolf/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Gray wolf-ear pelt hood; gray fur shoulder trim; dark brown belted clothing; furry cuffs and boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "skeleton",
+      "name": "Skeleton Set",
+      "collection": "halloween",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "skeleton.fullbody",
+          "category": "fullbody",
+          "coinPrice": 600,
+          "assetManifest": "./assets/skeleton/fullbody.json"
+        },
+        {
+          "id": "skeleton.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/skeleton/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Black fitted suit with white skeletal rib, arm and leg motifs; black/white footwear."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "pumpkin-knight",
+      "name": "Pumpkin Knight Set",
+      "collection": "halloween",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "pumpkin-knight.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/pumpkin-knight/top.json"
+        },
+        {
+          "id": "pumpkin-knight.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/pumpkin-knight/bottom.json"
+        },
+        {
+          "id": "pumpkin-knight.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/pumpkin-knight/footwear.json"
+        },
+        {
+          "id": "pumpkin-knight.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/pumpkin-knight/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Carved orange pumpkin helmet; green scarf; orange/gold armor-shaped jacket and legs; black/orange boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "dark-reaper",
+      "name": "Dark Reaper Set",
+      "collection": "halloween",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "dark-reaper.fullbody",
+          "category": "fullbody",
+          "coinPrice": 400,
+          "assetManifest": "./assets/dark-reaper/fullbody.json"
+        },
+        {
+          "id": "dark-reaper.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/dark-reaper/footwear.json"
+        },
+        {
+          "id": "dark-reaper.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/dark-reaper/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Purple/black hooded long coat; skull clasp; purple belt; dark boots and gloves."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "cat-burglar",
+      "name": "Cat Burglar Set",
+      "collection": "halloween",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "cat-burglar.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/cat-burglar/top.json"
+        },
+        {
+          "id": "cat-burglar.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/cat-burglar/bottom.json"
+        },
+        {
+          "id": "cat-burglar.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/cat-burglar/footwear.json"
+        },
+        {
+          "id": "cat-burglar.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/cat-burglar/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Purple cat ears and goggles; black/purple fitted clothing; utility belt; black boots and gloves."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "santa-hero",
+      "name": "Santa Hero Set",
+      "collection": "christmas",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "santa-hero.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/santa-hero/top.json"
+        },
+        {
+          "id": "santa-hero.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/santa-hero/bottom.json"
+        },
+        {
+          "id": "santa-hero.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/santa-hero/footwear.json"
+        },
+        {
+          "id": "santa-hero.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/santa-hero/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Red Santa cap with white fur; red gold-trim jacket and pants; white cuffs; black belt; red boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "mrs.-claus",
+      "name": "Mrs. Claus Set",
+      "collection": "christmas",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "mrs.-claus.fullbody",
+          "category": "fullbody",
+          "coinPrice": 400,
+          "assetManifest": "./assets/mrs-claus/fullbody.json"
+        },
+        {
+          "id": "mrs.-claus.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/mrs-claus/footwear.json"
+        },
+        {
+          "id": "mrs.-claus.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/mrs-claus/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "White/red bonnet; red gold-scroll dress with white fur edging; black belt; red shoes."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "elf-hero",
+      "name": "Elf Hero Set",
+      "collection": "christmas",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "elf-hero.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/elf-hero/top.json"
+        },
+        {
+          "id": "elf-hero.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/elf-hero/bottom.json"
+        },
+        {
+          "id": "elf-hero.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/elf-hero/footwear.json"
+        },
+        {
+          "id": "elf-hero.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/elf-hero/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Green/red pointed hat and tunic; gold belt; striped stockings; red/green curled shoes."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "reindeer",
+      "name": "Reindeer Set",
+      "collection": "christmas",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "reindeer.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/reindeer/top.json"
+        },
+        {
+          "id": "reindeer.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/reindeer/bottom.json"
+        },
+        {
+          "id": "reindeer.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/reindeer/footwear.json"
+        },
+        {
+          "id": "reindeer.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/reindeer/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Brown reindeer hood with antlers and ears; brown suit with cream fur; green/red neck accent; brown boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "snow-hero",
+      "name": "Snow Hero Set",
+      "collection": "christmas",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "snow-hero.top",
+          "category": "top",
+          "coinPrice": 400,
+          "assetManifest": "./assets/snow-hero/top.json"
+        },
+        {
+          "id": "snow-hero.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/snow-hero/bottom.json"
+        },
+        {
+          "id": "snow-hero.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/snow-hero/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Blue/white snowflake jacket and shorts; dark leggings; blue/white boots; pale blue snow goggles."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "gingerbread",
+      "name": "Gingerbread Set",
+      "collection": "christmas",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "gingerbread.fullbody",
+          "category": "fullbody",
+          "coinPrice": 500,
+          "assetManifest": "./assets/gingerbread/fullbody.json"
+        },
+        {
+          "id": "gingerbread.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/gingerbread/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Gingerbread brown hood and suit; white icing piping; red/green candy buttons; brown shoes."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "toy-soldier",
+      "name": "Toy Soldier Set",
+      "collection": "christmas",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "toy-soldier.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/toy-soldier/top.json"
+        },
+        {
+          "id": "toy-soldier.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/toy-soldier/bottom.json"
+        },
+        {
+          "id": "toy-soldier.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/toy-soldier/footwear.json"
+        },
+        {
+          "id": "toy-soldier.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/toy-soldier/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Tall red/black hat with gold crest; red/black gold-trim military-style coat and pants; black/gold boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "holiday-sweater",
+      "name": "Holiday Sweater Set",
+      "collection": "christmas",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "holiday-sweater.top",
+          "category": "top",
+          "coinPrice": 400,
+          "assetManifest": "./assets/holiday-sweater/top.json"
+        },
+        {
+          "id": "holiday-sweater.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/holiday-sweater/bottom.json"
+        },
+        {
+          "id": "holiday-sweater.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/holiday-sweater/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Red/green/white knit pompom hat; green patterned holiday sweater; dark green pants; red shoes."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "pilgrim-hero",
+      "name": "Pilgrim Hero Set",
+      "collection": "harvest",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "pilgrim-hero.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/pilgrim-hero/top.json"
+        },
+        {
+          "id": "pilgrim-hero.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/pilgrim-hero/bottom.json"
+        },
+        {
+          "id": "pilgrim-hero.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/pilgrim-hero/footwear.json"
+        },
+        {
+          "id": "pilgrim-hero.cape",
+          "category": "cape",
+          "coinPrice": 100,
+          "assetManifest": "./assets/pilgrim-hero/cape.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Tall black gold-buckle hat; black clothing with white collar and cuffs; gold buckle belt; black boots and cape."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "pilgrim-maid",
+      "name": "Pilgrim Maid Set",
+      "collection": "harvest",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "pilgrim-maid.fullbody",
+          "category": "fullbody",
+          "coinPrice": 500,
+          "assetManifest": "./assets/pilgrim-maid/fullbody.json"
+        },
+        {
+          "id": "pilgrim-maid.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/pilgrim-maid/footwear.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "White/purple bonnet; purple dress with white apron and collar; gold buckle waist; dark shoes."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "fantasy-harvest",
+      "name": "Fantasy Harvest Set",
+      "collection": "harvest",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "fantasy-harvest.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/fantasy-harvest/top.json"
+        },
+        {
+          "id": "fantasy-harvest.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/fantasy-harvest/bottom.json"
+        },
+        {
+          "id": "fantasy-harvest.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/fantasy-harvest/footwear.json"
+        },
+        {
+          "id": "fantasy-harvest.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/fantasy-harvest/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "User selected fantasy harvest replacement for Native Heritage. Design pending: no culturally attributed or ceremonial motifs; do not reuse the generic feathered reference outfit."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "harvest-scout",
+      "name": "Harvest Scout Set",
+      "collection": "harvest",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "harvest-scout.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/harvest-scout/top.json"
+        },
+        {
+          "id": "harvest-scout.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/harvest-scout/bottom.json"
+        },
+        {
+          "id": "harvest-scout.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/harvest-scout/footwear.json"
+        },
+        {
+          "id": "harvest-scout.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/harvest-scout/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Brown/ochre cap; red/yellow scarf; orange/green outdoor jacket; green cargo shorts; brown fur-trim boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "turkey-hero",
+      "name": "Turkey Hero Set",
+      "collection": "harvest",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "turkey-hero.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/turkey-hero/top.json"
+        },
+        {
+          "id": "turkey-hero.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/turkey-hero/bottom.json"
+        },
+        {
+          "id": "turkey-hero.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/turkey-hero/footwear.json"
+        },
+        {
+          "id": "turkey-hero.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/turkey-hero/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Orange/gold belted outfit; brown boots; fan of red/orange/yellow turkey feathers and matching crest."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "harvest-festival",
+      "name": "Harvest Festival Set",
+      "collection": "harvest",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "harvest-festival.fullbody",
+          "category": "fullbody",
+          "coinPrice": 400,
+          "assetManifest": "./assets/harvest-festival/fullbody.json"
+        },
+        {
+          "id": "harvest-festival.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/harvest-festival/footwear.json"
+        },
+        {
+          "id": "harvest-festival.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/harvest-festival/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Sunflower and autumn-leaf crown; brown/gold bodice; layered red/yellow/orange leaf skirt; brown/gold boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "scarecrow",
+      "name": "Scarecrow Set",
+      "collection": "harvest",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "scarecrow.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/scarecrow/top.json"
+        },
+        {
+          "id": "scarecrow.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/scarecrow/bottom.json"
+        },
+        {
+          "id": "scarecrow.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/scarecrow/footwear.json"
+        },
+        {
+          "id": "scarecrow.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/scarecrow/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Straw hat with red band; checked orange shirt; blue patched overalls; straw cuffs; brown boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    },
+    {
+      "id": "autumn-explorer",
+      "name": "Autumn Explorer Set",
+      "collection": "harvest",
+      "category": "set",
+      "coinPrice": 700,
+      "availability": "released",
+      "template": "universal-style-c-v1",
+      "pieces": [
+        {
+          "id": "autumn-explorer.top",
+          "category": "top",
+          "coinPrice": 300,
+          "assetManifest": "./assets/autumn-explorer/top.json"
+        },
+        {
+          "id": "autumn-explorer.bottom",
+          "category": "bottom",
+          "coinPrice": 100,
+          "assetManifest": "./assets/autumn-explorer/bottom.json"
+        },
+        {
+          "id": "autumn-explorer.footwear",
+          "category": "footwear",
+          "coinPrice": 100,
+          "assetManifest": "./assets/autumn-explorer/footwear.json"
+        },
+        {
+          "id": "autumn-explorer.accessory",
+          "category": "accessory",
+          "coinPrice": 100,
+          "assetManifest": "./assets/autumn-explorer/accessory.json"
+        }
+      ],
+      "reference": {
+        "poster": "seasonal",
+        "design": "Red/brown plaid cap; red/yellow scarf; brown plaid jacket and shorts; brown fur-trim boots."
+      },
+      "directions": [
+        "front",
+        "right",
+        "back",
+        "left"
+      ],
+      "animationCompatibility": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "double-jump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "power",
+        "hurt",
+        "turn"
+      ],
+      "ownershipRequirements": "per-hero permanent stable IDs",
+      "preview": {
+        "actualHero": true,
+        "requiredViews": [
+          "front",
+          "right",
+          "back",
+          "left"
+        ]
+      },
+      "review": {
+        "referenceFidelity": true,
+        "universalFit": true,
+        "animations": true,
+        "hairCompatibility": true
+      }
+    }
+  ],
+  "wearPolicy": "matching-outfits-no-headwear-v1"
+}
