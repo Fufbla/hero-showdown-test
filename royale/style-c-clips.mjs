@@ -30,6 +30,20 @@ export const STYLE_C_MOTIONS = Object.freeze({
    f([1,3,5], [16,-50],[-21,-40], [-12,-24],[5,-4]),
    f([1,-.5,6], [4,-51],[1,-51], [7,-24],[-11,-6])
  ]),
+ // Eight authored frames for the isolated V2 test hero's RUN ONLY.
+ // An entire stride alternates planted contact, weight acceptance, passing
+ // and push-off. Both feet never hover together, and the body visibly
+ // compresses on contact, rises through flight, and pumps the arms.
+ 'v2-run':clip(.34,true,[
+   f([0,0,6], [-9,-47],[13,-58], [23,-4],[-21,-10],{headTilt:-.018}),
+   f([0,5,7], [5,-42],[-2,-57], [15,-4],[-19,-20],{headTilt:.025}),
+   f([1,2,8], [22,-47],[-20,-47], [2,-4],[-12,-25],{headTilt:.005}),
+   f([0,-3,8], [29,-57],[-29,-43], [-18,-19],[21,-4],{headTilt:-.035}),
+   f([0,0,6], [13,-58],[-9,-47], [-21,-10],[23,-4],{headTilt:-.018}),
+   f([0,5,7], [-2,-57],[5,-42], [-19,-20],[15,-4],{headTilt:.025}),
+   f([1,2,8], [-20,-47],[22,-47], [-12,-25],[2,-4],{headTilt:.005}),
+   f([0,-3,8], [-29,-43],[29,-57], [21,-4],[-18,-19],{headTilt:-.035})
+ ]),
  turn:clip(.16,false,[rest,
    f([1,2,-2], [14,-44],[-9,-40], [12,-5],[-10,-4],{headTilt:-.05}),
    f([0,3,-4], [5,-47],[-1,-44], [6,-8],[-7,-4],{headTilt:-.08}),

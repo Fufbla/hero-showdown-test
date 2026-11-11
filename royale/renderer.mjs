@@ -14,6 +14,7 @@ import { clamp, ATTACKS } from './core.mjs';
 import { drawHero } from './hero-art.mjs';
 import {poseFor} from './style-c-rig.mjs';
 import {v2GeneratedSprites} from './v2-sprites/runtime.mjs';
+import {useV2RunCycle} from './v2-sprites/run-motion.mjs';
 import {approvedMotionSprites} from './v2-sprites/approved-motion.mjs';
 import {drawV2PowerPreview} from './v2-sprites/power-preview.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
@@ -91,12 +92,17 @@ export class Renderer {
     const spriteHero=this.v2SpriteTest?{...visualHero,v2Active:game.powers?.active}:visualHero;
     // Approved 24-pose art takes priority when installed. The old atlas keeps
     // true multi-frame running and remains fallback if the new asset is absent.
-    const approved=this.v2SpriteTest&&approvedMotionSprites.draw(c,pos.x,pos.y,spriteHero,game,1);
-    const generated=approved||(this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1));
+    // Do not let the single static Speed poster replace a moving hero.
+    // While genuinely running, paint the *same saved Style C character* with
+    // eight articulated poses. Every other action keeps its original renderer.
+    const v2Running=useV2RunCycle(spriteHero,game,this.v2SpriteTest);
+    const approved=!v2Running&&this.v2SpriteTest&&approvedMotionSprites.draw(c,pos.x,pos.y,spriteHero,game,1);
+    const generated=approved||(!v2Running&&this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1));
     const pose=generated?poseFor(game.look,visualHero,t,'game'):
       drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{
         outfit:game.visualOutfit(),clothing:clothingRuntime.layers(game.cosmetics),
-        cloth:this.cloth,dt:game.paused?0:dt
+        cloth:this.cloth,dt:game.paused?0:dt,
+        ...(v2Running?{poseName:'v2-run'}:{})
       });
     drawPowerHero(c,game,pos,pose);
     if(generated&&!approved)drawV2PowerPreview(c,game,pos,t); // Approved artwork already includes painted VFX.

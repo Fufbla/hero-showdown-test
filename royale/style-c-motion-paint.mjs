@@ -105,7 +105,7 @@ function extremity(c,pivot,image,point,angle,width) {
   smoothStamp(c,image,-pivot[0]*image.width,-pivot[1]*image.height);c.restore();
 }
 const narrowArms=new Set(['turn','punch','air-punch','strength','superKick','fireball','whirlwind','flight','knockback']);
-const fastLegs=new Set(['turn','run','speed','double-jump','air-kick','kick','superKick','knockback','defeat']);
+const fastLegs=new Set(['turn','run','v2-run','speed','double-jump','air-kick','kick','superKick','knockback','defeat']);
 function drawShoulderSeat(c,pose,look,palette) {
   // The torso plate is painted with a sleeve opening. During a backswing,
   // a little of the underlying deltoid remains visible inside that opening.
@@ -168,7 +168,7 @@ export function drawStyleCMotionLimb(c,pose,kind,index,look,palette,pieces={}) {
     const raised=pose.sole===index,part=raised?'sole':'boot';
     if(pieces.boots&&!raised)return true;
     const im=material(angle,part,look,palette,equipment);
-    const gait=['walk','run','speed'].includes(clip);
+    const gait=['walk','run','v2-run','speed'].includes(clip);
     const swing=gait?Math.sin(Math.max(0,((pose.phase+index*.5)%1-.5)*2)*Math.PI):0;
     // The sole turns into the line of the extended kick. Other feet keep their
     // level contact on the ground, then lift the heel through the swing.

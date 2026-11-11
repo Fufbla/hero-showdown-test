@@ -1,0 +1,34 @@
+name: V2 Running Sprite Regression
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'royale/renderer.mjs'
+      - 'royale/style-c-clips.mjs'
+      - 'royale/style-c-motion.mjs'
+      - 'royale/style-c-motion-paint.mjs'
+      - 'royale/v2-sprites/run-motion.mjs'
+      - 'royale/tests/v2-run-motion.test.mjs'
+      - '.github/workflows/v2-running-regression.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse updated run modules
+        run: |
+          node --check royale/renderer.mjs
+          node --check royale/style-c-clips.mjs
+          node --check royale/style-c-motion.mjs
+          node --check royale/style-c-motion-paint.mjs
+          node --check royale/v2-sprites/run-motion.mjs
+      - name: Verify eight running poses and unchanged other actions
+        run: |
+          node --test royale/tests/v2-run-motion.test.mjs
+          node --test royale/tests/v2-control-effects.test.mjs
+          node --test royale/tests/approved-motion.test.mjs
+          node --test royale/tests/v2-generated-sprites.test.mjs
