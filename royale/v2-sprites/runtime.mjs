@@ -152,7 +152,11 @@ export class V2GeneratedSprites {
   if(!this.ready)return false;
   const clip=this.frame(hero,time);if(!clip)return false;
   const atlas=V2_SPRITE_ATLASES[clip.atlas],image=this.images.get(clip.atlas);
-  if(!image||!(scale>0)||this.unsafeFrames.has(clip.atlas+':'+clip.row+':'+clip.index))return false;
+  // Keep the captured full-body frame visible even when a source tile touches
+  // the safety border. Turning it into a segmented rig mid-animation causes
+  // the obvious character/body swap. The repaired 192px jump sheets remain
+  // in use; unsafeFrames is retained for diagnostics, not pose replacement.
+  if(!image||!(scale>0))return false;
   const cell=atlas.cell,col=clamp(clip.index,0,clip.count-1);
   const drawSize=(atlas.cell===192?156:130)*scale; // Same visual hero size, larger cape-safe source frame.
   ctx.save();
