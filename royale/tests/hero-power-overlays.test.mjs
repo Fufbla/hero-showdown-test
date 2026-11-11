@@ -67,7 +67,7 @@ test('game compositor prevents old full-character Roots/Whirlwind poster',async(
  assert.ok(renderer.includes("drawHeroPowerOverlays(c,game,pos,t,'back')"));
  assert.ok(renderer.includes("drawHeroPowerOverlays(c,game,pos,t,'front')"));
  assert.ok(renderer.indexOf("drawHeroPowerOverlays(c,game,pos,t,'back')")<
-   renderer.indexOf('const generated=approved||('));
+   renderer.indexOf('const generated=!steelMode&&('));
  assert.ok(renderer.indexOf("drawHeroPowerOverlays(c,game,pos,t,'front')")>
    renderer.indexOf("drawHero(c,pos.x,pos.y"));
  assert.ok(app.includes('void prepareHeroPowerOverlays();'));
