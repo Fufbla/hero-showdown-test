@@ -1,0 +1,29 @@
+name: Inspect motion preview source
+on:
+  push:
+    branches: [action-chibi-motion-preview]
+    paths: [.github/workflows/motion-preview-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package source and approved movement assets for inspection
+        run: |
+          python - <<'PY'
+          import pathlib, zipfile
+          with zipfile.ZipFile('motion-source.zip','w',zipfile.ZIP_DEFLATED) as z:
+            for root in ('royale','royale-v3-staging','.github/workflows','tools','tests'):
+              for p in pathlib.Path(root).rglob('*'):
+                if not p.is_file(): continue
+                if p.suffix in ('.mjs','.js','.json','.html','.css','.py','.md','.yml') or str(p).startswith('royale-v3-staging/character-test/assets/'):
+                  z.write(p)
+          print('source package bytes',pathlib.Path('motion-source.zip').stat().st_size)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: motion-preview-source
+          path: motion-source.zip
+          retention-days: 2
