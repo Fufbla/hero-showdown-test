@@ -1,0 +1,78 @@
+name: Verify live Action Chibi test
+on:
+  push:
+    branches: [chibi-12-frame-test]
+    paths: [.github/workflows/chibi-live-check.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 79375945adde95f8dee1187f1646791a828e4b26
+      - name: Prepare browser
+        run: |
+          python -m pip install --quiet playwright Pillow
+          python -m playwright install --with-deps chromium
+      - name: Verify live files match tested build
+        run: |
+          python - <<'PY'
+          import time,json,hashlib,urllib.request
+          from pathlib import Path
+          root=Path('royale-v3-staging/character-test')
+          expected=json.loads((root/'manifest.json').read_text())
+          base='https://fufbla.github.io/hero-showdown-test/royale-v3-staging/character-test/'
+          for attempt in range(36):
+              try:
+                  raw=urllib.request.urlopen(base+'manifest.json?verify=79375945-'+str(attempt),timeout=20).read()
+                  live=json.loads(raw)
+                  if live['version']==expected['version']:break
+              except Exception as e: print('Publication check',attempt+1,type(e).__name__)
+              time.sleep(5)
+          else: raise RuntimeError('New test build is not served yet')
+          for name,asset in expected['actions'].items():
+              raw=urllib.request.urlopen(base+asset['src']+'?verify=79375945',timeout=40).read()
+              assert hashlib.sha256(raw).hexdigest()==asset['sha256'],name+' live asset differs'
+          html=urllib.request.urlopen(base+'?verify=79375945',timeout=30).read().decode()
+          assert 'test-game.mjs?v=chibi12-20261111-1' in html
+          print('PASS: live HTML and all six transparent atlases match the tested build')
+          PY
+      - name: Test actual published page
+        env:
+          CHIBI_TEST_URL: https://fufbla.github.io/hero-showdown-test/royale-v3-staging/character-test/?qa=1&v=79375945
+        run: python royale-v3-staging/character-test/qa/browser_test.py
+      - name: Verify code 0000000000 opens the new test
+        run: |
+          python - <<'PY'
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as p:
+              browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
+              page=browser.new_page(viewport={'width':1100,'height':800})
+              cloud=[]
+              page.on('request',lambda r:cloud.append(r.url) if 'supabase' in r.url else None)
+              page.goto('https://fufbla.github.io/hero-showdown-test/royale-v3-staging/?v=79375945',wait_until='networkidle')
+              page.locator('#enter').click()
+              page.locator('#input').fill('0000000000')
+              page.locator('#load').click()
+              frame=page.frame_locator('#game-frame')
+              frame.locator('#game').wait_for()
+              page.wait_for_timeout(1800)
+              iframe=page.locator('#game-frame').element_handle().content_frame()
+              iframe.wait_for_function('window.__chibiTest?.state.ready')
+              assert iframe.evaluate('__chibiTest.state.version')=='chibi12-20261111-1'
+              assert not cloud, 'Test unexpectedly called cloud account services'
+              page.screenshot(path='chibi-login-verified.png')
+              print('PASS: 0000000000 login opens 12-frame test without cloud requests')
+              browser.close()
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: chibi-live-browser-evidence
+          path: |
+            chibi-test-results.json
+            chibi-*-verified.png
+          retention-days: 7
