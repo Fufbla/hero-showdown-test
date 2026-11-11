@@ -12,7 +12,7 @@ const wrap=v=>((v%1)+1)%1;
 const pair=(a,b,t)=>[mix(a[0],b[0],t),mix(a[1],b[1],t)];
 const length=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
 const neutral=STYLE_C_MOTIONS.idle.frames[0];
-const gaitClips=new Set(['walk','run','v2-run','speed']);
+const gaitClips=new Set(['walk','v2-walk','run','v2-run','speed']);
 const attacks=new Set(['punch','air-punch','kick','air-kick','strength','superKick']);
 const airClips=new Set(['jump','double-jump','fall','air-punch','air-kick','flight','knockback']);
 
@@ -46,7 +46,7 @@ function clockFor(state,h,time,options) {
   const clip=STYLE_C_MOTIONS[state];
   if(attacks.has(state)&&h.attack)return attackPhase(h.attack.kind,h.attack.age);
   if(gaitClips.has(state)){
-    const stride=state==='walk'?11.5:state==='run'?16.5:state==='v2-run'?19.5:20;
+    const stride=state==='walk'||state==='v2-walk'?11.5:state==='run'?16.5:state==='v2-run'?19.5:20;
     return {phase:wrap((h.cycle||0)*52/(4*stride)),contact:false};
   }
   const clocks={
@@ -94,7 +94,7 @@ function sample(model,l,state,phase,contact,unit,elapsed, usePlantedFeet=true) {
     const q=wrap(phase+i*.5),swing=clamp((q-.5)*2),radius=stride/unit;
     const center=m.origin[0]+(i?-3:3)/unit;
     feet[i][0]=center+(q<.5?radius*(1-4*q):(swing*2-1)*radius);
-    feet[i][1]=floors[i]-(q<.5?0:Math.sin(swing*Math.PI)*(state==='walk'?9:state==='run'?16:state==='v2-run'?19:19)/unit);
+    feet[i][1]=floors[i]-(q<.5?0:Math.sin(swing*Math.PI)*(state==='walk'||state==='v2-walk'?9:state==='run'?16:state==='v2-run'?19:19)/unit);
   }
   const grounded=!airClips.has(state);
   // Bring a grounded pelvis down as needed for planted feet while preserving
