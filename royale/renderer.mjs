@@ -16,7 +16,8 @@ import {poseFor} from './style-c-rig.mjs';
 import {v2GeneratedSprites} from './v2-sprites/runtime.mjs';
 import {approvedMotionSprites} from './v2-sprites/approved-motion.mjs';
 import {drawV2PowerPreview} from './v2-sprites/power-preview.mjs';
-import {drawSteelBodyOverlay} from './v2-sprites/steel-body-overlay.mjs';
+import {drawSteelSilhouette} from './v2-sprites/steel-silhouette.mjs';
+import {universalPowerStates,drawUniversalPowerFX} from './v2-sprites/universal-power-fx.mjs';
 import {drawHeroPowerOverlays,heroPowerOverlayStates} from './v2-sprites/hero-power-overlays.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
 export { drawHero } from './hero-art.mjs';
@@ -99,34 +100,32 @@ export class Renderer {
     // This changes artwork selection ONLY; simulation and cloud heroes are
     // intentionally untouched.
     const active=game.powers?.active||{};
-    const wrappingPower=heroPowerOverlayStates(game).length>0;
-    const specialArt=this.v2SpriteTest&&(
-      !!spriteHero.attack?.power ||
-      (spriteHero.castAge??100)<.24 ||
-      (spriteHero.dodgeAge??100)<.30 ||
-      !!(game.legendary?.active && (game.mergeEffects?.length||game.mergeShots?.length))
+    const steelMode=this.v2SpriteTest&&!!spriteHero.steel;
+    const universalFX=this.v2SpriteTest&&universalPowerStates(game,spriteHero).length>0;
+    const wrappingPower=heroPowerOverlayStates(game).length>0||universalFX||steelMode;
+    // No full-character storyboard for abilities. Original user-approved
+    // blue-cape body remains alive under six universal power effects.
+    // Villain Merge retains its separate approved art until its own VFX pass.
+    const specialArt=this.v2SpriteTest&&!!(
+      game.legendary?.active&&(game.mergeEffects?.length||game.mergeShots?.length)
     );
-    // Ground Roots and Whirlwind never display the old full-body posters.
-    // Their reusable VFX are drawn around the original hero, with separate
-    // back and foreground passes that work for EVERY customized appearance.
     const approved=!wrappingPower&&!!specialArt&&approvedMotionSprites.draw(c,pos.x,pos.y,spriteHero,game,1);
+    // Back effects -> existing hero OR anonymous chrome figure -> front effects.
+    // This keeps the power artwork independent of costume, face and hairstyle.
     drawHeroPowerOverlays(c,game,pos,t,'back');
-    // Speed particles belong behind the painted hero; never swap to a static
-    // full-body Speed poster when they are active.
-    const speedTrail=this.v2SpriteTest&&!approved&&Number(game.powers?.speed)>0&&
-      Math.abs(spriteHero.vx||0)>160;
-    if(speedTrail)drawV2PowerPreview(c,game,pos,t);
-    const generated=approved||(this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1));
-    const pose=generated?poseFor(game.look,visualHero,t,'game'):
+    if(this.v2SpriteTest)drawUniversalPowerFX(c,game,pos,t,'back',spriteHero);
+    const generated=!steelMode&&(approved||(this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1)));
+    const pose=generated||steelMode?poseFor(game.look,visualHero,t,'game'):
       drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{
         outfit:game.visualOutfit(),clothing:clothingRuntime.layers(game.cosmetics),
         cloth:this.cloth,dt:game.paused?0:dt
       });
+    if(steelMode)drawSteelSilhouette(c,game,pos,t,spriteHero);
     drawPowerHero(c,game,pos,pose);
     drawHeroPowerOverlays(c,game,pos,t,'front');
-    // Composites the 8-cel metallic shield over the original, moving hero.
-    if(this.v2SpriteTest&&h.steel)drawSteelBodyOverlay(c,game,pos);
-    if(generated&&!approved&&!speedTrail)drawV2PowerPreview(c,game,pos,t); // Preserve painted power overlays.
+    if(this.v2SpriteTest)drawUniversalPowerFX(c,game,pos,t,'front',spriteHero);
+    // Do not re-paint previous full-body Steel or duplicate power previews.
+    // Existing projectile and hit effects are still painted by game systems.
     if(h.attack&&h.attack.power!=='superKick'){const a=h.attack,d=ATTACKS[a.kind];if(a.age>=d.startup&&a.age<d.startup+d.active){c.save();c.translate(h.x,h.y-43);c.scale(a.face,1);c.strokeStyle='#fff7d8c9';c.lineWidth=3;c.beginPath();c.arc(24,-8,a.kind==='kick'?48:35,-.7,.7);c.stroke();c.restore();}}
     for(const p of this.particles){if(p.life<=0)continue;if(!game.paused){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=210*dt;}c.globalAlpha=Math.max(0,p.life/p.max);oval(c,p.x,p.y,p.size,p.size,p.color);}c.globalAlpha=1;
     // Small foreground details give continuous ground a readable silhouette.
