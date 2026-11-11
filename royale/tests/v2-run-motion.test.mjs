@@ -42,13 +42,20 @@ test('only normal, grounded, moving V2 sprite hero gets this run animation',()=>
  for(const id of ['roots','whirlwind','steel','agility','flight','superKick'])
   assert.equal(useV2RunCycle(h,{...g,powers:{...g.powers,active:{[id]:{age:.2}}}},true),false,id+' art unchanged');
 });
-test('renderer chooses V2 run before static speed poster and only while moving',async()=>{
+test('0000000000 restores captured painted body for idle run and jumps',async()=>{
  const renderer=await readFile(new URL('../renderer.mjs',import.meta.url),'utf8');
- assert.ok(renderer.includes('const v2Running=useV2RunCycle(spriteHero,game,this.v2SpriteTest||!v2GeneratedSprites.ready);'));
- assert.ok(renderer.includes('!v2Running&&this.v2SpriteTest&&approvedMotionSprites.draw('));
- assert.ok(renderer.includes('!v2Running&&this.v2SpriteTest&&v2GeneratedSprites.draw('));
- assert.ok(renderer.includes("...(v2Running?{poseName:'v2-run'}:{})"));
- assert.ok(renderer.includes('const pose=generated?poseFor('),'unchanged attack/jump fallback');
+ assert.ok(renderer.includes('const generated=approved||(this.v2SpriteTest&&v2GeneratedSprites.draw('),
+   'captured illustrated atlas must be preferred for the isolated test hero');
+ assert.ok(renderer.includes('!!specialArt&&approvedMotionSprites.draw('),
+   'newer approved special-power art must remain available');
+ assert.ok(renderer.includes('drawHero(c,pos.x,pos.y'),
+   'production character fallback must remain unchanged');
+ assert.ok(!renderer.includes('const v2Running=useV2RunCycle('),
+   'do not replace the captured full-body frames with joint-based run art');
+ assert.ok(!renderer.includes('const v2Walking='),
+   'do not replace the captured painted walk with the segmented V2 walk');
+ assert.ok(!renderer.includes('const unifiedMotion='),
+   'do not bypass the captured atlas during jumps');
 });
 
 test('animated Speed effects travel with time and stay at feet when running left or right',()=>{
@@ -79,10 +86,11 @@ test('animated Speed effects travel with time and stay at feet when running left
  assert.equal(v2PowerEffectFlags({hero:{...h,vx:0},powers:{speed:.6}}).speed,false);
 });
 
-test('Speed visual rendering is restored behind the new eight-frame run only',async()=>{
+test('Speed trail stays behind captured painted hero and never duplicates after painting',async()=>{
  const renderer=await readFile(new URL('../renderer.mjs',import.meta.url),'utf8');
- assert.ok(renderer.includes('if(v2Running)drawV2PowerPreview(c,game,pos,t);'));
- assert.ok(renderer.indexOf('if(v2Running)drawV2PowerPreview(c,game,pos,t);')<
-           renderer.indexOf("...(v2Running?{poseName:'v2-run'}:{})"),
-           'trail paints behind animated body rather than replacing the body');
+ const before=renderer.indexOf('if(speedTrail)drawV2PowerPreview(c,game,pos,t);');
+ const paint=renderer.indexOf('const generated=approved||(this.v2SpriteTest&&v2GeneratedSprites.draw(');
+ assert.ok(before>=0&&paint>before,'Speed streaks must paint behind the restored sprite');
+ assert.ok(renderer.includes('if(generated&&!approved&&!speedTrail)drawV2PowerPreview('),
+   'moving test hero should not draw the Speed trail twice');
 });
