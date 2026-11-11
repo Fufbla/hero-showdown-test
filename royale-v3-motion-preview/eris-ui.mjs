@@ -1,0 +1,222 @@
+import {STYLE_C_VIEWS} from './style-c-defaults.mjs';
+import {itemIcon} from './item-art.mjs';
+import {FLIGHT_SUITS, matchingFlightBonus} from './flight-armor.mjs';
+import {AGILITY_SUITS, matchingAgilityBonus} from './agility-armor.mjs';
+import {SPEED_SUITS, matchingSpeedBonus} from './speed-armor.mjs';
+import {SUPER_KICK_SUITS, matchingSuperKickBonus} from './super-kick-armor.mjs';
+import {WHIRLWIND_SUITS, matchingWhirlwindBonus} from './whirlwind-armor.mjs';
+import {STRENGTH_SUITS, matchingStrengthBonus} from './strength-armor.mjs';
+import {ROOTS_SUITS, matchingRootsBonus} from './roots-armor.mjs';
+import {STEEL_SUITS, matchingSteelBonus} from './steel-armor.mjs';
+import {FIREBALL_SUITS, matchingFireballBonus} from './power-armor.mjs';
+import { COSTUME_SETS, STAT_KEYS, STAT_LABELS, formatStat, resaleValue } from './costume-catalog.mjs';
+import { EQUIPMENT_NAMES, itemDefinition, equipmentBonuses, equipmentOutfit, ownedArmorOutfits, activeArmorShopDefinitions, armorOutfitPrice, equipmentItemActive } from './equipment.mjs';
+import { equipmentStats, powerStats } from './powers.mjs';
+import { drawHero } from './hero-art.mjs';
+import { previewHero } from './hero-rig.mjs';
+import { formatClock } from './progression.mjs';
+const $=id=>document.getElementById(id);
+const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
+const button=(text,fn,cls='secondary')=>{const b=el('button',text,cls);b.type='button';b.onclick=fn;return b;};
+export function drawEquipmentPreview(canvas,g,inventory=g.inventory,view='front'){
+  const c=canvas.getContext('2d');c.clearRect(0,0,360,420);c.fillStyle='#8cca9133';c.beginPath();c.ellipse(180,382,75,11,0,0,Math.PI*2);c.fill();
+  drawHero(c,180,380,g.look,previewHero('idle',0),0,2.85,{view,outfit:equipmentOutfit(inventory,g.outfit)});canvas.setAttribute('aria-label',`${view} full-body costume preview of ${g.look.name}`);
+}
+export function appliedEquipment(g,inventory,level=g.hero.level){const stats=equipmentStats(equipmentBonuses(inventory,level)),speed=g.powers.data.levels.speed?powerStats('speed',g.powers.data.levels.speed,{equipment:{speedLevels:matchingSpeedBonus(inventory,level)}}):{attackBonus:0,runBonus:0};stats.attackSpeed=Math.min(stats.attackSpeed,Math.max(0,.5-speed.attackBonus));stats.moveSpeed=Math.min(stats.moveSpeed,Math.max(0,.6-speed.runBonus));return stats;}
+export function statComparison(before,after){
+  const table=el('table',undefined,'gear-stats'),head=el('tr');for(const t of ['Applied bonus','Equipped','Preview'])head.append(el('th',t));table.append(head);
+  for(const k of STAT_KEYS){const row=el('tr');row.append(el('th',STAT_LABELS[k]),el('td',`+${formatStat(k,before[k]||0)}`),el('td',`+${formatStat(k,after[k]||0)}`));table.append(row);}return table;
+}
+function withPreview(g,defs){
+  const inv=structuredClone(g.inventory);
+  inv.equipped={};
+  for(const [i,d] of defs.entries()){const uid=`preview-${i}`;inv.items.push({uid,catalogId:d.id});inv.equipped[d.part]=uid;}
+  return inv;
+}
+function shopEntries(category){
+  if(category==='flight')return FLIGHT_SUITS;
+  if(category==='agility')return AGILITY_SUITS;
+  if(category==='speed')return SPEED_SUITS;
+  if(category==='superKick')return SUPER_KICK_SUITS;
+  if(category==='whirlwind')return WHIRLWIND_SUITS;
+  if(category==='strength')return STRENGTH_SUITS;
+  if(category==='roots')return ROOTS_SUITS;
+  if(category==='steel')return STEEL_SUITS;
+  if(category==='fireball')return FIREBALL_SUITS;
+  {
+    const regional=Object.values(COSTUME_SETS).map(suit=>{
+      const setId=suit.id+'-ordinary';
+      const price=armorOutfitPrice({setId});
+      return {setId,name:suit.name,level:suit.level,color:suit.color,accent:suit.accent,price};
+    });
+    return regional.concat(FIREBALL_SUITS,STEEL_SUITS,ROOTS_SUITS,STRENGTH_SUITS,WHIRLWIND_SUITS,SUPER_KICK_SUITS,SPEED_SUITS,AGILITY_SUITS,FLIGHT_SUITS);
+  }
+}
+export class ErisMenu{
+  constructor(getGame,{powerMenu,transaction,say,appearance,leave,navigate}){
+    Object.assign(this,{getGame,powerMenu,transaction,say,appearance,leave,navigate});this.panel='powers';this.mode='buy';this.category='sets';this.selected={setId:'shore-ordinary'};this.view='front';this.previewInventory=null;this.confirm=null;
+    for(const b of document.querySelectorAll('[data-eris]'))b.onclick=()=>this.open(b.dataset.eris);
+    $('eris-appearance').onclick=appearance;$('close-tree').onclick=leave;
+    for(const view of STYLE_C_VIEWS)$(`gear-view-${view}`).onclick=()=>{this.view=view;this.draw();};
+    for(const b of document.querySelectorAll('[data-wardrobe]'))b.onclick=()=>{this.mode=b.dataset.wardrobe;this.selected=null;this.wardrobe();};
+    $('shop-category').onchange=()=>{this.category=$('shop-category').value;this.selected=null;this.wardrobe();};
+  }
+  open(panel='powers'){
+    if(panel==='appearance'){this.appearance();return;}
+    if(this.navigate?.()===false)return;
+    this.selectPanel(panel);
+  }
+  selectPanel(panel){
+    if(panel==='home')panel='powers';this.panel=panel;this.confirm=null;
+    for(const n of document.querySelectorAll('[data-eris-panel]'))n.hidden=n.dataset.erisPanel!==panel;
+    for(const b of document.querySelectorAll('[data-eris]'))b.setAttribute('aria-pressed',String(b.dataset.eris===panel));
+    this.update();if(panel==='merge')this.mergeMenu?.tree();if(panel==='powers')this.powerMenu.open();if(panel==='wardrobe')this.wardrobe();if(panel==='roots')this.roots();
+
+  }
+  update(){const g=this.getGame();$('eris-coins').textContent=g.hero.coins.toLocaleString();$('tree-points').textContent=g.powers.data.points;$('eris-capacity').textContent=`${g.inventory.items.length}/20 equipment`;$('eris-clock').textContent=`Adventure clock · ${formatClock(g.clock())}`;const r=g.sanctuary?.returnLocation;$('eris-return').textContent=r?`Return to ${g.getRegion().name} · board ${r.board+1}`:'Your adventure is waiting.';}
+  draw(){const g=this.getGame();drawEquipmentPreview($('gear-preview'),g,this.previewInventory||g.inventory,this.view);for(const v of STYLE_C_VIEWS)$(`gear-view-${v}`).setAttribute('aria-pressed',String(v===this.view));}
+  wardrobe(){
+    const g=this.getGame();this.update();$('shop-confirm').hidden=true;this.confirm=null;
+    $('shop-category-wrap').hidden=this.mode!=='buy';$('wardrobe-note').textContent=this.mode==='buy'?'Choose a complete matching outfit. Power Armor collections each have nine tiers.':this.mode==='sell'?'Resale is 25% of original catalog value, rounded down. Legendary equipment can never be sold.':'Wear a complete matching outfit. Collect its body armor and boots, then equip them together.';
+    for(const b of document.querySelectorAll('[data-wardrobe]'))b.setAttribute('aria-pressed',String(b.dataset.wardrobe===this.mode));
+    const list=$('shop-items');list.replaceChildren();list.closest('.wardrobe-layout').classList.toggle('selling',this.mode==='sell');$('shop-detail').hidden=this.mode==='sell';
+    let entries;
+    if(this.mode==='buy')entries=shopEntries(this.category);
+    else if(this.mode==='owned')entries=ownedArmorOutfits(g.inventory,g.hero.level).map(outfit=>({...outfit.definitions[0],...outfit}));
+    else entries=g.inventory.items.filter(equipmentItemActive).map(i=>({...itemDefinition(i),uid:i.uid,catalogId:i.catalogId,price:resaleValue(itemDefinition(i))}));
+    const key=e=>e.uid||e.catalogId||e.setId;
+    this.selected=entries.find(e=>key(e)===key(this.selected||{}))||entries[0]||null;
+    for(const e of entries){
+      if(this.mode==='sell'){list.append(this.saleCard(e));continue;}
+      const locked=g.hero.level<e.level,card=this.mode==='owned'?el('article',undefined,'shop-item'):button('',()=>{this.selected=e;this.wardrobe();},'shop-item');
+      if(this.mode==='owned'){card.tabIndex=0;card.setAttribute('role','group');card.setAttribute('aria-label',e.name);card.onclick=event=>{if(event.target.closest('button'))return;this.selected=e;this.wardrobe();};card.onkeydown=event=>{if(event.target===card&&(event.key==='Enter'||event.key===' ')){event.preventDefault();this.selected=e;this.wardrobe();}};}card.dataset.catalog=key(e);card.setAttribute('aria-pressed',String(key(e)===key(this.selected||{})));
+      const icon=itemIcon(e);
+      const text=el('span');text.append(el('b',e.name),el('small',`${locked?'LOCKED · ':''}LEVEL ${e.level||1} · ${(e.rarity||'ordinary').toUpperCase()}${e.legacy?' · LEGACY':''}`),el('small',this.mode==='owned'?(e.equipped?'Equipped':e.ok?'Complete outfit':e.error||'Collect the matching outfit'):`${e.price===null?'Not sellable':e.price+' coins'} · Complete outfit`));card.append(icon,text);
+      if(this.mode==='owned'&&e.uid){
+        const equipped=Object.values(g.inventory.equipped).includes(e.uid);
+        const equip=button(equipped?'✓':'+',async event=>{
+          event?.stopPropagation?.();
+          if(equipped)return;
+          const result=await this.transaction(()=>g.equipItem(e.uid));
+          if(result.ok){this.selected=e;this.wardrobe();}
+          else if(result.error)this.say(result.error);
+        },'wardrobe-quick-equip');
+        equip.type='button';equip.setAttribute('aria-label',equipped?`${e.name} equipped`:`Equip matching ${e.name} outfit`);
+        equip.title=equipped?'Equipped':e.ok?`Equip ${e.name}`:e.error;
+        equip.disabled=equipped||locked||!e.ok;
+        card.append(equip);
+      }
+      list.append(card);
+    }
+    if(!entries.length)list.append(el('p','Your starter suit is always available. Buy or earn equipment to fill your wardrobe.','empty-equipment'));
+    if(this.mode!=='sell')this.detail();
+  }
+  saleCard(e){
+    const g=this.getGame(),card=el('article',undefined,'sale-card'),header=el('div',undefined,'sale-card-heading');card.dataset.catalog=e.uid;
+    const text=el('div');text.append(el('h4',e.name),el('small',`${(e.rarity||'ordinary').toUpperCase()} · Level ${e.level||1} · ${EQUIPMENT_NAMES[e.part]||e.part}`));header.append(itemIcon(e),text);card.append(header);
+    const stats=el('ul',undefined,'sale-stats');for(const k of STAT_KEYS)if(e.stats?.[k])stats.append(el('li',`${STAT_LABELS[k]}: +${formatStat(k,e.stats[k])}`));
+    for(const [id,name] of Object.entries({fireball:'Fireball',strength:'Super Strength',superKick:'Super Kick',roots:'Ground Roots',whirlwind:'Whirlwind',steel:'Steel Body',speed:'Speed',agility:'Agility',flight:'Flight'}))if(e[id+'Levels'])stats.append(el('li',`Matching set: +${e[id+'Levels']} effective ${name} levels`));
+    if(!stats.children.length)stats.append(el('li','No direct stat bonuses'));card.append(stats);
+    const footer=el('div',undefined,'sale-card-footer'),worn=Object.values(g.inventory.equipped).includes(e.uid),q=g.salePreview(e.uid);footer.append(el('span',e.price===null?'No resale':`${e.price} coins`));
+    if(worn)footer.append(el('strong','Equipped','sale-equipped'));else if(e.price===null)footer.append(el('strong','Not sellable','sale-equipped'));else {const sell=button('Sell',()=>this.reviewSale(e.uid),'primary');sell.dataset.sell=e.uid;sell.setAttribute('aria-label',`Sell ${e.name} for ${e.price} coins`);sell.disabled=!q.ok;if(!q.ok)sell.title=q.error;footer.append(sell);}
+    card.append(footer);return card;
+  }
+  reviewSale(uid){
+    const g=this.getGame(),q=g.salePreview(uid);if(!q.ok){this.say(q.error);return;}if(this.saleDialog?.open)return;
+    const origin=document.activeElement,d=el('dialog',undefined,'sale-dialog'),title=el('h3','Sell equipment?');title.id='sale-title';d.setAttribute('aria-labelledby',title.id);d.append(title,el('p',`Are you sure you want to sell ${q.def.name} for ${q.value} coins?`));
+    const status=el('p',undefined,'sale-status');status.setAttribute('role','status');let busy=false;
+    const yes=button('Yes, Sell',async()=>{if(busy)return;busy=true;yes.disabled=true;const r=await this.transaction(()=>g.sellItem(uid,{confirmed:true,revision:q.revision}));if(r.ok){d.close();this.selected=null;this.wardrobe();this.say('Equipment sold. Coins credited once.');}else{status.textContent=r.error;busy=false;yes.disabled=false;}},'primary');yes.id='confirm-sale';
+    const no=button('Cancel',()=>{if(!busy)d.close();});no.id='cancel-sale';const actions=el('div',undefined,'sale-dialog-actions');actions.append(no,yes);d.append(status,actions);
+    // Keep Escape/Tab and remapped gameplay keys inside this modal. The outer
+    // game's Escape handler otherwise leaves the Tree before native cancel runs.
+    d.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();if(!busy)d.close();}});
+    d.addEventListener('cancel',e=>{if(busy)e.preventDefault();});d.addEventListener('close',()=>{d.remove();this.saleDialog=null;const next=origin?.isConnected&&!origin.disabled?origin:$('shop-items').querySelector('[data-sell]:not(:disabled)')||document.querySelector('[data-wardrobe="sell"]');next?.focus();});document.body.append(d);this.saleDialog=d;d.showModal();no.focus();
+  }
+  detail(){
+    const g=this.getGame(),e=this.selected,p=$('shop-detail');p.replaceChildren();this.previewInventory=g.inventory;
+    const applied=appliedEquipment(g,g.inventory);$('equipped-bonuses').textContent='Applied equipment · '+(STAT_KEYS.filter(k=>applied[k]).map(k=>`${STAT_LABELS[k]} +${formatStat(k,applied[k])}`).join(' · ')||'No stat bonuses')+` · Natural strength ${10+2*(g.hero.level-1)} · Total running +${formatStat('moveSpeed',g.powers.speed)} · Total attack speed +${formatStat('attackSpeed',g.powers.attackRate-1)}`;
+    const appliedDetails=el('details',undefined,'applied-details');appliedDetails.append(el('summary','Current applied bonuses'),el('p',$('equipped-bonuses').textContent));p.append(appliedDetails);
+    if(!e){this.draw();return;}
+    const defs=e.definitions||activeArmorShopDefinitions(e);
+    if(!defs.length){p.append(el('p','This outfit is unavailable.'));this.draw();return;}
+    this.previewInventory=withPreview(g,defs);this.draw();
+    p.append(el('div',`${this.mode==='buy'?'TRY IT ON':'YOUR EQUIPMENT'} · ${defs.length===2?'MATCHING OUTFIT':'OUTFIT INCOMPLETE'}`,'eyebrow'),el('h3',e.name||defs[0].setName));
+    if(this.mode==='owned'&&!e.ok)p.append(el('p',e.error||'Collect the matching body armor and boots to wear this outfit.','shop-warning'));
+    p.append(el('p',`Level ${defs[0].level||1} · ${defs[0].rarity} · Fixed colors${defs[0].rarity==='rare'?' · Constant white glow':''}.`));
+    p.append(statComparison(appliedEquipment(g,g.inventory),appliedEquipment(g,this.previewInventory,99)));
+    if(defs[0].flightLevels){
+      const learned=g.powers.data.levels.flight, bonus=matchingFlightBonus(this.previewInventory,99);
+      const stats=powerStats('flight',learned,{equipment:{flightLevels:bonus}});
+      p.append(el('p',`Matching chest armor and boots grant +${defs[0].flightLevels} effective Flight levels.`,'set-note'));
+      p.append(el('p',learned?`Level ${stats.level} · ${stats.duration} seconds of Flight · 30 seconds recovery. Launch from the ground. Fireball is the only airborne attack.`:'Learn Flight to use its armor bonus.'));
+    }else if(defs[0].agilityLevels){
+      const learned=g.powers.data.levels.agility, bonus=matchingAgilityBonus(this.previewInventory,99);
+      const stats=powerStats('agility',learned,{equipment:{agilityLevels:bonus}});
+      p.append(el('p',`Matching chest armor and boots grant +${defs[0].agilityLevels} effective Agility levels.`,'set-note'));
+      p.append(el('p',learned?`Level ${stats.level} · ${stats.duration.toFixed(1)} seconds active · 75% dodge, 50% against Legendary bosses · 10 seconds recovery.`:'Learn Agility to use its armor bonus.'));
+    }else if(defs[0].speedLevels){
+      const learned=g.powers.data.levels.speed, bonus=matchingSpeedBonus(this.previewInventory,99);
+      const stats=powerStats('speed',learned,{equipment:{speedLevels:bonus}});
+      p.append(el('p',`Equip the matching outfit for +${defs[0].speedLevels} effective Speed levels. Speed is passive.`,'set-note'));
+      p.append(el('p',learned?`Speed preview · learned ${learned} + armor ${bonus} = level ${stats.level} · running ${formatStat('moveSpeed',stats.runBonus)} · attack speed ${formatStat('attackSpeed',stats.attackBonus)}. Total caps are +60% and +50%.`:'Learn Speed to use its armor bonus.'));
+    }else if(defs[0].superKickLevels){
+      const learned=g.powers.data.levels.superKick, bonus=matchingSuperKickBonus(this.previewInventory,99);
+      const stats=powerStats('superKick',learned,{heroLevel:g.hero.level,equipment:{...appliedEquipment(g,this.previewInventory,99),superKickLevels:bonus}});
+      p.append(el('p',`Equip matching chest armor and boots for +${defs[0].superKickLevels} effective Super Kick levels.`,'set-note'));
+      p.append(el('p',learned?`Super Kick preview · learned ${learned} + armor ${bonus} = level ${stats.level} · ${stats.kicks} kicks · ${formatStat('damage',stats.damage)} damage per kick.`:'Learn Super Kick to use its armor bonus.'));
+    }else if(defs[0].whirlwindLevels){
+      const learned=g.powers.data.levels.whirlwind, bonus=matchingWhirlwindBonus(this.previewInventory,99);
+      const stats=powerStats('whirlwind',learned,{heroLevel:g.hero.level,equipment:{...appliedEquipment(g,this.previewInventory,99),whirlwindLevels:bonus}});
+      p.append(el('p',`Equip matching chest armor and boots for +${defs[0].whirlwindLevels} effective Whirlwind levels.`,'set-note'));
+      p.append(el('p',learned?`Whirlwind preview · learned ${learned} + armor ${bonus} = level ${stats.level} · ${formatStat('damage',stats.damage)} damage per second for ${stats.duration} s · up to ${stats.targets} targets.`:'Learn Whirlwind to use its armor bonus.'));
+    }else if(defs[0].strengthLevels){
+      const learned=g.powers.data.levels.strength, bonus=matchingStrengthBonus(this.previewInventory,99);
+      const stats=powerStats('strength',learned,{heroLevel:g.hero.level,equipment:{...appliedEquipment(g,this.previewInventory,99),strengthLevels:bonus}});
+      p.append(el('p',`Equip matching chest armor and boots for +${defs[0].strengthLevels} effective Super Strength levels. The chest includes the matching gauntlets.`,'set-note'));
+      p.append(el('p',learned?`Super Strength preview · learned ${learned} + armor ${bonus} = level ${stats.level} · ${formatStat('damage',stats.damage)} punch damage · up to ${stats.targets} targets.`:'Learn Super Strength to use its armor bonus.'));
+    }else if(defs[0].rootsLevels){
+      const learned=g.powers.data.levels.roots, bonus=matchingRootsBonus(this.previewInventory,99);
+      const stats=powerStats('roots',learned,{heroLevel:g.hero.level,equipment:{...appliedEquipment(g,this.previewInventory,99),rootsLevels:bonus}});
+      p.append(el('p',`Equip matching chest armor and boots for +${defs[0].rootsLevels} effective Ground Roots levels.`,'set-note'));
+      p.append(el('p',learned?`Ground Roots preview · learned ${learned} + armor ${bonus} = level ${stats.level} · ${formatStat('damage',stats.damage)} damage per one-second squeeze for ${stats.duration} s.`:'Learn Ground Roots to use its armor bonus.'));
+    }else if(defs[0].steelLevels){
+      const learned=g.powers.data.levels.steel, bonus=matchingSteelBonus(this.previewInventory,99);
+      const stats=powerStats('steel',learned,{equipment:{steelLevels:bonus}});
+      p.append(el('p',`Equip the matching outfit for +${defs[0].steelLevels} effective Steel Body levels.`,'set-note'));
+      p.append(el('p',learned?`Steel Body preview · learned ${learned} + armor ${bonus} = level ${stats.level} · ${Number((stats.reduction*100).toFixed(2))}% reduction for ${Number(stats.duration.toFixed(2))} s.`:'Learn Steel Body to use its armor bonus.'));
+    }else if(defs[0].fireballLevels){
+      const level=g.powers.data.levels.fireball, bonus=matchingFireballBonus(this.previewInventory,99);
+      p.append(el('p',`Matching chest armor and boots grant +${defs[0].fireballLevels} effective Fireball levels. The complete outfit also adds 4 Fireball damage.`,'set-note'));
+      p.append(el('p',level?`Fireball preview · learned ${level} + armor ${bonus} = level ${level+bonus}`:'Learn Fireball to use its armor bonus.'));
+    }else p.append(el('p','The complete matching outfit applies its full stat totals. Running +60% and attack speed +50% caps include powers.','set-note'));
+    if(this.mode==='buy'){
+      const cost=armorOutfitPrice(defs),b=button(`Review purchase · ${cost} coins`,()=>this.reviewBuy(e),'primary');b.id='review-purchase';b.disabled=g.hero.level<defs[0].level||g.hero.coins<cost;p.append(b);
+      if(g.hero.level<defs[0].level)p.append(el('p',`Unlocks at hero level ${defs[0].level}. You can inspect and preview it now.`,'shop-warning'));else if(g.hero.coins<cost)p.append(el('p',`You need ${cost-g.hero.coins} more coins.`,'shop-warning'));
+    }else if(this.mode==='sell'){
+      const q=g.salePreview(e.uid),b=button(q.ok?`Review sale · ${q.value} coins`:'Cannot sell',()=>this.reviewAction('sell',e.uid),'primary');b.id='review-sale';b.disabled=!q.ok;p.append(b);
+    }else{
+      const equipped=e.equipped,b=button(equipped?'Remove outfit':'Wear matching outfit',async()=>{const r=await this.transaction(()=>g.equipItem(e.uid));if(r.ok)this.wardrobe();else if(r.error)this.say(r.error);},'primary');b.id='equip-piece';b.disabled=!e.ok;p.append(b);
+    }
+  }
+  reviewBuy(selection){
+    const g=this.getGame(),s=$('shop-confirm');s.replaceChildren();s.hidden=false;const defs=activeArmorShopDefinitions(selection),needed=Math.max(0,g.inventory.items.length+defs.length-20),chosen=new Set(),revision=g.economy.revision;
+    s.append(el('h3','Confirm outfit purchase'),el('p',`${defs.map(d=>d.name).join(' + ')} · ${armorOutfitPrice(defs)} coins. ${needed?`Choose ${needed} owned items to permanently discard below.`:'The matching outfit fits in your inventory.'}`));
+    if(needed)for(const item of g.inventory.items){const def=itemDefinition(item),label=el('label',undefined,'discard-choice'),check=el('input');check.type='checkbox';check.value=item.uid;check.onchange=()=>{check.checked?chosen.add(item.uid):chosen.delete(item.uid);update();};label.append(check,el('span',`${def.name}${def.rarity==='rare'?' · RARE — cannot recover':''}${def.rarity==='legendary'?' · LEGENDARY — permanently lost, cannot earn again':''} · ${Object.entries(def.stats).filter(([,v])=>v).map(([k,v])=>`${STAT_LABELS[k]} +${formatStat(k,v)}`).join(', ')}`));s.append(label);}
+    const status=el('p'),yes=button('Confirm purchase',async()=>{const r=await this.transaction(()=>g.buyCostume(selection,{discardUids:[...chosen],confirmed:true,revision}));if(r.ok){this.say('Outfit purchased. Open Owned to wear the matching set.');this.wardrobe();}else status.textContent=r.error;},'primary'),no=button('Cancel purchase',async()=>{s.hidden=true;},'secondary');yes.id='confirm-purchase';no.id='cancel-purchase';s.append(status,yes,no);
+    const update=()=>{const q=g.costumePreview(selection,[...chosen]);yes.disabled=!q.ok;status.textContent=q.ok?`After purchase: ${g.hero.coins-q.cost} coins · ${g.inventory.items.length-chosen.size+defs.length}/20 equipment.${needed?' Selected items are permanently discarded.':''}`:q.error;};update();s.scrollIntoView({block:'nearest'});no.focus();
+  }
+  reviewAction(kind,uid){
+    const g=this.getGame(),item=g.inventory.items.find(i=>i.uid===uid),def=itemDefinition(item),revision=g.economy.revision,s=$('shop-confirm');s.replaceChildren();s.hidden=false;
+    s.append(el('h3',kind==='sell'?'Sell this equipment?':'Permanently discard this equipment?'),el('p',`${def.name} · ${kind==='sell'?`${resaleValue(def)} coins, 25% of catalog value rounded down.`:'Cannot be recovered.'}${def.rarity==='rare'?' This is RARE equipment.':''}${def.rarity==='legendary'?' LEGENDARY: permanent loss; cannot be earned again.':''}`));
+    const status=el('p'),yes=button(kind==='sell'?'Confirm sale':'Confirm discard',async()=>{const r=await this.transaction(()=>kind==='sell'?g.sellItem(uid,{confirmed:true,revision}):revision===g.economy.revision&&g.discardItem(uid,true));if(r.ok){this.selected=null;this.wardrobe();this.say(kind==='sell'?'Equipment sold. Coins credited once.':'Equipment permanently discarded.');}else status.textContent=r.error;},'primary danger'),no=button('Keep equipment',async()=>{s.hidden=true;});yes.id=kind==='sell'?'confirm-sale':'confirm-shop-discard';no.id='cancel-shop-action';s.append(status,yes,no);s.scrollIntoView({block:'nearest'});no.focus();
+  }
+  roots(){
+    const g=this.getGame(),s=$('root-shop');s.replaceChildren();s.append(itemIcon({part:'root',name:'Health Root'}));s.append(el('div','RESTOCK FOR THE ROAD','eyebrow'),el('h3','Health Roots'),el('p',`${g.healthRoots}/10 carried · ${10-g.healthRoots} spaces available. Each restores 25% maximum HP, with no cooldown. Separate from equipment.`));
+    const label=el('label','Quantity','field'),quantity=el('input');quantity.id='root-quantity';quantity.type='number';quantity.min=1;quantity.max=Math.max(1,10-g.healthRoots);quantity.value=1;quantity.inputMode='numeric';label.append(quantity);s.append(label);
+    const price=el('p'),review=button('Review Health Root purchase',()=>{const count=Number(quantity.value),q=g.rootPreview(count);if(!q.ok)return;confirm.hidden=false;note.textContent=`Buy ${count} Health Roots for ${q.cost} coins? You will carry ${g.healthRoots+count}/10.`;pending=q;},'primary');review.id='buy-root';
+    const confirm=el('div',undefined,'upgrade-confirm');confirm.hidden=true;const note=el('p');let pending=null;
+    const yes=button('Confirm Health Roots',async()=>{if(!pending||pending.revision!==g.economy.revision)return;const q=pending;pending=null;const r=await this.transaction(()=>g.buyHealthRoot(q.count));if(r.ok){this.roots();this.update();this.say(`${q.count} Health Roots purchased.`);}},'primary');yes.id='confirm-roots';confirm.append(note,yes,button('Cancel',async()=>{pending=null;confirm.hidden=true;}));
+    const update=()=>{pending=null;confirm.hidden=true;const q=g.rootPreview(Number(quantity.value));review.disabled=!q.ok;price.textContent=q.ok?`${q.cost} coins · balance after purchase ${g.hero.coins-q.cost}`:q.error;};quantity.oninput=update;update();s.append(price,review,confirm);
+    const heal=button('Use one Health Root now',async()=>{const r=await this.transaction(()=>g.useHealthRoot());if(r.ok){this.roots();this.update();}},'secondary');heal.id='eris-heal';heal.disabled=!g.healthRoots||g.hero.hp>=g.hero.maxHp;s.append(heal);
+  }
+}

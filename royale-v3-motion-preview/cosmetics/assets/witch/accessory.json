@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/witch/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        31,
+        1659,
+        162,
+        61
+      ],
+      "pivot": [
+        81.0,
+        30.5
+      ],
+      "attach": "waist",
+      "scale": 0.11475409836065574,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        261,
+        1657,
+        127,
+        65
+      ],
+      "pivot": [
+        63.5,
+        32.5
+      ],
+      "attach": "waist",
+      "scale": 0.10769230769230768,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        469,
+        1660,
+        167,
+        54
+      ],
+      "pivot": [
+        83.5,
+        27.0
+      ],
+      "attach": "waist",
+      "scale": 0.12962962962962962,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        717,
+        1655,
+        133,
+        66
+      ],
+      "pivot": [
+        66.5,
+        33.0
+      ],
+      "attach": "waist",
+      "scale": 0.10606060606060605,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

@@ -1,0 +1,77 @@
+✔ Gamepad API focus excludes hidden/disabled controls, scrolls, and ignores drift (1.997814ms)
+✔ confirm is one edge per press and a held button never confirms the next screen (0.868645ms)
+✔ directional repeats have an initial delay and reconnect is safe (0.633759ms)
+✔ shoulders activate the next and previous visible tab (0.438714ms)
+✔ Confirm enters slider adjustment and left/right uses existing input/change handlers (1.852384ms)
+✔ reconnecting with confirm held requires release before activation (0.333044ms)
+✔ B cancels appearance rather than selecting the Back viewing direction (0.295717ms)
+✔ every nested pause screen routes B/Circle/Escape to Pause Menu (1.123722ms)
+✔ main Pause resumes, subpanel goes home, and gameplay pauses (0.180163ms)
+✔ new hero creation, modal and reward screens do not become resume shortcuts (0.205381ms)
+✔ entering and exiting Tree of Eris retains exact position and progression (6.413069ms)
+✔ save, account and live entry points remain byte-identical to the release baseline (19.521283ms)
+Production autosave slot 1: 8006 ms; complete appearance, XP, powers, equipment, location and health preserved.
+Production autosave slot 2: 8007 ms; complete appearance, XP, powers, equipment, location and health preserved.
+✔ unchanged production autosave emits both visible slots every eight seconds with exact hero snapshots (16033.831572ms)
+✔ all nine assets have four independent authored rectangles and real transparency (197.780775ms)
+✔ changing colors retains alpha, while gold cuffs retain their material (1030.280363ms)
+Nine-hair animation/direction/equipment frames: 1080
+✔ all nine styles stay on the same head anchors through twelve animations and every direction (6099.367969ms)
+✔ tail motion pins scalp pixels and warmed rendering allocates no per-frame hair canvases (798.241487ms)
+✔ all nine saved hairstyles survive both visible slots and reload without modifying hidden slot (872.168503ms)
+✔ original default faces are pixel-identical, including native hair, ears, eyes and shading (86.446093ms)
+Pixel-identical original-art frames: 2184
+✔ all unchanged hairstyles and movement poses retain the original face and body pixels (6994.848465ms)
+✔ skin correction changes color without changing the head silhouette or original eye placement (209.792361ms)
+✔ erased eyebrows become selected skin instead of retaining orange default-color ghosts (366.17097ms)
+✔ facial selections update immediately and returning to the original selection restores identical pixels (489.363609ms)
+✔ profile forehead follows skin color and cannot inherit costume trim (24.121834ms)
+✔ explicit right direction selects the existing profile for every hairstyle (1168.265363ms)
+✔ existing saved appearance records and both visible slots are unchanged by rendering; third record remains untouched (97.769053ms)
+✔ approved assets, body/cape art, appearance schema, login, saves, combat and other modes remain untouched (36.883503ms)
+Short-hair animation/equipment frames: 240
+✔ short cut changes all authored directions while retaining distinct profiles and back (56.916654ms)
+✔ far temple touches the original face instead of hanging outside the skull (33.322646ms)
+✔ the illustrated forehead opening has a curve and a shallow central dip (1.128999ms)
+✔ head anchors, bodies, equipment and appearance records remain unchanged through animation (1315.329552ms)
+✔ warm animated hair frames reuse their tint cache, and changing hair color preserves the alpha (24.425026ms)
+✔ smooth level disadvantage, no immunity, and early health/defense retained (1.174618ms)
+✔ all damage paths share defenses, including bosses and Legendary barriers (23.098828ms)
+✔ late regular fight times with legal max powers: 90 challenging, 99 manageable (330.571528ms)
+✔ early encounters retain their existing ideal-contact timing (1.338636ms)
+✔ equipment remains additive and all earned power upgrades stay intact (3.018059ms)
+✔ melee hits once per target; a max Fireball burst is three shots, not repeated frame damage (8.513107ms)
+✔ Fireball piercing and crowd attacks retain their distinct target limits (1.009849ms)
+✔ a high-level monster can attack and quickly defeat an underlevel hero (2.281143ms)
+✔ separate attackers still hurt; the same attack event cannot be applied twice (0.559978ms)
+✔ bosses and Legendary bosses stay longer than regular encounters (240.522351ms)
+✔ Level 90 active combat permits repeated enemy attacks and rewards healing (55.618018ms)
+✔ representative levels exercise each basic attack and offensive power separately (234.105711ms)
+✔ boss phase thresholds still transition at half and one-fifth health (0.838239ms)
+✔ existing wounded monster HP and all hero progress survive saves unchanged (18.177277ms)
+✔ Tree of Eris and all seven regions preserve progress and open access (4.544419ms)
+10,000 defeat distribution: {"equipment":196,"root":416,"nothing":9388}
+✔ 10,000 actual regular defeats: independent, exclusive 2/4/94 distribution (21.125211ms)
+✔ exact probability boundaries; no pity drops or item allocation on misses (4.10875ms)
+✔ Roots and equipment expire at exactly 20 seconds; no stale pickup or effects (2.310348ms)
+✔ collected/equipped items and roots survive expiration without timer callbacks (1.147878ms)
+✔ expiry continues through pause, travel and saving; deadlines never reset on reload (1.822129ms)
+✔ unopened boss chests and pending rewards never despawn, and chest rolls persist (4.503778ms)
+✔ all 20 equipment spaces remain distinct; 21st drop leaves inventory intact (2.188413ms)
+✔ Health Root carrying limit and shop restocking are exactly 10 (1.288982ms)
+✔ shop purchases and pending chest acceptance use all 20 equipment spaces (1.354901ms)
+✔ Legendary progression rewards remain permanent and fit slots 18–20 (1.745623ms)
+✔ all existing helmet tiers roll within bounds and below every next-level minimum (19.286467ms)
+✔ equipment selection retains existing region, level, rarity and parts (0.460257ms)
+✔ old helmets retain exact catalog stats; new rolls survive equip, save, load, and sale review (3.977671ms)
+✔ invalid stat payloads fail closed; no legacy reroll, duplicate identity, or new stat type (0.502491ms)
+✔ both visible slots round-trip independently; stored third slot remains untouched (9.450888ms)
+✔ painted capes pin shoulders, react to speed/takeoff/double jump/fall, settle and remain bounded (1.184624ms)
+ℹ tests 63
+ℹ suites 0
+ℹ pass 63
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16273.802796

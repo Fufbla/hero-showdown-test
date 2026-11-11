@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/toy-soldier/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        34,
+        1397,
+        159,
+        153
+      ],
+      "pivot": [
+        79.5,
+        137.70000000000002
+      ],
+      "attach": "head",
+      "scale": 0.24528301886792453,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        244,
+        1397,
+        170,
+        146
+      ],
+      "pivot": [
+        85.0,
+        131.4
+      ],
+      "attach": "head",
+      "scale": 0.22941176470588234,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        475,
+        1397,
+        158,
+        151
+      ],
+      "pivot": [
+        79.0,
+        135.9
+      ],
+      "attach": "head",
+      "scale": 0.2468354430379747,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        685,
+        1398,
+        171,
+        145
+      ],
+      "pivot": [
+        85.5,
+        130.5
+      ],
+      "attach": "head",
+      "scale": 0.22807017543859648,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

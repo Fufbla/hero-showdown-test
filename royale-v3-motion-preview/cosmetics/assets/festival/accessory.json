@@ -1,0 +1,148 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/festival/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "handFar",
+      "rect": [
+        36,
+        1634,
+        75,
+        64
+      ],
+      "pivot": [
+        37.5,
+        19.2
+      ],
+      "attach": "wristFar",
+      "scale": 0.12,
+      "pass": "farArm"
+    },
+    {
+      "view": "front",
+      "part": "handNear",
+      "rect": [
+        111,
+        1634,
+        75,
+        64
+      ],
+      "pivot": [
+        37.5,
+        19.2
+      ],
+      "attach": "wristNear",
+      "scale": 0.12,
+      "pass": "nearArm"
+    },
+    {
+      "view": "right",
+      "part": "handFar",
+      "rect": [
+        258,
+        1634,
+        75,
+        63
+      ],
+      "pivot": [
+        37.5,
+        18.9
+      ],
+      "attach": "wristFar",
+      "scale": 0.12,
+      "pass": "farArm"
+    },
+    {
+      "view": "right",
+      "part": "handNear",
+      "rect": [
+        333,
+        1634,
+        75,
+        63
+      ],
+      "pivot": [
+        37.5,
+        18.9
+      ],
+      "attach": "wristNear",
+      "scale": 0.12,
+      "pass": "nearArm"
+    },
+    {
+      "view": "back",
+      "part": "handFar",
+      "rect": [
+        479,
+        1634,
+        75,
+        64
+      ],
+      "pivot": [
+        37.5,
+        19.2
+      ],
+      "attach": "wristFar",
+      "scale": 0.12,
+      "pass": "farArm"
+    },
+    {
+      "view": "back",
+      "part": "handNear",
+      "rect": [
+        554,
+        1634,
+        75,
+        64
+      ],
+      "pivot": [
+        37.5,
+        19.2
+      ],
+      "attach": "wristNear",
+      "scale": 0.12,
+      "pass": "nearArm"
+    },
+    {
+      "view": "left",
+      "part": "handFar",
+      "rect": [
+        701,
+        1634,
+        76,
+        64
+      ],
+      "pivot": [
+        38.0,
+        19.2
+      ],
+      "attach": "wristFar",
+      "scale": 0.11842105263157894,
+      "pass": "farArm"
+    },
+    {
+      "view": "left",
+      "part": "handNear",
+      "rect": [
+        777,
+        1634,
+        75,
+        64
+      ],
+      "pivot": [
+        37.5,
+        19.2
+      ],
+      "attach": "wristNear",
+      "scale": 0.12,
+      "pass": "nearArm"
+    }
+  ],
+  "covers": []
+}

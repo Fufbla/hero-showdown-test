@@ -1,0 +1,87 @@
+{
+  "coordinates": "Original 1536 \u00d7 864 approved source. Registration is at twice original pixel density. Each feature atlas has a 3 \u00d7 3 tile grid.",
+  "reference": {
+    "path": "../reference.jpeg",
+    "sha256": "e05d98f5b2b8d01e0bb50cc6feda77eb6556b401e7d6fa98dd828a13200f950b"
+  },
+  "originalArt": "Visible faces and native hairstyle layers use the reference. Generated bald head underlays extend hidden crown and ear regions. Short beard and stubble accessories were illustrated separately on transparency. Alternate lip shapes use the existing component sheet.",
+  "tiles": [
+    "registered bald head",
+    "neutral complexion for feature replacement",
+    "skin, iris and brow material channels",
+    "exposed-skin, feature and earring coverage",
+    "near and far eye masks",
+    "near and far brow masks",
+    "nose and mouth masks",
+    "isolated native hair",
+    "reference facial feature pixels"
+  ],
+  "anchors": {
+    "male": [
+      646,
+      386
+    ],
+    "female": [
+      948,
+      395
+    ]
+  },
+  "assets": [
+    {
+      "file": "beard.png",
+      "dimensions": [
+        320,
+        187
+      ],
+      "sha256": "42f21140d2229c6ed0fa408bb7dd4c13d8282e1fad6eeffa22a652ebdc1131b1"
+    },
+    {
+      "file": "eyebrows.png",
+      "dimensions": [
+        200,
+        192
+      ],
+      "sha256": "857a7caa3e7c3a9724c5b5599d638091ac2be51fed9d11daccd38b32704bc3ca"
+    },
+    {
+      "file": "female.png",
+      "dimensions": [
+        1494,
+        1416
+      ],
+      "sha256": "0cdb091ef859c598e5799d3bdc3dcc86cc361729321dc46665c4e0883a2dd5c1"
+    },
+    {
+      "file": "male.png",
+      "dimensions": [
+        1272,
+        1164
+      ],
+      "sha256": "fb132ade06fad6ec903ddc59f09b629e1e51092687d439abdff7447700051ae8"
+    },
+    {
+      "file": "mouth-full.png",
+      "dimensions": [
+        160,
+        66
+      ],
+      "sha256": "734990ad19b50f1beb995ad9928a7b8eb14b45dd941369283cacd1e92a903db7"
+    },
+    {
+      "file": "mouth-smile.png",
+      "dimensions": [
+        160,
+        50
+      ],
+      "sha256": "d9ca6ffa39831337c95c6d0e32da46d235540dfe23136b1f5dd57d81f1546079"
+    },
+    {
+      "file": "stubble.png",
+      "dimensions": [
+        320,
+        173
+      ],
+      "sha256": "54e22d8961188466574efebb70eb1195eb01883d857ff21e0ce2eaddf6a1672b"
+    }
+  ]
+}

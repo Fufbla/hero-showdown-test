@@ -1,0 +1,108 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/ninja-warrior/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        31,
+        1622,
+        161,
+        114
+      ],
+      "pivot": [
+        80.5,
+        57
+      ],
+      "attach": "head",
+      "scale": 0.13664596273291926,
+      "offset": [
+        0,
+        12
+      ],
+      "pass": "accessory",
+      "fit": {
+        "width": 0.98
+      }
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        260,
+        1622,
+        131,
+        114
+      ],
+      "pivot": [
+        65.5,
+        57
+      ],
+      "attach": "head",
+      "scale": 0.16793893129770993,
+      "offset": [
+        4,
+        12
+      ],
+      "pass": "accessory",
+      "fit": {
+        "width": 0.98
+      }
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        475,
+        1616,
+        158,
+        120
+      ],
+      "pivot": [
+        79,
+        60
+      ],
+      "attach": "head",
+      "scale": 0.13924050632911392,
+      "offset": [
+        0,
+        12
+      ],
+      "pass": "behindHead",
+      "fit": {
+        "width": 0.98
+      }
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        716,
+        1622,
+        129,
+        114
+      ],
+      "pivot": [
+        64.5,
+        57
+      ],
+      "attach": "head",
+      "scale": 0.17054263565891473,
+      "offset": [
+        -4,
+        12
+      ],
+      "pass": "accessory",
+      "fit": {
+        "width": 0.98
+      }
+    }
+  ],
+  "covers": []
+}

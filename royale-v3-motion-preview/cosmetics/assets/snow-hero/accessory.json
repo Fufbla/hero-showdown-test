@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/snow-hero/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        19,
+        1621,
+        194,
+        95
+      ],
+      "pivot": [
+        97.0,
+        47.5
+      ],
+      "attach": "head",
+      "scale": 0.15979381443298968,
+      "offset": [
+        0,
+        -17
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        244,
+        1618,
+        169,
+        98
+      ],
+      "pivot": [
+        84.5,
+        49.0
+      ],
+      "attach": "head",
+      "scale": 0.1834319526627219,
+      "offset": [
+        4,
+        -17
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        462,
+        1618,
+        185,
+        98
+      ],
+      "pivot": [
+        92.5,
+        49.0
+      ],
+      "attach": "head",
+      "scale": 0.16756756756756758,
+      "offset": [
+        0,
+        -17
+      ],
+      "pass": "behindHead"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        696,
+        1618,
+        170,
+        97
+      ],
+      "pivot": [
+        85.0,
+        48.5
+      ],
+      "attach": "head",
+      "scale": 0.18235294117647058,
+      "offset": [
+        -4,
+        -17
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

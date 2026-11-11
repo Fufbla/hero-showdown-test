@@ -1,0 +1,15 @@
+{
+  "tool": "built-in image_gen",
+  "transparent_background": true,
+  "source": "reference.jpeg",
+  "attempts": [
+    {
+      "output": "extraction-draft.png",
+      "prompt": "Use case: background-extraction. Asset: exact character cutouts for a game. Edit target: the supplied 1536 x 864 image. Remove EVERYTHING except the two central full-body superheroes, male on left and female on right. Delete all scenery, HUD, text, logo, ground, shadows and controls to genuine alpha transparency. Preserve every existing character pixel, face, hair strand, body/armor proportions, linework, costume, boots and cape. This is extraction, not redesign or redraw. Keep the characters exactly in their existing pose, position, size and spacing on the same 1536 x 864 canvas. Male approximately x438–720 y252–592; female x780–1018 y252–590. The existing male has short swept dark textured locs with small gold cuffs, brown skin, compact heroic proportions, blue/gold suit, silver metal gauntlets and shin armor, blue cape. The existing female has long curled textured locs gathered high with gold cuffs, gold hoop earrings, exact facial features, purple/gold suit and purple cape. Preserve their exact expressions and original details, including distinct silver male versus gold female armor. Clean edge alpha without background fringing. NO new design, no recentering, no pose change, no facial change, no relighting, no enlargement. Output only unchanged two characters on transparent canvas."
+    },
+    {
+      "output": "aligned-extraction.png",
+      "prompt": "Use case: background-extraction. Exact same-canvas masking task, NOT a redraw. Input image is 1536x864. Return exactly that 1536x864 composition with alpha transparency in place of the background. The two central heroes MUST STAY at original pixel coordinates and original sizes: male silhouette x438 to719, top y252, feet y589; female silhouette x780 to1018, top y252, feet y586. Leave enormous transparent margin around them. Do not enlarge, re-center, rearrange, regenerate, simplify, change faces, change hair, redraw costume, change pose, change cape silhouette, change colors, change expressions, move or scale either hero. Only erase backdrop/HUD/ground to alpha, preserving all original visible hero pixels and anti-aliased outlines. Preserve the reference male’s exact short swept locs and gold cuffs, face, blue-gold costume and silver gloves/shins, precise cape contour. Preserve reference female’s exact high long curled locs and gold cuffs, gold hoop earrings, face, purple-gold costume, silver gloves, and purple cape contour. Return only the original unchanged heroes, occupying the same small center area of the full frame, no labels, no shadow, no other image contents."
+    }
+  ]
+}

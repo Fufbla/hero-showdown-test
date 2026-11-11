@@ -1,0 +1,45 @@
+{
+  "source": "User-approved redesigned boss concept roster",
+  "status": "15 cropped reference panels; NOT transparent animation sprites",
+  "regional_mapping": [
+    {
+      "game_boss": "Trash Monster",
+      "poster_design": "Trash Monster"
+    },
+    {
+      "game_boss": "Bushman",
+      "poster_design": "Thorn Beast"
+    },
+    {
+      "game_boss": "Wastelander",
+      "poster_design": "Sludge Beast"
+    },
+    {
+      "game_boss": "Giant Scorpion",
+      "poster_design": "Venom Crawler"
+    },
+    {
+      "game_boss": "Venomis",
+      "poster_design": "Mutant Stalker"
+    },
+    {
+      "game_boss": "AtomDust",
+      "poster_design": "Energy Phantom"
+    },
+    {
+      "game_boss": "Ultimate Pollution Boss",
+      "poster_design": "Corrupted Guardian"
+    }
+  ],
+  "legendary_bosses": [
+    "Lightning Spree",
+    "Air Pollution Monster",
+    "Styrodog",
+    "Sonic Tusk",
+    "Dr. Styro",
+    "Wastelander",
+    "Venomis",
+    "AtomDust"
+  ],
+  "notes": "Keep original game boss names and gameplay behavior. Poster panels contain labels/backgrounds and tiny unverified pose examples. Do not treat as animation atlases."
+}

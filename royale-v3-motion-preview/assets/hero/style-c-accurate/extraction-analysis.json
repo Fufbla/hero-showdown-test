@@ -1,0 +1,64 @@
+{
+  "source": {
+    "file": "reference.jpeg",
+    "width": 1536,
+    "height": 864,
+    "sha256": "e05d98f5b2b8d01e0bb50cc6feda77eb6556b401e7d6fa98dd828a13200f950b"
+  },
+  "candidate": {
+    "file": "aligned-extraction.png",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGBA",
+    "alphaUniqueValues": 256,
+    "scaleToSource": [
+      0.9186602870813397,
+      0.9181721572794899
+    ],
+    "alpha128Bounds": {
+      "male": [
+        476,
+        278,
+        778,
+        642
+      ],
+      "female": [
+        847,
+        277,
+        1105,
+        642
+      ]
+    },
+    "sha256": "dde7ef9e5abb9d27b3a319941b6a43f7331dfaee9d948fb3a474bd2f1d253f42"
+  },
+  "comparison": {
+    "exactReproduction": false,
+    "nearestNeighborComparisonOnly": {
+      "maleFace": {
+        "meanAbsoluteRGBDifference": 13.4047122936368,
+        "pixels": 6239
+      },
+      "maleTorso": {
+        "meanAbsoluteRGBDifference": 23.622448979591837,
+        "pixels": 5684
+      },
+      "femaleFace": {
+        "meanAbsoluteRGBDifference": 14.088729016786571,
+        "pixels": 8062
+      },
+      "femaleTorso": {
+        "meanAbsoluteRGBDifference": 25.320847851335657,
+        "pixels": 4592
+      }
+    },
+    "visibleDeviations": [
+      "Generated image redraws eye highlights, eyebrows and facial contour subtly; not preserved original pixels.",
+      "Individual curl/loc contours and gold hair cuff details are not pixel-identical.",
+      "Cape silhouette and some armor contours differ; same overall pose and identity.",
+      "Image canvas is 1672x941 instead of requested 1536x864; provided scale maps its closely matched layout."
+    ],
+    "recommendation": "Use the source JPEG as the color texture; use generated extraction only as alpha guide with source geometry correction. This preserves source facial and costume pixels. Do not call generated RGB exact."
+  },
+  "method": "built-in image_gen transparent background-extraction; 2 attempts",
+  "status": "asset candidates ready for source-backed renderer; visual approval pending"
+}

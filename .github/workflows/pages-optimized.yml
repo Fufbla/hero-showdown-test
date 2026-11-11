@@ -8,6 +8,7 @@ on:
       - '.github/workflows/pages-optimized.yml'
       - 'royale/**'
       - 'royale-v3-staging/**'
+      - 'royale-v3-motion-preview/**'
       - 'assets/**'
       - 'videos/**'
       - 'index.html'
@@ -25,7 +26,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -67,7 +68,7 @@ jobs:
           path: _site
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 35
     environment:
       name: github-pages

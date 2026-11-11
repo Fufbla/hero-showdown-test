@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/mystic-robe/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        32,
+        1577,
+        161,
+        166
+      ],
+      "pivot": [
+        80.5,
+        83.0
+      ],
+      "attach": "waist",
+      "scale": 0.04216867469879518,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        257,
+        1579,
+        138,
+        164
+      ],
+      "pivot": [
+        69.0,
+        82.0
+      ],
+      "attach": "waist",
+      "scale": 0.042682926829268296,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        469,
+        1578,
+        164,
+        45
+      ],
+      "pivot": [
+        82.0,
+        22.5
+      ],
+      "attach": "waist",
+      "scale": 0.15555555555555556,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        703,
+        1578,
+        143,
+        165
+      ],
+      "pivot": [
+        71.5,
+        82.5
+      ],
+      "attach": "waist",
+      "scale": 0.04242424242424242,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

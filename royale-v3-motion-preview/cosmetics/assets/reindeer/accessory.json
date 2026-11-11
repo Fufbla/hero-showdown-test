@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/reindeer/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        43,
+        1627,
+        153,
+        127
+      ],
+      "pivot": [
+        76.5,
+        63.5
+      ],
+      "attach": "neck",
+      "scale": 0.1437908496732026,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        265,
+        1621,
+        134,
+        131
+      ],
+      "pivot": [
+        67.0,
+        65.5
+      ],
+      "attach": "neck",
+      "scale": 0.16417910447761194,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        473,
+        1618,
+        147,
+        133
+      ],
+      "pivot": [
+        73.5,
+        66.5
+      ],
+      "attach": "neck",
+      "scale": 0.14965986394557823,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        694,
+        1621,
+        148,
+        133
+      ],
+      "pivot": [
+        74.0,
+        66.5
+      ],
+      "attach": "neck",
+      "scale": 0.14864864864864866,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

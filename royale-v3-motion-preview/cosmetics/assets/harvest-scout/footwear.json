@@ -1,0 +1,159 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/harvest-scout/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "footNear",
+      "rect": [
+        53,
+        975,
+        117,
+        160
+      ],
+      "pivot": [
+        58.5,
+        112.0
+      ],
+      "attach": "ankleNear",
+      "scale": 0.17094017094017094,
+      "followLeg": true,
+      "pass": "nearLeg"
+    },
+    {
+      "view": "front",
+      "part": "footFar",
+      "rect": [
+        53,
+        1184,
+        116,
+        159
+      ],
+      "pivot": [
+        58.0,
+        111.3
+      ],
+      "attach": "ankleFar",
+      "scale": 0.1724137931034483,
+      "followLeg": true,
+      "pass": "farLeg"
+    },
+    {
+      "view": "right",
+      "part": "footNear",
+      "rect": [
+        253,
+        979,
+        170,
+        153
+      ],
+      "pivot": [
+        76.5,
+        107.1
+      ],
+      "attach": "ankleNear",
+      "scale": 0.1411764705882353,
+      "followLeg": true,
+      "pass": "nearLeg"
+    },
+    {
+      "view": "right",
+      "part": "footFar",
+      "rect": [
+        249,
+        1186,
+        175,
+        154
+      ],
+      "pivot": [
+        78.75,
+        107.8
+      ],
+      "attach": "ankleFar",
+      "scale": 0.13714285714285715,
+      "followLeg": true,
+      "pass": "farLeg"
+    },
+    {
+      "view": "back",
+      "part": "footNear",
+      "rect": [
+        493,
+        977,
+        121,
+        157
+      ],
+      "pivot": [
+        60.5,
+        109.89999999999999
+      ],
+      "attach": "ankleNear",
+      "scale": 0.1652892561983471,
+      "followLeg": true,
+      "pass": "nearLeg"
+    },
+    {
+      "view": "back",
+      "part": "footFar",
+      "rect": [
+        492,
+        1185,
+        122,
+        156
+      ],
+      "pivot": [
+        61.0,
+        109.19999999999999
+      ],
+      "attach": "ankleFar",
+      "scale": 0.16393442622950818,
+      "followLeg": true,
+      "pass": "farLeg"
+    },
+    {
+      "view": "left",
+      "part": "footNear",
+      "rect": [
+        676,
+        978,
+        174,
+        153
+      ],
+      "pivot": [
+        95.7,
+        107.1
+      ],
+      "attach": "ankleNear",
+      "scale": 0.13793103448275862,
+      "followLeg": true,
+      "pass": "nearLeg"
+    },
+    {
+      "view": "left",
+      "part": "footFar",
+      "rect": [
+        680,
+        1186,
+        172,
+        154
+      ],
+      "pivot": [
+        94.60000000000001,
+        107.8
+      ],
+      "attach": "ankleFar",
+      "scale": 0.13953488372093023,
+      "followLeg": true,
+      "pass": "farLeg"
+    }
+  ],
+  "covers": [
+    "feet",
+    "boots"
+  ]
+}

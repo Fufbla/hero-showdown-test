@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/autumn-explorer/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        15,
+        1389,
+        177,
+        115
+      ],
+      "pivot": [
+        88.5,
+        103.5
+      ],
+      "attach": "head",
+      "scale": 0.22033898305084745,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        228,
+        1392,
+        192,
+        116
+      ],
+      "pivot": [
+        96.0,
+        104.4
+      ],
+      "attach": "head",
+      "scale": 0.203125,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        464,
+        1391,
+        175,
+        112
+      ],
+      "pivot": [
+        87.5,
+        100.8
+      ],
+      "attach": "head",
+      "scale": 0.22285714285714286,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        686,
+        1391,
+        190,
+        116
+      ],
+      "pivot": [
+        95.0,
+        104.4
+      ],
+      "attach": "head",
+      "scale": 0.20526315789473684,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

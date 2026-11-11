@@ -1,0 +1,129 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/pumpkin-knight/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        21,
+        1373,
+        189,
+        174
+      ],
+      "pivot": [
+        94.5,
+        87.0
+      ],
+      "attach": "head",
+      "scale": 0.31746031746031744,
+      "offset": [
+        2,
+        -12
+      ],
+      "faceOpening": {
+        "center": [
+          5,
+          4
+        ],
+        "radius": [
+          15,
+          13
+        ]
+      },
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        246,
+        1374,
+        170,
+        179
+      ],
+      "pivot": [
+        85.0,
+        89.5
+      ],
+      "attach": "head",
+      "scale": 0.35294117647058826,
+      "offset": [
+        0,
+        -12
+      ],
+      "faceOpening": {
+        "center": [
+          12,
+          4
+        ],
+        "radius": [
+          14,
+          13
+        ]
+      },
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        464,
+        1374,
+        181,
+        175
+      ],
+      "pivot": [
+        90.5,
+        87.5
+      ],
+      "attach": "head",
+      "scale": 0.3314917127071823,
+      "offset": [
+        2,
+        -12
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        692,
+        1373,
+        170,
+        180
+      ],
+      "pivot": [
+        85.0,
+        90.0
+      ],
+      "attach": "head",
+      "scale": 0.35294117647058826,
+      "offset": [
+        0,
+        -12
+      ],
+      "faceOpening": {
+        "center": [
+          -12,
+          4
+        ],
+        "radius": [
+          14,
+          13
+        ]
+      },
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "hidden"
+}

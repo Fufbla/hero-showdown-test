@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/cat-burglar/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        21,
+        1645,
+        193,
+        83
+      ],
+      "pivot": [
+        96.5,
+        41.5
+      ],
+      "attach": "waist",
+      "scale": 0.08433734939759037,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        258,
+        1646,
+        152,
+        86
+      ],
+      "pivot": [
+        76.0,
+        43.0
+      ],
+      "attach": "waist",
+      "scale": 0.08139534883720931,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        453,
+        1644,
+        195,
+        79
+      ],
+      "pivot": [
+        97.5,
+        39.5
+      ],
+      "attach": "waist",
+      "scale": 0.08860759493670887,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        690,
+        1646,
+        156,
+        86
+      ],
+      "pivot": [
+        78.0,
+        43.0
+      ],
+      "attach": "waist",
+      "scale": 0.0813953488372093,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

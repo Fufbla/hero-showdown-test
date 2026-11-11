@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/casual-hoodie/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        22,
+        1579,
+        187,
+        162
+      ],
+      "pivot": [
+        93.5,
+        81.0
+      ],
+      "attach": "head",
+      "scale": 0.25668449197860965,
+      "offset": [
+        0,
+        -14
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        260,
+        1577,
+        140,
+        165
+      ],
+      "pivot": [
+        70.0,
+        82.5
+      ],
+      "attach": "head",
+      "scale": 0.20714285714285716,
+      "offset": [
+        -7,
+        -14
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        454,
+        1576,
+        198,
+        166
+      ],
+      "pivot": [
+        99.0,
+        83.0
+      ],
+      "attach": "head",
+      "scale": 0.24242424242424243,
+      "offset": [
+        0,
+        -14
+      ],
+      "pass": "behindHead"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        708,
+        1577,
+        139,
+        166
+      ],
+      "pivot": [
+        69.5,
+        83.0
+      ],
+      "attach": "head",
+      "scale": 0.20863309352517986,
+      "offset": [
+        7,
+        -14
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

@@ -1,0 +1,96 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/dark-reaper/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "accessory",
+      "rect": [
+        72,
+        1643,
+        83,
+        87
+      ],
+      "pivot": [
+        41.5,
+        43.5
+      ],
+      "attach": "neck",
+      "scale": 0.09195402298850575,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "right",
+      "part": "accessory",
+      "rect": [
+        287,
+        1644,
+        83,
+        86
+      ],
+      "pivot": [
+        41.5,
+        43.0
+      ],
+      "attach": "neck",
+      "scale": 0.09302325581395349,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    },
+    {
+      "view": "back",
+      "part": "accessory",
+      "rect": [
+        511,
+        1643,
+        88,
+        87
+      ],
+      "pivot": [
+        44.0,
+        43.5
+      ],
+      "attach": "neck",
+      "scale": 0.09195402298850576,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "behindBody"
+    },
+    {
+      "view": "left",
+      "part": "accessory",
+      "rect": [
+        737,
+        1644,
+        82,
+        86
+      ],
+      "pivot": [
+        41.0,
+        43.0
+      ],
+      "attach": "neck",
+      "scale": 0.09302325581395349,
+      "offset": [
+        0,
+        3
+      ],
+      "pass": "accessory"
+    }
+  ],
+  "covers": []
+}

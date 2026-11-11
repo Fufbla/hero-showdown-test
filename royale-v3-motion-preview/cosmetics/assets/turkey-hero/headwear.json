@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/turkey-hero/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        28,
+        1373,
+        167,
+        117
+      ],
+      "pivot": [
+        83.5,
+        105.3
+      ],
+      "attach": "head",
+      "scale": 0.23353293413173654,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        269,
+        1372,
+        127,
+        120
+      ],
+      "pivot": [
+        63.5,
+        108.0
+      ],
+      "attach": "head",
+      "scale": 0.30708661417322836,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        470,
+        1373,
+        166,
+        117
+      ],
+      "pivot": [
+        83.0,
+        105.3
+      ],
+      "attach": "head",
+      "scale": 0.23493975903614459,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        709,
+        1372,
+        128,
+        120
+      ],
+      "pivot": [
+        64.0,
+        108.0
+      ],
+      "attach": "head",
+      "scale": 0.3046875,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

@@ -1,0 +1,129 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/dark-reaper/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        16,
+        1415,
+        197,
+        179
+      ],
+      "pivot": [
+        98.5,
+        89.5
+      ],
+      "attach": "head",
+      "scale": 0.30456852791878175,
+      "offset": [
+        2,
+        -12
+      ],
+      "faceOpening": {
+        "center": [
+          5,
+          0
+        ],
+        "radius": [
+          15,
+          19
+        ]
+      },
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        250,
+        1415,
+        166,
+        179
+      ],
+      "pivot": [
+        83.0,
+        89.5
+      ],
+      "attach": "head",
+      "scale": 0.3614457831325301,
+      "offset": [
+        0,
+        -12
+      ],
+      "faceOpening": {
+        "center": [
+          12,
+          0
+        ],
+        "radius": [
+          14,
+          19
+        ]
+      },
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        463,
+        1415,
+        183,
+        176
+      ],
+      "pivot": [
+        91.5,
+        88.0
+      ],
+      "attach": "head",
+      "scale": 0.32786885245901637,
+      "offset": [
+        2,
+        -12
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        693,
+        1415,
+        168,
+        179
+      ],
+      "pivot": [
+        84.0,
+        89.5
+      ],
+      "attach": "head",
+      "scale": 0.35714285714285715,
+      "offset": [
+        0,
+        -12
+      ],
+      "faceOpening": {
+        "center": [
+          -12,
+          0
+        ],
+        "radius": [
+          14,
+          19
+        ]
+      },
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "hidden"
+}

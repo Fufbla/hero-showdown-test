@@ -1,0 +1,99 @@
+{
+  "template": "universal-style-c-v1",
+  "atlas": {
+    "url": "./assets/pilgrim-hero/atlas.png",
+    "width": 887,
+    "height": 1774
+  },
+  "reviewStatus": "reviewed-for-release",
+  "layers": [
+    {
+      "view": "front",
+      "part": "headwear",
+      "rect": [
+        9,
+        1422,
+        204,
+        135
+      ],
+      "pivot": [
+        102.0,
+        121.5
+      ],
+      "attach": "head",
+      "scale": 0.23529411764705882,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "right",
+      "part": "headwear",
+      "rect": [
+        231,
+        1420,
+        196,
+        136
+      ],
+      "pivot": [
+        98.0,
+        122.4
+      ],
+      "attach": "head",
+      "scale": 0.24489795918367346,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "back",
+      "part": "headwear",
+      "rect": [
+        454,
+        1423,
+        205,
+        130
+      ],
+      "pivot": [
+        102.5,
+        117.0
+      ],
+      "attach": "head",
+      "scale": 0.23414634146341465,
+      "offset": [
+        2,
+        -16
+      ],
+      "pass": "headwear"
+    },
+    {
+      "view": "left",
+      "part": "headwear",
+      "rect": [
+        681,
+        1422,
+        196,
+        134
+      ],
+      "pivot": [
+        98.0,
+        120.60000000000001
+      ],
+      "attach": "head",
+      "scale": 0.24489795918367346,
+      "offset": [
+        0,
+        -16
+      ],
+      "pass": "headwear"
+    }
+  ],
+  "covers": [
+    "helmet"
+  ],
+  "hair": "preserved"
+}

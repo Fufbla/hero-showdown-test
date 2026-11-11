@@ -1,0 +1,30 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {PGlite} from '@electric-sql/pglite';import {readFile,readdir} from 'node:fs/promises';import {makeHandler} from '../delete-hero.mjs';
+const migration=new URL('../supabase/migrations/',import.meta.url);
+test('transactional deletion: authorization, revision fences, archive, idempotency and replacement protection',async()=>{
+ const db=new PGlite();await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;
+ create table royale_v3_sessions(token_hash text primary key,profile_id uuid,expires_at timestamptz);
+ create table royale_v3_hero_slots(profile_id uuid,slot_number smallint,snapshot jsonb,revision bigint,updated_at timestamptz default now(),primary key(profile_id,slot_number));
+ grant select on royale_v3_sessions to service_role;grant select,update on royale_v3_hero_slots to service_role;
+ insert into royale_v3_sessions values('one','00000000-0000-4000-8000-000000000001',now()+interval '1 hour'),('two','00000000-0000-4000-8000-000000000002',now()+interval '1 hour'),('expired','00000000-0000-4000-8000-000000000001',now()-interval '1 hour');
+ insert into royale_v3_hero_slots(profile_id,slot_number,snapshot,revision) values('00000000-0000-4000-8000-000000000001',1,'{"look":{"name":"Alpha"},"coins":42}',4),('00000000-0000-4000-8000-000000000002',1,'{"look":{"name":"Beta"},"coins":73}',4);`);
+ for(const file of await readdir(migration))await db.exec(await readFile(new URL(file,migration),'utf8'));
+ const call=async(token,rev=4,name='Alpha')=>(await db.query('select royale_local_delete_hero($1,1::smallint,$2::bigint,$3) as result',[token,rev,name])).rows[0].result;
+ await db.exec('set role service_role');
+ assert.equal((await call('missing')).status,401);assert.equal((await call('expired')).status,401);assert.equal((await call('one',3)).status,409);assert.equal((await call('two')).status,409);
+ assert.equal((await call('one')).revision,5);assert.equal((await call('one')).revision,5);
+ assert.equal((await db.query('select count(*)::int as n from royale_local_hero_archive')).rows[0].n,1);
+ assert.equal((await db.query("select snapshot->>'coins' as coins from royale_local_hero_archive")).rows[0].coins,'42');
+ assert.equal((await db.query("select snapshot->>'coins' as coins from royale_v3_hero_slots where profile_id='00000000-0000-4000-8000-000000000002'")).rows[0].coins,'73');
+ await db.exec(`update royale_v3_hero_slots set snapshot='{"look":{"name":"Replacement"}}',revision=6 where profile_id='00000000-0000-4000-8000-000000000001'`);
+ assert.equal((await call('one')).status,409);
+ await db.exec('reset role');assert.equal((await db.query("select has_function_privilege('anon','royale_local_delete_hero(text,smallint,bigint,text)','execute') as allowed")).rows[0].allowed,false);
+ assert.equal((await db.query("select has_table_privilege('authenticated','royale_local_hero_archive','select') as allowed")).rows[0].allowed,false);
+ await db.close();
+});
+test('endpoint rejects missing confirmation, wrong origin and unauthenticated calls before database access',async()=>{
+ let calls=0;const handler=makeHandler({url:'https://example.test',key:'server-only',fetcher:async()=>{calls++;return new Response(JSON.stringify({revision:5}));}});
+ const req=(body,origin='https://fufbla.github.io',token='a'.repeat(64))=>new Request('https://example.test',{method:'POST',headers:{Origin:origin,Authorization:'Bearer '+token},body:JSON.stringify(body)});
+ const data={action:'delete-hero',slot:1,revision:4,name:'Alpha',confirmed:true};
+ assert.equal((await handler(req({...data,confirmed:false}))).status,400);assert.equal((await handler(req(data,'https://other.test'))).status,403);assert.equal((await handler(req(data,undefined,'invalid'))).status,401);assert.equal(calls,0);
+ assert.equal((await handler(req(data))).status,200);assert.equal(calls,1);
+});
