@@ -1,0 +1,31 @@
+name: Check approved sprite transfer
+on:
+  push:
+    branches: [chibi-12-frame-test]
+    paths: [.github/workflows/chibi-asset-check.yml]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect approved image
+        env:
+          ASSET_URL: 'https://elevenlabsusercontent.com/database/workspace/83f84c7670164c789bf3941e593782ce/content_generation/content_asset/uS2IvTzxwGHgvR2lINDy/thumbnail.webp?Expires=1794430800&KeyName=assets-cdn-key-1&Signature=ji0DxjNwNLfg_F1utKWmT0G6zy4='
+        run: |
+          python -m pip install --quiet Pillow
+          python - <<'PY'
+          import os, urllib.request, io, hashlib
+          from PIL import Image
+          url=os.environ['ASSET_URL']
+          print('::add-mask::'+url)
+          data=urllib.request.urlopen(url,timeout=40).read()
+          im=Image.open(io.BytesIO(data))
+          print({'bytes':len(data),'format':im.format,'size':im.size,'mode':im.mode,'sha256':hashlib.sha256(data).hexdigest()})
+          open('sprite-transfer.webp','wb').write(data)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: approved-sprite-transfer-check
+          path: sprite-transfer.webp
+          retention-days: 1
