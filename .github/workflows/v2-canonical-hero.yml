@@ -7,7 +7,9 @@ on:
       - 'royale/app.mjs'
       - 'royale/index.html'
       - 'royale/v2-sprites/consistent-motion.mjs'
+      - 'royale/v2-sprites/approved-effects.mjs'
       - 'royale/tests/v2-consistent-motion.test.mjs'
+      - 'royale/tests/v2-approved-effects.test.mjs'
       - 'royale/tests/v2-generated-sprites.test.mjs'
       - 'royale/tests/v2-control-effects.test.mjs'
       - '.github/workflows/v2-canonical-hero.yml'
@@ -25,8 +27,10 @@ jobs:
           node --check royale/app.mjs
           node --check royale/renderer.mjs
           node --check royale/v2-sprites/consistent-motion.mjs
+          node --check royale/v2-sprites/approved-effects.mjs
       - name: Verify V2 renderer, ground motion and power timing
         run: |
           node --test royale/tests/v2-consistent-motion.test.mjs
+          node --test royale/tests/v2-approved-effects.test.mjs
           node --test royale/tests/v2-control-effects.test.mjs
           node --test royale/tests/v2-generated-sprites.test.mjs
