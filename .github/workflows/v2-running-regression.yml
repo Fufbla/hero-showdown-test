@@ -10,6 +10,8 @@ on:
       - 'royale/v2-sprites/run-motion.mjs'
       - 'royale/v2-sprites/power-preview.mjs'
       - 'royale/v2-sprites/steel-body-overlay.mjs'
+      - 'royale/v2-sprites/hero-power-overlays.mjs'
+      - 'royale/tests/hero-power-overlays.test.mjs'
       - 'royale/v2-sprites/approved-motion.mjs'
       - 'royale/tests/v2-steel-body-overlay.test.mjs'
       - 'royale/tests/approved-motion.test.mjs'
@@ -33,6 +35,7 @@ jobs:
           node --check royale/v2-sprites/run-motion.mjs
           node --check royale/v2-sprites/power-preview.mjs
           node --check royale/v2-sprites/steel-body-overlay.mjs
+          node --check royale/v2-sprites/hero-power-overlays.mjs
       - name: Verify eight running poses and unchanged other actions
         run: |
           node --test royale/tests/v2-run-motion.test.mjs
@@ -40,3 +43,4 @@ jobs:
           node --test royale/tests/approved-motion.test.mjs
           node --test royale/tests/v2-steel-body-overlay.test.mjs
           node --test royale/tests/v2-generated-sprites.test.mjs
+          node --test royale/tests/hero-power-overlays.test.mjs
