@@ -1,0 +1,74 @@
+name: Verify published real-game motion preview
+on:
+  push:
+    branches: [action-chibi-motion-preview]
+    paths: [.github/workflows/motion-preview-live.yml]
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare verified browser test
+        run: |
+          python -m pip install --quiet Pillow playwright
+          python -m playwright install --with-deps chromium
+          python - <<'PY'
+          import base64,gzip,hashlib,pathlib
+          data=gzip.decompress(base64.b64decode(pathlib.Path('tools/motion-preview-build.b64').read_text()))
+          assert hashlib.sha256(data).hexdigest()=='efdf761c61cab5ee3ce950baddfe3fce32ba79d53e5b07f49f0340c0a3e08301'
+          pathlib.Path('/tmp/build_motion.py').write_bytes(data)
+          PY
+          python /tmp/build_motion.py
+      - name: Confirm production game and asset trees are unchanged
+        run: |
+          git fetch origin 8fa7a78ca79774c345932892a39b2a1f7ccad7c4 --depth=2
+          python - <<'PY'
+          import subprocess,json,pathlib
+          base='79375945adde95f8dee1187f1646791a828e4b26';published='8fa7a78ca79774c345932892a39b2a1f7ccad7c4'
+          report={}
+          for name in ['royale','royale-v3-staging','assets','index.html','game.html','hero-showdown.html']:
+            a=subprocess.check_output(['git','rev-parse',base+':'+name],text=True).strip()
+            b=subprocess.check_output(['git','rev-parse',published+':'+name],text=True).strip()
+            assert a==b,(name,a,b)
+            report[name]={'unchanged':True,'sha':a}
+          pathlib.Path('motion-live-evidence').mkdir(exist_ok=True)
+          pathlib.Path('motion-live-evidence/production-preservation.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Confirm deployed files match verified build
+        run: |
+          python - <<'PY'
+          import urllib.request,time,pathlib,hashlib,json
+          base='https://fufbla.github.io/hero-showdown-test/royale-v3-motion-preview/'
+          root=pathlib.Path('royale-v3-motion-preview')
+          files=['index.html','app.mjs','entry.mjs','motion-sprites.mjs','motion-safety.mjs','motion-assets/manifest.json']+[str(p.relative_to(root)) for p in (root/'motion-assets').glob('*.webp')]
+          report={}
+          for name in files:
+            expected=hashlib.sha256((root/name).read_bytes()).hexdigest()
+            for attempt in range(45):
+              try:
+                data=urllib.request.urlopen(base+name+'?verify=8fa7a78c',timeout=30).read()
+                actual=hashlib.sha256(data).hexdigest()
+                if actual==expected:break
+              except Exception as error: print(name,type(error).__name__)
+              time.sleep(4)
+            else: raise AssertionError('Published file mismatch: '+name)
+            report[name]={'sha256':actual,'bytes':len(data)}
+          pathlib.Path('motion-live-evidence/files.json').write_text(json.dumps(report,indent=2))
+          print('All',len(report),'published files match the tested build')
+          PY
+      - name: Test actual published game in desktop and mobile browsers
+        env:
+          PREVIEW_BASE: https://fufbla.github.io/hero-showdown-test/royale-v3-motion-preview/
+          EVIDENCE_DIR: motion-live-evidence
+        run: python tools/motion-preview-browser.py
+      - name: Published browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-preview-live-evidence
+          path: motion-live-evidence/
+          retention-days: 3
