@@ -4,7 +4,7 @@
 // image, *not* the original labeled concept board with opaque scenery panels.
 export const APPROVED_MOTION_VERSION='approved-style-c-24-v1';
 export const APPROVED_MOTION_ATLAS=Object.freeze({
-  file:'approved/approved-action-atlas.webp',
+  file:'approved/approved-action-atlas.svg',
   cols:6,rows:4,cell:256,anchorX:128,anchorY:232
 });
 export const APPROVED_POSES=Object.freeze([
