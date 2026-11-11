@@ -10,12 +10,14 @@ const assert=require('node:assert/strict');
   await page.goto('http://127.0.0.1:8174/royale/tests/approved-motion-visual-review.html',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>window.__reviewDone,{timeout:30000});
   const result=await page.evaluate(()=>({review:window.__review,error:window.__reviewError}));
-  assert.equal(result.error,null,'SVG atlas load must succeed');
+  assert.equal(result.error,null,'PNG atlas load must succeed');
   assert.equal(result.review.poses,24);
+  assert.equal(result.review.transparentCorners,24);
+  assert.equal(result.review.src,'approved/approved-action-atlas-clean.png');
   assert.deepEqual(result.review.dimensions,[1536,1024]);
   assert.deepEqual(errors,[]);
   fs.mkdirSync('visual-artifacts',{recursive:true});
-  await page.locator('#atlas').screenshot({path:'visual-artifacts/approved-motion-svg-actual.png'});
-  console.log('SVG decoded in real Chromium; all 24 sprite cells are accessible',result.review);
+  await page.locator('#atlas').screenshot({path:'visual-artifacts/approved-motion-png-actual.png'});
+  console.log('PNG decoded in real Chromium; all 24 sprite cells are accessible',result.review);
  }finally{await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});
