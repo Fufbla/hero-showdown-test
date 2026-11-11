@@ -7,7 +7,7 @@ import {v2PowerEffectFlags,drawV2PowerPreview,V2_POWER_PREVIEW_VERSION} from '..
 const root=new URL('../v2-sprites/',import.meta.url);
 
 test('all three actual generated WebP atlases have transparent WebP metadata and registered cell grids',async()=>{
- assert.equal(V2_SPRITE_VERSION,'power-motion-preview-v5');
+ assert.equal(V2_SPRITE_VERSION,'blue-cape-basic-combat-v1');
  for(const [name,meta] of Object.entries(V2_SPRITE_ATLASES)){
   const b=await readFile(new URL(meta.file,root));
   assert.ok(b.byteLength>20000,name+' source file is missing or empty');

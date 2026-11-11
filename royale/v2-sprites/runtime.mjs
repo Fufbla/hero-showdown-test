@@ -1,7 +1,8 @@
 // Experimental V2-only generated character art. This renderer is opt-in for
 // the public 0000000000 local sandbox; production heroes never import it.
 // Source images are transparent registered atlases, not screenshot posters.
-export const V2_SPRITE_VERSION='power-motion-preview-v5';
+import {V2BasicCombatSprites} from './basic-combat.mjs';
+export const V2_SPRITE_VERSION='blue-cape-basic-combat-v1';
 export const V2_SPRITE_ATLASES=Object.freeze({
  idle_run:Object.freeze({file:'idle_run.webp',cols:8,rows:4,cell:160}),
  jump:Object.freeze({file:'jump_fixed.webp',cols:6,rows:2,cell:192}),
@@ -29,7 +30,7 @@ export function chooseV2Frame(hero,time=0){
  if(hero?.dead||hero?.stun>0)return null;
  // The power posters are storyboards, so these are temporary poses made from
  // the clean V2 atlases while the original game supplies combat/projectile FX.
- // Basic punch/kick still uses the original accurate combat pose as fallback.
+ // Basic punch/kick is drawn by basicCombat before this movement/power fallback.
  if(hero?.attack?.kind){
   // The original atlas contains only idle/run/jump, not bespoke combat art.
   // Play a short, deterministic sequence of compatible poses instead of
@@ -85,14 +86,17 @@ export function chooseV2Frame(hero,time=0){
 }
 
 export class V2GeneratedSprites {
- constructor({loader=null}={}){
+ constructor({loader=null,combatLoader=null}={}){
   this.images=new Map();this.ready=false;this.loading=null;this.error=null;
   this.loader=loader||null;
+  this.basicCombat=new V2BasicCombatSprites({loader:combatLoader});
   this.unsafeFrames=new Set();
  }
  async preload(){
   if(this.ready)return true;
   if(this.loading)return this.loading;
+  // Optional attack art must not delay the existing idle/run/jump atlases.
+  void this.basicCombat.preload();
   const load=this.loader||((name)=>new Promise((resolve,reject)=>{
    if(typeof Image==='undefined')return reject(Error('Browser image decoder unavailable'));
    const img=new Image();
@@ -150,6 +154,7 @@ export class V2GeneratedSprites {
  }
  draw(ctx,x,y,hero,time,scale=1){
   if(!this.ready)return false;
+  if(this.basicCombat.draw(ctx,x,y,hero,scale))return true;
   const clip=this.frame(hero,time);if(!clip)return false;
   const atlas=V2_SPRITE_ATLASES[clip.atlas],image=this.images.get(clip.atlas);
   // Keep the captured full-body frame visible even when a source tile touches
