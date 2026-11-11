@@ -26,6 +26,11 @@ const assert=require('node:assert/strict');
   console.log('Fallbacks:',report.samples.filter(x=>!x.generated).map(x=>x.label).join(', ')||'none');
 
   const game=await context.newPage();
+  const approvedRequests=[];
+  game.on('response',response=>{
+   if(response.url().includes('approved-action-atlas-clean.png'))
+    approvedRequests.push({url:response.url(),status:response.status()});
+  });
   game.on('pageerror',error=>errors.push('game: '+error.message));
   await game.goto('http://127.0.0.1:8174/royale-v3-staging/',{waitUntil:'domcontentloaded',timeout:45000});
   await game.locator('#enter').click();
@@ -35,6 +40,7 @@ const assert=require('node:assert/strict');
   await iframe.locator('#v2-sprite-toggle').waitFor({state:'attached',timeout:55000});
   await iframe.locator('#game').waitFor({state:'visible',timeout:55000});
   await game.waitForTimeout(2000);
+  assert.ok(approvedRequests.some(x=>x.status===200),'The test hero never downloaded the approved clean PNG');
   const spriteButton=await iframe.locator('#v2-sprite-toggle').textContent();
   const phase=await iframe.locator('.phase-label').textContent();
   assert.ok(phase.includes('0000000000'),'wrong or non-isolated hero context');
@@ -52,7 +58,7 @@ const assert=require('node:assert/strict');
   console.log('Live sandbox browser smoke passed:',phase.trim(),'toggle:',spriteButton.trim());
   // The standalone preview is visually representative, but not an assertion
   // that every power is unlocked in the level-1 gameplay sandbox.
-  fs.writeFileSync(path.join(output,'browser-smoke.json'),JSON.stringify({phase,spriteButton,errors},null,2));
+  fs.writeFileSync(path.join(output,'browser-smoke.json'),JSON.stringify({phase,spriteButton,approvedRequests,errors},null,2));
   assert.deepEqual(errors,[],'browser JS exceptions detected');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
