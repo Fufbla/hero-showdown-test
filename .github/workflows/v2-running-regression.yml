@@ -11,6 +11,8 @@ on:
       - 'royale/v2-sprites/power-preview.mjs'
       - 'royale/v2-sprites/steel-body-overlay.mjs'
       - 'royale/v2-sprites/hero-power-overlays.mjs'
+      - 'royale/assets/vfx/ground-root-overlay.webp'
+      - 'royale/assets/vfx/whirlwind-overlay.webp'
       - 'royale/tests/hero-power-overlays.test.mjs'
       - 'royale/v2-sprites/approved-motion.mjs'
       - 'royale/tests/v2-steel-body-overlay.test.mjs'
