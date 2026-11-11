@@ -12,22 +12,37 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Check renderer and loader syntax
+      - name: Verify renderer and loader syntax
         run: |
           node --check royale/v2-sprites/approved-motion.mjs
           node --check royale/renderer.mjs
           node --check royale/app.mjs
-      - name: Verify approved frame mapping and fallback
+      - name: Verify approved frame mapping and safe fallback
         run: node --test royale/tests/approved-motion.test.mjs
-      - name: Check installed atlas dimensions when present
+      - name: Verify committed SVG is substantial and well formed
         run: |
-          if [ -f royale/v2-sprites/approved/approved-action-atlas.webp ]; then
-            python3 - <<'PY'
+          python3 - <<'PY'
           from pathlib import Path
-          p=Path('royale/v2-sprites/approved/approved-action-atlas.webp')
-          assert p.stat().st_size > 100000, 'Uploaded atlas appears incomplete'
-          print('Approved atlas asset present:',p.stat().st_size,'bytes')
+          import xml.etree.ElementTree as ET
+          p=Path('royale/v2-sprites/approved/approved-action-atlas.svg')
+          assert p.stat().st_size>300000,'Approved sprite sheet missing/incomplete'
+          root=ET.parse(p).getroot()
+          assert root.attrib['width']=='1536' and root.attrib['height']=='1024'
+          assert len(root)==1
+          print('Approved SVG atlas checked:',p.stat().st_size,'bytes')
           PY
-          else
-            echo 'Approved binary sprite atlas not yet installed; old in-game art remains fallback'
-          fi
+      - name: Install browser dependencies
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install chromium --with-deps
+      - name: Decode all sprite frames in browser
+        run: |
+          python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/approved-atlas-server.log 2>&1 &
+          node royale/v2-sprites/tests/approved-motion-browser.cjs
+      - name: Upload visual preview
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: approved-style-c-svg-visual-review
+          path: visual-artifacts/
+          if-no-files-found: warn
