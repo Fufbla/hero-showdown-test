@@ -12,6 +12,7 @@ import {shouldWriteAdventure} from './save-policy.mjs';
 import {clockSynchronized} from './shared-clock.mjs';
 import {CloudAPI, CloudHeroStore} from './cloud-client.mjs';
 import {v2GeneratedSprites} from './v2-sprites/runtime.mjs';
+import {approvedMotionSprites} from './v2-sprites/approved-motion.mjs';
 import {clothingRuntime} from './cosmetics/runtime.mjs';
 import {cosmeticTransaction,normalizeCosmetics} from './cosmetics/state.mjs';
 import {isV2TestRoute,V2_TEST_STORAGE_PREFIX,v2TestLook,maxV2TestPowers,hasMaxV2TestPowers} from './v2-test-hero.mjs';
@@ -174,6 +175,12 @@ const powerMenu=new PowerMenu(()=>game,persist,say,powerUpgrades),controlMenu=ne
 const renderer=new Renderer($('game')),creator=new Creator(),powerButtons=[...document.querySelectorAll('.power-button')];
 if(v2TestHero){
  renderer.v2SpriteTest=true;
+ // Optional approved sprite atlas: failures safely keep the original art.
+ // Preload only inside the isolated 0000000000 sandbox, never for cloud heroes.
+ void approvedMotionSprites.preload().then(ok=>{
+  if(ok)console.info('[V2 approved Style C sprites] 24 approved poses loaded');
+  else console.info('[V2 approved Style C sprites] original fallback active',approvedMotionSprites.error);
+ });
  const root=$('pause-primary');
  if(root){
   const button=document.createElement('button');
