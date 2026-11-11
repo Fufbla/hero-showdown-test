@@ -9,7 +9,7 @@ import {STYLE_C_DEFAULTS} from './style-c-defaults.mjs';
 import {TURNAROUND_MODELS} from './assets/hero/style-c-accurate/turnaround/model.mjs';
 import {sampleStyleCMotion} from './style-c-motion.mjs';
 import {drawStyleCHair} from './style-c-hair.mjs';
-import {drawStyleCEquipment, drawStyleCEquipmentAura, withStyleCEquipmentGlow} from './style-c-equipment.mjs';
+import {ARMOR_HELMETS_VISIBLE, drawStyleCEquipment, drawStyleCEquipmentAura, withStyleCEquipmentGlow} from './style-c-equipment.mjs';
 import {emblem} from './style-c-paint.mjs';
 import {drawClothingPass} from './cosmetics/renderer.mjs';
 
@@ -206,7 +206,7 @@ export function drawTurnaroundHero(c,x,y,raw,h,time,scale=1,options={}) {
     c.restore();
   };
   if(h.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;
-  look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
+  look.headwearCoverage=headwearFit(ARMOR_HELMETS_VISIBLE?pieces.helmet:null,view).hair;
   const regularHair=look.hair===base.hair&&look.headwearCoverage!=='tucked';
   if (!options.clothingActive&&pose.state==='idle'&&neutralShape(look)&&neutralFace(look,base)&&regularHair&&look.cape&&!Object.keys(pieces).length&&look.emblem===base.emblem&&!h.steel) {
     draw('source',[0,0]);c.restore();return report;

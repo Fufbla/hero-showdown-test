@@ -3,6 +3,10 @@ import {armorCollection, drawArmorPiece} from './power-armor-art.mjs';
 import {WEARABLE_REGIONS} from './assets/hero/style-c-accurate/equipment/regions.mjs';
 import {emblem} from './style-c-paint.mjs';
 
+// Temporary visual policy: retain equipped helmets and their bonuses while
+// keeping the player's face and full hairstyle visible.
+export const ARMOR_HELMETS_VISIBLE = false;
+
 const atlasURL = new URL('./assets/hero/style-c-accurate/equipment/worn.png', import.meta.url);
 const variants = new Map();
 const CELL_LIMIT = 128;
@@ -230,6 +234,8 @@ function wearEmblem(c,item,a,look,steel) {
 // The original equipment system also exposes chest and helmet under legacy
 // aliases. Only a real equipped slot may paint a layer at its own depth.
 export function drawStyleCEquipment(c, part, item, pose, look, {view='game',side=0,steel=false}={}) {
+  // equipmentOutfit also exposes a helmet through the legacy mask alias.
+  if (!ARMOR_HELMETS_VISIBLE && (part==='helmet' || item?.part==='helmet')) return false;
   if (!artwork || !item || (item.part && part!==item.part && !(part==='shoulder'&&['chest','suit'].includes(item.part)))) return false;
   const a=anchors(pose,look,view);
   if (!a) return false;

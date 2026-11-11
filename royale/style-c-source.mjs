@@ -5,7 +5,7 @@ import {drawStyleCHair} from './style-c-hair.mjs';
 import {hairMotion} from './hair-art.mjs';
 import {STYLE_C_FACE_ANCHORS,drawStyleCFace,styleCFaceChanged} from './style-c-face.mjs';
 import {drawStyleCMotionLimb,sampleStyleCMotion} from './style-c-motion.mjs';
-import {drawStyleCEquipment,drawStyleCEquipmentAura,withStyleCEquipmentGlow} from './style-c-equipment.mjs';
+import {ARMOR_HELMETS_VISIBLE,drawStyleCEquipment,drawStyleCEquipmentAura,withStyleCEquipmentGlow} from './style-c-equipment.mjs';
 import {drawSourceRest,drawRegisteredHead,drawStyleCCape,drawStyleCTorso,styleCBodyStatus} from './style-c-body.mjs';
 import {drawDefaultSprite,isDefaultLook} from './style-c-sprites.mjs';
 import {drawClothingPass} from './cosmetics/renderer.mjs';
@@ -110,7 +110,7 @@ export function drawSourceHero(c,x,y,raw,h,time,scale=1,options={}) {
   };
   const baseFor=region=>!h.steel&&options.clothingRegionBase?.[region]
     ? {...palette,...options.clothingRegionBase[region]} :palette;
-  look.headwearCoverage=headwearFit(pieces.helmet,view).hair;
+  look.headwearCoverage=headwearFit(ARMOR_HELMETS_VISIBLE?pieces.helmet:null,view).hair;
   const customHair=look.hair!==base.hair||look.headwearCoverage==='tucked';
   const differentJaw=look.jaw!==base.jaw||look.face!==base.face;
   const bareHead=customHair||differentJaw;
