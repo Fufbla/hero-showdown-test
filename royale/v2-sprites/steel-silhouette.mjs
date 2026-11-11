@@ -97,7 +97,7 @@ function paintCel(c,clip,index,total){
  const legLift=air?Math.max(13,jumpArc+6):0;
  const legNear=(function(){
   if(clip==='kick'){
-   const extend=sin(Math.PI*clamp(q*1.25))**1.3;
+   const extend=Math.max(0,sin(Math.PI*clamp(q*1.25)))**1.3;
    return [16+extend*64,-3-extend*35];
   }
   if(air)return [21+6*sin(a),-5-legLift-8*sin(a+.3)];
