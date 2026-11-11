@@ -26,7 +26,9 @@ test('approved poses are chosen only from the isolated hero state without mutati
  assert.equal(selectApprovedPose({...right,castAge:.05}),12);
  assert.equal(selectApprovedPose({...right,castAge:.17}),13);
  assert.equal(selectApprovedPose({...right,face:-1,castAge:.2}),23);
- assert.equal(selectApprovedPose({...right,steel:true}),14);
+ assert.equal(selectApprovedPose({...right,steel:true}),0,'Steel Body keeps the original idle hero, with separate effect layer');
+ assert.equal(selectApprovedPose({...right,steel:true,vx:145}),null,'Steel Body keeps the moving run cycle');
+ assert.equal(selectApprovedPose({...right,steel:true,grounded:false}),null,'Steel Body keeps jumping animation');
  assert.equal(selectApprovedPose(right,{powers:{active:{roots:{age:1}}}}),15);
  assert.equal(selectApprovedPose(right,{powers:{active:{whirlwind:{age:1}}}}),16);
  assert.equal(selectApprovedPose({...right,dodgeAge:.1}),17);
