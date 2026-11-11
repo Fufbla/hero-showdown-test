@@ -103,6 +103,9 @@ export class PowerSystem {
     if(id==='flight'&&(!h.grounded||h.attack||this.active.superKick))return false;
     if(['strength','superKick'].includes(id)&&(h.attack||this.active.superKick))return false;
     const s=powerStats(id,slot.level,{heroLevel:h.level,equipment:g.equipment});s.cooldown*=slot.cooldownMultiplier;
+    // The 0000000000 V2 prototype tests two-second control effects. Keep
+    // the production hero balance, power levels and cloud saves unchanged.
+    if(g.testPowers&&(id==='roots'||id==='whirlwind'))s.duration=2;
     const state={...s,age:0,targets:[],x:h.x+h.face*100,y:h.y,face:h.face};
     if(def.after)this.active[id]=state;else this.cooldowns[id]=s.cooldown;
     if(def.offensive)g.markCombat();

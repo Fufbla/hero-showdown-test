@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {APPROVED_MOTION_ATLAS,APPROVED_POSES,APPROVED_MOTION_VERSION,ApprovedMotionSprites,selectApprovedPose} from '../v2-sprites/approved-motion.mjs';
 test('approved source layout is fixed 24 registered transparent art frames',()=>{
- assert.equal(APPROVED_MOTION_VERSION,'approved-style-c-24-v1');
+ assert.equal(APPROVED_MOTION_VERSION,'approved-style-c-24-v2-ground-speed');
  assert.equal(APPROVED_POSES.length,24);
  assert.equal(new Set(APPROVED_POSES).size,24);
  assert.deepEqual([APPROVED_MOTION_ATLAS.cols,APPROVED_MOTION_ATLAS.rows,APPROVED_MOTION_ATLAS.cell],[6,4,256]);
@@ -48,4 +48,42 @@ test('missing or incorrectly sized binary sprite atlas never disrupts existing g
  assert.equal(good.draw(ctx,100,200,{face:1},{}),true);
  assert.equal(args.length,1);assert.deepEqual(args[0].slice(1,5),[0,0,256,256]);
  assert.equal(good.draw(ctx,100,200,{face:1,vx:100},{}),false,'moving run falls back to existing loop');
+});
+
+test('ground effect artwork uses visible ground anchor and speed mirrors only toward the left',async()=>{
+ const previousDocument=globalThis.document;
+ const cell=APPROVED_MOTION_ATLAS.cell;
+ const pixels=new Uint8ClampedArray(cell*cell*4);
+ pixels[(214*cell+100)*4+3]=255; // A painted foot/root endpoint at pixel 214.
+ try{
+  globalThis.document={createElement:()=>({getContext:()=>({
+   clearRect(){},drawImage(){},getImageData(){return {data:pixels};}
+  })})};
+  const art=new ApprovedMotionSprites({loader:async()=>({width:1536,height:1024})});
+  assert.equal(await art.preload(),true);
+  const calls=[];
+  const ctx={save(){},restore(){},drawImage(...a){calls.push(['draw',...a]);},
+   translate(...a){calls.push(['translate',...a]);},scale(...a){calls.push(['scale',...a]);},
+   set imageSmoothingEnabled(x){},set imageSmoothingQuality(x){}};
+  const hero={face:1,grounded:true,vx:0,castAge:100,dodgeAge:100,stun:0,attack:null};
+  for(const id of ['roots','whirlwind']){
+   calls.length=0;
+   assert.equal(art.draw(ctx,100,200,hero,{powers:{active:{[id]:{age:1}}}}),true);
+   const args=calls.find(a=>a[0]==='draw').slice(1);
+   assert.equal(args[6]+args[8]*215/256,200,'painted FX reaches the platform surface');
+  }
+  calls.length=0;
+  assert.equal(art.draw(ctx,100,200,{...hero,face:-1,vx:-290},{powers:{speed:.6}}),true);
+  assert.ok(calls.some(c=>c[0]==='scale'&&c[1]===-1),'leftward speed pose is mirrored');
+  calls.length=0;
+  assert.equal(art.draw(ctx,100,200,{...hero,face:1,vx:290},{powers:{speed:.6}}),true);
+  assert.equal(calls.some(c=>c[0]==='scale'),false,'rightward speed is not mirrored');
+  assert.equal(selectApprovedPose({...hero,vx:290},{powers:{active:{roots:{age:1}},speed:.6}}),19,
+    'running must not be frozen in the roots pose');
+  assert.equal(selectApprovedPose({...hero,grounded:false,jumps:1},{powers:{active:{whirlwind:{age:1}}}}),4,
+    'jumping must not render an airborne ground-power poster');
+ }finally{
+  if(previousDocument===undefined)delete globalThis.document;
+  else globalThis.document=previousDocument;
+ }
 });

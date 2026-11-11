@@ -2,7 +2,7 @@
 // This optional atlas is separate from cloud characters and gameplay physics.
 // The sheet must be the transparent 6x4, 256px-cell derivative of the approved
 // image, *not* the original labeled concept board with opaque scenery panels.
-export const APPROVED_MOTION_VERSION='approved-style-c-24-v1';
+export const APPROVED_MOTION_VERSION='approved-style-c-24-v2-ground-speed';
 export const APPROVED_MOTION_ATLAS=Object.freeze({
   file:'approved/approved-action-atlas-clean.png',
   cols:6,rows:4,cell:256,anchorX:128,anchorY:232
@@ -16,6 +16,28 @@ export const APPROVED_POSES=Object.freeze([
 ]);
 const idx=Object.freeze(Object.fromEntries(APPROVED_POSES.map((name,i)=>[name,i])));
 const seconds=value=>Number.isFinite(value)?Math.max(0,value):0;
+const GROUNDED_POWER_FRAMES=new Set([idx.roots,idx.whirlwind]);
+// Find the actual bottom of each painted root/wind effect, not the generic
+// standing-hero anchor. This keeps its plants/tornado on the platform surface.
+function findGroundAnchors(image){
+  const anchors=new Map();
+  if(typeof document==='undefined')return anchors;
+  try{
+    const cell=APPROVED_MOTION_ATLAS.cell,cols=APPROVED_MOTION_ATLAS.cols;
+    const canvas=document.createElement('canvas');canvas.width=cell;canvas.height=cell;
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    if(!ctx)return anchors;
+    for(const frame of GROUNDED_POWER_FRAMES){
+      ctx.clearRect(0,0,cell,cell);
+      ctx.drawImage(image,(frame%cols)*cell,Math.floor(frame/cols)*cell,cell,cell,0,0,cell,cell);
+      const pixels=ctx.getImageData(0,0,cell,cell).data;
+      outer:for(let row=cell-1;row>=0;row--)for(let col=0;col<cell;col++){
+        if(pixels[(row*cell+col)*4+3]>32){anchors.set(frame,row+1);break outer;}
+      }
+    }
+  }catch(_error){/* Canvas readback unavailable: keep the conservative fallback anchor. */}
+  return anchors;
+}
 export function selectApprovedPose(hero={},game={}){
   if(hero.dead||hero.stun>0)return null;
   const left=(hero.attack?.face||hero.face||1)<0;
@@ -32,20 +54,21 @@ export function selectApprovedPose(hero={},game={}){
   if(hero.flying||active.flight)return idx.flight;
   if(game?.legendary?.active&&(game?.mergeEffects?.length||game?.mergeShots?.length))return idx.merge;
   if(active.steel||hero.steel)return idx.steel;
-  if(active.roots)return idx.roots;
-  if(active.whirlwind)return idx.whirlwind;
-  if((hero.dodgeAge??Infinity)<.22||hero.agile&&Math.abs(hero.vx||0)<25)return idx.agility;
+  // Ground powers cannot turn an airborne hero into a floating static poster.
   if(hero.grounded===false)return left?idx[hero.jumps>=2?'double-left':'jump-left']:idx[hero.jumps>=2?'double-right':'jump-right'];
+  // Movement always retains its matching directional run/speed animation,
+  // including during the two-second root/whirlwind action.
   if(Math.abs(hero.vx||0)>25){
     if(Number(game?.powers?.speed)>0&&Math.abs(hero.vx||0)>180)return idx.speed;
-    // Only one approved frame per facing: avoid a fake sliding run loop.
-    // Keep old multi-frame run atlas until a genuine run-cycle is authored.
-    return null;
+    return null; // Use the multi-frame directional run atlas.
   }
+  if(active.roots)return idx.roots;
+  if(active.whirlwind)return idx.whirlwind;
+  if((hero.dodgeAge??Infinity)<.22||hero.agile)return idx.agility;
   return left?idx['idle-left']:idx['idle-right'];
 }
 export class ApprovedMotionSprites{
- constructor({loader=null}={}){this.loader=loader;this.image=null;this.loading=null;this.error=null;}
+ constructor({loader=null}={}){this.loader=loader;this.image=null;this.loading=null;this.error=null;this.groundAnchors=new Map();}
  async preload(){
   if(this.image)return true;
   if(this.loading)return this.loading;
@@ -62,6 +85,7 @@ export class ApprovedMotionSprites{
     if(image.width!==APPROVED_MOTION_ATLAS.cols*APPROVED_MOTION_ATLAS.cell||
        image.height!==APPROVED_MOTION_ATLAS.rows*APPROVED_MOTION_ATLAS.cell)
       throw Error('Approved Style C atlas has incorrect dimensions');
+    this.groundAnchors=findGroundAnchors(image);
     this.image=image;this.error=null;return true;
    }catch(error){this.error=error.message;return false;}
    finally{this.loading=null;}
@@ -75,10 +99,18 @@ export class ApprovedMotionSprites{
   const meta=APPROVED_MOTION_ATLAS,cell=meta.cell;
   const sourceX=(frame%meta.cols)*cell,sourceY=Math.floor(frame/meta.cols)*cell;
   const worldSize=176*scale;
+  // The approved plant/vortex frames have different transparent padding than
+  // idle artwork. Use their detected silhouette baseline for grounded FX.
+  const anchorY=GROUNDED_POWER_FRAMES.has(frame)?(this.groundAnchors.get(frame)??meta.anchorY-20):meta.anchorY;
   ctx.save();
   ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+  // One approved speed frame exists: mirror it around the character's x-axis
+  // when traveling left, without changing collision or logical facing.
+  if(frame===idx.speed&&((hero.vx||0)<-25||(Math.abs(hero.vx||0)<=25&&(hero.face||1)<0))){
+    ctx.translate(x*2,0);ctx.scale(-1,1);
+  }
   ctx.drawImage(this.image,sourceX,sourceY,cell,cell,
-   x-worldSize*meta.anchorX/cell,y-worldSize*meta.anchorY/cell,worldSize,worldSize);
+   x-worldSize*meta.anchorX/cell,y-worldSize*anchorY/cell,worldSize,worldSize);
   ctx.restore();
   return true;
  }
