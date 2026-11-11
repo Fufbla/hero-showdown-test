@@ -44,7 +44,7 @@ test('only normal, grounded, moving V2 sprite hero gets this run animation',()=>
 });
 test('0000000000 restores captured painted body for idle run and jumps',async()=>{
  const renderer=await readFile(new URL('../renderer.mjs',import.meta.url),'utf8');
- assert.ok(renderer.includes('const generated=approved||(this.v2SpriteTest&&v2GeneratedSprites.draw('),
+ assert.ok(renderer.includes('const generated=!steelMode&&(approved||(this.v2SpriteTest&&v2GeneratedSprites.draw('),
    'captured illustrated atlas must be preferred for the isolated test hero');
  assert.ok(renderer.includes('!!specialArt&&approvedMotionSprites.draw('),
    'newer approved special-power art must remain available');
@@ -86,11 +86,12 @@ test('animated Speed effects travel with time and stay at feet when running left
  assert.equal(v2PowerEffectFlags({hero:{...h,vx:0},powers:{speed:.6}}).speed,false);
 });
 
-test('Speed trail stays behind captured painted hero and never duplicates after painting',async()=>{
+test('Speed gets reusable effects behind original illustrated hero',async()=>{
  const renderer=await readFile(new URL('../renderer.mjs',import.meta.url),'utf8');
- const before=renderer.indexOf('if(speedTrail)drawV2PowerPreview(c,game,pos,t);');
- const paint=renderer.indexOf('const generated=approved||(this.v2SpriteTest&&v2GeneratedSprites.draw(');
- assert.ok(before>=0&&paint>before,'Speed streaks must paint behind the restored sprite');
- assert.ok(renderer.includes('if(generated&&!approved&&!speedTrail)drawV2PowerPreview('),
-   'moving test hero should not draw the Speed trail twice');
+ const before=renderer.indexOf("drawUniversalPowerFX(c,game,pos,t,'back',spriteHero)");
+ const paint=renderer.indexOf('const generated=!steelMode&&(');
+ assert.ok(before>=0&&paint>before,'Speed and other trails must paint behind the moving hero');
+ assert.ok(renderer.includes("drawUniversalPowerFX(c,game,pos,t,'front',spriteHero)"));
+ assert.ok(!renderer.includes('if(speedTrail)drawV2PowerPreview('),
+   'old Speed overlays must not double-draw or replace the hero');
 });
