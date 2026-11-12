@@ -5,5 +5,5 @@ if(!allowed){location.replace('../');}
 else{
  await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=new URL('../../assets/animation/motion-core.js',import.meta.url).href;s.onload=resolve;s.onerror=reject;document.head.append(s);});
  await import('../../royale/clothing-catalog-preview.mjs');
- await import('./app.mjs?v=kingjames-1');
+ await import('./app.mjs?v=steel-speed-1');
 }

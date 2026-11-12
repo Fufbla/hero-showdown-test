@@ -1,3 +1,4 @@
+import {migratePowerSnapshot} from '../../royale-v3-staging/power-policy.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -92,6 +93,7 @@ async function parentFixture(run,{forbidGameImports=false}={}){
  try{
   const dependency=forbidGameImports?'data:text/javascript,throw new Error("Old game module loaded during fresh test")':storeURL;
   const source=parentSource.replace("from './character-test/reset.mjs'",'from '+JSON.stringify(resetURL))
+   .replace("from './power-policy.mjs'",'from '+JSON.stringify(new URL('../../royale-v3-staging/power-policy.mjs',import.meta.url).href))
    .replace("import('../royale/saves.mjs')",'import('+JSON.stringify(dependency)+')');
   await import('data:text/javascript,'+encodeURIComponent(source+'\n// fixture '+Math.random()));
   const enter=async value=>{get('input').value=value;get('load').onclick();await until(()=>get('game-frame').src||get('status').textContent);await tick();};
@@ -131,12 +133,12 @@ test('ordinary codes retain authenticated cloud loading and saves; switching to 
  await f.enter('1234567890');
  assert.deepEqual(f.requests.map(request=>request.body.action),['verify','slots']);
  assert.equal(f.requests[0].authorization,undefined);assert.equal(f.requests[1].authorization,'Bearer fixture-access');
- assert.match(f.get('game-frame').src,/\.\.\/royale\/\?codePlay=v3/);assert.equal(f.note.hidden,false);
+ assert.match(f.get('game-frame').src,/\.\/gameplay\/\?codePlay=v3/);assert.equal(f.note.hidden,false);
  assert.equal(f.localStorage.getItem(legacy+'profile'),'old test','Ordinary login does not clear the isolated test');
  const snapshot={world:{region:1,location:{x:120,y:600}},look:{name:'Cloud Hero'},coins:12,level:1,xp:0};
  await f.message({type:'royale-code-progress',slot:0,snapshot});
  assert.equal(f.requests.at(-1).body.action,'save');assert.equal(f.requests.at(-1).authorization,'Bearer fixture-access');
- assert.deepEqual(f.requests.at(-1).body.snapshot,snapshot);
+ assert.deepEqual(f.requests.at(-1).body.snapshot,migratePowerSnapshot(snapshot));
  const count=f.requests.length;
  const queued=f.message({type:'royale-code-progress',slot:0,snapshot:{...snapshot,coins:13}});
  await f.enter('0000000000');await queued;

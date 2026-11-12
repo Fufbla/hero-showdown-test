@@ -2,7 +2,7 @@ name: KingJames full-body sprite regression
 
 on:
   push:
-    branches: [codex/kingjames-fullbody-prototype]
+    branches: [codex/kingjames-fullbody-prototype, codex/kingjames-steel-speed-no-agility]
   workflow_dispatch:
 
 permissions:
@@ -30,10 +30,15 @@ jobs:
       - name: Check generated adapter and protected production source
         run: |
           node tools/build-kingjames-staging.cjs
+          git diff --exit-code -- royale-v3-staging/gameplay royale-v3-staging/local-coop royale-v3-staging/index.html
           git diff --exit-code -- royale-v3-staging/kingjames
           test -z "$(git diff --name-only 8fa7a78ca79774c345932892a39b2a1f7ccad7c4 HEAD -- royale assets index.html game.html hero-showdown.html ':!royale/tests')"
       - name: Run full-body, save, cloud bridge, co-op and power regression tests
         run: node --test royale-v3-staging/kingjames/tests/engine.test.mjs royale/tests/fresh-character-reset.test.mjs royale/local-coop/tests/*.test.mjs royale/v2-sprites/tests/*.test.mjs royale/tests/v2-test-hero-code.test.mjs royale/tests/travel-cloud.test.mjs royale/tests/travel-eris.test.mjs royale/tests/clothing-purchases.test.mjs
+      - name: Verify Steel, Speed and the staging save migration
+        run: |
+          node --test royale-v3-staging/kingjames/tests/steel-motion.test.mjs
+          node --import ./royale-v3-staging/kingjames/tests/register-staging.mjs --test royale-v3-staging/kingjames/tests/power-policy.test.mjs
       - name: Verify desktop and mobile in Chromium and WebKit
         run: |
           python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/kingjames-server.log 2>&1 &

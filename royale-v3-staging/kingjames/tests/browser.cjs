@@ -3,6 +3,7 @@ const {chromium,webkit}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const origin=process.env.KINGJAMES_TEST_ORIGIN||'http://127.0.0.1:8174';
+const exercisePowers=require('./browser-powers.cjs');
 const namespace='royale-v2-prototype-0000000000:healthia.royale.profiles.v2';
 const report=[];
 async function check(type,mode){
@@ -24,10 +25,14 @@ async function check(type,mode){
    const until=Number(await frame.locator('#game').getAttribute('data-simulation-time'))+seconds;
    await frame.waitForFunction(t=>Number(document.querySelector('#game').dataset.simulationTime)>=t,until,{timeout:30000});
   };
+  const waitForStride=async direction=>frame.waitForFunction(dir=>{
+   const frames=(document.querySelector('#game').dataset.spriteSeen||'').split(',');
+   return frames.filter(s=>s.startsWith('run:')&&s.endsWith(':'+dir)).length>=5;
+  },direction,{timeout:10000});
   await frame.locator('#game').click();
-  await page.keyboard.down('Shift');await page.keyboard.down('ArrowRight');await advance(.8);await page.keyboard.up('ArrowRight');await page.keyboard.up('Shift');
+  await page.keyboard.down('Shift');await page.keyboard.down('ArrowRight');await waitForStride(1);await page.keyboard.up('ArrowRight');await page.keyboard.up('Shift');
   await advance(.2);
-  await page.keyboard.down('Shift');await page.keyboard.down('ArrowLeft');await advance(.8);await page.keyboard.up('ArrowLeft');await page.keyboard.up('Shift');
+  await page.keyboard.down('Shift');await page.keyboard.down('ArrowLeft');await waitForStride(-1);await page.keyboard.up('ArrowLeft');await page.keyboard.up('Shift');
   await advance(.25);
   await page.keyboard.press('Space');await advance(.1);await page.keyboard.press('Space');await advance(1.05);
   await page.keyboard.press('j');await advance(.33);await page.keyboard.press('k');await advance(.45);
@@ -39,6 +44,7 @@ async function check(type,mode){
   const seen=(await frame.locator('#game').getAttribute('data-sprite-seen')).split(',');
   for(const action of ['idle','run','jump','doubleJump','fall','land','punch','kick'])assert.ok(seen.some(s=>s.startsWith(action+':')),type.name()+'/'+mobile+' did not render '+action);
   for(const dir of [-1,1])assert.ok(seen.filter(s=>s.startsWith('run:')&&s.endsWith(':'+dir)).length>=5,'Insufficient alternating run frames '+dir);
+  const powers=await exercisePowers(frame,page,advance,type.name()+'-'+mode,initial.snapshot);
   // The released game prevents saves until five seconds after combat.
   // Let that normal cooldown elapse before pausing the simulation.
   await frame.waitForFunction(()=>window.kingJamesQA.status().snapshot!==null,null,{timeout:30000});
@@ -47,13 +53,20 @@ async function check(type,mode){
   const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),namespace);assert.ok(saved.slots.some(s=>s?.snapshot.look.name==='KingJames'));
   await page.reload();await page.locator('#enter').click();await page.locator('#input').fill('0000000000');await page.locator('#load').click();
   const fresh=await page.locator('#game-frame').elementHandle();const restored=await fresh.contentFrame();
+  await restored.waitForFunction(()=>window.kingJamesQA?.status().ready===true);
+  // Returning from the power menu preserves the Tree visit in the save. The
+  // existing restore flow opens that menu before any character frame is drawn.
+  if(await restored.getByRole('button',{name:'Return to Pause Menu',exact:true}).isVisible()){
+   await restored.getByRole('button',{name:'Return to Pause Menu',exact:true}).click();
+   await restored.getByRole('button',{name:'Resume Game',exact:true}).click();
+  }
   await restored.waitForFunction(()=>document.querySelector('#game')?.dataset.outfit==='kingjames-original');
   const recovered=await restored.evaluate(()=>window.kingJamesQA.status().snapshot);
   for(const key of ['level','xp','coins','inventory','powers','look','cosmetics'])assert.deepEqual(recovered[key],after.snapshot[key]);
   assert.equal(cloudRequests.length,0,'Reserved test contacted cloud account endpoints');assert.deepEqual(errors,[]);
   const file='kingjames-'+type.name()+'-'+mode+'.png';
   await page.screenshot({path:'/tmp/'+file,fullPage:true});
-  report.push({engine:type.name(),mode,viewport,verified:['reserved-code-load','idle','both-run-directions','jump','doubleJump','fall','land','punch','kick','progress-reload','no-cloud-write'],seen,errors});
+  report.push({engine:type.name(),mode,viewport,powers,verified:['reserved-code-load','idle','both-run-directions','jump','doubleJump','fall','land','punch','kick','progress-reload','no-cloud-write'],seen,errors});
   console.log(JSON.stringify(report.at(-1)));
  }catch(error){
   const tag=type.name()+'-'+mode;
