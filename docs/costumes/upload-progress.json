@@ -12,10 +12,10 @@
   "initial_committed_files": 0,
   "initial_previous_upload_records": 28,
   "total_required_files": 98,
-  "verified_files": 7,
-  "remaining_files": 91,
-  "last_verified_content_commit": "03f4c81bf81f1fe93c230f3ea67911786c019280",
-  "remote_head": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+  "verified_files": 14,
+  "remaining_files": 84,
+  "last_verified_content_commit": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
+  "remote_head": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
   "completed_files": [
     ".github/workflows/costume-review.yml",
     "docs/costumes/ASSET-BRIEF.md",
@@ -23,16 +23,16 @@
     "docs/costumes/README.md",
     "docs/costumes/approved-concepts.jpeg",
     "docs/costumes/art/assets-a-metrics.json",
-    "docs/costumes/art/assets-a-notes.md"
-  ],
-  "remaining_paths": [
+    "docs/costumes/art/assets-a-notes.md",
     "docs/costumes/art/assets-b-notes.md",
     "docs/costumes/art/assets-c-notes.md",
     "docs/costumes/art/black-business-suit-source.png",
     "docs/costumes/art/dolphin-costume-source.png",
     "docs/costumes/art/dolphin-prompt.txt",
     "docs/costumes/art/fishsticks-costume-source.png",
-    "docs/costumes/art/hamburger-costume-source.png",
+    "docs/costumes/art/hamburger-costume-source.png"
+  ],
+  "remaining_paths": [
     "docs/costumes/art/hamburger-prompt.txt",
     "docs/costumes/art/pink-shark-costume-source.png",
     "docs/costumes/art/pizza-slice-costume-source.png",
@@ -210,8 +210,10 @@
       "size_bytes": 10373,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
+      "batch_number": 2
     },
     {
       "path": "docs/costumes/art/assets-c-notes.md",
@@ -220,8 +222,10 @@
       "size_bytes": 13200,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
+      "batch_number": 2
     },
     {
       "path": "docs/costumes/art/black-business-suit-source.png",
@@ -230,8 +234,10 @@
       "size_bytes": 1565280,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
+      "batch_number": 2
     },
     {
       "path": "docs/costumes/art/dolphin-costume-source.png",
@@ -240,8 +246,10 @@
       "size_bytes": 2257694,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
+      "batch_number": 2
     },
     {
       "path": "docs/costumes/art/dolphin-prompt.txt",
@@ -250,8 +258,10 @@
       "size_bytes": 2850,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
+      "batch_number": 2
     },
     {
       "path": "docs/costumes/art/fishsticks-costume-source.png",
@@ -260,8 +270,10 @@
       "size_bytes": 2341753,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
+      "batch_number": 2
     },
     {
       "path": "docs/costumes/art/hamburger-costume-source.png",
@@ -270,8 +282,10 @@
       "size_bytes": 2128729,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
+      "batch_number": 2
     },
     {
       "path": "docs/costumes/art/hamburger-prompt.txt",
@@ -1141,6 +1155,33 @@
       "tree_sha": "f93542739fd447903e9c6b43040376f920ebc688",
       "commit_sha": "03f4c81bf81f1fe93c230f3ea67911786c019280",
       "verified_at": "2026-11-12T21:24:31.406Z"
+    },
+    {
+      "number": 2,
+      "started_at": "2026-11-12T21:24:41.088Z",
+      "files": [
+        "docs/costumes/art/assets-b-notes.md",
+        "docs/costumes/art/assets-c-notes.md",
+        "docs/costumes/art/black-business-suit-source.png",
+        "docs/costumes/art/dolphin-costume-source.png",
+        "docs/costumes/art/dolphin-prompt.txt",
+        "docs/costumes/art/fishsticks-costume-source.png",
+        "docs/costumes/art/hamburger-costume-source.png"
+      ],
+      "status": "verified",
+      "reused_blobs": [
+        "docs/costumes/art/assets-b-notes.md",
+        "docs/costumes/art/assets-c-notes.md",
+        "docs/costumes/art/black-business-suit-source.png",
+        "docs/costumes/art/dolphin-costume-source.png",
+        "docs/costumes/art/dolphin-prompt.txt",
+        "docs/costumes/art/fishsticks-costume-source.png",
+        "docs/costumes/art/hamburger-costume-source.png"
+      ],
+      "uploaded_blobs": [],
+      "tree_sha": "187eec7c032c469eac35c4e6fa689029580658f9",
+      "commit_sha": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
+      "verified_at": "2026-11-12T21:24:48.833Z"
     }
   ],
   "errors": [
@@ -1170,6 +1211,6 @@
     "Save every verified batch SHA and exact file/phase/error in this manifest before beginning another batch.",
     "Keep deployment on hold."
   ],
-  "last_checkpoint_commit": "341c485bae402ac035d77c2f99c993ea13d2d44a",
-  "updated_at": "2026-11-12T21:24:32.448Z"
+  "last_checkpoint_commit": "222638eb07af7881beed1e77f2a6faeb34429f1d",
+  "updated_at": "2026-11-12T21:24:49.845Z"
 }
