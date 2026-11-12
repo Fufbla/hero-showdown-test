@@ -57,7 +57,9 @@ async function check(type,mode){
   assert.ok(after.snapshot.coins>=initial.snapshot.coins,'Combat lost coins');
   const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),namespace);
   const savedHero=saved.slots.find(s=>s?.snapshot.look.name==='KingJames');assert.ok(savedHero);
-  for(const key of ['level','xp','coins','inventory','powers','look','cosmetics'])assert.deepEqual(savedHero.snapshot[key],after.snapshot[key],'Saved progress differs from the post-combat hero: '+key);
+  // Storage adds compatibility defaults to powers; compare that complete value
+  // after the ordinary loader canonicalizes it below, rather than its raw shape.
+  for(const key of ['level','xp','coins','inventory','look','cosmetics'])assert.deepEqual(savedHero.snapshot[key],after.snapshot[key],'Saved progress differs from the post-combat hero: '+key);
   await page.reload();await page.locator('#enter').click();await page.locator('#input').fill('0000000000');await page.locator('#load').click();
   const fresh=await page.locator('#game-frame').elementHandle();const restored=await fresh.contentFrame();
   await restored.waitForFunction(()=>window.kingJamesQA?.status().ready===true);
