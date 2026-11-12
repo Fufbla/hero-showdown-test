@@ -13,6 +13,7 @@ on:
       - 'royale-v3-staging/character-test/**'
       - 'royale/qa/staging-startup.cjs'
       - 'royale-v3-staging/kingjames/**'
+      - 'tools/build-staging-power-policy.cjs'
   workflow_dispatch:
 jobs:
   inspect:
@@ -23,6 +24,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Validate staging import-map addresses
+        run: node --test royale-v3-staging/kingjames/tests/import-maps.test.mjs
       - name: Install Chromium and WebKit
         run: |
           npm install --no-save --no-package-lock playwright@1.56.1
@@ -30,4 +33,5 @@ jobs:
       - name: Probe staging launch and log browser errors
         run: |
           python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/v3-browser-server.log 2>&1 &
+          node royale-v3-staging/kingjames/tests/login.browser.cjs
           node royale-v3-staging/kingjames/tests/browser.cjs

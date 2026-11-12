@@ -42,9 +42,17 @@ function mappedHTML(html,originalDirectory){
   const m=JSON.parse(raw);
   for(const file of ['powers.mjs','eris-ui.mjs','cloud-validation.mjs','local-coop/serialize.mjs']){
    const original=new URL('/royale/'+file,base).href;
-   const target=path.posix.relative(originalDirectory,'/royale-v3-staging/gameplay/'+path.posix.basename(file))+'?v=steel-speed-1';
+   const relative=path.posix.relative(originalDirectory,'/royale-v3-staging/gameplay/'+path.posix.basename(file));
+   // Import-map addresses must be URL-like; bare "gameplay/..." is blocked by browsers.
+   const target=(relative.startsWith('.')?relative:'./'+relative)+'?v=steel-speed-1';
+   const targetURL=new URL(target,base).href.split('?')[0];
    for(const [key,value]of Object.entries(m.imports)){
-    if(new URL(key,base).href.split('?')[0]===original){m.imports[key]=target;m.imports[value]=target;}
+    const valueURL=new URL(value,base).href.split('?')[0];
+    if(new URL(key,base).href.split('?')[0]===original){
+     m.imports[key]=target;
+     // Preserve versioned shared imports, without accumulating staging self-aliases.
+     if(valueURL===original)m.imports[value]=target;
+    }else if(valueURL===targetURL)m.imports[key]=target;
    }
    const key=path.posix.relative(originalDirectory,'/royale/'+file);
    m.imports[key.startsWith('.')?key:'./'+key]=target;
