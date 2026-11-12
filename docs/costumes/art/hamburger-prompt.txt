@@ -1,0 +1,13 @@
+Use case: stylized-concept. Production 2D game sprite atlas, not a redesign.
+Input reference: approved 10-costume sheet. Reproduce ONLY the HAMBURGER COSTUME in top row third panel: sesame seed golden bun on top of head, bright green lettuce, red tomato, glossy yellow cheese, brown burger patty, lower bread layers around body, matching golden yellow boots, white cuffs, black outline. Exact approved compact Action-Chibi proportions, detailed shaded illustration style. The bun covers the head and surrounds an empty personalized face opening. No hair.
+Technical output: transparent PNG 2048x1536, EXACTLY 8 columns by 6 rows of equally spaced cells, 48 full-body poses total. No text/captions/grid/borders/environment/floor/shadow. All figures face RIGHT in a three-quarter gameplay side view. Each complete costume remains inside its own equal cell with at least 12px margin. Matching body/head size throughout; head stays upright. Jump poses have distinct body shapes but no vertical trajectory baked in.
+MANDATORY COLOR-KEYS: face area in EVERY cell is a flat PURE MAGENTA #ff00ff oval, with no eyes/brows/nose/mouth/beard/hair/shading. The bun/lettuce/tomato hood fits immediately around that magenta face oval. Magenta nowhere else. Bare hands in EVERY cell are FLAT PURE CYAN #00ffff with dark outlines and knuckle details only, no shading/gradient. Cyan nowhere else. Game will substitute personalized skin and face. Ingredients remain securely attached in every pose.
+Whole-character animation requirements: no separate limbs, clothing parts or rigs. Real forward running, alternating leg contact/passing/push-off/flight, strong punch extension, obvious kick extension, believable crouches and jump tucks. Hamburger layers follow body's authored motion but never float away.
+Exact row-major frame contents:
+Row1 (8 poses): 0–1 idle breathing,2–3 accelerate into run,4–5 brake/stop,6–7 first two of eight running gait phases.
+Row2: 8–13 remaining six running phases,14–15 jump crouch/takeoff.
+Row3: 16–17 jump rise/apex,18–21 double jump tuck/recoil/extend/apex,22–23 fall controlled/brace.
+Row4: 24–25 landing crouch/recovery,26–29 punch anticipation/windup/FULL FORWARD ARM EXTENSION/recovery,30–31 kick windup/knee lift.
+Row5:32–33 kick FULL FORWARD LEG EXTENSION/recovery,34–35 hurt recoil/recover,36–37 defeat kneel/collapse,38–39 recovery getup/guard.
+Row6:40–43 fireball gather/aim/release/recover with no projectile,44–47 flight lift/hover/fly/glide mostly upright.
+48 complete figures exactly, consistent high detail and genuine transparent alpha.

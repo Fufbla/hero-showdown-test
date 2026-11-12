@@ -1,0 +1,13 @@
+Use case: stylized-concept. Asset type: production 2D game animation sprite atlas.
+Reference image: approved costume concept sheet. Reproduce ONLY the PINK SHARK COSTUME in top-row second panel: pink full-body shark onesie, white belly and cuffs, shark-shaped hood with white pointed triangular teeth around face opening, matching pink feet, dorsal fins and strong forked shark tail. EXACT same approved design, detailed illustrated Action-Chibi compact proportions, thick dark outline, richly shaded pink cloth, no face copied from reference.
+Transparent PNG requested 2048x1536; EXACTLY 8 equal columns x 6 equal rows = 48 complete distinct poses. NO labels/grid/borders/scenery/floors/cast shadows. One entire figure per cell with 12px transparent margins and no spill into neighbor cells. Consistent height/head/body proportions. All poses face RIGHT in three-quarter side gameplay view. Keep heads upright and face openings visible. Jump and flight pose changes must not add vertical trajectory offsets.
+IMPORTANT CUSTOMIZATION MASK: Every hood face opening must be a perfectly FLAT PURE MAGENTA #ff00ff oval surrounded by the exact white teeth and pink hood. No eyes/nose/mouth/eyebrows/beard/hair. Magenta is a technical color-key face mask and MUST NOT shade or mix with pink cloth. Costume pink should be #f38bbc (pastel pink), face mask #ff00ff highly saturated. The mask should stay similar size in every frame. Every bare hand is FLAT PURE CYAN #00ffff with only dark contour/knuckle ink; no cyan elsewhere. These are technical masks recolored in game, not final skin.
+Every frame must contain one complete authored costume pose, including hood/tail/fins/shoes; no limb pieces or rigs. Tail follows movement. Real varied forward run gait with alternating contact/passing/airborne feet; no repeated still pose and no backward skipping.
+Exact cell sequence, row-major:
+Row1: cells0–1 idle breathing,2–3 accelerating to run,4–5 brake/stop,6–7 first two of eight run gait phases.
+Row2: cells8–13 last six of eight running gait phases,14–15 jump crouch/takeoff.
+Row3:16–17 jump rise/apex,18–21 double jump tuck/recoil/extend/apex,22–23 fall controlled/brace.
+Row4:24–25 land crouch/recovery,26–29 punch anticipation/windup/FULL FORWARD ARM EXTENSION/recovery,30–31 kick windup/knee lift.
+Row5:32–33 kick FULL FORWARD LEG EXTENSION/recovery,34–35 damage recoil/recover,36–37 defeat kneel/collapse head upright,38–39 recovery getup/guard.
+Row6:40–43 fireball gather/aim/release/recover (no projectile),44–47 flight lift/hover/fly/glide mostly upright.
+48 complete poses exactly; preserve alpha transparency.
