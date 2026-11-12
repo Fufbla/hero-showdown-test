@@ -15,7 +15,7 @@ async function check(type,mobile){
   await page.goto(origin+'/royale-v3-staging/?spriteQA=1',{waitUntil:'domcontentloaded'});
   await page.locator('#enter').click();await page.locator('#input').fill('0000000000');await page.locator('#load').click();
   const element=await page.locator('#game-frame').elementHandle();const frame=await element.contentFrame();
-  await frame.waitForFunction(()=>document.querySelector('#game')?.dataset.outfit==='kingjames-original',null,{timeout:45000});
+  await frame.waitForFunction(()=>{const d=document.querySelector('#game')?.dataset;return d?.outfit==='kingjames-original'&&d.artReady==='true'&&d.inputEnabled==='true';},null,{timeout:90000});
   const initial=await frame.evaluate(()=>window.kingJamesQA.status());
   assert.equal(initial.name,'KingJames');assert.equal(initial.ready,true);
   await frame.locator('#game').click();
@@ -33,6 +33,9 @@ async function check(type,mobile){
   const seen=(await frame.locator('#game').getAttribute('data-sprite-seen')).split(',');
   for(const action of ['idle','run','jump','doubleJump','fall','land','punch','kick'])assert.ok(seen.some(s=>s.startsWith(action+':')),type.name()+'/'+mobile+' did not render '+action);
   for(const dir of [-1,1])assert.ok(seen.filter(s=>s.startsWith('run:')&&s.endsWith(':'+dir)).length>=5,'Insufficient alternating run frames '+dir);
+  // The released game prevents saves until five seconds after combat.
+  // Let that normal cooldown elapse before pausing the simulation.
+  await frame.waitForFunction(()=>window.kingJamesQA.status().snapshot!==null,null,{timeout:15000});
   const after=await frame.evaluate(()=>{window.kingJamesQA.pause();window.kingJamesQA.save();return window.kingJamesQA.status();});
   for(const key of ['level','xp','coins','inventory','powers','look','cosmetics'])assert.deepEqual(after.snapshot[key],initial.snapshot[key],'Unexpected progress/appearance change '+key);
   const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),namespace);assert.ok(saved.slots.some(s=>s?.snapshot.look.name==='KingJames'));
