@@ -45,6 +45,7 @@ write('royale-v3-staging/gameplay/local-coop-app.mjs','// Generated staging equi
 // the changed adapters so a returning player cannot reuse a visible-armor module.
 for(const [file,basePath] of [['index.html','/royale-v3-staging/'],['kingjames/index.html','/royale/'],['gameplay/index.html','/royale/'],['local-coop/index.html','/royale/local-coop/']]){
  const dest=path.join(stage,file);let html=fs.readFileSync(dest,'utf8');
+ if(file==='index.html')html=html.replaceAll('./app.mjs?v=outfits-1','./app.mjs?v=armor-stats-1').replace("location.href='./local-coop/'","location.href='./local-coop/?v=armor-stats-1'");
  html=html.replace('>Costume Wardrobe<','>Armor Equipment<').replace('YOUR NEXT LOOK','YOUR COSMETIC APPEARANCE').replace('THE CENTRAL COSTUME SHOP','ARMOR EQUIPMENT').replace('Dress for your journey.','Choose your armor bonuses.').replace('Preview only. Your equipped items change when you choose Equip.','Armor provides stat bonuses only. Your selected cosmetic outfit stays the same.').replace('>Complete outfits<','>Matching armor sets<');
  html=html.replace(/<script type="importmap">([\s\S]*?)<\/script>/,(_,json)=>{
   const m=JSON.parse(json),base=new URL(basePath,'https://game.test');
@@ -64,7 +65,7 @@ for(const [file,basePath] of [['index.html','/royale-v3-staging/'],['kingjames/i
    }
    const key=path.posix.relative(basePath,sourcePath);m.imports[key.startsWith('.')?key:'./'+key]=target;
   }
-  for(const [key,value]of Object.entries(m.imports))if(new URL(value,base).pathname.endsWith('/kingjames/app.mjs'))m.imports[key]=value.replace(/\?v=[^&]+/,'?v=armor-stats-1');
+  for(const [key,value]of Object.entries(m.imports))if(['/royale-v3-staging/kingjames/app.mjs','/royale-v3-staging/app.mjs'].includes(new URL(value,base).pathname))m.imports[key]=value.replace(/\?v=[^&]+/,'?v=armor-stats-1');
   return '<script type="importmap">'+JSON.stringify(m)+'</script>';
  });
  fs.writeFileSync(dest,html);

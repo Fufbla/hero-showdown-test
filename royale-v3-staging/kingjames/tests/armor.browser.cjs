@@ -29,7 +29,7 @@ const fixture=JSON.parse(execFileSync(process.execPath,['--import','./royale-v3-
    const stats=()=>frame.evaluate(async()=>{const {Game,decodeSave}=await import('../../royale/core.mjs');return new Game({save:decodeSave(JSON.stringify(window.kingJamesQA.status().snapshot))}).equipment;});
    await frame.evaluate(()=>window.kingJamesQA.pause());
    const original=await state(),baseStats=await stats();
-   await frame.locator('#tree-from-pause').click();await frame.locator('[data-eris="wardrobe"]').click();await frame.locator('[data-wardrobe="owned"]').click();
+   await frame.locator('#tree-from-pause').click();await frame.getByRole('button',{name:'Armor Equipment',exact:true}).click();await frame.locator('[data-wardrobe="owned"]').click();
    assert.match(await frame.locator('#wardrobe-note').innerText(),/stat bonuses only/);
    const preview=()=>frame.locator('#gear-preview').evaluate(c=>c.toDataURL());
    const initialImage=await preview();
@@ -50,7 +50,7 @@ const fixture=JSON.parse(execFileSync(process.execPath,['--import','./royale-v3-
    await frame.waitForFunction(()=>document.querySelector('#game').dataset.outfit==='blossom-kimono');
    assert.deepEqual(await stats(),equippedStats);
    await frame.evaluate(()=>window.kingJamesQA.pause());
-   await frame.locator('#tree-from-pause').click();await frame.locator('[data-eris="wardrobe"]').click();await frame.locator('[data-wardrobe="owned"]').click();await frame.locator('[data-catalog="drop-3"]').click();
+   await frame.locator('#tree-from-pause').click();await frame.getByRole('button',{name:'Armor Equipment',exact:true}).click();await frame.locator('[data-wardrobe="owned"]').click();await frame.locator('[data-catalog="drop-3"]').click();
    const kimono=await preview();assert.notEqual(kimono,initialImage);
    await frame.locator('#equip-piece').click();assert.deepEqual((await state()).inventory.equipped,{});assert.deepEqual(await stats(),baseStats);assert.equal(await preview(),kimono);
    await frame.locator('#equip-piece').click();assert.deepEqual(await stats(),equippedStats);

@@ -31,7 +31,7 @@ for(let i=0;i<3;i++){let snap=slots[i]?.snapshot||null;const journal=localStorag
 next.slots[i]=snap?{id:'v3-slot-'+i,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),lastRegion:'Cloud',snapshot:snap}:null;}
 const original=storage.getItem('healthia.royale.profiles.v2');if(original){const backup=prefix+'backup:'+crypto.randomUUID();localStorage.setItem(backup,original);if(localStorage.getItem(backup)!==original)throw Error('Local backup failed');}
 const saved=store.flush(next,{atomic:true});if(!saved.ok)throw Error(saved.error||'Local restore failed');
-last=slots.map(x=>x.snapshot?JSON.stringify(x.snapshot):null);console.info('[V3 cloud restored]',slots.map(x=>({slot:x.slot_number,revision:x.revision,x:x.snapshot?.world?.location?.x,y:x.snapshot?.world?.location?.y,xp:x.snapshot?.xp,coins:x.snapshot?.coins})));$('welcome').hidden=true;$('new-code').hidden=true;$('roster').hidden=false;$('game-frame').src='./gameplay/?codePlay=v3&v=portals-1&cloudLoad='+Date.now();status('V3 cloud loaded. Choose a hero.');
+last=slots.map(x=>x.snapshot?JSON.stringify(x.snapshot):null);console.info('[V3 cloud restored]',slots.map(x=>({slot:x.slot_number,revision:x.revision,x:x.snapshot?.world?.location?.x,y:x.snapshot?.world?.location?.y,xp:x.snapshot?.xp,coins:x.snapshot?.coins})));$('welcome').hidden=true;$('new-code').hidden=true;$('roster').hidden=false;$('game-frame').src='./gameplay/?codePlay=v3&v=armor-stats-1&cloudLoad='+Date.now();status('V3 cloud loaded. Choose a hero.');
 }
 // Fixed code 0000000000 is a public, isolated test mode, not a real Supabase
 // 10-digit account. Never verify, write, or renew the production cloud here.
@@ -43,7 +43,7 @@ function launchCharacterTest(){
  $('welcome').hidden=true;$('new-code').hidden=true;$('roster').hidden=false;
  $('refresh').textContent='Reload Character Test';
  const qa=new URLSearchParams(location.search).get('spriteQA')==='1'?'&spriteQA=1':'';
- $('game-frame').src='./kingjames/index.html?v2TestCharacter='+CHARACTER_TEST_CODE+'&v=outfits-1'+qa;
+ $('game-frame').src='./kingjames/index.html?v2TestCharacter='+CHARACTER_TEST_CODE+'&v=armor-stats-1'+qa;
  status('KINGJAMES PROTOTYPE · 0000000000 · Progress saves on this browser every eight seconds.');
 }
 async function save(slot,snapshot,{clothingAction=false}={}){if(blocked||!access||![0,1,2].includes(slot)||!snapshot)return {ok:false,error:'Cloud saving is paused. Re-enter your code to reconcile progress.'};
