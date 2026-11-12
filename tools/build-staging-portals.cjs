@@ -18,7 +18,7 @@ let menu="import {worldPortalPreview,pulsePortal} from './runtime.mjs?v=portals-
 menu=replace(menu,"const g=this.getGame(),list=$('region-cards');list.replaceChildren();","const g=this.getGame(),list=$('region-cards');list.replaceChildren();if(source!=='portal')worldPortalPreview(list);else pulsePortal();");
 fs.writeFileSync(path.join(out,'journey-menu.mjs'),menu);
 for(const [file,basePath] of [['index.html','/royale-v3-staging/'],['kingjames/index.html','/royale/'],['gameplay/index.html','/royale/'],['local-coop/index.html','/royale/local-coop/']]){
- const dest=path.join(stage,file);let html=fs.readFileSync(dest,'utf8');if(file==='index.html')html=html.replace('./app.mjs?v=steel-speed-1','./app.mjs?v=portals-1');
+ const dest=path.join(stage,file);let html=fs.readFileSync(dest,'utf8');if(file==='index.html')html=html.replaceAll('./app.mjs?v=steel-speed-1','./app.mjs?v=portals-1');
  html=html.replace(/<script type="importmap">([\s\S]*?)<\/script>/,(_,json)=>{const m=JSON.parse(json),base=new URL(basePath,'https://game.test');for(const f of ['world-art.mjs','boss-ui.mjs','journey-menu.mjs']){const source='/royale/'+f,relative=path.posix.relative(basePath,'/royale-v3-staging/portals/'+f),target=(relative.startsWith('.')?relative:'./'+relative)+'?v=portals-1';for(const [key,value]of Object.entries(m.imports)){if(new URL(key,base).pathname===source||new URL(value,base).pathname===source)m.imports[key]=target;}const key=path.posix.relative(basePath,source);m.imports[key.startsWith('.')?key:'./'+key]=target;}return '<script type="importmap">'+JSON.stringify(m)+'</script>';});fs.writeFileSync(dest,html);
 }
 console.log('Built staging-only approved portal artwork adapters.');
