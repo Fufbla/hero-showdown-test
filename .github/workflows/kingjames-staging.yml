@@ -45,6 +45,7 @@ jobs:
         run: |
           node --test royale-v3-staging/kingjames/tests/import-maps.test.mjs
           node --import ./royale-v3-staging/kingjames/tests/register-staging.mjs --test royale-v3-staging/kingjames/tests/armor.test.mjs
+          node --import ./royale-v3-staging/kingjames/tests/register-staging.mjs --test royale-v3-staging/kingjames/tests/armor-bonus-ui.test.mjs royale-v3-staging/kingjames/tests/armor-combat.test.mjs
           node --import ./royale-v3-staging/kingjames/tests/register-staging.mjs --test royale-v3-staging/kingjames/tests/armor-render.test.mjs
           python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/kingjames-server.log 2>&1 &
           node royale-v3-staging/kingjames/tests/armor.browser.cjs

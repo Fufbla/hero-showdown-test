@@ -15,6 +15,10 @@ equipment="// Generated staging presentation; all catalog, equipment and bonus r
 write('royale-v3-staging/gameplay/equipment.mjs',equipment);
 
 let eris=read('royale-v3-staging/gameplay/eris-ui.mjs');
+eris="import {armorLevelBonuses,armorStatKeys,armorStatLabel,appliedBonusSummary} from './armor-bonus-summary.mjs?v=armor-bonuses-2';\n"+eris;
+eris=replace(eris,'return stats;}\nexport function statComparison','return {...stats,...armorLevelBonuses(g,inventory,level)};}\nexport function statComparison');
+eris=replace(eris,"for(const k of STAT_KEYS){const row=el('tr');row.append(el('th',STAT_LABELS[k])","for(const k of armorStatKeys(before,after)){const row=el('tr');row.append(el('th',armorStatLabel(k))");
+eris=replace(eris,"(STAT_KEYS.filter(k=>applied[k]).map(k=>`${STAT_LABELS[k]} +${formatStat(k,applied[k])}`).join(' · ')||'No stat bonuses')","appliedBonusSummary(applied)");
 eris="import {drawCosmeticPreview} from './armor-preview.mjs?v=armor-stats-1';\n"+eris;
 eris=replace(eris,"drawHero(c,180,380,g.look,previewHero('idle',0),0,2.85,{view,outfit:equipmentOutfit(inventory,g.outfit)});canvas.setAttribute('aria-label',`${view} full-body costume preview of ${g.look.name}`);","drawCosmeticPreview(c,180,380,g,previewHero('idle',0),0,2.85,view);canvas.setAttribute('aria-label',`Current cosmetic appearance of ${g.look.name}; armor grants stats only`);");
 eris=replace(eris,"Choose a complete matching outfit. Power Armor collections each have nine tiers.","Armor grants stat bonuses only and never changes your appearance. Equip a complete matching set. Power Armor collections each have nine tiers.");
@@ -56,7 +60,7 @@ for(const [file,basePath] of [['index.html','/royale-v3-staging/'],['kingjames/i
    'eris-ui.mjs':'gameplay/eris-ui.mjs','journey-menu.mjs':'portals/journey-menu.mjs'
   })){
    const sourcePath='/royale/'+source,targetPath='/royale-v3-staging/'+dest;
-   const rel=path.posix.relative(basePath,targetPath),target=(rel.startsWith('.')?rel:'./'+rel)+'?v=armor-stats-1';
+   const rel=path.posix.relative(basePath,targetPath),target=(rel.startsWith('.')?rel:'./'+rel)+'?v='+(source==='eris-ui.mjs'?'armor-bonuses-2':'armor-stats-1');
    for(const [key,value]of Object.entries(m.imports)){
     const k=new URL(key,base).pathname,v=new URL(value,base).pathname;
     if(k===sourcePath||v===sourcePath||v===targetPath){

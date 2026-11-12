@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Armor combat regression review</title><style>body{font:16px system-ui;margin:20px;background:#13231e;color:#fff}button,a{font:inherit;padding:12px;margin:6px}iframe{width:100%;height:850px;border:0}</style></head><body>
+<h1>Armor regression test · 0000000000</h1>
+<p>Local preview only. Backs up the complete test profile before loading a temporary fixture. Restore it when finished. No cloud account is connected.</p>
+<button id="seed">Back up and open armor fixture</button><button id="restore">Restore original test profile</button><p id="status"></p><iframe id="review" title="Armor test game"></iframe>
+<script type="module">
+import {OUTFIT_STORAGE_KEY} from '../outfit-catalog.mjs';
+const button=document.querySelector('#seed'),status=document.querySelector('#status');
+const key='royale-v2-prototype-0000000000:healthia.royale.profiles.v2',backup='armor-combat-review-original-profile';
+document.querySelector('#restore').onclick=()=>{
+ document.querySelector('#review').src='about:blank';
+ const raw=localStorage.getItem(backup);if(raw===null){status.textContent='No backup to restore.';return;}
+ const original=JSON.parse(raw);for(const k of [key,OUTFIT_STORAGE_KEY]){if(original[k]===null)localStorage.removeItem(k);else localStorage.setItem(k,original[k]);}
+ localStorage.removeItem(backup);status.textContent='Original profile restored exactly.';button.disabled=false;
+};
+button.onclick=async()=>{
+ if(location.hostname!=='127.0.0.1'&&location.hostname!=='localhost'){status.textContent='Fixture setup is restricted to local preview.';return;}
+ const {Game}=await import('../../../royale/core.mjs');
+ const {kingJamesLook}=await import('../selection.mjs');
+ if(localStorage.getItem(backup)===null)localStorage.setItem(backup,JSON.stringify({[key]:localStorage.getItem(key),[OUTFIT_STORAGE_KEY]:localStorage.getItem(OUTFIT_STORAGE_KEY)}));
+ const game=new Game();game.gainXP(1e9);game.look=kingJamesLook(game.look);game.enemies=[];game.paused=true;
+ for(const id of ['strength','superKick','fireball','steel','roots','whirlwind','speed','flight'])game.powers.data.levels[id]=5;
+ game.powers.data.equipped=['steel','strength','superKick'];game.powers.data.points=58;
+ game.inventory.items=['fireball-flare-chest','fireball-flare-boots','steel-rivet-chest','steel-rivet-boots'].map((catalogId,i)=>({uid:'drop-'+(i+1),catalogId}));game.inventory.nextId=5;game.refreshEquipment();
+ localStorage.setItem(key,JSON.stringify({version:2,revision:1,activeSlot:0,legacyImported:true,slots:[{id:'armor-review-fixture',snapshot:JSON.parse(game.save())},null,null]}));status.textContent='Fixture ready: level 99, Fireball Flare and Rivet Guard owned. Enter 0000000000 below.';
+ document.querySelector('#review').src='../../?spriteQA=1';button.disabled=true;
+};
+</script></body></html>

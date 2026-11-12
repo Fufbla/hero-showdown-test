@@ -1,4 +1,5 @@
 import {drawCosmeticPreview} from './armor-preview.mjs?v=armor-stats-1';
+import {armorLevelBonuses,armorStatKeys,armorStatLabel,appliedBonusSummary} from './armor-bonus-summary.mjs?v=armor-bonuses-2';
 // Generated staging menu; inventory catalog and statistics are preserved.
 import {STYLE_C_VIEWS} from '../../royale/style-c-defaults.mjs';
 import {itemIcon} from '../../royale/item-art.mjs';
@@ -23,10 +24,10 @@ export function drawEquipmentPreview(canvas,g,inventory=g.inventory,view='front'
   const c=canvas.getContext('2d');c.clearRect(0,0,360,420);c.fillStyle='#8cca9133';c.beginPath();c.ellipse(180,382,75,11,0,0,Math.PI*2);c.fill();
   drawCosmeticPreview(c,180,380,g,previewHero('idle',0),0,2.85,view);canvas.setAttribute('aria-label',`Current cosmetic appearance of ${g.look.name}; armor grants stats only`);
 }
-export function appliedEquipment(g,inventory,level=g.hero.level){const stats=equipmentStats(equipmentBonuses(inventory,level)),speed=g.powers.data.levels.speed?powerStats('speed',g.powers.data.levels.speed,{equipment:{speedLevels:matchingSpeedBonus(inventory,level)}}):{attackBonus:0,runBonus:0};stats.attackSpeed=Math.min(stats.attackSpeed,Math.max(0,.5-speed.attackBonus));stats.moveSpeed=Math.min(stats.moveSpeed,Math.max(0,.6-speed.runBonus));return stats;}
+export function appliedEquipment(g,inventory,level=g.hero.level){const stats=equipmentStats(equipmentBonuses(inventory,level)),speed=g.powers.data.levels.speed?powerStats('speed',g.powers.data.levels.speed,{equipment:{speedLevels:matchingSpeedBonus(inventory,level)}}):{attackBonus:0,runBonus:0};stats.attackSpeed=Math.min(stats.attackSpeed,Math.max(0,.5-speed.attackBonus));stats.moveSpeed=Math.min(stats.moveSpeed,Math.max(0,.6-speed.runBonus));return {...stats,...armorLevelBonuses(g,inventory,level)};}
 export function statComparison(before,after){
   const table=el('table',undefined,'gear-stats'),head=el('tr');for(const t of ['Applied bonus','Equipped','Preview'])head.append(el('th',t));table.append(head);
-  for(const k of STAT_KEYS){const row=el('tr');row.append(el('th',STAT_LABELS[k]),el('td',`+${formatStat(k,before[k]||0)}`),el('td',`+${formatStat(k,after[k]||0)}`));table.append(row);}return table;
+  for(const k of armorStatKeys(before,after)){const row=el('tr');row.append(el('th',armorStatLabel(k)),el('td',`+${formatStat(k,before[k]||0)}`),el('td',`+${formatStat(k,after[k]||0)}`));table.append(row);}return table;
 }
 function withPreview(g,defs){
   const inv=structuredClone(g.inventory);
@@ -134,7 +135,7 @@ export class ErisMenu{
   }
   detail(){
     const g=this.getGame(),e=this.selected,p=$('shop-detail');p.replaceChildren();this.previewInventory=g.inventory;
-    const applied=appliedEquipment(g,g.inventory);$('equipped-bonuses').textContent='Applied equipment · '+(STAT_KEYS.filter(k=>applied[k]).map(k=>`${STAT_LABELS[k]} +${formatStat(k,applied[k])}`).join(' · ')||'No stat bonuses')+` · Natural strength ${10+2*(g.hero.level-1)} · Total running +${formatStat('moveSpeed',g.powers.speed)} · Total attack speed +${formatStat('attackSpeed',g.powers.attackRate-1)}`;
+    const applied=appliedEquipment(g,g.inventory);$('equipped-bonuses').textContent='Applied equipment · '+appliedBonusSummary(applied)+` · Natural strength ${10+2*(g.hero.level-1)} · Total running +${formatStat('moveSpeed',g.powers.speed)} · Total attack speed +${formatStat('attackSpeed',g.powers.attackRate-1)}`;
     const appliedDetails=el('details',undefined,'applied-details');appliedDetails.append(el('summary','Current applied bonuses'),el('p',$('equipped-bonuses').textContent));p.append(appliedDetails);
     if(!e){this.draw();return;}
     const defs=e.definitions||activeArmorShopDefinitions(e);
