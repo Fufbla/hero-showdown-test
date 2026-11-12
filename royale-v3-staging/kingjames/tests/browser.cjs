@@ -49,6 +49,13 @@ async function check(type,mode){
   const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),namespace);assert.ok(saved.slots.some(s=>s?.snapshot.look.name==='KingJames'));
   await page.reload();await page.locator('#enter').click();await page.locator('#input').fill('0000000000');await page.locator('#load').click();
   const fresh=await page.locator('#game-frame').elementHandle();const restored=await fresh.contentFrame();
+  await restored.waitForFunction(()=>window.kingJamesQA?.status().ready===true);
+  // Returning from the power menu preserves the Tree visit in the save. The
+  // existing restore flow opens that menu before any character frame is drawn.
+  if(await restored.getByRole('button',{name:'Return to Pause Menu',exact:true}).isVisible()){
+   await restored.getByRole('button',{name:'Return to Pause Menu',exact:true}).click();
+   await restored.getByRole('button',{name:'Resume Game',exact:true}).click();
+  }
   await restored.waitForFunction(()=>document.querySelector('#game')?.dataset.outfit==='kingjames-original');
   const recovered=await restored.evaluate(()=>window.kingJamesQA.status().snapshot);
   for(const key of ['level','xp','coins','inventory','powers','look','cosmetics'])assert.deepEqual(recovered[key],after.snapshot[key]);
