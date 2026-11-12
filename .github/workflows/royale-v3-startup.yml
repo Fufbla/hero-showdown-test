@@ -1,4 +1,4 @@
-name: Royale V3 real browser startup diagnostic
+name: Royale V3 playable KingJames startup diagnostic
 on:
   push:
     branches: [main]
@@ -12,6 +12,7 @@ on:
       - 'royale-v3-staging/app.mjs'
       - 'royale-v3-staging/character-test/**'
       - 'royale/qa/staging-startup.cjs'
+      - 'royale-v3-staging/kingjames/**'
   workflow_dispatch:
 jobs:
   inspect:
@@ -29,4 +30,4 @@ jobs:
       - name: Probe staging launch and log browser errors
         run: |
           python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/v3-browser-server.log 2>&1 &
-          node royale/qa/staging-startup.cjs
+          node royale-v3-staging/kingjames/tests/browser.cjs

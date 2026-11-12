@@ -23,3 +23,13 @@ Baseline: `8fa7a78ca79774c345932892a39b2a1f7ccad7c4` (local tag `kingjames-befor
 ## Rollback
 
 Revert the prototype commit(s), or restore the staging launch route from the baseline. No save migration or equipment rewrite is required. The previous character sandbox and original renderer remain available.
+
+## Validation and publishing record
+
+- 116 targeted sprite, save, cloud bridge, power, wardrobe and local co-op regression checks passed.
+- Chromium and WebKit each passed desktop (1280 × 900), phone portrait (390 × 844) and phone landscape (844 × 390) checks: reserved-code load, both run directions, jump, double jump, fall, landing, punch, kick, save/reload and zero test-mode cloud account requests. Evidence: GitHub Actions run `43196755521`.
+- All 48 composed frames were inspected for padding and fixed-size head attachment. Gameplay equivalence was checked for 300 deterministic simulation ticks with and without sprite rendering.
+- The complete pre-change legacy suite had 252 passing checks and 10 pre-existing failures (historical artwork/source-hash expectations and combat-balancing expectations). Those unrelated systems were not rewritten.
+- GitHub Pages environment protection accepts the existing main publishing route, not the development branch. After successful regression checks, the tested staging-only changes advance to main and the existing Pages pipeline publishes them. Production runtime files remain byte-identical to baseline.
+- The reserved code has no Supabase profile. It preserves existing browser-local test slots and creates KingJames only in an empty slot; it cannot restore nonexistent cloud progress. Ordinary authenticated cloud accounts keep their released path.
+- Physical controller hardware, real iOS/Android devices and live multi-device multiplayer sessions were not exercised. Their gameplay modules remain unchanged; multiplayer/co-op rendering stays on the released renderer during this prototype.
