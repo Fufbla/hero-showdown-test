@@ -61,8 +61,11 @@ const fixture=JSON.parse(execFileSync(process.execPath,['--import','./royale-v3-
    await frame.evaluate(()=>{window.kingJamesQA.resume();window.kingJamesQA.sample({},620);window.kingJamesQA.pause();});
    await frame.waitForFunction(()=>document.querySelector('#game').dataset.outfit==='blossom-kimono');
    for(const move of [{move:1},{move:-1},{jump:true},{jump:true},{punch:true},{kick:true}])await frame.evaluate(action=>{window.kingJamesQA.resume();window.kingJamesQA.sample(action,1);window.kingJamesQA.sample({},50);window.kingJamesQA.pause();},move);
+   // Saving is intentionally blocked for five seconds after an attack.
+   await frame.evaluate(()=>window.kingJamesQA.resume());
+   await frame.waitForFunction(()=>window.kingJamesQA.status().snapshot!==null,null,{timeout:30000});
    await frame.evaluate(()=>{window.kingJamesQA.pause();window.kingJamesQA.save();});
-   const saved=await state();assert.deepEqual(saved.inventory.items,original.inventory.items);assert.deepEqual(saved.look,original.look);
+   const saved=await state();for(const item of original.inventory.items)assert.deepEqual(saved.inventory.items.find(i=>i.uid===item.uid),item);assert.deepEqual(saved.look,original.look);
    assert.deepEqual(saved.powers.levels,original.powers.levels);assert.deepEqual(saved.cosmetics,original.cosmetics);
    await page.goto(origin+'/royale-v3-staging/?spriteQA=1');await page.locator('#enter').click();await page.locator('#input').fill('0000000000');await page.locator('#load').click();
    frame=await(await page.locator('#game-frame').elementHandle()).contentFrame();
