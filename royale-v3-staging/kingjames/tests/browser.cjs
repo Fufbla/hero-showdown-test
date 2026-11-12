@@ -25,10 +25,14 @@ async function check(type,mode){
    const until=Number(await frame.locator('#game').getAttribute('data-simulation-time'))+seconds;
    await frame.waitForFunction(t=>Number(document.querySelector('#game').dataset.simulationTime)>=t,until,{timeout:30000});
   };
+  const waitForStride=async direction=>frame.waitForFunction(dir=>{
+   const frames=(document.querySelector('#game').dataset.spriteSeen||'').split(',');
+   return frames.filter(s=>s.startsWith('run:')&&s.endsWith(':'+dir)).length>=5;
+  },direction,{timeout:10000});
   await frame.locator('#game').click();
-  await page.keyboard.down('Shift');await page.keyboard.down('ArrowRight');await advance(.8);await page.keyboard.up('ArrowRight');await page.keyboard.up('Shift');
+  await page.keyboard.down('Shift');await page.keyboard.down('ArrowRight');await waitForStride(1);await page.keyboard.up('ArrowRight');await page.keyboard.up('Shift');
   await advance(.2);
-  await page.keyboard.down('Shift');await page.keyboard.down('ArrowLeft');await advance(.8);await page.keyboard.up('ArrowLeft');await page.keyboard.up('Shift');
+  await page.keyboard.down('Shift');await page.keyboard.down('ArrowLeft');await waitForStride(-1);await page.keyboard.up('ArrowLeft');await page.keyboard.up('Shift');
   await advance(.25);
   await page.keyboard.press('Space');await advance(.1);await page.keyboard.press('Space');await advance(1.05);
   await page.keyboard.press('j');await advance(.33);await page.keyboard.press('k');await advance(.45);
