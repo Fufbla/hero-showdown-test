@@ -12,12 +12,13 @@ fs.writeFileSync(path.join(out,'world-art.mjs'),world);
 let boss=imports(read('royale/boss-ui.mjs'));
 boss="import {drawPortal} from './runtime.mjs?v=portals-1';\n"+boss;
 boss=replace(boss,"c.strokeStyle='#e8d296';c.lineWidth=4;c.strokeRect(120,480,100,120);","drawPortal(c,ARENA.left,ARENA.floor,g.regionId,g.time,g.arenaScene.cleared?'RETURN TO REGION':'RETREAT · WALK LEFT',g,g.arenaScene.cleared?'return':'regular');");
+boss=boss.replace("205,490","205,410").replace("210,510","210,426");
 fs.writeFileSync(path.join(out,'boss-ui.mjs'),boss);
 let menu="import {worldPortalPreview,pulsePortal} from './runtime.mjs?v=portals-1';\n"+imports(read('royale/journey-menu.mjs'));
 menu=replace(menu,"const g=this.getGame(),list=$('region-cards');list.replaceChildren();","const g=this.getGame(),list=$('region-cards');list.replaceChildren();if(source!=='portal')worldPortalPreview(list);else pulsePortal();");
 fs.writeFileSync(path.join(out,'journey-menu.mjs'),menu);
 for(const [file,basePath] of [['index.html','/royale-v3-staging/'],['kingjames/index.html','/royale/'],['gameplay/index.html','/royale/'],['local-coop/index.html','/royale/local-coop/']]){
- const dest=path.join(stage,file);let html=fs.readFileSync(dest,'utf8');
+ const dest=path.join(stage,file);let html=fs.readFileSync(dest,'utf8');if(file==='index.html')html=html.replace('./app.mjs?v=steel-speed-1','./app.mjs?v=portals-1');
  html=html.replace(/<script type="importmap">([\s\S]*?)<\/script>/,(_,json)=>{const m=JSON.parse(json),base=new URL(basePath,'https://game.test');for(const f of ['world-art.mjs','boss-ui.mjs','journey-menu.mjs']){const source='/royale/'+f,relative=path.posix.relative(basePath,'/royale-v3-staging/portals/'+f),target=(relative.startsWith('.')?relative:'./'+relative)+'?v=portals-1';for(const [key,value]of Object.entries(m.imports)){if(new URL(key,base).pathname===source||new URL(value,base).pathname===source)m.imports[key]=target;}const key=path.posix.relative(basePath,source);m.imports[key.startsWith('.')?key:'./'+key]=target;}return '<script type="importmap">'+JSON.stringify(m)+'</script>';});fs.writeFileSync(dest,html);
 }
 console.log('Built staging-only approved portal artwork adapters.');

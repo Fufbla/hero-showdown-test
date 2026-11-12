@@ -32,7 +32,7 @@ export function openChestMenu(game,onClaim){
 }
 export function drawArena(c,g){
   if(!g.arenaScene)return;
-  c.save();c.textAlign='center';c.font='bold 17px system-ui';c.fillStyle='#fff1c4';c.fillText('← EXIT ARENA',205,490);c.font='11px system-ui';c.fillText('Walk left to retreat',210,510);
+  c.save();c.textAlign='center';c.font='bold 17px system-ui';c.fillStyle='#fff1c4';c.fillText('← EXIT ARENA',205,410);c.font='11px system-ui';c.fillText('Walk left to retreat',210,426);
   drawPortal(c,ARENA.left,ARENA.floor,g.regionId,g.time,g.arenaScene.cleared?'RETURN TO REGION':'RETREAT · WALK LEFT',g,g.arenaScene.cleared?'return':'regular');
   drawBossAttackFX(c,g);
   c.setLineDash([]);

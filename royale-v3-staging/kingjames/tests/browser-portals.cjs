@@ -20,9 +20,11 @@ module.exports=async frame=>{
   c.clearRect(0,0,960,720);c.save();c.translate(-5500,0);worldLandmarks(c,g,5500,960);c.restore();
   if(!g.usePassage())throw Error('Boss entrance failed');drawArena(c,g);g.arenaScene.cleared=true;drawArena(c,g);if(!g.leaveBoss()||g.hero.x!==5840)throw Error('Return location changed');
  }
+ const {LEGENDARY_IDS}=await import(new URL('./legendary-data.mjs',document.baseURI).href);
+ for(const id of LEGENDARY_IDS){const g=new Game();g.hero.level=99;g.hero.x=5840;g.startLegendaryScene(id,'cleared');g.arenaScene.cleared=true;drawArena(c,g);if(!g.leaveBoss()||g.hero.x!==5840)throw Error('Legendary exit changed: '+id);}
  for(const coins of [99,100,150]){const g=new Game();g.hero.coins=coins;const ok=g.fastTravel({region:2,board:1},g.economy.revision);if(ok!==(coins>=100)||g.hero.coins!==(coins>=100?coins-100:coins))throw Error('Fast travel charge changed');}
  c.clearRect(0,0,960,720);drawPortal(c,480,600,1,0,'REGION PORTAL');const before=fingerprint();await new Promise(r=>setTimeout(r,150));c.clearRect(0,0,960,720);drawPortal(c,480,600,1,0,'REGION PORTAL');if(before===fingerprint())throw Error('Vortex froze with simulation paused');
- return {visited:visited.length,uniqueBoards:pixels.size,status:portalStatus(),renderChecksMs:performance.now()-start};
+ return {visited:visited.length,legendaryExits:LEGENDARY_IDS.length,uniqueBoards:pixels.size,status:portalStatus(),renderChecksMs:performance.now()-start};
  });
- assert.equal(result.visited,21);assert.ok(result.uniqueBoards>=7);assert.equal(result.status.ready,true);assert.ok(result.status.cache<=4);console.log('Portal browser checks',result);return result;
+ assert.equal(result.visited,21);assert.equal(result.legendaryExits,8);assert.ok(result.uniqueBoards>=7);assert.equal(result.status.ready,true);assert.ok(result.status.cache<=4);console.log('Portal browser checks',result);return result;
 };
