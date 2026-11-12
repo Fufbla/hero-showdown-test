@@ -12,19 +12,20 @@
   "initial_committed_files": 0,
   "initial_previous_upload_records": 28,
   "total_required_files": 98,
-  "verified_files": 0,
-  "remaining_files": 98,
-  "last_verified_content_commit": null,
-  "remote_head": "bba835f089f2664fd9605b4a8c44309fcad6178e",
-  "completed_files": [],
-  "remaining_paths": [
+  "verified_files": 7,
+  "remaining_files": 91,
+  "last_verified_content_commit": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+  "remote_head": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+  "completed_files": [
     ".github/workflows/costume-review.yml",
     "docs/costumes/ASSET-BRIEF.md",
     "docs/costumes/ASSET-CHECKSUMS.sha256",
     "docs/costumes/README.md",
     "docs/costumes/approved-concepts.jpeg",
     "docs/costumes/art/assets-a-metrics.json",
-    "docs/costumes/art/assets-a-notes.md",
+    "docs/costumes/art/assets-a-notes.md"
+  ],
+  "remaining_paths": [
     "docs/costumes/art/assets-b-notes.md",
     "docs/costumes/art/assets-c-notes.md",
     "docs/costumes/art/black-business-suit-source.png",
@@ -125,8 +126,10 @@
       "size_bytes": 1178,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "code_documentation_or_tests"
+      "status": "verified",
+      "category": "code_documentation_or_tests",
+      "verified_commit": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+      "batch_number": 1
     },
     {
       "path": "docs/costumes/ASSET-BRIEF.md",
@@ -135,8 +138,10 @@
       "size_bytes": 3446,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "code_documentation_or_tests"
+      "status": "verified",
+      "category": "code_documentation_or_tests",
+      "verified_commit": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+      "batch_number": 1
     },
     {
       "path": "docs/costumes/ASSET-CHECKSUMS.sha256",
@@ -145,8 +150,10 @@
       "size_bytes": 5831,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "code_documentation_or_tests"
+      "status": "verified",
+      "category": "code_documentation_or_tests",
+      "verified_commit": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+      "batch_number": 1
     },
     {
       "path": "docs/costumes/README.md",
@@ -155,8 +162,10 @@
       "size_bytes": 7479,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "code_documentation_or_tests"
+      "status": "verified",
+      "category": "code_documentation_or_tests",
+      "verified_commit": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+      "batch_number": 1
     },
     {
       "path": "docs/costumes/approved-concepts.jpeg",
@@ -165,8 +174,10 @@
       "size_bytes": 662185,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+      "batch_number": 1
     },
     {
       "path": "docs/costumes/art/assets-a-metrics.json",
@@ -175,8 +186,10 @@
       "size_bytes": 56520,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+      "batch_number": 1
     },
     {
       "path": "docs/costumes/art/assets-a-notes.md",
@@ -185,8 +198,10 @@
       "size_bytes": 2463,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+      "batch_number": 1
     },
     {
       "path": "docs/costumes/art/assets-b-notes.md",
@@ -1099,7 +1114,35 @@
       "category": "code_documentation_or_tests"
     }
   ],
-  "batches": [],
+  "batches": [
+    {
+      "number": 1,
+      "started_at": "2026-11-12T21:24:20.966Z",
+      "files": [
+        ".github/workflows/costume-review.yml",
+        "docs/costumes/ASSET-BRIEF.md",
+        "docs/costumes/ASSET-CHECKSUMS.sha256",
+        "docs/costumes/README.md",
+        "docs/costumes/approved-concepts.jpeg",
+        "docs/costumes/art/assets-a-metrics.json",
+        "docs/costumes/art/assets-a-notes.md"
+      ],
+      "status": "verified",
+      "reused_blobs": [
+        ".github/workflows/costume-review.yml",
+        "docs/costumes/ASSET-BRIEF.md",
+        "docs/costumes/ASSET-CHECKSUMS.sha256",
+        "docs/costumes/README.md",
+        "docs/costumes/approved-concepts.jpeg",
+        "docs/costumes/art/assets-a-metrics.json",
+        "docs/costumes/art/assets-a-notes.md"
+      ],
+      "uploaded_blobs": [],
+      "tree_sha": "f93542739fd447903e9c6b43040376f920ebc688",
+      "commit_sha": "03f4c81bf81f1fe93c230f3ea67911786c019280",
+      "verified_at": "2026-11-12T21:24:31.406Z"
+    }
+  ],
   "errors": [
     {
       "phase": "previous_session",
@@ -1126,5 +1169,7 @@
     "Upload at most eight files per batch, then create a content commit and verify the remote tree.",
     "Save every verified batch SHA and exact file/phase/error in this manifest before beginning another batch.",
     "Keep deployment on hold."
-  ]
+  ],
+  "last_checkpoint_commit": "341c485bae402ac035d77c2f99c993ea13d2d44a",
+  "updated_at": "2026-11-12T21:24:32.448Z"
 }
