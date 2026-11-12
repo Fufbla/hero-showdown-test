@@ -47,6 +47,7 @@ for(const [file,basePath] of [['index.html','/royale-v3-staging/'],['kingjames/i
  const dest=path.join(stage,file);let html=fs.readFileSync(dest,'utf8');
  if(file==='index.html')html=html.replaceAll('./app.mjs?v=outfits-1','./app.mjs?v=armor-stats-1').replace("location.href='./local-coop/'","location.href='./local-coop/?v=armor-stats-1'");
  html=html.replace('>Costume Wardrobe<','>Armor Equipment<').replace('YOUR NEXT LOOK','YOUR COSMETIC APPEARANCE').replace('THE CENTRAL COSTUME SHOP','ARMOR EQUIPMENT').replace('Dress for your journey.','Choose your armor bonuses.').replace('Preview only. Your equipped items change when you choose Equip.','Armor provides stat bonuses only. Your selected cosmetic outfit stays the same.').replace('>Complete outfits<','>Matching armor sets<');
+ html=html.replace('Equipment colors are fixed. Only your starter outfit can be recolored. Rare pieces have a constant white glow.','Armor grants stat bonuses only. Choose your appearance separately through character customization or cosmetic outfits.');
  html=html.replace(/<script type="importmap">([\s\S]*?)<\/script>/,(_,json)=>{
   const m=JSON.parse(json),base=new URL(basePath,'https://game.test');
   for(const [source,dest]of Object.entries({
