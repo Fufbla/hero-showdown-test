@@ -18,24 +18,28 @@ async function check(type,mobile){
   await frame.waitForFunction(()=>{const d=document.querySelector('#game')?.dataset;return d?.outfit==='kingjames-original'&&d.artReady==='true'&&d.inputEnabled==='true';},null,{timeout:90000});
   const initial=await frame.evaluate(()=>window.kingJamesQA.status());
   assert.equal(initial.name,'KingJames');assert.equal(initial.ready,true);
+  const advance=async seconds=>{
+   const until=Number(await frame.locator('#game').getAttribute('data-simulation-time'))+seconds;
+   await frame.waitForFunction(t=>Number(document.querySelector('#game').dataset.simulationTime)>=t,until,{timeout:30000});
+  };
   await frame.locator('#game').click();
-  await page.keyboard.down('Shift');await page.keyboard.down('ArrowRight');await page.waitForTimeout(620);await page.keyboard.up('ArrowRight');await page.keyboard.up('Shift');
-  await page.waitForTimeout(200);
-  await page.keyboard.down('Shift');await page.keyboard.down('ArrowLeft');await page.waitForTimeout(620);await page.keyboard.up('ArrowLeft');await page.keyboard.up('Shift');
-  await page.waitForTimeout(250);
-  await page.keyboard.press('Space');await page.waitForTimeout(100);await page.keyboard.press('Space');await page.waitForTimeout(1050);
-  await page.keyboard.press('j');await page.waitForTimeout(330);await page.keyboard.press('k');await page.waitForTimeout(450);
+  await page.keyboard.down('Shift');await page.keyboard.down('ArrowRight');await advance(.8);await page.keyboard.up('ArrowRight');await page.keyboard.up('Shift');
+  await advance(.2);
+  await page.keyboard.down('Shift');await page.keyboard.down('ArrowLeft');await advance(.8);await page.keyboard.up('ArrowLeft');await page.keyboard.up('Shift');
+  await advance(.25);
+  await page.keyboard.press('Space');await advance(.1);await page.keyboard.press('Space');await advance(1.05);
+  await page.keyboard.press('j');await advance(.33);await page.keyboard.press('k');await advance(.45);
   if(mobile){
-   await frame.getByRole('button',{name:'Jump',exact:true}).tap();await page.waitForTimeout(900);
-   await frame.getByRole('button',{name:'Punch',exact:true}).tap();await page.waitForTimeout(320);
-   await frame.getByRole('button',{name:'Kick',exact:true}).tap();await page.waitForTimeout(430);
+   await frame.getByRole('button',{name:'Jump',exact:true}).tap();await advance(.9);
+   await frame.getByRole('button',{name:'Punch',exact:true}).tap();await advance(.32);
+   await frame.getByRole('button',{name:'Kick',exact:true}).tap();await advance(.43);
   }
   const seen=(await frame.locator('#game').getAttribute('data-sprite-seen')).split(',');
   for(const action of ['idle','run','jump','doubleJump','fall','land','punch','kick'])assert.ok(seen.some(s=>s.startsWith(action+':')),type.name()+'/'+mobile+' did not render '+action);
   for(const dir of [-1,1])assert.ok(seen.filter(s=>s.startsWith('run:')&&s.endsWith(':'+dir)).length>=5,'Insufficient alternating run frames '+dir);
   // The released game prevents saves until five seconds after combat.
   // Let that normal cooldown elapse before pausing the simulation.
-  await frame.waitForFunction(()=>window.kingJamesQA.status().snapshot!==null,null,{timeout:15000});
+  await frame.waitForFunction(()=>window.kingJamesQA.status().snapshot!==null,null,{timeout:30000});
   const after=await frame.evaluate(()=>{window.kingJamesQA.pause();window.kingJamesQA.save();return window.kingJamesQA.status();});
   for(const key of ['level','xp','coins','inventory','powers','look','cosmetics'])assert.deepEqual(after.snapshot[key],initial.snapshot[key],'Unexpected progress/appearance change '+key);
   const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),namespace);assert.ok(saved.slots.some(s=>s?.snapshot.look.name==='KingJames'));
@@ -48,6 +52,11 @@ async function check(type,mobile){
   await page.screenshot({path:'/tmp/'+file,fullPage:true});
   report.push({engine:type.name(),viewport:mobile?'390x844 touch':'1280x900',verified:['reserved-code-load','idle','both-run-directions','jump','doubleJump','fall','land','punch','kick','progress-reload','no-cloud-write'],seen,errors});
   console.log(JSON.stringify(report.at(-1)));
+ }catch(error){
+  const tag=type.name()+'-'+(mobile?'mobile':'desktop');
+  const diagnostics=await page.frames().at(-1).evaluate(()=>({data:{...document.querySelector('#game')?.dataset},status:window.kingJamesQA?.status()})).catch(()=>null);
+  fs.writeFileSync('/tmp/kingjames-failure-'+tag+'.json',JSON.stringify({error:error.message,diagnostics,errors},null,2));
+  await page.screenshot({path:'/tmp/kingjames-failure-'+tag+'.png',fullPage:true}).catch(()=>{});throw error;
  }finally{await browser.close();}
 }
 (async()=>{for(const type of [chromium,webkit])for(const mobile of [false,true])await check(type,mobile);fs.writeFileSync('/tmp/kingjames-browser-report.json',JSON.stringify(report,null,2));})().catch(e=>{console.error(e);process.exitCode=1;});
