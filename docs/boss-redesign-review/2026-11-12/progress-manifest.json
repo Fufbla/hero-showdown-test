@@ -1,0 +1,406 @@
+{
+  "schema_version": 1,
+  "status": "in_progress",
+  "approval": "not_requested",
+  "implementation_authorized": false,
+  "deployment_authorized": false,
+  "branch": "codex/boss-redesign-review-20261112",
+  "baseline": "5effb0ac9438a56c59748fd16088f2a8f27a29e2",
+  "baseline_deployment": "https://github.com/Fufbla/hero-showdown-test/actions/runs/43313311069",
+  "verified_bosses": [
+    {
+      "id": "regional-trash-monster",
+      "name": "Trash Monster",
+      "category": "regional",
+      "source_key": "1",
+      "attacks": [
+        "swipe",
+        "throw",
+        "slam"
+      ],
+      "concept": {
+        "path": "concepts/regional-trash-monster.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/regional-trash-monster.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/regional-trash-monster.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "regional-bushman",
+      "name": "Bushman",
+      "category": "regional",
+      "source_key": "2",
+      "attacks": [
+        "vine",
+        "swipe",
+        "thorns",
+        "branch",
+        "roots"
+      ],
+      "concept": {
+        "path": "concepts/regional-bushman.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/regional-bushman.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/regional-bushman.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "regional-wastelander",
+      "name": "Wastelander",
+      "category": "regional",
+      "source_key": "3",
+      "attacks": [
+        "punch",
+        "toxic",
+        "shockwave",
+        "slam",
+        "hazard"
+      ],
+      "concept": {
+        "path": "concepts/regional-wastelander.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/regional-wastelander.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/regional-wastelander.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "regional-giant-scorpion",
+      "name": "Giant Scorpion",
+      "category": "regional",
+      "source_key": "4",
+      "attacks": [
+        "claw",
+        "sting",
+        "clawCombo",
+        "stingPattern"
+      ],
+      "concept": {
+        "path": "concepts/regional-giant-scorpion.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/regional-giant-scorpion.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/regional-giant-scorpion.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "regional-venomis",
+      "name": "Venomis",
+      "category": "regional",
+      "source_key": "5",
+      "attacks": [
+        "thorns",
+        "vine",
+        "poison",
+        "vineCombo",
+        "roots"
+      ],
+      "concept": {
+        "path": "concepts/regional-venomis.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/regional-venomis.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/regional-venomis.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "regional-atomdust",
+      "name": "AtomDust",
+      "category": "regional",
+      "source_key": "6",
+      "attacks": [
+        "blast",
+        "expansion",
+        "debris",
+        "atomic"
+      ],
+      "concept": {
+        "path": "concepts/regional-atomdust.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/regional-atomdust.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/regional-atomdust.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "regional-ultimate-pollution",
+      "name": "Ultimate Pollution Boss",
+      "category": "regional",
+      "source_key": "7",
+      "attacks": [
+        "pollution",
+        "punch",
+        "environment",
+        "slam",
+        "cataclysm"
+      ],
+      "concept": {
+        "path": "concepts/regional-ultimate-pollution.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/regional-ultimate-pollution.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/regional-ultimate-pollution.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "legendary-lightning",
+      "name": "Lightning Spree",
+      "category": "legendary",
+      "source_key": "lightning",
+      "attacks": [
+        "lightningStrike",
+        "crystalBeam",
+        "chainLightning",
+        "conductive",
+        "lightningStorm"
+      ],
+      "concept": {
+        "path": "concepts/legendary-lightning.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/legendary-lightning.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/legendary-lightning.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "legendary-air",
+      "name": "Air Pollution Monster",
+      "category": "legendary",
+      "source_key": "air",
+      "attacks": [
+        "smog",
+        "pollutionClaw",
+        "gust",
+        "cloud",
+        "smogTornado"
+      ],
+      "concept": {
+        "path": "concepts/legendary-air.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/legendary-air.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/legendary-air.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "legendary-styrodog",
+      "name": "Styrodog",
+      "category": "legendary",
+      "source_key": "styrodog",
+      "attacks": [
+        "beastClaw",
+        "lunge",
+        "leap",
+        "beastCombo",
+        "beastCharge"
+      ],
+      "concept": {
+        "path": "concepts/legendary-styrodog.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/legendary-styrodog.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/legendary-styrodog.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "legendary-sonic",
+      "name": "Sonic Tusk",
+      "category": "legendary",
+      "source_key": "sonic",
+      "attacks": [
+        "sonicShot",
+        "tuskStrike",
+        "sonicRing",
+        "tuskCharge",
+        "sonicOverlap",
+        "tuskCombo"
+      ],
+      "concept": {
+        "path": "concepts/legendary-sonic.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/legendary-sonic.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/legendary-sonic.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "legendary-styro",
+      "name": "Dr. Styro",
+      "category": "legendary",
+      "source_key": "styro",
+      "attacks": [
+        "styroBounce",
+        "styroShot",
+        "styroWall",
+        "machineTrap",
+        "machinery",
+        "styroVolley"
+      ],
+      "concept": {
+        "path": "concepts/legendary-styro.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/legendary-styro.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/legendary-styro.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "legendary-wastelander",
+      "name": "Wastelander",
+      "category": "legendary",
+      "source_key": "wastelander",
+      "attacks": [
+        "legendPunch",
+        "toxicShot",
+        "toxicRing",
+        "legendSlam",
+        "toxicGround",
+        "toxicCombo"
+      ],
+      "concept": {
+        "path": "concepts/legendary-wastelander.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/legendary-wastelander.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/legendary-wastelander.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "legendary-venomis",
+      "name": "Venomis",
+      "category": "legendary",
+      "source_key": "venomis",
+      "attacks": [
+        "thornShot",
+        "legendVine",
+        "poisonPatch",
+        "thornSweep",
+        "vinePair",
+        "vineField",
+        "poisonFan"
+      ],
+      "concept": {
+        "path": "concepts/legendary-venomis.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/legendary-venomis.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/legendary-venomis.png",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "legendary-atomdust",
+      "name": "AtomDust",
+      "category": "legendary",
+      "source_key": "atomdust",
+      "attacks": [
+        "atomicShot",
+        "atomicPulse",
+        "atomicRing",
+        "radioactiveFall",
+        "atomicStorm",
+        "atomicVolley"
+      ],
+      "concept": {
+        "path": "concepts/legendary-atomdust.png",
+        "status": "pending"
+      },
+      "storyboard": {
+        "path": "storyboards/legendary-atomdust.png",
+        "status": "pending"
+      },
+      "attack_study": {
+        "path": "attack-studies/legendary-atomdust.png",
+        "status": "pending"
+      }
+    }
+  ],
+  "completed_files": [
+    "source/verified-data.json"
+  ],
+  "remaining_artwork": 45,
+  "commits": [],
+  "errors": [
+    {
+      "operation": "sparse-checkout add",
+      "error": "unknown option --no-cone",
+      "resolution": "Retried without redundant flag; succeeded"
+    },
+    {
+      "operation": "Live legacy boss QA link",
+      "error": "HTTP 404 for /royale/tests/bosses.html",
+      "resolution": "Inspected current source and atlases; staging character/camera rendered successfully"
+    }
+  ]
+}

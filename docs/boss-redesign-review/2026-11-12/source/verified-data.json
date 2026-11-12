@@ -1,0 +1,1765 @@
+{
+  "BOSSES": {
+    "1": {
+      "region": 1,
+      "name": "Trash Monster",
+      "level": 10,
+      "hp": 950,
+      "damage": 18,
+      "speed": 42,
+      "helper": "slime",
+      "patterns": [
+        [
+          "swipe",
+          "throw"
+        ],
+        [
+          "throw",
+          "slam",
+          "swipe"
+        ],
+        [
+          "slam",
+          "throw",
+          "swipe",
+          "slam"
+        ]
+      ],
+      "art": "temporary",
+      "xp": 250
+    },
+    "2": {
+      "region": 2,
+      "name": "Bushman",
+      "level": 20,
+      "hp": 2600,
+      "damage": 32,
+      "speed": 55,
+      "helper": "sprout",
+      "patterns": [
+        [
+          "vine",
+          "swipe"
+        ],
+        [
+          "thorns",
+          "branch",
+          "vine"
+        ],
+        [
+          "roots",
+          "thorns",
+          "branch"
+        ]
+      ],
+      "art": "approved",
+      "xp": 800
+    },
+    "3": {
+      "region": 3,
+      "name": "Wastelander",
+      "level": 35,
+      "hp": 6000,
+      "damage": 52,
+      "speed": 44,
+      "helper": "scrap",
+      "patterns": [
+        [
+          "punch",
+          "toxic"
+        ],
+        [
+          "shockwave",
+          "slam",
+          "toxic"
+        ],
+        [
+          "hazard",
+          "shockwave",
+          "punch"
+        ]
+      ],
+      "art": "approved",
+      "xp": 2200
+    },
+    "4": {
+      "region": 4,
+      "name": "Giant Scorpion",
+      "level": 50,
+      "hp": 11000,
+      "damage": 82,
+      "speed": 48,
+      "helper": "scorpion",
+      "patterns": [
+        [
+          "claw",
+          "sting"
+        ],
+        [
+          "clawCombo",
+          "stingPattern",
+          "claw"
+        ],
+        [
+          "stingPattern",
+          "clawCombo",
+          "sting"
+        ]
+      ],
+      "art": "approved",
+      "xp": 4500
+    },
+    "5": {
+      "region": 5,
+      "name": "Venomis",
+      "level": 65,
+      "hp": 18000,
+      "damage": 120,
+      "speed": 66,
+      "helper": "stalker",
+      "patterns": [
+        [
+          "thorns",
+          "vine"
+        ],
+        [
+          "poison",
+          "vineCombo",
+          "thorns"
+        ],
+        [
+          "roots",
+          "poison",
+          "vineCombo"
+        ]
+      ],
+      "art": "approved",
+      "xp": 8500
+    },
+    "6": {
+      "region": 6,
+      "name": "AtomDust",
+      "level": 80,
+      "hp": 28000,
+      "damage": 175,
+      "speed": 60,
+      "helper": "phantom",
+      "patterns": [
+        [
+          "blast"
+        ],
+        [
+          "expansion",
+          "debris",
+          "blast"
+        ],
+        [
+          "atomic",
+          "debris",
+          "expansion"
+        ]
+      ],
+      "art": "approved",
+      "xp": 15000
+    },
+    "7": {
+      "region": 7,
+      "name": "Ultimate Pollution Boss",
+      "level": 99,
+      "hp": 42000,
+      "damage": 235,
+      "speed": 74,
+      "helper": "apocalypse",
+      "patterns": [
+        [
+          "pollution",
+          "punch"
+        ],
+        [
+          "environment",
+          "slam",
+          "pollution"
+        ],
+        [
+          "cataclysm",
+          "environment",
+          "pollution"
+        ]
+      ],
+      "art": "temporary",
+      "xp": 28000
+    }
+  },
+  "BOSS_ATTACKS": {
+    "swipe": {
+      "label": "Heavy swipe",
+      "shape": "melee",
+      "warning": 0.95,
+      "duration": 0.25,
+      "recovery": 1.25,
+      "damage": 1,
+      "reach": 165
+    },
+    "throw": {
+      "label": "Trash throw",
+      "shape": "projectile",
+      "warning": 1,
+      "duration": 0.25,
+      "recovery": 1.35,
+      "damage": 1,
+      "speed": 170,
+      "count": 1,
+      "color": "#c9aa6e"
+    },
+    "slam": {
+      "label": "Ground slam \u00b7 jump",
+      "shape": "ground",
+      "warning": 1.2,
+      "duration": 0.3,
+      "recovery": 1.45,
+      "damage": 1.25,
+      "width": 240
+    },
+    "vine": {
+      "label": "Vine strike",
+      "shape": "melee",
+      "warning": 0.95,
+      "duration": 0.3,
+      "recovery": 1.1,
+      "damage": 1,
+      "reach": 220
+    },
+    "thorns": {
+      "label": "Thorn volley",
+      "shape": "projectile",
+      "warning": 1.1,
+      "duration": 0.35,
+      "recovery": 1.2,
+      "damage": 0.8,
+      "speed": 220,
+      "count": 3,
+      "color": "#729044"
+    },
+    "branch": {
+      "label": "Sweeping branches \u00b7 jump",
+      "shape": "sweep",
+      "warning": 1.15,
+      "duration": 0.4,
+      "recovery": 1.3,
+      "damage": 1.15,
+      "reach": 290
+    },
+    "roots": {
+      "label": "Rising roots \u00b7 move away",
+      "shape": "ground",
+      "warning": 1.3,
+      "duration": 0.45,
+      "recovery": 1.4,
+      "damage": 1.3,
+      "width": 160,
+      "spots": 2
+    },
+    "punch": {
+      "label": "Heavy punch",
+      "shape": "melee",
+      "warning": 0.95,
+      "duration": 0.25,
+      "recovery": 1.2,
+      "damage": 1.15,
+      "reach": 170
+    },
+    "toxic": {
+      "label": "Toxic shot",
+      "shape": "projectile",
+      "warning": 1.1,
+      "duration": 0.3,
+      "recovery": 1.25,
+      "damage": 1,
+      "speed": 210,
+      "count": 1,
+      "color": "#bed465"
+    },
+    "shockwave": {
+      "label": "Toxic shockwave \u00b7 jump",
+      "shape": "wave",
+      "warning": 1.2,
+      "duration": 0.4,
+      "recovery": 1.4,
+      "damage": 1.15,
+      "speed": 270
+    },
+    "hazard": {
+      "label": "Toxic ground \u00b7 move away",
+      "shape": "ground",
+      "warning": 1.3,
+      "duration": 0.5,
+      "recovery": 1.5,
+      "damage": 1.35,
+      "width": 160,
+      "spots": 3
+    },
+    "claw": {
+      "label": "Claw strike",
+      "shape": "melee",
+      "warning": 1,
+      "duration": 0.35,
+      "recovery": 1.3,
+      "damage": 1,
+      "reach": 230
+    },
+    "sting": {
+      "label": "Stinger \u00b7 leave the marker",
+      "shape": "ground",
+      "warning": 1.3,
+      "duration": 0.35,
+      "recovery": 1.45,
+      "damage": 1.3,
+      "width": 140
+    },
+    "clawCombo": {
+      "label": "Twin claw sweep \u00b7 jump",
+      "shape": "sweep",
+      "warning": 0.95,
+      "duration": 0.5,
+      "recovery": 1.2,
+      "damage": 1.15,
+      "reach": 310
+    },
+    "stingPattern": {
+      "label": "Heavy stinger \u00b7 move",
+      "shape": "ground",
+      "warning": 1.15,
+      "duration": 0.55,
+      "recovery": 1.3,
+      "damage": 1.4,
+      "width": 150,
+      "spots": 1
+    },
+    "poison": {
+      "label": "Poison fan",
+      "shape": "projectile",
+      "warning": 1,
+      "duration": 0.35,
+      "recovery": 1.1,
+      "damage": 1,
+      "speed": 250,
+      "count": 3,
+      "color": "#bd77cf"
+    },
+    "vineCombo": {
+      "label": "Sweeping vine combination \u00b7 jump",
+      "shape": "sweep",
+      "warning": 1,
+      "duration": 0.55,
+      "recovery": 1.1,
+      "damage": 1.25,
+      "reach": 330
+    },
+    "blast": {
+      "label": "Concentrated energy",
+      "shape": "projectile",
+      "warning": 1.1,
+      "duration": 0.25,
+      "recovery": 1.3,
+      "damage": 1,
+      "speed": 295,
+      "count": 1,
+      "color": "#e8ce78"
+    },
+    "expansion": {
+      "label": "Expanding energy \u00b7 jump",
+      "shape": "wave",
+      "warning": 1.2,
+      "duration": 0.5,
+      "recovery": 1.3,
+      "damage": 1.15,
+      "speed": 300
+    },
+    "debris": {
+      "label": "Falling debris \u00b7 leave the markers",
+      "shape": "fall",
+      "warning": 1.25,
+      "duration": 0.45,
+      "recovery": 1.35,
+      "damage": 1.2,
+      "spots": 3,
+      "width": 100
+    },
+    "atomic": {
+      "label": "Atomic shockwaves \u00b7 jump",
+      "shape": "wave",
+      "warning": 1.25,
+      "duration": 0.6,
+      "recovery": 1.4,
+      "damage": 1.35,
+      "speed": 340,
+      "double": true
+    },
+    "pollution": {
+      "label": "Pollution barrage",
+      "shape": "projectile",
+      "warning": 1.05,
+      "duration": 0.35,
+      "recovery": 1.1,
+      "damage": 1,
+      "speed": 265,
+      "count": 3,
+      "color": "#97b76b"
+    },
+    "environment": {
+      "label": "Pollution fallout \u00b7 move",
+      "shape": "fall",
+      "warning": 1.2,
+      "duration": 0.6,
+      "recovery": 1.25,
+      "damage": 1.3,
+      "spots": 3,
+      "width": 120
+    },
+    "cataclysm": {
+      "label": "Pollution shockwaves \u00b7 jump",
+      "shape": "wave",
+      "warning": 1.2,
+      "duration": 0.65,
+      "recovery": 1.25,
+      "damage": 1.45,
+      "speed": 360,
+      "double": true
+    }
+  },
+  "LEGENDARY": {
+    "lightning": {
+      "id": "lightning",
+      "name": "Lightning Spree",
+      "arena": "Storm Fortress",
+      "region": 6,
+      "damage": 220,
+      "speed": 85,
+      "helper": "wisp",
+      "style": "crystal",
+      "patterns": [
+        [
+          "lightningStrike",
+          "crystalBeam"
+        ],
+        [
+          "chainLightning",
+          "conductive",
+          "lightningStrike"
+        ],
+        [
+          "lightningStorm",
+          "chainLightning",
+          "conductive"
+        ]
+      ],
+      "colors": [
+        "#6258ad",
+        "#f0d677"
+      ],
+      "stats": [
+        38,
+        18,
+        0.1,
+        0.12,
+        0.1,
+        30,
+        4,
+        6
+      ],
+      "level": 99,
+      "art": "approved"
+    },
+    "air": {
+      "id": "air",
+      "name": "Air Pollution Monster",
+      "arena": "Toxic Sky",
+      "region": 3,
+      "damage": 205,
+      "speed": 95,
+      "helper": "wisp",
+      "style": "hover",
+      "patterns": [
+        [
+          "smog",
+          "pollutionClaw"
+        ],
+        [
+          "gust",
+          "cloud",
+          "smog"
+        ],
+        [
+          "smogTornado",
+          "gust",
+          "cloud"
+        ]
+      ],
+      "colors": [
+        "#45515a",
+        "#e7954a"
+      ],
+      "stats": [
+        25,
+        16,
+        0.13,
+        0.09,
+        0.06,
+        24,
+        10,
+        20
+      ],
+      "level": 99,
+      "art": "approved"
+    },
+    "styrodog": {
+      "id": "styrodog",
+      "name": "Styrodog",
+      "arena": "Styrofoam Wasteland",
+      "region": 3,
+      "damage": 235,
+      "speed": 120,
+      "helper": "scrap",
+      "style": "beast",
+      "patterns": [
+        [
+          "beastClaw",
+          "lunge"
+        ],
+        [
+          "leap",
+          "beastCombo",
+          "lunge"
+        ],
+        [
+          "beastCharge",
+          "leap",
+          "beastCombo"
+        ]
+      ],
+      "colors": [
+        "#c7c6bd",
+        "#4d5155"
+      ],
+      "stats": [
+        64,
+        32,
+        0.12,
+        0.1,
+        0.12,
+        8,
+        0,
+        3
+      ],
+      "level": 99,
+      "art": "approved"
+    },
+    "sonic": {
+      "id": "sonic",
+      "name": "Sonic Tusk",
+      "arena": "Echoing Caverns",
+      "region": 4,
+      "damage": 225,
+      "speed": 95,
+      "helper": "crawler",
+      "style": "tusk",
+      "patterns": [
+        [
+          "sonicShot",
+          "tuskStrike"
+        ],
+        [
+          "sonicRing",
+          "tuskCharge",
+          "sonicShot"
+        ],
+        [
+          "sonicOverlap",
+          "tuskCombo",
+          "sonicRing"
+        ]
+      ],
+      "colors": [
+        "#806184",
+        "#dcca9a"
+      ],
+      "stats": [
+        48,
+        26,
+        0.15,
+        0.04,
+        0.09,
+        18,
+        4,
+        12
+      ],
+      "level": 99,
+      "art": "approved"
+    },
+    "styro": {
+      "id": "styro",
+      "name": "Dr. Styro",
+      "arena": "Abandoned Laboratory",
+      "region": 3,
+      "damage": 210,
+      "speed": 63,
+      "helper": "drone",
+      "style": "scientist",
+      "patterns": [
+        [
+          "styroBounce",
+          "styroShot"
+        ],
+        [
+          "styroWall",
+          "machineTrap",
+          "styroBounce"
+        ],
+        [
+          "machinery",
+          "styroVolley",
+          "machineTrap"
+        ]
+      ],
+      "colors": [
+        "#deded0",
+        "#6b9790"
+      ],
+      "stats": [
+        24,
+        14,
+        0.22,
+        0.03,
+        0.05,
+        36,
+        8,
+        8
+      ],
+      "level": 99,
+      "art": "approved"
+    },
+    "wastelander": {
+      "id": "wastelander",
+      "name": "Wastelander",
+      "arena": "Toxic Ruins",
+      "region": 3,
+      "damage": 240,
+      "speed": 72,
+      "helper": "scrap",
+      "style": "heavy",
+      "patterns": [
+        [
+          "legendPunch",
+          "toxicShot"
+        ],
+        [
+          "toxicRing",
+          "legendSlam",
+          "legendPunch"
+        ],
+        [
+          "toxicGround",
+          "toxicCombo",
+          "legendSlam"
+        ]
+      ],
+      "colors": [
+        "#426f63",
+        "#c4ad79"
+      ],
+      "stats": [
+        58,
+        30,
+        0.18,
+        0.02,
+        0.06,
+        10,
+        10,
+        5
+      ],
+      "level": 99,
+      "art": "approved"
+    },
+    "venomis": {
+      "id": "venomis",
+      "name": "Venomis",
+      "arena": "Poison Garden",
+      "region": 5,
+      "damage": 210,
+      "speed": 90,
+      "helper": "stalker",
+      "style": "scientist",
+      "patterns": [
+        [
+          "thornShot",
+          "legendVine"
+        ],
+        [
+          "poisonPatch",
+          "thornSweep",
+          "vinePair"
+        ],
+        [
+          "vineField",
+          "poisonFan",
+          "vinePair"
+        ]
+      ],
+      "colors": [
+        "#e0dfcc",
+        "#5eb779"
+      ],
+      "stats": [
+        29,
+        16,
+        0.1,
+        0.07,
+        0.13,
+        28,
+        15,
+        4
+      ],
+      "level": 99,
+      "art": "approved"
+    },
+    "atomdust": {
+      "id": "atomdust",
+      "name": "AtomDust",
+      "arena": "Atomic Core",
+      "region": 6,
+      "damage": 245,
+      "speed": 78,
+      "helper": "phantom",
+      "style": "reactor",
+      "patterns": [
+        [
+          "atomicShot",
+          "atomicPulse"
+        ],
+        [
+          "atomicRing",
+          "radioactiveFall",
+          "atomicShot"
+        ],
+        [
+          "atomicStorm",
+          "atomicVolley",
+          "atomicRing"
+        ]
+      ],
+      "colors": [
+        "#c1a455",
+        "#e5e2d2"
+      ],
+      "stats": [
+        42,
+        23,
+        0.16,
+        0.03,
+        0.07,
+        60,
+        6,
+        14
+      ],
+      "level": 99,
+      "art": "approved"
+    }
+  },
+  "LEGENDARY_ATTACKS": {
+    "lightningStrike": {
+      "label": "Lightning \u00b7 leave the yellow marker",
+      "shape": "lightning",
+      "warning": 1.5,
+      "duration": 0.22,
+      "recovery": 1.45,
+      "damage": 1,
+      "width": 150
+    },
+    "crystalBeam": {
+      "label": "Crystal beam \u00b7 jump or move",
+      "shape": "projectile",
+      "warning": 1.35,
+      "duration": 0.25,
+      "recovery": 1.35,
+      "damage": 0.85,
+      "speed": 330,
+      "count": 1,
+      "color": "#f1d779"
+    },
+    "chainLightning": {
+      "label": "Chain lightning \u00b7 clear the marked ground",
+      "shape": "lightning",
+      "warning": 1.5,
+      "duration": 0.6,
+      "recovery": 1.45,
+      "damage": 1.1,
+      "width": 185,
+      "chain": true
+    },
+    "conductive": {
+      "label": "Conductive ground \u00b7 leave the yellow area",
+      "shape": "lightning",
+      "warning": 1.65,
+      "duration": 1.2,
+      "recovery": 1.5,
+      "damage": 1.05,
+      "width": 220,
+      "hazard": true
+    },
+    "lightningStorm": {
+      "label": "Storm strike \u00b7 move out of the yellow area",
+      "shape": "lightning",
+      "warning": 1.8,
+      "duration": 0.55,
+      "recovery": 1.55,
+      "damage": 1.35,
+      "width": 245,
+      "chain": true
+    },
+    "smog": {
+      "label": "Slow smog \u00b7 watch its path",
+      "shape": "projectile",
+      "warning": 1.2,
+      "duration": 0.3,
+      "recovery": 1.35,
+      "damage": 0.85,
+      "speed": 175,
+      "count": 2,
+      "color": "#809689"
+    },
+    "pollutionClaw": {
+      "label": "Pollution claws \u00b7 step back",
+      "shape": "melee",
+      "warning": 1.1,
+      "duration": 0.3,
+      "recovery": 1.4,
+      "damage": 1,
+      "reach": 200
+    },
+    "gust": {
+      "label": "Wind gust \u00b7 jump",
+      "shape": "wave",
+      "warning": 1.3,
+      "duration": 0.4,
+      "recovery": 1.45,
+      "damage": 1,
+      "speed": 330
+    },
+    "cloud": {
+      "label": "Toxic cloud \u00b7 leave its path",
+      "shape": "cloud",
+      "warning": 1.4,
+      "duration": 0.4,
+      "recovery": 1.5,
+      "damage": 1,
+      "width": 155,
+      "life": 3
+    },
+    "smogTornado": {
+      "label": "Pollution tornado \u00b7 move away",
+      "shape": "tornado",
+      "warning": 1.65,
+      "duration": 0.6,
+      "recovery": 1.6,
+      "damage": 1.25,
+      "width": 150,
+      "life": 3
+    },
+    "beastClaw": {
+      "label": "Three-headed claw swipe",
+      "shape": "melee",
+      "warning": 1.05,
+      "duration": 0.35,
+      "recovery": 1.4,
+      "damage": 1,
+      "reach": 185
+    },
+    "lunge": {
+      "label": "Forward lunge \u00b7 jump or retreat",
+      "shape": "charge",
+      "warning": 1.2,
+      "duration": 0.58,
+      "recovery": 1.5,
+      "damage": 1,
+      "speed": 380,
+      "reach": 240
+    },
+    "leap": {
+      "label": "Leaping impact \u00b7 leave the landing zone",
+      "shape": "leap",
+      "warning": 1.5,
+      "duration": 0.85,
+      "recovery": 1.65,
+      "damage": 1.25,
+      "width": 200
+    },
+    "beastCombo": {
+      "label": "Claw combination \u00b7 stay clear",
+      "shape": "melee",
+      "warning": 1.15,
+      "duration": 0.65,
+      "recovery": 1.5,
+      "damage": 1.15,
+      "reach": 230
+    },
+    "beastCharge": {
+      "label": "Beast charge \u00b7 jump",
+      "shape": "charge",
+      "warning": 1.45,
+      "duration": 0.8,
+      "recovery": 1.7,
+      "damage": 1.3,
+      "speed": 460,
+      "reach": 360
+    },
+    "sonicShot": {
+      "label": "Sonic blast \u00b7 jump",
+      "shape": "projectile",
+      "warning": 1.3,
+      "duration": 0.3,
+      "recovery": 1.4,
+      "damage": 1,
+      "speed": 315,
+      "count": 1,
+      "color": "#c6aad6"
+    },
+    "tuskStrike": {
+      "label": "Tusk strike \u00b7 step back",
+      "shape": "melee",
+      "warning": 1.2,
+      "duration": 0.35,
+      "recovery": 1.45,
+      "damage": 1.1,
+      "reach": 210
+    },
+    "sonicRing": {
+      "label": "Expanding sound \u00b7 jump",
+      "shape": "wave",
+      "warning": 1.4,
+      "duration": 0.45,
+      "recovery": 1.5,
+      "damage": 1.1,
+      "speed": 285
+    },
+    "tuskCharge": {
+      "label": "Tusk charge \u00b7 jump",
+      "shape": "charge",
+      "warning": 1.45,
+      "duration": 0.7,
+      "recovery": 1.7,
+      "damage": 1.2,
+      "speed": 370,
+      "reach": 300
+    },
+    "sonicOverlap": {
+      "label": "Layered sound waves \u00b7 time your jump",
+      "shape": "wave",
+      "warning": 1.65,
+      "duration": 0.6,
+      "recovery": 1.8,
+      "damage": 1.25,
+      "speed": 340,
+      "double": true
+    },
+    "tuskCombo": {
+      "label": "Tusk combination \u00b7 retreat",
+      "shape": "melee",
+      "warning": 1.25,
+      "duration": 0.65,
+      "recovery": 1.55,
+      "damage": 1.2,
+      "reach": 265
+    },
+    "styroBounce": {
+      "label": "Bouncing foam \u00b7 watch the arc",
+      "shape": "bounce",
+      "warning": 1.3,
+      "duration": 0.3,
+      "recovery": 1.5,
+      "damage": 0.85,
+      "speed": 240,
+      "count": 2,
+      "color": "#e9e5d0"
+    },
+    "styroShot": {
+      "label": "Styrofoam shot",
+      "shape": "projectile",
+      "warning": 1.15,
+      "duration": 0.25,
+      "recovery": 1.35,
+      "damage": 0.85,
+      "speed": 260,
+      "count": 1,
+      "color": "#e9e5d0"
+    },
+    "styroWall": {
+      "label": "Foam barrier \u00b7 attacks reduced briefly",
+      "shape": "barrier",
+      "warning": 1.35,
+      "duration": 2.4,
+      "recovery": 1.6,
+      "damage": 0,
+      "width": 155
+    },
+    "machineTrap": {
+      "label": "Mechanical trap \u00b7 leave the marker",
+      "shape": "trap",
+      "warning": 1.5,
+      "duration": 0.4,
+      "recovery": 1.55,
+      "damage": 1.1,
+      "width": 145,
+      "spots": 2,
+      "life": 2
+    },
+    "machinery": {
+      "label": "Laboratory crushers \u00b7 leave the markers",
+      "shape": "fall",
+      "warning": 1.8,
+      "duration": 0.5,
+      "recovery": 1.75,
+      "damage": 1.3,
+      "width": 110,
+      "spots": 3
+    },
+    "styroVolley": {
+      "label": "Bouncing foam volley",
+      "shape": "bounce",
+      "warning": 1.4,
+      "duration": 0.5,
+      "recovery": 1.5,
+      "damage": 1,
+      "speed": 300,
+      "count": 3,
+      "color": "#e9e5d0"
+    },
+    "legendPunch": {
+      "label": "Heavy punch \u00b7 step back",
+      "shape": "melee",
+      "warning": 1.15,
+      "duration": 0.3,
+      "recovery": 1.5,
+      "damage": 1.1,
+      "reach": 190
+    },
+    "toxicShot": {
+      "label": "Toxic projectile",
+      "shape": "projectile",
+      "warning": 1.25,
+      "duration": 0.3,
+      "recovery": 1.4,
+      "damage": 0.9,
+      "speed": 270,
+      "count": 1,
+      "color": "#bdd26b"
+    },
+    "toxicRing": {
+      "label": "Expanding toxic shockwave \u00b7 jump",
+      "shape": "wave",
+      "warning": 1.45,
+      "duration": 0.4,
+      "recovery": 1.5,
+      "damage": 1.1,
+      "speed": 290
+    },
+    "legendSlam": {
+      "label": "Heavy ground slam \u00b7 jump",
+      "shape": "ground",
+      "warning": 1.5,
+      "duration": 0.4,
+      "recovery": 1.6,
+      "damage": 1.25,
+      "width": 260
+    },
+    "toxicGround": {
+      "label": "Toxic ground \u00b7 leave the markers",
+      "shape": "trap",
+      "warning": 1.7,
+      "duration": 0.4,
+      "recovery": 1.7,
+      "damage": 1.2,
+      "width": 145,
+      "spots": 3,
+      "life": 2.5
+    },
+    "toxicCombo": {
+      "label": "Toxic combination \u00b7 jump",
+      "shape": "wave",
+      "warning": 1.5,
+      "duration": 0.55,
+      "recovery": 1.6,
+      "damage": 1.2,
+      "speed": 330,
+      "double": true
+    },
+    "thornShot": {
+      "label": "Thorn volley",
+      "shape": "projectile",
+      "warning": 1.2,
+      "duration": 0.3,
+      "recovery": 1.35,
+      "damage": 0.9,
+      "speed": 285,
+      "count": 3,
+      "color": "#91b873"
+    },
+    "legendVine": {
+      "label": "Vine strike \u00b7 step back",
+      "shape": "melee",
+      "warning": 1.15,
+      "duration": 0.35,
+      "recovery": 1.4,
+      "damage": 1,
+      "reach": 245
+    },
+    "poisonPatch": {
+      "label": "Poison patch \u00b7 leave the marker",
+      "shape": "trap",
+      "warning": 1.5,
+      "duration": 0.4,
+      "recovery": 1.5,
+      "damage": 1.05,
+      "width": 170,
+      "life": 3
+    },
+    "thornSweep": {
+      "label": "Sweeping thorns \u00b7 jump",
+      "shape": "sweep",
+      "warning": 1.4,
+      "duration": 0.45,
+      "recovery": 1.55,
+      "damage": 1.15,
+      "reach": 320
+    },
+    "vinePair": {
+      "label": "Sweeping vine combination \u00b7 jump",
+      "shape": "sweep",
+      "warning": 1.3,
+      "duration": 0.6,
+      "recovery": 1.55,
+      "damage": 1.15,
+      "reach": 345
+    },
+    "vineField": {
+      "label": "Rising vines \u00b7 leave the markers",
+      "shape": "ground",
+      "warning": 1.7,
+      "duration": 0.6,
+      "recovery": 1.7,
+      "damage": 1.3,
+      "width": 130,
+      "spots": 3
+    },
+    "poisonFan": {
+      "label": "Poison fan \u00b7 find a gap",
+      "shape": "projectile",
+      "warning": 1.45,
+      "duration": 0.4,
+      "recovery": 1.55,
+      "damage": 1,
+      "speed": 310,
+      "count": 5,
+      "color": "#a16da8"
+    },
+    "atomicShot": {
+      "label": "Concentrated atomic blast",
+      "shape": "projectile",
+      "warning": 1.3,
+      "duration": 0.3,
+      "recovery": 1.45,
+      "damage": 1,
+      "speed": 335,
+      "count": 1,
+      "color": "#ebd078"
+    },
+    "atomicPulse": {
+      "label": "Atomic pulse \u00b7 jump",
+      "shape": "wave",
+      "warning": 1.45,
+      "duration": 0.4,
+      "recovery": 1.55,
+      "damage": 1.05,
+      "speed": 260
+    },
+    "atomicRing": {
+      "label": "Expanding energy rings \u00b7 jump",
+      "shape": "wave",
+      "warning": 1.5,
+      "duration": 0.5,
+      "recovery": 1.55,
+      "damage": 1.15,
+      "speed": 315,
+      "double": true
+    },
+    "radioactiveFall": {
+      "label": "Radioactive debris \u00b7 leave the markers",
+      "shape": "fall",
+      "warning": 1.65,
+      "duration": 0.5,
+      "recovery": 1.6,
+      "damage": 1.1,
+      "width": 110,
+      "spots": 3
+    },
+    "atomicStorm": {
+      "label": "Atomic shockwave \u00b7 time your jump",
+      "shape": "wave",
+      "warning": 1.8,
+      "duration": 0.65,
+      "recovery": 1.8,
+      "damage": 1.35,
+      "speed": 360,
+      "double": true
+    },
+    "atomicVolley": {
+      "label": "Atomic fan \u00b7 find a gap",
+      "shape": "projectile",
+      "warning": 1.5,
+      "duration": 0.45,
+      "recovery": 1.6,
+      "damage": 1.1,
+      "speed": 350,
+      "count": 3,
+      "color": "#f0c36b"
+    }
+  },
+  "artRegional": {
+    "version": 1,
+    "cell": 416,
+    "columns": 4,
+    "rows": 8,
+    "anchor": [
+      176,
+      384
+    ],
+    "referenceHeight": 192,
+    "facing": 1,
+    "source": "Recovered local checkpoint d6b667ef3a8a8a6af7637ac4290c8b0dd3e8dbc9",
+    "bosses": {
+      "1": {
+        "name": "Trash Monster",
+        "design": "Trash Monster",
+        "file": "royale/assets/boss-sprites/atlases/regional-trash-monster.png",
+        "source": "source/regional-trash-monster.png",
+        "sourceSha256": "a30d7e14feb2352d32e631987346ad96a5b06e1228e89a7322097f5a07170a53",
+        "sha256": "ba063becc9f64ca10e3868612303ffa36ed4f035533a9091053ee98ec64f49c1",
+        "bytes": 2498014,
+        "states": [
+          "idle",
+          "walk",
+          "swipe",
+          "throw",
+          "slam",
+          "hit",
+          "defeat",
+          "surge"
+        ],
+        "frame_count": 32
+      },
+      "2": {
+        "name": "Bushman",
+        "design": "Thorn Beast",
+        "file": "royale/assets/boss-sprites/atlases/regional-bushman.png",
+        "source": "source/regional-bushman.png",
+        "sourceSha256": "524cf2a2d7a3bbccae2ac4f0b74c5ffbf98953aa3b7969fcde3243edccb24b84",
+        "sha256": "8b850b27bdbb5814f89b5ec35fef99b0cd6577b14392212e9e908015de09de21",
+        "bytes": 2308613,
+        "states": [
+          "idle",
+          "walk",
+          "branch",
+          "vine",
+          "thorns",
+          "roots",
+          "hit",
+          "defeat"
+        ],
+        "frame_count": 32
+      },
+      "3": {
+        "name": "Wastelander",
+        "design": "Sludge Beast",
+        "file": "royale/assets/boss-sprites/atlases/regional-wastelander.png",
+        "source": "source/regional-wastelander.png",
+        "sourceSha256": "ae3a00c8b6fdd1f69107b07bc47c268ae4b8a5247687118ded2fcdc8f136e44f",
+        "sha256": "ac862f8df1937a847ba124c18dcd7db3ee501f61a1114af7e0b9d8e7391332da",
+        "bytes": 2128035,
+        "states": [
+          "idle",
+          "walk",
+          "punch",
+          "toxic",
+          "slam",
+          "hazard",
+          "hit",
+          "defeat"
+        ],
+        "frame_count": 32
+      },
+      "5": {
+        "cell": 512,
+        "anchor": [
+          208,
+          480
+        ],
+        "referenceHeight": 192,
+        "name": "Venomis",
+        "design": "Mutant Stalker",
+        "file": "royale/assets/boss-sprites/atlases/regional-venomis.png",
+        "source": "source/batch2/regional-venomis.png",
+        "sourceSha256": "8b27ce555fc884beeaa2d64239690910f8b7041ce76dac1763a1313be5c3fb9d",
+        "sha256": "807362b86cb601738b51e836f7308e51c33a2203a11f33aba5ffa7cd657062dc",
+        "bytes": 3228316,
+        "states": [
+          "idle",
+          "walk",
+          "vine",
+          "thorns",
+          "poison",
+          "roots",
+          "hit",
+          "defeat"
+        ],
+        "frame_count": 32
+      },
+      "6": {
+        "cell": 512,
+        "anchor": [
+          208,
+          480
+        ],
+        "referenceHeight": 192,
+        "name": "AtomDust",
+        "design": "Energy Phantom",
+        "file": "royale/assets/boss-sprites/atlases/regional-atomdust.png",
+        "source": "source/batch2/regional-atomdust.png",
+        "sourceSha256": "93cefebf3fb7c2d7aea4ee0c3c7b2d46724688d7924b36ca1741f67c1672c198",
+        "sha256": "13e6f3ac1181996131dbe3e9b95492ed3978f4a3ca5bbcef762527f25c2c294d",
+        "bytes": 2067082,
+        "states": [
+          "idle",
+          "walk",
+          "blast",
+          "expansion",
+          "debris",
+          "atomic",
+          "hit",
+          "defeat"
+        ],
+        "frame_count": 32
+      },
+      "7": {
+        "cell": 384,
+        "columns": 4,
+        "rows": 9,
+        "anchor": [
+          192,
+          352
+        ],
+        "referenceHeight": 192,
+        "name": "Ultimate Pollution Boss",
+        "design": "Corrupted Guardian",
+        "file": "royale/assets/boss-sprites/atlases/regional-ultimate-pollution.png",
+        "sources": [
+          {
+            "file": "source/batch3/movement-punch.png",
+            "sha256": "71c13bab1357fd002a76274c6bc304f5ba5a7edd010bc5209bd78e026ba75e22"
+          },
+          {
+            "file": "source/batch3/pollution-environment-slam.png",
+            "sha256": "186bb4d30a400dc66d35640290fed9e1018b9e9db1eae41bd7ecb934135639c4"
+          },
+          {
+            "file": "source/batch3/cataclysm-hit-defeat.png",
+            "sha256": "448070e3a84f3e7eac82e2547735e5a22fa4673a6b1e0306cb33d2ef6eed1ca3"
+          }
+        ],
+        "sha256": "42c941615d8c6c17c6f6cf82d2187abd7e9549dac5f01db7102ad81da5c00869",
+        "bytes": 2368330,
+        "states": [
+          "idle",
+          "walk",
+          "punch",
+          "pollution",
+          "environment",
+          "slam",
+          "cataclysm",
+          "hit",
+          "defeat"
+        ],
+        "frame_count": 36
+      }
+    }
+  },
+  "artLegendary": {
+    "version": 4,
+    "cell": 512,
+    "anchor": [
+      224,
+      480
+    ],
+    "referenceHeight": 224,
+    "columns": 4,
+    "bosses": {
+      "lightning": {
+        "name": "Lightning Spree",
+        "design": "Lightning Spree",
+        "file": "royale/assets/boss-sprites/atlases/legendary-lightning.png",
+        "cell": 512,
+        "columns": 4,
+        "rows": 9,
+        "anchor": [
+          224,
+          480
+        ],
+        "referenceHeight": 224,
+        "phaseColors": [
+          "#a5dfff",
+          "#fff4a3"
+        ],
+        "states": [
+          "idle",
+          "walk",
+          "lightningStrike",
+          "crystalBeam",
+          "chainLightning",
+          "conductive",
+          "lightningStorm",
+          "hit",
+          "defeat"
+        ],
+        "sources": [
+          {
+            "file": "source/batch4/lightning-3.png",
+            "sha256": "d37145ab77fa85be2592ce8ef56967d1220422ba175547d7ff87c8f3ed42e307"
+          },
+          {
+            "file": "source/batch4/lightning-1.png",
+            "sha256": "c92bbc447f60c85d1d39fbd41c85eb5a27be7f3be692f0e8b3cdbf4cf8c4c117"
+          },
+          {
+            "file": "source/batch4/lightning-2.png",
+            "sha256": "ad01efcb9ab98b15169522d7d857d2116915d4032dd198fcc4505a1cadc3b56d"
+          }
+        ],
+        "sha256": "2fa2ac8d039834882a9e2fd149d17112ec1b6cb990a2a9e4230339d2b0e27c59",
+        "frame_count": 36
+      },
+      "air": {
+        "name": "Air Pollution Monster",
+        "design": "Air Pollution Monster",
+        "file": "royale/assets/boss-sprites/atlases/legendary-air.png",
+        "cell": 512,
+        "columns": 4,
+        "rows": 9,
+        "anchor": [
+          224,
+          480
+        ],
+        "referenceHeight": 224,
+        "phaseColors": [
+          "#a6b9aa",
+          "#f0a34a"
+        ],
+        "states": [
+          "idle",
+          "walk",
+          "smog",
+          "pollutionClaw",
+          "gust",
+          "cloud",
+          "smogTornado",
+          "hit",
+          "defeat"
+        ],
+        "sources": [
+          {
+            "file": "source/batch4/air-1.png",
+            "sha256": "ff2ae71e1a336005a66a099088447219446cce7f1b52c0a43ec28f57958dddae"
+          },
+          {
+            "file": "source/batch4/air-2.png",
+            "sha256": "bfca709ccad2c5761715dc465ec1154bb19ef9decefec5fc2b90e53ea3e9da6b"
+          }
+        ],
+        "sha256": "82a1b9a700df85815ffb6cc72fbd18ffc92f5085ea5e647d869a82ccdbecde33",
+        "frame_count": 36
+      },
+      "styrodog": {
+        "name": "Styrodog",
+        "design": "Styrodog",
+        "file": "royale/assets/boss-sprites/atlases/legendary-styrodog.png",
+        "cell": 512,
+        "columns": 4,
+        "rows": 10,
+        "anchor": [
+          224,
+          480
+        ],
+        "referenceHeight": 224,
+        "phaseColors": [
+          "#d9e5ed",
+          "#ff8866"
+        ],
+        "states": [
+          "idle",
+          "walk",
+          "beastClaw",
+          "lunge",
+          "leap",
+          "impact",
+          "beastCombo",
+          "beastCharge",
+          "hit",
+          "defeat"
+        ],
+        "sources": [
+          {
+            "file": "source/batch4/styrodog-1.png",
+            "sha256": "0789a6315accbb110c01577df72f15ab2fabb233ea5e553e1a9acb8a93ace859"
+          },
+          {
+            "file": "source/batch4/styrodog-3.png",
+            "sha256": "abdbc4940c7d12674a3af1081cb1495f06480281982ce67bfb4ad32333305814"
+          },
+          {
+            "file": "source/batch4/styrodog-1.png",
+            "sha256": "0789a6315accbb110c01577df72f15ab2fabb233ea5e553e1a9acb8a93ace859"
+          },
+          {
+            "file": "source/batch4/styrodog-2.png",
+            "sha256": "021d32c2bb8106d4ef9450cb088d5d55f458efb4be3e0f40969e3c95b86ff3ef"
+          }
+        ],
+        "sha256": "b76ed856cf36009816602aab838fcc3c283ae2358c8a888e6a0f9ce775558165",
+        "frame_count": 40
+      },
+      "sonic": {
+        "name": "Sonic Tusk",
+        "design": "Sonic Tusk",
+        "file": "royale/assets/boss-sprites/atlases/legendary-sonic.png",
+        "cell": 512,
+        "columns": 4,
+        "rows": 10,
+        "anchor": [
+          224,
+          480
+        ],
+        "referenceHeight": 224,
+        "phaseColors": [
+          "#70cfff",
+          "#dbb4ff"
+        ],
+        "states": [
+          "idle",
+          "walk",
+          "sonicShot",
+          "tuskStrike",
+          "sonicRing",
+          "tuskCharge",
+          "sonicOverlap",
+          "tuskCombo",
+          "hit",
+          "defeat"
+        ],
+        "sources": [
+          {
+            "file": "source/batch5/sonic-1.png",
+            "sha256": "20adf4539983a58929f708dd0d12ccc4b82dc6d98af6c4fef66c6833821c415a"
+          },
+          {
+            "file": "source/batch5/sonic-2.png",
+            "sha256": "30abaf56977c8ae9e1c83c20779ea24cf9ce4d37bd968a977bc725a0d933610f"
+          },
+          {
+            "file": "source/batch5/sonic-3.png",
+            "sha256": "9abaf2c83fe55a3300b412cdd52f3af53b02cae52d241fd07379481eb1cbdc44"
+          }
+        ],
+        "sha256": "60323cb058d8e870393f457c88f847a3c8916bee369fbafcfd75919eb70fc48d",
+        "frame_count": 40
+      },
+      "styro": {
+        "name": "Dr. Styro",
+        "design": "Dr. Styro",
+        "file": "royale/assets/boss-sprites/atlases/legendary-styro.png",
+        "cell": 512,
+        "columns": 4,
+        "rows": 10,
+        "anchor": [
+          224,
+          480
+        ],
+        "referenceHeight": 224,
+        "phaseColors": [
+          "#b6e5f0",
+          "#a7ff88"
+        ],
+        "states": [
+          "idle",
+          "walk",
+          "styroBounce",
+          "styroShot",
+          "styroWall",
+          "machineTrap",
+          "machinery",
+          "styroVolley",
+          "hit",
+          "defeat"
+        ],
+        "sources": [
+          {
+            "file": "source/batch5/styro-1.png",
+            "sha256": "a3d0a257568063f3e30cfa1f4aa313351bbd673a35f906e2ee40f34e8695fc6e"
+          },
+          {
+            "file": "source/batch5/styro-2.png",
+            "sha256": "db90dddc1a224ae84414a63a72b2c27c04a8a62c1d23f7e866325bf56f9c04da"
+          },
+          {
+            "file": "source/batch5/styro-3.png",
+            "sha256": "ea6471f82241587aafb7ddf2712ef6b21fb7d7b3ce7c639d3a5e3225d6df1e31"
+          }
+        ],
+        "sha256": "9c73846f2417b1b8da04c95c73ed349682a8c4b17472ef9343cc5df9b7e4b9d5",
+        "frame_count": 40
+      },
+      "wastelander": {
+        "name": "Wastelander",
+        "design": "Wastelander",
+        "file": "royale/assets/boss-sprites/atlases/legendary-wastelander.png",
+        "cell": 512,
+        "columns": 4,
+        "rows": 10,
+        "anchor": [
+          224,
+          480
+        ],
+        "referenceHeight": 224,
+        "phaseColors": [
+          "#d9ca72",
+          "#b6ed60"
+        ],
+        "states": [
+          "idle",
+          "walk",
+          "legendPunch",
+          "toxicShot",
+          "toxicRing",
+          "legendSlam",
+          "toxicGround",
+          "toxicCombo",
+          "hit",
+          "defeat"
+        ],
+        "sources": [
+          {
+            "file": "source/batch5/wastelander-1.png",
+            "sha256": "b6caa3c2647288c335cad1d11262edc4fd24023f9cc815ed9643fd354fc01588"
+          },
+          {
+            "file": "source/batch5/wastelander-2.png",
+            "sha256": "dbd7ae9ed6c0a271615decff6a3e6d83f1e0cc27d59526fcaa3a1bd08f2f63ab"
+          },
+          {
+            "file": "source/batch5/wastelander-3.png",
+            "sha256": "26fc27840cab67eee267470184c343479875a0efbab67d4735fbafdca02748cc"
+          }
+        ],
+        "sha256": "5dd55f97898b67093431e3feaa412df9b6e0d41f6a752a0b733a0417b1a0953e",
+        "frame_count": 40
+      },
+      "venomis": {
+        "name": "Venomis",
+        "design": "Venomis",
+        "file": "royale/assets/boss-sprites/atlases/legendary-venomis.png",
+        "cell": 512,
+        "columns": 4,
+        "rows": 11,
+        "anchor": [
+          224,
+          480
+        ],
+        "referenceHeight": 224,
+        "phaseColors": [
+          "#7aff4a",
+          "#df69f9"
+        ],
+        "states": [
+          "idle",
+          "walk",
+          "thornShot",
+          "legendVine",
+          "poisonPatch",
+          "thornSweep",
+          "vinePair",
+          "vineField",
+          "poisonFan",
+          "hit",
+          "defeat"
+        ],
+        "sources": [
+          {
+            "file": "source/batch6/venomis-1.png",
+            "sha256": "2c1685fe8e8769af9233fc27f8a7c4afd951b66a74cd7b4e66b2c3cd96bda631"
+          },
+          {
+            "file": "source/batch6/venomis-2.png",
+            "sha256": "17da847905c9eb0b58edf48986cced1227eee80ecedb6ff1fcef1e0b42ad6518"
+          },
+          {
+            "file": "source/batch6/venomis-3.png",
+            "sha256": "104a8c36506ed44ad84e51582e6e16e3ada541a6165fb6cb8264090de1c3c795"
+          }
+        ],
+        "sha256": "104e30964fbb4160341182fc680c4997eeda91cf95583a0eed9c2b12493a4bef",
+        "frame_count": 44
+      },
+      "atomdust": {
+        "name": "AtomDust",
+        "design": "AtomDust",
+        "file": "royale/assets/boss-sprites/atlases/legendary-atomdust.png",
+        "cell": 512,
+        "columns": 4,
+        "rows": 10,
+        "anchor": [
+          224,
+          480
+        ],
+        "referenceHeight": 224,
+        "phaseColors": [
+          "#ffb44a",
+          "#fff0a0"
+        ],
+        "states": [
+          "idle",
+          "walk",
+          "atomicShot",
+          "atomicPulse",
+          "atomicRing",
+          "radioactiveFall",
+          "atomicStorm",
+          "atomicVolley",
+          "hit",
+          "defeat"
+        ],
+        "sources": [
+          {
+            "file": "source/batch6/atomdust-1.png",
+            "sha256": "4bce8a8082ae05c4f2b9dfece6785a0681dc40f37c227dfbba2e60e2488f1782"
+          },
+          {
+            "file": "source/batch6/atomdust-2.png",
+            "sha256": "7d22dbd6f6b4a908437ad133bda0823c0117cbf76b035c2bc31af05640bf83f7"
+          },
+          {
+            "file": "source/batch6/atomdust-3.png",
+            "sha256": "efece236710088a355ec537fae11eff934ded135c8da3a790424222cfd4ed869"
+          }
+        ],
+        "sha256": "4a574b2b99291314ec67b3dd49f37f987be32afdb1b0793635b51b48e367d7e1",
+        "frame_count": 40
+      }
+    }
+  }
+}
