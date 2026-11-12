@@ -3,6 +3,7 @@ const {chromium,webkit}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const origin=process.env.KINGJAMES_TEST_ORIGIN||'http://127.0.0.1:8174';
+const exercisePowers=require('./browser-powers.cjs');
 const namespace='royale-v2-prototype-0000000000:healthia.royale.profiles.v2';
 const report=[];
 async function check(type,mode){
@@ -39,6 +40,7 @@ async function check(type,mode){
   const seen=(await frame.locator('#game').getAttribute('data-sprite-seen')).split(',');
   for(const action of ['idle','run','jump','doubleJump','fall','land','punch','kick'])assert.ok(seen.some(s=>s.startsWith(action+':')),type.name()+'/'+mobile+' did not render '+action);
   for(const dir of [-1,1])assert.ok(seen.filter(s=>s.startsWith('run:')&&s.endsWith(':'+dir)).length>=5,'Insufficient alternating run frames '+dir);
+  const powers=await exercisePowers(frame,page,advance,type.name()+'-'+mode,initial.snapshot);
   // The released game prevents saves until five seconds after combat.
   // Let that normal cooldown elapse before pausing the simulation.
   await frame.waitForFunction(()=>window.kingJamesQA.status().snapshot!==null,null,{timeout:30000});
@@ -53,7 +55,7 @@ async function check(type,mode){
   assert.equal(cloudRequests.length,0,'Reserved test contacted cloud account endpoints');assert.deepEqual(errors,[]);
   const file='kingjames-'+type.name()+'-'+mode+'.png';
   await page.screenshot({path:'/tmp/'+file,fullPage:true});
-  report.push({engine:type.name(),mode,viewport,verified:['reserved-code-load','idle','both-run-directions','jump','doubleJump','fall','land','punch','kick','progress-reload','no-cloud-write'],seen,errors});
+  report.push({engine:type.name(),mode,viewport,powers,verified:['reserved-code-load','idle','both-run-directions','jump','doubleJump','fall','land','punch','kick','progress-reload','no-cloud-write'],seen,errors});
   console.log(JSON.stringify(report.at(-1)));
  }catch(error){
   const tag=type.name()+'-'+mode;

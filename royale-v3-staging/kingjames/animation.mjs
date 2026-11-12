@@ -16,12 +16,13 @@ export function validateManifest(m){
  return m;
 }
 const limit=(x,a,b)=>Math.max(a,Math.min(b,x));
-function stateFor(h){
+function stateFor(h,m){
  if(h.dead)return 'defeat';
  if(h.respawnAge<.6)return 'recovery';
  if(h.stun>0)return 'hurt';
- if(h.attack&&ATTACKS[h.attack.kind])return h.attack.kind;
+ if(h.attack&&ATTACKS[h.attack.kind])return m.animations[h.attack.power]?h.attack.power:h.attack.kind;
  if(!h.grounded){
+  if(h.flying&&m.animations.fly)return (h.v2Active?.flight?.age??1)<m.animations.flightStart.duration?'flightStart':Math.abs(h.vx||0)>15||Math.abs(h.vy||0)>35?'fly':'hover';
   if(h.flying)return 'fall';
   if(h.jumpAge<.11||h.vy<-65)return h.jumps>=2?'doubleJump':'jump';
   return 'fall';
@@ -36,7 +37,7 @@ export class FullBodyAnimator{
   const m=this.manifest,dt=this.lastTime===null?0:limit(time-this.lastTime,0,.1);
   if(this.lastTime!==null&&time<this.lastTime)this.reset();
   this.lastTime=time;
-  let next=stateFor(h);
+  let next=stateFor(h,m);
   if(next==='run'){
    if(this.state==='idle'||this.state==='stop')next='start';
    else if(this.state==='start'&&time-this.entered<m.animations.start.duration)next='start';
@@ -52,9 +53,9 @@ export class FullBodyAnimator{
   this.lastJumpAge=h.jumpAge??100;
   const a=m.animations[next],n=a.frames.length,age=Math.max(0,time-this.entered);
   let index=0;
-  if(next==='punch'||next==='kick'){
+  if(['punch','kick','strength','superKick'].includes(next)){
    // Contact artwork begins at the existing simulation's active hit window.
-   const attack=h.attack,d=ATTACKS[next],t=Math.max(0,attack.age||0);
+   const attack=h.attack,d=ATTACKS[attack.kind],t=Math.max(0,attack.age||0);
    if(t<d.startup)index=Math.min(1,Math.floor(t/d.startup*2));
    else if(t<d.startup+d.active)index=2;
    else index=3;
