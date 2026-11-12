@@ -20,7 +20,13 @@ module.exports=async function exercisePowers(frame,page,advance,tag,original){
  await settle(360);await loadout(['steel','strength','superKick']);await activate('Steel Body');await advance(.3);
  assert.equal(await canvas.getAttribute('data-outfit'),'steel-universal');
  await page.screenshot({path:'/tmp/kingjames-steel-'+tag+'.png',fullPage:true});
- for(const key of ['ArrowRight','ArrowLeft']){await page.keyboard.down('Shift');await page.keyboard.down(key);await advance(.45);await page.keyboard.up(key);await page.keyboard.up('Shift');await advance(.2);}
+ for(const [key,direction]of [['ArrowRight',1],['ArrowLeft',-1]]){
+  await page.keyboard.down('Shift');await page.keyboard.down(key);
+  // Slow WebKit profiles may render fewer frames in a fixed .45s window.
+  // Wait for the same three required distinct strides instead of guessing a delay.
+  await frame.waitForFunction(dir=>JSON.parse(document.querySelector('#game').dataset.steelSeen||'[]').filter(s=>s.startsWith('run:')&&s.endsWith(':'+dir)).length>=3,direction,{timeout:6000});
+  await page.keyboard.up(key);await page.keyboard.up('Shift');await advance(.2);
+ }
  await page.keyboard.press('Space');await advance(.12);await page.keyboard.press('Space');await advance(1.1);
  await page.keyboard.press('j');await advance(.28);await page.keyboard.press('k');await advance(.4);
  await activate('Super Strength');await advance(.3);await activate('Super Kick');await advance(1.8);
