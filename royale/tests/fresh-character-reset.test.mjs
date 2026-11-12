@@ -102,15 +102,15 @@ async function parentFixture(run,{forbidGameImports=false}={}){
  }
 }
 
-test('entering and reloading 000 opens only the new character page without game imports or cloud requests',()=>parentFixture(async f=>{
+test('entering and reloading 000 opens the full-body staging adapter and preserves test saves without cloud requests',()=>parentFixture(async f=>{
  await f.enter('0000000000');
- assert.ok(f.get('game-frame').src.startsWith(CHARACTER_TEST_URL+'?v=fresh-character-'));
+ assert.ok(f.get('game-frame').src.startsWith('./kingjames/index.html?v2TestCharacter=0000000000'));
  assert.equal(f.get('refresh').textContent,'Reload Character Test');assert.equal(f.note.hidden,true);
- assert.equal(f.localStorage.getItem(legacy+'profile'),null);assert.equal(f.sessionStorage.length,0);
+ assert.equal(f.localStorage.getItem(legacy+'profile'),'old test');assert.equal(f.sessionStorage.length,1);
  assert.equal(f.localStorage.getItem('healthia.royale.profiles.v2'),'real local hero');
  assert.deepEqual(f.requests,[]);
  f.localStorage.setItem(legacy+'old-tab-write','old test');f.get('refresh').onclick();await tick();
- assert.equal(f.localStorage.getItem(legacy+'old-tab-write'),null);
+ assert.equal(f.localStorage.getItem(legacy+'old-tab-write'),'old test');
  for(const interval of f.intervals)interval();await tick();assert.deepEqual(f.requests,[]);
 },{forbidGameImports:true}));
 
@@ -143,7 +143,7 @@ test('ordinary codes retain authenticated cloud loading and saves; switching to 
  await f.message({type:'royale-code-progress',slot:0,snapshot});
  for(const interval of f.intervals)interval();await tick();
  assert.equal(f.requests.length,count,'Test mode cannot save or renew the previous real session');
- assert.equal(f.note.hidden,true);assert.equal(f.localStorage.getItem(legacy+'profile'),null);
+ assert.equal(f.note.hidden,true);assert.equal(f.localStorage.getItem(legacy+'profile'),'old test');
  assert.ok(f.localStorage.getItem('royale-v3-play:healthia.royale.profiles.v2'));
  assert.equal(JSON.parse(f.localStorage.getItem('royale-v3-play:journal:0')).snapshot.coins,13,'A prior queued real save keeps its recovery journal');
 }));

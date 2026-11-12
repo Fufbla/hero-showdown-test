@@ -1,0 +1,6 @@
+{
+  "baseline": "8fa7a78ca79774c345932892a39b2a1f7ccad7c4",
+  "applicationSHA256": "e06556e3a3aa234086724e00355f967cdc9e547f0cb17d5e86823bacbc72a808",
+  "rendererSHA256": "b3d93b6294d5eace572b86ba0493951aad5425812e8f5e40a6dad9e973a8e63d",
+  "isolation": "staging entry only; shared gameplay imports"
+}

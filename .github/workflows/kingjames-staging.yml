@@ -1,0 +1,152 @@
+name: KingJames staging prototype checks and deployment
+
+on:
+  push:
+    branches: [codex/kingjames-fullbody-prototype]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: optimized-pages-publish
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned test dependencies
+        run: |
+          npm install --no-save --no-package-lock @napi-rs/canvas@0.1.100 playwright@1.56.1
+          npx playwright install chromium webkit --with-deps
+      - name: Check generated adapter and protected production source
+        run: |
+          node tools/build-kingjames-staging.cjs
+          git diff --exit-code -- royale-v3-staging/kingjames
+          test -z "$(git diff --name-only 8fa7a78ca79774c345932892a39b2a1f7ccad7c4 HEAD -- royale assets index.html game.html hero-showdown.html ':!royale/tests')"
+      - name: Run full-body, save, cloud bridge, co-op and power regression tests
+        run: node --test royale-v3-staging/kingjames/tests/engine.test.mjs royale/tests/fresh-character-reset.test.mjs royale/local-coop/tests/*.test.mjs royale/v2-sprites/tests/*.test.mjs royale/tests/v2-test-hero-code.test.mjs royale/tests/travel-cloud.test.mjs royale/tests/travel-eris.test.mjs royale/tests/clothing-purchases.test.mjs
+      - name: Verify desktop and mobile in Chromium and WebKit
+        run: |
+          python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/kingjames-server.log 2>&1 &
+          node royale-v3-staging/kingjames/tests/browser.cjs
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kingjames-browser-evidence
+          path: /tmp/kingjames-*
+  build:
+    needs: verify
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Create smaller deployment without deleting source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          rsync -a ./ _site/ \
+            --exclude='/node_modules/' \
+            --exclude='/.openai/' \
+            --exclude='/dist/' \
+            --exclude='/.git/' \
+            --exclude='/.github/' \
+            --exclude='/_site/' \
+            --exclude='/royale-cloud-test/' \
+            --exclude='/docs/' \
+            --exclude='/tools/' \
+            --exclude='/scorpion-test-qa/' \
+            --exclude='/tests/' \
+            --exclude='qa/' \
+            --exclude='tests/' \
+            --exclude='*.md' \
+            --exclude='*.txt' \
+            --exclude='*.command' \
+            --exclude='*.bat' \
+            --exclude='*.py' \
+            --exclude='*.sha256' \
+            --exclude='PACKAGE-MANIFEST.json'
+          touch _site/.nojekyll
+          test -s _site/index.html
+          test -s _site/royale/index.html
+          test -s _site/royale/app.mjs
+          test -s _site/royale/clothing-catalog-preview.mjs
+          test -s _site/royale/cosmetics/catalog.json
+          test -s _site/royale/cosmetics/assets/royal-kimono/atlas.png
+          test -s _site/royale-v3-staging/index.html
+          du -sh _site
+      - name: Upload optimized Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # The official deploy-pages action clamps its timeout to 10 minutes,
+      # cancelling otherwise healthy uploads stuck in Pages syncing_files.
+      # Use the same documented Pages endpoints with a longer bounded poll.
+      - name: Deploy website with longer Pages sync window
+        id: deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner=context.repo.owner,repo=context.repo.repo;
+            const response=await github.rest.actions.listWorkflowRunArtifacts({
+              owner,repo,run_id:context.runId,per_page:100
+            });
+            const artifacts=response.data.artifacts.filter(a=>a.name==='github-pages'&&!a.expired);
+            if(artifacts.length!==1)throw Error('Expected one valid GitHub Pages artifact; found '+artifacts.length);
+            const token=await core.getIDToken();
+            const created=await github.request('POST /repos/{owner}/{repo}/pages/deployments',{
+              owner,repo,artifact_id:artifacts[0].id,pages_build_version:context.sha,oidc_token:token
+            });
+            const id=created.data.id||created.data.status_url?.split('/').pop()||context.sha;
+            core.setOutput('page_url',created.data.page_url||'https://'+owner.toLowerCase()+'.github.io/'+repo+'/');
+            core.info('Pages deployment started for '+context.sha+' with artifact '+artifacts[0].id);
+            const started=Date.now(), deadline=25*60*1000, interval=20000;
+            const terminal=new Set(['deployment_failed','deployment_content_failed','deployment_cancelled','deployment_lost']);
+            let lastStatus='',errors=0;
+            while(Date.now()-started<deadline){
+              await new Promise(resolve=>setTimeout(resolve,interval));
+              let state;
+              try{
+                const checked=await github.request('GET /repos/{owner}/{repo}/pages/deployments/{deploymentId}',{
+                  owner,repo,deploymentId:id
+                });
+                state=checked.data.status;
+                errors=0;
+              }catch(error){
+                errors++;
+                core.warning('Pages status check '+errors+': '+error.message);
+                if(errors>=10)throw Error('Pages status service returned too many errors.');
+                continue;
+              }
+              if(state!==lastStatus){core.info('Pages status: '+String(state));lastStatus=state;}
+              if(state==='succeed'){core.info('Published '+context.sha);return;}
+              if(terminal.has(state))throw Error('Pages deployment ended: '+state);
+            }
+            // Preserve site health by cancelling the *known* pending Pages deploy
+            // before failing instead of leaving an indefinite deployment lock.
+            try{
+              await github.request('POST /repos/{owner}/{repo}/pages/deployments/{deploymentId}/cancel',{
+                owner,repo,deploymentId:id
+              });
+            }catch(error){core.warning('Could not cancel timed-out Pages deployment: '+error.message);}
+            throw Error('Pages syncing did not finish within 25 minutes.');

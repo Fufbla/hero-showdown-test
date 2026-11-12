@@ -1,4 +1,4 @@
-import {CHARACTER_TEST_CODE,CHARACTER_TEST_URL,isCharacterTestCode,clearLegacyCharacterTest} from './character-test/reset.mjs';
+import {CHARACTER_TEST_CODE,isCharacterTestCode} from './character-test/reset.mjs';
 const $=id=>document.getElementById(id),url='https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-v3-staging',prefix='royale-v3-play:';
 const storage={getItem:k=>localStorage.getItem(prefix+k),setItem:(k,v)=>localStorage.setItem(prefix+k,v)};
 let access='',refresh='',code='',slots=[],last=[null,null,null],busy=false,blocked=false,queue=Promise.resolve();
@@ -36,12 +36,12 @@ last=slots.map(x=>x.snapshot?JSON.stringify(x.snapshot):null);console.info('[V3 
 function launchCharacterTest(){
  characterTestSession=true;access='';refresh='';code=CHARACTER_TEST_CODE;
  blocked=false;slots=[];last=[null,null,null];
- clearLegacyCharacterTest();
  showCloudNote(false);
  $('welcome').hidden=true;$('new-code').hidden=true;$('roster').hidden=false;
  $('refresh').textContent='Reload Character Test';
- $('game-frame').src=CHARACTER_TEST_URL+'?v=fresh-character-'+Date.now();
- status('NEW CHARACTER TEST · 0000000000');
+ const qa=new URLSearchParams(location.search).get('spriteQA')==='1'?'&spriteQA=1':'';
+ $('game-frame').src='./kingjames/index.html?v2TestCharacter='+CHARACTER_TEST_CODE+'&v=kingjames-1'+qa;
+ status('KINGJAMES PROTOTYPE · 0000000000 · Progress saves on this browser every eight seconds.');
 }
 async function save(slot,snapshot,{clothingAction=false}={}){if(blocked||!access||![0,1,2].includes(slot)||!snapshot)return {ok:false,error:'Cloud saving is paused. Re-enter your code to reconcile progress.'};
  if(clothingSavesPending.has(slot)&&!clothingAction)return {ok:false,skipped:true,error:'Clothing purchase is being saved.'};const raw=JSON.stringify(snapshot);if(raw===last[slot])return {ok:true};const key=prefix+'journal:'+slot;const journal=JSON.stringify({snapshot,revision:slots[slot].revision});localStorage.setItem(key,journal);

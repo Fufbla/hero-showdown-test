@@ -1,6 +1,6 @@
 import {clearLegacyCharacterTest} from './reset.mjs';
 
-clearLegacyCharacterTest();
+// Keep earlier test saves intact when an old preview bookmark is opened.
 
 const image=document.getElementById('character-art');
 const stage=document.getElementById('character-stage');
