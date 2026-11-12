@@ -10,6 +10,7 @@ module.exports=async function exercisePowers(frame,page,advance,tag,original){
    const select=frame.getByLabel('Power slot '+(i+1),{exact:true});
    const options=await select.locator('option').allTextContents();assert.ok(!options.some(x=>/Agility|Speed/.test(x)));
    await select.selectOption(ids[i]||'');
+   await frame.waitForFunction(({slot,id})=>window.kingJamesQA.status().snapshot?.powers.equipped[slot]===id,{slot:i,id:ids[i]||null},{timeout:5000});
   }
   await frame.getByRole('button',{name:'Return to Pause Menu',exact:true}).click();
   await frame.getByRole('button',{name:'Resume Game',exact:true}).click();await canvas.click();await advance(.1);
@@ -50,7 +51,8 @@ module.exports=async function exercisePowers(frame,page,advance,tag,original){
  await loadout(['flight','fireball','strength']);await activate('Flight');await activate('Fireball');await advance(.7);
  assert.ok((await canvas.getAttribute('data-sprite-seen')).includes('fireballAir:'),tag+' missing flying Fireball');
  await page.screenshot({path:'/tmp/kingjames-attack-flight-'+tag+'.png',fullPage:true});
- await frame.getByRole('button',{name:'Flight · flying, press to cancel',exact:true}).click();await advance(1.1);await settle(700);
+ // The normal 30-second Flight cooldown must expire before restoring its slot.
+ await frame.getByRole('button',{name:'Flight · flying, press to cancel',exact:true}).click();await advance(1.1);await settle(2100);
  await loadout(original.powers.equipped);await settle(360);
  return {steel:await seen(),fx:JSON.parse(await canvas.getAttribute('data-motion-fx')),verified:['steel-transform','metal-strides-both-directions','metal-jump-double-fall-land','metal-punch-kick','strength','six-kick-combo','flight-launch-fly-hover-both-directions','steel-expiry','passive-speed-grounded-effects','no-agility-or-speed-active-slot']};
 };
