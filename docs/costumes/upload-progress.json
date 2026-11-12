@@ -12,10 +12,10 @@
   "initial_committed_files": 0,
   "initial_previous_upload_records": 28,
   "total_required_files": 98,
-  "verified_files": 14,
-  "remaining_files": 84,
-  "last_verified_content_commit": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
-  "remote_head": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
+  "verified_files": 21,
+  "remaining_files": 77,
+  "last_verified_content_commit": "076af2db4710e0cf9a3127bc864a97b706728a2b",
+  "remote_head": "076af2db4710e0cf9a3127bc864a97b706728a2b",
   "completed_files": [
     ".github/workflows/costume-review.yml",
     "docs/costumes/ASSET-BRIEF.md",
@@ -30,16 +30,16 @@
     "docs/costumes/art/dolphin-costume-source.png",
     "docs/costumes/art/dolphin-prompt.txt",
     "docs/costumes/art/fishsticks-costume-source.png",
-    "docs/costumes/art/hamburger-costume-source.png"
-  ],
-  "remaining_paths": [
+    "docs/costumes/art/hamburger-costume-source.png",
     "docs/costumes/art/hamburger-prompt.txt",
     "docs/costumes/art/pink-shark-costume-source.png",
     "docs/costumes/art/pizza-slice-costume-source.png",
     "docs/costumes/art/reaper-costume-source.png",
     "docs/costumes/art/shark-prompt.txt",
     "docs/costumes/art/stuffed-animal-costume-source.png",
-    "docs/costumes/art/white-business-suit-source.png",
+    "docs/costumes/art/white-business-suit-source.png"
+  ],
+  "remaining_paths": [
     "docs/costumes/art/zombie-costume-source.png",
     "docs/costumes/review/.gitignore",
     "docs/costumes/review/black-business-suit-sprites.png",
@@ -294,8 +294,10 @@
       "size_bytes": 2603,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "076af2db4710e0cf9a3127bc864a97b706728a2b",
+      "batch_number": 3
     },
     {
       "path": "docs/costumes/art/pink-shark-costume-source.png",
@@ -304,8 +306,10 @@
       "size_bytes": 2360040,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "076af2db4710e0cf9a3127bc864a97b706728a2b",
+      "batch_number": 3
     },
     {
       "path": "docs/costumes/art/pizza-slice-costume-source.png",
@@ -314,8 +318,10 @@
       "size_bytes": 2145162,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "076af2db4710e0cf9a3127bc864a97b706728a2b",
+      "batch_number": 3
     },
     {
       "path": "docs/costumes/art/reaper-costume-source.png",
@@ -324,8 +330,10 @@
       "size_bytes": 2730632,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "076af2db4710e0cf9a3127bc864a97b706728a2b",
+      "batch_number": 3
     },
     {
       "path": "docs/costumes/art/shark-prompt.txt",
@@ -334,8 +342,10 @@
       "size_bytes": 2649,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "076af2db4710e0cf9a3127bc864a97b706728a2b",
+      "batch_number": 3
     },
     {
       "path": "docs/costumes/art/stuffed-animal-costume-source.png",
@@ -344,8 +354,10 @@
       "size_bytes": 2488298,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "076af2db4710e0cf9a3127bc864a97b706728a2b",
+      "batch_number": 3
     },
     {
       "path": "docs/costumes/art/white-business-suit-source.png",
@@ -354,8 +366,10 @@
       "size_bytes": 1765884,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "076af2db4710e0cf9a3127bc864a97b706728a2b",
+      "batch_number": 3
     },
     {
       "path": "docs/costumes/art/zombie-costume-source.png",
@@ -1182,6 +1196,33 @@
       "tree_sha": "187eec7c032c469eac35c4e6fa689029580658f9",
       "commit_sha": "22b1e6a3af6f7131a932ef995717d0a3888c5885",
       "verified_at": "2026-11-12T21:24:48.833Z"
+    },
+    {
+      "number": 3,
+      "started_at": "2026-11-12T21:25:04.402Z",
+      "files": [
+        "docs/costumes/art/hamburger-prompt.txt",
+        "docs/costumes/art/pink-shark-costume-source.png",
+        "docs/costumes/art/pizza-slice-costume-source.png",
+        "docs/costumes/art/reaper-costume-source.png",
+        "docs/costumes/art/shark-prompt.txt",
+        "docs/costumes/art/stuffed-animal-costume-source.png",
+        "docs/costumes/art/white-business-suit-source.png"
+      ],
+      "status": "verified",
+      "reused_blobs": [
+        "docs/costumes/art/hamburger-prompt.txt",
+        "docs/costumes/art/pink-shark-costume-source.png",
+        "docs/costumes/art/pizza-slice-costume-source.png",
+        "docs/costumes/art/reaper-costume-source.png",
+        "docs/costumes/art/shark-prompt.txt",
+        "docs/costumes/art/stuffed-animal-costume-source.png",
+        "docs/costumes/art/white-business-suit-source.png"
+      ],
+      "uploaded_blobs": [],
+      "tree_sha": "448b3ec9b6e01c5271d49fd1d533429cbd761f43",
+      "commit_sha": "076af2db4710e0cf9a3127bc864a97b706728a2b",
+      "verified_at": "2026-11-12T21:25:11.734Z"
     }
   ],
   "errors": [
@@ -1211,6 +1252,6 @@
     "Save every verified batch SHA and exact file/phase/error in this manifest before beginning another batch.",
     "Keep deployment on hold."
   ],
-  "last_checkpoint_commit": "222638eb07af7881beed1e77f2a6faeb34429f1d",
-  "updated_at": "2026-11-12T21:24:49.845Z"
+  "last_checkpoint_commit": "d6ebb9e05d342d6916c872cc7e921826d11dc66d",
+  "updated_at": "2026-11-12T21:25:12.740Z"
 }
