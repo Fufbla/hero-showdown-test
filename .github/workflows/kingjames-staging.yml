@@ -2,7 +2,7 @@ name: KingJames full-body sprite regression
 
 on:
   push:
-    branches: [codex/kingjames-fullbody-prototype, codex/kingjames-steel-speed-no-agility, codex/kingjames-approved-attacks]
+    branches: [codex/kingjames-fullbody-prototype, codex/kingjames-steel-speed-no-agility, codex/kingjames-approved-attacks, codex/kingjames-regular-punch-kick]
   workflow_dispatch:
 
 permissions:

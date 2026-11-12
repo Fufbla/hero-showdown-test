@@ -44,6 +44,26 @@ async function check(type,mode){
   const seen=(await frame.locator('#game').getAttribute('data-sprite-seen')).split(',');
   for(const action of ['idle','run','jump','doubleJump','fall','land','punch','kick'])assert.ok(seen.some(s=>s.startsWith(action+':')),type.name()+'/'+mobile+' did not render '+action);
   for(const dir of [-1,1])assert.ok(seen.filter(s=>s.startsWith('run:')&&s.endsWith(':'+dir)).length>=5,'Insufficient alternating run frames '+dir);
+  // Drive ordinary combat through the existing simulation at fixed steps so even
+  // slower mobile profiles must render the exact new contact frames, both ways.
+  const basic=await frame.evaluate(()=>{
+   const context=document.querySelector('#game').getContext('2d'),arc=context.arc;
+   let curves=0;
+   context.arc=function(x,y,r,start,end,...rest){
+    if(x===24&&y===-8&&(r===35||r===48)&&start===-.7&&end===.7)curves++;
+    return arc.call(this,x,y,r,start,end,...rest);
+   };
+   try{
+    for(const direction of [-1,1])for(const kind of ['punch','kick']){
+     window.kingJamesQA.sample({},40);
+     window.kingJamesQA.sample({move:direction,[kind]:true},1);
+     for(let i=0;i<40;i++)window.kingJamesQA.sample({},1);
+    }
+    return {curves,seen:document.querySelector('#game').dataset.spriteSeen};
+   }finally{context.arc=arc;}
+  });
+  assert.equal(basic.curves,0,'Ordinary attack still draws the old curve');
+  for(const dir of [-1,1])for(const [kind,contact]of [['punch',104],['kick',112]])assert.ok(basic.seen.split(',').includes(kind+':'+contact+':'+dir),'Missing new '+kind+' contact '+dir);
   const powers=await exercisePowers(frame,page,advance,type.name()+'-'+mode,initial.snapshot);
   // The released game prevents saves until five seconds after combat.
   // Let that normal cooldown elapse before pausing the simulation.
@@ -73,7 +93,7 @@ async function check(type,mode){
   assert.equal(cloudRequests.length,0,'Reserved test contacted cloud account endpoints');assert.deepEqual(errors,[]);
   const file='kingjames-'+type.name()+'-'+mode+'.png';
   await page.screenshot({path:'/tmp/'+file,fullPage:true});
-  report.push({engine:type.name(),mode,viewport,powers,verified:['reserved-code-load','idle','both-run-directions','jump','doubleJump','fall','land','punch','kick','progress-reload','no-cloud-write'],seen,errors});
+  report.push({engine:type.name(),mode,viewport,powers,basic,verified:['reserved-code-load','idle','both-run-directions','jump','doubleJump','fall','land','punch','kick','basic-contact-art-both-directions','no-basic-curve','progress-reload','no-cloud-write'],seen,errors});
   console.log(JSON.stringify(report.at(-1)));
  }catch(error){
   const tag=type.name()+'-'+mode;

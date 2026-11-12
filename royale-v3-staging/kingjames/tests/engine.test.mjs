@@ -25,7 +25,7 @@ test('the complete outfit contract rejects missing anchors, frames and animation
  assert.equal(validateManifest(manifest),manifest);
  for(const state of REQUIRED_STATES){const m=structuredClone(manifest);delete m.animations[state];assert.throws(()=>validateManifest(m));}
  const m=structuredClone(manifest);delete m.frames[2].head;assert.throws(()=>validateManifest(m));
- assert.equal(manifest.frames.length,100);assert.deepEqual(manifest.cell,[256,256]);
+ assert.equal(manifest.frames.length,116);assert.deepEqual(manifest.cell,[256,256]);
 });
 test('running uses alternating authored strides, advances with speed and freezes at paused game time',()=>{
  const a=new FullBodyAnimator(manifest),h=idle();a.sample(h,0);h.vx=315;
@@ -49,9 +49,14 @@ test('jump, double jump, apex, fall and land follow existing physics timers',()=
 test('punch and kick contact frames match active hit windows in either direction',()=>{
  for(const kind of ['punch','kick'])for(const face of [-1,1]){
   const a=new FullBodyAnimator(manifest),h={...idle(),face,attack:{kind,face,age:0}},d=ATTACKS[kind];
-  assert.equal(a.sample(h,0).index,0);h.attack.age=d.startup*.75;assert.equal(a.sample(h,.01).index,1);
-  h.attack.age=d.startup;assert.equal(a.sample(h,.02).index,2);assert.equal(a.sample(h,.02).direction,face);
-  h.attack.age=d.startup+d.active+.001;assert.equal(a.sample(h,.03).index,3);
+  const seen=new Set();
+  for(let age=0;age<d.duration;age+=.001){
+   h.attack.age=age;const sample=a.sample(h,age);seen.add(sample.frameIndex);
+   assert.equal(sample.direction,face);assert.equal(sample.frame.atlas,'basic');
+   // The painted contact sprite appears only during the existing active hit window.
+   assert.equal(sample.index===4,age>=d.startup&&age<d.startup+d.active);
+  }
+  assert.equal(seen.size,8);assert.equal(manifest.animations[kind].embeddedImpact,true);
  }
 });
 test('hurt, defeat and recovery preserve the gameplay priority',()=>{
@@ -70,7 +75,7 @@ test('every body/head composition is padded, opaque where expected and never cha
   assert.ok(count>5000,'Missing full frame '+i);assert.equal(edge,0,'Clipped body/head '+i);
   hashes.add(createRequire(import.meta.url)('crypto').createHash('sha256').update(d).digest('hex'));
  }
- assert.equal(hashes.size,100,'Each cell is distinct authored artwork');
+ assert.equal(hashes.size,116,'Each cell is distinct authored artwork');
 });
 test('render sampling is read-only and leaves deterministic movement, combat, saves and equipment equal',()=>{
  const a=new Game({look,random:()=>.4,now:()=>1000,testPowers:true}),b=new Game({look,random:()=>.4,now:()=>1000,testPowers:true});a.started=b.started=true;

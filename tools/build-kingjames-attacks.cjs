@@ -41,5 +41,6 @@ async function bounds(buffer){const {data,info}=await sharp(buffer).ensureAlpha(
  await sharp({create:{width:2048,height:Math.ceil(tiles.length/8)*256,channels:4,background:{r:0,g:0,b:0,alpha:0}}}).composite(tiles).webp({lossless:true}).toFile(path.join(dir,'attacks.webp'));
  await sharp(path.join(art,'attack-fx-source.png')).webp({lossless:true}).toFile(path.join(root,'royale-v3-staging/kingjames/effects/attacks.webp'));
  fs.writeFileSync(path.join(dir,'manifest.json'),JSON.stringify(m,null,2)+'\n');
+ await require('./build-kingjames-basic-attacks.cjs').build();
  console.log('Packed 12 strength, 24 combo-kick and 16 ground/air fireball frames.');
 })().catch(e=>{console.error(e);process.exitCode=1;});
