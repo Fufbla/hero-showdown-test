@@ -30,7 +30,9 @@ const origin=process.env.KINGJAMES_TEST_ORIGIN||'http://127.0.0.1:8174';
      assert.equal(await page.locator('#roster').isVisible(),true);
      const frame=page.frameLocator('#game-frame');
      await frame.locator('#roster').waitFor({state:'visible'});
-     if(populated)assert.ok((await frame.locator('#roster').innerText()).includes('Login Regression'));
+     // The roster shell is visible before its asynchronous module graph finishes.
+     if(populated)await frame.getByRole('heading',{name:'Login Regression',exact:true}).waitFor({state:'visible'});
+     else await frame.getByRole('button',{name:'Create Hero +',exact:true}).first().waitFor({state:'visible'});
      assert.deepEqual(actions,['verify','slots']);
      assert.deepEqual(errors,[]);
      console.log(type.name()+': ordinary account '+(populated?'saved hero':'empty slots')+' loaded without cloud writes');
