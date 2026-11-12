@@ -64,12 +64,17 @@ const fixture=JSON.parse(execFileSync(process.execPath,['--import','./royale-v3-
    // Saving is intentionally blocked for five seconds after an attack.
    await frame.evaluate(()=>window.kingJamesQA.resume());
    await frame.waitForFunction(()=>window.kingJamesQA.status().snapshot!==null,null,{timeout:30000});
-   await frame.evaluate(()=>{window.kingJamesQA.pause();window.kingJamesQA.save();});
+   await frame.evaluate(()=>window.kingJamesQA.pause());
+   await frame.locator('#manual-save').click();
    const saved=await state();for(const item of original.inventory.items)assert.deepEqual(saved.inventory.items.find(i=>i.uid===item.uid),item);assert.deepEqual(saved.look,original.look);
    assert.deepEqual(saved.powers.levels,original.powers.levels);assert.deepEqual(saved.cosmetics,original.cosmetics);
    await page.goto(origin+'/royale-v3-staging/?spriteQA=1');await page.locator('#enter').click();await page.locator('#input').fill('0000000000');await page.locator('#load').click();
    frame=await(await page.locator('#game-frame').elementHandle()).contentFrame();
-   await frame.waitForFunction(()=>window.kingJamesQA?.status().ready&&document.querySelector('#game').dataset.outfit==='blossom-kimono',null,{timeout:90000});
+   await frame.waitForFunction(()=>window.kingJamesQA?.status().ready,null,{timeout:90000});
+   // An equipment transaction can restore into Eris before the first game frame.
+   if(await frame.locator('#return-menu').isVisible())await frame.locator('#return-menu').click();
+   if(await frame.locator('#resume').isVisible())await frame.locator('#resume').click();
+   await frame.waitForFunction(()=>document.querySelector('#game').dataset.outfit==='blossom-kimono',null,{timeout:30000});
    for(const key of ['inventory','cosmetics','look'])assert.deepEqual((await state())[key],saved[key]);assert.deepEqual(await stats(),equippedStats);
    assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);assert.deepEqual(cloud,[]);
    results.push({engine:type.name(),equipReplaceUnequip:true,unchangedCostumePixels:true,outfitSwitchPreservesStats:true,steelRestoresCostume:true,localReload:true});
