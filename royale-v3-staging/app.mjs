@@ -43,7 +43,7 @@ function launchCharacterTest(){
  $('welcome').hidden=true;$('new-code').hidden=true;$('roster').hidden=false;
  $('refresh').textContent='Reload Character Test';
  const qa=new URLSearchParams(location.search).get('spriteQA')==='1'?'&spriteQA=1':'';
- $('game-frame').src='./kingjames/index.html?v2TestCharacter='+CHARACTER_TEST_CODE+'&v=portals-1'+qa;
+ $('game-frame').src='./kingjames/index.html?v2TestCharacter='+CHARACTER_TEST_CODE+'&v=outfits-1'+qa;
  status('KINGJAMES PROTOTYPE · 0000000000 · Progress saves on this browser every eight seconds.');
 }
 async function save(slot,snapshot,{clothingAction=false}={}){if(blocked||!access||![0,1,2].includes(slot)||!snapshot)return {ok:false,error:'Cloud saving is paused. Re-enter your code to reconcile progress.'};

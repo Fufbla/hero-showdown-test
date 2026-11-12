@@ -1,5 +1,5 @@
 // Generated staging renderer; original renderer remains unchanged.
-import {kingJamesSprites} from './outfit-engine.mjs?v=basic-attacks-1';
+import {kingJamesSprites} from './outfit-engine.mjs?v=outfits-1';
 import {kingJamesFX} from './motion-fx.mjs';
 import {kingJamesAttackFX} from './attack-fx.mjs';
 import {drawBossShot} from '../../royale/boss-effects.mjs';
