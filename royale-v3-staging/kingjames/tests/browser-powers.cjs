@@ -14,7 +14,7 @@ module.exports=async function exercisePowers(frame,page,advance,tag,original){
   await frame.getByRole('button',{name:'Return to Pause Menu',exact:true}).click();
   await frame.getByRole('button',{name:'Resume Game',exact:true}).click();await canvas.click();await advance(.1);
  };
- const activate=async name=>{await frame.getByRole('checkbox',{name:name+' · ready',exact:true}).click();await advance(.04);};
+ const activate=async name=>{await frame.getByRole('button',{name:name+' · ready',exact:true}).click();await advance(.04);};
  const seen=async()=>JSON.parse(await canvas.getAttribute('data-steel-seen')||'[]');
  await settle(360);await loadout(['steel','strength','superKick']);await activate('Steel Body');await advance(.3);
  assert.equal(await canvas.getAttribute('data-outfit'),'steel-universal');
@@ -34,7 +34,7 @@ module.exports=async function exercisePowers(frame,page,advance,tag,original){
  await page.keyboard.up('ArrowRight');await page.keyboard.down('ArrowLeft');await advance(.6);await page.keyboard.up('ArrowLeft');await advance(.5);
  assert.equal(await canvas.getAttribute('data-outfit'),'steel-universal');
  const flying=await seen();for(const id of ['flightStart','fly','hover'])assert.ok(flying.some(s=>s.startsWith(id+':')),tag+' missing '+id);
- await frame.getByRole('checkbox',{name:'Flight · active',exact:true}).click();await advance(1.1);
+ await frame.getByRole('button',{name:'Flight · flying, press to cancel',exact:true}).click();await advance(1.1);
  await settle(2400);assert.equal(await canvas.getAttribute('data-outfit'),'kingjames-original');
  await loadout(original.powers.equipped);await settle(360);
  return {steel:await seen(),fx:JSON.parse(await canvas.getAttribute('data-motion-fx')),verified:['steel-transform','metal-strides-both-directions','metal-jump-double-fall-land','metal-punch-kick','strength','six-kick-combo','flight-launch-fly-hover-both-directions','steel-expiry','passive-speed-grounded-effects','no-agility-or-speed-active-slot']};
