@@ -55,7 +55,7 @@ const fixture=JSON.parse(execFileSync(process.execPath,['--import','./royale-v3-
    await frame.locator('#equip-piece').click();assert.deepEqual((await state()).inventory.equipped,{});assert.deepEqual(await stats(),baseStats);assert.equal(await preview(),kimono);
    await frame.locator('#equip-piece').click();assert.deepEqual(await stats(),equippedStats);
    await page.screenshot({path:'/tmp/kingjames-armor-'+type.name()+'.png'});
-   await frame.locator('#close-tree').click();
+   await frame.locator('#return-menu').click();await frame.locator('#resume').click();
    await frame.evaluate(()=>{window.kingJamesQA.resume();window.kingJamesQA.sample({powers:[true,false,false]},1);window.kingJamesQA.pause();});
    await frame.waitForFunction(()=>document.querySelector('#game').dataset.outfit==='steel-universal');
    await frame.evaluate(()=>{window.kingJamesQA.resume();window.kingJamesQA.sample({},620);window.kingJamesQA.pause();});
