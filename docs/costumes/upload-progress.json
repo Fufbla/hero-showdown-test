@@ -12,10 +12,10 @@
   "initial_committed_files": 0,
   "initial_previous_upload_records": 28,
   "total_required_files": 98,
-  "verified_files": 21,
-  "remaining_files": 77,
-  "last_verified_content_commit": "076af2db4710e0cf9a3127bc864a97b706728a2b",
-  "remote_head": "076af2db4710e0cf9a3127bc864a97b706728a2b",
+  "verified_files": 28,
+  "remaining_files": 70,
+  "last_verified_content_commit": "fe51df0c3b78199b7f136f73c584cdfe899cb15d",
+  "remote_head": "fe51df0c3b78199b7f136f73c584cdfe899cb15d",
   "completed_files": [
     ".github/workflows/costume-review.yml",
     "docs/costumes/ASSET-BRIEF.md",
@@ -37,15 +37,16 @@
     "docs/costumes/art/reaper-costume-source.png",
     "docs/costumes/art/shark-prompt.txt",
     "docs/costumes/art/stuffed-animal-costume-source.png",
-    "docs/costumes/art/white-business-suit-source.png"
-  ],
-  "remaining_paths": [
+    "docs/costumes/art/white-business-suit-source.png",
     "docs/costumes/art/zombie-costume-source.png",
     "docs/costumes/review/.gitignore",
     "docs/costumes/review/black-business-suit-sprites.png",
     "docs/costumes/review/costume-animation-review.mp4",
     "docs/costumes/review/costume-hair-restored.jpg",
     "docs/costumes/review/costume-review-browser.jpg",
+    "royale-v3-staging/costumes/catalog.mjs"
+  ],
+  "remaining_paths": [
     "docs/costumes/review/costume-sprite-sheets.zip",
     "docs/costumes/review/dolphin-costume-sprites.png",
     "docs/costumes/review/fishsticks-costume-sprites.png",
@@ -89,7 +90,6 @@
     "royale-v3-staging/costumes/assets/zombie-costume/body.webp",
     "royale-v3-staging/costumes/assets/zombie-costume/manifest.json",
     "royale-v3-staging/costumes/assets/zombie-costume/registration.json",
-    "royale-v3-staging/costumes/catalog.mjs",
     "royale-v3-staging/costumes/engine.mjs",
     "royale-v3-staging/costumes/game-session.mjs",
     "royale-v3-staging/costumes/hero-art.mjs",
@@ -378,8 +378,10 @@
       "size_bytes": 1652970,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "source_art"
+      "status": "verified",
+      "category": "source_art",
+      "verified_commit": "fe51df0c3b78199b7f136f73c584cdfe899cb15d",
+      "batch_number": 4
     },
     {
       "path": "docs/costumes/review/.gitignore",
@@ -388,8 +390,10 @@
       "size_bytes": 15,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "review_artwork"
+      "status": "verified",
+      "category": "review_artwork",
+      "verified_commit": "fe51df0c3b78199b7f136f73c584cdfe899cb15d",
+      "batch_number": 4
     },
     {
       "path": "docs/costumes/review/black-business-suit-sprites.png",
@@ -398,8 +402,10 @@
       "size_bytes": 1334225,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "review_artwork"
+      "status": "verified",
+      "category": "review_artwork",
+      "verified_commit": "fe51df0c3b78199b7f136f73c584cdfe899cb15d",
+      "batch_number": 4
     },
     {
       "path": "docs/costumes/review/costume-animation-review.mp4",
@@ -408,8 +414,10 @@
       "size_bytes": 2578900,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "review_artwork"
+      "status": "verified",
+      "category": "review_artwork",
+      "verified_commit": "fe51df0c3b78199b7f136f73c584cdfe899cb15d",
+      "batch_number": 4
     },
     {
       "path": "docs/costumes/review/costume-hair-restored.jpg",
@@ -418,8 +426,10 @@
       "size_bytes": 108267,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "review_artwork"
+      "status": "verified",
+      "category": "review_artwork",
+      "verified_commit": "fe51df0c3b78199b7f136f73c584cdfe899cb15d",
+      "batch_number": 4
     },
     {
       "path": "docs/costumes/review/costume-review-browser.jpg",
@@ -428,8 +438,10 @@
       "size_bytes": 241744,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "review_artwork"
+      "status": "verified",
+      "category": "review_artwork",
+      "verified_commit": "fe51df0c3b78199b7f136f73c584cdfe899cb15d",
+      "batch_number": 4
     },
     {
       "path": "docs/costumes/review/costume-sprite-sheets.zip",
@@ -868,8 +880,10 @@
       "size_bytes": 1540,
       "base_blob_sha": null,
       "previous_upload_recorded": true,
-      "status": "remaining",
-      "category": "code_documentation_or_tests"
+      "status": "verified",
+      "category": "code_documentation_or_tests",
+      "verified_commit": "fe51df0c3b78199b7f136f73c584cdfe899cb15d",
+      "batch_number": 4
     },
     {
       "path": "royale-v3-staging/costumes/engine.mjs",
@@ -1223,6 +1237,33 @@
       "tree_sha": "448b3ec9b6e01c5271d49fd1d533429cbd761f43",
       "commit_sha": "076af2db4710e0cf9a3127bc864a97b706728a2b",
       "verified_at": "2026-11-12T21:25:11.734Z"
+    },
+    {
+      "number": 4,
+      "started_at": "2026-11-12T21:25:23.423Z",
+      "files": [
+        "docs/costumes/art/zombie-costume-source.png",
+        "docs/costumes/review/.gitignore",
+        "docs/costumes/review/black-business-suit-sprites.png",
+        "docs/costumes/review/costume-animation-review.mp4",
+        "docs/costumes/review/costume-hair-restored.jpg",
+        "docs/costumes/review/costume-review-browser.jpg",
+        "royale-v3-staging/costumes/catalog.mjs"
+      ],
+      "status": "verified",
+      "reused_blobs": [
+        "docs/costumes/art/zombie-costume-source.png",
+        "docs/costumes/review/.gitignore",
+        "docs/costumes/review/black-business-suit-sprites.png",
+        "docs/costumes/review/costume-animation-review.mp4",
+        "docs/costumes/review/costume-hair-restored.jpg",
+        "docs/costumes/review/costume-review-browser.jpg",
+        "royale-v3-staging/costumes/catalog.mjs"
+      ],
+      "uploaded_blobs": [],
+      "tree_sha": "73a78e55a6b2f35b969cd09098b88cce0b12aced",
+      "commit_sha": "fe51df0c3b78199b7f136f73c584cdfe899cb15d",
+      "verified_at": "2026-11-12T21:25:30.494Z"
     }
   ],
   "errors": [
@@ -1252,6 +1293,6 @@
     "Save every verified batch SHA and exact file/phase/error in this manifest before beginning another batch.",
     "Keep deployment on hold."
   ],
-  "last_checkpoint_commit": "d6ebb9e05d342d6916c872cc7e921826d11dc66d",
-  "updated_at": "2026-11-12T21:25:12.740Z"
+  "last_checkpoint_commit": "47920616a80b4a4a5bf877fff978173efdd4058f",
+  "updated_at": "2026-11-12T21:25:31.500Z"
 }
