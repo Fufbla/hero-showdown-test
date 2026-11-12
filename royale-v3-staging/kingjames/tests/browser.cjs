@@ -69,9 +69,13 @@ async function check(type,mode){
   // Let that normal cooldown elapse before pausing the simulation.
   await frame.waitForFunction(()=>window.kingJamesQA.status().snapshot!==null,null,{timeout:30000});
   const after=await frame.evaluate(()=>{window.kingJamesQA.pause();window.kingJamesQA.save();return window.kingJamesQA.status();});
-  // The real attack checks can defeat a monster and earn ordinary XP/coins.
+  // Real combat can earn XP/coins and allocate a new loot identifier.
   // Keep appearance/loadout invariant, then round-trip the earned progress exactly.
-  for(const key of ['inventory','powers','look','cosmetics'])assert.deepEqual(after.snapshot[key],initial.snapshot[key],'Unexpected appearance/loadout change '+key);
+  for(const key of ['powers','look','cosmetics'])assert.deepEqual(after.snapshot[key],initial.snapshot[key],'Unexpected appearance/loadout change '+key);
+  const beforeInventory=initial.snapshot.inventory,afterInventory=after.snapshot.inventory;
+  for(const key of ['equipped','headwearArchive','retired'])assert.deepEqual(afterInventory[key],beforeInventory[key],'Combat changed inventory '+key);
+  for(const item of [...beforeInventory.items,...beforeInventory.pending])assert.deepEqual([...afterInventory.items,...afterInventory.pending].find(i=>i.uid===item.uid),item,'Combat lost or modified existing item '+item.uid);
+  assert.ok(afterInventory.nextId>=beforeInventory.nextId,'Combat rolled back the loot identifier');
   assert.ok(after.snapshot.level>=initial.snapshot.level,'Combat lost a level');
   if(after.snapshot.level===initial.snapshot.level)assert.ok(after.snapshot.xp>=initial.snapshot.xp,'Combat lost XP');
   assert.ok(after.snapshot.coins>=initial.snapshot.coins,'Combat lost coins');
