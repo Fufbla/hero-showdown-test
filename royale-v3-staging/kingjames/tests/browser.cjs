@@ -49,8 +49,15 @@ async function check(type,mode){
   // Let that normal cooldown elapse before pausing the simulation.
   await frame.waitForFunction(()=>window.kingJamesQA.status().snapshot!==null,null,{timeout:30000});
   const after=await frame.evaluate(()=>{window.kingJamesQA.pause();window.kingJamesQA.save();return window.kingJamesQA.status();});
-  for(const key of ['level','xp','coins','inventory','powers','look','cosmetics'])assert.deepEqual(after.snapshot[key],initial.snapshot[key],'Unexpected progress/appearance change '+key);
-  const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),namespace);assert.ok(saved.slots.some(s=>s?.snapshot.look.name==='KingJames'));
+  // The real attack checks can defeat a monster and earn ordinary XP/coins.
+  // Keep appearance/loadout invariant, then round-trip the earned progress exactly.
+  for(const key of ['inventory','powers','look','cosmetics'])assert.deepEqual(after.snapshot[key],initial.snapshot[key],'Unexpected appearance/loadout change '+key);
+  assert.ok(after.snapshot.level>=initial.snapshot.level,'Combat lost a level');
+  if(after.snapshot.level===initial.snapshot.level)assert.ok(after.snapshot.xp>=initial.snapshot.xp,'Combat lost XP');
+  assert.ok(after.snapshot.coins>=initial.snapshot.coins,'Combat lost coins');
+  const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),namespace);
+  const savedHero=saved.slots.find(s=>s?.snapshot.look.name==='KingJames');assert.ok(savedHero);
+  for(const key of ['level','xp','coins','inventory','powers','look','cosmetics'])assert.deepEqual(savedHero.snapshot[key],after.snapshot[key],'Saved progress differs from the post-combat hero: '+key);
   await page.reload();await page.locator('#enter').click();await page.locator('#input').fill('0000000000');await page.locator('#load').click();
   const fresh=await page.locator('#game-frame').elementHandle();const restored=await fresh.contentFrame();
   await restored.waitForFunction(()=>window.kingJamesQA?.status().ready===true);
