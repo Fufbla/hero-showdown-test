@@ -18,6 +18,7 @@ async function check(type,mode){
   await page.locator('#enter').click();await page.locator('#input').fill('0000000000');await page.locator('#load').click();
   const element=await page.locator('#game-frame').elementHandle();const frame=await element.contentFrame();
   await frame.waitForFunction(()=>{const d=document.querySelector('#game')?.dataset;return d?.outfit==='kingjames-original'&&d.artReady==='true'&&d.inputEnabled==='true';},null,{timeout:90000});
+  const portals=await require('./browser-portals.cjs')(frame);
   const initial=await frame.evaluate(()=>window.kingJamesQA.status());
   assert.equal(initial.name,'KingJames');assert.equal(initial.ready,true);
   if(mobile){const box=await page.locator('#game-frame').boundingBox();assert.ok(box.y>=0&&box.y+box.height<=viewport.height+1,'Mobile game extends outside viewport');}

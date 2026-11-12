@@ -2,7 +2,7 @@ name: KingJames full-body sprite regression
 
 on:
   push:
-    branches: [codex/kingjames-fullbody-prototype, codex/kingjames-steel-speed-no-agility, codex/kingjames-approved-attacks, codex/kingjames-regular-punch-kick]
+    branches: [codex/kingjames-fullbody-prototype, codex/kingjames-steel-speed-no-agility, codex/kingjames-approved-attacks, codex/kingjames-regular-punch-kick, codex/portal-integration]
   workflow_dispatch:
 
 permissions:
@@ -31,7 +31,7 @@ jobs:
         run: |
           node tools/build-kingjames-staging.cjs
           git diff --exit-code -- royale-v3-staging/gameplay royale-v3-staging/local-coop royale-v3-staging/index.html
-          git diff --exit-code -- royale-v3-staging/kingjames
+          git diff --exit-code -- royale-v3-staging/kingjames royale-v3-staging/portals
           test -z "$(git diff --name-only 8fa7a78ca79774c345932892a39b2a1f7ccad7c4 HEAD -- royale assets index.html game.html hero-showdown.html ':!royale/tests')"
       - name: Run full-body, save, cloud bridge, co-op and power regression tests
         run: node --test royale-v3-staging/kingjames/tests/engine.test.mjs royale/tests/fresh-character-reset.test.mjs royale/local-coop/tests/*.test.mjs royale/v2-sprites/tests/*.test.mjs royale/tests/v2-test-hero-code.test.mjs royale/tests/travel-cloud.test.mjs royale/tests/travel-eris.test.mjs royale/tests/clothing-purchases.test.mjs
