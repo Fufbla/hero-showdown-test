@@ -1,3 +1,4 @@
+import {drawCosmeticPreview} from './armor-preview.mjs?v=armor-stats-1';
 // Generated staging menu; inventory catalog and statistics are preserved.
 import {STYLE_C_VIEWS} from '../../royale/style-c-defaults.mjs';
 import {itemIcon} from '../../royale/item-art.mjs';
@@ -20,7 +21,7 @@ const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefine
 const button=(text,fn,cls='secondary')=>{const b=el('button',text,cls);b.type='button';b.onclick=fn;return b;};
 export function drawEquipmentPreview(canvas,g,inventory=g.inventory,view='front'){
   const c=canvas.getContext('2d');c.clearRect(0,0,360,420);c.fillStyle='#8cca9133';c.beginPath();c.ellipse(180,382,75,11,0,0,Math.PI*2);c.fill();
-  drawHero(c,180,380,g.look,previewHero('idle',0),0,2.85,{view,outfit:equipmentOutfit(inventory,g.outfit)});canvas.setAttribute('aria-label',`${view} full-body costume preview of ${g.look.name}`);
+  drawCosmeticPreview(c,180,380,g,previewHero('idle',0),0,2.85,view);canvas.setAttribute('aria-label',`Current cosmetic appearance of ${g.look.name}; armor grants stats only`);
 }
 export function appliedEquipment(g,inventory,level=g.hero.level){const stats=equipmentStats(equipmentBonuses(inventory,level)),speed=g.powers.data.levels.speed?powerStats('speed',g.powers.data.levels.speed,{equipment:{speedLevels:matchingSpeedBonus(inventory,level)}}):{attackBonus:0,runBonus:0};stats.attackSpeed=Math.min(stats.attackSpeed,Math.max(0,.5-speed.attackBonus));stats.moveSpeed=Math.min(stats.moveSpeed,Math.max(0,.6-speed.runBonus));return stats;}
 export function statComparison(before,after){
@@ -76,7 +77,7 @@ export class ErisMenu{
   draw(){const g=this.getGame();drawEquipmentPreview($('gear-preview'),g,this.previewInventory||g.inventory,this.view);for(const v of STYLE_C_VIEWS)$(`gear-view-${v}`).setAttribute('aria-pressed',String(v===this.view));}
   wardrobe(){
     const g=this.getGame();this.update();$('shop-confirm').hidden=true;this.confirm=null;
-    $('shop-category-wrap').hidden=this.mode!=='buy';$('wardrobe-note').textContent=this.mode==='buy'?'Choose a complete matching outfit. Power Armor collections each have nine tiers.':this.mode==='sell'?'Resale is 25% of original catalog value, rounded down. Legendary equipment can never be sold.':'Wear a complete matching outfit. Collect its body armor and boots, then equip them together.';
+    $('shop-category-wrap').hidden=this.mode!=='buy';$('wardrobe-note').textContent=this.mode==='buy'?'Armor grants stat bonuses only and never changes your appearance. Equip a complete matching set. Power Armor collections each have nine tiers.':this.mode==='sell'?'Armor grants stat bonuses only. Resale is 25% of original catalog value, rounded down. Legendary equipment can never be sold.':'Armor grants stat bonuses only and never changes your appearance. Collect matching body armor and boots, then equip them together. Choose clothing separately in the Clothing Store.';
     for(const b of document.querySelectorAll('[data-wardrobe]'))b.setAttribute('aria-pressed',String(b.dataset.wardrobe===this.mode));
     const list=$('shop-items');list.replaceChildren();list.closest('.wardrobe-layout').classList.toggle('selling',this.mode==='sell');$('shop-detail').hidden=this.mode==='sell';
     let entries;
@@ -139,9 +140,9 @@ export class ErisMenu{
     const defs=e.definitions||activeArmorShopDefinitions(e);
     if(!defs.length){p.append(el('p','This outfit is unavailable.'));this.draw();return;}
     this.previewInventory=withPreview(g,defs);this.draw();
-    p.append(el('div',`${this.mode==='buy'?'TRY IT ON':'YOUR EQUIPMENT'} · ${defs.length===2?'MATCHING OUTFIT':'OUTFIT INCOMPLETE'}`,'eyebrow'),el('h3',e.name||defs[0].setName));
-    if(this.mode==='owned'&&!e.ok)p.append(el('p',e.error||'Collect the matching body armor and boots to wear this outfit.','shop-warning'));
-    p.append(el('p',`Level ${defs[0].level||1} · ${defs[0].rarity} · Fixed colors${defs[0].rarity==='rare'?' · Constant white glow':''}.`));
+    p.append(el('div',`${this.mode==='buy'?'COMPARE BONUSES':'YOUR EQUIPMENT'} · ${defs.length===2?'MATCHING OUTFIT':'OUTFIT INCOMPLETE'}`,'eyebrow'),el('h3',e.name||defs[0].setName));
+    if(this.mode==='owned'&&!e.ok)p.append(el('p',e.error||'Collect the matching body armor and boots to equip this armor set.','shop-warning'));
+    p.append(el('p',`Level ${defs[0].level||1} · ${defs[0].rarity} · Stat bonuses only. Your cosmetic outfit stays selected.`));
     p.append(statComparison(appliedEquipment(g,g.inventory),appliedEquipment(g,this.previewInventory,99)));
     if(defs[0].flightLevels){
       const learned=g.powers.data.levels.flight, bonus=matchingFlightBonus(this.previewInventory,99);
@@ -166,7 +167,7 @@ export class ErisMenu{
     }else if(defs[0].strengthLevels){
       const learned=g.powers.data.levels.strength, bonus=matchingStrengthBonus(this.previewInventory,99);
       const stats=powerStats('strength',learned,{heroLevel:g.hero.level,equipment:{...appliedEquipment(g,this.previewInventory,99),strengthLevels:bonus}});
-      p.append(el('p',`Equip matching chest armor and boots for +${defs[0].strengthLevels} effective Super Strength levels. The chest includes the matching gauntlets.`,'set-note'));
+      p.append(el('p',`Equip matching chest armor and boots for +${defs[0].strengthLevels} effective Super Strength levels.`,'set-note'));
       p.append(el('p',learned?`Super Strength preview · learned ${learned} + armor ${bonus} = level ${stats.level} · ${formatStat('damage',stats.damage)} punch damage · up to ${stats.targets} targets.`:'Learn Super Strength to use its armor bonus.'));
     }else if(defs[0].rootsLevels){
       const learned=g.powers.data.levels.roots, bonus=matchingRootsBonus(this.previewInventory,99);
@@ -189,14 +190,14 @@ export class ErisMenu{
     }else if(this.mode==='sell'){
       const q=g.salePreview(e.uid),b=button(q.ok?`Review sale · ${q.value} coins`:'Cannot sell',()=>this.reviewAction('sell',e.uid),'primary');b.id='review-sale';b.disabled=!q.ok;p.append(b);
     }else{
-      const equipped=e.equipped,b=button(equipped?'Remove outfit':'Wear matching outfit',async()=>{const r=await this.transaction(()=>g.equipItem(e.uid));if(r.ok)this.wardrobe();else if(r.error)this.say(r.error);},'primary');b.id='equip-piece';b.disabled=!e.ok;p.append(b);
+      const equipped=e.equipped,b=button(equipped?'Unequip armor':'Equip matching armor',async()=>{const r=await this.transaction(()=>g.equipItem(e.uid));if(r.ok)this.wardrobe();else if(r.error)this.say(r.error);},'primary');b.id='equip-piece';b.disabled=!e.ok;p.append(b);
     }
   }
   reviewBuy(selection){
     const g=this.getGame(),s=$('shop-confirm');s.replaceChildren();s.hidden=false;const defs=activeArmorShopDefinitions(selection),needed=Math.max(0,g.inventory.items.length+defs.length-20),chosen=new Set(),revision=g.economy.revision;
     s.append(el('h3','Confirm outfit purchase'),el('p',`${defs.map(d=>d.name).join(' + ')} · ${armorOutfitPrice(defs)} coins. ${needed?`Choose ${needed} owned items to permanently discard below.`:'The matching outfit fits in your inventory.'}`));
     if(needed)for(const item of g.inventory.items){const def=itemDefinition(item),label=el('label',undefined,'discard-choice'),check=el('input');check.type='checkbox';check.value=item.uid;check.onchange=()=>{check.checked?chosen.add(item.uid):chosen.delete(item.uid);update();};label.append(check,el('span',`${def.name}${def.rarity==='rare'?' · RARE — cannot recover':''}${def.rarity==='legendary'?' · LEGENDARY — permanently lost, cannot earn again':''} · ${Object.entries(def.stats).filter(([,v])=>v).map(([k,v])=>`${STAT_LABELS[k]} +${formatStat(k,v)}`).join(', ')}`));s.append(label);}
-    const status=el('p'),yes=button('Confirm purchase',async()=>{const r=await this.transaction(()=>g.buyCostume(selection,{discardUids:[...chosen],confirmed:true,revision}));if(r.ok){this.say('Outfit purchased. Open Owned to wear the matching set.');this.wardrobe();}else status.textContent=r.error;},'primary'),no=button('Cancel purchase',async()=>{s.hidden=true;},'secondary');yes.id='confirm-purchase';no.id='cancel-purchase';s.append(status,yes,no);
+    const status=el('p'),yes=button('Confirm purchase',async()=>{const r=await this.transaction(()=>g.buyCostume(selection,{discardUids:[...chosen],confirmed:true,revision}));if(r.ok){this.say('Outfit purchased. Open Owned to equip the matching armor set.');this.wardrobe();}else status.textContent=r.error;},'primary'),no=button('Cancel purchase',async()=>{s.hidden=true;},'secondary');yes.id='confirm-purchase';no.id='cancel-purchase';s.append(status,yes,no);
     const update=()=>{const q=g.costumePreview(selection,[...chosen]);yes.disabled=!q.ok;status.textContent=q.ok?`After purchase: ${g.hero.coins-q.cost} coins · ${g.inventory.items.length-chosen.size+defs.length}/20 equipment.${needed?' Selected items are permanently discarded.':''}`:q.error;};update();s.scrollIntoView({block:'nearest'});no.focus();
   }
   reviewAction(kind,uid){

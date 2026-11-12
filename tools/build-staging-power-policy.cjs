@@ -72,3 +72,4 @@ html=fs.readFileSync(parent,'utf8').replace("location.href='../royale/local-coop
 fs.writeFileSync(parent,mappedHTML(html,'/royale-v3-staging/'));
 console.log('Built staging-only power policy for solo, online, KingJames and local co-op.');
 require('./build-staging-portals.cjs');
+require('./build-staging-armor.cjs');

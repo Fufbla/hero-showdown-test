@@ -23,11 +23,11 @@ for(const entry of entries){
    assert.ok(target.pathname.startsWith('/hero-showdown-test/'),`${path}: target escapes the project path`);
    if(urlLike.test(key))resolved.set(new URL(key,base).href,target);
   }
-  for(const module of ['powers.mjs','eris-ui.mjs','cloud-validation.mjs','local-coop/serialize.mjs']){
+  for(const module of ['powers.mjs','eris-ui.mjs','cloud-validation.mjs','local-coop/serialize.mjs','equipment.mjs','hero-art.mjs','local-coop/app.mjs']){
    const shared=new URL('royale/'+module,origin);
    const target=resolved.get(shared.href);
    assert.ok(target,`${path}: missing shared module ${module}`);
-   assert.equal(target.pathname,new URL('royale-v3-staging/gameplay/'+module.split('/').at(-1),origin).pathname);
+   assert.equal(target.pathname,new URL('royale-v3-staging/gameplay/'+(module==='local-coop/app.mjs'?'local-coop-app.mjs':module.split('/').at(-1)),origin).pathname);
   }
  });
 }

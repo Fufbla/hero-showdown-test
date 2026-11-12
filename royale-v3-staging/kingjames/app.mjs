@@ -3,6 +3,7 @@ import {kingJamesSprites,STEEL_ID} from './outfit-engine.mjs?v=outfits-1';
 import {kingJamesFX} from './motion-fx.mjs';
 import {kingJamesAttackFX} from './attack-fx.mjs';
 import {isPrototypeContext,kingJamesLook,prototypeSlot} from './selection.mjs';
+import {setCosmeticPreviewRenderer} from '../gameplay/armor-preview.mjs?v=armor-stats-1';
 import {encodeRuntime,decodeRuntime} from '../../royale/multiplayer/runtime.mjs';
 import {MenuGamepad} from '../../royale/menu-gamepad.mjs';
 import {backRoute,hasResumeActions} from '../../royale/menu-navigation.mjs';
@@ -184,6 +185,7 @@ void prepareHeroPowerOverlays();
 if(v2TestHero){
  kingJamesSprites.enabled=true;
  const ready=(await Promise.all([kingJamesSprites.preload(),kingJamesSprites.preload(STEEL_ID),kingJamesFX.preload(),kingJamesAttackFX.preload()])).every(Boolean);
+ if(ready)setCosmeticPreviewRenderer((c,x,y,look,hero,time,scale,view)=>kingJamesSprites.draw(c,x,y,look,{...hero,face:view==='left'||view==='back'?-1:1},time,{scale}));
  if(!ready)console.error('KingJames outfit could not load; original artwork retained:',kingJamesSprites.error);
  const button=document.createElement('button');button.type='button';button.className='secondary';button.id='kingjames-sprite-toggle';
  button.textContent=ready?'Outfit artwork: ON':'KingJames artwork unavailable · Original art';button.disabled=!ready;

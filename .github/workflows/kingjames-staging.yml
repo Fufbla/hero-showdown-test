@@ -2,7 +2,7 @@ name: KingJames full-body sprite regression
 
 on:
   push:
-    branches: [codex/kingjames-fullbody-prototype, codex/kingjames-steel-speed-no-agility, codex/kingjames-approved-attacks, codex/kingjames-regular-punch-kick, codex/portal-integration, codex/kingjames-approved-outfits]
+    branches: [codex/kingjames-fullbody-prototype, codex/kingjames-steel-speed-no-agility, codex/kingjames-approved-attacks, codex/kingjames-regular-punch-kick, codex/portal-integration, codex/kingjames-approved-outfits, codex/armor-stats-only]
   workflow_dispatch:
 
 permissions:
@@ -46,6 +46,12 @@ jobs:
           python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/kingjames-server.log 2>&1 &
           node royale-v3-staging/kingjames/tests/browser.cjs
           node royale-v3-staging/kingjames/tests/outfits.browser.cjs
+      - name: Verify invisible armor, original bonuses and save independence
+        run: |
+          node --test royale-v3-staging/kingjames/tests/import-maps.test.mjs
+          node --import ./royale-v3-staging/kingjames/tests/register-staging.mjs --test royale-v3-staging/kingjames/tests/armor.test.mjs
+          node --import ./royale-v3-staging/kingjames/tests/register-staging.mjs --test royale-v3-staging/kingjames/tests/armor-render.test.mjs
+          node royale-v3-staging/kingjames/tests/armor.browser.cjs
       - name: Save browser evidence
         if: always()
         uses: actions/upload-artifact@v4

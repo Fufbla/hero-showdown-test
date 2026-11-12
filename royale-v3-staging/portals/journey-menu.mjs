@@ -19,7 +19,7 @@ export class JourneyMenu {
     const inv=structuredClone(g.inventory);if(!inv.items.some(i=>i.uid===item.uid))inv.items.push(item);
     const outfit=armorOutfitForItem(inv,item.uid,99);
     inv.equipped=outfit.ok?Object.fromEntries(outfit.items.map(i=>[itemDefinition(i).part,i.uid])):{};
-    const body=el('div');body.append(el('h3',outfit.name||def.name),el('p',`${def.rarity} · Level ${def.level||1} · Matching outfit`),el('p',outfit.ok?statsText({stats:outfit.stats}):outfit.error));
+    const body=el('div');body.append(el('h3',outfit.name||def.name),el('p',`${def.rarity} · Level ${def.level||1} · Matching armor · Stat bonuses only`),el('p',outfit.ok?statsText({stats:outfit.stats}):outfit.error));
     for(const view of ['front','back']){const b=el('button',view==='front'?'Front preview':'Back preview','secondary');b.onclick=()=>drawEquipmentPreview(canvas,g,inv,view);body.append(b);}
     panel.append(canvas,body);$('equipment-list').prepend(panel);drawEquipmentPreview(canvas,g,inv);panel.scrollIntoView({block:'nearest'});
   }
@@ -68,11 +68,11 @@ export class JourneyMenu {
   }
   inventory(){
     const g=this.getGame();this.confirmation=null;$('equipment-confirm').hidden=true;
-    $('inventory-summary').textContent=`${g.inventory.items.length} / 20 carried · Equipped and unequipped items share this limit. ${g.healthRoots} / 10 Health Roots stored separately.`;
+    $('inventory-summary').textContent=`${g.inventory.items.length} / 20 carried · Equipped and unequipped items share this limit. ${g.healthRoots} / 10 Health Roots stored separately. Armor grants stat bonuses only and never changes your appearance.`;
     const list=$('equipment-list');list.replaceChildren();
-    if(!g.inventory.items.length)list.append(el('p','Your starter suit is always yours. Regular monsters may drop fixed-color costume equipment.','empty-equipment'));
+    if(!g.inventory.items.length)list.append(el('p','Your customized appearance is always yours. Regular monsters may drop armor that grants stat bonuses only.','empty-equipment'));
     const ground=g.loot.find(o=>o.id===this.groundReward),pending=ground?.item||g.inventory.pending[0],reward=$('pending-reward');reward.replaceChildren();reward.hidden=!pending;
-    if(pending){const def=itemDefinition(pending);reward.append(el('div',g.inventory.items.length>=20?'INVENTORY FULL · CHOOSE YOUR REWARD':'CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`${def.rarity==='rare'?'Constant white glow.':'No glow.'} Choose a carried item below to compare and replace, or leave this item.`));
+    if(pending){const def=itemDefinition(pending);reward.append(el('div',g.inventory.items.length>=20?'INVENTORY FULL · CHOOSE YOUR REWARD':'CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`Stat bonuses only; your appearance stays the same. Choose a carried item below to compare and replace, or leave this item.`));
       if(g.inventory.items.length<20){const keep=el('button','Keep this equipment','primary');keep.id='accept-reward';keep.disabled=!g.canSave();keep.onclick=async()=>{if(await this.commit(()=>ground?pickupForGame(g,ground.id):g.acceptReward()))this.inventory();};reward.append(keep);}
       const decline=el('button',ground?'Leave orb on the ground':'Discard new reward','secondary');decline.id='discard-reward';decline.onclick=()=>{if(ground){this.groundReward=null;this.resume();}else this.confirm(null,true);};reward.append(decline);}
     for(const item of g.inventory.items.filter(equipmentItemActive)){
