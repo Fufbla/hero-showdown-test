@@ -1,0 +1,14 @@
+Use case: stylized-concept. Asset type: production 2D game animation sprite atlas, not a concept mockup.
+Reference image: approved concept sheet. Reproduce ONLY the DOLPHIN COSTUME in top-left: full-body blue dolphin onesie, white belly and cuffs, rounded friendly dolphin hood with long snout and dorsal fins, blue tail and matching feet. Keep its richly illustrated Action-Chibi proportions, thick dark outline, glossy shaded blue cloth and exact silhouette/details. Do not add the reference character's face or hair.
+Output transparent PNG 2048x1536, EXACTLY 8 columns x 6 rows of 256x256 equal cells = 48 complete separate character poses. No grid lines, text, borders, scenery, floor, shadows or labels. All poses face RIGHT in three-quarter gameplay side view. Consistent body proportions and head size in all cells. Each entire pose fits inside its cell with 12px transparent margins. Standing feet y≈238, hood top y≈24, face around y=70–125. Jump poses stay in-cell at the same reference height, no jump trajectory.
+CRITICAL FACE MASK: In EVERY hood, render a featureless FLAT PURE MAGENTA #ff00ff face opening oval where the personalized face will be composited. Absolutely NO eyes, nose, mouth, eyebrows, facial hair or hairstyle in that oval. The magenta stays flat with no shading or highlights, surrounded by the blue/white hood rim. No magenta anywhere else. Keep the head upright so the oval is clearly visible in all 48 poses.
+CRITICAL SKIN MASK: bare hands are FLAT PURE CYAN #00ffff with dark outline and knuckle lines only, no cyan gradients. The game recolors hands to the player's skin. Dolphin fabric must stay distinctly BLUE #2494e8, never cyan.
+Create genuine varied full-body animation poses, not the same pose repeated. Tail follows each pose and every costume component stays attached. No separate limb rig.
+Exact row-major sequence:
+Row1 cells 0–1 idle subtle breathing; 2–3 accelerate forward into run; 4–5 brake and settle; 6–7 first 2 of 8 run gait phases.
+Row2 cells 8–13 remaining six run gait phases with alternating feet, contact, passing, push-off and flight; 14–15 jump crouch and takeoff.
+Row3 cells16–17 jump rise and apex; 18–21 double jump tuck/recoil/extend/apex; 22–23 fall controlled and brace.
+Row4 cells24–25 landing crouch and recovery; 26–29 punch anticipation/windup/FULL POWERFUL FORWARD ARM EXTENSION/recovery; 30–31 kick windup and knee lift.
+Row5 cells32–33 kick FULL FORWARD LEG EXTENSION and recovery;34–35 hurt recoil/recover;36–37 defeat kneel/collapse with head upright;38–39 recovery getup/guard.
+Row6 cells40–43 fireball gather/aim/hand release/recover, no actual projectile;44–47 flight lift/hover/fly/glide mostly upright, tailored pose changes.
+The atlas must have exactly 48 figures with one pose per equal cell. Transparent alpha background.
