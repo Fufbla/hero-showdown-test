@@ -5,9 +5,10 @@ const fs=require('node:fs');
 const origin=process.env.KINGJAMES_TEST_ORIGIN||'http://127.0.0.1:8174';
 const namespace='royale-v2-prototype-0000000000:healthia.royale.profiles.v2';
 const report=[];
-async function check(type,mobile){
+async function check(type,mode){
+ const mobile=mode!=='desktop',viewport=mode==='portrait'?{width:390,height:844}:mode==='landscape'?{width:844,height:390}:{width:1280,height:900};
  const browser=await type.launch({headless:true});
- const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1280,height:900},isMobile:mobile,hasTouch:mobile,deviceScaleFactor:mobile?2:1});
+ const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,deviceScaleFactor:mobile?2:1});
  const page=await context.newPage(),errors=[],cloudRequests=[];
  page.on('pageerror',e=>errors.push(e.message));
  page.on('request',r=>{if(r.url().includes('supabase.co/functions/'))cloudRequests.push(r.url());});
@@ -18,6 +19,7 @@ async function check(type,mobile){
   await frame.waitForFunction(()=>{const d=document.querySelector('#game')?.dataset;return d?.outfit==='kingjames-original'&&d.artReady==='true'&&d.inputEnabled==='true';},null,{timeout:90000});
   const initial=await frame.evaluate(()=>window.kingJamesQA.status());
   assert.equal(initial.name,'KingJames');assert.equal(initial.ready,true);
+  if(mobile){const box=await page.locator('#game-frame').boundingBox();assert.ok(box.y>=0&&box.y+box.height<=viewport.height+1,'Mobile game extends outside viewport');}
   const advance=async seconds=>{
    const until=Number(await frame.locator('#game').getAttribute('data-simulation-time'))+seconds;
    await frame.waitForFunction(t=>Number(document.querySelector('#game').dataset.simulationTime)>=t,until,{timeout:30000});
@@ -43,20 +45,21 @@ async function check(type,mobile){
   const after=await frame.evaluate(()=>{window.kingJamesQA.pause();window.kingJamesQA.save();return window.kingJamesQA.status();});
   for(const key of ['level','xp','coins','inventory','powers','look','cosmetics'])assert.deepEqual(after.snapshot[key],initial.snapshot[key],'Unexpected progress/appearance change '+key);
   const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),namespace);assert.ok(saved.slots.some(s=>s?.snapshot.look.name==='KingJames'));
-  await page.locator('#refresh').click();const fresh=await page.locator('#game-frame').elementHandle();const restored=await fresh.contentFrame();
+  await page.reload();await page.locator('#enter').click();await page.locator('#input').fill('0000000000');await page.locator('#load').click();
+  const fresh=await page.locator('#game-frame').elementHandle();const restored=await fresh.contentFrame();
   await restored.waitForFunction(()=>document.querySelector('#game')?.dataset.outfit==='kingjames-original');
   const recovered=await restored.evaluate(()=>window.kingJamesQA.status().snapshot);
   for(const key of ['level','xp','coins','inventory','powers','look','cosmetics'])assert.deepEqual(recovered[key],after.snapshot[key]);
   assert.equal(cloudRequests.length,0,'Reserved test contacted cloud account endpoints');assert.deepEqual(errors,[]);
-  const file='kingjames-'+type.name()+'-'+(mobile?'mobile':'desktop')+'.png';
+  const file='kingjames-'+type.name()+'-'+mode+'.png';
   await page.screenshot({path:'/tmp/'+file,fullPage:true});
-  report.push({engine:type.name(),viewport:mobile?'390x844 touch':'1280x900',verified:['reserved-code-load','idle','both-run-directions','jump','doubleJump','fall','land','punch','kick','progress-reload','no-cloud-write'],seen,errors});
+  report.push({engine:type.name(),mode,viewport,verified:['reserved-code-load','idle','both-run-directions','jump','doubleJump','fall','land','punch','kick','progress-reload','no-cloud-write'],seen,errors});
   console.log(JSON.stringify(report.at(-1)));
  }catch(error){
-  const tag=type.name()+'-'+(mobile?'mobile':'desktop');
+  const tag=type.name()+'-'+mode;
   const diagnostics=await page.frames().at(-1).evaluate(()=>({data:{...document.querySelector('#game')?.dataset},status:window.kingJamesQA?.status()})).catch(()=>null);
   fs.writeFileSync('/tmp/kingjames-failure-'+tag+'.json',JSON.stringify({error:error.message,diagnostics,errors},null,2));
   await page.screenshot({path:'/tmp/kingjames-failure-'+tag+'.png',fullPage:true}).catch(()=>{});throw error;
  }finally{await browser.close();}
 }
-(async()=>{for(const type of [chromium,webkit])for(const mobile of [false,true])await check(type,mobile);fs.writeFileSync('/tmp/kingjames-browser-report.json',JSON.stringify(report,null,2));})().catch(e=>{console.error(e);process.exitCode=1;});
+(async()=>{for(const type of [chromium,webkit])for(const mode of ['desktop','portrait','landscape'])await check(type,mode);fs.writeFileSync('/tmp/kingjames-browser-report.json',JSON.stringify(report,null,2));})().catch(e=>{console.error(e);process.exitCode=1;});

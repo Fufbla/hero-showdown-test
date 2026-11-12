@@ -12,6 +12,7 @@ async function call(action,body){try{return await api(action,body);}catch(e){if(
 async function run(fn){if(busy)return;busy=true;try{await fn();}catch(e){status(e.message);}finally{busy=false;}}
 async function launch(){
  characterTestSession=false;
+ document.body?.classList?.remove('kingjames-session');
  showCloudNote(true);
  $('refresh').textContent='Reload Cloud Heroes';
  // Always resolve each slot by its server-assigned number, never by array order.
@@ -35,6 +36,7 @@ last=slots.map(x=>x.snapshot?JSON.stringify(x.snapshot):null);console.info('[V3 
 // 10-digit account. Never verify, write, or renew the production cloud here.
 function launchCharacterTest(){
  characterTestSession=true;access='';refresh='';code=CHARACTER_TEST_CODE;
+ document.body?.classList?.add('kingjames-session');
  blocked=false;slots=[];last=[null,null,null];
  showCloudNote(false);
  $('welcome').hidden=true;$('new-code').hidden=true;$('roster').hidden=false;
