@@ -15,9 +15,12 @@ export class OutfitEngine{
    const url=OUTFITS[id];if(!url)throw Error('Unknown outfit');
    const manifest=validateManifest(await this.jsonLoader(url));
    const [atlas]=await Promise.all([this.imageLoader(new URL(manifest.atlas,url)),this.head.preload()]);
-   const width=atlas.naturalWidth||atlas.width,height=atlas.naturalHeight||atlas.height;
-   if(manifest.frames.some(f=>f.rect[0]<0||f.rect[1]<0||f.rect[0]+f.rect[2]>width||f.rect[1]+f.rect[3]>height))throw Error('Outfit atlas dimensions do not match manifest');
-   this.outfits.set(id,{manifest,atlas});this.error=null;return true;
+   const atlases={default:atlas};
+   await Promise.all(Object.entries(manifest.atlases||{}).map(async([key,file])=>{atlases[key]=await this.imageLoader(new URL(file,url));}));
+   for(const f of manifest.frames){const image=atlases[f.atlas||'default'];
+    if(!image||f.rect[0]<0||f.rect[1]<0||f.rect[0]+f.rect[2]>(image.naturalWidth||image.width)||f.rect[1]+f.rect[3]>(image.naturalHeight||image.height))throw Error('Outfit atlas dimensions do not match manifest');
+   }
+   this.outfits.set(id,{manifest,atlas,atlases});this.error=null;return true;
   }catch(e){this.error=e.message;return false;}
  }
  selected(look){return selectedOutfit(this.enabled,look);}
@@ -39,7 +42,7 @@ export class OutfitEngine{
   if(hero.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;
   c.translate(-m.foot[0],-m.foot[1]);
   // One full outfit draw. No bones, independently rotated limbs or cape physics.
-  c.drawImage(atlas,...f.rect,0,0,...m.cell);
+  c.drawImage(loaded.atlases[f.atlas||'default'],...f.rect,0,0,...m.cell);
   const closed=sample.state==='defeat'||sample.state==='idle'&&time%3.9>3.73;
   if(!m.head.embedded)this.head.draw(c,look,f.head,m.head.scale,{closed});c.restore();c.restore();
   const toWorld=point=>[(point[0]-m.foot[0])*m.worldScale,(point[1]-m.foot[1])*m.worldScale];
@@ -52,7 +55,7 @@ export class OutfitEngine{
   if(!paint)return;const loaded=this.outfits.get(paint.id);if(!loaded)return;
   const {manifest:m,atlas}=loaded,f=m.frames[paint.frame];
   c.save();c.translate(x,y);c.scale(paint.direction*m.worldScale,m.worldScale);c.translate(-m.foot[0],-m.foot[1]);
-  c.drawImage(atlas,...f.rect,0,0,...m.cell);
+  c.drawImage(loaded.atlases[f.atlas||'default'],...f.rect,0,0,...m.cell);
   if(!m.head.embedded)this.head.draw(c,paint.look,f.head,m.head.scale);c.restore();
  }
  status(){return {enabled:this.enabled,ready:this.outfits.size>0&&this.head.ready,error:this.error,lastFrame:this.lastFrame};}

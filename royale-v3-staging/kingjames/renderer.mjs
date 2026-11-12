@@ -1,6 +1,7 @@
 // Generated staging renderer; original renderer remains unchanged.
 import {kingJamesSprites} from './outfit-engine.mjs';
 import {kingJamesFX} from './motion-fx.mjs';
+import {kingJamesAttackFX} from './attack-fx.mjs';
 import {drawBossShot} from '../../royale/boss-effects.mjs';
 import {stableTouchScale} from '../../royale/landscape-layout.mjs';
 import {EnvironmentArt} from '../../royale/environment-art.mjs';
@@ -83,7 +84,9 @@ export class Renderer {
     if(!game.arenaScene){if(visible(150,390,260,230))drawEris(c,t);worldLandmarks(c,game,this.camera,this.width);}else{drawArena(c,game);if(game.arenaScene.legendary)drawLegendaryWorld(c,game);}
     for(const shot of game.enemyShots){if(!visible(shot.x-12,shot.y-12,24,24))continue;if(drawBossShot(c,shot,t))continue;oval(c,shot.x,shot.y,7,5,shot.color,'#283b43',2);line(c,[[shot.x-shot.vx*.025,shot.y-shot.vy*.025],[shot.x,shot.y]],'#eadcac',2);}
     for(const e of game.enemies){const vw=e.boss||e.legendaryHelper?e.w:Math.max(e.w,192),vh=e.boss||e.legendaryHelper?e.h:Math.max(e.h,MONSTER_HEIGHT[e.type]||e.h);if(visible(e.x-vw/2,e.y-vh-40,vw,vh+50))this.enemy(e,t,alpha);}
-    drawPowerWorld(c,game);drawMergeWorld(c,game);
+    const attackPresentation=this.prototypeSession&&kingJamesSprites.selected(game.look)&&kingJamesAttackFX.ready;
+    if(attackPresentation){drawPowerWorld(c,{...game,powers:{...game.powers,projectiles:[]}});kingJamesAttackFX.world(c,game);}else drawPowerWorld(c,game);
+    drawMergeWorld(c,game);
     const pos=globalThis.HealthiaMotionCore?.renderPosition({x:h.prevX,y:h.prevY,face:h.prevFace},{x:h.x,y:h.y,face:h.face},alpha,h.dead)||{x:lerp(h.prevX,h.x,alpha),y:lerp(h.prevY,h.y,alpha)};
     let visualHero={...h,cycle:h.cycle-(1-alpha)*Math.abs(h.x-h.prevX)/52,attack:h.attack?{...h.attack,age:Math.max(0,h.attack.age-(1-alpha)/60*game.powers.attackRate)}:null};
     if(h.dead&&!h.grounded){
@@ -125,14 +128,15 @@ export class Renderer {
         outfit:game.visualOutfit(),clothing:clothingRuntime.layers(game.cosmetics),
         cloth:this.cloth,dt:game.paused?0:dt
       }));
-    if(fullBody){Object.assign(this.canvas.dataset,{motionFx:JSON.stringify(kingJamesFX.lastStats),powerPolicy:String(game.powers.data.movementPolicy?.version||0)});const f=kingJamesSprites.lastFrame;this.steelSeen??=new Set();if(f.outfit==='steel-universal')this.steelSeen.add(f.state+':'+f.frame+':'+f.direction);this.canvas.dataset.steelSeen=JSON.stringify([...this.steelSeen]);this.spriteSeen??=new Set();this.spriteSeen.add(f.state+':'+f.frame+':'+f.direction);Object.assign(this.canvas.dataset,{outfit:f.outfit,spriteState:f.state,spriteFrame:String(f.frame),spriteDirection:String(f.direction),spriteSeen:[...this.spriteSeen].join(',')});}else{delete this.canvas.dataset.outfit;delete this.canvas.dataset.spriteState;delete this.canvas.dataset.spriteFrame;delete this.canvas.dataset.spriteDirection;}
+    if(fullBody){Object.assign(this.canvas.dataset,{motionFx:JSON.stringify(kingJamesFX.lastStats),attackFx:JSON.stringify([...kingJamesAttackFX.seen]),powerPolicy:String(game.powers.data.movementPolicy?.version||0)});const f=kingJamesSprites.lastFrame;this.steelSeen??=new Set();if(f.outfit==='steel-universal')this.steelSeen.add(f.state+':'+f.frame+':'+f.direction);this.canvas.dataset.steelSeen=JSON.stringify([...this.steelSeen]);this.spriteSeen??=new Set();this.spriteSeen.add(f.state+':'+f.frame+':'+f.direction);Object.assign(this.canvas.dataset,{outfit:f.outfit,spriteState:f.state,spriteFrame:String(f.frame),spriteDirection:String(f.direction),spriteSeen:[...this.spriteSeen].join(',')});}else{delete this.canvas.dataset.outfit;delete this.canvas.dataset.spriteState;delete this.canvas.dataset.spriteFrame;delete this.canvas.dataset.spriteDirection;}
     if(steelMode&&!fullBody)drawSteelSilhouette(c,game,pos,t,spriteHero);
-    if(!prototype||!steelMode)drawPowerHero(c,game,pos,pose);
+    if((!prototype||!steelMode)&&!(attackPresentation&&h.attack?.power==='strength'))drawPowerHero(c,game,pos,pose);
+    if(attackPresentation)kingJamesAttackFX.hero(c,game,pos,visualHero);
     drawHeroPowerOverlays(c,game,pos,t,'front');
     if(prototype)kingJamesFX.draw(c,game,pos,t,'front',spriteHero,kingJamesSprites);else if(this.v2SpriteTest)drawUniversalPowerFX(c,game,pos,t,'front',spriteHero);
     // Do not re-paint previous full-body Steel or duplicate power previews.
     // Existing projectile and hit effects are still painted by game systems.
-    if(!(prototype&&steelMode)&&h.attack&&h.attack.power!=='superKick'){const a=h.attack,d=ATTACKS[a.kind];if(a.age>=d.startup&&a.age<d.startup+d.active){c.save();c.translate(h.x,h.y-43);c.scale(a.face,1);c.strokeStyle='#fff7d8c9';c.lineWidth=3;c.beginPath();c.arc(24,-8,a.kind==='kick'?48:35,-.7,.7);c.stroke();c.restore();}}
+    if(!(prototype&&steelMode)&&!(attackPresentation&&h.attack?.power==='strength')&&h.attack&&h.attack.power!=='superKick'){const a=h.attack,d=ATTACKS[a.kind];if(a.age>=d.startup&&a.age<d.startup+d.active){c.save();c.translate(h.x,h.y-43);c.scale(a.face,1);c.strokeStyle='#fff7d8c9';c.lineWidth=3;c.beginPath();c.arc(24,-8,a.kind==='kick'?48:35,-.7,.7);c.stroke();c.restore();}}
     for(const p of this.particles){if(p.life<=0)continue;if(!game.paused){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=210*dt;}c.globalAlpha=Math.max(0,p.life/p.max);oval(c,p.x,p.y,p.size,p.size,p.color);}c.globalAlpha=1;
     // Small foreground details give continuous ground a readable silhouette.
     for(let x=65;!game.arenaScene&&x<WORLD_WIDTH;x+=190){if(x<this.camera-60||x>this.camera+this.width+60)continue;const surface=SURFACES.find(s=>!s.oneWay&&s.kind==='sand'&&x>s.x+20&&x<s.x+s.w-20);if(!surface)continue;const y=surface.y+8;for(let i=0;i<5;i++)line(c,[[x+i*3,y],[x-8+i*6,y-14-(i%2)*10]],'#448d67',2);if(x%3===0)oval(c,x+25,y+4,7,3,'#fff1cb');}

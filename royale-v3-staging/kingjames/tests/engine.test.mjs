@@ -25,7 +25,7 @@ test('the complete outfit contract rejects missing anchors, frames and animation
  assert.equal(validateManifest(manifest),manifest);
  for(const state of REQUIRED_STATES){const m=structuredClone(manifest);delete m.animations[state];assert.throws(()=>validateManifest(m));}
  const m=structuredClone(manifest);delete m.frames[2].head;assert.throws(()=>validateManifest(m));
- assert.equal(manifest.frames.length,48);assert.deepEqual(manifest.cell,[256,256]);
+ assert.equal(manifest.frames.length,100);assert.deepEqual(manifest.cell,[256,256]);
 });
 test('running uses alternating authored strides, advances with speed and freezes at paused game time',()=>{
  const a=new FullBodyAnimator(manifest),h=idle();a.sample(h,0);h.vx=315;
@@ -61,16 +61,16 @@ test('hurt, defeat and recovery preserve the gameplay priority',()=>{
  h.respawnAge=.59;assert.equal(a.sample(h,.79).frameIndex,47);
 });
 test('every body/head composition is padded, opaque where expected and never changes head scale',()=>{
- const {atlas}=engine.outfits.get('kingjames-original'),canvas=createCanvas(288,288),c=canvas.getContext('2d');
+ const {atlases}=engine.outfits.get('kingjames-original'),canvas=createCanvas(288,288),c=canvas.getContext('2d');
  const hashes=new Set();
  for(const [i,f]of manifest.frames.entries()){
-  c.clearRect(0,0,288,288);c.save();c.translate(16,16);c.drawImage(atlas,...f.rect,0,0,...manifest.cell);engine.head.draw(c,look,f.head,manifest.head.scale);c.restore();
+  c.clearRect(0,0,288,288);c.save();c.translate(16,16);c.drawImage(atlases[f.atlas||'default'],...f.rect,0,0,...manifest.cell);engine.head.draw(c,look,f.head,manifest.head.scale);c.restore();
   const d=c.getImageData(0,0,288,288).data;let count=0,edge=0;
   for(let y=0;y<288;y++)for(let x=0;x<288;x++){if(d[(y*288+x)*4+3]>32){count++;if(x<16||x>=272||y<16||y>=272)edge++;}}
   assert.ok(count>5000,'Missing full frame '+i);assert.equal(edge,0,'Clipped body/head '+i);
   hashes.add(createRequire(import.meta.url)('crypto').createHash('sha256').update(d).digest('hex'));
  }
- assert.equal(hashes.size,48,'Each cell is distinct authored artwork');
+ assert.equal(hashes.size,100,'Each cell is distinct authored artwork');
 });
 test('render sampling is read-only and leaves deterministic movement, combat, saves and equipment equal',()=>{
  const a=new Game({look,random:()=>.4,now:()=>1000,testPowers:true}),b=new Game({look,random:()=>.4,now:()=>1000,testPowers:true});a.started=b.started=true;

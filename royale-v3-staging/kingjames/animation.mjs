@@ -21,6 +21,7 @@ function stateFor(h,m){
  if(h.respawnAge<.6)return 'recovery';
  if(h.stun>0)return 'hurt';
  if(h.attack&&ATTACKS[h.attack.kind])return m.animations[h.attack.power]?h.attack.power:h.attack.kind;
+ if(h.castAge>=0&&h.castAge<(m.animations.fireball?.duration||0))return !h.grounded&&m.animations.fireballAir?'fireballAir':'fireball';
  if(!h.grounded){
   if(h.flying&&m.animations.fly)return (h.v2Active?.flight?.age??1)<m.animations.flightStart.duration?'flightStart':Math.abs(h.vx||0)>15||Math.abs(h.vy||0)>35?'fly':'hover';
   if(h.flying)return 'fall';
@@ -56,9 +57,17 @@ export class FullBodyAnimator{
   if(['punch','kick','strength','superKick'].includes(next)){
    // Contact artwork begins at the existing simulation's active hit window.
    const attack=h.attack,d=ATTACKS[attack.kind],t=Math.max(0,attack.age||0);
-   if(t<d.startup)index=Math.min(1,Math.floor(t/d.startup*2));
+   if(a.phases){
+    const [wind,contact,recover,end]=a.phases;
+    index=t<d.startup?wind+Math.floor(t/d.startup*(contact-wind)):
+     t<d.startup+d.active?contact+Math.floor((t-d.startup)/d.active*(recover-contact)):
+     recover+Math.floor(limit((t-d.startup-d.active)/(d.duration-d.startup-d.active),0,.999)*(end-recover));
+   }else if(t<d.startup)index=Math.min(1,Math.floor(t/d.startup*2));
    else if(t<d.startup+d.active)index=2;
    else index=3;
+   if(a.comboStride)index+=limit(h.attack.comboIndex||0,0,Math.floor(n/a.comboStride)-1)*a.comboStride;
+  }else if(next==='fireball'||next==='fireballAir'){
+   index=Math.floor(limit(h.castAge/a.duration,0,.999)*n);
   }else if(next==='run'){
    this.phase=(this.phase+Math.abs(h.vx||0)*dt/m.strideDistance)%1;
    index=Math.floor(this.phase*n)%n;

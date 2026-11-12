@@ -2,7 +2,7 @@ name: KingJames full-body sprite regression
 
 on:
   push:
-    branches: [codex/kingjames-fullbody-prototype, codex/kingjames-steel-speed-no-agility]
+    branches: [codex/kingjames-fullbody-prototype, codex/kingjames-steel-speed-no-agility, codex/kingjames-approved-attacks]
   workflow_dispatch:
 
 permissions:
@@ -39,6 +39,7 @@ jobs:
         run: |
           node --test royale-v3-staging/kingjames/tests/steel-motion.test.mjs
           node --import ./royale-v3-staging/kingjames/tests/register-staging.mjs --test royale-v3-staging/kingjames/tests/power-policy.test.mjs
+          node --import ./royale-v3-staging/kingjames/tests/register-staging.mjs --test royale-v3-staging/kingjames/tests/attacks.test.mjs
       - name: Verify desktop and mobile in Chromium and WebKit
         run: |
           python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/kingjames-server.log 2>&1 &

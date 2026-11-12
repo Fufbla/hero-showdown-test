@@ -36,6 +36,21 @@ module.exports=async function exercisePowers(frame,page,advance,tag,original){
  const flying=await seen();for(const id of ['flightStart','fly','hover'])assert.ok(flying.some(s=>s.startsWith(id+':')),tag+' missing '+id);
  await frame.getByRole('button',{name:'Flight · flying, press to cancel',exact:true}).click();await advance(1.1);
  await settle(2400);assert.equal(await canvas.getAttribute('data-outfit'),'kingjames-original');
+ await loadout(['strength','superKick','fireball']);
+ for(const [direction,key]of [[1,'ArrowRight'],[-1,'ArrowLeft']]){
+  await page.keyboard.down(key);await advance(.08);await page.keyboard.up(key);
+  await activate('Super Strength');await advance(.4);
+  await activate('Super Kick');await advance(2);
+  await activate('Fireball');await advance(.7);
+  await settle(700);
+  const attacks=(await canvas.getAttribute('data-sprite-seen')).split(',');
+  for(const state of ['strength','superKick','fireball'])assert.ok(attacks.some(s=>s.startsWith(state+':')&&s.endsWith(':'+direction)),tag+' missing '+state+' '+direction);
+  for(let i=0;i<6;i++)assert.ok(attacks.some(s=>{const [state,frame,face]=s.split(':');return state==='superKick'&&Number(face)===direction&&Number(frame)>=60+i*4&&Number(frame)<64+i*4;}),tag+' missing combo kick '+i+' '+direction);
+ }
+ await loadout(['flight','fireball','strength']);await activate('Flight');await activate('Fireball');await advance(.7);
+ assert.ok((await canvas.getAttribute('data-sprite-seen')).includes('fireballAir:'),tag+' missing flying Fireball');
+ await page.screenshot({path:'/tmp/kingjames-attack-flight-'+tag+'.png',fullPage:true});
+ await frame.getByRole('button',{name:'Flight · flying, press to cancel',exact:true}).click();await advance(1.1);await settle(700);
  await loadout(original.powers.equipped);await settle(360);
  return {steel:await seen(),fx:JSON.parse(await canvas.getAttribute('data-motion-fx')),verified:['steel-transform','metal-strides-both-directions','metal-jump-double-fall-land','metal-punch-kick','strength','six-kick-combo','flight-launch-fly-hover-both-directions','steel-expiry','passive-speed-grounded-effects','no-agility-or-speed-active-slot']};
 };
