@@ -22,6 +22,24 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
    window.__testPads=[0,1].map(index=>({index,id:'Isolated standard controller '+index,mapping:'standard',connected:true,axes:[0,0,0,0],buttons:Array.from({length:17},()=>({pressed:false,touched:false,value:0})),timestamp:1}));
    navigator.getGamepads=()=>window.__testPads;
    window.__rejections=[];addEventListener('unhandledrejection',e=>window.__rejections.push(String(e.reason?.stack||e.reason)));
+   window.__observed={frames:0,loopMax:0,timers:0};
+   const raf=requestAnimationFrame,queued=new Map();
+   window.requestAnimationFrame=callback=>{
+    if(callback.name!=='frame')return raf(callback);
+    const count=(queued.get(callback)||0)+1;queued.set(callback,count);window.__observed.loopMax=Math.max(window.__observed.loopMax,count);
+    return raf(time=>{queued.set(callback,queued.get(callback)-1);callback(time);});
+   };
+   const interval=setInterval,clear=clearInterval,timers=new Set();
+   window.setInterval=(callback,ms,...args)=>{const id=interval(callback,ms,...args);if(ms===8000){timers.add(id);window.__observed.timers=timers.size;}return id;};
+   window.clearInterval=id=>{timers.delete(id);window.__observed.timers=timers.size;clear(id);};
+   const text=CanvasRenderingContext2D.prototype.fillText;
+   CanvasRenderingContext2D.prototype.fillText=function(label,x,y,...rest){
+    if(this.canvas.id==='world'&&String(label).startsWith('P2 ·')){
+     if(window.__failFrame){window.__failFrame=false;throw Error('Injected recoverable render failure');}
+     const t=this.getTransform();window.__observed.frames++;window.__observed.follower={x,y:y+112,cameraX:-t.e/t.a,cameraY:-t.f/t.d,width:this.canvas.width/t.a,height:this.canvas.height/t.d};
+    }
+    return text.call(this,label,x,y,...rest);
+   };
   });
   await context.route('**/*.supabase.co/**',async route=>{
    const req=route.request(),b=req.postDataJSON()||{};
@@ -41,13 +59,14 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
   const page=await context.newPage();
   page.on('pageerror',e=>{report.errors.push(e.stack);console.log('BROWSER ERROR:',e.stack);});
   await page.goto(url,{waitUntil:'networkidle',timeout:120000});
-  for(let i=0;i<2;i++){
+  async function login(){for(let i=0;i<2;i++){
    const card=page.locator('.player-card').nth(i);
    await page.locator('#code-'+i).fill(accounts[i].code);
    await card.getByRole('button',{name:'Load Heroes',exact:true}).click();
    await card.locator('.hero-choice').filter({hasText:i?'Coop QA Nova':'Coop QA Atlas'}).click({timeout:60000});
    await card.getByRole('button',{name:'Ready',exact:true}).click();
-  }
+  }}
+  await login();
   await page.locator('#start').click();
   await page.waitForTimeout(4000);
   report.text=await page.locator('body').innerText();
@@ -57,5 +76,66 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
   assert.deepEqual(report.rejections,[],'No rejected initialization promises');
   assert(await page.locator('#play').isVisible(),'Both heroes entered gameplay');
   report.checks.push('Two separate accounts and saved slots entered gameplay');
+  const until=async(fn,timeout=12000)=>{const end=Date.now()+timeout;while(!fn()){assert(Date.now()<end,'Timed out waiting for independent saves');await page.waitForTimeout(100);}};
+  const latest=i=>accounts[i].slots[i].snapshot;
+  const observe=()=>page.evaluate(()=>window.__observed);
+  const pulse=async(i,button)=>{await page.evaluate(([i,b])=>window.__testPads[i].buttons[b].pressed=true,[i,button]);await page.waitForTimeout(90);await page.evaluate(([i,b])=>window.__testPads[i].buttons[b].pressed=false,[i,button]);await page.waitForTimeout(100);};
+  const move=async(i,axis,ms)=>{await page.evaluate(([i,x])=>window.__testPads[i].axes[0]=x,[i,axis]);await page.waitForTimeout(ms);await page.evaluate(i=>window.__testPads[i].axes[0]=0,i);await page.waitForTimeout(150);};
+  async function pauseSave(){
+   if(!await page.locator('#menu').isVisible())await page.locator('#pause').click();
+   for(let i=0;i<2;i++)await page.locator('#panel-'+i).getByRole('button',{name:'Save My Hero',exact:true}).click();
+   await page.waitForTimeout(400);
+  }
+  async function resume(){for(let i=0;i<2;i++)await page.locator('#panel-'+i).getByRole('button',{name:'Ready / Resume',exact:true}).click();assert(!await page.locator('#menu').isVisible());await page.waitForTimeout(150);}
+  assert((await observe()).frames>5,'Both heroes continuously render');
+  await until(()=>accounts.every(a=>a.saves.length));
+  for(let i=0;i<2;i++){
+   assert.equal(latest(i).level,14+i);assert.equal(latest(i).xp,20+i);assert.equal(latest(i).coins,1234+i*100);
+   assert.equal(latest(i).look.name,i?'Coop QA Nova':'Coop QA Atlas');assert.equal(latest(i).powers.levels.fireball,2);
+   assert(accounts[i].slots.filter((_,j)=>j!==i).every(r=>r.snapshot===null));
+  }
+  report.checks.push('Both eight-second autosaves retain independent progress, appearance, power levels and other slots');
+  const before=accounts.map((_,i)=>latest(i).world.location.x);
+  await move(0,.5,300);await pauseSave();
+  assert(latest(0).world.location.x>before[0]+5);assert(Math.abs(latest(1).world.location.x-before[1])<2);
+  await resume();await move(1,.5,300);await pauseSave();assert(latest(1).world.location.x>before[1]+5);await resume();
+  report.checks.push('Separate controllers move only their own heroes; pause/resume retains the world');
+  await pulse(0,4);await pulse(1,4);
+  for(let i=0;i<2;i++)assert.match(await page.locator('#powers-'+i+' .cooldown-icon').first().getAttribute('aria-label'),/\ds|Active/);
+  await pulse(0,2);await pulse(1,1);
+  report.checks.push('Both controllers cast equipped powers and accept punch/kick input');
+  await pulse(1,9);assert(await page.locator('#menu').isVisible(),'Player 2 controller can pause');
+  const paused=await observe();await move(0,1,250);assert.equal((await observe()).follower.cameraX,paused.follower.cameraX);await resume();
+  await move(0,1,3300);const camera=await observe();
+  assert(camera.follower.cameraX>10,'Shared camera follows Player 1');
+  assert(camera.follower.x>=camera.follower.cameraX-32&&camera.follower.x<=camera.follower.cameraX+camera.follower.width+32,'Player 2 stays inside the shared viewport');
+  report.checks.push('Player 1 moves the shared camera and Player 2 remains inside its viewport');
+  // Force the follower to walk out of the viewport while the leader is still.
+  await move(1,-1,4500);const teleported=await observe();
+  assert(teleported.follower.x>=teleported.follower.cameraX-32,'Off-screen Player 2 returns near Player 1');
+  report.checks.push('Off-screen follower teleport remains active');
+  await pauseSave();const saved=accounts.map((_,i)=>structuredClone(latest(i)));
+  await page.locator('#panel-0').getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
+  await page.waitForTimeout(350);await page.locator('#pause').click();await page.locator('#panel-1').getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
+  await page.locator('#setup').waitFor({state:'visible'});assert.equal((await observe()).timers,0);
+  await login();
+  // The first frame failure must leave the account selections usable and must
+  // not start autosaving an initialization that never finished.
+  await page.evaluate(()=>window.__failFrame=true);await page.locator('#start').click();
+  await page.waitForFunction(()=>document.querySelector('#setup-status').textContent.includes('Injected recoverable render failure'));
+  assert(await page.locator('#setup').isVisible());assert.equal((await observe()).timers,0);assert(await page.locator('#start').isEnabled());
+  await page.locator('#start').click();await page.locator('#play').waitFor({state:'visible'});await page.waitForTimeout(1200);
+  assert.equal((await observe()).timers,1);assert.equal((await observe()).loopMax,1);
+  report.checks.push('Returning to setup, reloading saved heroes and restarting co-op use one loop and one autosave timer');
+  report.checks.push('First-frame exception displays a recoverable error; retry succeeds without reload');
+  await page.evaluate(()=>window.__failFrame=true);
+  await page.waitForFunction(()=>!document.querySelector('#setup').hidden&&!document.querySelector('#start').disabled);
+  assert.match(await page.locator('#setup-status').innerText(),/Both heroes saved/);
+  await page.locator('#start').click();await page.locator('#play').waitFor({state:'visible'});await page.waitForTimeout(400);
+  report.checks.push('A later frame exception saves both checkpoints and keeps the setup loop usable');
+  assert.deepEqual(report.errors,[]);assert.deepEqual(await page.evaluate(()=>window.__rejections),[]);
+  report.observed=await observe();
+  await page.screenshot({path:dir+'/browser.png',fullPage:true});
+  report.passed=true;
  }finally{await browser.close();}
 })().catch(e=>{report.failure=e.stack;process.exitCode=1;}).finally(()=>{fs.writeFileSync(dir+'/browser.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));});

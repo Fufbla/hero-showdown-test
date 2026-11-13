@@ -1,5 +1,6 @@
 // Staging economy UI v1.
 import {travelQuote} from './portal-layout.mjs?v=phase-portals-1';
+import {coopRenderView} from '../../royale/local-coop/render-view.mjs';
 // Generated staging equipment labels; co-op behavior is shared.
 import {CloudProfile} from '../../royale/local-coop/cloud.mjs?v=20261108-coop-menus';
 import {LocalSession,AUTOSAVE_MS} from '../../royale/local-coop/session.mjs?v=20261108-coop-menus';
@@ -31,7 +32,7 @@ const button=(label,action,disabled=false)=>{const b=el('button',label);b.type='
 const statText=stats=>STAT_KEYS.filter(k=>stats?.[k]).map(k=>`${STAT_LABELS[k]} +${formatStat(k,stats[k])}`).join(' · ');
 const cloudConfig=await fetch(new URL('../../royale/local-coop/config.json',import.meta.url),{cache:'no-store'}).then(r=>r.json());
 const players=[0,1].map(()=>({profile:null,slot:null,ready:false,tab:'stats',focus:0,previous:new Set(),repeat:0,statusText:'',leaving:false}));
-let session=null,renderer=null,visual=null,cloth=new CapeCloth(),timer=null,artReady=false,last=performance.now(),accumulator=0,hudTime=0,lastDraw=0,lastControllers=0,padSignature='',frameCap=60;
+let session=null,renderer=null,cloth=new CapeCloth(),timer=null,artReady=false,starting=false,recovering=false,last=performance.now(),accumulator=0,hudTime=0,lastDraw=0,lastControllers=0,padSignature='',frameCap=60;
 let testPads=null,measurement=null;const autosaveTimes=[];
 const metrics=[];
 const getPads=()=>testPads||navigator.getGamepads?.()||[];
@@ -43,7 +44,7 @@ function panelNote(i,message){players[i].statusText=message;const n=$('panel-'+i
 function controllersValid(){const pads=getPads(),sources=players.map(p=>p.control.value);return sources.every(s=>/^pad:\d+$/.test(s)&&pads[+s.slice(4)]?.connected)&&sources[0]!==sources[1];}
 function updateStart(){
  const duplicate=players.every(p=>p.profile)&&players[0].profile.identity===players[1].profile.identity;
- $('start').disabled=!artReady||manager.active||!controllersValid()||players.some(p=>!p.profile||!p.slot||!p.ready||p.busy)||duplicate;
+ $('start').disabled=starting||recovering||!!session||!artReady||manager.active||!controllersValid()||players.some(p=>!p.profile||!p.slot||!p.ready||p.busy)||duplicate;
  players.forEach((p,i)=>{p.readyButton.disabled=!p.profile||!p.slot||!getPads()[+p.control.value.slice(4)]?.connected||duplicate;p.readyButton.textContent=p.ready?'Ready ✓':'Ready';p.readyButton.setAttribute('aria-pressed',String(p.ready));});
  if(duplicate)note('Each player needs their own 10-digit account code.');
 }
@@ -96,15 +97,47 @@ function refreshControllers(now){
 const powerHUD=[];
 function initHUD(){for(let i=0;i<2;i++){$('hud-'+i).hidden=false;$('hud-'+i).innerHTML=`<strong id="name-${i}"></strong><div class="health"><span id="hp-${i}"></span></div><div class="power-status" id="powers-${i}"></div><small id="stats-${i}"></small><small id="xp-${i}"></small><small class="save-status" id="save-${i}">Autosave every 8 seconds</small>`;powerHUD[i]=makePowerHUD($('powers-'+i),i);}}
 async function start(){
- if($('start').disabled)return;$('start').disabled=true;
+ if($('start').disabled||starting||session)return;starting=true;updateStart();note('Loading both saved heroes…');
+ let deadline;
  try{
   if(!controllersValid())throw Error('Assign two different connected controllers.');input.configure(players.map(p=>p.control.value));
-  if(!qa)for(const p of players){await p.profile.load();await p.profile.prepare(p.slot);}
-  session=new LocalSession(players);$('setup').hidden=true;$('play').hidden=false;renderer?.destroy();renderer=new Renderer($('world'));visual=Object.create(session.games[0]);bindStyleCGame(renderer.cloth,session.games[0]);bindStyleCGame(cloth,session.games[1]);initHUD();
+  if(!qa){
+   // Work on temporary slot lists. A timed-out load must not later replace the
+   // profiles of a successful retry or create a second session.
+   const selections=players.map(p=>({profile:p.profile,slot:p.slot}));
+   const loaded=await Promise.race([
+    Promise.all(selections.map(async({profile,slot})=>{
+     const fresh=new CloudProfile({endpoint:profile.endpoint,heroEndpoint:profile.heroEndpoint});
+     Object.assign(fresh,{access:profile.access,refresh:profile.refresh,identity:profile.identity});
+     await fresh.load();await fresh.prepare(slot);return fresh;
+    })),
+    new Promise((_,reject)=>{deadline=setTimeout(()=>reject(Error('Hero loading took too long. Check your connection and press Start Game to retry.')),30000);})
+   ]);
+   if(selections.some((s,i)=>players[i].profile!==s.profile||players[i].slot!==s.slot))throw Error('Hero selection changed. Select Ready and try again.');
+   loaded.forEach((p,i)=>Object.assign(players[i].profile,{access:p.access,refresh:p.refresh,slots:p.slots}));
+  }
+  if(!controllersValid())throw Error('Reconnect both assigned controllers and try again.');
+  session=new LocalSession(players);$('setup').hidden=true;$('play').hidden=false;renderer?.destroy();renderer=new Renderer($('world'));bindStyleCGame(renderer.cloth,session.games[0]);bindStyleCGame(cloth,session.games[1]);initHUD();
+  // Validate the complete first frame before enabling input or autosaving.
+  renderer.draw(coopRenderView(session.games[0],session.visualLoot()),1,0);drawFollower(session.games[1],0,1);
   const Context=window.AudioContext||window.webkitAudioContext;if(Context)void audio.enable(Context).catch(()=>{});
   session.setPaused(false);input.clear();input.enabled=true;last=performance.now();accumulator=0;lastDraw=0;
-  timer=setInterval(()=>{if(qa)autosaveTimes.push(performance.now());void saveAll();},AUTOSAVE_MS);updateHUD();note(qa?'Practice · simulated controllers':'Local co-op · autosave on');
- }catch(e){session=null;$('setup').hidden=false;$('play').hidden=true;note(e.message);updateStart();}
+  clearInterval(timer);timer=setInterval(()=>{if(qa)autosaveTimes.push(performance.now());void saveAll();},AUTOSAVE_MS);updateHUD();note(qa?'Practice · simulated controllers':'Local co-op · autosave on');
+ }catch(e){await recoverSession(e,{save:false});}
+ finally{clearTimeout(deadline);starting=false;updateStart();}
+}
+async function recoverSession(error,{save=true}={}){
+ if(recovering)return;recovering=true;
+ const failed=session;session=null;clearInterval(timer);timer=null;input.enabled=false;input.clear();accumulator=0;
+ failed?.pause();audio.update('',false);renderer?.destroy();renderer=null;
+ if($('menu').open)$('menu').close();$('play').hidden=true;$('setup').hidden=false;updateStart();
+ note('Local co-op stopped: '+error.message+(save?' Preserving both checkpoints…':' Press Start Game to retry.'));
+ try{
+  if(save&&failed){const saved=await failed.saveAll();note('Local co-op stopped: '+error.message+(saved.every(r=>r.ok)?' Both heroes saved. Press Start Game to retry.':' A save is pending. Reconnect and press Start Game to recover your checkpoint.'));}
+ }finally{
+  for(const s of failed?.selections||[])s.profile.activeSlots?.delete(s.slot);
+  recovering=false;updateStart();
+ }
 }
 $('start').onclick=start;
 function toast(text){$('toast').textContent=text;$('toast').hidden=false;$('toast').dataset.until=String(performance.now()+4500);}
@@ -136,7 +169,7 @@ async function leave(i){
  players[i].profile.forget?.();$('hud-'+i).hidden=true;$('panel-'+i).hidden=true;
  if(!session.active.size){clearInterval(timer);session=null;input.enabled=false;input.clear();$('menu').close();$('play').hidden=true;$('setup').hidden=false;players.forEach((p,i)=>{p.profile=null;p.slot=null;p.ready=false;p.choices.replaceChildren();profileStatus(i,'Signed out. Enter your code to play again.');});updateStart();note('Both heroes saved.');return;}
  if(session.leaving.size){renderPanels();return;}
- $('menu').close();input.clear();input.enabled=true;last=performance.now();accumulator=0;renderer.scene=null;visual=Object.create(session.games[session.leader]);bindStyleCGame(renderer.cloth,session.games[session.leader]);note(`Player ${session.leader+1} continues solo · autosave on`);
+ $('menu').close();input.clear();input.enabled=true;last=performance.now();accumulator=0;renderer.scene=null;bindStyleCGame(renderer.cloth,session.games[session.leader]);note(`Player ${session.leader+1} continues solo · autosave on`);
 }
 $('pause').onclick=openMenu;$('menu').addEventListener('cancel',e=>{e.preventDefault();});
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('play').requestFullscreen();}catch{note('Full screen is unavailable in this browser.');}};
@@ -282,6 +315,7 @@ function events(){
  }}
 }
 function frame(now){
+ try{
  const wall=Math.max(0,(now-last)/1000),elapsed=Math.min(.1,wall);last=now;const begun=performance.now();input.poll();refreshControllers(now);const managementHandled=manager.poll(now);for(let i=0;i<2;i++)navigateController(i,now,managementHandled);
  if(session&&!document.hidden){
   session.expireLoot();let g=session.games[session.leader],artPending=false;
@@ -290,11 +324,12 @@ function frame(now){
   const simStart=performance.now();
   if(!session.paused&&!artPending){accumulator+=elapsed;while(accumulator>=STEP&&!session.paused){session.step([input.sample(0),input.sample(1)],{x:renderer.camera,y:renderer.cameraY,width:renderer.width,height:renderer.height});accumulator-=STEP;events();}}else accumulator=0;
   const simMs=performance.now()-simStart;let drawMs=0,drawn=false;
-  if(now-lastDraw>=1000/frameCap-1){g=session.games[session.leader];const d=performance.now();if(Object.getPrototypeOf(visual)!==g)Object.setPrototypeOf(visual,g);visual.loot=session.visualLoot();const alpha=session.paused?1:accumulator/STEP;renderer.draw(visual,alpha,Math.min(.1,(now-lastDraw)/1000));if(session.active.size===2)drawFollower(session.games[1],elapsed,alpha);drawMs=performance.now()-d;lastDraw=now;drawn=true;}
+  if(now-lastDraw>=1000/frameCap-1){g=session.games[session.leader];const d=performance.now();const alpha=session.paused?1:accumulator/STEP;renderer.draw(coopRenderView(g,session.visualLoot()),alpha,Math.min(.1,(now-lastDraw)/1000));if(session.active.size===2)drawFollower(session.games[1],elapsed,alpha);drawMs=performance.now()-d;lastDraw=now;drawn=true;}
   hudTime+=elapsed;if(hudTime>.12){updateHUD();hudTime=0;}audio.update(musicScene(g),!session.paused);
   if(measurement){const sample={intervalMs:wall*1000,simulationMs:simMs,drawMs,cpuMs:performance.now()-begun,drawn,heap:performance.memory?.usedJSHeapSize||null};metrics.push(sample);if(metrics.length>7200)metrics.shift();}
  }
- requestAnimationFrame(frame);
+ }catch(error){void recoverSession(error);}
+ finally{requestAnimationFrame(frame);}
 }
 window.addEventListener('blur',()=>{if(session)openMenu();});document.addEventListener('visibilitychange',()=>{if(document.hidden&&session){openMenu();void saveAll();}last=performance.now();accumulator=0;});window.addEventListener('beforeunload',e=>{if(session){e.preventDefault();e.returnValue='';}});
 requestAnimationFrame(frame);
