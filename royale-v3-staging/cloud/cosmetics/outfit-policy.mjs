@@ -2,10 +2,20 @@
 // Historical piece prices are immutable purchase credit, not individual offers.
 // Retired IDs remain readable ownership records; they can never be bought or worn.
 export const OUTFIT_PRICE=700;
-export const OUTFIT_POLICY_VERSION='matching-outfits-no-headwear-v1';
+export const OUTFIT_POLICY_VERSION='matching-outfits-face-only-v2';
 export const CLOTHING_SLOTS=Object.freeze(['top','bottom','fullbody','footwear','accessory','cape']);
 export const LEGACY_CLOTHING_SLOTS=Object.freeze(['headwear',...CLOTHING_SLOTS]);
 const historicalRows=[
+ ["dolphin-costume","Dolphin Costume",[["fullbody",700]]],
+ ["pink-shark-costume","Pink Shark Costume",[["fullbody",700]]],
+ ["hamburger-costume","Hamburger Costume",[["fullbody",700]]],
+ ["stuffed-animal-costume","Stuffed Animal Costume",[["fullbody",700]]],
+ ["zombie-costume","Zombie Costume",[["fullbody",700]]],
+ ["reaper-costume","Reaper Costume",[["fullbody",700]]],
+ ["fishsticks-costume","I Love Fishsticks Costume",[["fullbody",700]]],
+ ["pizza-slice-costume","Pizza Slice Costume",[["fullbody",700]]],
+ ["black-business-suit","Black Business Suit",[["fullbody",700]]],
+ ["white-business-suit","White Business Suit",[["fullbody",700]]],
  ["royal-kimono","Royal Kimono Set",[["headwear",100],["fullbody",500],["footwear",100]]],
  ["ninja-warrior","Ninja Warrior Set",[["headwear",100],["top",300],["bottom",100],["footwear",100],["accessory",100]]],
  ["urban-hero","Urban Hero Set",[["headwear",100],["top",400],["bottom",100],["footwear",100]]],
@@ -59,4 +69,3 @@ export const historicalPiece=id=>pieces.get(id)||null;
 export const outfitForPiece=id=>{
  const piece=historicalPiece(id);return piece?OUTFIT_POLICIES[piece.setId]:null;
 };
-

@@ -1,3 +1,5 @@
+import {costumeForState} from '../costumes/catalog.mjs';
+import {costumeSprites} from '../costumes/engine.mjs';
 // Generated staging renderer; original renderer remains unchanged.
 import {kingJamesSprites} from './outfit-engine.mjs?v=outfits-1';
 import {kingJamesFX} from './motion-fx.mjs';
@@ -65,7 +67,7 @@ export class Renderer {
     if(e.state==='warn'){oval(c,x,y-height-29,9,10,'#ffe4a0');c.fillStyle='#774b31';c.font='bold 15px sans-serif';c.textAlign='center';c.fillText('!',x,y-height-24);line(c,[[x-30,y+5],[x+30,y+5]],'#f8c87b',2);}
     if(e.state==='strike')line(c,[[x+e.face*24,y-28],[x+e.face*42,y-20],[x+e.face*31,y-8]],'#fff2c8',2);
   }
-  draw(game,alpha,dt){const c=this.c,h=game.hero,t=game.time;this.regionTheme=game.getRegion();this.night=game.clock().night;if(this.spriteRegion!==game.regionId){this.spriteRegion=game.regionId;this.monsterAtlas.preload(game.regionId);}
+  draw(game,alpha,dt){const costume=costumeForState(game.cosmetics);const c=this.c,h=game.hero,t=game.time;this.regionTheme=game.getRegion();this.night=game.clock().night;if(this.spriteRegion!==game.regionId){this.spriteRegion=game.regionId;this.monsterAtlas.preload(game.regionId);}
     const scene=`${game.regionId}:${game.arenaScene?.id||game.arenaScene?.region||'world'}`;
     const camera=trackCamera({x:this.camera,y:this.cameraY},h,this.width,this.height,dt,{worldWidth:game.arenaScene?1880:WORLD_WIDTH,arena:!!game.arenaScene,reset:this.scene!==scene});
     this.scene=scene;this.camera=camera.x;this.cameraY=camera.y;
@@ -84,7 +86,7 @@ export class Renderer {
     if(!game.arenaScene){if(visible(150,390,260,230))drawEris(c,t);worldLandmarks(c,game,this.camera,this.width);}else{drawArena(c,game);if(game.arenaScene.legendary)drawLegendaryWorld(c,game);}
     for(const shot of game.enemyShots){if(!visible(shot.x-12,shot.y-12,24,24))continue;if(drawBossShot(c,shot,t))continue;oval(c,shot.x,shot.y,7,5,shot.color,'#283b43',2);line(c,[[shot.x-shot.vx*.025,shot.y-shot.vy*.025],[shot.x,shot.y]],'#eadcac',2);}
     for(const e of game.enemies){const vw=e.boss||e.legendaryHelper?e.w:Math.max(e.w,192),vh=e.boss||e.legendaryHelper?e.h:Math.max(e.h,MONSTER_HEIGHT[e.type]||e.h);if(visible(e.x-vw/2,e.y-vh-40,vw,vh+50))this.enemy(e,t,alpha);}
-    const attackPresentation=this.prototypeSession&&kingJamesSprites.selected(game.look)&&kingJamesAttackFX.ready;
+    const attackPresentation=this.prototypeSession&&!costume&&kingJamesSprites.selected(game.look)&&kingJamesAttackFX.ready;
     if(attackPresentation){drawPowerWorld(c,{...game,powers:{...game.powers,projectiles:[]}});kingJamesAttackFX.world(c,game);}else drawPowerWorld(c,game);
     drawMergeWorld(c,game);
     const pos=globalThis.HealthiaMotionCore?.renderPosition({x:h.prevX,y:h.prevY,face:h.prevFace},{x:h.x,y:h.y,face:h.face},alpha,h.dead)||{x:lerp(h.prevX,h.x,alpha),y:lerp(h.prevY,h.y,alpha)};
@@ -106,7 +108,7 @@ export class Renderer {
     // This changes artwork selection ONLY; simulation and cloud heroes are
     // intentionally untouched.
     const active=game.powers?.active||{};
-    const prototype=this.prototypeSession&&kingJamesSprites.selected(game.look);
+    const prototype=this.prototypeSession&&!costume&&kingJamesSprites.selected(game.look);
     const steelMode=(this.v2SpriteTest||!!prototype)&&!!spriteHero.steel;
     const universalFX=(this.v2SpriteTest||!!prototype)&&universalPowerStates(game,spriteHero).length>0;
     const wrappingPower=heroPowerOverlayStates(game).length>0||universalFX||steelMode;
@@ -121,14 +123,15 @@ export class Renderer {
     // This keeps the power artwork independent of costume, face and hairstyle.
     drawHeroPowerOverlays(c,game,pos,t,'back');
     if(prototype)kingJamesFX.draw(c,game,pos,t,'back',spriteHero,kingJamesSprites);else if(this.v2SpriteTest)drawUniversalPowerFX(c,game,pos,t,'back',spriteHero);
-    const fullBody=prototype&&kingJamesSprites.draw(c,pos.x,pos.y,game.look,{...visualHero,v2Active:game.powers?.active},t,{owner:game.hero});
+    const costumeBody=costume&&costumeSprites.draw(c,pos.x,pos.y,game.look,spriteHero,t,{id:costume.id,owner:game.hero});
+    const fullBody=costumeBody||prototype&&kingJamesSprites.draw(c,pos.x,pos.y,game.look,{...visualHero,v2Active:game.powers?.active},t,{owner:game.hero});
     const generated=!!fullBody||!steelMode&&(approved||(this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1)));
     const pose=fullBody||(generated||steelMode?poseFor(game.look,visualHero,t,'game'):
       drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{
         outfit:game.visualOutfit(),clothing:clothingRuntime.layers(game.cosmetics),
         cloth:this.cloth,dt:game.paused?0:dt
       }));
-    if(fullBody){Object.assign(this.canvas.dataset,{motionFx:JSON.stringify(kingJamesFX.lastStats),attackFx:JSON.stringify([...kingJamesAttackFX.seen]),powerPolicy:String(game.powers.data.movementPolicy?.version||0)});const f=kingJamesSprites.lastFrame;this.steelSeen??=new Set();if(f.outfit==='steel-universal')this.steelSeen.add(f.state+':'+f.frame+':'+f.direction);this.canvas.dataset.steelSeen=JSON.stringify([...this.steelSeen]);this.spriteSeen??=new Set();this.spriteSeen.add(f.state+':'+f.frame+':'+f.direction);Object.assign(this.canvas.dataset,{outfit:f.outfit,spriteState:f.state,spriteFrame:String(f.frame),spriteDirection:String(f.direction),spriteSeen:[...this.spriteSeen].join(',')});}else{delete this.canvas.dataset.outfit;delete this.canvas.dataset.spriteState;delete this.canvas.dataset.spriteFrame;delete this.canvas.dataset.spriteDirection;}
+    if(fullBody){Object.assign(this.canvas.dataset,{motionFx:JSON.stringify(kingJamesFX.lastStats),attackFx:JSON.stringify([...kingJamesAttackFX.seen]),powerPolicy:String(game.powers.data.movementPolicy?.version||0)});const f=costumeBody?costumeSprites.lastFrame:kingJamesSprites.lastFrame;this.steelSeen??=new Set();if(f.outfit==='steel-universal')this.steelSeen.add(f.state+':'+f.frame+':'+f.direction);this.canvas.dataset.steelSeen=JSON.stringify([...this.steelSeen]);this.spriteSeen??=new Set();this.spriteSeen.add(f.state+':'+f.frame+':'+f.direction);Object.assign(this.canvas.dataset,{outfit:f.outfit,spriteState:f.state,spriteFrame:String(f.frame),spriteDirection:String(f.direction),spriteSeen:[...this.spriteSeen].join(',')});}else{delete this.canvas.dataset.outfit;delete this.canvas.dataset.spriteState;delete this.canvas.dataset.spriteFrame;delete this.canvas.dataset.spriteDirection;}
     if(steelMode&&!fullBody)drawSteelSilhouette(c,game,pos,t,spriteHero);
     if((!prototype||!steelMode)&&!(attackPresentation&&h.attack?.power==='strength'))drawPowerHero(c,game,pos,pose);
     if(attackPresentation)kingJamesAttackFX.hero(c,game,pos,visualHero);

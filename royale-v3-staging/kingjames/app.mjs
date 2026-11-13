@@ -92,6 +92,7 @@ window.addEventListener('message',e=>{
  if(finish){clothingReplies.delete(e.data.requestId);finish(e.data.result);}
 });
 function saveClothingToAccount(snapshot){
+ if(v2TestHero){const result=store.writeSlot(activeSlot,snapshot,{expectedId:activeId,requireDurable:true});return Promise.resolve({...result,localConfirmed:result.ok});}
  return new Promise(resolve=>{
   const requestId=crypto.randomUUID();
   const timer=setTimeout(()=>{const pending=clothingReplies.get(requestId);if(pending){clothingReplies.delete(requestId);resolve({ok:false,error:'Cloud acknowledgement timed out. Reload your hero before retrying.'});}},20000);
@@ -115,9 +116,9 @@ function requestClothingSession(){
  }else clothingCloudReason='Open this hero through V3 Cloud Login, not the standalone Royale page';
 }
 function currentClothingStatus(){
- const ready=clothingCloudVerified&&game.started&&game.treeVisit&&!online()&&game.canSave();
+ const ready=(clothingCloudVerified||v2TestHero)&&game.started&&game.treeVisit&&!online()&&game.canSave();
  return {cosmetics:normalizeCosmetics(game.cosmetics),coins:game.hero.coins,ready,
-  reason:ready?'V3 cloud hero verified':clothingCloudReason,
+  reason:ready?(v2TestHero?'Local test hero; saves on this browser':'V3 cloud hero verified'):clothingCloudReason,
   checks:{cloudSession:clothingCloudVerified,heroLoaded:game.started,atTree:game.treeVisit,safe:game.canSave()}};
 }
 window.addEventListener('royale-clothing-snapshot-request',e=>{
@@ -154,7 +155,7 @@ window.addEventListener('royale-clothing-operation',e=>{
    const localSave=persistSnapshot(game.save(),true);
    sendCodeProgress(true);
    window.dispatchEvent(new Event('royale-clothing-updated'));
-   complete({...result,cloudConfirmed:true,localSaved:!!localSave?.ok});
+   complete({...result,cloudConfirmed:!v2TestHero,localConfirmed:v2TestHero,localSaved:!!localSave?.ok});
   }catch(error){complete({ok:false,error:error?.message||'Could not complete clothing transaction.'});}
   finally{clothingBusy=false;}
  })();
@@ -188,7 +189,7 @@ void prepareHeroPowerOverlays();
 if(v2TestHero){
  kingJamesSprites.enabled=true;
  const ready=(await Promise.all([kingJamesSprites.preload(),kingJamesSprites.preload(STEEL_ID),kingJamesFX.preload(),kingJamesAttackFX.preload()])).every(Boolean);
- if(ready)setCosmeticPreviewRenderer((c,x,y,look,hero,time,scale,view)=>kingJamesSprites.draw(c,x,y,look,{...hero,face:view==='left'||view==='back'?-1:1},time,{scale}));
+ if(ready)setCosmeticPreviewRenderer((c,x,y,look,hero,time,scale,view)=>!game.cosmetics?.equipped?.fullbody&&kingJamesSprites.draw(c,x,y,look,{...hero,face:view==='left'||view==='back'?-1:1},time,{scale}));
  if(!ready)console.error('KingJames outfit could not load; original artwork retained:',kingJamesSprites.error);
  const button=document.createElement('button');button.type='button';button.className='secondary';button.id='kingjames-sprite-toggle';
  button.textContent=ready?'Outfit artwork: ON':'KingJames artwork unavailable · Original art';button.disabled=!ready;
