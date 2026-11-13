@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-13T16:12:27.875Z",
+  "endpoint": "https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-v3-staging",
+  "qaNamePrefix": "Release QA 6d33",
+  "createdAccounts": 2,
+  "existingPlayerWrites": 0,
+  "browserEndToEnd": false,
+  "checks": [
+    "Unauthenticated slot reads refused",
+    "Account 1: ordinary code login, three slots, save acknowledgment, independent-session exact reload, stale-write 409, renewal and unused-slot preservation",
+    "Account 2: ordinary code login, three slots, save acknowledgment, independent-session exact reload, stale-write 409, renewal and unused-slot preservation",
+    "Two authenticated accounts retain separate names, positions and wallets"
+  ],
+  "passed": true
+}

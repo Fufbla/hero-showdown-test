@@ -1,8 +1,8 @@
 {
   "productionReady": false,
   "blockers": [
-    "Online multiplayer is disabled in current main; the separate prototype persists test copies rather than the production V3 heroes.",
-    "The packaged candidate still needs a live-origin cloud login/save/reload check and a two-controller co-op playtest.",
-    "GitHub Pages must use only the filtered release artifact; repository-branch publishing and raw artifact recovery must not expose developer routes."
+    "Deployed multiplayer rejects V3 version-9 saves (HTTP 400 for both ordinary QA accounts) and persists isolated test copies rather than production V3 heroes; production integration is incomplete.",
+    "Live cloud API checks passed for two new accounts and all 43 existing saves validated; packaged-browser live-origin end-to-end and physical two-controller co-op remain unverified. No controllers are exposed to the remote browser.",
+    "GitHub Pages must use only the filtered release artifact; current connection lacks Pages administration access to verify Actions-only publication."
   ]
 }

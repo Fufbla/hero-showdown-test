@@ -1,0 +1,21 @@
+{
+  "at": "2026-11-13T16:14:02.968Z",
+  "endpoint": "https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-mp-test",
+  "productionMultiplayerPassed": false,
+  "accounts": [
+    {
+      "account": 1,
+      "status": 400,
+      "accepted": false,
+      "error": "Saved hero needs recovery. No original data was changed."
+    },
+    {
+      "account": 2,
+      "status": 400,
+      "accepted": false,
+      "error": "Saved hero needs recovery. No original data was changed."
+    }
+  ],
+  "existingPlayerWrites": 0,
+  "reason": "Deployed multiplayer decoder accepts versions 1-8; the release uses version 9. Its separate test-copy persistence is not production V3 saving."
+}
