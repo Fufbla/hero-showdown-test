@@ -51,6 +51,8 @@ write('royale-v3-staging/gameplay/world-loot.mjs',loot);
 // Co-op retains its individual-fast-travel restriction while two players share
 // the screen. Retire the old portalTravel -> free travel shortcut in that router.
 let session=read('royale/local-coop/session.mjs').replace(/((?:from\s*|import\s*\()\s*['"])\.\.\//g,'$1../../royale/').replace(/((?:from\s*|import\s*\()\s*['"])\.\//g,'$1../../royale/local-coop/');
+session="import {sharedLegendaryTravel} from './coop-travel.mjs';\n"+session;
+session=replace(session,"  const h=this.heroes[player];","  const h=this.heroes[player];\n  if(method==='enterLegendary')return sharedLegendaryTravel(this,args[0],args[1]);");
 session=replace(session,"  if(method==='fastTravel'&&this.active.size>1)","  if(['fastTravel','portalTravel','travel'].includes(method)&&this.active.size>1)");
 session=replace(session,"Use regular portals together for free.","Use entrance and exit portals together for free.");
 session=replace(session,"  if(method==='portalTravel'){if(!h.game.nearPortal())return false;method='travel';}","  // Paid travel is handled by each game's revision-checked travel method.");
@@ -70,11 +72,11 @@ for(const [file,basePath]of [['index.html','/royale-v3-staging/'],['kingjames/in
   for(const [source,target]of Object.entries(mappings)){
    const sourcePath='/royale/'+source,targetPath='/royale-v3-staging/gameplay/'+target;
    const relative=p=>{const r=path.posix.relative(basePath,p);return r.startsWith('.')?r:'./'+r;};
-   const dest=relative(targetPath)+'?v=economy-1';
+   const dest=relative(targetPath)+'?v=economy-2';
    for(const [key,value]of Object.entries(m.imports))if(new URL(key,base).pathname===sourcePath||new URL(value,base).pathname===sourcePath||new URL(value,base).pathname===targetPath){m.imports[key]=dest;if(new URL(value,base).pathname===sourcePath)m.imports[value]=dest;}
    m.imports[relative(sourcePath)]=dest;
   }
-  for(const [key,value]of Object.entries(m.imports))if(/\/royale-v3-staging\/(?:portals\/(?:world-art|journey-menu|boss-ui)|gameplay\/local-coop-app)\.mjs$/.test(new URL(value,base).pathname))m.imports[key]=value.replace(/\?v=[^&]+/,'?v=economy-1');
+  for(const [key,value]of Object.entries(m.imports))if(/\/royale-v3-staging\/(?:portals\/(?:world-art|journey-menu|boss-ui)|gameplay\/local-coop-app)\.mjs$/.test(new URL(value,base).pathname))m.imports[key]=value.replace(/\?v=[^&]+/,'?v=economy-2');
   return '<script type="importmap">'+JSON.stringify(m)+'</script>';
  });write(dest,html);
 }

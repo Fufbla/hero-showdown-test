@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import {Game,decodeSave} from '../../../royale/core.mjs';
 import {boardIndex,regionSurfaces} from '../../../royale/world.mjs';
 import {nearbyInteractions} from '../../../royale/world-loot.mjs';
-import {LocalSession} from '../../../royale/local-coop/session.mjs';
+import {LocalSession,captureProgress} from '../../../royale/local-coop/session.mjs';
 import {boardPortals,regionPortals,travelQuote,destinationLevel} from '../portal-layout.mjs';
 import {travelCoins,bossChestCoins} from '../economy.mjs';
 const expected=[100,200,300,800,1200,2500,3500];
@@ -53,4 +53,32 @@ test('shared-screen restriction blocks every former free-teleport alias without 
  const s=new LocalSession(profiles.map(profile=>({profile,slot:1})));
  for(const method of ['travel','portalTravel','fastTravel']){const result=s.command(0,method,method==='fastTravel'?[{region:2},0]:[2,0]);assert.equal(result.ok,false);}
  assert.deepEqual(s.games.map(g=>[g.regionId,g.hero.coins]),[[1,5000],[1,5000]]);
+});
+function legendaryParty(){
+ const profiles=[0,1].map(i=>{const g=new Game();g.hero.level=99;g.hero.coins=5000;g.powers.data.levels.fireball=1;g.powers.data.equipped=['fireball',null,null];return {identity:'legendary-travel-'+i,slots:[{slot_number:1,snapshot:JSON.parse(g.save())}],async save(){}};});
+ const s=new LocalSession(profiles.map(profile=>({profile,slot:1})));
+ for(const g of s.games){g.hero.grounded=true;g.combatTimer=0;g.legendaryStorageReady=true;}
+ return s;
+}
+test('shared legendary trip charges each hero once and checkpoints each debit',()=>{
+ const s=legendaryParty(),revisions=Object.fromEntries(s.games.map((g,i)=>[i,g.economy.revision]));
+ assert.equal(s.command(1,'enterLegendary',['styro',revisions]),true);
+ for(const g of s.games){assert.equal(g.hero.coins,1500);assert.equal(g.economy.coinsSpent,3500);assert.equal(g.arenaScene.legendary,'styro');const saved=captureProgress(g);assert.equal(saved.coins,1500);assert.equal(saved.arena.legendary,'styro');assert(decodeSave(JSON.stringify(saved)));}
+ assert.equal(s.games[0].arenaScene.boss,s.games[1].arenaScene.boss);
+ const entry=s.games[0].drain().find(e=>e.type==='boss-entry');assert.equal(JSON.parse(entry.snapshot).coins,1500);
+ assert.equal(s.command(1,'enterLegendary',['styro',revisions]).ok,false);assert.deepEqual(s.games.map(g=>g.hero.coins),[1500,1500]);
+});
+test('shared legendary trip refuses missing or stale confirmations and an ineligible companion without any debit',()=>{
+ for(const failure of ['missing','stale','funds','level','power','storage','grounded','failed-entry']){
+  const s=legendaryParty(),r=Object.fromEntries(s.games.map((g,i)=>[i,g.economy.revision]));
+  if(failure==='stale')r[1]--;
+  if(failure==='funds')s.games[1].hero.coins=3499;
+  if(failure==='level')s.games[1].hero.level=98;
+  if(failure==='power')s.games[1].powers.data.equipped=[null,null,null];
+  if(failure==='storage')s.games[1].legendaryStorageReady=false;
+  if(failure==='grounded')s.games[1].hero.grounded=false;
+  if(failure==='failed-entry')s.games[0].enterLegendary=()=>false;
+  const balances=s.games.map(g=>g.hero.coins),result=s.command(0,'enterLegendary',failure==='missing'?['styro']:['styro',r]);
+  assert(result===false||result?.ok===false,failure);assert.deepEqual(s.games.map(g=>g.hero.coins),balances);assert(s.games.every(g=>!g.arenaScene));
+ }
 });
