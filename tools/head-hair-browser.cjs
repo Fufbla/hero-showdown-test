@@ -37,7 +37,7 @@ const report=[];
     const pixels=c=>c.getContext('2d').getImageData(0,0,256,256).data,look={...styleCDefault('female'),facialHair:'none'};
     for(const o of COSTUMES.filter(o=>o.hideHair))for(let frame=0;frame<48;frame++){
      const bare=pixels(e.compose(o.id,frame,{...look,hair:'none'})),mask=pixels(e.masks(o.id,frame).mask);
-     const styles=frame===0?HAIR_STYLES:['braids','ponytail','long-straight','bun','short'];
+     const styles=frame===0?HAIR_STYLES:['braids','ponytail','long-straight','high-loc-bun','short'];
      for(const hair of styles){
       const custom={...look,hair},before=JSON.stringify(custom),drawn=pixels(e.compose(o.id,frame,custom));let changed=0;
       for(let i=0;i<drawn.length;i+=4)if(drawn[i]!==bare[i]||drawn[i+1]!==bare[i+1]||drawn[i+2]!==bare[i+2]||drawn[i+3]!==bare[i+3]){
@@ -45,6 +45,17 @@ const report=[];
       }
       if(hair==='braids'&&changed<20)throw Error('Braids disappeared from '+o.id+' '+frame);
       if(JSON.stringify(custom)!==before)throw Error('Appearance mutated');results.containedCombinations++;if(changed)results.visibleHair++;
+     }
+    }
+    results.uncoveredFrames=0;
+    for(const o of COSTUMES.filter(o=>!o.hideHair))for(const [index,f]of e.outfits.get(o.id).manifest.frames.entries()){
+     const b=pixels(e.masks(o.id,index).body);
+     for(const sex of ['male','female']){
+      hc.clearRect(0,0,256,256);e.face.draw(hc,{...styleCDefault(sex),hair:'none',facialHair:'none'},f,{hideHair:false});const h=hc.getImageData(0,0,256,256).data;let touching=0;
+      for(let y=Math.floor(f.head[1]-8);y<=Math.ceil(f.head[1]+12);y++)for(let x=Math.floor(f.head[0]-12);x<=Math.ceil(f.head[0]+12);x++){
+       const i=(y*256+x)*4;if(b[i+3]>=128&&h[i+3]>=128)touching++;
+      }
+      if(touching<2)throw Error('Detached uncovered '+o.id+' '+index+' '+sex);results.uncoveredFrames++;
      }
     }
     return results;

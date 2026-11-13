@@ -3,7 +3,7 @@ import {UniversalHead} from './head.mjs';
 import {selectedOutfit,OUTFIT_ID} from './selection.mjs';
 import {APPROVED_OUTFITS} from './outfit-catalog.mjs';
 export const STEEL_ID='steel-universal';
-export const OUTFITS=Object.freeze({[OUTFIT_ID]:new URL('./outfits/kingjames-original/manifest.json?v=basic-attacks-1',import.meta.url),[STEEL_ID]:new URL('./transforms/steel/manifest.json',import.meta.url),...Object.fromEntries(APPROVED_OUTFITS.map(({id})=>[id,new URL('./outfits/'+id+'/manifest.json',import.meta.url)]))});
+export const OUTFITS=Object.freeze({[OUTFIT_ID]:new URL('./outfits/kingjames-original/manifest.json?v=head-hair-20261113',import.meta.url),[STEEL_ID]:new URL('./transforms/steel/manifest.json',import.meta.url),...Object.fromEntries(APPROVED_OUTFITS.map(({id})=>[id,new URL('./outfits/'+id+'/manifest.json',import.meta.url)]))});
 const browserImage=url=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(Error('Outfit atlas unavailable'));im.src=url.href;});
 export class OutfitEngine{
  constructor({imageLoader=browserImage,jsonLoader=async url=>{const r=await fetch(url);if(!r.ok)throw Error('Outfit manifest unavailable');return r.json();},canvasFactory}={}){

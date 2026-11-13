@@ -2,7 +2,7 @@ import {FullBodyAnimator,validateManifest} from '../kingjames/animation.mjs';
 import {OutfitEngine,STEEL_ID} from '../kingjames/outfit-engine.mjs';
 import {sanitizeLook} from '../../royale/appearance.mjs';
 import {COSTUMES,costumeById} from './catalog.mjs';
-import {CostumeFace,appearanceKey,browserCanvas} from './face.mjs';
+import {CostumeFace,appearanceKey,browserCanvas,FACE_CLEARANCE} from './face.mjs';
 const browserImage=url=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(Error('Costume atlas unavailable'));image.src=url.href;});
 const browserJSON=async url=>{const response=await fetch(url);if(!response.ok)throw Error('Costume manifest unavailable');return response.json();};
 export class CostumeEngine {
@@ -56,7 +56,7 @@ export class CostumeEngine {
    const candidate=n=>{const i=n*4,r=pixels.data[i],g=pixels.data[i+1],b=pixels.data[i+2];return allowed[n]&&pixels.data[i+3]>8&&g>8&&b>8&&r<Math.min(g,b)*.96&&Math.abs(g-b)<Math.max(g,b)*.4;};
    for(let n=0;n<W*H;n++)if(candidate(n)){const i=n*4;skin.push([i,(pixels.data[i+1]+pixels.data[i+2])/510]);}
   }
-  c.putImageData(pixels,0,0);if(!costumeById(id).hideHair)c.clearRect(fx-2,fy-2,fw+4,fh+4);mc.putImageData(face,0,0);
+  c.putImageData(pixels,0,0);if(!costumeById(id).hideHair)c.clearRect(fx-FACE_CLEARANCE,fy-FACE_CLEARANCE,fw+2*FACE_CLEARANCE,fh+2*FACE_CLEARANCE);mc.putImageData(face,0,0);
   const result={body,mask,skin};loaded.masks.set(index,result);return result;
  }
  compose(id,index,raw,closed=false,direction=1){

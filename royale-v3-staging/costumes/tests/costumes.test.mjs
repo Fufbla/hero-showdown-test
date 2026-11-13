@@ -45,6 +45,28 @@ test('uncovered costumes retain hair; all costumes retain skin, eyes, face and f
  for(const o of COSTUMES){const baseline=digest(e.compose(o.id,0,look));for(const changed of [{skin:'#e5c5a0'},{eyes:'#3399dd',eyeShape:'round'},{nose:'wide',mouth:'smile'},{facialHair:'none'},{presentation:'female'}])assert.notEqual(digest(e.compose(o.id,0,{...look,...changed})),baseline,o.id+' '+JSON.stringify(changed));
  if(!o.hideHair)assert.notEqual(digest(e.compose(o.id,0,{...look,hair:'none'})),baseline,o.id+' lost hair');}
 });
+test('uncovered formal and zombie heads touch the body in all 48 poses',()=>{
+ const canvas=createCanvas(256,256),c=canvas.getContext('2d');let checked=0;
+ for(const o of COSTUMES.filter(o=>!o.hideHair))for(const [frame,f]of e.outfits.get(o.id).manifest.frames.entries()){
+  const b=e.masks(o.id,frame).body.getContext('2d').getImageData(0,0,256,256).data;
+  for(const sex of ['male','female']){
+   c.clearRect(0,0,256,256);e.face.draw(c,{...styleCDefault(sex),hair:'none',facialHair:'none'},f,{hideHair:false});
+   const h=c.getImageData(0,0,256,256).data;let touching=0;
+   for(let y=Math.floor(f.head[1]-8);y<=Math.ceil(f.head[1]+12);y++)for(let x=Math.floor(f.head[0]-12);x<=Math.ceil(f.head[0]+12);x++){
+    const i=(y*256+x)*4;if(b[i+3]>=128&&h[i+3]>=128)touching++;
+   }
+   assert(touching>=2,`${o.id} frame ${frame}: detached ${sex} chin`);checked++;
+  }
+ }
+ console.log(checked+' uncovered costume/pose/face combinations have opaque neck contact');
+});
+test('two co-op heroes wearing the same hood retain their own hair when rendered alternately',()=>{
+ for(const o of COSTUMES.filter(o=>o.hideHair)){
+  const a={...look,hair:'braids'},b={...look,hair:'ponytail'},ownerA={},ownerB={},h=motionHero('idle',0);
+  const first=render(o.id,h,a,ownerA),second=render(o.id,h,b,ownerB);assert.notEqual(first,second,o.id+' shared a bald/cached head');
+  assert.equal(render(o.id,h,a,ownerA),first);assert.equal(render(o.id,h,b,ownerB),second);
+ }
+});
 test('skin recoloring removes cyan hand markers without tinting the dolphin tail',()=>{
  for(let frame=0;frame<48;frame++){
   const canvas=e.compose('black-business-suit',frame,look),d=canvas.getContext('2d').getImageData(0,0,256,256).data;
