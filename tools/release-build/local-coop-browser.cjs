@@ -45,7 +45,7 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
    const card=page.locator('.player-card').nth(i);
    await page.locator('#code-'+i).fill(accounts[i].code);
    await card.getByRole('button',{name:'Load Heroes',exact:true}).click();
-   await card.getByRole('button',{name:new RegExp(i?'Coop QA Nova':'Coop QA Atlas')}).click({timeout:60000});
+   await card.locator('.hero-choice').filter({hasText:i?'Coop QA Nova':'Coop QA Atlas'}).click({timeout:60000});
    await card.getByRole('button',{name:'Ready',exact:true}).click();
   }
   await page.locator('#start').click();
