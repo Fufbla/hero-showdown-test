@@ -41,3 +41,11 @@ Use the current V3 staging local co-op page to verify hardware/gameplay behavior
 6. Report each step Pass/Fail, browser/OS/controller models, and any visible error; do not share secret account codes.
 
 Separately report the current GitHub Pages Source setting. Do not change deployment settings or merge the release until all gates pass.
+
+## Deployment authorization and gate resolution
+
+User subsequently confirmed that all four physical co-op steps passed, including both saved heroes restoring after reload. User supplied a Pages settings screenshot showing branch publishing, then confirmed saving the requested change to GitHub Actions. User explicitly approved deployment afterward.
+
+Pre-release cloud verification is supported by both the actual packaged-runtime cloud integration test and the user's successful live browser save/reload. The localhost preview cannot independently contact the service because CORS is restricted to the production GitHub Pages origin. This is a preview restriction, not a confirmed game defect. We do not claim a separate pre-publication packaged-browser roundtrip. The release gate is cleared based on the combined evidence and user confirmation; post-publication checks must still be reported separately.
+
+No gameplay, save schema, backend, data, or online service changes accompany this gate update. Rollback remains `rollback/pre-v3-final-release-20261113` at `af68f4ea08b0ceee920e7ec5d0e6f9a4098ee97b`.
