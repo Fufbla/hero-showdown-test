@@ -5,20 +5,10 @@
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
   "deployment": "Authorized after functional verification; not deployed",
   "upload_authorized": true,
-  "last_verified_content_commit": "44018802f1890ea0d6e3370d0ee0ce8dbd37a7a6",
+  "last_verified_content_commit": "12c8d78f0dcd38cddb6b3166cc890adaad599290",
   "total_required_files": 106,
-  "verified_files": 97,
-  "remaining_paths": [
-    "docs/costumes/review/stuffed-animal-costume-sprites.png",
-    "docs/costumes/review/ten-costumes.png",
-    "docs/costumes/review/white-business-suit-sprites.png",
-    "docs/costumes/review/zombie-costume-sprites.png",
-    "docs/costumes/verification/costume-tests.log",
-    "docs/costumes/verification/prior-fullbody-tests.log",
-    "docs/costumes/verification/prior-shared-tests.log",
-    "docs/costumes/verification/source-preservation.json",
-    "docs/costumes/verification/staging-build.log"
-  ],
+  "verified_files": 106,
+  "remaining_paths": [],
   "batches": [
     {
       "number": 2,
@@ -115,23 +105,26 @@
       ],
       "verified_at": "2026-11-13T07:07:34.215Z",
       "verification": "GitHub tree matched every expected Git blob SHA"
+    },
+    {
+      "number": 8,
+      "commit": "12c8d78f0dcd38cddb6b3166cc890adaad599290",
+      "paths": [
+        "docs/costumes/review/stuffed-animal-costume-sprites.png",
+        "docs/costumes/review/ten-costumes.png",
+        "docs/costumes/review/white-business-suit-sprites.png",
+        "docs/costumes/review/zombie-costume-sprites.png",
+        "docs/costumes/verification/costume-tests.log",
+        "docs/costumes/verification/prior-fullbody-tests.log",
+        "docs/costumes/verification/prior-shared-tests.log",
+        "docs/costumes/verification/source-preservation.json",
+        "docs/costumes/verification/staging-build.log"
+      ],
+      "verified_at": "2026-11-13T07:15:45.463Z",
+      "verification": "GitHub recursive tree matched all 106 expected Git blob SHAs"
     }
   ],
-  "current_batch": {
-    "number": 8,
-    "paths": [
-      "docs/costumes/review/stuffed-animal-costume-sprites.png",
-      "docs/costumes/review/ten-costumes.png",
-      "docs/costumes/review/white-business-suit-sprites.png",
-      "docs/costumes/review/zombie-costume-sprites.png",
-      "docs/costumes/verification/costume-tests.log",
-      "docs/costumes/verification/prior-fullbody-tests.log",
-      "docs/costumes/verification/prior-shared-tests.log",
-      "docs/costumes/verification/source-preservation.json",
-      "docs/costumes/verification/staging-build.log"
-    ],
-    "state": "awaiting_remote_verification"
-  },
+  "current_batch": null,
   "errors": [
     {
       "batch": 1,
@@ -401,63 +394,63 @@
       "git_blob_sha": "00fa14daaa2d0e2bdf51d4db6fd0c24918fd9ff3",
       "sha256": "4f761db0795de77d389926b7817eee2368f3bbaa916717273197212443328769",
       "size_bytes": 1131342,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/ten-costumes.png",
       "git_blob_sha": "3ab2f41a52aad948c3533cec0dc2db5ff2a5e984",
       "sha256": "feaeb4a0da0d32b0f05bb8557418a7f534cdc79d7f4d11a67416eb93ebe62401",
       "size_bytes": 623140,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/white-business-suit-sprites.png",
       "git_blob_sha": "9556f5c566e80f287ef4400018eb39c1fbdc8865",
       "sha256": "a51f8072343f15a9e52c6e398a430c19f78f92bad402695a78d5f94ce4e139fc",
       "size_bytes": 946431,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/zombie-costume-sprites.png",
       "git_blob_sha": "ed2fbc77395ebac20fc93a7ad6c34782695a95a8",
       "sha256": "2784dd46555b2db4dda2ff67697c411b22f45cba650009e52c34eadeb6380f2d",
       "size_bytes": 880807,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/verification/costume-tests.log",
       "git_blob_sha": "2986bae4db53b2aeaede52cd5bf7c4e1b590c526",
       "sha256": "11df5d0607c00b5d20fa29667695f1b2447718578a9a92d85defac0d8a86d43e",
       "size_bytes": 1246,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/verification/prior-fullbody-tests.log",
       "git_blob_sha": "77022880cec5a38e9f04ac68cb580b921bef6bc1",
       "sha256": "b6a3ddc45e12c51995748f89587f745b4b73beee5445a47626dd91bc44b5e02d",
       "size_bytes": 2050,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/verification/prior-shared-tests.log",
       "git_blob_sha": "4ba3e17bc57c2810e701441fef20469fc37d059c",
       "sha256": "b613508aedc0ba05a60423bea20e519ab8b4f22696dde94158947b60db1eeec2",
       "size_bytes": 7577,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/verification/source-preservation.json",
       "git_blob_sha": "d2b493c269e6b79468b32f625be24f3bf602a978",
       "sha256": "f197d1d1a8ea3cd0a19be3a897d3b40bb84a45bf80e36a2bb38604dda179a88d",
       "size_bytes": 5995,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/verification/staging-build.log",
       "git_blob_sha": "df3be3a0b5df211f4cf76da59ad9c64129c1d63a",
       "sha256": "d8f91a3c118607107614db18c56479ce7a9b568a17ff09f6f0cab5ea710e46d6",
       "size_bytes": 442,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/cloud/cosmetics/outfit-policy.mjs",
@@ -901,7 +894,7 @@
       "status": "verified"
     }
   ],
-  "status": "upload_in_progress",
+  "status": "upload_complete_pending_deployment_verification",
   "preserved_validation": {
     "costume_checks_passed": 10,
     "fullbody_checks_passed": 19,
