@@ -3,7 +3,7 @@
   "repository": "Fufbla/hero-showdown-test",
   "branch": "codex/face-only-costumes-review",
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
-  "deployment": "Cloud catalog v8 deployed and source-verified; client remains on main baseline pending cloud round-trip completion.",
+  "deployment": "Authorized; client publication next. Cloud function v8 verified with all ten costumes.",
   "upload_authorized": true,
   "last_verified_content_commit": "12c8d78f0dcd38cddb6b3166cc890adaad599290",
   "total_required_files": 106,
@@ -178,10 +178,11 @@
     },
     {
       "path": "docs/costumes/README.md",
-      "git_blob_sha": "68573e094de1008351fdefef6a94231a2b880253",
-      "sha256": "2cf980ea0e539a133e8bd2979dcc0e67aa0b51870de785663120439797d69074",
-      "size_bytes": 4859,
-      "status": "verified"
+      "git_blob_sha": "4e42d7ba5fa7362ce966de74eac25dc2eb62de85",
+      "sha256": "5340723b5bd4063ea10a93dba30792217926f872c410af6da5bc75afe21b1815",
+      "size_bytes": 5125,
+      "status": "verified",
+      "recovered_git_blob_sha": "68573e094de1008351fdefef6a94231a2b880253"
     },
     {
       "path": "docs/costumes/approved-concepts.jpeg",
@@ -898,7 +899,7 @@
       "status": "verified"
     }
   ],
-  "status": "upload_complete_pending_deployment_verification",
+  "status": "complete_verified_ready_to_deploy",
   "preserved_validation": {
     "costume_checks_passed": 10,
     "fullbody_checks_passed": 19,
@@ -918,7 +919,15 @@
     "new_armor_combat_test": "passed for all ten purchased/equipped costumes, reload and removal",
     "cloud_function_version": 8,
     "cloud_source_verified": true,
-    "cloud_round_trip": "in progress; isolated QA account",
-    "browser_evidence": "Recovered exact tested source and prior browser evidence; local Chromium launch unavailable (socket operation not permitted)."
+    "cloud_round_trip": {
+      "passed": 22,
+      "costumes": 10,
+      "new_session_restore": true,
+      "stale_revision_rejected": true,
+      "total_coin_debit": 7000
+    },
+    "browser_evidence": "Recovered exact tested source and prior browser evidence; local Chromium launch unavailable (socket operation not permitted).",
+    "report": "docs/costumes/verification/release.json",
+    "checkpoint": "3ac84c6bba0e650215677f8b7fa6e298bbca409c"
   }
 }

@@ -1,6 +1,6 @@
 # Ten costumes and universal face-only hoods
 
-Complete local collection for animation review. **Not deployed.**
+All 106 recovered package files are uploaded and checksum verified. Deployment is authorized; see `upload-progress.json` and `verification/release.json` for the latest release status.
 Review branch: `codex/face-only-costumes-review`. Current staging baseline:
 `3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1` (armor and boss work preserved).
 Exact upload state and file hashes are in `upload-progress.json`.
@@ -73,13 +73,15 @@ retained ownership and equipped state after reload. Removal preserved ownership
 without another debit. Other costume purchase/save cases are covered by the
 automated suite; this session did not buy all ten separately in the browser.
 
-## Remaining deployment gates
+## Release verification
 
-- Review and approve these finished animations before merging or deploying.
-- Reconcile with the latest main before deployment.
-- Deploy matching client and cloud cosmetic policy only after deployment approval.
-- Then verify real-account cloud round trips, cross-device restoration and
-  physical multiplayer controllers. No cloud function was deployed here.
+The user authorized staging deployment on November 13, 2026. The original
+106-file package was recovered without regenerating artwork. All previous
+passing tests were retained because the tested sources match exactly.
+`verification/release.json` records the additional real combat and hosted cloud
+save checks, plus deployment status. The reserved code `0000000000` remains
+browser-local; hosted cloud checks use a separate isolated QA account.
+Physical controllers are outside this costume release verification.
 
 ## Reproduce
 

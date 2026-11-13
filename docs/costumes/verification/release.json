@@ -1,0 +1,72 @@
+{
+  "original_package": {
+    "total": 106,
+    "verified": 106,
+    "missing": []
+  },
+  "review_branch": "codex/face-only-costumes-review",
+  "recovered_checkpoint": "338264051038dd88070a4444c5a7f2c6f595f658",
+  "release_checkpoint": "3ac84c6bba0e650215677f8b7fa6e298bbca409c",
+  "artwork_regenerated": false,
+  "previous_successful_tests_repeated": false,
+  "prior_passing_tests": {
+    "costume": 10,
+    "fullbody": 19,
+    "shared": 86
+  },
+  "new_combat_gate": {
+    "costumes": 10,
+    "punch_damage": {
+      "without_armor": 7.54666667,
+      "with_armor": 9.54666667
+    },
+    "incoming_damage": {
+      "without_armor": 100,
+      "with_armor": 97.5
+    },
+    "reload_and_armor_removal": true
+  },
+  "build": "idempotent",
+  "unrelated_paths_changed": [],
+  "staging_cloud": {
+    "version": 8,
+    "only_changed_file": "cloud/cosmetics/outfit-policy.mjs",
+    "source_verified": true
+  },
+  "deployment": "Ready for authorized V3 staging deployment",
+  "cloud_round_trip": {
+    "timestamp": "2026-11-13T07:23:51.467676+00:00",
+    "function_version": 8,
+    "transactions": [
+      "initial",
+      "purchase:dolphin-costume",
+      "equip:dolphin-costume",
+      "purchase:pink-shark-costume",
+      "equip:pink-shark-costume",
+      "purchase:hamburger-costume",
+      "equip:hamburger-costume",
+      "purchase:stuffed-animal-costume",
+      "equip:stuffed-animal-costume",
+      "purchase:zombie-costume",
+      "equip:zombie-costume",
+      "purchase:reaper-costume",
+      "equip:reaper-costume",
+      "purchase:fishsticks-costume",
+      "equip:fishsticks-costume",
+      "purchase:pizza-slice-costume",
+      "equip:pizza-slice-costume",
+      "purchase:black-business-suit",
+      "equip:black-business-suit",
+      "purchase:white-business-suit",
+      "equip:white-business-suit",
+      "remove-and-restore-hair"
+    ],
+    "round_trips": 22,
+    "new_session_restore": true,
+    "stale_revision_rejected": true,
+    "final_coins": 13000,
+    "owned_costumes": 10,
+    "original_look_preserved": true,
+    "qa_cleanup": "pending"
+  }
+}
