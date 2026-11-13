@@ -5,12 +5,14 @@ import {kingJamesFX} from '../../royale-v3-staging/kingjames/motion-fx.mjs';
 import {kingJamesAttackFX} from '../../royale-v3-staging/kingjames/attack-fx.mjs';
 import {costumeSprites} from '../../royale-v3-staging/costumes/engine.mjs';
 import {setCosmeticPreviewRenderer} from '../../royale-v3-staging/gameplay/armor-preview.mjs';
+import {starterSuit} from '../../royale-v3-staging/starter-suit/engine.mjs';
 
 kingJamesSprites.selected=()=>kingJamesSprites.enabled?'kingjames-original':null;
 export async function prepareReleaseArt(){
-  const ready=await Promise.all([kingJamesSprites.preload(),kingJamesSprites.preload(STEEL_ID),kingJamesFX.preload(),kingJamesAttackFX.preload()]);
+  const ready=await Promise.all([starterSuit.preload(),kingJamesSprites.preload(),kingJamesSprites.preload(STEEL_ID),kingJamesFX.preload(),kingJamesAttackFX.preload()]);
   if(!ready.every(Boolean))throw Error('Hero artwork could not load. Please reload the game.');
   kingJamesSprites.enabled=true;
+  kingJamesSprites.starter=starterSuit;
   setCosmeticPreviewRenderer((c,x,y,look,hero,time,scale,view)=>drawHero(c,x,y,look,hero,time,scale,{view}));
 }
 export function drawHero(c,x,y,look,hero,time,scale=1,options={}){
@@ -18,5 +20,5 @@ export function drawHero(c,x,y,look,hero,time,scale=1,options={}){
   const h={...hero,face},owner=options.owner||hero;
   const id=options.clothing?.find(layer=>layer.costumeId)?.costumeId;
   if(id){const pose=costumeSprites.draw(c,x,y,look,h,time,{id,owner,scale});if(pose)return pose;}
-  return kingJamesSprites.draw(c,x,y,look,h,time,{owner,scale});
+  return kingJamesSprites.draw(c,x,y,look,h,time,{owner,scale,view:options.view||'game'});
 }

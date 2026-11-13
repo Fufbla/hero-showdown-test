@@ -34,8 +34,12 @@ export class OutfitEngine{
   return true;
  }
  selected(look){return selectedOutfit(this.enabled,look)?this.outfitID:null;}
- draw(c,x,y,look,hero,time,{owner=hero,scale=1}={}){
+ draw(c,x,y,look,hero,time,{owner=hero,scale=1,view='game'}={}){
   const selected=this.selected(look),id=selected&&hero.steel?STEEL_ID:selected,loaded=this.outfits.get(id);
+  if(selected===OUTFIT_ID&&!hero.steel&&this.starter?.ready){
+   const pose=this.starter.draw(c,x,y,look,hero,time,{owner,scale,view});
+   this.lastFrame=this.starter.lastFrame;this.lastPaint=this.starter.lastPaint;return pose;
+  }
   if(!loaded||!this.head.ready)return false;
   const {manifest:m,atlas}=loaded;
   let animator=this.states.get(owner);if(!animator||animator.manifest!==m){animator=new FullBodyAnimator(m);this.states.set(owner,animator);}
@@ -62,6 +66,7 @@ export class OutfitEngine{
   return {artSource:'full-body-atlas',clip:sample.state,head:neck,faceCenter:neck,shoulder:neck,hip:[0,-35],arms:[[neck,elbow,hand],[neck,elbow,hand]],legs:[],opacity:1};
  }
  drawEcho(c,x,y,paint){
+  if(this.starter?.ready&&paint&&(paint.id==='starter-superhero'||paint.id===OUTFIT_ID))return this.starter.drawEcho(c,x,y,paint);
   if(!paint)return;const loaded=this.outfits.get(paint.id);if(!loaded)return;
   const {manifest:m,atlas}=loaded,f=m.frames[paint.frame];
   c.save();c.translate(x,y);c.scale(paint.direction*m.worldScale,m.worldScale);c.translate(-m.foot[0],-m.foot[1]);
