@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "status": "Rebuilding review only; no deployment.",
+  "baseMain": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
+  "previousReview": "c33a7f0e3db2a726922ebcca720f1efd238ac3ad",
+  "recoveredSources": 10,
+  "assembledPoses": 480,
+  "remaining": "Uploading rebuilt atlases, integration, tests, and final review media."
+}

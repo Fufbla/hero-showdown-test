@@ -1,0 +1,27 @@
+name: Costume review regression
+on:
+  push:
+    branches: [codex/face-only-costumes-review]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-package-lock @napi-rs/canvas@0.1.100
+      - name: Verify generated adapters
+        run: |
+          node tools/build-kingjames-staging.cjs
+          git diff --exit-code -- royale-v3-staging
+      - name: Verify complete costume rendering, purchases, saves and independent heroes
+        run: node --import ./royale-v3-staging/costumes/tests/register.mjs --test royale-v3-staging/costumes/tests/costumes.test.mjs
+      - name: Verify existing outfits and gameplay boundaries
+        run: |
+          node --test royale-v3-staging/kingjames/tests/engine.test.mjs royale-v3-staging/kingjames/tests/steel-motion.test.mjs royale-v3-staging/kingjames/tests/outfits.test.mjs
+          node --test royale/tests/clothing-purchases.test.mjs royale/local-coop/tests/*.test.mjs royale/tests/travel-cloud.test.mjs
