@@ -1,0 +1,71 @@
+{
+  "sourceCommit": "dc789be422a370c8300709d6271f6eaecb191267",
+  "productionReady": true,
+  "modes": {
+    "singlePlayer": true,
+    "localCoop": true,
+    "onlineMultiplayer": false
+  },
+  "developerTools": false,
+  "routes": [
+    {
+      "path": "royale/",
+      "status": 200
+    },
+    {
+      "path": "royale/gameplay/",
+      "status": 200
+    },
+    {
+      "path": "royale/local-coop/",
+      "status": 200
+    },
+    {
+      "path": "royale-v3-staging/",
+      "status": 200
+    },
+    {
+      "path": "royale/app.mjs",
+      "status": 404
+    },
+    {
+      "path": "royale/multiplayer/menu.mjs",
+      "status": 404
+    },
+    {
+      "path": "royale/multiplayer/config.json",
+      "status": 404
+    },
+    {
+      "path": "royale-v3-staging/character-test/",
+      "status": 404
+    },
+    {
+      "path": "royale-v3-staging/bosses/launcher.mjs",
+      "status": 404
+    },
+    {
+      "path": "royale/local-coop/tests/browser-harness.mjs",
+      "status": 404
+    }
+  ],
+  "bundleHashesMatched": 13,
+  "bundleCount": 13,
+  "deploymentRun": 43469984889,
+  "deploymentStatus": "success",
+  "liveURL": "https://fufbla.github.io/hero-showdown-test/royale/",
+  "browserChecks": [
+    "Live home offers cloud login, local co-op and browser heroes; no online menu",
+    "Created Release Live QA in empty browser-local slot",
+    "Sent movement, jump, punch and kick inputs",
+    "Verified six-action pause menu without map or inventory entries",
+    "Opened Tree of Eris and inventory",
+    "Saved and reloaded browser-local hero successfully",
+    "Live co-op loads two separate account/controller panels"
+  ],
+  "cloudEvidence": "Two-account actual release runtime save/reload passed before deployment; user confirmed live staging browser save/reload. Separate authenticated post-deployment browser roundtrip was not performed.",
+  "physicalControllerEvidence": "User-confirmed manual test; not performed by remote browser",
+  "productionDataChanges": "No database or original-player writes during deployment; only isolated browser-local QA hero created",
+  "rollback": "rollback/pre-v3-final-release-20261113",
+  "stagingRedirectVerified": true
+}
