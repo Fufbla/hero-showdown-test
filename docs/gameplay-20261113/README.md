@@ -67,11 +67,14 @@ The co-op Legendary menu had a separate direct-entry shortcut. Follow-up PR #21 
 - Initial browser test failed because its selector targeted a hidden HUD button. Correcting it to the actual World Map control passed. The legacy cross-browser portal diagnostic also failed because it explicitly expected free region portals and flat 100-coin travel. Those obsolete assertions were updated to the approved prices; the final cross-browser result is recorded in PR #21.
 - Staging Supabase function `royale-v3-staging` was updated from version 8 to 9 with additive economy guards, then re-fetched and compared against all seven expected source files. Existing authentication, schema, cosmetics guards and optimistic revision checks remain. The new guard rejects reopened first-defeat chests, reward-version rollback, changed coin-only chest amounts and rollback of recorded spending. This is continuity validation, not a replacement for server-authoritative combat.
 
+## Live cloud verification completed after approval
+
+The user approved creating one isolated V3 QA account. Live staging function version 9 passed all nine checks recorded in [cloud-live.json](cloud-live.json): paid travel saved the 3,500-coin debit; the first boss chest awarded 1,200 coins once; a second authenticated session restored the 7,700-coin balance, claimed chest and destination; region 7 board 2 and exact camp X/Y were retained; stale saves, reopened chests and spending rollback were rejected with HTTP 409; the restored game refused another claim; the other QA slots remained empty. Existing player accounts were not accessed or changed. Credentials were excluded from the repository. No gameplay redeployment was needed.
+
 ## Unfinished or externally blocked
 
 - No verifiable costume retirement list was found. All existing owned cosmetics and the ten newly approved costumes remain. Specific retirement names need approval before removal.
 - The previously completed boss redesign is present on the reserved KingJames test route only. Ordinary cloud and local co-op routes still use the prior boss renderer/attack presentation. Extending the 15-atlas/77-attack redesign to those routes is outside this approved preservation change and was not attempted.
-- Code `0000000000` intentionally uses local saves. Live cloud save/reload testing requires another account. Automatic approval review rejected creating a separate QA account because the task supplied only the existing test code. No new account was created. Live cloud mutation tests remain unrun; the opt-in script is prepared but never invoked by CI.
 - Online multiplayer is unconfigured on main (`royale/multiplayer/config.json` is absent). The separate multiplayer development branch/PR was not changed. No live two-device online test or physical two-controller playthrough was performed. Automated local co-op tests passed.
 
 Deployment status and the final deployment SHA are recorded in PR #21 after the Pages job and live staging verification. Production gameplay assets are byte-identical to the verified baseline.

@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "endpoint": "https://adakwbhxiuatjvphutgo.supabase.co/functions/v1/royale-v3-staging",
+  "functionVersion": 9,
+  "isolatedQaAccount": true,
+  "realUserAccountsTouched": false,
+  "checks": [
+    "paid travel persists 3500-coin debit and exact destination",
+    "1200-coin first chest save and claim accepted",
+    "stale revision rejected with 409",
+    "reopened claimed chest rejected with 409",
+    "travel refund/coinsSpent rollback rejected with 409",
+    "second authenticated session restores latest wallet, location and claimed chest",
+    "other two QA slots remain empty",
+    "stored board 2 and exact X/Y match region 7 destination camp",
+    "restored Game refuses another chest claim without changing coins"
+  ],
+  "revision": 4,
+  "verifiedAt": "2026-11-13T11:06:14.271Z"
+}
