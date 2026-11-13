@@ -101,7 +101,20 @@
       "verification": "GitHub tree matched every expected Git blob SHA"
     }
   ],
-  "current_batch": null,
+  "current_batch": {
+    "number": 6,
+    "paths": [
+      "tools/build-approved-costumes.cjs",
+      "tools/build-costume-lettering.cjs",
+      "tools/build-kingjames-staging.cjs",
+      "tools/build-staging-costumes.cjs",
+      "tools/render-costume-review.mjs",
+      "docs/costumes/ASSET-CHECKSUMS.sha256",
+      "docs/costumes/README.md",
+      "docs/costumes/review/black-business-suit-sprites.png"
+    ],
+    "state": "awaiting_remote_verification"
+  },
   "errors": [
     {
       "batch": 1,

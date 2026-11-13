@@ -1,129 +1,94 @@
 # Ten costumes and universal face-only hoods
 
-Status: implementation review; not deployed. The costume designs were approved,
-but approval of these finished sprite frames is still required before publishing
-to V3 staging. This work is isolated to `codex/face-only-costumes-review`, based on
-`bba835f089f2664fd9605b4a8c44309fcad6178e`.
+Complete local collection for animation review. **Not deployed.**
+Review branch: `codex/face-only-costumes-review`. Current staging baseline:
+`3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1` (armor and boss work preserved).
+Exact upload state and file hashes are in `upload-progress.json`.
 
 ## Review files
 
-- [All ten costumes on the same personalized hero](review/ten-costumes.png)
-- [Actual running, jumping, double-jumping, punching, kicking, flight and Steel Body playback](review/costume-animation-review.mp4)
-- [Hood on / costume removed, with original hair restored](review/hair-visibility.png)
-- Individual complete sprite-sheet previews: `review/*-sprites.png`.
-- Interactive review: `royale-v3-staging/costumes/review.html` served from the
-  repository root. It supports both facing directions, saved face variations,
-  hairstyles, skin tones, facial hair and removing/restoring the costume.
+- [Actual animation video](review/costume-animation-review.mp4): running both ways,
+  jump, double jump, punch, kick, strength, super kick, fireball, flight, Steel
+  Body and restored costumes. 18 seconds at 24 fps.
+- [All ten costumes](review/ten-costumes.png).
+- [Hood hair visibility](review/hair-visibility.png).
+- Individual 48-pose sheets: `review/*-sprites.png`.
+- Interactive review: serve the repository root and open
+  `royale-v3-staging/costumes/review.html`. Motion, direction, hairstyle, skin,
+  eyes, presentation and facial hair are adjustable. Remove/Restore costumes
+  shows the unchanged original appearance and hairstyle.
 
-| Outfit | Hair under costume | Price | Authored poses |
+| Costume | Hair | Coins | Poses |
 |---|---|---:|---:|
-| Dolphin Costume | Hidden | 700 | 48 |
-| Pink Shark Costume | Hidden | 700 | 48 |
-| Hamburger Costume | Hidden | 700 | 48 |
-| Stuffed Animal Costume | Hidden | 700 | 48 |
-| Zombie Costume | Preserved | 700 | 48 |
-| Reaper Costume | Hidden | 700 | 48 |
-| I Love Fishsticks Costume | Hidden | 700 | 48 |
-| Pizza Slice Costume | Hidden | 700 | 48 |
-| Black Business Suit | Preserved | 700 | 48 |
-| White Business Suit | Preserved | 700 | 48 |
+| Dolphin | Hidden | 700 | 48 |
+| Pink Shark | Hidden | 700 | 48 |
+| Hamburger | Hidden | 700 | 48 |
+| Stuffed Animal | Hidden | 700 | 48 |
+| Zombie | Preserved | 700 | 48 |
+| Reaper | Hidden | 700 | 48 |
+| I Love Fishsticks | Hidden | 700 | 48 |
+| Pizza Slice | Hidden | 700 | 48 |
+| Black Business Suit / white tie | Preserved | 700 | 48 |
+| White Business Suit / light blue tie | Preserved | 700 | 48 |
 
 ## Implementation
 
-Each outfit is one complete, authored full-body atlas. The existing
-`FullBodyAnimator` chooses the pose. There are no new limb rigs, independent
-clothing physics, weapons, collision changes or gameplay stat adjustments.
-Each atlas has 48 distinct poses, mapped to 20 existing renderer states. Complete
-poses are mirrored for left-facing play; they are not separate hairstyle variants.
+All ten source sheets were recovered unchanged. Each outfit uses one complete
+48-pose body atlas and the existing FullBodyAnimator. No independent limb rigs
+were added. The existing personalized face is composed inside each hood opening.
+Hoods omit hair rendering without changing saved appearance. Uncovered costumes
+retain the full personalized head. Cyan skin markers are recolored inside their
+marker regions, preserving blue fabric and dolphin tails. Fishstick lettering
+remains readable on the left-facing body.
 
-The existing customized face is composited inside an authored opening. Hooded
-costumes never call the hair painter. Zombie and business suits use the saved
-full head. Skin material on exposed hands follows the saved skin tone. Hair
-visibility is derived from the equipped costume and is never written into the
-saved hairstyle. Fishstick shirt lettering is a fixed material on each composed
-pose and remains readable when facing left.
+The collection is isolated to V3 staging. Existing armor inventory, stat bonuses,
+powers, physics, portals and boss work are preserved. Steel Body temporarily uses
+its existing metallic atlas, then restores the costume. Existing clothing and
+the separate twelve-outfit test wardrobe remain available. Ownership uses the
+existing purchase, revision and save safeguards.
 
-Steel Body selects the existing complete metallic animation atlas and suppresses
-the costume, face and hair. When it ends, the same equipped costume is drawn.
-Costumes take priority over the older V2 test sprites and armor artwork; armor
-inventory and bonuses remain untouched. Online snapshot animation owners are
-kept outside saved data, separately for every peer, so a packet cannot restart
-another player's running animation.
+Public test code `0000000000` uses browser-local saves; its store confirms local
+persistence. Real account purchases still require a cloud acknowledgement.
+The public test code cannot establish real Supabase cloud synchronization.
 
-The Tree of Eris catalog retains the existing 36 offers and adds ten complete
-outfits. The earlier 12 approved test-wardrobe outfits are also retained. New
-ownership and equipped IDs use the existing cosmetic transaction and save
-schema. The server-side policy includes the same new IDs, prices and complete-set
-rules. Duplicate purchases, stale revisions and removal of existing ownership
-remain rejected.
+## Verification
 
-The public code `0000000000` is a browser-local development shortcut in the
-existing application, not a Supabase cloud profile. Its store transactions now
-use an explicit local save acknowledgement and say that they saved on this
-browser. Real V3 profiles still require their existing cloud acknowledgement.
+The final costume suite passes **10/10 tests**: 480 distinct padded poses,
+supported animator states, both directions, 16,464 hood/pose/hair combinations,
+face customization, skin, Steel Body, 700-coin purchases, duplicate/stale-write
+rejection, save decoding, cloud policy, independent co-op/network appearances,
+and unchanged simulation/save behavior. The new skin regression checks cyan
+markers on the black suit and preservation of the dolphin's blue tail.
 
-## Verification completed
+Recovered passing logs for 19 full-body/outfit tests and 86 shared purchase,
+co-op and travel tests are retained under `verification/`. These were not
+repeated because their implementation inputs were unchanged. They are prior-run
+evidence, not new live online or cloud tests.
 
-114 automated checks passed locally (rerun on November 12, 2026):
+Browser verification on November 13, 2026 loaded all ten atlases. Running and
+left-facing kicking were observed for all ten. Removing costumes restored braids
+in the review. The actual test game displayed all ten store cards. Dolphin was
+purchased for 700 coins (20,000 to 19,300), equipped, displayed in gameplay and
+retained ownership and equipped state after reload. Removal preserved ownership
+without another debit. Other costume purchase/save cases are covered by the
+automated suite; this session did not buy all ten separately in the browser.
 
-- 9 costume checks covering all 480 frames, padded complete poses, distinct
-  motion, every supported hair class under hoods, customized faces, skin and
-  facial hair, 700-coin purchases, duplicate/stale-write rejection, save decoding,
-  cloud save policy, independent network owners and co-op save packets.
-- All seven hooded costumes were checked across all 48 frames in both directions
-  with braids and a large afro; their rendered pixels match the same face with
-  hair omitted. All 49 supported hairstyles were checked under every hood.
-  Unequipping, saving and decoding restores the exact original appearance data
-  and the original rendered hero for all 343 costume/hairstyle combinations.
-- The actual staging renderer was exercised with every costume through movement,
-  attacks, strength, super kick, fireball, flight, speed and Steel Body.
-- 19 existing full-body, twelve-outfit and Steel/Speed regression checks.
-- 86 existing clothing, co-op, independent account, save conflict/retry, travel,
-  combat checkpoint and equipment-related regression checks.
-- A full staging rebuild reproduced the generated adapters without changes.
+## Remaining deployment gates
 
-Browser checks used a disposable local Slot 2 fixture under public code
-`0000000000`; the existing Slot 1 was preserved. All ten outfits were purchased
-and equipped through the actual store, with exactly 700 coins deducted each
-time. A full reload preserved all ten ownership records and the equipped white
-suit. Actual gameplay displayed the white suit with saved braids, jump/punch/kick
-poses and the approved metallic Steel Body. The interactive review confirmed
-that the dolphin hood hides braids and removing it restores them.
+- Review and approve these finished animations before merging or deploying.
+- Reconcile with the latest main before deployment.
+- Deploy matching client and cloud cosmetic policy only after deployment approval.
+- Then verify real-account cloud round trips, cross-device restoration and
+  physical multiplayer controllers. No cloud function was deployed here.
 
-The extraction tool finds each entire connected authored pose before packing,
-including any pixels that cross nominal source-grid boundaries. This prevents
-clipped hood/tail edges and removes fragments from neighboring cells. It does
-not synthesize movement from a still or redraw the approved costume design.
-
-## Remaining live checks and deployment gate
-
-No Pages deployment or Supabase function deployment was performed. Real cloud
-round trips, cross-device appearance, physical controllers and live online play
-must still be verified after the finished sprites are approved and the staging
-client/server policy is deployed. Automated save validation is not reported as
-a live cloud test, and the public local test code cannot establish cloud sync.
-
-After approval, first reconcile this branch with the latest main without
-overwriting unrelated work. Deploy the matching
-`royale-v3-staging/cloud/backend-v3/index.ts` dependency bundle and its updated
-cosmetic policy, then deploy the approved staging client. Verify the deployed
-commit, asset responses, purchases, independent saves and two-device restoration.
-
-## Reproduction
-
-Install the repository test dependencies (`@napi-rs/canvas` and `sharp`).
+## Reproduce
 
 ```sh
-node tools/build-approved-costumes.cjs
 node tools/build-kingjames-staging.cjs
 node --import ./royale-v3-staging/costumes/tests/register.mjs --test royale-v3-staging/costumes/tests/costumes.test.mjs
-node --test royale-v3-staging/kingjames/tests/engine.test.mjs royale-v3-staging/kingjames/tests/steel-motion.test.mjs royale-v3-staging/kingjames/tests/outfits.test.mjs
-node --test royale/tests/clothing-purchases.test.mjs royale/local-coop/tests/*.test.mjs royale/tests/travel-cloud.test.mjs
 node tools/render-costume-review.mjs --video
 ffmpeg -y -framerate 24 -i docs/costumes/review/motion-frames/%04d.png -c:v libx264 -crf 18 -pix_fmt yuv420p -movflags +faststart docs/costumes/review/costume-animation-review.mp4
 ```
 
-Source art was created with the built-in image generation tool from the approved
-reference. The prompts and asset notes are retained under `art/`. Generated
-intermediate movie frames are reproducible and excluded from Git. The local
-fixture is under a `tests/` directory, which the Pages packaging workflow excludes.
+Artwork recovery creates only missing files. Do not regenerate approved sources
+or overwrite recovered atlases. Intermediate video frames are ignored by Git.
