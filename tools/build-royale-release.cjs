@@ -42,6 +42,7 @@ const skipDirs=new Set(['.git','.github','dist','_site','node_modules','docs','r
 function copyPublic(dir='',restricted=false){
   for(const entry of fs.readdirSync(path.join(root,dir),{withFileTypes:true})){
     const rel=path.posix.join(dir,entry.name),parts=rel.split('/');
+    if(rel==='royale/multiplayer')continue;
     if(skipDirs.has(entry.name)||entry.name.startsWith('.')&&entry.name!=='.nojekyll')continue;
     if(parts[0].startsWith('royale-')&&parts[0]!=='royale-v3-staging')continue;
     if(entry.isDirectory()){copyPublic(rel,restricted||['royale','royale-v3-staging'].includes(parts[0]));continue;}
@@ -93,7 +94,7 @@ async function build(){
   let index=read('index.html').replace('href="./royale-v3-staging/"','href="./royale/"').replace('Open Hero Showdown Royale V3 in a new browser tab','Open Hero Showdown Royale in a new browser tab');write('index.html',index);
   write('.nojekyll','');
   const sha=cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
-  const manifest={version:1,productionReady:require('./release-build/readiness.json').productionReady,sourceCommit:sha,sourceTreeDirty:!!cp.execFileSync('git',['status','--porcelain','--untracked-files=no'],{cwd:root,encoding:'utf8'}).trim(),sourceHashes,entrypoints:['royale/index.html','royale/gameplay/index.html','royale/local-coop/index.html'],bundles:Object.fromEntries(Object.entries(result.metafile.outputs).map(([p])=>{const rel=path.relative(out,path.resolve(root,p));return [rel,hash(fs.readFileSync(path.join(out,rel)))];})),saveContract:{endpoint:'royale-v3-staging',profileKey:'healthia.royale.profiles.v2',cloudPrefix:'royale-v3-play:',databaseMigration:false},developerTools:false};
+  const manifest={version:1,productionReady:require('./release-build/readiness.json').productionReady,sourceCommit:sha,sourceTreeDirty:!!cp.execFileSync('git',['status','--porcelain','--untracked-files=no'],{cwd:root,encoding:'utf8'}).trim(),sourceHashes,entrypoints:['royale/index.html','royale/gameplay/index.html','royale/local-coop/index.html'],bundles:Object.fromEntries(Object.entries(result.metafile.outputs).map(([p])=>{const rel=path.relative(out,path.resolve(root,p));return [rel,hash(fs.readFileSync(path.join(out,rel)))];})),saveContract:{endpoint:'royale-v3-staging',profileKey:'healthia.royale.profiles.v2',cloudPrefix:'royale-v3-play:',databaseMigration:false},developerTools:false,modes:{singlePlayer:true,localCoop:true,onlineMultiplayer:false}};
   write('royale/release-manifest.json',JSON.stringify(manifest,null,2)+'\n');
   console.log(JSON.stringify({out,modules:Object.keys(sourceHashes).length,bundles:Object.keys(manifest.bundles).length,sourceCommit:sha}));
 }

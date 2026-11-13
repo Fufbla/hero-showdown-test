@@ -61,3 +61,17 @@ test('artifact preserves cloud save contract and does not ship backend migration
  for(const entry of manifest.entrypoints)assert(fs.statSync(path.join(out,entry)).size>0);
  const home=read('royale/index.html');assert(!home.includes('Test Account'));assert(home.includes('HEROES ON THIS BROWSER'));assert(home.includes('local-coop/'));
 });
+
+test('release offers local co-op only and excludes online transports and room routes',async()=>{
+ assert.deepEqual(manifest.modes,{singlePlayer:true,localCoop:true,onlineMultiplayer:false});
+ assert(!fs.existsSync(path.join(out,'royale/multiplayer')));
+ const sources=Object.keys(manifest.sourceHashes);
+ assert(!sources.some(p=>/royale\/multiplayer\/(?:client|menu|supabase-test|supabase-live|config)/.test(p)));
+ const code=Object.keys(manifest.bundles).map(read).join('\n');
+ for(const marker of ['royale-mp-test','royale-mp-stream-test','new WebSocket(','Online Multiplayer — Coming Soon'])assert(!code.includes(marker),marker);
+ const {createMultiplayerMenu}=await import('../../royale/multiplayer-gate.mjs');
+ let networkLoads=0,domWrites=0;
+ const gate=await createMultiplayerMenu({onError(){},getContext:()=>({storage:{getItem:()=>null}})},{enabled:true,loadMenu:()=>{networkLoads++;throw Error('Online code loaded');},document:{createElement(){domWrites++;throw Error('Online button created');}}});
+ assert.equal(networkLoads,0);assert.equal(domWrites,0);assert.equal(gate.session,null);assert.equal(gate.connect(),false);assert.equal(gate.isLinked('ordinary-hero'),false);
+ assert(read('royale/local-coop/index.html').includes('Player 2'));
+});

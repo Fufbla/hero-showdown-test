@@ -32,7 +32,7 @@ jobs:
       - name: Verify packaged release graph, saves, economy, portals, bosses, costumes and co-op
         run: |
           set -o pipefail
-          node --import ./tools/release-build/register.mjs --test tools/release-build/release.test.mjs royale-v3-staging/gameplay/tests/*.test.mjs royale-v3-staging/bosses/tests/*.test.mjs royale-v3-staging/costumes/tests/*.test.mjs royale/local-coop/tests/local-coop.test.mjs | tee release-test-results.txt
+          node --import ./tools/release-build/register.mjs --test tools/release-build/release.test.mjs royale-v3-staging/gameplay/tests/*.test.mjs royale-v3-staging/bosses/tests/*.test.mjs royale-v3-staging/costumes/tests/*.test.mjs royale/local-coop/tests/local-coop.test.mjs royale/local-coop/tests/setup-controller.test.mjs royale/local-coop/tests/asset-cache.test.mjs | tee release-test-results.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:

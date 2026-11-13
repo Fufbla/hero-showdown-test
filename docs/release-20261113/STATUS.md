@@ -1,5 +1,7 @@
 # V3 final cleanup — candidate saved, production release held
 
+**Current scope correction:** single-player and local same-device co-op only. Online multiplayer is excluded, not a release blocker. See `LOCAL-ONLY-RELEASE.md` for the latest evidence and remaining gates. Earlier online integration requirements below are historical and superseded.
+
 This branch prepares the approved V3 experience for the existing `/royale/` path. **It has not been deployed.** The user authorized only a verified, non-destructive release; the remaining checks below are mandatory. Do not merge or bypass the deployment gate to make the checklist appear complete.
 
 ## Baseline and rollback

@@ -62,6 +62,8 @@ function coop(s){
   return s;
 }
 module.exports=function transform(file,s){
+  if(file==='royale-v3-staging/portals/journey-menu.mjs')s=replace(s,"import {pickupForGame} from '../../royale/multiplayer/game-session.mjs';","function pickupForGame(game,...args){return game.pickupLoot?game.pickupLoot(...args):pickupLoot(game,...args);}");
+  if(file==='royale/journey-menu.mjs')s=replace(s,"import {pickupForGame} from './multiplayer/game-session.mjs';","function pickupForGame(game,...args){return game.pickupLoot?game.pickupLoot(...args):pickupLoot(game,...args);}");
   if(file==='royale/app.mjs')s=game(s);
   if(file==='royale-v3-staging/kingjames/renderer.mjs')s=renderer(s);
   if(file==='royale-v3-staging/app.mjs')s=cloud(s);
@@ -69,6 +71,8 @@ module.exports=function transform(file,s){
   if(file==='royale/multiplayer-gate.mjs'){
     s=replace(s,"loadMenu=()=>import('./multiplayer/menu.mjs')",'loadMenu=null');
     s=replace(s,"if(enabled){const {MultiplayerMenu}=await loadMenu();return new MultiplayerMenu(hooks);}",'');
+    s=between(s," for(const id of ['roster']){"," return {session:null");
+    s=s.replace('Online Multiplayer — Coming Soon. ','');
   }
   if(file==='royale/core.mjs')s=s.replace('this.testPowers=testPowers===true;','this.testPowers=false;');
   if(file==='royale-v3-staging/kingjames/selection.mjs')s="export const OUTFIT_ID='kingjames-original';\nexport const selectedOutfit=enabled=>enabled?OUTFIT_ID:null;\n";
