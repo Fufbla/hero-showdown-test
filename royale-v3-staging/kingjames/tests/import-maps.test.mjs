@@ -27,7 +27,11 @@ for(const entry of entries){
    const shared=new URL('royale/'+module,origin);
    const target=resolved.get(shared.href);
    assert.ok(target,`${path}: missing shared module ${module}`);
-   assert.equal(target.pathname,new URL('royale-v3-staging/gameplay/'+(module==='local-coop/app.mjs'?'local-coop-app.mjs':module.split('/').at(-1)),origin).pathname);
+   // Costumes compose the personalized face over one complete body atlas.
+   // Other staging gameplay/armor adapters retain their existing routes.
+   const adapter=module==='hero-art.mjs'?'costumes/hero-art.mjs':
+    'gameplay/'+(module==='local-coop/app.mjs'?'local-coop-app.mjs':module.split('/').at(-1));
+   assert.equal(target.pathname,new URL('royale-v3-staging/'+adapter,origin).pathname);
   }
  });
 }
