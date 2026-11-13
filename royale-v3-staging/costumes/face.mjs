@@ -20,7 +20,8 @@ export class CostumeFace {
   // Register the actual face ink, not transparent source padding. The full head
   // uses precisely the same transform regardless of the saved hairstyle.
   const dx=x+(w-bw*s)/2-bx*s,dy=y+h-bh*s-by*s;
-  if(hideHair){c.fillStyle=look.skin;c.fillRect(x-3,y-3,w+6,h+6);c.drawImage(p.image,dx,dy,256*s,256*s);}
+  // The exposed face keeps its own skin tone; the space inside the hood is dark.
+  if(hideHair){c.fillStyle='#000000';c.fillRect(x-3,y-3,w+6,h+6);c.drawImage(p.image,dx,dy,256*s,256*s);}
   else c.drawImage(this.fullHead.plate(look,closed).image,dx,dy,256*s,256*s);
  }
 }
