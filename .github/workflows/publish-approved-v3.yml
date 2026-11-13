@@ -1,0 +1,26 @@
+name: Publish approved V3 release bundle
+on:
+  push:
+    branches: [upload/v3-approved-20261113]
+permissions:
+  contents: write
+  actions: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify and publish the approved commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat .release-upload/part-*.b64 | base64 --decode > /tmp/approved-v3.pack
+          echo '80c510562be4309ff320039f8335eeb9d8ac3d1579601d57f2ca5bdd3fd8658e  /tmp/approved-v3.pack' | sha256sum --check
+          git unpack-objects < /tmp/approved-v3.pack
+          test "$(git cat-file -t a812cc9429e7761bf652acd48f65461ca2c9150f)" = commit
+          git merge-base --is-ancestor a47a8800259b99acae2436711098bb84e9ed37e3 a812cc9429e7761bf652acd48f65461ca2c9150f
+          git push origin a812cc9429e7761bf652acd48f65461ca2c9150f:refs/heads/fix/v3-approved-wardrobe-20261113
+          gh workflow run v3-gameplay-economy.yml --repo Fufbla/hero-showdown-test --ref fix/v3-approved-wardrobe-20261113
