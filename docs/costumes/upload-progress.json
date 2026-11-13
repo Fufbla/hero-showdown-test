@@ -12,10 +12,10 @@
   "initial_committed_files": 0,
   "initial_previous_upload_records": 28,
   "total_required_files": 98,
-  "verified_files": 34,
-  "remaining_files": 64,
-  "last_verified_content_commit": "3bfd273ba1af0283d013140cf82bdfb484cfa9a7",
-  "remote_head": "3bfd273ba1af0283d013140cf82bdfb484cfa9a7",
+  "verified_files": 38,
+  "remaining_files": 60,
+  "last_verified_content_commit": "41581e4d5be1f35674c3c2157d54939e61a68f07",
+  "remote_head": "41581e4d5be1f35674c3c2157d54939e61a68f07",
   "completed_files": [
     ".github/workflows/costume-review.yml",
     "docs/costumes/ASSET-BRIEF.md",
@@ -50,6 +50,10 @@
     "royale-v3-staging/costumes/assets/dolphin-costume/body.webp",
     "royale-v3-staging/costumes/assets/dolphin-costume/manifest.json",
     "royale-v3-staging/costumes/assets/dolphin-costume/registration.json",
+    "royale-v3-staging/costumes/assets/fishsticks-costume/body.webp",
+    "royale-v3-staging/costumes/assets/fishsticks-costume/manifest.json",
+    "royale-v3-staging/costumes/assets/fishsticks-costume/registration.json",
+    "royale-v3-staging/costumes/assets/hamburger-costume/body.webp",
     "royale-v3-staging/costumes/catalog.mjs"
   ],
   "remaining_paths": [
@@ -66,10 +70,6 @@
     "docs/costumes/review/white-business-suit-sprites.png",
     "docs/costumes/review/zombie-costume-sprites.png",
     "royale-v3-staging/cloud/cosmetics/outfit-policy.mjs",
-    "royale-v3-staging/costumes/assets/fishsticks-costume/body.webp",
-    "royale-v3-staging/costumes/assets/fishsticks-costume/manifest.json",
-    "royale-v3-staging/costumes/assets/fishsticks-costume/registration.json",
-    "royale-v3-staging/costumes/assets/hamburger-costume/body.webp",
     "royale-v3-staging/costumes/assets/hamburger-costume/manifest.json",
     "royale-v3-staging/costumes/assets/hamburger-costume/registration.json",
     "royale-v3-staging/costumes/assets/pink-shark-costume/body.webp",
@@ -652,8 +652,10 @@
       "size_bytes": 1834266,
       "base_blob_sha": null,
       "previous_upload_recorded": false,
-      "status": "remaining",
-      "category": "runtime_sprite_asset"
+      "status": "verified",
+      "category": "runtime_sprite_asset",
+      "verified_commit": "41581e4d5be1f35674c3c2157d54939e61a68f07",
+      "batch_number": 7
     },
     {
       "path": "royale-v3-staging/costumes/assets/fishsticks-costume/manifest.json",
@@ -662,8 +664,10 @@
       "size_bytes": 25976,
       "base_blob_sha": null,
       "previous_upload_recorded": false,
-      "status": "remaining",
-      "category": "runtime_sprite_asset"
+      "status": "verified",
+      "category": "runtime_sprite_asset",
+      "verified_commit": "41581e4d5be1f35674c3c2157d54939e61a68f07",
+      "batch_number": 7
     },
     {
       "path": "royale-v3-staging/costumes/assets/fishsticks-costume/registration.json",
@@ -672,8 +676,10 @@
       "size_bytes": 13441,
       "base_blob_sha": null,
       "previous_upload_recorded": false,
-      "status": "remaining",
-      "category": "runtime_sprite_asset"
+      "status": "verified",
+      "category": "runtime_sprite_asset",
+      "verified_commit": "41581e4d5be1f35674c3c2157d54939e61a68f07",
+      "batch_number": 7
     },
     {
       "path": "royale-v3-staging/costumes/assets/hamburger-costume/body.webp",
@@ -682,8 +688,10 @@
       "size_bytes": 1756630,
       "base_blob_sha": null,
       "previous_upload_recorded": false,
-      "status": "remaining",
-      "category": "runtime_sprite_asset"
+      "status": "verified",
+      "category": "runtime_sprite_asset",
+      "verified_commit": "41581e4d5be1f35674c3c2157d54939e61a68f07",
+      "batch_number": 7
     },
     {
       "path": "royale-v3-staging/costumes/assets/hamburger-costume/manifest.json",
@@ -1317,6 +1325,28 @@
       "commit_sha": "3bfd273ba1af0283d013140cf82bdfb484cfa9a7",
       "verified_at": "2026-11-12T21:38:56.191Z",
       "verification_method": "GitHub tree blob SHA comparison against source recovery manifest"
+    },
+    {
+      "number": 7,
+      "started_at": "2026-11-13T02:55:23.185Z",
+      "files": [
+        "royale-v3-staging/costumes/assets/fishsticks-costume/body.webp",
+        "royale-v3-staging/costumes/assets/fishsticks-costume/manifest.json",
+        "royale-v3-staging/costumes/assets/fishsticks-costume/registration.json",
+        "royale-v3-staging/costumes/assets/hamburger-costume/body.webp"
+      ],
+      "status": "verified",
+      "reused_blobs": [
+        "royale-v3-staging/costumes/assets/fishsticks-costume/body.webp",
+        "royale-v3-staging/costumes/assets/fishsticks-costume/manifest.json",
+        "royale-v3-staging/costumes/assets/fishsticks-costume/registration.json",
+        "royale-v3-staging/costumes/assets/hamburger-costume/body.webp"
+      ],
+      "uploaded_blobs": [],
+      "tree_sha": "41581e4d5be1f35674c3c2157d54939e61a68f07",
+      "commit_sha": "41581e4d5be1f35674c3c2157d54939e61a68f07",
+      "verified_at": "2026-11-13T02:55:23.185Z",
+      "verification_method": "GitHub recursive tree blob SHA comparison against the original recovery manifest"
     }
   ],
   "errors": [
@@ -1341,6 +1371,76 @@
       "phase": "git_push_preflight",
       "message": "fatal: could not read Username for 'https://github.com': terminal prompts disabled",
       "status": "unresolved_for_large_archive"
+    },
+    {
+      "at": "2026-11-13T02:55:23.185Z",
+      "batch_number": null,
+      "phase": "source_recovery",
+      "file": null,
+      "message": "The original source workspace /workspace/scratch/6a26c3fe5769/hero-showdown-test is unavailable in this session. The 60 remaining expected Git blobs returned 404. No matching ten-costume archive was found in available project files or Library. Existing artwork and prior test results were preserved; no regeneration or test reruns performed.",
+      "affected_paths": [
+        "docs/costumes/review/costume-sprite-sheets.zip",
+        "docs/costumes/review/dolphin-costume-sprites.png",
+        "docs/costumes/review/fishsticks-costume-sprites.png",
+        "docs/costumes/review/hair-visibility.png",
+        "docs/costumes/review/hamburger-costume-sprites.png",
+        "docs/costumes/review/pink-shark-costume-sprites.png",
+        "docs/costumes/review/pizza-slice-costume-sprites.png",
+        "docs/costumes/review/reaper-costume-sprites.png",
+        "docs/costumes/review/stuffed-animal-costume-sprites.png",
+        "docs/costumes/review/ten-costumes.png",
+        "docs/costumes/review/white-business-suit-sprites.png",
+        "docs/costumes/review/zombie-costume-sprites.png",
+        "royale-v3-staging/cloud/cosmetics/outfit-policy.mjs",
+        "royale-v3-staging/costumes/assets/hamburger-costume/manifest.json",
+        "royale-v3-staging/costumes/assets/hamburger-costume/registration.json",
+        "royale-v3-staging/costumes/assets/pink-shark-costume/body.webp",
+        "royale-v3-staging/costumes/assets/pink-shark-costume/manifest.json",
+        "royale-v3-staging/costumes/assets/pink-shark-costume/registration.json",
+        "royale-v3-staging/costumes/assets/pizza-slice-costume/body.webp",
+        "royale-v3-staging/costumes/assets/pizza-slice-costume/manifest.json",
+        "royale-v3-staging/costumes/assets/pizza-slice-costume/registration.json",
+        "royale-v3-staging/costumes/assets/reaper-costume/body.webp",
+        "royale-v3-staging/costumes/assets/reaper-costume/manifest.json",
+        "royale-v3-staging/costumes/assets/reaper-costume/registration.json",
+        "royale-v3-staging/costumes/assets/stuffed-animal-costume/body.webp",
+        "royale-v3-staging/costumes/assets/stuffed-animal-costume/manifest.json",
+        "royale-v3-staging/costumes/assets/stuffed-animal-costume/registration.json",
+        "royale-v3-staging/costumes/assets/white-business-suit/body.webp",
+        "royale-v3-staging/costumes/assets/white-business-suit/manifest.json",
+        "royale-v3-staging/costumes/assets/white-business-suit/registration.json",
+        "royale-v3-staging/costumes/assets/zombie-costume/body.webp",
+        "royale-v3-staging/costumes/assets/zombie-costume/manifest.json",
+        "royale-v3-staging/costumes/assets/zombie-costume/registration.json",
+        "royale-v3-staging/costumes/engine.mjs",
+        "royale-v3-staging/costumes/game-session.mjs",
+        "royale-v3-staging/costumes/hero-art.mjs",
+        "royale-v3-staging/costumes/owners.mjs",
+        "royale-v3-staging/costumes/preview.mjs",
+        "royale-v3-staging/costumes/purchase-ui.mjs",
+        "royale-v3-staging/costumes/review-state.mjs",
+        "royale-v3-staging/costumes/review.html",
+        "royale-v3-staging/costumes/review.mjs",
+        "royale-v3-staging/costumes/runtime.mjs",
+        "royale-v3-staging/costumes/store.mjs",
+        "royale-v3-staging/costumes/tests/costumes.test.mjs",
+        "royale-v3-staging/costumes/tests/fixture.html",
+        "royale-v3-staging/costumes/tests/loader.mjs",
+        "royale-v3-staging/costumes/tests/register.mjs",
+        "royale-v3-staging/costumes/tryon.mjs",
+        "royale-v3-staging/gameplay/index.html",
+        "royale-v3-staging/index.html",
+        "royale-v3-staging/kingjames/app.mjs",
+        "royale-v3-staging/kingjames/head.mjs",
+        "royale-v3-staging/kingjames/index.html",
+        "royale-v3-staging/kingjames/renderer.mjs",
+        "royale-v3-staging/local-coop/index.html",
+        "tools/build-approved-costumes.cjs",
+        "tools/build-kingjames-staging.cjs",
+        "tools/build-staging-costumes.cjs",
+        "tools/render-costume-review.mjs"
+      ],
+      "status": "blocked_missing_original_source_files"
     }
   ],
   "prior_validation": {
@@ -1361,8 +1461,8 @@
     "Save every verified batch SHA and exact file/phase/error in this manifest before beginning another batch.",
     "Keep deployment on hold."
   ],
-  "last_checkpoint_commit": "2de3d56f3bb86d67466d7d7162de82bf51f725ee",
-  "updated_at": "2026-11-12T21:38:56.193Z",
+  "last_checkpoint_commit": "9f8f422a046cf6b77666794dfa8210b561172b2c",
+  "updated_at": "2026-11-13T02:55:23.185Z",
   "recovery_audit": {
     "started_at": "2026-11-12T21:38:56.192Z",
     "starting_head": "3bfd273ba1af0283d013140cf82bdfb484cfa9a7",
@@ -1440,6 +1540,19 @@
       "git_blob_and_sha256_matches": 98
     },
     "tests_rerun": false,
-    "artwork_regenerated": false
+    "artwork_regenerated": false,
+    "latest_recovery": {
+      "at": "2026-11-13T02:55:23.185Z",
+      "starting_head": "9f8f422a046cf6b77666794dfa8210b561172b2c",
+      "starting_verified_files": 34,
+      "recovered_previously_uploaded_blobs": 4,
+      "verified_files": 38,
+      "remaining_files": 60,
+      "tests_rerun": false,
+      "artwork_regenerated": false,
+      "original_source_workspace_available": false,
+      "missing_git_blobs": 60,
+      "deployment_performed": false
+    }
   }
 }
