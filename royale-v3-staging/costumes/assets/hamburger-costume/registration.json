@@ -1,0 +1,829 @@
+{
+  "sourceSize": [
+    1448,
+    1086
+  ],
+  "extraction": "complete-connected-pose",
+  "sourceCell": 181,
+  "padding": 24,
+  "cells": 48,
+  "recoveredMetadataFromAtlas": true,
+  "frames": [
+    {
+      "index": 0,
+      "faceMaskPixels": 1970,
+      "sourceBounds": null,
+      "packedBounds": [
+        54,
+        58,
+        182,
+        231
+      ],
+      "face": [
+        98,
+        105,
+        61,
+        41
+      ]
+    },
+    {
+      "index": 1,
+      "faceMaskPixels": 1959,
+      "sourceBounds": null,
+      "packedBounds": [
+        53,
+        58,
+        183,
+        231
+      ],
+      "face": [
+        99,
+        105,
+        60,
+        41
+      ]
+    },
+    {
+      "index": 2,
+      "faceMaskPixels": 2063,
+      "sourceBounds": null,
+      "packedBounds": [
+        39,
+        62,
+        184,
+        231
+      ],
+      "face": [
+        98,
+        114,
+        63,
+        42
+      ]
+    },
+    {
+      "index": 3,
+      "faceMaskPixels": 2021,
+      "sourceBounds": null,
+      "packedBounds": [
+        32,
+        67,
+        183,
+        231
+      ],
+      "face": [
+        98,
+        118,
+        62,
+        42
+      ]
+    },
+    {
+      "index": 4,
+      "faceMaskPixels": 1941,
+      "sourceBounds": null,
+      "packedBounds": [
+        53,
+        61,
+        183,
+        231
+      ],
+      "face": [
+        98,
+        111,
+        62,
+        40
+      ]
+    },
+    {
+      "index": 5,
+      "faceMaskPixels": 1941,
+      "sourceBounds": null,
+      "packedBounds": [
+        55,
+        62,
+        182,
+        231
+      ],
+      "face": [
+        99,
+        111,
+        61,
+        41
+      ]
+    },
+    {
+      "index": 6,
+      "faceMaskPixels": 1980,
+      "sourceBounds": null,
+      "packedBounds": [
+        49,
+        61,
+        181,
+        231
+      ],
+      "face": [
+        98,
+        109,
+        61,
+        42
+      ]
+    },
+    {
+      "index": 7,
+      "faceMaskPixels": 1922,
+      "sourceBounds": null,
+      "packedBounds": [
+        41,
+        65,
+        181,
+        231
+      ],
+      "face": [
+        99,
+        113,
+        60,
+        41
+      ]
+    },
+    {
+      "index": 8,
+      "faceMaskPixels": 1917,
+      "sourceBounds": null,
+      "packedBounds": [
+        49,
+        69,
+        180,
+        230
+      ],
+      "face": [
+        99,
+        115,
+        60,
+        42
+      ]
+    },
+    {
+      "index": 9,
+      "faceMaskPixels": 1873,
+      "sourceBounds": null,
+      "packedBounds": [
+        52,
+        75,
+        180,
+        231
+      ],
+      "face": [
+        100,
+        121,
+        60,
+        40
+      ]
+    },
+    {
+      "index": 10,
+      "faceMaskPixels": 1829,
+      "sourceBounds": null,
+      "packedBounds": [
+        51,
+        74,
+        179,
+        231
+      ],
+      "face": [
+        100,
+        122,
+        59,
+        40
+      ]
+    },
+    {
+      "index": 11,
+      "faceMaskPixels": 1887,
+      "sourceBounds": null,
+      "packedBounds": [
+        35,
+        71,
+        180,
+        231
+      ],
+      "face": [
+        99,
+        117,
+        60,
+        42
+      ]
+    },
+    {
+      "index": 12,
+      "faceMaskPixels": 1897,
+      "sourceBounds": null,
+      "packedBounds": [
+        38,
+        67,
+        180,
+        230
+      ],
+      "face": [
+        99,
+        114,
+        60,
+        40
+      ]
+    },
+    {
+      "index": 13,
+      "faceMaskPixels": 1890,
+      "sourceBounds": null,
+      "packedBounds": [
+        48,
+        67,
+        180,
+        231
+      ],
+      "face": [
+        98,
+        115,
+        61,
+        40
+      ]
+    },
+    {
+      "index": 14,
+      "faceMaskPixels": 1983,
+      "sourceBounds": null,
+      "packedBounds": [
+        54,
+        14,
+        182,
+        164
+      ],
+      "face": [
+        98,
+        65,
+        62,
+        42
+      ]
+    },
+    {
+      "index": 15,
+      "faceMaskPixels": 1933,
+      "sourceBounds": null,
+      "packedBounds": [
+        56,
+        17,
+        181,
+        181
+      ],
+      "face": [
+        99,
+        66,
+        61,
+        41
+      ]
+    },
+    {
+      "index": 16,
+      "faceMaskPixels": 2099,
+      "sourceBounds": null,
+      "packedBounds": [
+        54,
+        19,
+        180,
+        184
+      ],
+      "face": [
+        98,
+        64,
+        62,
+        44
+      ]
+    },
+    {
+      "index": 17,
+      "faceMaskPixels": 2010,
+      "sourceBounds": null,
+      "packedBounds": [
+        53,
+        19,
+        180,
+        182
+      ],
+      "face": [
+        98,
+        65,
+        61,
+        41
+      ]
+    },
+    {
+      "index": 18,
+      "faceMaskPixels": 1928,
+      "sourceBounds": null,
+      "packedBounds": [
+        54,
+        18,
+        181,
+        166
+      ],
+      "face": [
+        99,
+        66,
+        61,
+        40
+      ]
+    },
+    {
+      "index": 19,
+      "faceMaskPixels": 1950,
+      "sourceBounds": null,
+      "packedBounds": [
+        54,
+        21,
+        177,
+        164
+      ],
+      "face": [
+        98,
+        65,
+        61,
+        41
+      ]
+    },
+    {
+      "index": 20,
+      "faceMaskPixels": 1923,
+      "sourceBounds": null,
+      "packedBounds": [
+        55,
+        21,
+        188,
+        193
+      ],
+      "face": [
+        100,
+        66,
+        60,
+        40
+      ]
+    },
+    {
+      "index": 21,
+      "faceMaskPixels": 1858,
+      "sourceBounds": null,
+      "packedBounds": [
+        53,
+        25,
+        195,
+        181
+      ],
+      "face": [
+        100,
+        65,
+        58,
+        42
+      ]
+    },
+    {
+      "index": 22,
+      "faceMaskPixels": 1964,
+      "sourceBounds": null,
+      "packedBounds": [
+        56,
+        17,
+        182,
+        181
+      ],
+      "face": [
+        98,
+        66,
+        62,
+        41
+      ]
+    },
+    {
+      "index": 23,
+      "faceMaskPixels": 1987,
+      "sourceBounds": null,
+      "packedBounds": [
+        57,
+        15,
+        183,
+        175
+      ],
+      "face": [
+        98,
+        65,
+        62,
+        42
+      ]
+    },
+    {
+      "index": 24,
+      "faceMaskPixels": 1921,
+      "sourceBounds": null,
+      "packedBounds": [
+        54,
+        85,
+        183,
+        230
+      ],
+      "face": [
+        98,
+        137,
+        61,
+        41
+      ]
+    },
+    {
+      "index": 25,
+      "faceMaskPixels": 1864,
+      "sourceBounds": null,
+      "packedBounds": [
+        55,
+        67,
+        181,
+        230
+      ],
+      "face": [
+        99,
+        115,
+        60,
+        39
+      ]
+    },
+    {
+      "index": 26,
+      "faceMaskPixels": 1988,
+      "sourceBounds": null,
+      "packedBounds": [
+        50,
+        64,
+        182,
+        230
+      ],
+      "face": [
+        98,
+        115,
+        62,
+        41
+      ]
+    },
+    {
+      "index": 27,
+      "faceMaskPixels": 2002,
+      "sourceBounds": null,
+      "packedBounds": [
+        58,
+        58,
+        183,
+        230
+      ],
+      "face": [
+        99,
+        109,
+        61,
+        42
+      ]
+    },
+    {
+      "index": 28,
+      "faceMaskPixels": 1638,
+      "sourceBounds": null,
+      "packedBounds": [
+        44,
+        61,
+        200,
+        230
+      ],
+      "face": [
+        98,
+        108,
+        62,
+        35
+      ]
+    },
+    {
+      "index": 29,
+      "faceMaskPixels": 1949,
+      "sourceBounds": null,
+      "packedBounds": [
+        56,
+        61,
+        181,
+        230
+      ],
+      "face": [
+        99,
+        108,
+        60,
+        42
+      ]
+    },
+    {
+      "index": 30,
+      "faceMaskPixels": 1946,
+      "sourceBounds": null,
+      "packedBounds": [
+        56,
+        46,
+        181,
+        230
+      ],
+      "face": [
+        99,
+        92,
+        61,
+        42
+      ]
+    },
+    {
+      "index": 31,
+      "faceMaskPixels": 1936,
+      "sourceBounds": null,
+      "packedBounds": [
+        55,
+        48,
+        182,
+        231
+      ],
+      "face": [
+        99,
+        92,
+        60,
+        41
+      ]
+    },
+    {
+      "index": 32,
+      "faceMaskPixels": 1952,
+      "sourceBounds": null,
+      "packedBounds": [
+        56,
+        49,
+        204,
+        231
+      ],
+      "face": [
+        99,
+        97,
+        61,
+        41
+      ]
+    },
+    {
+      "index": 33,
+      "faceMaskPixels": 1946,
+      "sourceBounds": null,
+      "packedBounds": [
+        56,
+        54,
+        180,
+        230
+      ],
+      "face": [
+        98,
+        101,
+        61,
+        41
+      ]
+    },
+    {
+      "index": 34,
+      "faceMaskPixels": 1798,
+      "sourceBounds": null,
+      "packedBounds": [
+        57,
+        62,
+        200,
+        230
+      ],
+      "face": [
+        101,
+        97,
+        55,
+        44
+      ]
+    },
+    {
+      "index": 35,
+      "faceMaskPixels": 1952,
+      "sourceBounds": null,
+      "packedBounds": [
+        45,
+        72,
+        181,
+        231
+      ],
+      "face": [
+        98,
+        122,
+        61,
+        41
+      ]
+    },
+    {
+      "index": 36,
+      "faceMaskPixels": 1822,
+      "sourceBounds": null,
+      "packedBounds": [
+        49,
+        83,
+        184,
+        231
+      ],
+      "face": [
+        97,
+        142,
+        62,
+        39
+      ]
+    },
+    {
+      "index": 37,
+      "faceMaskPixels": 1782,
+      "sourceBounds": null,
+      "packedBounds": [
+        34,
+        109,
+        182,
+        231
+      ],
+      "face": [
+        99,
+        159,
+        59,
+        42
+      ]
+    },
+    {
+      "index": 38,
+      "faceMaskPixels": 1855,
+      "sourceBounds": null,
+      "packedBounds": [
+        35,
+        91,
+        184,
+        231
+      ],
+      "face": [
+        99,
+        145,
+        60,
+        41
+      ]
+    },
+    {
+      "index": 39,
+      "faceMaskPixels": 1925,
+      "sourceBounds": null,
+      "packedBounds": [
+        58,
+        64,
+        182,
+        231
+      ],
+      "face": [
+        98,
+        112,
+        62,
+        41
+      ]
+    },
+    {
+      "index": 40,
+      "faceMaskPixels": 1971,
+      "sourceBounds": null,
+      "packedBounds": [
+        55,
+        64,
+        181,
+        231
+      ],
+      "face": [
+        98,
+        111,
+        61,
+        41
+      ]
+    },
+    {
+      "index": 41,
+      "faceMaskPixels": 1857,
+      "sourceBounds": null,
+      "packedBounds": [
+        56,
+        65,
+        180,
+        231
+      ],
+      "face": [
+        100,
+        111,
+        60,
+        39
+      ]
+    },
+    {
+      "index": 42,
+      "faceMaskPixels": 1721,
+      "sourceBounds": null,
+      "packedBounds": [
+        56,
+        64,
+        184,
+        231
+      ],
+      "face": [
+        99,
+        109,
+        59,
+        38
+      ]
+    },
+    {
+      "index": 43,
+      "faceMaskPixels": 1672,
+      "sourceBounds": null,
+      "packedBounds": [
+        54,
+        68,
+        193,
+        231
+      ],
+      "face": [
+        100,
+        112,
+        59,
+        38
+      ]
+    },
+    {
+      "index": 44,
+      "faceMaskPixels": 1917,
+      "sourceBounds": null,
+      "packedBounds": [
+        57,
+        19,
+        180,
+        184
+      ],
+      "face": [
+        99,
+        65,
+        60,
+        41
+      ]
+    },
+    {
+      "index": 45,
+      "faceMaskPixels": 1860,
+      "sourceBounds": null,
+      "packedBounds": [
+        54,
+        21,
+        179,
+        196
+      ],
+      "face": [
+        100,
+        66,
+        59,
+        40
+      ]
+    },
+    {
+      "index": 46,
+      "faceMaskPixels": 1829,
+      "sourceBounds": null,
+      "packedBounds": [
+        46,
+        22,
+        181,
+        185
+      ],
+      "face": [
+        99,
+        66,
+        59,
+        41
+      ]
+    },
+    {
+      "index": 47,
+      "faceMaskPixels": 1923,
+      "sourceBounds": null,
+      "packedBounds": [
+        40,
+        19,
+        180,
+        177
+      ],
+      "face": [
+        99,
+        64,
+        60,
+        42
+      ]
+    }
+  ]
+}

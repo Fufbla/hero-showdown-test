@@ -1,9 +1,308 @@
 {
   "version": 2,
-  "status": "Rebuilding review only; no deployment.",
+  "status": "Review upload in progress; no deployment",
   "baseMain": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
-  "previousReview": "c33a7f0e3db2a726922ebcca720f1efd238ac3ad",
-  "recoveredSources": 10,
-  "assembledPoses": 480,
-  "remaining": "Uploading rebuilt atlases, integration, tests, and final review media."
+  "lastVerifiedCommit": "91855e9f0bfca9d12a7849c58af157e412a421de",
+  "batches": [],
+  "completed": [
+    {
+      "path": ".github/workflows/costume-review.yml",
+      "sha": "63d444c3329710ebd1d19820725ea6b691b26e14",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/ASSET-BRIEF.md",
+      "sha": "d55a8760df09d131fd37d3ae4208ec9c6f5f2b48",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/ASSET-CHECKSUMS.sha256",
+      "sha": "1030011c05b123d426955ce58a50a0780d9d6ecc",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/README.md",
+      "sha": "dead86a83ae499a796df52eca8888160d8b1a563",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/approved-concepts.jpeg",
+      "sha": "f64af14711c09d4aab926e19834ffcecebd739d4",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/assets-a-metrics.json",
+      "sha": "b3808298e7d687be4a4f5deeeaea437087256219",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/assets-a-notes.md",
+      "sha": "34453b45dd6047e108d06812e98c69919793e839",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/assets-b-notes.md",
+      "sha": "646a33fc01ad211ac6552f1b4d81eb7913d40a7e",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/assets-c-notes.md",
+      "sha": "69ad6c0b3775411f6d4b62ea90cb0f12e174633d",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/black-business-suit-source.png",
+      "sha": "cb89c252b127f1450d097761ba72c419a0057875",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/dolphin-costume-source.png",
+      "sha": "0e03cfb787905240e5b5c64f72f5da2c93612a70",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/dolphin-prompt.txt",
+      "sha": "7669c535435d6747033f22bf458fd7a5266b05e3",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/fishsticks-costume-source.png",
+      "sha": "f635cff204f658013fdc952356177968e0d73e85",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/hamburger-costume-source.png",
+      "sha": "fca5b87fcc29d99f0d6cdcfa1e5b3868683433f4",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/hamburger-prompt.txt",
+      "sha": "d1783ab6114753dbdca5cbb171ae071f039f4c9e",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/pink-shark-costume-source.png",
+      "sha": "2bbad35c80fd56ce7ab652e86dca9aa7d997a907",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/pizza-slice-costume-source.png",
+      "sha": "c036866c4c9738b7357bce1deb84da2026dde7e7",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/reaper-costume-source.png",
+      "sha": "c23a0e764931fdc302dfe3a7b10790001e46d07f",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/shark-prompt.txt",
+      "sha": "d6d3fbb95c63833db0d073304bdf78f22df3ae3f",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/stuffed-animal-costume-source.png",
+      "sha": "da5c5ba62bc54f931fcd2264f06e5c3b7742e81b",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/white-business-suit-source.png",
+      "sha": "098c0372997f79d0c5cd3a74888ba1a51ae7273e",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/art/zombie-costume-source.png",
+      "sha": "97a647a4f7555b755bae4fcec732adc67290d520",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/review/.gitignore",
+      "sha": "e45beaf5fa6bed95b29541a0571a9ca2c8bbb69e",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/review/black-business-suit-sprites.png",
+      "sha": "62e6628351c90159ae4c73e4e571036333986673",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/review/costume-animation-review.mp4",
+      "sha": "667994f40f0798f57b5f8a953c1b2be4e5630570",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/review/costume-hair-restored.jpg",
+      "sha": "5be8e45ca789b6c86468c736c94220d3b022b15e",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/review/costume-review-browser.jpg",
+      "sha": "a35dbaa0dc84ce3431682fa44a08203a052be563",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "docs/costumes/upload-progress.json",
+      "sha": "566021f8adabb68000f979d4a23b9ed9fb569134",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/black-business-suit/body.webp",
+      "sha": "11b22913f402d99a3c9d97a927389d6d786bb9f3",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/black-business-suit/manifest.json",
+      "sha": "2d1ba80e28923cf89087d556be95a8cb6142a1b7",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/black-business-suit/registration.json",
+      "sha": "cf5c73f07b64889ac326e58e822390f05ccc62cb",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/dolphin-costume/body.webp",
+      "sha": "c06d1cebdce6a86fa1e013c924cd24913b8352e5",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/dolphin-costume/manifest.json",
+      "sha": "37da29c1388be3dd3495433a9d3af0c982f7b34d",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/dolphin-costume/registration.json",
+      "sha": "e020e80a74b2b52bdef7c6c19728acb92a2e4dd9",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/fishsticks-costume/body.webp",
+      "sha": "bdd9cc738ff56817b63d5b40ebc0243ca40b93c3",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/fishsticks-costume/manifest.json",
+      "sha": "44d9ef395cfcbce7a417e257f9633692d071134f",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/fishsticks-costume/registration.json",
+      "sha": "d62c03c879308aecae43051ba7b40ab1695c671f",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/hamburger-costume/body.webp",
+      "sha": "6bad83da64aedadfcba0a98ed9f9a051480aa762",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/catalog.mjs",
+      "sha": "99fd540baf8cb741d6174766756df8b1cc9f96f2",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/fishsticks-costume/lettering-mask.webp",
+      "sha": "ff8d2fa63140d9395f91dc4d78f5320fc76b1e9a",
+      "type": "blob",
+      "mode": "100644"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/fishsticks-costume/lettering.json",
+      "sha": "a118c3a32084d6231610d4542469383301ece7c0",
+      "type": "blob",
+      "mode": "100644"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/hamburger-costume/manifest.json",
+      "sha": "4862c08f79e42ba3173cb1eb7aa254ade78c06f8",
+      "type": "blob",
+      "mode": "100644"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/hamburger-costume/registration.json",
+      "sha": "499bb1aaee01d235b64dbe8bcc0e5d6186514eb5",
+      "type": "blob",
+      "mode": "100644"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/pink-shark-costume/body.webp",
+      "sha": "e7d53176c9ca7c44338e99461f8388f448e8e7a2",
+      "type": "blob",
+      "mode": "100644"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/pink-shark-costume/manifest.json",
+      "sha": "7434937a4c7fdaf74c9940ea06216b85df78252d",
+      "type": "blob",
+      "mode": "100644"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/pink-shark-costume/registration.json",
+      "sha": "3e1ca5ceac4434db915ee1b4cc446fb6408db26c",
+      "type": "blob",
+      "mode": "100644"
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/pizza-slice-costume/body.webp",
+      "sha": "e659a3d54387503cc4a6e151cc7edc107a5647f5",
+      "type": "blob",
+      "mode": "100644"
+    }
+  ],
+  "remainingAssets": [
+    "royale-v3-staging/costumes/assets/pizza-slice-costume/manifest.json",
+    "royale-v3-staging/costumes/assets/pizza-slice-costume/registration.json",
+    "royale-v3-staging/costumes/assets/reaper-costume/body.webp",
+    "royale-v3-staging/costumes/assets/reaper-costume/manifest.json",
+    "royale-v3-staging/costumes/assets/reaper-costume/registration.json",
+    "royale-v3-staging/costumes/assets/stuffed-animal-costume/body.webp",
+    "royale-v3-staging/costumes/assets/stuffed-animal-costume/manifest.json",
+    "royale-v3-staging/costumes/assets/stuffed-animal-costume/registration.json",
+    "royale-v3-staging/costumes/assets/white-business-suit/body.webp",
+    "royale-v3-staging/costumes/assets/white-business-suit/manifest.json",
+    "royale-v3-staging/costumes/assets/white-business-suit/registration.json",
+    "royale-v3-staging/costumes/assets/zombie-costume/body.webp",
+    "royale-v3-staging/costumes/assets/zombie-costume/manifest.json",
+    "royale-v3-staging/costumes/assets/zombie-costume/registration.json"
+  ],
+  "remainingWork": "Integration, final review media and browser QA"
 }
