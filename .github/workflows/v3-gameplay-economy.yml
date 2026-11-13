@@ -1,0 +1,39 @@
+name: V3 approved gameplay regression
+on:
+  push:
+    branches: [feature/v3-approved-economy-20261113]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test dependencies
+        run: |
+          npm install --no-save --no-package-lock @napi-rs/canvas@0.1.100 playwright@1.56.1
+          npx playwright install chromium --with-deps
+      - name: Check reproducible staging build
+        run: |
+          node tools/build-kingjames-staging.cjs
+          git diff --exit-code -- royale-v3-staging
+          test -z "$(git diff --name-only f93df6bb68c5c75c09e9be6d2eb12665a5cb1746 HEAD -- royale assets index.html game.html hero-showdown.html)"
+      - name: Verify economy, portal routes, armor, costumes, boss attacks and co-op saves
+        run: |
+          node --import ./royale-v3-staging/gameplay/tests/register.mjs --test royale-v3-staging/gameplay/tests/*.test.mjs royale-v3-staging/kingjames/tests/armor-combat.test.mjs royale-v3-staging/kingjames/tests/armor.test.mjs royale-v3-staging/kingjames/tests/armor-bonus-ui.test.mjs royale-v3-staging/kingjames/tests/armor-render.test.mjs royale-v3-staging/bosses/tests/*.test.mjs royale-v3-staging/costumes/tests/costumes.test.mjs royale/local-coop/tests/local-coop.test.mjs
+      - name: Exercise test code in Chromium
+        run: |
+          python3 -m http.server 8174 --bind 127.0.0.1 > /tmp/v3-economy-server.log 2>&1 &
+          node royale-v3-staging/gameplay/tests/browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v3-economy-browser
+          path: docs/gameplay-20261113/

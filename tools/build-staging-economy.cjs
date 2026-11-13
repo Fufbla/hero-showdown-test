@@ -7,11 +7,15 @@ const write=(p,s)=>fs.writeFileSync(path.join(root,p),s);
 const shared=s=>s.replace(/((?:from\s*|import\s*\()\s*['"])\.\//g,'$1../../royale/');
 const replace=(s,a,b)=>{if(!s.includes(a))throw Error('Economy source changed: '+a.slice(0,100));return s.replace(a,b);};
 let journey=shared(read('royale/journey.mjs'));
-journey="import {monsterCoins} from './economy.mjs';\n"+journey;
+journey="import {travelMethods} from './travel.mjs';\nimport {monsterCoins} from './economy.mjs';\n"+journey;
 journey=replace(journey,"coins=regular&&!summoned?(this.clock().night?2:1):0","coins=regular&&!summoned?monsterCoins(e.level??info.level):0");
 const start=journey.indexOf('    let root=false,item=null;'),end=journey.indexOf("    this.emit('reward'",start);
 if(start<0||end<0)throw Error('Missing loot boundary');
 journey=journey.slice(0,start)+'    const root=false,item=null; // Regular monsters award coins and unchanged XP only.\n'+journey.slice(end);
+const travelStart=journey.indexOf('  fastTravel('),travelEnd=journey.indexOf('  // Retired menu command:',travelStart);
+if(travelStart<0||travelEnd<0)throw Error('Missing travel boundary');
+journey=journey.slice(0,travelStart)+journey.slice(travelEnd);
+journey=replace(journey,"  monsterDamage(e){","  ...travelMethods,\n  monsterDamage(e){");
 write('royale-v3-staging/gameplay/journey.mjs',journey);
 
 let data=shared(read('royale/boss-data.mjs'));
@@ -38,7 +42,27 @@ bosses=replace(bosses,'this.hero.coins=Math.min(999999,this.hero.coins+reward.co
     reward.coins=reward.first?0:reward.coins;
     this.hero.coins=Math.min(999999,this.hero.coins+reward.coins);const xp=`);
 write('royale-v3-staging/gameplay/bosses.mjs',bosses);
-const mappings={'journey.mjs':'journey.mjs','boss-data.mjs':'boss-data.mjs','boss-state.mjs':'boss-state.mjs','bosses.mjs':'bosses.mjs'};
+let loot=shared(read('royale/world-loot.mjs'));
+loot="import {regionPortals} from './portal-layout.mjs';\n"+loot;
+const ls=loot.indexOf(' g.camps.forEach('),le=loot.indexOf(' return result.sort',ls);
+if(ls<0||le<0)throw Error('Missing portal interaction boundary');
+loot=loot.slice(0,ls)+" for(const p of regionPortals(g.regionId))add(p.id,p.kind,p.x,p.y,p.label);\n"+loot.slice(le);
+write('royale-v3-staging/gameplay/world-loot.mjs',loot);
+// Co-op retains its individual-fast-travel restriction while two players share
+// the screen. Retire the old portalTravel -> free travel shortcut in that router.
+let session=read('royale/local-coop/session.mjs').replace(/((?:from\s*|import\s*\()\s*['"])\.\.\//g,'$1../../royale/').replace(/((?:from\s*|import\s*\()\s*['"])\.\//g,'$1../../royale/local-coop/');
+session=replace(session,"  if(method==='fastTravel'&&this.active.size>1)","  if(['fastTravel','portalTravel','travel'].includes(method)&&this.active.size>1)");
+session=replace(session,"Use regular portals together for free.","Use entrance and exit portals together for free.");
+session=replace(session,"  if(method==='portalTravel'){if(!h.game.nearPortal())return false;method='travel';}","  // Paid travel is handled by each game's revision-checked travel method.");
+write('royale-v3-staging/gameplay/local-session.mjs',session);
+let validation=read('royale-v3-staging/gameplay/cloud-validation.mjs');
+if(!validation.includes('guardEconomySave')){
+ validation="import {guardEconomySave} from './economy-save-guard.mjs';\n"+validation;
+ validation=replace(validation," if(!previous)return next;"," guardEconomySave(previous,next);\n if(!previous)return next;");
+ write('royale-v3-staging/gameplay/cloud-validation.mjs',validation);
+}
+require('./build-staging-economy-ui.cjs');
+const mappings={'world-loot.mjs':'world-loot.mjs','local-coop/session.mjs':'local-session.mjs','journey.mjs':'journey.mjs','boss-data.mjs':'boss-data.mjs','boss-state.mjs':'boss-state.mjs','bosses.mjs':'bosses.mjs'};
 for(const [file,basePath]of [['index.html','/royale-v3-staging/'],['kingjames/index.html','/royale/'],['gameplay/index.html','/royale/'],['local-coop/index.html','/royale/local-coop/']]){
  const dest='royale-v3-staging/'+file;
  let html=read(dest).replace(/<script type="importmap">([\s\S]*?)<\/script>/,(_,raw)=>{
@@ -50,6 +74,7 @@ for(const [file,basePath]of [['index.html','/royale-v3-staging/'],['kingjames/in
    for(const [key,value]of Object.entries(m.imports))if(new URL(key,base).pathname===sourcePath||new URL(value,base).pathname===sourcePath||new URL(value,base).pathname===targetPath){m.imports[key]=dest;if(new URL(value,base).pathname===sourcePath)m.imports[value]=dest;}
    m.imports[relative(sourcePath)]=dest;
   }
+  for(const [key,value]of Object.entries(m.imports))if(/\/royale-v3-staging\/(?:portals\/(?:world-art|journey-menu|boss-ui)|gameplay\/local-coop-app)\.mjs$/.test(new URL(value,base).pathname))m.imports[key]=value.replace(/\?v=[^&]+/,'?v=economy-1');
   return '<script type="importmap">'+JSON.stringify(m)+'</script>';
  });write(dest,html);
 }
