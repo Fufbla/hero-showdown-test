@@ -77,6 +77,7 @@ function shell(html,base,script){
 }
 async function build(){
   if(out===root||!path.relative(root,out)||out.includes('/.git'))throw Error('Unsafe output directory');
+  const sha=cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   fs.rmSync(out,{recursive:true,force:true});fs.mkdirSync(out,{recursive:true});copyPublic();
   const result=await esbuild.build({absWorkingDir:root,entryPoints:{game:'royale/release-src/game-entry.mjs',coop:'royale/release-src/coop-entry.mjs',cloud:'royale-v3-staging/app.mjs','json-worker':'royale/local-coop/json-worker.mjs'},outdir:path.join(out,'royale/release'),outExtension:{'.js':'.mjs'},chunkNames:'shared-[hash]',bundle:true,splitting:true,format:'esm',platform:'browser',target:['es2022'],minifySyntax:true,minifyWhitespace:false,legalComments:'none',drop:['console','debugger'],metafile:true,plugins:[runtimePlugin]});
   let home=read('royale-v3-staging/index.html');
@@ -85,18 +86,17 @@ async function build(){
   home=home.replace(/<small>\s*<\/small>/g,'').replace(/<button id="local-coop"/,'<button id="local-coop"');
   home=home.replace(/location.href='[^']*local-coop[^']*'/,"location.href='./local-coop/'");
   home=home.replace('</section>',`<button type="button" onclick="location.href='./gameplay/'">HEROES ON THIS BROWSER</button></section>`);
-  home=home.replace('</body>','<script type="module" src="./release/cloud.mjs"></script></body>');
+  home=home.replace('</body>',`<script type="module" src="./release/cloud.mjs?v=${sha}"></script></body>`);
   home=home.replace(/<p>V3[^<]*<\/p>/g,'');
   write('royale/index.html',home);
-  write('royale/gameplay/index.html',shell(read('royale-v3-staging/gameplay/index.html'),'../','./release/game.mjs'));
-  let coopHTML=shell(read('royale-v3-staging/local-coop/index.html'),'./','../release/coop.mjs');
+  write('royale/gameplay/index.html',shell(read('royale-v3-staging/gameplay/index.html'),'../',`./release/game.mjs?v=${sha}`));
+  let coopHTML=shell(read('royale-v3-staging/local-coop/index.html'),'./',`../release/coop.mjs?v=${sha}`);
   // Co-op base remains /royale/local-coop/, one level deeper than the solo base.
   coopHTML=coopHTML.replace('src="../assets/animation/motion-core.js"','src="../../assets/animation/motion-core.js"');
   write('royale/local-coop/index.html',coopHTML);
   write('royale-v3-staging/index.html','<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hero Showdown Royale</title><meta http-equiv="refresh" content="0;url=../royale/"><a href="../royale/">Open Hero Showdown Royale</a>');
   let index=read('index.html').replace('href="./royale-v3-staging/"','href="./royale/"').replace('Open Hero Showdown Royale V3 in a new browser tab','Open Hero Showdown Royale in a new browser tab');write('index.html',index);
   write('.nojekyll','');
-  const sha=cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   const {COLLECTION}=await import('../royale/fashion/catalog.mjs');
   const costumes={count:COLLECTION.length,ids:COLLECTION.map(o=>o.id),price:700};
   const manifest={version:1,productionReady:require('./release-build/readiness.json').productionReady,sourceCommit:sha,sourceTreeDirty:!!cp.execFileSync('git',['status','--porcelain','--untracked-files=no'],{cwd:root,encoding:'utf8'}).trim(),sourceHashes,entrypoints:['royale/index.html','royale/gameplay/index.html','royale/local-coop/index.html'],bundles:Object.fromEntries(Object.entries(result.metafile.outputs).map(([p])=>{const rel=path.relative(out,path.resolve(root,p));return [rel,hash(fs.readFileSync(path.join(out,rel)))];})),saveContract:{endpoint:'royale-v3-staging',profileKey:'healthia.royale.profiles.v2',cloudPrefix:'royale-v3-play:',databaseMigration:false},developerTools:false,modes:{singlePlayer:true,localCoop:true,onlineMultiplayer:false}};
