@@ -1,0 +1,17 @@
+{
+  "hoodedCostumes": [
+    "dolphin-costume",
+    "pink-shark-costume",
+    "hamburger-costume",
+    "stuffed-animal-costume",
+    "reaper-costume",
+    "fishsticks-costume",
+    "pizza-slice-costume"
+  ],
+  "hoodedCompositions": 672,
+  "uncoveredCompositions": 288,
+  "blackBackingPixels": 474793,
+  "changedOutsideOpening": 0,
+  "skinAndFacialFeaturesPreserved": true,
+  "passed": true
+}

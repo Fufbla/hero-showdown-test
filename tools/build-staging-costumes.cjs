@@ -84,6 +84,14 @@ for(const [file,basePath] of [['index.html','/royale-v3-staging/'],['kingjames/i
    const key=path.posix.relative(basePath,src);m.imports[key.startsWith('.')?key:'./'+key]=target;
   }
   for(const [key,value]of Object.entries(m.imports))if(['/royale-v3-staging/kingjames/app.mjs','/royale-v3-staging/kingjames/renderer.mjs'].includes(new URL(value,base).pathname))m.imports[key]=value.replace(/\?v=[^&]+/,'?v=costumes-2');
-  return '<script type="importmap">'+JSON.stringify(m)+'</script>';});write(dest,html);
+  const facePath=path.posix.relative(basePath,'/royale-v3-staging/costumes/face.mjs');
+  const faceKey=facePath.startsWith('.')?facePath:'./'+facePath;
+  m.imports[faceKey]=faceKey+'?v=black-hood-1';
+  return '<script type="importmap">'+JSON.stringify(m)+'</script>';});
+ if(file==='index.html')html=html.replace(/src="\.\/app\.mjs\?v=[^"]+"/,'src="./app.mjs?v=black-hood-1"');
+ write(dest,html);
 }
+// Reload the test iframe as well as the face module after a costume art fix.
+const parentApp=read('royale-v3-staging/app.mjs').replace(/\+'&v=[^']+'\+qa/,"+'&v=black-hood-1'+qa");
+write('royale-v3-staging/app.mjs',parentApp);
 console.log('Built ten-costume staging integration. Existing gameplay and production routes unchanged.');
