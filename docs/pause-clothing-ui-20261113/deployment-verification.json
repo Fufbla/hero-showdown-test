@@ -1,0 +1,15 @@
+{
+  "applicationCommit": "a3c5df49e970cde505fcc822029cabc03b78d86a",
+  "productionCommit": "dceaffdee5fdb45826062dd4d0f9568694d9a548",
+  "publishCommit": "a043ffac135ee0eef0ec4c5c0f972e075f55c461",
+  "publishRun": 43516322115,
+  "publishResult": "success",
+  "unchangedProductionFiles": 1368,
+  "costumeCount": 28,
+  "testsPassed": 74,
+  "testsFailed": 0,
+  "stagingUrl": "https://fufbla.github.io/hero-showdown-test/royale-v3-staging/",
+  "cloudTesting": "Simulated authenticated bridge/acknowledgement/recovery; no real-player or live cross-device session accessed.",
+  "physicalDevices": "Not tested; browser viewports and existing co-op unit tests verified.",
+  "productionUiDeployed": false
+}

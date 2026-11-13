@@ -34,11 +34,29 @@ Browser checks use only existing test hero 0000000000:
 - Responsive viewports checked: 320×568, 390×844, 844×390, 768×1024, 1024×768 and desktop 1363×936 / 1280×800. Long pages scroll; carousel scrolls separately; confirmation controls fit inside the viewport.
 - Screenshots record portrait pause/store and landscape confirmation. These are browser viewport checks, not physical-device/controller tests.
 
-## Staging-only publication
+## Verified staging publication
 
-`staging-interface.yml` downloads the already deployed Pages artifact from run 43509370838. It verifies the main branch and production manifest are still at the baseline, adds only `/royale-v3-staging/`, and asserts every file outside that directory is byte-for-byte unchanged. It rechecks main immediately before deployment. Main is not merged or updated.
+Deployed application source: `a3c5df49e970cde505fcc822029cabc03b78d86a`.
 
-The staging URL is https://fufbla.github.io/hero-showdown-test/royale-v3-staging/ . `interface-manifest.json` reports the review commit, production baseline, and preserved-file count.
+The review build passed all 74 tests in run [43515370987](https://github.com/Fufbla/hero-showdown-test/actions/runs/43515370987). Its direct deployment was rejected because the existing github-pages environment accepts main, not the review branch. No environment protections or permissions were changed.
+
+The verified artifact was published through a configuration-only workflow on main in successful run [43516322115](https://github.com/Fufbla/hero-showdown-test/actions/runs/43516322115), publishing commit `a043ffac135ee0eef0ec4c5c0f972e075f55c461`. That workflow compared the complete artifact with the previously deployed production artifact and confirmed **all 1,368 files outside royale-v3-staging were byte-for-byte unchanged**. No interface implementation was merged into main or released to production.
+
+The publishing workflow is now manual-only and refuses a repeat publication if production has changed from the pinned baseline. Its follow-up configuration commit is `2b280d02bbb20cf86291bb11771d4cab9701a62d`. The review branch includes this identical configuration plus the verification record; these documentation/configuration additions do not change the deployed application bundle.
+
+Verified public URL: https://fufbla.github.io/hero-showdown-test/royale-v3-staging/ . The published `interface-manifest.json` confirms application source a3c5df4, production baseline dceaffd, 1,368 preserved files, 28 costumes and online multiplayer disabled. The production `/royale/release-manifest.json` still reports dceaffd.
+
+### Checks against the deployed website
+
+- Root launcher loads staging, with the existing local co-op entry and no online multiplayer entry.
+- Reserved code 0000000000 loads its existing KingJames hero; no new account or replacement hero was created. Its zero coin balance, appearance, powers and world location were retained.
+- Pause has the seven ordered actions, actual saved-slot footer, no statistics/HUD or autosave banner, and the text-only Clothing Store entry.
+- Tree of Eris retains Upgrade Powers, Armor Equipment and Inventory & Equipment without a Clothing Store tab.
+- All 28 store cards are present. Existing hero running preview switches between outfits, and stops after leaving the store.
+- Buy opens the 700-coin Dolphin confirmation. Zero balance produces the clear insufficient-funds message. Cancel closes the dialog and preserves the preview and zero balance without ownership changes.
+- Save Game updated the actual saved timestamp; reload retained KingJames, level, region/board, appearance, zero balance and existing maxed test powers.
+- Deployed 390×844 portrait and 844×390 landscape layouts were checked, including a fully visible confirmation dialog. Phone, tablet and desktop viewport coverage was completed before deployment as described above.
+- `deployed-*.jpg` are screenshots from the published staging site. The earlier screenshots and successful 700-coin purchase/reload evidence are from the local build, using the same reserved test code in its separate localhost namespace.
 
 ## Verification limits
 
