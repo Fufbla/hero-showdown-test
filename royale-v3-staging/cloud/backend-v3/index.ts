@@ -1,5 +1,6 @@
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.0';
 import {migratePowerSnapshot,guardPowerSave} from '../../power-policy.mjs';
+import {guardEconomySave} from '../../gameplay/economy-save-guard.mjs';
 import {checkCosmeticSave} from '../cosmetics/save-guard.mjs';
 const origin='https://fufbla.github.io',project='royale-v3-staging';
 const headers={'Content-Type':'application/json','Access-Control-Allow-Origin':origin,'Access-Control-Allow-Headers':'content-type,authorization,apikey','Access-Control-Allow-Methods':'POST,OPTIONS','Cache-Control':'no-store'};
@@ -56,7 +57,7 @@ Deno.serve(async req=>{
    const current=await db.from('royale_v3_hero_slots').select('snapshot,revision').eq('profile_id',profile).eq('slot_number',slot).maybeSingle();
    if(current.error)throw Error('Save read failed');
    if(!current.data||current.data.revision!==revision)return out({error:'Revision conflict'},409);
-   try{snapshot=guardPowerSave(current.data.snapshot,snapshot);}catch(error){return out({error:error.message},409);}
+   try{snapshot=guardPowerSave(current.data.snapshot,snapshot);snapshot=guardEconomySave(current.data.snapshot,snapshot);}catch(error){return out({error:error.message},409);}
    // The shared guard also blocks pre-v9 tabs from overwriting an upgraded
    // hero and checks the raw matching-outfit selection before storing it.
    const clothing=checkCosmeticSave(current.data.snapshot,snapshot);

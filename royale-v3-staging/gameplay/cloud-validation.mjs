@@ -1,3 +1,4 @@
+import {guardEconomySave} from './economy-save-guard.mjs';
 import {migratePowerSnapshot} from '../power-policy.mjs';
 // Shared structural validation; executed again in the authenticated server endpoint.
 // It is not a server-side combat simulation or an anti-cheat claim.
@@ -22,6 +23,7 @@ export function validateSnapshot(raw,{migration=false}={}){
  state.world.clockReference=WORLD_CLOCK_REFERENCE;return state;
 }
 export function validateProgress(previous,next,{kind='manual'}={}){
+ guardEconomySave(previous,next);
  if(!previous)return next;
  const old=decodeSave(JSON.stringify(previous));
  if(!old)fail('Previous progress requires recovery.');

@@ -1,3 +1,5 @@
+// Staging economy UI v1.
+import {travelQuote} from './portal-layout.mjs';
 // Generated staging equipment labels; co-op behavior is shared.
 import {CloudProfile} from '../../royale/local-coop/cloud.mjs?v=20261108-coop-menus';
 import {LocalSession,AUTOSAVE_MS} from '../../royale/local-coop/session.mjs?v=20261108-coop-menus';
@@ -204,10 +206,10 @@ function renderPanel(i){
    content.append(button('Collect Boss Chest',()=>act(i,'claimChest'),!g.availableChest()||!g.canSave()));
   }
   if(p.tab==='travel'){
-   content.append(el('p',p.portal?'Regular portals move the shared world for free.':session.active.size>1?'Individual fast travel is unavailable while sharing one screen. Use regular portals together for free.':'World Map fast travel costs 100 coins.'));
+   content.append(el('p',session.active.size>1?'Individual fast travel is unavailable while sharing one screen. Use entrance and exit portals together for free.':'Every fast-travel trip is paid. Return trips are charged separately.'));
    if(g.treeVisit)content.append(button('Leave Tree to travel',()=>act(i,'leaveTree')));
-   for(const region of WORLD_REGIONS){const b=button(`${region.name} · ${p.portal?'Free':'100 Coins'}`,()=>{if(p.portal){void act(i,'portalTravel',[region.id]);return;}p.travelChoice={region:region.id,board:0,revision:g.economy.revision};renderPanel(i);},!g.canTravel()||!p.portal&&session.active.size>1||region.id===g.regionId&&g.board===0);b.className='region-button';content.append(b);}
-   if(p.travelChoice){const q=p.travelChoice;content.append(el('h4','Fast Travel — 100 Coins'),el('p',g.hero.coins<100?'Not enough coins! Fast travel requires 100 coins. Use regular portals to travel for free.':'Teleport directly to this destination for 100 coins?'),button('Travel — 100 Coins',()=>{delete p.travelChoice;void act(i,'fastTravel',[{region:q.region,board:q.board},q.revision]);},g.hero.coins<100),button('Cancel',()=>{delete p.travelChoice;renderPanel(i);}));}
+   for(const region of WORLD_REGIONS){const quote=travelQuote(g,{region:region.id,board:0});const b=button(`${region.name} · ${quote?quote.cost.toLocaleString()+' Coins':'Locked'}`,()=>{p.travelChoice={region:region.id,board:0,revision:g.economy.revision};renderPanel(i);},!quote||!g.canTravel()||session.active.size>1||region.id===g.regionId&&g.board===0);b.className='region-button';content.append(b);}
+   if(p.travelChoice){const q=p.travelChoice,quote=travelQuote(g,q);if(quote){const cost=quote.cost,price=cost.toLocaleString();content.append(el('h4',`Fast Travel — ${price} Coins`),el('p',g.hero.coins<cost?`Not enough coins! This trip costs ${price} coins.`:`Teleport to this destination for ${price} coins?`),button(`Travel — ${price} Coins`,()=>{delete p.travelChoice;void act(i,'fastTravel',[{region:q.region,board:q.board},q.revision]);},g.hero.coins<cost||session.active.size>1),button('Cancel',()=>{delete p.travelChoice;renderPanel(i);}));}}
   }
   if(p.tab==='merge'){
    const id=g.pendingMergeReward();

@@ -1,4 +1,6 @@
-import {worldPortalPreview,pulsePortal} from './runtime.mjs?v=portals-1';
+// Staging economy UI v1.
+import {travelQuote} from '../gameplay/portal-layout.mjs';
+import {worldPortalPreview,pulsePortal} from './runtime.mjs?v=economy-1';
 import {pickupForGame} from '../../royale/multiplayer/game-session.mjs';
 import {itemIcon} from '../../royale/item-art.mjs';
 import {pickupLoot} from '../../royale/world-loot.mjs';
@@ -32,34 +34,30 @@ export class JourneyMenu {
   updateClock(){const g=this.getGame();for(const region of WORLD_REGIONS){const n=document.querySelector(`[data-region="${region.id}"] small`);if(n)n.textContent=`RECOMMENDED ${region.levels.join('–')} · ${formatClock(worldClock(g.world.clockReference,g.now(),region.id))}`;}}
   map(source=this.source||'map'){
     this.source=source;
-    const g=this.getGame(),list=$('region-cards');list.replaceChildren();if(source!=='portal')worldPortalPreview(list);else pulsePortal();
-    $('map-note').hidden=false;$('map-note').textContent=source==='portal'?'Regular portal travel is free.':'World Map fast travel costs 100 coins. Regular portals are free.';
+    const g=this.getGame(),list=$('region-cards');list.replaceChildren();worldPortalPreview(list);if(source==='portal')pulsePortal();
+    $('map-note').hidden=false;$('map-note').textContent='Fast travel is paid on every trip, including returns. Prices use the highest monster level on the destination board. Entrance, boss entrance and exit portals are free.';
     for(const region of WORLD_REGIONS){
-      const open=true,current=region.id===g.regionId,card=el('article',undefined,'region-card');card.style.setProperty('--region-color',region.sky[0]);card.dataset.region=region.id;if(current)card.setAttribute('aria-current','location');
+      const current=region.id===g.regionId,card=el('article',undefined,'region-card');card.style.setProperty('--region-color',region.sky[0]);card.dataset.region=region.id;if(current)card.setAttribute('aria-current','location');
       const art=el('div',undefined,`region-art ${region.theme}`);art.append(el('span',String(region.id).padStart(2,'0'),'region-number'),el('b',['','≋','♧','▥','◇','❧','✧','✦'][region.id]));card.append(art);
-      const body=el('div',undefined,'region-copy');
-      body.append(el('h3',region.name),el('small',`LV ${region.levels.join('–')}`));
-      const boards=source==='portal'?[0]:[0,1,2];
-      for(const board of boards){
-        const here=current&&!g.arenaScene&&g.board===board;
-        const button=el('button',here?'Current location':source==='portal'?'Enter Portal · Free':`Phase ${board+1} · 100 Coins`,'secondary');button.disabled=here||!g.canTravel();button.dataset.travel=region.id;button.dataset.board=board;
-        button.onclick=async()=>{
-          if(source!=='portal'){this.confirmTravel({region:region.id,board});return;}
-          if(await g.portalTravel(region.id)){this.persist();this.resume();this.say(`${region.name} · arrived through a free portal.`);}else{this.say('Stand beside a regular portal outside combat.');this.map(source);}
-        };body.append(button);
+      const body=el('div',undefined,'region-copy');body.append(el('h3',region.name),el('small',`LV ${region.levels.join('–')}`));
+      for(const board of [0,1,2]){
+        const destination={region:region.id,board},quote=travelQuote(g,destination),here=current&&!g.arenaScene&&g.board===board;
+        const button=el('button',here?'Current location':quote?`${region.boards[board]} · ${quote.cost.toLocaleString()} Coins`:'Locked','secondary');
+        button.disabled=here||!quote||!g.canTravel();button.dataset.travel=region.id;button.dataset.board=board;
+        button.onclick=()=>this.confirmTravel(destination);body.append(button);
       }card.append(body);list.append(card);
     }
   }
   cancelTravel(){if(!this.travelDialog)return false;if(!this.travelBusy&&!this.travelPending)this.travelDialog.close();return true;}
   confirmTravel(destination){
     if(this.travelDialog)return;
-    const g=this.getGame(),revision=g.economy.revision,origin=document.activeElement,d=el('dialog',undefined,'sale-dialog');d.id='fast-travel-dialog';
-    const title=el('h3','Fast Travel — 100 Coins');title.id='fast-travel-title';d.setAttribute('aria-labelledby',title.id);
-    const status=el('p',g.hero.coins<100?'Not enough coins! Fast travel requires 100 coins. Use regular portals to travel for free.':'Teleport directly to this destination for 100 coins?');status.setAttribute('role','status');
-    const yes=el('button','Travel — 100 Coins','primary'),no=el('button','Cancel','secondary');yes.id='confirm-fast-travel';no.id='cancel-fast-travel';yes.disabled=g.hero.coins<100||!g.canTravel();
+    const g=this.getGame(),quote=travelQuote(g,destination);if(!quote){this.say('This destination is unavailable.');return;}const cost=quote.cost,price=cost.toLocaleString(),revision=g.economy.revision,origin=document.activeElement,d=el('dialog',undefined,'sale-dialog');d.id='fast-travel-dialog';
+    const title=el('h3',`Fast Travel — ${price} Coins`);title.id='fast-travel-title';d.setAttribute('aria-labelledby',title.id);
+    const status=el('p',g.hero.coins<cost?`Not enough coins! This trip costs ${price} coins. Entrance and exit portals remain free.`:`Teleport to this destination for ${price} coins? Return trips are charged separately.`);status.setAttribute('role','status');
+    const yes=el('button',`Travel — ${price} Coins`,'primary'),no=el('button','Cancel','secondary');yes.id='confirm-fast-travel';no.id='cancel-fast-travel';yes.disabled=g.hero.coins<cost||!g.canTravel();
     no.onclick=()=>this.cancelTravel();yes.onclick=async()=>{
       if(this.travelBusy)return;this.travelBusy=true;yes.disabled=true;no.disabled=true;
-      try{const result=this.travelCommit?await this.travelCommit(()=>g.fastTravel(destination,revision)):{ok:await this.commit(()=>g.fastTravel(destination,revision))};this.travelPending=!!result.pending;if(result.ok){d.close();this.resume();this.say('Fast travel complete · 100 coins paid.');}else{status.textContent=result.error||'Travel was not completed. No fee was charged. Cancel and review the destination again.';}}
+      try{const result=this.travelCommit?await this.travelCommit(()=>g.fastTravel(destination,revision)):{ok:await this.commit(()=>g.fastTravel(destination,revision))};this.travelPending=!!result.pending;if(result.ok){d.close();this.resume();this.say(`Fast travel complete · ${price} coins paid.`);}else{status.textContent=result.error||'Travel was not completed. No fee was charged. Cancel and review the destination again.';}}
       catch(error){status.textContent=error.message;}
       finally{this.travelBusy=false;no.disabled=!!this.travelPending;if(this.travelPending){yes.textContent='Retry travel save';yes.disabled=false;}}
     };
@@ -70,7 +68,7 @@ export class JourneyMenu {
     const g=this.getGame();this.confirmation=null;$('equipment-confirm').hidden=true;
     $('inventory-summary').textContent=`${g.inventory.items.length} / 20 carried · Equipped and unequipped items share this limit. ${g.healthRoots} / 10 Health Roots stored separately. Armor grants stat bonuses only and never changes your appearance.`;
     const list=$('equipment-list');list.replaceChildren();
-    if(!g.inventory.items.length)list.append(el('p','Your customized appearance is always yours. Regular monsters may drop armor that grants stat bonuses only.','empty-equipment'));
+    if(!g.inventory.items.length)list.append(el('p','Your customized appearance is always yours. Monsters award coins only. Buy armor at the Tree of Eris; Legendary bosses retain their unique equipment.','empty-equipment'));
     const ground=g.loot.find(o=>o.id===this.groundReward),pending=ground?.item||g.inventory.pending[0],reward=$('pending-reward');reward.replaceChildren();reward.hidden=!pending;
     if(pending){const def=itemDefinition(pending);reward.append(el('div',g.inventory.items.length>=20?'INVENTORY FULL · CHOOSE YOUR REWARD':'CHOOSE YOUR REWARD','eyebrow'),el('h3',def.name),el('p',statsText(def)),el('p',`Stat bonuses only; your appearance stays the same. Choose a carried item below to compare and replace, or leave this item.`));
       if(g.inventory.items.length<20){const keep=el('button','Keep this equipment','primary');keep.id='accept-reward';keep.disabled=!g.canSave();keep.onclick=async()=>{if(await this.commit(()=>ground?pickupForGame(g,ground.id):g.acceptReward()))this.inventory();};reward.append(keep);}

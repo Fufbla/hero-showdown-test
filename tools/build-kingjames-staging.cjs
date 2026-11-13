@@ -89,3 +89,5 @@ require('./build-staging-power-policy.cjs');
 require('./build-staging-bosses.cjs');
 
 require('./build-staging-costumes.cjs');
+
+require('./build-staging-economy.cjs');
