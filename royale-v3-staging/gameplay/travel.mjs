@@ -1,6 +1,7 @@
 import {boardIndex,regionCamps} from '../../royale/world.mjs';
-import {regionPortals,boardPortals,travelQuote} from './portal-layout.mjs';
+import {regionPortals,travelQuote} from './portal-layout.mjs?v=phase-portals-1';
 export const travelMethods={
+ nearPortal(){return !this.arenaScene&&!this.treeVisit&&regionPortals(this.regionId).some(p=>p.role==='fast-travel'&&Math.abs(this.hero.x-p.x)<=90&&Math.abs(this.hero.y-p.y)<100);},
  fastTravel(destination,revision){
   const quote=travelQuote(this,destination);
   if(!quote||revision!==this.economy.revision||!this.canTravel()||this.hero.coins<quote.cost)return false;
@@ -36,7 +37,7 @@ export const travelMethods={
   if(d.boss)return this.enterBoss();
   if(d.hub){this.emit('tree');return true;}
   if(!this.world.unlocked.includes(d.region))return false;
-  const landing=boardPortals(d.region,d.board).find(p=>p.role===(d.side==='exit'?'exit':'entrance'));
+  const landing=regionPortals(d.region).find(p=>p.role===(d.side==='exit'?'exit':'entrance'));
   const x=landing.x+(d.side==='exit'?-110:110);
   if(this.loadRegion(d.region,{x,y:600})===false)return false;
   this.checkpoint=d.board;this.world.checkpoint={region:d.region,index:d.board};

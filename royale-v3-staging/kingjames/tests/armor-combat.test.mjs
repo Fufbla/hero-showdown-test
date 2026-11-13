@@ -1,3 +1,4 @@
+import {COLLECTION} from '../../costumes/catalog.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
@@ -37,7 +38,7 @@ test('power armor bonuses survive maxed test powers, repeated refresh and save/r
  }
 });
 test('changing every saved cosmetic and replacing armor cannot remove or accumulate actual combat bonuses',()=>{
- const catalog=JSON.parse(readFileSync(new URL('../../../royale/cosmetics/catalog.json',import.meta.url))),index=catalogIndex(catalog);
+ const catalog={sets:COLLECTION},index=catalogIndex(catalog);
  const g=combatHero('shore-ordinary'),expected=measure(g),learned=structuredClone(g.powers.data.levels),look=structuredClone(g.look);
  for(const outfit of catalog.sets){
   for(const type of ['purchase','equip']){

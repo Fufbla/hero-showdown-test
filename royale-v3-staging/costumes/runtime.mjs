@@ -1,4 +1,4 @@
-import {COSTUMES,costumeById,costumeForState} from './catalog.mjs';
+import {COLLECTION,costumeById,costumeForState} from './catalog.mjs';
 import {costumeSprites} from './engine.mjs';
 import {ClothingAssets,bodyClothingLayers} from '../../royale/cosmetics/assets.mjs';
 import {catalogIndex,outfitSelection,selectedOutfit,isRetiredCosmeticId} from '../../royale/cosmetics/state.mjs';
@@ -21,7 +21,7 @@ export class ClothingRuntime {
   this.notify=notify;this.limit=limit;this.selections=new Map();this.manifests=new Map();
  }
  async catalog(){
-  if(!this.catalogPromise)this.catalogPromise=this.readJSON('./catalog.json').then(data=>{data={...data,sets:[...data.sets,...COSTUMES]};return {data,index:catalogIndex(data)};}).catch(e=>{this.catalogPromise=null;throw e;});
+  if(!this.catalogPromise)this.catalogPromise=Promise.resolve().then(()=>{const data={version:1,sets:COLLECTION};return {data,index:catalogIndex(data)};}).catch(e=>{this.catalogPromise=null;throw e;});
   return this.catalogPromise;
  }
  async manifest(path){
@@ -36,7 +36,7 @@ export class ClothingRuntime {
   return this.loadIds(ids,options);
  }
  async loadIds(ids,{review=false,retry=false}={}){
-  const costume=ids.length===1&&COSTUMES.find(o=>o.pieces[0].id===ids[0]);
+  const costume=ids.length===1&&COLLECTION.find(o=>o.pieces[0].id===ids[0]);
   if(costume){if(!await costumeSprites.preload(costume.id))throw Error(costumeSprites.error);this.notify();return [{id:costume.pieces[0].id,category:'fullbody',costumeId:costume.id}];}
   // Reject mixed/partial requests before even opening the catalog. Retired
   // hats and face accessories cannot make an otherwise complete outfit fail.

@@ -1,5 +1,5 @@
 // Staging economy UI v1.
-import {travelQuote} from './portal-layout.mjs';
+import {travelQuote} from './portal-layout.mjs?v=phase-portals-1';
 // Generated staging equipment labels; co-op behavior is shared.
 import {CloudProfile} from '../../royale/local-coop/cloud.mjs?v=20261108-coop-menus';
 import {LocalSession,AUTOSAVE_MS} from '../../royale/local-coop/session.mjs?v=20261108-coop-menus';

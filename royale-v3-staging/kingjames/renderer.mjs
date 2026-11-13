@@ -1,4 +1,5 @@
 import {costumeForState} from '../costumes/catalog.mjs';
+import {outfitTrial} from '../costumes/trial.mjs';
 import {costumeSprites} from '../costumes/engine.mjs';
 // Generated staging renderer; original renderer remains unchanged.
 import {kingJamesSprites} from './outfit-engine.mjs?v=outfits-1';
@@ -67,7 +68,7 @@ export class Renderer {
     if(e.state==='warn'){oval(c,x,y-height-29,9,10,'#ffe4a0');c.fillStyle='#774b31';c.font='bold 15px sans-serif';c.textAlign='center';c.fillText('!',x,y-height-24);line(c,[[x-30,y+5],[x+30,y+5]],'#f8c87b',2);}
     if(e.state==='strike')line(c,[[x+e.face*24,y-28],[x+e.face*42,y-20],[x+e.face*31,y-8]],'#fff2c8',2);
   }
-  draw(game,alpha,dt){const costume=costumeForState(game.cosmetics);const c=this.c,h=game.hero,t=game.time;this.regionTheme=game.getRegion();this.night=game.clock().night;if(this.spriteRegion!==game.regionId){this.spriteRegion=game.regionId;this.monsterAtlas.preload(game.regionId);}
+  draw(game,alpha,dt){const savedCostume=costumeForState(game.cosmetics),costume=this.prototypeSession?outfitTrial.selected(savedCostume):savedCostume;const c=this.c,h=game.hero,t=game.time;this.regionTheme=game.getRegion();this.night=game.clock().night;if(this.spriteRegion!==game.regionId){this.spriteRegion=game.regionId;this.monsterAtlas.preload(game.regionId);}
     const scene=`${game.regionId}:${game.arenaScene?.id||game.arenaScene?.region||'world'}`;
     const camera=trackCamera({x:this.camera,y:this.cameraY},h,this.width,this.height,dt,{worldWidth:game.arenaScene?1880:WORLD_WIDTH,arena:!!game.arenaScene,reset:this.scene!==scene});
     this.scene=scene;this.camera=camera.x;this.cameraY=camera.y;

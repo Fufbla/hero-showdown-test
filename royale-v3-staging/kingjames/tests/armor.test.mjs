@@ -1,3 +1,4 @@
+import {COLLECTION} from '../../costumes/catalog.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -11,7 +12,7 @@ import {cosmeticTransaction,catalogIndex} from '../../../royale/cosmetics/state.
 import {LocalSession,captureProgress} from '../../../royale/local-coop/session.mjs';
 import {encodeRuntime,decodeRuntime} from '../../../royale/multiplayer/runtime.mjs';
 import {makeHero,inventoryFor,recordBonuses,testedPowers} from './armor-fixture.mjs';
-const catalog=JSON.parse(readFileSync(new URL('../../../royale/cosmetics/catalog.json',import.meta.url))),index=catalogIndex(catalog);
+const catalog={sets:COLLECTION},index=catalogIndex(catalog);
 function wear(g,id){
  for(const type of ['purchase','equip']){
   const r=cosmeticTransaction({state:g.cosmetics,coins:10000,index,operation:{type,id,revision:g.cosmetics.revision,confirmed:true},safe:true,atWardrobe:true});
@@ -43,7 +44,7 @@ test('default appearance and old armor-rich appearance packets never supply visi
  assert.deepEqual(old,original);
 });
 test('save, validated cloud payload, runtime packets and repeated reload retain independent equipment and cosmetics',()=>{
- const g=makeHero();wear(g,'royal-kimono');const before=JSON.parse(g.save());assert(g.equipItem('drop-1'));
+ const g=makeHero();wear(g,'blossom-kimono');const before=JSON.parse(g.save());assert(g.equipItem('drop-1'));
  const snapshot=JSON.parse(g.save());assert.doesNotThrow(()=>validateProgress(before,snapshot,{kind:'manual'}));
  const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v)};
  const store=new LocalHeroStore(storage);assert(store.writeSlot(0,snapshot,{expectedId:null,requireDurable:true}).ok);
@@ -57,7 +58,7 @@ test('save, validated cloud payload, runtime packets and repeated reload retain 
  assert(map.has(PROFILE_KEY));
 });
 test('both local co-op heroes keep their own armor, costume and save after one player changes equipment',async()=>{
- const heroes=[makeHero(),makeHero()];wear(heroes[0],'royal-kimono');wear(heroes[1],'vampire');
+ const heroes=[makeHero(),makeHero()];wear(heroes[0],'blossom-kimono');wear(heroes[1],'dolphin-costume');
  heroes[0].equipItem('drop-1');heroes[1].equipItem('drop-3');
  const profiles=heroes.map((g,i)=>({identity:'armor-fixture-'+i,slots:[{slot_number:1,snapshot:JSON.parse(g.save())}],saved:[],async save(slot,snapshot){this.saved.push({slot,snapshot});}}));
  const session=new LocalSession(profiles.map(profile=>({profile,slot:1})));session.paused=true;

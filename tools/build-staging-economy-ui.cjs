@@ -3,7 +3,7 @@ const marker='// Staging economy UI v1.\n';
 function edit(file,fn){const p=path.join(root,file),s=fs.readFileSync(p,'utf8');if(!s.startsWith(marker))fs.writeFileSync(p,marker+fn(s).replaceAll('./runtime.mjs?v=portals-1','./runtime.mjs?v=economy-1'));}
 function replace(s,a,b){if(!s.includes(a))throw Error('Economy UI anchor changed: '+a.slice(0,80));return s.replace(a,b);}
 edit('royale-v3-staging/portals/world-art.mjs',s=>{
- s="import {regionPortals} from '../gameplay/portal-layout.mjs';\n"+s;
+ s="import {regionPortals} from '../gameplay/portal-layout.mjs?v=phase-portals-1';\n"+s;
  s=replace(s,"  for(const camp of g.camps){const x=camp.x+90;if(x<camera-160||x>camera+width+160)continue;drawPortal(c,x,camp.y,g.regionId,g.time,'REGION PORTAL · FREE',g);}","");
  const start=s.indexOf('  for(const [x,label,locked]'),end=s.indexOf('\n}',start);
  if(start<0||end<0)throw Error('Missing world portal rendering boundary');
@@ -14,22 +14,22 @@ edit('royale-v3-staging/portals/world-art.mjs',s=>{
   }`+s.slice(end);
 });
 edit('royale-v3-staging/portals/journey-menu.mjs',s=>{
- s="import {travelQuote} from '../gameplay/portal-layout.mjs';\n"+s;
+ s="import {travelQuote} from '../gameplay/portal-layout.mjs?v=phase-portals-1';\n"+s;
  const start=s.indexOf("  map(source="),end=s.indexOf('  cancelTravel()',start);
  s=s.slice(0,start)+`  map(source=this.source||'map'){
     this.source=source;
     const g=this.getGame(),list=$('region-cards');list.replaceChildren();worldPortalPreview(list);if(source==='portal')pulsePortal();
-    $('map-note').hidden=false;$('map-note').textContent='Fast travel is paid on every trip, including returns. Prices use the highest monster level on the destination board. Entrance, boss entrance and exit portals are free.';
+    $('map-note').hidden=false;$('map-note').textContent='Fast travel is paid on every trip, including returns. Choose one of the seven phases. Fast travel always arrives at the beginning. Each phase has four portals: entrance and fast travel at the start, boss entrance and exit at the end.';
     for(const region of WORLD_REGIONS){
       const current=region.id===g.regionId,card=el('article',undefined,'region-card');card.style.setProperty('--region-color',region.sky[0]);card.dataset.region=region.id;if(current)card.setAttribute('aria-current','location');
       const art=el('div',undefined,\`region-art \${region.theme}\`);art.append(el('span',String(region.id).padStart(2,'0'),'region-number'),el('b',['','≋','♧','▥','◇','❧','✧','✦'][region.id]));card.append(art);
       const body=el('div',undefined,'region-copy');body.append(el('h3',region.name),el('small',\`LV \${region.levels.join('–')}\`));
-      for(const board of [0,1,2]){
-        const destination={region:region.id,board},quote=travelQuote(g,destination),here=current&&!g.arenaScene&&g.board===board;
-        const button=el('button',here?'Current location':quote?\`\${region.boards[board]} · \${quote.cost.toLocaleString()} Coins\`:'Locked','secondary');
+      const board=0;
+      const destination={region:region.id,board},quote=travelQuote(g,destination),here=current&&!g.arenaScene&&g.board===board;
+        const button=el('button',here?'Current location':quote?\`\${region.name} · \${quote.cost.toLocaleString()} Coins\`:'Locked','secondary');
         button.disabled=here||!quote||!g.canTravel();button.dataset.travel=region.id;button.dataset.board=board;
         button.onclick=()=>this.confirmTravel(destination);body.append(button);
-      }card.append(body);list.append(card);
+      card.append(body);list.append(card);
     }
   }
 `+s.slice(end);
@@ -49,7 +49,7 @@ edit('royale-v3-staging/portals/boss-ui.mjs',s=>{
 });
 edit('royale-v3-staging/portals/runtime.mjs',s=>s.replaceAll('REGION PORTAL · FREE','FAST TRAVEL · PAID').replace('World Portal — fast travel costs 100 coins','World Portal — destination price shown before travel'));
 edit('royale-v3-staging/gameplay/local-coop-app.mjs',s=>{
- s="import {travelQuote} from './portal-layout.mjs';\n"+s;
+ s="import {travelQuote} from './portal-layout.mjs?v=phase-portals-1';\n"+s;
  s=replace(s,"   for(const [id,def] of Object.entries(LEGENDARY))content.append(button(def.name,()=>act(i,'enterLegendary',[id]),g.hero.level!==99||!g.canTravel()));",`   for(const [id,def] of Object.entries(LEGENDARY))content.append(button(def.name+' · 3,500 Coins per hero',()=>{p.legendaryTravel={id,revisions:Object.fromEntries([...session.active].map(n=>[n,session.games[n].economy.revision]))};renderPanel(i);},g.hero.level!==99||!g.canTravel()));
    if(p.legendaryTravel){const choice=p.legendaryTravel;content.append(el('h4','Shared arena travel — 3,500 Coins per hero'),el('p','Every active hero pays 3,500 coins after successful entry. Both heroes must meet the arena requirements. Return visits also cost coins.'),button('Confirm paid arena travel',()=>{delete p.legendaryTravel;void act(i,'enterLegendary',[choice.id,choice.revisions]);},[...session.active].some(n=>session.games[n].hero.coins<3500)),button('Cancel',()=>{delete p.legendaryTravel;renderPanel(i);}));}`);
  s=replace(s,"  if(method==='fastTravel')players[i].travelPending=true;", "  if(method==='enterLegendary'){for(const n of session.active)players[n].travelPending=true;renderPanels();updateHUD();await Promise.all([...session.active].map(n=>saveOne(n)));return true;}\n  if(method==='fastTravel')players[i].travelPending=true;");

@@ -22,7 +22,7 @@ app=app.slice(0,preloadStart)+`if(v2TestHero){
  button.textContent=ready?'Outfit artwork: ON':'KingJames artwork unavailable · Original art';button.disabled=!ready;
  button.onclick=()=>{kingJamesSprites.enabled=!kingJamesSprites.enabled;button.textContent=kingJamesSprites.enabled?'Outfit artwork: ON':'Original renderer: ON';};
  $('pause-primary').prepend(button);
- if(ready){const {installOutfitWardrobe}=await import('./outfit-wardrobe.mjs?v=outfits-1');installOutfitWardrobe({engine:kingJamesSprites,parent:$('pause-primary'),getLook:()=>game.look,onResume:()=>resume()});}
+ if(ready){const {installOutfitWardrobe}=await import('./outfit-wardrobe.mjs?v=wardrobe-22-1');installOutfitWardrobe({engine:kingJamesSprites,parent:$('pause-primary'),getLook:()=>game.look,getCosmetics:()=>game.cosmetics,onResume:()=>resume()});}
 }
 `+app.slice(preloadEnd);
 const initStart=app.indexOf('if(v2TestHero){\n // A brand-new character'),initEnd=app.indexOf("if (practiceHero && store.slot(0))",initStart);

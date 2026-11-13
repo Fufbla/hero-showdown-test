@@ -1,4 +1,4 @@
-import {travelMethods} from './travel.mjs';
+import {travelMethods} from './travel.mjs?v=phase-portals-1';
 import {monsterCoins} from './economy.mjs';
 import {matchingFlightBonus,refreshFlightEffect} from '../../royale/flight-armor.mjs';
 import {matchingAgilityBonus,refreshAgilityEffect} from '../../royale/agility-armor.mjs';
