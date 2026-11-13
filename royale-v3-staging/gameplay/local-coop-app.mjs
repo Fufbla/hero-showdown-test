@@ -144,6 +144,7 @@ $('frame-rate').onchange=()=>{frameCap=+$('frame-rate').value;};
 async function act(i,method,args=[]){
  if(!session.active.has(i)||session.ready[i]||players[i].leaving||players[i].travelPending)return false;
  try{const result=session.command(i,method,args);if(result===false||result?.ok===false){panelNote(i,result?.error||'Check this action’s requirements and leave combat first.');return false;}
+  if(method==='enterLegendary'){for(const n of session.active)players[n].travelPending=true;renderPanels();updateHUD();await Promise.all([...session.active].map(n=>saveOne(n)));return true;}
   if(method==='fastTravel')players[i].travelPending=true;
   renderPanel(i);updateHUD();if(method==='fastTravel')await saveOne(i);else void saveOne(i);return true;
  }catch(e){panelNote(i,e.message);return false;}
@@ -217,7 +218,8 @@ function renderPanel(i){
     for(const [items,set,verb,checked] of [[record.pieces,keep,'Keep',true],[g.inventory.items,discard,'Discard',false]])for(const item of items){const label=el('label'),check=el('input');check.type='checkbox';check.checked=checked;check.onchange=()=>{check.checked?set.add(item.uid):set.delete(item.uid);};label.append(check,document.createTextNode(`${verb} ${itemDefinition(item)?.name||item.catalogId}`));content.append(label,el('br'));}
     content.append(button('Confirm equipment choices',()=>{if(g.inventory.items.length-discard.size+keep.size>20){panelNote(i,'Choose enough equipment to discard to stay within 20 slots.');return;}void act(i,'claimMergeReward',[id,[...keep],[...discard],{confirmed:true,revision:g.legendary.revision}]);},!g.canSave()));
    }
-   for(const [id,def] of Object.entries(LEGENDARY))content.append(button(def.name,()=>act(i,'enterLegendary',[id]),g.hero.level!==99||!g.canTravel()));
+   for(const [id,def] of Object.entries(LEGENDARY))content.append(button(def.name+' · 3,500 Coins per hero',()=>{p.legendaryTravel={id,revisions:Object.fromEntries([...session.active].map(n=>[n,session.games[n].economy.revision]))};renderPanel(i);},g.hero.level!==99||!g.canTravel()));
+   if(p.legendaryTravel){const choice=p.legendaryTravel;content.append(el('h4','Shared arena travel — 3,500 Coins per hero'),el('p','Every active hero pays 3,500 coins after successful entry. Both heroes must meet the arena requirements. Return visits also cost coins.'),button('Confirm paid arena travel',()=>{delete p.legendaryTravel;void act(i,'enterLegendary',[choice.id,choice.revisions]);},[...session.active].some(n=>session.games[n].hero.coins<3500)),button('Cancel',()=>{delete p.legendaryTravel;renderPanel(i);}));}
    for(const [id,record] of Object.entries(g.legendary.defeated))if(record.claimed)content.append(button('Activate '+LEGENDARY[id].name,()=>act(i,'activateMergeSet',[id]),!g.treeVisit||!g.canSave()));
   }
  }

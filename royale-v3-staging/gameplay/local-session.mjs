@@ -1,3 +1,4 @@
+import {sharedLegendaryTravel} from './coop-travel.mjs';
 import {EqualXPAuthority} from '../../royale/local-coop/equal-xp-authority.mjs?v=20261108-coop-menus';
 import {Game,decodeSave} from '../../royale/core.mjs';
 import {encodeRuntime,decodeRuntime} from '../../royale/multiplayer/runtime.mjs';
@@ -69,6 +70,7 @@ export class LocalSession {
  command(player,method,args=[]){
   if(!this.active.has(player))throw Error('This player has left.');
   const h=this.heroes[player];
+  if(method==='enterLegendary')return sharedLegendaryTravel(this,args[0],args[1]);
   if(['fastTravel','portalTravel','travel'].includes(method)&&this.active.size>1)return {ok:false,error:'Individual fast travel is unavailable while sharing one screen. Use entrance and exit portals together for free.'};
   // Paid travel is handled by each game's revision-checked travel method.
   if(['travel','enterBoss','enterLegendary','returnCheckpoint'].includes(method)&&this.active.size===2){
