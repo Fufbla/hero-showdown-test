@@ -3,11 +3,11 @@
   "repository": "Fufbla/hero-showdown-test",
   "branch": "codex/face-only-costumes-review",
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
-  "deployment": "HOLD — animation review before any merge, Pages or cloud deployment",
+  "deployment": "HOLD — uploaded to review branch only; no merge, Pages or cloud deployment",
   "upload_authorized": true,
-  "last_verified_content_commit": "4d06fe3aadd5b272c756b44991dde672aa9f6639",
+  "last_verified_content_commit": "06a55fb10a9acb18da1731ef8bc4afed6b52b584",
   "total_required_files": 106,
-  "verified_files": 49,
+  "verified_files": 57,
   "remaining_paths": [
     "docs/costumes/ASSET-CHECKSUMS.sha256",
     "docs/costumes/README.md",
@@ -30,14 +30,6 @@
     "docs/costumes/verification/source-preservation.json",
     "docs/costumes/verification/staging-build.log",
     "royale-v3-staging/cloud/cosmetics/outfit-policy.mjs",
-    "royale-v3-staging/costumes/assets/stuffed-animal-costume/registration.json",
-    "royale-v3-staging/costumes/assets/white-business-suit/body.webp",
-    "royale-v3-staging/costumes/assets/white-business-suit/manifest.json",
-    "royale-v3-staging/costumes/assets/white-business-suit/registration.json",
-    "royale-v3-staging/costumes/assets/zombie-costume/body.webp",
-    "royale-v3-staging/costumes/assets/zombie-costume/manifest.json",
-    "royale-v3-staging/costumes/assets/zombie-costume/registration.json",
-    "royale-v3-staging/costumes/engine.mjs",
     "royale-v3-staging/costumes/face.mjs",
     "royale-v3-staging/costumes/game-session.mjs",
     "royale-v3-staging/costumes/hero-art.mjs",
@@ -67,21 +59,25 @@
     "tools/build-staging-costumes.cjs",
     "tools/render-costume-review.mjs"
   ],
-  "batches": [],
-  "current_batch": {
-    "number": 2,
-    "paths": [
-      "royale-v3-staging/costumes/assets/stuffed-animal-costume/registration.json",
-      "royale-v3-staging/costumes/assets/white-business-suit/body.webp",
-      "royale-v3-staging/costumes/assets/white-business-suit/manifest.json",
-      "royale-v3-staging/costumes/assets/white-business-suit/registration.json",
-      "royale-v3-staging/costumes/assets/zombie-costume/body.webp",
-      "royale-v3-staging/costumes/assets/zombie-costume/manifest.json",
-      "royale-v3-staging/costumes/assets/zombie-costume/registration.json",
-      "royale-v3-staging/costumes/engine.mjs"
-    ],
-    "state": "awaiting_remote_verification"
-  },
+  "batches": [
+    {
+      "number": 2,
+      "commit": "06a55fb10a9acb18da1731ef8bc4afed6b52b584",
+      "paths": [
+        "royale-v3-staging/costumes/assets/stuffed-animal-costume/registration.json",
+        "royale-v3-staging/costumes/assets/white-business-suit/body.webp",
+        "royale-v3-staging/costumes/assets/white-business-suit/manifest.json",
+        "royale-v3-staging/costumes/assets/white-business-suit/registration.json",
+        "royale-v3-staging/costumes/assets/zombie-costume/body.webp",
+        "royale-v3-staging/costumes/assets/zombie-costume/manifest.json",
+        "royale-v3-staging/costumes/assets/zombie-costume/registration.json",
+        "royale-v3-staging/costumes/engine.mjs"
+      ],
+      "verified_at": "2026-11-13T07:05:38.608Z",
+      "verification": "GitHub tree matched every expected Git blob SHA"
+    }
+  ],
+  "current_batch": null,
   "errors": [
     {
       "batch": 1,
@@ -587,49 +583,49 @@
       "git_blob_sha": "776be44e292b76bdb0bb5a16b9e4f3c2fd6b5b77",
       "sha256": "f99a8c9030fe4a6170f963968b70660a4cc290c257069cdd56a57be7407bfc6b",
       "size_bytes": 27976,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/assets/white-business-suit/body.webp",
       "git_blob_sha": "3f3c75be66299e7a6853905b730f28de1f79ed06",
       "sha256": "d52c0531e4e8454930bebdf344bf93f350543ff64d2ab799c6ebf480165ed63b",
       "size_bytes": 1174000,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/assets/white-business-suit/manifest.json",
       "git_blob_sha": "19cdd0d58d88aeecebbbd5f2f07af0568890b724",
       "sha256": "128769284bf09fe4dabbe211ce2bb42dc162f6158fdccd13a93442c517874424",
       "size_bytes": 19559,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/assets/white-business-suit/registration.json",
       "git_blob_sha": "356e1b8722cc8b4c0816fb7e546c0907175f1aac",
       "sha256": "0f51f52e6834df868bc835cfa16a6d02fab0a93c8ee7e4700eedad01e76c188c",
       "size_bytes": 27893,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/assets/zombie-costume/body.webp",
       "git_blob_sha": "7be2bcc6696600f49896522bbab78b2181fd6a2f",
       "sha256": "487ffdaf115da10bde39c32a848553f60e7bc8da7a14b132ad2a8f29b75adbc4",
       "size_bytes": 1139134,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/assets/zombie-costume/manifest.json",
       "git_blob_sha": "3a2d1c3bf0d061deeaefa3ba838b037104f62979",
       "sha256": "4479e56a89f2987fadef2578b2d42186a652229a600183d6ef595068456871d0",
       "size_bytes": 19588,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/assets/zombie-costume/registration.json",
       "git_blob_sha": "b3a2c68af78cf83ac7f2d4d236580825b6a33457",
       "sha256": "d610d932acfe89bb33d1b9600e2edb0c24ef74d6e42762320cdb494fc7ab5856",
       "size_bytes": 27872,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/catalog.mjs",
@@ -643,7 +639,7 @@
       "git_blob_sha": "d30f2b6227beb4b6977381191383183439c90b2a",
       "sha256": "3c6fc91a429202ce4253125da781715a8e47cf609c576ecd85d99745072b2a98",
       "size_bytes": 8465,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/face.mjs",
@@ -841,5 +837,13 @@
       "size_bytes": 4270,
       "status": "pending"
     }
-  ]
+  ],
+  "status": "upload_in_progress",
+  "preserved_validation": {
+    "costume_checks_passed": 10,
+    "fullbody_checks_passed": 19,
+    "shared_checks_passed": 86,
+    "new_animation_test_runs": 0,
+    "reason": "All 106 recovered source files match the saved manifest checksums exactly."
+  }
 }
