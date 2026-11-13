@@ -3,7 +3,7 @@
   "repository": "Fufbla/hero-showdown-test",
   "branch": "codex/face-only-costumes-review",
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
-  "deployment": "Authorized after functional verification; not deployed",
+  "deployment": "Cloud catalog v8 deployed and source-verified; client remains on main baseline pending cloud round-trip completion.",
   "upload_authorized": true,
   "last_verified_content_commit": "12c8d78f0dcd38cddb6b3166cc890adaad599290",
   "total_required_files": 106,
@@ -148,6 +148,10 @@
       "batch": 8,
       "path": "docs/costumes/review/stuffed-animal-costume-sprites.png",
       "error": "Whole-file tool read truncated; recovered using length-checked base64 chunks. No corrupt content committed."
+    },
+    {
+      "phase": "release_verification",
+      "error": "Local Chromium failed to launch: socket() failed: Operation not permitted. Cloud browser could not access localhost. Prior browser checks retained because artifacts match exactly; live browser smoke check planned after release."
     }
   ],
   "files": [
@@ -901,5 +905,20 @@
     "shared_checks_passed": 86,
     "new_animation_test_runs": 0,
     "reason": "All 106 recovered source files match the saved manifest checksums exactly."
+  },
+  "release_verification": {
+    "baseline_main": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
+    "generated_adapters": "rebuild produced no differences",
+    "production_source": "royale/, assets/, root game pages unchanged",
+    "prior_tests_retained": {
+      "costume": 10,
+      "fullbody": 19,
+      "shared": 86
+    },
+    "new_armor_combat_test": "passed for all ten purchased/equipped costumes, reload and removal",
+    "cloud_function_version": 8,
+    "cloud_source_verified": true,
+    "cloud_round_trip": "in progress; isolated QA account",
+    "browser_evidence": "Recovered exact tested source and prior browser evidence; local Chromium launch unavailable (socket operation not permitted)."
   }
 }

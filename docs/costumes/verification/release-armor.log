@@ -1,0 +1,10 @@
+{"costumes":10,"punch":{"bare":7.54666667,"armored":9.54666667},"incoming":{"bare":100,"armored":97.5}}
+✔ all ten purchased costumes preserve actual armor combat bonuses and learned levels through reload and removal (500.351404ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 830.859805
