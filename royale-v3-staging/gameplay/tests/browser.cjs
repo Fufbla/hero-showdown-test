@@ -24,7 +24,7 @@ const namespace='royale-v2-prototype-0000000000:healthia.royale.profiles.v2';
   await page.evaluate(key=>{const p=JSON.parse(localStorage.getItem(key));const s=p.slots.find(s=>s?.snapshot?.look.name==='KingJames').snapshot;s.coins=20000;localStorage.setItem(key,JSON.stringify(p));},namespace);
   frame=await launch();await frame.evaluate(()=>window.kingJamesQA.pause());
   const before=await frame.evaluate(()=>window.kingJamesQA.status().snapshot);
-  await frame.locator('#world-portal').click();
+  await frame.locator('#open-map').click();
   assert.match(await frame.locator('#map-note').innerText(),/every trip/);
   const prices=await frame.locator('[data-travel][data-board="0"]').allTextContents();
   for(const price of ['200','300','800','1,200','2,500','3,500'])assert(prices.some(p=>p.includes(price+' Coins')),price);
@@ -43,7 +43,7 @@ const namespace='royale-v2-prototype-0000000000:healthia.royale.profiles.v2';
   report.checks.push('Actual test-code local save/reload retains debit and destination');
   // A second isolated test balance checks the rendered disabled confirmation.
   await page.evaluate(key=>{const p=JSON.parse(localStorage.getItem(key));p.slots.find(s=>s?.snapshot?.look.name==='KingJames').snapshot.coins=99;localStorage.setItem(key,JSON.stringify(p));},namespace);
-  frame=await launch();await frame.evaluate(()=>window.kingJamesQA.pause());await frame.locator('#world-portal').click();await frame.locator('[data-travel="1"][data-board="0"]').click();assert(await frame.locator('#confirm-fast-travel').isDisabled());assert.match(await frame.locator('#fast-travel-dialog').innerText(),/100 coins/);await frame.locator('#cancel-fast-travel').click();assert.equal((await frame.evaluate(()=>window.kingJamesQA.status().snapshot)).coins,99);report.checks.push('Insufficient funds disables travel; cancel does not charge');
+  frame=await launch();await frame.evaluate(()=>window.kingJamesQA.pause());await frame.locator('#open-map').click();await frame.locator('[data-travel="1"][data-board="0"]').click();assert(await frame.locator('#confirm-fast-travel').isDisabled());assert.match(await frame.locator('#fast-travel-dialog').innerText(),/100 coins/);await frame.locator('#cancel-fast-travel').click();assert.equal((await frame.evaluate(()=>window.kingJamesQA.status().snapshot)).coins,99);report.checks.push('Insufficient funds disables travel; cancel does not charge');
   assert.deepEqual(errors,[]);report.errors=errors;report.passed=true;fs.writeFileSync(out+'/browser.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
- }finally{await browser.close();}
+ }catch(error){await page.screenshot({path:out+'/browser-failure.png',fullPage:true}).catch(()=>{});fs.writeFileSync(out+'/browser-failure.json',JSON.stringify({error:String(error),errors,url:page.url()},null,2));throw error;}finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
