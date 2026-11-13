@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "functionVersion": 10,
+  "existingIsolatedQaAccount": true,
+  "realPlayerAccountsTouched": false,
+  "outfitsPurchasedAndSaved": 22,
+  "pricePerOutfit": 700,
+  "startingCoins": 20000,
+  "restoredCoins": 4600,
+  "restoredOutfit": "sapphire-starlight",
+  "retiredOutfitRejected": 409,
+  "staleRevisionRejected": 409,
+  "otherQaSlotsUnchanged": true,
+  "revision": 23
+}

@@ -14,3 +14,7 @@ There are no portals between terrain sections and no section destinations in the
 Terrain sections and checkpoints remain internal save data. Existing saves in the middle or end of a phase retain their exact position, inventory and progress. No cloud schema, player records, bosses, costumes, terrain, combat or prices are changed. The approved phase prices remain 100 / 200 / 300 / 800 / 1,200 / 2,500 / 3,500 coins. Shared-screen travel restrictions and Legendary arena behavior remain unchanged.
 
 Validation before publication: 47 economy/travel/save tests and 118 armor/boss/co-op regressions passed. Tests exercise all 28 physical portals, all 56 removed locations, sequential phase links, boss returns, seven paid destinations, legacy saved coordinates, invalid destinations, insufficient balances and payment revisions. The Chromium test now requires exactly seven map buttons, no section names, and arrival/save/reload at the destination start. Generated staging adapters are reproducible; shared production files are unchanged.
+
+## Deployment
+
+Published with the approved wardrobe update through PR #22 at `f63bff8e48a122f18eb8e9dd0168531f061e9ebc`. Release CI and Pages deployment passed. The live World Map was verified to show exactly seven phase destinations, with no subsection travel buttons.
