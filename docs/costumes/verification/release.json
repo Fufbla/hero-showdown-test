@@ -8,7 +8,6 @@
   "recovered_checkpoint": "338264051038dd88070a4444c5a7f2c6f595f658",
   "release_checkpoint": "3ac84c6bba0e650215677f8b7fa6e298bbca409c",
   "artwork_regenerated": false,
-  "previous_successful_tests_repeated": false,
   "prior_passing_tests": {
     "costume": 10,
     "fullbody": 19,
@@ -33,7 +32,14 @@
     "only_changed_file": "cloud/cosmetics/outfit-policy.mjs",
     "source_verified": true
   },
-  "deployment": "Ready for authorized V3 staging deployment",
+  "deployment": {
+    "commit": "2ce05112a479bb3f446350e040d77dc9966245e6",
+    "initial_release_commit": "7e5ae4e7386be7db9aa97463af48fdd71db259bf",
+    "status": "GitHub Pages published successfully; live files hash-verified",
+    "review_commit": "34702e0f1660d692bcd557d528e26d8a551ad9e8",
+    "url": "https://fufbla.github.io/hero-showdown-test/royale-v3-staging/",
+    "all_checks": "success"
+  },
   "cloud_round_trip": {
     "timestamp": "2026-11-13T07:23:51.467676+00:00",
     "function_version": 8,
@@ -67,6 +73,231 @@
     "final_coins": 13000,
     "owned_costumes": 10,
     "original_look_preserved": true,
-    "qa_cleanup": "pending"
-  }
+    "qa_cleanup": "Not performed: Supabase deletion confirmation expired; isolated synthetic QA account retained. No existing user account modified."
+  },
+  "prior_suites_manually_repeated": false,
+  "automatic_push_ci": "Startup/browser and clothing checks ran automatically on release commits.",
+  "startup_ci": {
+    "run": "https://github.com/Fufbla/hero-showdown-test/actions/runs/43387017945",
+    "commit": "2ce05112a479bb3f446350e040d77dc9966245e6",
+    "conclusion": "success",
+    "imports": {
+      "passed": 4,
+      "failed": 0
+    },
+    "login": [
+      "chromium: ordinary account empty slots loaded without cloud writes",
+      "chromium: ordinary account saved hero loaded without cloud writes",
+      "webkit: ordinary account empty slots loaded without cloud writes",
+      "webkit: ordinary account saved hero loaded without cloud writes"
+    ],
+    "gameplay": [
+      {
+        "engine": "chromium",
+        "mode": "desktop",
+        "verified": [
+          "reserved-code-load",
+          "idle",
+          "both-run-directions",
+          "jump",
+          "doubleJump",
+          "fall",
+          "land",
+          "punch",
+          "kick",
+          "basic-contact-art-both-directions",
+          "no-basic-curve",
+          "progress-reload",
+          "no-cloud-write"
+        ],
+        "errors": []
+      },
+      {
+        "engine": "chromium",
+        "mode": "portrait",
+        "verified": [
+          "reserved-code-load",
+          "idle",
+          "both-run-directions",
+          "jump",
+          "doubleJump",
+          "fall",
+          "land",
+          "punch",
+          "kick",
+          "basic-contact-art-both-directions",
+          "no-basic-curve",
+          "progress-reload",
+          "no-cloud-write"
+        ],
+        "errors": []
+      },
+      {
+        "engine": "chromium",
+        "mode": "landscape",
+        "verified": [
+          "reserved-code-load",
+          "idle",
+          "both-run-directions",
+          "jump",
+          "doubleJump",
+          "fall",
+          "land",
+          "punch",
+          "kick",
+          "basic-contact-art-both-directions",
+          "no-basic-curve",
+          "progress-reload",
+          "no-cloud-write"
+        ],
+        "errors": []
+      },
+      {
+        "engine": "webkit",
+        "mode": "desktop",
+        "verified": [
+          "reserved-code-load",
+          "idle",
+          "both-run-directions",
+          "jump",
+          "doubleJump",
+          "fall",
+          "land",
+          "punch",
+          "kick",
+          "basic-contact-art-both-directions",
+          "no-basic-curve",
+          "progress-reload",
+          "no-cloud-write"
+        ],
+        "errors": []
+      },
+      {
+        "engine": "webkit",
+        "mode": "portrait",
+        "verified": [
+          "reserved-code-load",
+          "idle",
+          "both-run-directions",
+          "jump",
+          "doubleJump",
+          "fall",
+          "land",
+          "punch",
+          "kick",
+          "basic-contact-art-both-directions",
+          "no-basic-curve",
+          "progress-reload",
+          "no-cloud-write"
+        ],
+        "errors": []
+      },
+      {
+        "engine": "webkit",
+        "mode": "landscape",
+        "verified": [
+          "reserved-code-load",
+          "idle",
+          "both-run-directions",
+          "jump",
+          "doubleJump",
+          "fall",
+          "land",
+          "punch",
+          "kick",
+          "basic-contact-art-both-directions",
+          "no-basic-curve",
+          "progress-reload",
+          "no-cloud-write"
+        ],
+        "errors": []
+      }
+    ]
+  },
+  "live_assets": [
+    {
+      "path": "royale-v3-staging/costumes/assets/black-business-suit/body.webp",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/dolphin-costume/body.webp",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/fishsticks-costume/body.webp",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/hamburger-costume/body.webp",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/pink-shark-costume/body.webp",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/pizza-slice-costume/body.webp",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/reaper-costume/body.webp",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/stuffed-animal-costume/body.webp",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/white-business-suit/body.webp",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/costumes/assets/zombie-costume/body.webp",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/costumes/engine.mjs",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/index.html",
+      "status": 200,
+      "sha256_match": true,
+      "layout": true
+    },
+    {
+      "path": "royale-v3-staging/kingjames/app.mjs",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/kingjames/index.html",
+      "status": 200,
+      "sha256_match": true,
+      "layout": true
+    }
+  ],
+  "live_browser": {
+    "account": "0000000000 (reserved browser-local test)",
+    "catalog_entries": 10,
+    "price_each": 700,
+    "preview": "Pink Shark: running, left facing, double jump, punch and kick controls; personalized face visible",
+    "wallet": 0,
+    "buy_disabled_reason": "Not enough coins; existing rules preserved",
+    "cloud_purchase_verification": "Separate isolated QA account: all ten purchase/equip/reload transactions passed",
+    "proof": "docs/costumes/verification/live-store.jpg",
+    "layout_cache": "Existing iframe retained previous CSS; the final published HTML itself was retrieved and hash-verified against the grid correction."
+  },
+  "layout_correction": "Responsive grid for all twelve fitting-room animation buttons. CSS-only correction; all four staging HTML files and builder committed."
 }

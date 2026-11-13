@@ -3,9 +3,9 @@
   "repository": "Fufbla/hero-showdown-test",
   "branch": "codex/face-only-costumes-review",
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
-  "deployment": "Live; final fitting-room action layout correction uploading",
+  "deployment": "Completed: GitHub Pages release 2ce05112a479bb3f446350e040d77dc9966245e6; staging cloud policy version 8",
   "upload_authorized": true,
-  "last_verified_content_commit": "12c8d78f0dcd38cddb6b3166cc890adaad599290",
+  "last_verified_content_commit": "2ce05112a479bb3f446350e040d77dc9966245e6",
   "total_required_files": 106,
   "verified_files": 106,
   "remaining_paths": [],
@@ -122,6 +122,48 @@
       ],
       "verified_at": "2026-11-13T07:15:45.463Z",
       "verification": "GitHub recursive tree matched all 106 expected Git blob SHAs"
+    },
+    {
+      "number": 9,
+      "commit": "3ac84c6bba0e650215677f8b7fa6e298bbca409c",
+      "paths": [
+        "royale-v3-staging/costumes/tests/release-armor.test.mjs",
+        "docs/costumes/verification/release-armor.log",
+        "docs/costumes/upload-progress.json"
+      ],
+      "verification": "All ten costumes preserve actual armor damage and defense through reload and removal."
+    },
+    {
+      "number": 10,
+      "commit": "34702e0f1660d692bcd557d528e26d8a551ad9e8",
+      "paths": [
+        "docs/costumes/README.md",
+        "docs/costumes/verification/release.json",
+        "docs/costumes/upload-progress.json"
+      ],
+      "verification": "Recorded 22 real cloud round trips and complete recovery."
+    },
+    {
+      "number": 11,
+      "commit": "323552ea02201ebaf794d341d8ef25386654f06c",
+      "paths": [
+        "royale-v3-staging/kingjames/tests/import-maps.test.mjs",
+        "docs/costumes/verification/release-import-maps.log"
+      ],
+      "verification": "4/4 import-map checks pass after updating stale hero-art path expectation."
+    },
+    {
+      "number": 12,
+      "commit": "2ce05112a479bb3f446350e040d77dc9966245e6",
+      "paths": [
+        "tools/build-staging-costumes.cjs",
+        "royale-v3-staging/index.html",
+        "royale-v3-staging/kingjames/index.html",
+        "royale-v3-staging/gameplay/index.html",
+        "royale-v3-staging/local-coop/index.html",
+        "docs/costumes/upload-progress.json"
+      ],
+      "verification": "Remote tree matches all 106 original package entries; CSS-only action-grid layout correction."
     }
   ],
   "current_batch": null,
@@ -138,20 +180,25 @@
         "royale-v3-staging/costumes/assets/stuffed-animal-costume/body.webp",
         "royale-v3-staging/costumes/assets/stuffed-animal-costume/manifest.json"
       ],
-      "error": "Error: Incomplete local read: royale-v3-staging/costumes/assets/reaper-costume/body.webp"
+      "error": "Error: Incomplete local read: royale-v3-staging/costumes/assets/reaper-costume/body.webp",
+      "resolved": true
     },
     {
       "batch": 8,
-      "error": "Command-line git push failed: could not read Username for https://github.com. Switched to connected GitHub service."
+      "error": "Command-line git push failed: could not read Username for https://github.com. Switched to connected GitHub service.",
+      "resolved": true
     },
     {
       "batch": 8,
       "path": "docs/costumes/review/stuffed-animal-costume-sprites.png",
-      "error": "Whole-file tool read truncated; recovered using length-checked base64 chunks. No corrupt content committed."
+      "error": "Whole-file tool read truncated; recovered using length-checked base64 chunks. No corrupt content committed.",
+      "resolved": true
     },
     {
       "phase": "release_verification",
-      "error": "Local Chromium failed to launch: socket() failed: Operation not permitted. Cloud browser could not access localhost. Prior browser checks retained because artifacts match exactly; live browser smoke check planned after release."
+      "error": "Local Chromium failed to launch: socket() failed: Operation not permitted. Cloud browser could not access localhost. Prior browser checks retained because artifacts match exactly; live browser smoke check planned after release.",
+      "resolved": true,
+      "resolution": "Completed live cloud-browser verification after deployment."
     }
   ],
   "files": [
@@ -826,7 +873,7 @@
       "git_blob_sha": "384f3373ec33fc17e11c18ec42ee023cb844f26c",
       "sha256": "aa67396c4b1b3df891b338d70aef6a7499b0f3b66e1461eeed3eff936bb31cee",
       "size_bytes": 43428,
-      "status": "pending-layout-batch",
+      "status": "verified",
       "recovered_git_blob_sha": "69f7e8415537cd17eca39c3145b69775ab649955"
     },
     {
@@ -834,7 +881,7 @@
       "git_blob_sha": "eb05423972420d89420f4a112c82d0ee922f7774",
       "sha256": "005c04efcc9f6f8cb09ffbc4a287cef8dab1318c920b0f3938825641f3dbed7d",
       "size_bytes": 10406,
-      "status": "pending-layout-batch",
+      "status": "verified",
       "recovered_git_blob_sha": "43c928c6e9970c4fef18afc2155121edb17269c0"
     },
     {
@@ -849,7 +896,7 @@
       "git_blob_sha": "6d1e93963f38ede13d581db9ea9f09f4588eaa21",
       "sha256": "5d744b9f9989e150f532fa4573d646b2f82b899e8a0b3611b7b97c02d03d05d6",
       "size_bytes": 43755,
-      "status": "pending-layout-batch",
+      "status": "verified",
       "recovered_git_blob_sha": "11c67981e3ecb198b3c5c711d6256d15436b86f6"
     },
     {
@@ -864,7 +911,7 @@
       "git_blob_sha": "4fcf53380e820ef7591465523e85b3017a049be1",
       "sha256": "c2ddfcdcdc08bfc956d805cc94668c771401c33e982dbf373775d4d45668e37c",
       "size_bytes": 14463,
-      "status": "pending-layout-batch",
+      "status": "verified",
       "recovered_git_blob_sha": "1e97e0514f35314f4943de4b1ceb04cbfb4e8ce7"
     },
     {
@@ -893,7 +940,7 @@
       "git_blob_sha": "3d76c711d4c4e515d6baf69c11e740dbec34ad53",
       "sha256": "a99c3376f46aa1501c38ef5944ee126386ce004953ae567554116439e11ff02e",
       "size_bytes": 10761,
-      "status": "pending-layout-batch",
+      "status": "verified",
       "recovered_git_blob_sha": "5b473ae2c2433c30db0e4a74ceb502c17fff3da8"
     },
     {
@@ -904,7 +951,7 @@
       "status": "verified"
     }
   ],
-  "status": "complete_verified_ready_to_deploy",
+  "status": "complete_verified_deployed",
   "preserved_validation": {
     "costume_checks_passed": 10,
     "fullbody_checks_passed": 19,
@@ -931,9 +978,15 @@
       "stale_revision_rejected": true,
       "total_coin_debit": 7000
     },
-    "browser_evidence": "Recovered exact tested source and prior browser evidence; local Chromium launch unavailable (socket operation not permitted).",
+    "browser_evidence": "Live V3 test account opened successfully; all ten Mascots & Formal store entries present at 700 coins. Pink Shark left-facing running, double-jump and kick preview controls exercised; full-body kick and personalized face visually confirmed.",
     "report": "docs/costumes/verification/release.json",
     "checkpoint": "3ac84c6bba0e650215677f8b7fa6e298bbca409c",
-    "layout": "Wrap twelve action buttons in a responsive grid; no sprite or gameplay changes"
+    "layout": "Wrap twelve action buttons in a responsive grid; no sprite or gameplay changes",
+    "live_asset_hashes": "docs/costumes/verification/live-assets.json",
+    "startup_ci": "Final release passed: Chromium and WebKit in desktop, portrait and landscape; four ordinary login cases; no browser errors",
+    "runtime_commit": "2ce05112a479bb3f446350e040d77dc9966245e6",
+    "live_proof": "docs/costumes/verification/live-store.jpg",
+    "layout_observation": "Published HTML contains responsive grid; existing browser iframe retained cached earlier CSS during smoke check. No gameplay or artwork impact.",
+    "all_release_checks": "success"
   }
 }

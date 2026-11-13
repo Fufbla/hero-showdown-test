@@ -1,0 +1,74 @@
+[
+  {
+    "path": "royale-v3-staging/costumes/assets/black-business-suit/body.webp",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/costumes/assets/dolphin-costume/body.webp",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/costumes/assets/fishsticks-costume/body.webp",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/costumes/assets/hamburger-costume/body.webp",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/costumes/assets/pink-shark-costume/body.webp",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/costumes/assets/pizza-slice-costume/body.webp",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/costumes/assets/reaper-costume/body.webp",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/costumes/assets/stuffed-animal-costume/body.webp",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/costumes/assets/white-business-suit/body.webp",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/costumes/assets/zombie-costume/body.webp",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/costumes/engine.mjs",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/index.html",
+    "status": 200,
+    "sha256_match": true,
+    "layout": true
+  },
+  {
+    "path": "royale-v3-staging/kingjames/app.mjs",
+    "status": 200,
+    "sha256_match": true
+  },
+  {
+    "path": "royale-v3-staging/kingjames/index.html",
+    "status": 200,
+    "sha256_match": true,
+    "layout": true
+  }
+]

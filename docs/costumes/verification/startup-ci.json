@@ -1,0 +1,137 @@
+{
+  "run": "https://github.com/Fufbla/hero-showdown-test/actions/runs/43387017945",
+  "commit": "2ce05112a479bb3f446350e040d77dc9966245e6",
+  "conclusion": "success",
+  "imports": {
+    "passed": 4,
+    "failed": 0
+  },
+  "login": [
+    "chromium: ordinary account empty slots loaded without cloud writes",
+    "chromium: ordinary account saved hero loaded without cloud writes",
+    "webkit: ordinary account empty slots loaded without cloud writes",
+    "webkit: ordinary account saved hero loaded without cloud writes"
+  ],
+  "gameplay": [
+    {
+      "engine": "chromium",
+      "mode": "desktop",
+      "verified": [
+        "reserved-code-load",
+        "idle",
+        "both-run-directions",
+        "jump",
+        "doubleJump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "basic-contact-art-both-directions",
+        "no-basic-curve",
+        "progress-reload",
+        "no-cloud-write"
+      ],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "mode": "portrait",
+      "verified": [
+        "reserved-code-load",
+        "idle",
+        "both-run-directions",
+        "jump",
+        "doubleJump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "basic-contact-art-both-directions",
+        "no-basic-curve",
+        "progress-reload",
+        "no-cloud-write"
+      ],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "mode": "landscape",
+      "verified": [
+        "reserved-code-load",
+        "idle",
+        "both-run-directions",
+        "jump",
+        "doubleJump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "basic-contact-art-both-directions",
+        "no-basic-curve",
+        "progress-reload",
+        "no-cloud-write"
+      ],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "mode": "desktop",
+      "verified": [
+        "reserved-code-load",
+        "idle",
+        "both-run-directions",
+        "jump",
+        "doubleJump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "basic-contact-art-both-directions",
+        "no-basic-curve",
+        "progress-reload",
+        "no-cloud-write"
+      ],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "mode": "portrait",
+      "verified": [
+        "reserved-code-load",
+        "idle",
+        "both-run-directions",
+        "jump",
+        "doubleJump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "basic-contact-art-both-directions",
+        "no-basic-curve",
+        "progress-reload",
+        "no-cloud-write"
+      ],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "mode": "landscape",
+      "verified": [
+        "reserved-code-load",
+        "idle",
+        "both-run-directions",
+        "jump",
+        "doubleJump",
+        "fall",
+        "land",
+        "punch",
+        "kick",
+        "basic-contact-art-both-directions",
+        "no-basic-curve",
+        "progress-reload",
+        "no-cloud-write"
+      ],
+      "errors": []
+    }
+  ]
+}
