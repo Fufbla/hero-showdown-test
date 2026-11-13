@@ -5,18 +5,10 @@
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
   "deployment": "HOLD — uploaded to review branch only; no merge, Pages or cloud deployment",
   "upload_authorized": true,
-  "last_verified_content_commit": "8e9d6b2f86fb984b50305ec8aa46d38143310a2c",
+  "last_verified_content_commit": "44018802f1890ea0d6e3370d0ee0ce8dbd37a7a6",
   "total_required_files": 106,
-  "verified_files": 89,
+  "verified_files": 97,
   "remaining_paths": [
-    "docs/costumes/review/costume-animation-review.mp4",
-    "docs/costumes/review/dolphin-costume-sprites.png",
-    "docs/costumes/review/fishsticks-costume-sprites.png",
-    "docs/costumes/review/hair-visibility.png",
-    "docs/costumes/review/hamburger-costume-sprites.png",
-    "docs/costumes/review/pink-shark-costume-sprites.png",
-    "docs/costumes/review/pizza-slice-costume-sprites.png",
-    "docs/costumes/review/reaper-costume-sprites.png",
     "docs/costumes/review/stuffed-animal-costume-sprites.png",
     "docs/costumes/review/ten-costumes.png",
     "docs/costumes/review/white-business-suit-sprites.png",
@@ -107,22 +99,25 @@
       ],
       "verified_at": "2026-11-13T07:06:56.292Z",
       "verification": "GitHub tree matched every expected Git blob SHA"
+    },
+    {
+      "number": 7,
+      "commit": "44018802f1890ea0d6e3370d0ee0ce8dbd37a7a6",
+      "paths": [
+        "docs/costumes/review/costume-animation-review.mp4",
+        "docs/costumes/review/dolphin-costume-sprites.png",
+        "docs/costumes/review/fishsticks-costume-sprites.png",
+        "docs/costumes/review/hair-visibility.png",
+        "docs/costumes/review/hamburger-costume-sprites.png",
+        "docs/costumes/review/pink-shark-costume-sprites.png",
+        "docs/costumes/review/pizza-slice-costume-sprites.png",
+        "docs/costumes/review/reaper-costume-sprites.png"
+      ],
+      "verified_at": "2026-11-13T07:07:34.215Z",
+      "verification": "GitHub tree matched every expected Git blob SHA"
     }
   ],
-  "current_batch": {
-    "number": 7,
-    "paths": [
-      "docs/costumes/review/costume-animation-review.mp4",
-      "docs/costumes/review/dolphin-costume-sprites.png",
-      "docs/costumes/review/fishsticks-costume-sprites.png",
-      "docs/costumes/review/hair-visibility.png",
-      "docs/costumes/review/hamburger-costume-sprites.png",
-      "docs/costumes/review/pink-shark-costume-sprites.png",
-      "docs/costumes/review/pizza-slice-costume-sprites.png",
-      "docs/costumes/review/reaper-costume-sprites.png"
-    ],
-    "state": "awaiting_remote_verification"
-  },
+  "current_batch": null,
   "errors": [
     {
       "batch": 1,
@@ -313,7 +308,7 @@
       "git_blob_sha": "5f9e924186fba27827cf937606a5fe71c0d8dc51",
       "sha256": "0fa610756b54944bbd0261893a519503f3b6c28ee55421e75192295b434a4719",
       "size_bytes": 4890550,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/costume-hair-restored.jpg",
@@ -334,49 +329,49 @@
       "git_blob_sha": "b0e9c81b4a87a66ac0ef46f6503e57b1d6939532",
       "sha256": "219476aab96959c7bb2c2c8b037794e9d3f0e8d7dfeec3aef2e36c84c59db237",
       "size_bytes": 1171939,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/fishsticks-costume-sprites.png",
       "git_blob_sha": "9c95b7d14e05de6b060df2163ea890c22fdec60a",
       "sha256": "c265069ac73c06150f9583f29f293589cd7c2f4abe42a2d1e5a7b3445fe7da81",
       "size_bytes": 1095114,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/hair-visibility.png",
       "git_blob_sha": "b73defd6f30701b90d0ac7b675c6e798b1ec8cfd",
       "sha256": "e3dc91a36843ba171bc4e1b1788aace05473aa4bf1e337adf60d90e5f0ea5680",
       "size_bytes": 106399,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/hamburger-costume-sprites.png",
       "git_blob_sha": "3ca6386e2be306c3e74bc9264b561c67aba69201",
       "sha256": "dbd65216f850b84cdc89b4187bff301821d4e1584ae0504f60ae8d81c31a0475",
       "size_bytes": 1075034,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/pink-shark-costume-sprites.png",
       "git_blob_sha": "b0174f7ecc30996fecbbbf4bea98736b2313b281",
       "sha256": "e6693b377d695df9f909984a156c0c9d8bcde7f9dd63975672762156a39be44f",
       "size_bytes": 1115781,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/pizza-slice-costume-sprites.png",
       "git_blob_sha": "391e101a42b0016f7b1528e66c7cc40f75d4c688",
       "sha256": "34092d9bf340042f82435f89dcee38b851fdd667075d28d880dde2b178356c3b",
       "size_bytes": 1050905,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/reaper-costume-sprites.png",
       "git_blob_sha": "e61e59fb37b1c2d5caca40c2ef2bc559f3cf5e9a",
       "sha256": "c327494c902f121c930dd528e962d86b0791c1cac659c4777613d6cf9a003c84",
       "size_bytes": 1250930,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/stuffed-animal-costume-sprites.png",
