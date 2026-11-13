@@ -4,7 +4,6 @@ on:
     branches: [upload/v3-approved-20261113]
 permissions:
   contents: write
-  actions: write
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -22,5 +21,10 @@ jobs:
           git unpack-objects < /tmp/approved-v3.pack
           test "$(git cat-file -t a812cc9429e7761bf652acd48f65461ca2c9150f)" = commit
           git merge-base --is-ancestor a47a8800259b99acae2436711098bb84e9ed37e3 a812cc9429e7761bf652acd48f65461ca2c9150f
-          git push origin a812cc9429e7761bf652acd48f65461ca2c9150f:refs/heads/fix/v3-approved-wardrobe-20261113
-          gh workflow run v3-gameplay-economy.yml --repo Fufbla/hero-showdown-test --ref fix/v3-approved-wardrobe-20261113
+          git read-tree a812cc9429e7761bf652acd48f65461ca2c9150f
+          baseline_workflow=$(git rev-parse a47a8800259b99acae2436711098bb84e9ed37e3:.github/workflows/v3-gameplay-economy.yml)
+          git update-index --cacheinfo 100644,$baseline_workflow,.github/workflows/v3-gameplay-economy.yml
+          release_tree=$(git write-tree)
+          release_commit=$(git -c user.name="Fufbla" -c user.email="334566788+Fufbla@users.noreply.github.com" commit-tree "$release_tree" -p a47a8800259b99acae2436711098bb84e9ed37e3 -m "feat(v3): publish approved portal and wardrobe files")
+          git push origin "$release_commit":refs/heads/upload/v3-assets-20261113
+          echo "Published source tree $release_tree at $release_commit. The connected GitHub account will apply the CI configuration."
