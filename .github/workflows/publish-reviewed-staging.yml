@@ -1,8 +1,5 @@
 name: Publish verified V3 staging artifact
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/publish-reviewed-staging.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,6 +18,8 @@ jobs:
         with:
           script: |
             const owner=context.repo.owner,repo=context.repo.repo,run_id=43515370987;
+            const drift=(await github.rest.repos.compareCommits({owner,repo,base:'dceaffdee5fdb45826062dd4d0f9568694d9a548',head:context.sha})).data;
+            if(!drift.files||drift.files.length>=300||drift.files.some(f=>f.filename!=='.github/workflows/publish-reviewed-staging.yml'))throw Error('Production has changed since this staging artifact was prepared. Build a new reviewed artifact before publishing.');
             const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id})).data;
             if(run.head_sha!=='a3c5df49e970cde505fcc822029cabc03b78d86a')throw Error('Unexpected source commit');
             const jobs=(await github.rest.actions.listJobsForWorkflowRun({owner,repo,run_id})).data.jobs;
