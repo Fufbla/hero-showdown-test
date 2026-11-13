@@ -1,0 +1,126 @@
+{
+  "reference": "origin/codex/face-only-costumes-review",
+  "files": [
+    {
+      "file": "docs/costumes/art/black-business-suit-source.png",
+      "referenceSHA256": "e1b5e10a8dbf37a4f5f71379eec062a7d476010b8e843a5e5ae1e35222d9bdc0",
+      "currentSHA256": "e1b5e10a8dbf37a4f5f71379eec062a7d476010b8e843a5e5ae1e35222d9bdc0",
+      "unchanged": true
+    },
+    {
+      "file": "docs/costumes/art/dolphin-costume-source.png",
+      "referenceSHA256": "8dff6a930eeecfb5e3818f636f0f306f7b0c8dc9e6bb425315d945391297f5f5",
+      "currentSHA256": "8dff6a930eeecfb5e3818f636f0f306f7b0c8dc9e6bb425315d945391297f5f5",
+      "unchanged": true
+    },
+    {
+      "file": "docs/costumes/art/fishsticks-costume-source.png",
+      "referenceSHA256": "d29c026eeab9ca20b3cb0279a2fa90afe78f6743a2e3b65c838098b46f8e696d",
+      "currentSHA256": "d29c026eeab9ca20b3cb0279a2fa90afe78f6743a2e3b65c838098b46f8e696d",
+      "unchanged": true
+    },
+    {
+      "file": "docs/costumes/art/hamburger-costume-source.png",
+      "referenceSHA256": "56c559fae0d5159a2b17bc14bc782fa83702683df0c68d9001793d51f2a71628",
+      "currentSHA256": "56c559fae0d5159a2b17bc14bc782fa83702683df0c68d9001793d51f2a71628",
+      "unchanged": true
+    },
+    {
+      "file": "docs/costumes/art/pink-shark-costume-source.png",
+      "referenceSHA256": "dc341262a1d7e7b72e0de32db34fb9c87fdd7e0ce59155c6fe9eb765cc9bb849",
+      "currentSHA256": "dc341262a1d7e7b72e0de32db34fb9c87fdd7e0ce59155c6fe9eb765cc9bb849",
+      "unchanged": true
+    },
+    {
+      "file": "docs/costumes/art/pizza-slice-costume-source.png",
+      "referenceSHA256": "d0ca9743fd304a6548ef3427ccc2ff746f8068b20e8cddcad320ec4c0739c961",
+      "currentSHA256": "d0ca9743fd304a6548ef3427ccc2ff746f8068b20e8cddcad320ec4c0739c961",
+      "unchanged": true
+    },
+    {
+      "file": "docs/costumes/art/reaper-costume-source.png",
+      "referenceSHA256": "b6cb8ec4098c6de913e5469898cb90fdd5b909417fd7bfec3c8f132a355a618e",
+      "currentSHA256": "b6cb8ec4098c6de913e5469898cb90fdd5b909417fd7bfec3c8f132a355a618e",
+      "unchanged": true
+    },
+    {
+      "file": "docs/costumes/art/stuffed-animal-costume-source.png",
+      "referenceSHA256": "8dc999b588ba86b6aa25c88f27270c1514c912ae0cfd444963260bf3166b34e1",
+      "currentSHA256": "8dc999b588ba86b6aa25c88f27270c1514c912ae0cfd444963260bf3166b34e1",
+      "unchanged": true
+    },
+    {
+      "file": "docs/costumes/art/white-business-suit-source.png",
+      "referenceSHA256": "b686cfd4e435af14e58731e47546a44b02e3fb1d7acf751ebd27eb2ad25da5af",
+      "currentSHA256": "b686cfd4e435af14e58731e47546a44b02e3fb1d7acf751ebd27eb2ad25da5af",
+      "unchanged": true
+    },
+    {
+      "file": "docs/costumes/art/zombie-costume-source.png",
+      "referenceSHA256": "44fce9ba6a363152185126e3ca2c8d0da882b0c5850bdd2e8e1d222be60ea2ce",
+      "currentSHA256": "44fce9ba6a363152185126e3ca2c8d0da882b0c5850bdd2e8e1d222be60ea2ce",
+      "unchanged": true
+    },
+    {
+      "file": "royale-v3-staging/costumes/assets/black-business-suit/body.webp",
+      "referenceSHA256": "09f5b9ae2bf61c3e73d3ea9eabfc10138fa4b674e0646d709a04e6f30e963528",
+      "currentSHA256": "09f5b9ae2bf61c3e73d3ea9eabfc10138fa4b674e0646d709a04e6f30e963528",
+      "unchanged": true
+    },
+    {
+      "file": "royale-v3-staging/costumes/assets/black-business-suit/manifest.json",
+      "referenceSHA256": "d965216aba1c0b0f5bcb7f43c12359fc6ecde1585b9a6d765c7a6a068a30d52c",
+      "currentSHA256": "d965216aba1c0b0f5bcb7f43c12359fc6ecde1585b9a6d765c7a6a068a30d52c",
+      "unchanged": true
+    },
+    {
+      "file": "royale-v3-staging/costumes/assets/black-business-suit/registration.json",
+      "referenceSHA256": "cc785ce9d47b1d66cca29ac990cc72e8e739e7fd9dd28871d2bc87fcded8afe1",
+      "currentSHA256": "cc785ce9d47b1d66cca29ac990cc72e8e739e7fd9dd28871d2bc87fcded8afe1",
+      "unchanged": true
+    },
+    {
+      "file": "royale-v3-staging/costumes/assets/dolphin-costume/body.webp",
+      "referenceSHA256": "5cdc54acedd0e346b34ba74e9b9609c3b1531136b3884aeff957352e4290a16d",
+      "currentSHA256": "5cdc54acedd0e346b34ba74e9b9609c3b1531136b3884aeff957352e4290a16d",
+      "unchanged": true
+    },
+    {
+      "file": "royale-v3-staging/costumes/assets/dolphin-costume/manifest.json",
+      "referenceSHA256": "e70652a69c62d9254bdfc0f9678a1d64d811c4f8683205eeeaa081a29194bca8",
+      "currentSHA256": "e70652a69c62d9254bdfc0f9678a1d64d811c4f8683205eeeaa081a29194bca8",
+      "unchanged": true
+    },
+    {
+      "file": "royale-v3-staging/costumes/assets/dolphin-costume/registration.json",
+      "referenceSHA256": "7a826b3e2526c5ea9551b974e4ab42cb60fbeb8855130c3a603e097ff6be090f",
+      "currentSHA256": "7a826b3e2526c5ea9551b974e4ab42cb60fbeb8855130c3a603e097ff6be090f",
+      "unchanged": true
+    },
+    {
+      "file": "royale-v3-staging/costumes/assets/fishsticks-costume/body.webp",
+      "referenceSHA256": "6e709a68300eda0766fea9aca7045c72d4ed411beaf56fa481d6404c204bf037",
+      "currentSHA256": "6e709a68300eda0766fea9aca7045c72d4ed411beaf56fa481d6404c204bf037",
+      "unchanged": true
+    },
+    {
+      "file": "royale-v3-staging/costumes/assets/fishsticks-costume/manifest.json",
+      "referenceSHA256": "16a8cfc5dfdf008add81d3c6a34acd581a29662a63b5f4f29e02c0ef351cae65",
+      "currentSHA256": "16a8cfc5dfdf008add81d3c6a34acd581a29662a63b5f4f29e02c0ef351cae65",
+      "unchanged": true
+    },
+    {
+      "file": "royale-v3-staging/costumes/assets/fishsticks-costume/registration.json",
+      "referenceSHA256": "c5af9910dc5c268ec9fc68d9ba0fd5b34ab841c7bfd6630b3d9d8a956656bf38",
+      "currentSHA256": "c5af9910dc5c268ec9fc68d9ba0fd5b34ab841c7bfd6630b3d9d8a956656bf38",
+      "unchanged": true
+    },
+    {
+      "file": "royale-v3-staging/costumes/assets/hamburger-costume/body.webp",
+      "referenceSHA256": "6fb0af15f7a7586d39a86836836c03ecab45afe011ad8410c5cd2a0e236884ba",
+      "currentSHA256": "6fb0af15f7a7586d39a86836836c03ecab45afe011ad8410c5cd2a0e236884ba",
+      "unchanged": true
+    }
+  ],
+  "allUnchanged": true
+}

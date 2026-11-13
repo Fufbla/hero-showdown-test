@@ -3,7 +3,7 @@
   "repository": "Fufbla/hero-showdown-test",
   "branch": "codex/face-only-costumes-review",
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
-  "deployment": "HOLD — uploaded to review branch only; no merge, Pages or cloud deployment",
+  "deployment": "Authorized after functional verification; not deployed",
   "upload_authorized": true,
   "last_verified_content_commit": "44018802f1890ea0d6e3370d0ee0ce8dbd37a7a6",
   "total_required_files": 106,
@@ -117,7 +117,21 @@
       "verification": "GitHub tree matched every expected Git blob SHA"
     }
   ],
-  "current_batch": null,
+  "current_batch": {
+    "number": 8,
+    "paths": [
+      "docs/costumes/review/stuffed-animal-costume-sprites.png",
+      "docs/costumes/review/ten-costumes.png",
+      "docs/costumes/review/white-business-suit-sprites.png",
+      "docs/costumes/review/zombie-costume-sprites.png",
+      "docs/costumes/verification/costume-tests.log",
+      "docs/costumes/verification/prior-fullbody-tests.log",
+      "docs/costumes/verification/prior-shared-tests.log",
+      "docs/costumes/verification/source-preservation.json",
+      "docs/costumes/verification/staging-build.log"
+    ],
+    "state": "awaiting_remote_verification"
+  },
   "errors": [
     {
       "batch": 1,
@@ -132,6 +146,15 @@
         "royale-v3-staging/costumes/assets/stuffed-animal-costume/manifest.json"
       ],
       "error": "Error: Incomplete local read: royale-v3-staging/costumes/assets/reaper-costume/body.webp"
+    },
+    {
+      "batch": 8,
+      "error": "Command-line git push failed: could not read Username for https://github.com. Switched to connected GitHub service."
+    },
+    {
+      "batch": 8,
+      "path": "docs/costumes/review/stuffed-animal-costume-sprites.png",
+      "error": "Whole-file tool read truncated; recovered using length-checked base64 chunks. No corrupt content committed."
     }
   ],
   "files": [

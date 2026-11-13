@@ -1,0 +1,20 @@
+480 composed poses verified
+16464 hood/pose/hairstyle combinations match bald-face composition
+✔ all ten complete costumes have 480 distinct padded poses and all renderer states (7195.843173ms)
+✔ every hood hides all 49 hairstyle choices across every pose without altering appearance (1938.098888ms)
+✔ uncovered costumes retain hair; all costumes retain skin, eyes, face and facial hair (602.842837ms)
+✔ skin recoloring removes cyan hand markers without tinting the dolphin tail (216.921291ms)
+✔ actual attack timing, both directions, running strides, jump and power states are sampled (311.278029ms)
+✔ Steel Body completely suppresses all costume, face and hair and restores selection (126.53165ms)
+✔ 700-coin ownership, duplicate protection, equip and remove survive saved hero reloads (27.900869ms)
+✔ cloud policy accepts ownership and rejects incomplete or stale clothing records (6.416892ms)
+✔ independent owners, compact network appearances and co-op snapshots never exchange looks (43.202106ms)
+✔ cosmetic rendering leaves movement, damage, armor, power levels and save data unchanged (252.416994ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12457.070958

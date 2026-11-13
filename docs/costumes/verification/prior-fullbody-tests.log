@@ -1,0 +1,27 @@
+✔ only the reserved code inside the staging parent enables the prototype (2.054321ms)
+✔ the complete outfit contract rejects missing anchors, frames and animation states (14.590668ms)
+✔ running uses alternating authored strides, advances with speed and freezes at paused game time (1.527328ms)
+✔ jump, double jump, apex, fall and land follow existing physics timers (0.336093ms)
+✔ punch and kick contact frames match active hit windows in either direction (3.242552ms)
+✔ hurt, defeat and recovery preserve the gameplay priority (0.261002ms)
+✔ every body/head composition is padded, opaque where expected and never changes head scale (217.956494ms)
+✔ render sampling is read-only and leaves deterministic movement, combat, saves and equipment equal (271.322ms)
+✔ saved test progress survives load/render/save and initialization never replaces a populated slot (5.258147ms)
+✔ failed assets safely retain the old renderer and other heroes have no new draw calls (0.939277ms)
+✔ all twelve approved outfits have complete distinct artwork for movement and powers (3482.421907ms)
+✔ outfit changes preserve gameplay, saved appearance, equipment, coins and powers (1702.705829ms)
+✔ Steel Body restores the selected outfit and failed selection keeps the previous outfit (195.676104ms)
+✔ each selected outfit retains contact timing, run strides and all six kick stages (7.075886ms)
+✔ 64 metal frames are padded whole figures, with one fixed canvas/foot/scale and no head overlay (150.590932ms)
+✔ dedicated special attacks use the unchanged contact window and combos restart at windup (0.395209ms)
+✔ flight has launch, forward flight and hovering with an embedded metal head (0.252379ms)
+✔ Steel expiration restores the exact original outfit and saved face without changing gameplay (60.023502ms)
+✔ speed dust stays at world ground, direction is retained, and all trails expire after stopping (0.987157ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5977.308918
