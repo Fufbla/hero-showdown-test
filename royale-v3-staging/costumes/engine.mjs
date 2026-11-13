@@ -60,13 +60,17 @@ export class CostumeEngine {
   const result={body,mask,skin};loaded.masks.set(index,result);return result;
  }
  compose(id,index,raw,closed=false,direction=1){
-  const look=sanitizeLook(raw),costume=costumeById(id),loaded=this.outfits.get(id),key=id+'|'+index+'|'+closed+'|'+(id==='fishsticks-costume'?direction:1)+'|'+appearanceKey(look,costume.hideHair);
+  const look=sanitizeLook(raw),costume=costumeById(id),loaded=this.outfits.get(id),key=id+'|'+index+'|'+closed+'|'+(id==='fishsticks-costume'?direction:1)+'|'+appearanceKey(look);
   if(this.composites.has(key)){const old=this.composites.get(key);this.composites.delete(key);this.composites.set(key,old);return old;}
   const m=loaded.manifest,f=m.frames[index],{body,mask,skin}=this.masks(id,index),canvas=this.factory(...m.cell),c=canvas.getContext('2d');c.drawImage(body,0,0);
   if(skin.length){const data=c.getImageData(0,0,...m.cell),rgb=[1,3,5].map(i=>parseInt(look.skin.slice(i,i+2),16));for(const [i,shade]of skin)for(let k=0;k<3;k++)data.data[i+k]=Math.min(255,rgb[k]*(.55+.55*shade));c.putImageData(data,0,0);}
   const head=this.factory(...m.cell),hc=head.getContext('2d');this.face.draw(hc,look,f,{hideHair:costume.hideHair,closed});
-  if(costume.hideHair){hc.globalCompositeOperation='destination-in';hc.drawImage(mask,0,0);}
-  c.drawImage(head,0,0);
+  if(costume.hideHair){
+   hc.globalCompositeOperation='destination-in';hc.drawImage(mask,0,0);
+   // Solid costume pixels sit in front of the unchanged hairstyle. The exact
+   // existing opening is the only place the head can be visible.
+   c.globalCompositeOperation='destination-over';c.drawImage(head,0,0);c.globalCompositeOperation='source-over';
+  }else c.drawImage(head,0,0);
   // Clear old printing through an authored cloth mask. Arms and gloves occlude
   // the decal; reverse only the letters before mirroring a left-facing body.
   if(loaded.lettering){
@@ -91,7 +95,7 @@ export class CostumeEngine {
   const picture=this.compose(id,sample.frameIndex,look,closed,sample.direction),s=m.worldScale*scale;
   c.save();c.translate(x,y);c.scale(sample.direction*s,s);c.translate(-m.foot[0],-m.foot[1]);if(hero.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;c.drawImage(picture,0,0);
   c.restore();const world=p=>[(p[0]-m.foot[0])*m.worldScale,(p[1]-m.foot[1])*m.worldScale],neck=world(f.head),hand=world(f.hand),elbow=[(neck[0]+hand[0])/2,(neck[1]+hand[1])/2+8];
-  this.lastFrame={outfit:id,state:sample.state,frame:sample.frameIndex,direction:sample.direction,hairVisible:!costumeById(id).hideHair};
+  this.lastFrame={outfit:id,state:sample.state,frame:sample.frameIndex,direction:sample.direction,hairVisible:true,hairContained:!!costumeById(id).hideHair};
   return {artSource:'full-body-costume',clip:sample.state,head:neck,faceCenter:neck,shoulder:neck,hip:[0,-35],arms:[[neck,elbow,hand],[neck,elbow,hand]],legs:[],opacity:1};
  }
 }

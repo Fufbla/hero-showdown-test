@@ -17,10 +17,29 @@ test('all ten complete costumes have 480 distinct padded poses and all renderer 
  assert.equal(hashes.size,48,o.id);for(const state of [...REQUIRED_STATES,'strength','superKick','fireball','flightStart','hover','fly'])assert(m.animations[state]?.frames.length>=2);}
  console.log(frames+' composed poses verified');
 });
-test('every hood hides all 49 hairstyle choices across every pose without altering appearance',()=>{
- let combinations=0;for(const o of COSTUMES.filter(o=>o.hideHair))for(let frame=0;frame<48;frame++){
- const bare=e.compose(o.id,frame,{...look,hair:'none'});for(const hair of HAIR_STYLES){const l={...look,hair},before=JSON.stringify(l);assert.strictEqual(e.compose(o.id,frame,l),bare);assert.equal(JSON.stringify(l),before);combinations++;}
- }console.log(combinations+' hood/pose/hairstyle combinations match bald-face composition');
+test('every hood preserves all hairstyle choices and confines hair to its original opening in every pose',async()=>{
+ let combinations=0,visible=0;
+ // Reuse each customized head across frames; this also exercises eviction of
+ // the bounded composite cache without creating hairstyle-specific assets.
+ for(const o of COSTUMES.filter(o=>o.hideHair)){
+  const bare=Array.from({length:48},(_,frame)=>e.compose(o.id,frame,{...look,hair:'none'}).getContext('2d').getImageData(0,0,256,256).data);
+  const masks=Array.from({length:48},(_,frame)=>e.masks(o.id,frame).mask.getContext('2d').getImageData(0,0,256,256).data);
+  for(const hair of HAIR_STYLES){const l={...look,hair},before=JSON.stringify(l);
+   for(let frame=0;frame<48;frame++){
+    const pixels=e.compose(o.id,frame,l).getContext('2d').getImageData(0,0,256,256).data,baseline=bare[frame],mask=masks[frame];let changed=0;
+    for(let i=0;i<pixels.length;i+=4){
+     if(pixels[i]!==baseline[i]||pixels[i+1]!==baseline[i+1]||pixels[i+2]!==baseline[i+2]||pixels[i+3]!==baseline[i+3]){
+      assert(mask[i+3]>0,o.id+' '+hair+' escaped hood in frame '+frame+' pixel '+i/4);changed++;
+     }
+    }
+    if(changed)visible++;if(hair==='braids')assert(changed>20,o.id+' braids missing from opening '+frame);
+    assert.equal(JSON.stringify(l),before);combinations++;
+   }
+   // Let native canvas allocations from evicted composites be collected.
+   await new Promise(resolve=>setImmediate(resolve));globalThis.gc?.();
+  }
+ }
+ assert(visible>0);console.log(combinations+' hood/pose/hairstyle combinations preserve the costume exterior; '+visible+' visibly retain hair');
 });
 test('uncovered costumes retain hair; all costumes retain skin, eyes, face and facial hair',()=>{
  for(const o of COSTUMES){const baseline=digest(e.compose(o.id,0,look));for(const changed of [{skin:'#e5c5a0'},{eyes:'#3399dd',eyeShape:'round'},{nose:'wide',mouth:'smile'},{facialHair:'none'},{presentation:'female'}])assert.notEqual(digest(e.compose(o.id,0,{...look,...changed})),baseline,o.id+' '+JSON.stringify(changed));

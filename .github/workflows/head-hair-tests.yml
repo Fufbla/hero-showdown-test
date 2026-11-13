@@ -1,0 +1,44 @@
+name: Verify attached heads and contained costume hair
+on:
+  push:
+    branches: [fix/v3-head-hair-20261113]
+  pull_request:
+    paths:
+      - 'royale-v3-staging/kingjames/head.mjs'
+      - 'royale-v3-staging/kingjames/outfits/**/manifest.json'
+      - 'royale-v3-staging/costumes/face.mjs'
+      - 'royale-v3-staging/costumes/engine.mjs'
+      - 'tools/head-hair-browser.cjs'
+      - '.github/workflows/head-hair-tests.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned rendering and browser test dependencies
+        run: |
+          npm ci --prefix tools/release-build
+          npm install --no-save --no-package-lock @napi-rs/canvas@0.1.100 playwright@1.56.1
+          npx playwright install chromium webkit --with-deps
+      - name: Verify every head attachment
+        run: node --test royale-v3-staging/kingjames/tests/head-alignment.test.mjs
+      - name: Build and test the production artifact
+        run: |
+          node tools/build-royale-release.cjs
+          node --expose-gc --import ./tools/release-build/register.mjs --test --test-concurrency=1 tools/release-build/release.test.mjs royale-v3-staging/gameplay/tests/*.test.mjs royale-v3-staging/bosses/tests/*.test.mjs royale-v3-staging/costumes/tests/*.test.mjs royale/local-coop/tests/local-coop.test.mjs royale/local-coop/tests/setup-controller.test.mjs royale/local-coop/tests/asset-cache.test.mjs
+      - name: Verify Chromium and mobile WebKit rendering and test-account reload
+        run: |
+          python3 -m http.server 8174 --bind 127.0.0.1 >/tmp/head-hair-server.log 2>&1 &
+          node tools/head-hair-browser.cjs
+      - name: Save browser results and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: head-hair-browser-evidence
+          path: /tmp/head-hair-*

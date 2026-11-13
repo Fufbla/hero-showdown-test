@@ -24,7 +24,7 @@ export const costumeForState=state=>{
  if(Array.isArray(state.owned)&&!state.owned.includes(piece))return null;
  return COLLECTION.find(c=>c.pieces[0].id===piece)||null;
 };
-export const costumeHairVisible=(costume,steel=false)=>!steel&&!costume?.hideHair;
+export const costumeHairVisible=(costume,steel=false)=>!steel;
 `;
 write('royale-v3-staging/costumes/catalog.mjs',collectionModule);
 const rows=collection.map(o=>[o.id,o.name,[['fullbody',700]]]);

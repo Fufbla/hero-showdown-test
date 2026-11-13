@@ -44,7 +44,7 @@ jobs:
       - name: Build filtered production artifact
         run: node tools/build-royale-release.cjs
       - name: Verify the production runtime and save compatibility
-        run: node --import ./tools/release-build/register.mjs --test tools/release-build/release.test.mjs royale-v3-staging/gameplay/tests/*.test.mjs royale-v3-staging/bosses/tests/*.test.mjs royale-v3-staging/costumes/tests/*.test.mjs royale/local-coop/tests/local-coop.test.mjs royale/local-coop/tests/setup-controller.test.mjs royale/local-coop/tests/asset-cache.test.mjs
+        run: node --expose-gc --import ./tools/release-build/register.mjs --test --test-concurrency=1 tools/release-build/release.test.mjs royale-v3-staging/gameplay/tests/*.test.mjs royale-v3-staging/bosses/tests/*.test.mjs royale-v3-staging/costumes/tests/*.test.mjs royale/local-coop/tests/local-coop.test.mjs royale/local-coop/tests/setup-controller.test.mjs royale/local-coop/tests/asset-cache.test.mjs
       - name: Upload optimized Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
