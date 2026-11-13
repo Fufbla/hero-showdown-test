@@ -5,9 +5,9 @@
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
   "deployment": "HOLD — uploaded to review branch only; no merge, Pages or cloud deployment",
   "upload_authorized": true,
-  "last_verified_content_commit": "0897606cd8a6f78af181d24b70d573c6a37f3c6d",
+  "last_verified_content_commit": "cf97dae6d0d04d4a0339b2233f9a15813f80eb21",
   "total_required_files": 106,
-  "verified_files": 73,
+  "verified_files": 81,
   "remaining_paths": [
     "docs/costumes/ASSET-CHECKSUMS.sha256",
     "docs/costumes/README.md",
@@ -29,14 +29,6 @@
     "docs/costumes/verification/prior-shared-tests.log",
     "docs/costumes/verification/source-preservation.json",
     "docs/costumes/verification/staging-build.log",
-    "royale-v3-staging/cloud/cosmetics/outfit-policy.mjs",
-    "royale-v3-staging/costumes/tryon.mjs",
-    "royale-v3-staging/gameplay/index.html",
-    "royale-v3-staging/index.html",
-    "royale-v3-staging/kingjames/app.mjs",
-    "royale-v3-staging/kingjames/index.html",
-    "royale-v3-staging/kingjames/renderer.mjs",
-    "royale-v3-staging/local-coop/index.html",
     "tools/build-approved-costumes.cjs",
     "tools/build-costume-lettering.cjs",
     "tools/build-kingjames-staging.cjs",
@@ -91,22 +83,25 @@
       ],
       "verified_at": "2026-11-13T07:06:18.821Z",
       "verification": "GitHub tree matched every expected Git blob SHA"
+    },
+    {
+      "number": 5,
+      "commit": "cf97dae6d0d04d4a0339b2233f9a15813f80eb21",
+      "paths": [
+        "royale-v3-staging/costumes/tryon.mjs",
+        "royale-v3-staging/cloud/cosmetics/outfit-policy.mjs",
+        "royale-v3-staging/gameplay/index.html",
+        "royale-v3-staging/index.html",
+        "royale-v3-staging/kingjames/app.mjs",
+        "royale-v3-staging/kingjames/index.html",
+        "royale-v3-staging/kingjames/renderer.mjs",
+        "royale-v3-staging/local-coop/index.html"
+      ],
+      "verified_at": "2026-11-13T07:06:38.721Z",
+      "verification": "GitHub tree matched every expected Git blob SHA"
     }
   ],
-  "current_batch": {
-    "number": 5,
-    "paths": [
-      "royale-v3-staging/costumes/tryon.mjs",
-      "royale-v3-staging/cloud/cosmetics/outfit-policy.mjs",
-      "royale-v3-staging/gameplay/index.html",
-      "royale-v3-staging/index.html",
-      "royale-v3-staging/kingjames/app.mjs",
-      "royale-v3-staging/kingjames/index.html",
-      "royale-v3-staging/kingjames/renderer.mjs",
-      "royale-v3-staging/local-coop/index.html"
-    ],
-    "state": "awaiting_remote_verification"
-  },
+  "current_batch": null,
   "errors": [
     {
       "batch": 1,
@@ -430,7 +425,7 @@
       "git_blob_sha": "b9bcad9f536db38118a5ad68c1c4860b99d4893f",
       "sha256": "eb5be3fefc41ea42d2976aabfc2b53332d69d6e949a88a9664383ed70320567e",
       "size_bytes": 6617,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/assets/black-business-suit/body.webp",
@@ -787,49 +782,49 @@
       "git_blob_sha": "5ae250a1b3808c31e8dd0dfaf6ad29fcad587649",
       "sha256": "66cbc35bdb86ccc44af93ac1794ecd3cf52c59c5370d39bcabc0b406debbe278",
       "size_bytes": 4516,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/gameplay/index.html",
       "git_blob_sha": "69f7e8415537cd17eca39c3145b69775ab649955",
       "sha256": "18bbff7fde17e651903524cbe05af40ae0b81ba2565abffece7334396fc8fc58",
       "size_bytes": 43245,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/index.html",
       "git_blob_sha": "43c928c6e9970c4fef18afc2155121edb17269c0",
       "sha256": "7b5d46da7ae069903be42f4e1fbdfc88aa691773aefd5cd15711a3547c4faa7f",
       "size_bytes": 10223,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/kingjames/app.mjs",
       "git_blob_sha": "cf9745d1f1de6cdfa2b228c0ba52643439a99f1e",
       "sha256": "f5f2f5ab57229614661d8831ba03e63de50cc5be4044bf8a9094c45dc61c4bfb",
       "size_bytes": 67694,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/kingjames/index.html",
       "git_blob_sha": "11c67981e3ecb198b3c5c711d6256d15436b86f6",
       "sha256": "66bab0901d5b69816cf6e37c4a3fd8bb700b4c7bcd87ba4e927a12016942e10d",
       "size_bytes": 43572,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/kingjames/renderer.mjs",
       "git_blob_sha": "7c0175b8da00b4904fb38f244e263a3716585cf9",
       "sha256": "fa1064cab230d9ce65d41d4111867dd6511818f45b93fb136f35e6dcce9d96a3",
       "size_bytes": 16810,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/local-coop/index.html",
       "git_blob_sha": "1e97e0514f35314f4943de4b1ceb04cbfb4e8ce7",
       "sha256": "cc752312590d28d40df69b2a497aed2fda5821b685089bab3667d3822a0292ca",
       "size_bytes": 14280,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "tools/build-approved-costumes.cjs",
