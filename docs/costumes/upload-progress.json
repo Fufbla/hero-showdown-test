@@ -3,9 +3,9 @@
   "repository": "Fufbla/hero-showdown-test",
   "branch": "codex/face-only-costumes-review",
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
-  "deployment": "Completed: GitHub Pages release 2ce05112a479bb3f446350e040d77dc9966245e6; staging cloud policy version 8",
+  "deployment": "Completed: black hood lining revision 86423f58856efc38801c74c7bc0a213e9df84832 published and live files hash-verified; original collection complete",
   "upload_authorized": true,
-  "last_verified_content_commit": "2ce05112a479bb3f446350e040d77dc9966245e6",
+  "last_verified_content_commit": "86423f58856efc38801c74c7bc0a213e9df84832",
   "total_required_files": 106,
   "verified_files": 106,
   "remaining_paths": [],
@@ -164,6 +164,24 @@
         "docs/costumes/upload-progress.json"
       ],
       "verification": "Remote tree matches all 106 original package entries; CSS-only action-grid layout correction."
+    },
+    {
+      "number": 13,
+      "commit": "86423f58856efc38801c74c7bc0a213e9df84832",
+      "paths": [
+        "royale-v3-staging/costumes/face.mjs",
+        "tools/build-staging-costumes.cjs",
+        "royale-v3-staging/app.mjs",
+        "royale-v3-staging/index.html",
+        "royale-v3-staging/gameplay/index.html",
+        "royale-v3-staging/kingjames/index.html",
+        "royale-v3-staging/local-coop/index.html",
+        "docs/costumes/verification/black-hood-lining.json",
+        "docs/costumes/upload-progress.json",
+        "docs/costumes/verification/black-hood-lining.png"
+      ],
+      "verified_at": "2026-11-13T08:44:34.337029+00:00",
+      "verification": "All ten changed/uploaded files match GitHub blob SHAs; 672 hood compositions plus 288 uncovered compositions passed pixel comparison."
     }
   ],
   "current_batch": null,
@@ -754,7 +772,7 @@
       "git_blob_sha": "7d3808f5c39ab0aeccfd09e41a2bb00538083d2b",
       "sha256": "c98b79bb44394be079da653ffa540d66bec71f2f1e6417a82f18bcfbcbf8a7b7",
       "size_bytes": 2465,
-      "status": "hood-fix-ready"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/game-session.mjs",
@@ -873,7 +891,7 @@
       "git_blob_sha": "7cd4b41a3dfd5b10f44059d18b694b6832ddb834",
       "sha256": "4b5169dead53dbf37863f0c47489e86022ba28840ea2a480945b8d91b6db1468",
       "size_bytes": 43525,
-      "status": "hood-fix-ready",
+      "status": "verified",
       "recovered_git_blob_sha": "69f7e8415537cd17eca39c3145b69775ab649955"
     },
     {
@@ -881,7 +899,7 @@
       "git_blob_sha": "da22af97d7871b0520748934e81e7c7ef3b286d4",
       "sha256": "d181e2f14ed2a1b90275f8a855a57b0d5fd0b2e15a3cf9108445d13332e5543e",
       "size_bytes": 10466,
-      "status": "hood-fix-ready",
+      "status": "verified",
       "recovered_git_blob_sha": "43c928c6e9970c4fef18afc2155121edb17269c0"
     },
     {
@@ -896,7 +914,7 @@
       "git_blob_sha": "18a6ea6dccd98eb5d56c1a1f7cfce135c3b869ee",
       "sha256": "c98e5a5f09386b2eacf7e74dc1625a737f213882525b472d55c96eed45aa066b",
       "size_bytes": 43852,
-      "status": "hood-fix-ready",
+      "status": "verified",
       "recovered_git_blob_sha": "11c67981e3ecb198b3c5c711d6256d15436b86f6"
     },
     {
@@ -911,7 +929,7 @@
       "git_blob_sha": "ccf358d5e3078624ae6e5cab7a06103cee64eb24",
       "sha256": "695ed9d310f0d2f2015cd1f971cc2d6020af2f85e32bbb6ee55c2d4c4d317576",
       "size_bytes": 14566,
-      "status": "hood-fix-ready",
+      "status": "verified",
       "recovered_git_blob_sha": "1e97e0514f35314f4943de4b1ceb04cbfb4e8ce7"
     },
     {
@@ -940,7 +958,7 @@
       "git_blob_sha": "518802e373abc0664b724eb8ceec16055dcfa9db",
       "sha256": "34e3046d58bd58f4e50e3373ff7f461eab7d9efe7e7d80fcd6cdeedcae18f076",
       "size_bytes": 11297,
-      "status": "hood-fix-ready",
+      "status": "verified",
       "recovered_git_blob_sha": "5b473ae2c2433c30db0e4a74ceb502c17fff3da8"
     },
     {
@@ -989,13 +1007,15 @@
     "layout_observation": "Published HTML contains responsive grid; existing browser iframe retained cached earlier CSS during smoke check. No gameplay or artwork impact.",
     "all_release_checks": "success",
     "hood_lining": {
-      "status": "verified_ready_to_publish",
+      "status": "verified_deployed",
       "color": "#000000",
       "hooded_costumes": 7,
       "poses_per_costume": 48,
       "skin_variants": 2,
       "changed_outside_face_opening": 0,
-      "report": "docs/costumes/verification/black-hood-lining.json"
+      "report": "docs/costumes/verification/black-hood-lining.json",
+      "commit": "86423f58856efc38801c74c7bc0a213e9df84832",
+      "live_runtime_files_verified": 6
     }
   }
 }

@@ -13,5 +13,72 @@
   "blackBackingPixels": 474793,
   "changedOutsideOpening": 0,
   "skinAndFacialFeaturesPreserved": true,
-  "passed": true
+  "passed": true,
+  "commit": "86423f58856efc38801c74c7bc0a213e9df84832",
+  "artwork_regenerated": false,
+  "cache_refresh": "Versioned face-module import and local test iframe",
+  "import_map_checks": 4,
+  "live_files": [
+    {
+      "path": "royale-v3-staging/costumes/face.mjs",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/app.mjs",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/index.html",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/kingjames/index.html",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/gameplay/index.html",
+      "status": 200,
+      "sha256_match": true
+    },
+    {
+      "path": "royale-v3-staging/local-coop/index.html",
+      "status": 200,
+      "sha256_match": true
+    }
+  ],
+  "deployed": true,
+  "workflows_at_verification": [
+    {
+      "id": 43395448447,
+      "name": "Verify Clothing Store Transactions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Fufbla/hero-showdown-test/actions/runs/43395448447"
+    },
+    {
+      "id": 43395448405,
+      "name": "Royale V3 playable KingJames startup diagnostic",
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/Fufbla/hero-showdown-test/actions/runs/43395448405"
+    },
+    {
+      "id": 43395448379,
+      "name": "pages build and deployment",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Fufbla/hero-showdown-test/actions/runs/43395448379"
+    },
+    {
+      "id": 43395448404,
+      "name": "Publish optimized Hero Showdown site",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Fufbla/hero-showdown-test/actions/runs/43395448404"
+    }
+  ]
 }
