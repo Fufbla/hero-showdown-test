@@ -81,7 +81,7 @@ async function build(){
   const sha=cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   const {COLLECTION}=await import('../royale/fashion/catalog.mjs');
   fs.rmSync(out,{recursive:true,force:true});fs.mkdirSync(out,{recursive:true});copyPublic();
-  const result=await esbuild.build({absWorkingDir:root,entryPoints:{game:'royale/release-src/game-entry.mjs',coop:'royale/release-src/coop-entry.mjs',cloud:'royale-v3-staging/app.mjs','json-worker':'royale/local-coop/json-worker.mjs'},outdir:path.join(out,'royale/release'),outExtension:{'.js':'.mjs'},chunkNames:'shared-[hash]',bundle:true,splitting:true,format:'esm',platform:'browser',target:['es2022'],minifySyntax:true,minifyWhitespace:false,legalComments:'none',drop:['console','debugger'],metafile:true,plugins:[runtimePlugin]});
+  const result=await esbuild.build({absWorkingDir:root,entryPoints:{game:'royale-v3-staging/interface/game-entry.mjs',coop:'royale/release-src/coop-entry.mjs',cloud:'royale-v3-staging/app.mjs','json-worker':'royale/local-coop/json-worker.mjs'},outdir:path.join(out,'royale/release'),outExtension:{'.js':'.mjs'},chunkNames:'shared-[hash]',bundle:true,splitting:true,format:'esm',platform:'browser',target:['es2022'],minifySyntax:true,minifyWhitespace:false,legalComments:'none',drop:['console','debugger'],metafile:true,plugins:[runtimePlugin]});
   let home=read('royale-v3-staging/index.html');
   home=home.replace(/<script type="importmap">[\s\S]*?<\/script>/g,'').replace(/<script type="module" src="[^"]+"><\/script>/g,'');
   home=home.replace('Hero Showdown Royale V3 Test','Hero Showdown Royale').replace('V3 isolated test — original saves remain untouched.','');
