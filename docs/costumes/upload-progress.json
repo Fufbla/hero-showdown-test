@@ -109,7 +109,20 @@
       "verification": "GitHub tree matched every expected Git blob SHA"
     }
   ],
-  "current_batch": null,
+  "current_batch": {
+    "number": 7,
+    "paths": [
+      "docs/costumes/review/costume-animation-review.mp4",
+      "docs/costumes/review/dolphin-costume-sprites.png",
+      "docs/costumes/review/fishsticks-costume-sprites.png",
+      "docs/costumes/review/hair-visibility.png",
+      "docs/costumes/review/hamburger-costume-sprites.png",
+      "docs/costumes/review/pink-shark-costume-sprites.png",
+      "docs/costumes/review/pizza-slice-costume-sprites.png",
+      "docs/costumes/review/reaper-costume-sprites.png"
+    ],
+    "state": "awaiting_remote_verification"
+  },
   "errors": [
     {
       "batch": 1,
