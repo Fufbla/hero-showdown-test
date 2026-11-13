@@ -9,11 +9,18 @@ export class CostumeEngine {
  constructor({imageLoader=browserImage,jsonLoader=browserJSON,canvasFactory=browserCanvas}={}){
   Object.assign(this,{imageLoader,jsonLoader,factory:canvasFactory});this.face=new CostumeFace({imageLoader,canvasFactory});this.outfits=new Map();this.pending=new Map();this.states=new WeakMap();this.composites=new Map();this.lastFrame=null;
   this.steel=new OutfitEngine({imageLoader,jsonLoader,canvasFactory});this.steel.selected=()=>STEEL_ID;this.steel.enabled=true;
+  this.approved=new OutfitEngine({imageLoader,jsonLoader,canvasFactory});this.approved.selected=()=>this.approved.outfitID;
  }
  async preload(id){
   if(this.outfits.has(id))return true;if(this.pending.has(id))return this.pending.get(id);
   if(!costumeById(id))return false;
   const task=(async()=>{try{
+   if(costumeById(id).renderer==='approved'){
+    const source=new URL(costumeById(id).pieces[0].assetManifest,import.meta.url);
+    const [ready,steel]=await Promise.all([this.approved.preload(id,source),this.steel.preload(STEEL_ID)]);
+    if(!ready||!steel)throw Error(this.approved.error||this.steel.error);
+    this.outfits.set(id,{...this.approved.outfits.get(id),approved:true});this.error=null;return true;
+   }
    const url=new URL('./assets/'+id+'/manifest.json',import.meta.url),manifest=validateManifest(await this.jsonLoader(url));
    if(manifest.id!==id||manifest.frames.length!==48)throw Error('Invalid approved costume atlas');
    const [atlas,,steel]=await Promise.all([this.imageLoader(new URL(manifest.atlas,url)),this.face.preload(),this.steel.preload(STEEL_ID)]);
@@ -72,8 +79,13 @@ export class CostumeEngine {
   this.composites.set(key,canvas);while(this.composites.size>128)this.composites.delete(this.composites.keys().next().value);return canvas;
  }
  draw(c,x,y,look,hero,time,{id,owner=hero,scale=1}={}){
-  const loaded=this.outfits.get(id);if(!loaded||!this.face.ready)return false;
+  const loaded=this.outfits.get(id);if(!loaded)return false;
   if(hero.steel){const pose=this.steel.draw(c,x,y,look,hero,time,{owner,scale});this.lastFrame={...this.steel.lastFrame,costume:id,hairVisible:false};return pose;}
+  if(loaded.approved){
+   this.approved.outfitID=id;const pose=this.approved.draw(c,x,y,look,hero,time,{owner,scale});
+   this.lastFrame={...this.approved.lastFrame,hairVisible:true};return pose&&{...pose,artSource:'full-body-costume'};
+  }
+  if(!this.face.ready)return false;
   const m=loaded.manifest;let animator=this.states.get(owner);if(!animator||animator.manifest!==m){animator=new FullBodyAnimator(m);this.states.set(owner,animator);}
   const sample=animator.sample(hero,time),f=sample.frame,closed=sample.state==='defeat'||sample.state==='idle'&&time%3.9>3.73;
   const picture=this.compose(id,sample.frameIndex,look,closed,sample.direction),s=m.worldScale*scale;

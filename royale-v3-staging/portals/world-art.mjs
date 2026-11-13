@@ -1,5 +1,5 @@
 // Staging economy UI v1.
-import {regionPortals} from '../gameplay/portal-layout.mjs';
+import {regionPortals} from '../gameplay/portal-layout.mjs?v=phase-portals-1';
 import {drawPortal} from './runtime.mjs?v=economy-1';
 import {drawLoot} from '../../royale/world-loot.mjs';
 import { GATES } from '../../royale/world.mjs';

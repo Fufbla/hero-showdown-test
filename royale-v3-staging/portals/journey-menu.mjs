@@ -1,5 +1,5 @@
 // Staging economy UI v1.
-import {travelQuote} from '../gameplay/portal-layout.mjs';
+import {travelQuote} from '../gameplay/portal-layout.mjs?v=phase-portals-1';
 import {worldPortalPreview,pulsePortal} from './runtime.mjs?v=economy-1';
 import {pickupForGame} from '../../royale/multiplayer/game-session.mjs';
 import {itemIcon} from '../../royale/item-art.mjs';
@@ -35,17 +35,17 @@ export class JourneyMenu {
   map(source=this.source||'map'){
     this.source=source;
     const g=this.getGame(),list=$('region-cards');list.replaceChildren();worldPortalPreview(list);if(source==='portal')pulsePortal();
-    $('map-note').hidden=false;$('map-note').textContent='Fast travel is paid on every trip, including returns. Prices use the highest monster level on the destination board. Entrance, boss entrance and exit portals are free.';
+    $('map-note').hidden=false;$('map-note').textContent='Fast travel is paid on every trip, including returns. Choose one of the seven phases. Fast travel always arrives at the beginning. Each phase has four portals: entrance and fast travel at the start, boss entrance and exit at the end.';
     for(const region of WORLD_REGIONS){
       const current=region.id===g.regionId,card=el('article',undefined,'region-card');card.style.setProperty('--region-color',region.sky[0]);card.dataset.region=region.id;if(current)card.setAttribute('aria-current','location');
       const art=el('div',undefined,`region-art ${region.theme}`);art.append(el('span',String(region.id).padStart(2,'0'),'region-number'),el('b',['','≋','♧','▥','◇','❧','✧','✦'][region.id]));card.append(art);
       const body=el('div',undefined,'region-copy');body.append(el('h3',region.name),el('small',`LV ${region.levels.join('–')}`));
-      for(const board of [0,1,2]){
-        const destination={region:region.id,board},quote=travelQuote(g,destination),here=current&&!g.arenaScene&&g.board===board;
-        const button=el('button',here?'Current location':quote?`${region.boards[board]} · ${quote.cost.toLocaleString()} Coins`:'Locked','secondary');
+      const board=0;
+      const destination={region:region.id,board},quote=travelQuote(g,destination),here=current&&!g.arenaScene&&g.board===board;
+        const button=el('button',here?'Current location':quote?`${region.name} · ${quote.cost.toLocaleString()} Coins`:'Locked','secondary');
         button.disabled=here||!quote||!g.canTravel();button.dataset.travel=region.id;button.dataset.board=board;
         button.onclick=()=>this.confirmTravel(destination);body.append(button);
-      }card.append(body);list.append(card);
+      card.append(body);list.append(card);
     }
   }
   cancelTravel(){if(!this.travelDialog)return false;if(!this.travelBusy&&!this.travelPending)this.travelDialog.close();return true;}

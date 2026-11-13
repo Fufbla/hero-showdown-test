@@ -1,7 +1,7 @@
 name: V3 approved gameplay regression
 on:
   push:
-    branches: [feature/v3-approved-economy-20261113]
+    branches: [feature/v3-approved-economy-20261113, fix/v3-phase-portals-20261113, fix/v3-approved-wardrobe-20261113]
   workflow_dispatch:
 permissions:
   contents: read
@@ -27,11 +27,12 @@ jobs:
           test -z "$(git diff --name-only f93df6bb68c5c75c09e9be6d2eb12665a5cb1746 HEAD -- royale assets index.html game.html hero-showdown.html)"
       - name: Verify economy, portal routes, armor, costumes, boss attacks and co-op saves
         run: |
-          node --import ./royale-v3-staging/gameplay/tests/register.mjs --test royale-v3-staging/gameplay/tests/*.test.mjs royale-v3-staging/kingjames/tests/armor-combat.test.mjs royale-v3-staging/kingjames/tests/armor.test.mjs royale-v3-staging/kingjames/tests/armor-bonus-ui.test.mjs royale-v3-staging/kingjames/tests/armor-render.test.mjs royale-v3-staging/bosses/tests/*.test.mjs royale-v3-staging/costumes/tests/costumes.test.mjs royale/local-coop/tests/local-coop.test.mjs
+          node --import ./royale-v3-staging/gameplay/tests/register.mjs --test royale-v3-staging/gameplay/tests/*.test.mjs royale-v3-staging/kingjames/tests/armor-combat.test.mjs royale-v3-staging/kingjames/tests/armor.test.mjs royale-v3-staging/kingjames/tests/armor-bonus-ui.test.mjs royale-v3-staging/kingjames/tests/armor-render.test.mjs royale-v3-staging/bosses/tests/*.test.mjs royale-v3-staging/costumes/tests/*.test.mjs royale/local-coop/tests/local-coop.test.mjs
       - name: Exercise test code in Chromium
         run: |
           python3 -m http.server 8174 --bind 127.0.0.1 > /tmp/v3-economy-server.log 2>&1 &
           node royale-v3-staging/gameplay/tests/browser.cjs
+          OUTFIT_TEST_BROWSER=chromium node royale-v3-staging/kingjames/tests/outfits.browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

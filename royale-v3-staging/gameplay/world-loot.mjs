@@ -1,4 +1,4 @@
-import {regionPortals} from './portal-layout.mjs';
+import {regionPortals} from './portal-layout.mjs?v=phase-portals-1';
 import {itemDefinition,normalizeEquipmentItem,isRetiredHeadwear} from '../../royale/equipment.mjs';
 import {sharedNow} from '../../royale/shared-clock.mjs';
 import {LOOT} from '../../royale/progression.mjs';

@@ -16,7 +16,7 @@ export function checkCosmeticSave(previous,incoming){
  if(before.owned.some(id=>!after.owned.includes(id)))return {ok:false,error:'Purchased clothing cannot be removed.'};
  for(const id of after.owned){
   if(before.owned.includes(id))continue;
-  if(isRetiredCosmeticId(id))return {ok:false,error:'Headwear is no longer available.'};
+  if(isRetiredCosmeticId(id))return {ok:false,error:'This outfit is no longer available.'};
   const piece=historicalPiece(id),set=outfitForPiece(id);
   if(!piece||!set||!ownsOutfit(after,set))return {ok:false,error:'Clothing can only be purchased as a complete matching outfit.'};
  }
