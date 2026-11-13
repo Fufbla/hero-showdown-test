@@ -1,0 +1,134 @@
+[
+  {
+    "id": "dolphin-costume",
+    "name": "Dolphin Costume",
+    "hideHair": true,
+    "renderer": "mascot"
+  },
+  {
+    "id": "pink-shark-costume",
+    "name": "Pink Shark Costume",
+    "hideHair": true,
+    "renderer": "mascot"
+  },
+  {
+    "id": "hamburger-costume",
+    "name": "Hamburger Costume",
+    "hideHair": true,
+    "renderer": "mascot"
+  },
+  {
+    "id": "stuffed-animal-costume",
+    "name": "Stuffed Animal Costume",
+    "hideHair": true,
+    "renderer": "mascot"
+  },
+  {
+    "id": "zombie-costume",
+    "name": "Zombie Costume",
+    "hideHair": false,
+    "renderer": "mascot"
+  },
+  {
+    "id": "reaper-costume",
+    "name": "Reaper Costume",
+    "hideHair": true,
+    "renderer": "mascot"
+  },
+  {
+    "id": "fishsticks-costume",
+    "name": "I Love Fishsticks Costume",
+    "hideHair": true,
+    "renderer": "mascot"
+  },
+  {
+    "id": "pizza-slice-costume",
+    "name": "Pizza Slice Costume",
+    "hideHair": true,
+    "renderer": "mascot"
+  },
+  {
+    "id": "black-business-suit",
+    "name": "Black Business Suit",
+    "hideHair": false,
+    "renderer": "mascot"
+  },
+  {
+    "id": "white-business-suit",
+    "name": "White Business Suit",
+    "hideHair": false,
+    "renderer": "mascot"
+  },
+  {
+    "id": "santa-street",
+    "name": "Santa Street",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "snowflake-knit",
+    "name": "Snowflake Knit",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "holiday-velvet",
+    "name": "Holiday Velvet",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "purple-puffer",
+    "name": "Purple Puffer",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "classic-varsity",
+    "name": "Classic Varsity",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "olive-bomber",
+    "name": "Olive Bomber",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "midnight-leather",
+    "name": "Midnight Leather",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "sherpa-denim",
+    "name": "Sherpa Denim",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "blossom-kimono",
+    "name": "Blossom Kimono",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "plum-gold-kimono",
+    "name": "Plum & Gold Kimono",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "emerald-gala",
+    "name": "Emerald Gala",
+    "hideHair": false,
+    "renderer": "approved"
+  },
+  {
+    "id": "sapphire-starlight",
+    "name": "Sapphire Starlight",
+    "hideHair": false,
+    "renderer": "approved"
+  }
+]

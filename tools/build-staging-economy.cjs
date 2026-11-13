@@ -7,7 +7,7 @@ const write=(p,s)=>fs.writeFileSync(path.join(root,p),s);
 const shared=s=>s.replace(/((?:from\s*|import\s*\()\s*['"])\.\//g,'$1../../royale/');
 const replace=(s,a,b)=>{if(!s.includes(a))throw Error('Economy source changed: '+a.slice(0,100));return s.replace(a,b);};
 let journey=shared(read('royale/journey.mjs'));
-journey="import {travelMethods} from './travel.mjs';\nimport {monsterCoins} from './economy.mjs';\n"+journey;
+journey="import {travelMethods} from './travel.mjs?v=phase-portals-1';\nimport {monsterCoins} from './economy.mjs';\n"+journey;
 journey=replace(journey,"coins=regular&&!summoned?(this.clock().night?2:1):0","coins=regular&&!summoned?monsterCoins(e.level??info.level):0");
 const start=journey.indexOf('    let root=false,item=null;'),end=journey.indexOf("    this.emit('reward'",start);
 if(start<0||end<0)throw Error('Missing loot boundary');
@@ -43,7 +43,7 @@ bosses=replace(bosses,'this.hero.coins=Math.min(999999,this.hero.coins+reward.co
     this.hero.coins=Math.min(999999,this.hero.coins+reward.coins);const xp=`);
 write('royale-v3-staging/gameplay/bosses.mjs',bosses);
 let loot=shared(read('royale/world-loot.mjs'));
-loot="import {regionPortals} from './portal-layout.mjs';\n"+loot;
+loot="import {regionPortals} from './portal-layout.mjs?v=phase-portals-1';\n"+loot;
 const ls=loot.indexOf(' g.camps.forEach('),le=loot.indexOf(' return result.sort',ls);
 if(ls<0||le<0)throw Error('Missing portal interaction boundary');
 loot=loot.slice(0,ls)+" for(const p of regionPortals(g.regionId))add(p.id,p.kind,p.x,p.y,p.label);\n"+loot.slice(le);
@@ -72,11 +72,11 @@ for(const [file,basePath]of [['index.html','/royale-v3-staging/'],['kingjames/in
   for(const [source,target]of Object.entries(mappings)){
    const sourcePath='/royale/'+source,targetPath='/royale-v3-staging/gameplay/'+target;
    const relative=p=>{const r=path.posix.relative(basePath,p);return r.startsWith('.')?r:'./'+r;};
-   const dest=relative(targetPath)+'?v=economy-2';
+   const dest=relative(targetPath)+'?v=phase-portals-1';
    for(const [key,value]of Object.entries(m.imports))if(new URL(key,base).pathname===sourcePath||new URL(value,base).pathname===sourcePath||new URL(value,base).pathname===targetPath){m.imports[key]=dest;if(new URL(value,base).pathname===sourcePath)m.imports[value]=dest;}
    m.imports[relative(sourcePath)]=dest;
   }
-  for(const [key,value]of Object.entries(m.imports))if(/\/royale-v3-staging\/(?:portals\/(?:world-art|journey-menu|boss-ui)|gameplay\/local-coop-app)\.mjs$/.test(new URL(value,base).pathname))m.imports[key]=value.replace(/\?v=[^&]+/,'?v=economy-2');
+  for(const [key,value]of Object.entries(m.imports))if(/\/royale-v3-staging\/(?:portals\/(?:world-art|journey-menu|boss-ui)|gameplay\/local-coop-app)\.mjs$/.test(new URL(value,base).pathname))m.imports[key]=value.replace(/\?v=[^&]+/,'?v=phase-portals-1');
   return '<script type="importmap">'+JSON.stringify(m)+'</script>';
  });write(dest,html);
 }

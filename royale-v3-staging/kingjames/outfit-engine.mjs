@@ -10,10 +10,10 @@ export class OutfitEngine{
   this.imageLoader=imageLoader;this.jsonLoader=jsonLoader;this.head=new UniversalHead({imageLoader,canvasFactory});
   this.outfits=new Map();this.states=new WeakMap();this.enabled=false;this.lastFrame=null;this.error=null;this.outfitID=OUTFIT_ID;this.selectionRequest=0;
  }
- async preload(id=OUTFIT_ID){
+ async preload(id=OUTFIT_ID,source=OUTFITS[id]){
   try{
    if(this.outfits.has(id))return true;
-   const url=OUTFITS[id];if(!url)throw Error('Unknown outfit');
+   const url=source;if(!url)throw Error('Unknown outfit');
    const manifest=validateManifest(await this.jsonLoader(url));
    const [atlas]=await Promise.all([this.imageLoader(new URL(manifest.atlas,url)),this.head.preload()]);
    const atlases={default:atlas};

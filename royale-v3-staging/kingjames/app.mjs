@@ -195,7 +195,7 @@ if(v2TestHero){
  button.textContent=ready?'Outfit artwork: ON':'KingJames artwork unavailable · Original art';button.disabled=!ready;
  button.onclick=()=>{kingJamesSprites.enabled=!kingJamesSprites.enabled;button.textContent=kingJamesSprites.enabled?'Outfit artwork: ON':'Original renderer: ON';};
  $('pause-primary').prepend(button);
- if(ready){const {installOutfitWardrobe}=await import('./outfit-wardrobe.mjs?v=outfits-1');installOutfitWardrobe({engine:kingJamesSprites,parent:$('pause-primary'),getLook:()=>game.look,onResume:()=>resume()});}
+ if(ready){const {installOutfitWardrobe}=await import('./outfit-wardrobe.mjs?v=wardrobe-22-1');installOutfitWardrobe({engine:kingJamesSprites,parent:$('pause-primary'),getLook:()=>game.look,getCosmetics:()=>game.cosmetics,onResume:()=>resume()});}
 }
 const creatorHome=document.createComment('Character creator home');$('creator').before(creatorHome);
 const erisMenu=new ErisMenu(()=>game,{powerMenu,transaction,say,appearance:()=>openCreator(activeSlot,true),leave:returnAdventure,navigate:()=>{if(!canLeaveMenu())return false;if(screen==='creator'&&editing){abandonUnconfirmedAppearance();setScreen('tree');}return true;}});

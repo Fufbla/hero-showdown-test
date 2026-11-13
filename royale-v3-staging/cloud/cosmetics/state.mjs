@@ -4,7 +4,7 @@ import {CLOTHING_SLOTS,LEGACY_CLOTHING_SLOTS,OUTFIT_PRICE,OUTFIT_POLICIES,
 export {CLOTHING_SLOTS,OUTFIT_PRICE,OUTFIT_POLICIES,isRetiredCosmeticId};
 const idOK=id=>typeof id==='string'&&/^[a-z][a-z0-9._-]{0,95}$/.test(id);
 const revisionOK=n=>Number.isSafeInteger(n)&&n>=0&&n<Number.MAX_SAFE_INTEGER;
-const policyFor=set=>set&&Object.hasOwn(OUTFIT_POLICIES,set.id)?OUTFIT_POLICIES[set.id]:null;
+const policyFor=set=>set&&Object.hasOwn(OUTFIT_POLICIES,set.id)&&OUTFIT_POLICIES[set.id].pieces.length>0?OUTFIT_POLICIES[set.id]:null;
 export const emptyCosmetics=()=>({version:1,revision:0,owned:[],equipped:{},visible:true});
 
 // Keep piece IDs as the ownership ledger, but expose only complete outfits.
@@ -120,4 +120,3 @@ export function cosmeticTransaction({state,coins,index,operation,safe=false,atWa
 export function cosmeticAppearance(state){
  const s=normalizeCosmetics(state);return s?{revision:s.revision,visible:s.visible,equipped:{...s.equipped}}:null;
 }
-

@@ -5,8 +5,9 @@ const fs=require('node:fs');
 const origin=process.env.KINGJAMES_TEST_ORIGIN||'http://127.0.0.1:8174';
 const report=[];
 (async()=>{
- const {APPROVED_OUTFITS,OUTFIT_STORAGE_KEY}=await import('../outfit-catalog.mjs');
- for(const [type,viewport]of [[chromium,{width:1280,height:900}],[webkit,{width:390,height:844}]]){
+ const {COLLECTION}=await import('../../costumes/catalog.mjs');const APPROVED_OUTFITS=COLLECTION.map(o=>({...o,label:o.name}));const {OUTFIT_STORAGE_KEY}=await import('../outfit-catalog.mjs');
+ const engines=process.env.OUTFIT_TEST_BROWSER==='chromium'?[[chromium,{width:1280,height:900}]]:[[chromium,{width:1280,height:900}],[webkit,{width:390,height:844}]];
+ for(const [type,viewport]of engines){
   const browser=await type.launch({headless:true});
   try{
    const context=await browser.newContext({viewport,isMobile:type===webkit,hasTouch:type===webkit});
@@ -25,8 +26,8 @@ const report=[];
    for(const outfit of APPROVED_OUTFITS){
     await frame.evaluate(()=>window.kingJamesQA.pause());
     const before=await frame.evaluate(()=>window.kingJamesQA.status().snapshot);
-    await frame.getByRole('button',{name:'Try Outfits · 12',exact:true}).click();
-    assert.equal(await frame.locator('.outfit-card').count(),13);
+    await frame.getByRole('button',{name:'Try Outfits · '+APPROVED_OUTFITS.length,exact:true}).click();
+    assert.equal(await frame.locator('.outfit-card').count(),APPROVED_OUTFITS.length+1);
     await frame.getByRole('button',{name:'Wear '+outfit.label,exact:true}).click();
     await frame.waitForFunction(id=>document.querySelector('[data-outfit="'+id+'"]').getAttribute('aria-pressed')==='true',outfit.id);
     assert.equal(await frame.locator('[data-play]').isEnabled(),true);
@@ -55,7 +56,7 @@ const report=[];
    const restored=await frame.evaluate(()=>window.kingJamesQA.status().snapshot);
    for(const key of ['level','xp','coins','inventory','powers','look','cosmetics'])assert.deepEqual(restored[key],final[key]);
    assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);assert.deepEqual(cloud,[]);
-   console.log(type.name()+': all 12 outfits equip, animate in both directions, preserve snapshots and reload');
+   console.log(type.name()+': all approved outfits equip, animate in both directions, preserve snapshots and reload');
   }finally{await browser.close();}
  }
  fs.writeFileSync('/tmp/kingjames-outfit-browser-results.json',JSON.stringify(report,null,2));
