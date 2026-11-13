@@ -47,6 +47,9 @@ jobs:
       - name: Verify the existing archive
         run: |
           test -s pages-artifact/artifact.tar
+          # A raw repository artifact exposes test routes and must never recover
+          # over the production-only bundle after the final V3 transition.
+          tar -tf pages-artifact/artifact.tar | grep -q 'royale/release-manifest.json'
           sha256sum pages-artifact/artifact.tar
 
       - name: Attach the unchanged archive to this run

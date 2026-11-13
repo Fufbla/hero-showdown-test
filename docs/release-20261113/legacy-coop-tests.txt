@@ -1,0 +1,48 @@
+✔ regular full coin rewards accrue independently without duplicate deaths (25.594076ms)
+✔ odd XP remainder alternates deterministically and conserves base XP (11.108539ms)
+✔ both heroes get boss XP and full first-victory coins without final-hit ownership (10.396598ms)
+✔ first-defeat boss coin eligibility stays per account (9.29622ms)
+✔ boss chest claims are independent and cannot repeat (9.633944ms)
+✔ one loot roll; matching independent copies; pickup order 0,1 (19.423976ms)
+✔ one loot roll; matching independent copies; pickup order 1,0 (162.252405ms)
+✔ equipment drop rate is rolled once, without a second player random roll (11.085887ms)
+✔ full inventory only blocks player 1 (15.675485ms)
+✔ full inventory only blocks player 2 (12.995779ms)
+✔ shared ordinary loot expires at 20 seconds while boss rewards remain (9.727691ms)
+✔ inventory copies and independent coin balances survive snapshot restoration (7.657734ms)
+✔ offscreen test waits until the entire hero crosses the margin (0.207474ms)
+✔ teleport finds ground beside airborne leader and preserves progression (7.231772ms)
+✔ teleport avoids enemies, solid walls and hazards; no unsafe fallback (5.568041ms)
+✔ single player Ready never unpauses; cancellation and both Ready work (7.960617ms)
+✔ simultaneous upgrades affect only each hero and preserve caps (6.64167ms)
+✔ player 1 leaves, other preserves world and resumes solo rewards/autosave (10.573437ms)
+✔ player 2 leaves, other preserves world and resumes solo rewards/autosave (5.044755ms)
+✔ failed final save keeps departing hero and pending session available (9.307136ms)
+✔ region travel joins both heroes to the same authoritative enemies (13.101954ms)
+✔ checkpoint capture is equivalent to solo save outside combat (7.912839ms)
+✔ boss XP is conserved exactly across independent level-ups (5.657741ms)
+✔ dead active partner still receives their share without duplicate deaths (10.231878ms)
+✔ one authority advances each shared enemy once per simulation tick (14.853585ms)
+✔ active strength can checkpoint safely during combat (11.475426ms)
+✔ active superKick can checkpoint safely during combat (10.464758ms)
+✔ active fireball can checkpoint safely during combat (11.97057ms)
+✔ active flight can checkpoint safely during combat (8.923354ms)
+✔ active steel can checkpoint safely during combat (8.859211ms)
+✔ active roots can checkpoint safely during combat (11.510026ms)
+✔ active agility can checkpoint safely during combat (8.262169ms)
+✔ active whirlwind can checkpoint safely during combat (8.073542ms)
+✔ concurrent departures remain paused until both final saves settle (7.636334ms)
+✔ mixed boss chest eligibility false,false: retries and restore retain each hero's claim (12.466685ms)
+✔ mixed boss chest eligibility true,false: retries and restore retain each hero's claim (16.788963ms)
+✔ mixed boss chest eligibility false,true: retries and restore retain each hero's claim (12.815184ms)
+✔ mixed boss chest eligibility true,true: retries and restore retain each hero's claim (11.861701ms)
+✔ companion in leader-only unlocked region earns own chest after actual shared victory (8.522038ms)
+✔ full inventory holds all chest equipment safely through save/restore (10.660464ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 714.554049

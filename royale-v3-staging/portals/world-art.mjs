@@ -74,9 +74,6 @@ export function worldLandmarks(c,g,camera,width){
   drawLoot(c,g);
   const region=g.getRegion();
 
-  for(const [x,text,color] of [[1940,'→ '+region.boards[1],region.edge],[4020,'→ '+region.boards[2],region.edge]]){
-    if(x<camera-200||x>camera+width+200)continue;line(c,[[x,600],[x,508]],'#4d5d59',6);rect(c,x-90,500,180,32,'#233d45');c.fillStyle=color;c.font='bold 12px system-ui';c.textAlign='center';c.fillText(text,x,521);
-  }
   for(const p of regionPortals(g.regionId)){
     if(p.x<camera-240||p.x>camera+width+240)continue;
     const label=p.destination?.hub?'Tree of Eris · Free':p.role==='boss'?region.boss+' Arena':p.label;

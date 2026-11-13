@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-13T16:26:08.152Z",
+  "passed": true,
+  "physicalControllersTested": false,
+  "browserEndToEnd": false,
+  "existingPlayerWrites": 0,
+  "checks": [
+    "Actual release CloudProfile login for two distinct QA accounts",
+    "Actual LocalSession independent cloud saves acknowledged",
+    "Independent fresh sessions restore both heroes, inventory, equipment, powers, customization, XP and coins",
+    "Other slots unchanged",
+    "Player 1 leader and 8000ms autosave configuration"
+  ]
+}

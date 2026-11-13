@@ -1,0 +1,45 @@
+name: Verify Royale release candidate
+on:
+  push:
+    branches: [release/v3-final-cleanup-20261113]
+  pull_request:
+    paths:
+      - 'royale/**'
+      - 'royale-v3-staging/**'
+      - 'tools/release-build/**'
+      - 'tools/build-royale-release.cjs'
+      - '.github/workflows/royale-release-candidate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned build and rendering dependencies
+        run: |
+          npm ci --prefix tools/release-build
+          npm install --no-save --no-package-lock @napi-rs/canvas@0.1.100
+      - name: Package approved V3 for the existing Royale path
+        run: node tools/build-royale-release.cjs
+      - name: Verify packaged release graph, saves, economy, portals, bosses, costumes and co-op
+        run: |
+          set -o pipefail
+          node --import ./tools/release-build/register.mjs --test tools/release-build/release.test.mjs royale-v3-staging/gameplay/tests/*.test.mjs royale-v3-staging/bosses/tests/*.test.mjs royale-v3-staging/costumes/tests/*.test.mjs royale/local-coop/tests/local-coop.test.mjs royale/local-coop/tests/setup-controller.test.mjs royale/local-coop/tests/asset-cache.test.mjs | tee release-test-results.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: royale-release-verification
+          path: |
+            release-test-results.txt
+            _site/royale/release-manifest.json
+            docs/release-20261113/
+# This workflow cannot deploy. Production remains on the verified existing build
+# until the blockers in docs/release-20261113/STATUS.md are resolved.

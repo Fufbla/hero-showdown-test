@@ -1,0 +1,16 @@
+✔ release keeps existing save version and exact progression, position, appearance and equipped gear (13.797218ms)
+✔ three occupied original slots survive release loading and one-slot save without touching the other slots (14.856112ms)
+✔ release rejects stale-tab saves and leaves malformed existing saves untouched (7.572031ms)
+✔ release constructor refuses the old test-power privilege and arbitrary names use the approved sprite body (0.49386ms)
+✔ published graph contains approved bosses, rewards, armor and cosmetics without developer modules (14.843213ms)
+✔ release menu contains the exact six player actions, with gear only in Eris and no map entry (0.78844ms)
+✔ artifact preserves cloud save contract and does not ship backend migrations or test entrypoints (0.3428ms)
+✔ release offers local co-op only and excludes online transports and room routes (10.569592ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 326.23

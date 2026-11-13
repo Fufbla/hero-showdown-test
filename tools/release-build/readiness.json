@@ -1,0 +1,20 @@
+{
+  "productionReady": true,
+  "releaseModes": {
+    "singlePlayer": true,
+    "localCoop": true,
+    "onlineMultiplayer": false
+  },
+  "blockers": [],
+  "verification": {
+    "automatedReleaseTests": 183,
+    "legacyCoopTests": 40,
+    "backendTests": 2,
+    "liveCloudIntegration": "Two ordinary QA accounts passed actual release CloudProfile/LocalSession independent save and reload",
+    "existingSaves": "43 compatible; original snapshot/revision fingerprint unchanged",
+    "physicalControllers": "User confirmed all four manual co-op steps, including independent cloud save/reload",
+    "pagesSource": "User confirmed changing Source to GitHub Actions and saving",
+    "deploymentAuthorization": "User explicitly approved deployment after these confirmations",
+    "packagedLiveBrowserCloud": "Not separately exercised before publication; covered pre-release by live runtime integration and user browser roundtrip. Post-deployment smoke check remains to be reported honestly."
+  }
+}

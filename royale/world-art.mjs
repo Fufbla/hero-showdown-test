@@ -72,9 +72,6 @@ export function worldLandmarks(c,g,camera,width){
   drawLoot(c,g);
   const region=g.getRegion();
   for(const camp of g.camps){const x=camp.x+90;if(x<camera-100||x>camera+width+100)continue;drawPortal(c,x,camp.y,g.regionId,g.time);}
-  for(const [x,text,color] of [[1940,'→ '+region.boards[1],region.edge],[4020,'→ '+region.boards[2],region.edge]]){
-    if(x<camera-200||x>camera+width+200)continue;line(c,[[x,600],[x,508]],'#4d5d59',6);rect(c,x-90,500,180,32,'#233d45');c.fillStyle=color;c.font='bold 12px system-ui';c.textAlign='center';c.fillText(text,x,521);
-  }
   for(const [x,label,locked] of [[GATES.back,g.regionId>1?'E · Previous region':'Shoreward path',false],[GATES.arena,'E · '+region.boss+' Arena',false],[GATES.forward,g.regionId===7?'World edge':'E · Next region',false]]){
     if(x<camera-240||x>camera+width+240)continue;
     drawPortal(c,x,600,g.regionId,g.time,label.replace('E · ',''));

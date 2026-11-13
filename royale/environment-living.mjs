@@ -47,11 +47,6 @@ export function animateLivingWorld(c,region,width,height,cx,cy,time,night){
   c.globalAlpha=.12+.055*Math.sin(time*.8);c.strokeStyle=theme==='energy'?'#c4c5f4':'#bce7b7';c.lineWidth=2;c.beginPath();
   for(let i=0;i<Math.min(8,Math.ceil(width/240)+1);i++){const x=i*240-mod(cx*.32,240)+50,y=510-cy*.32; c.moveTo(x,y);c.lineTo(x+5,y-20);c.lineTo(x+12,y-4);}c.stroke();
  }
- // Sparse mist is made of broad translucent ellipses; no per-frame textures.
- if(['forest','factory','cave','mutant','energy','final'].includes(theme)){
-  c.fillStyle=theme==='final'?'#d3acaa':'#c8d7d1';c.globalAlpha=night?.035:.055;
-  for(let i=-1;i<Math.min(7,Math.ceil(width/310)+1);i++){const x=i*310+mod(time*5-cx*.19,310),y=height*.76-cy*.1+Math.sin(time*.25+i)*8;c.beginPath();c.ellipse(x,y,180,15,0,0,TAU);c.fill();}
- }
  c.restore();
 }
 export const LIVING_WORLD_THEMES=Object.freeze(Object.keys(tones));

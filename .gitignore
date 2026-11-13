@@ -4,3 +4,10 @@
 /royale/qa/nine-hair-review/screenshots/
 /.local-coop-cache/
 /local-coop-assets.json
+
+# Reproducible release outputs and build dependencies.
+/_site/
+/node_modules
+/tools/release-build/node_modules/
+/.openai/
+/dist
