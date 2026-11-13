@@ -1,0 +1,273 @@
+{
+  "status": "implementation-complete-and-locally-verified",
+  "scope": "V3 reserved local test code 0000000000 only",
+  "baseline": "5effb0ac9438a56c59748fd16088f2a8f27a29e2",
+  "reviewBranch": "codex/boss-redesign-review-20261112",
+  "implementationBranch": "codex/boss-test-0000000000",
+  "bossCount": 15,
+  "authoredPoseCount": 240,
+  "attackDefinitionsPreserved": 77,
+  "remainingFiles": [],
+  "tests": {
+    "combat": {
+      "passed": 80,
+      "attackTimingCases": 924,
+      "practiceBossPhaseCases": 45
+    },
+    "art": {
+      "passed": 2,
+      "transparentAtlases": 15,
+      "distinctFrames": 240
+    },
+    "preservation": {
+      "passed": 45,
+      "coverage": [
+        "armor stats and measured combat",
+        "outfits",
+        "browser import maps",
+        "travel/cloud snapshot handling",
+        "local co-op"
+      ]
+    },
+    "browser": {
+      "rosterLoaded": 15,
+      "phase": 3,
+      "returnToSavedHeroVerified": true,
+      "environment": "managed Chromium preview",
+      "physicalIPhoneTested": false,
+      "realCloudAccountUsed": false
+    }
+  },
+  "deployment": {
+    "target": "https://fufbla.github.io/hero-showdown-test/royale-v3-staging/",
+    "trigger": "main branch push",
+    "statusSource": "GitHub Actions: Publish optimized Hero Showdown site"
+  },
+  "files": [
+    {
+      "path": "royale-v3-staging/bosses/README.md",
+      "bytes": 2536,
+      "sha256": "90aecc6ff7268b1d69b4ac7cbb99939143c1d473d1d3b71864259a4e864c2e71"
+    },
+    {
+      "path": "royale-v3-staging/bosses/art.mjs",
+      "bytes": 4251,
+      "sha256": "fb5a181b1630859b9764518797d8d8c90d1ffa553340130f1e79c79a34edcedc"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/asset-validation.json",
+      "bytes": 28757,
+      "sha256": "c595a12b5bf477a9b7e45ecad0764394b63a07d8e3b2dc4a7c6a5c6eeec2a152"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/build-manifest.py",
+      "bytes": 4063,
+      "sha256": "66f3b5c26c8d4b080ffc5cf9eef7eb5269dd8276cca437bddcc5d33cd4764c38"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/generation-record.json",
+      "bytes": 2701,
+      "sha256": "aa871e77ee776518f45eb794389dec8f9a9a0e68cb249a97e4af036168ce1c70"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-air.png",
+      "bytes": 2079082,
+      "sha256": "e8e4c3b1e243384be6acead3c6b328f546f5e7882991e1218d69a5c3bf69ac27"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-air.prompt.txt",
+      "bytes": 1895,
+      "sha256": "ab18cdc6f2e679bac8fddfa4200c69201e687ea64c748fe30f8e2eb30f19007e"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-atomdust.png",
+      "bytes": 2133022,
+      "sha256": "0991fdfd02761802e06460fcdad7f0487256099858532aa80418e88a7d974e9f"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-atomdust.prompt.txt",
+      "bytes": 1932,
+      "sha256": "0047e148d6839b19b99d8ce738250ec34c95af4791b8baefd0dd3e1eb889fc12"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-lightning.png",
+      "bytes": 2107367,
+      "sha256": "fe5fe6c7c27802c43265b91359b0ef995b20bc9247948b54266b2f7852ffd62d"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-lightning.prompt.txt",
+      "bytes": 1820,
+      "sha256": "8c8bd650f9433f2018e0a8c2862eab0e77727d05fb243e344b139db6f1ba1bb4"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-sonic.png",
+      "bytes": 2336607,
+      "sha256": "a2239c724e93c654319c886fdff2580b999d2b774c570ff277fcb8c685f7ed46"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-sonic.prompt.txt",
+      "bytes": 1820,
+      "sha256": "cc016c5fced7ee04befa4a350fb11cdef337a13824326549b1faca4263bb341b"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-styro.png",
+      "bytes": 2151490,
+      "sha256": "4f8bd9e2fc57005c2a451f7071f3bef7bf7187bec1a41d1f4661e612c991dec1"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-styro.prompt.txt",
+      "bytes": 1911,
+      "sha256": "8d7a18d16b2255f5a5c52c2aa0337adf8a6d44b6d4f959b9a0dded2a0b775544"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-styrodog.png",
+      "bytes": 2313543,
+      "sha256": "15919a6a7160b651da08bbdfaa03ccad2473b6f1a31b04541fbc026ef5bfb580"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-styrodog.prompt.txt",
+      "bytes": 1904,
+      "sha256": "f69c1e81a0c085c591c9d04afccf785a2f7f6bbd7d779b6c415744dbd896a489"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-venomis.png",
+      "bytes": 2926401,
+      "sha256": "264b1c09cdcc4f6c752326e3fc506da3ba5e470fbe88b196387443ecfc486f9a"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-venomis.prompt.txt",
+      "bytes": 2039,
+      "sha256": "9e6f13e2d44eb58649bf68042d43912229f4d6be832cdc2c94826bcb8ee473b9"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-wastelander.png",
+      "bytes": 2293659,
+      "sha256": "2c52e7ceb844e6c4aa90f15d1ff8c60c2c5cd568b406e28b778603b709d8a960"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/legendary-wastelander.prompt.txt",
+      "bytes": 1923,
+      "sha256": "c3e9386f3357eb4c7bd8fa9759017534519630a63c1164b4327b7b5fbe748720"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/manifest.json",
+      "bytes": 86924,
+      "sha256": "157a6a22b4faa9c87e288c407825aba4279a6f21ea30f768fd4cf05e8db77438"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-atomdust.png",
+      "bytes": 1751682,
+      "sha256": "717d6139eb433172d4f03d85f89ca5cb6431bdbcfcf52894c7467bd541568b11"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-atomdust.prompt.txt",
+      "bytes": 1847,
+      "sha256": "7a0f16218ae786c16dd84c3b444cb240e002dd2ad3e0992f79a88f0c5790164c"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-bushman.png",
+      "bytes": 2278054,
+      "sha256": "d835e0a96cdffd4400e87d544107d89483840aed7e31768b7fe9115aa4a486db"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-bushman.prompt.txt",
+      "bytes": 1885,
+      "sha256": "574bbe9ed2f616314c43483443dd62b2a1962a6f6f0e24483028d11f1838c974"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-giant-scorpion.png",
+      "bytes": 1796222,
+      "sha256": "316700e49812e7da03896a5a504e1addb4d9471d91101f3c7cb2bb8a2e746b19"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-giant-scorpion.prompt.txt",
+      "bytes": 1809,
+      "sha256": "5adb52a4ff902494ec547d25487807a3c23f5d632fa89b7daf4c8e67f4f2e1e7"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-trash-monster.png",
+      "bytes": 2216089,
+      "sha256": "10b0eec0f5badb6e0527dc1f5915e4f64c53a50f4c48bf6024444e74c10ab1f2"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-trash-monster.prompt.txt",
+      "bytes": 1962,
+      "sha256": "17974926e3a9a47d118caeb59851b451228a3c582bafc2739a028fe2f6e587d8"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-ultimate-pollution.png",
+      "bytes": 2297886,
+      "sha256": "5c59b0654f0333f790a9681495fb4015ca221779acbd731d8448fe4c6a170c98"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-ultimate-pollution.prompt.txt",
+      "bytes": 1863,
+      "sha256": "e9687b6d80f87548c454a1ba922c3934bda2398dbbb8c15087fea38eaf0b267f"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-venomis.png",
+      "bytes": 2356258,
+      "sha256": "1f5ef9914b2a1165ed8b37f3d07fc424be6d29626194412f80018fe03bd732c9"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-venomis.prompt.txt",
+      "bytes": 1878,
+      "sha256": "45f399b4c1001d3294b14bacaf06805a94fa24e240c8e6e3ed7463fbdbc1e88d"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-wastelander.png",
+      "bytes": 2273727,
+      "sha256": "ddc5f7cb7c427ac3f69ac224f6dbf510c096f1101722133d083231b3bfd10475"
+    },
+    {
+      "path": "royale-v3-staging/bosses/assets/regional-wastelander.prompt.txt",
+      "bytes": 1976,
+      "sha256": "d1cb0094c2645853b630ffccac7c47455cc9fda4a93c3c835941700cdc5a6a2a"
+    },
+    {
+      "path": "royale-v3-staging/bosses/effects.mjs",
+      "bytes": 7545,
+      "sha256": "fec95a66556911798222658279744c42f435adf1216d08f21302b690fceb11ac"
+    },
+    {
+      "path": "royale-v3-staging/bosses/launcher.mjs",
+      "bytes": 3543,
+      "sha256": "4876cbb4abe50e94dd7e6198889fd4418d6965d84bd3bc09dddea5087bdfacea"
+    },
+    {
+      "path": "royale-v3-staging/bosses/legendary-art.mjs",
+      "bytes": 583,
+      "sha256": "caacbbb3eb91b55e0643f1728df10352cd3ceff0d03cf46031d797f2d9549047"
+    },
+    {
+      "path": "royale-v3-staging/bosses/model.mjs",
+      "bytes": 2541,
+      "sha256": "6ce4945bc71876daa7983038347e23f31ad75a9982de6ff1d83a700256d9df0c"
+    },
+    {
+      "path": "royale-v3-staging/bosses/practice.mjs",
+      "bytes": 1553,
+      "sha256": "f97d1d0652b755ad355cf7d4e75e0161510ab8fb0308e214f8369a89be533021"
+    },
+    {
+      "path": "royale-v3-staging/bosses/qa/browser-roster.json",
+      "bytes": 6594,
+      "sha256": "12906609b84a8e13031b63456e7fe32b3d4d37ae6c9690090a18174c02e8f316"
+    },
+    {
+      "path": "royale-v3-staging/bosses/qa/legendary-atomdust.jpg",
+      "bytes": 96266,
+      "sha256": "cfe422833956180e33b518c4f679b6702bac6a0c10cdb9f8811948cb3ad0747c"
+    },
+    {
+      "path": "royale-v3-staging/bosses/tests/art.test.mjs",
+      "bytes": 3210,
+      "sha256": "036a48315dd1d07405c7633411fdb959064bc75d18cb8ad30919fe9bd14052a5"
+    },
+    {
+      "path": "royale-v3-staging/bosses/tests/combat.test.mjs",
+      "bytes": 6271,
+      "sha256": "f5479f4e34b386ecc93bc40e915363bb5e8fdedbf13a2e0f20f09570a44b18d3"
+    }
+  ]
+}

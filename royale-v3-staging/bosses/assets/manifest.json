@@ -1,0 +1,4839 @@
+{
+  "schemaVersion": 1,
+  "frameOrder": [
+    "idle-a",
+    "idle-b",
+    "walk-a",
+    "walk-b",
+    "melee-windup",
+    "melee-active",
+    "melee-recovery",
+    "hit",
+    "ranged-windup",
+    "ranged-active",
+    "ranged-recovery",
+    "defeat",
+    "ground-windup",
+    "ground-active",
+    "ground-recovery",
+    "phase"
+  ],
+  "bosses": {
+    "legendary-air": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 258,
+      "anchor": [
+        117.75,
+        258
+      ],
+      "phaseColor": "#f5aa68",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            34,
+            18,
+            257,
+            266
+          ],
+          "anchor": [
+            117.75,
+            258
+          ],
+          "bounds": [
+            34,
+            18,
+            291,
+            284
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            335,
+            13,
+            257,
+            267
+          ],
+          "anchor": [
+            130.25,
+            259
+          ],
+          "bounds": [
+            335,
+            13,
+            592,
+            280
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            629,
+            19,
+            286,
+            257
+          ],
+          "anchor": [
+            149.75,
+            240
+          ],
+          "bounds": [
+            629,
+            19,
+            915,
+            276
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            948,
+            22,
+            292,
+            254
+          ],
+          "anchor": [
+            144.25,
+            242
+          ],
+          "bounds": [
+            948,
+            22,
+            1240,
+            276
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            37,
+            323,
+            236,
+            274
+          ],
+          "anchor": [
+            114.75,
+            266
+          ],
+          "bounds": [
+            37,
+            323,
+            273,
+            597
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            321,
+            332,
+            313,
+            264
+          ],
+          "anchor": [
+            144.25,
+            256
+          ],
+          "bounds": [
+            321,
+            332,
+            634,
+            596
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            657,
+            329,
+            251,
+            263
+          ],
+          "anchor": [
+            121.75,
+            256
+          ],
+          "bounds": [
+            657,
+            329,
+            908,
+            592
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            953,
+            326,
+            280,
+            268
+          ],
+          "anchor": [
+            139.25,
+            256
+          ],
+          "bounds": [
+            953,
+            326,
+            1233,
+            594
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            36,
+            636,
+            240,
+            268
+          ],
+          "anchor": [
+            115.75,
+            252
+          ],
+          "bounds": [
+            36,
+            636,
+            276,
+            904
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            335,
+            642,
+            282,
+            258
+          ],
+          "anchor": [
+            130.25,
+            242
+          ],
+          "bounds": [
+            335,
+            642,
+            617,
+            900
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            665,
+            638,
+            238,
+            265
+          ],
+          "anchor": [
+            113.75,
+            250
+          ],
+          "bounds": [
+            665,
+            638,
+            903,
+            903
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            968,
+            642,
+            251,
+            257
+          ],
+          "anchor": [
+            124.25,
+            243
+          ],
+          "bounds": [
+            968,
+            642,
+            1219,
+            899
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            44,
+            951,
+            222,
+            260
+          ],
+          "anchor": [
+            107.75,
+            252
+          ],
+          "bounds": [
+            44,
+            951,
+            266,
+            1211
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            329,
+            948,
+            276,
+            279
+          ],
+          "anchor": [
+            136.25,
+            259
+          ],
+          "bounds": [
+            329,
+            948,
+            605,
+            1227
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            652,
+            946,
+            262,
+            278
+          ],
+          "anchor": [
+            126.75,
+            267
+          ],
+          "bounds": [
+            652,
+            946,
+            914,
+            1224
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            957,
+            951,
+            277,
+            275
+          ],
+          "anchor": [
+            135.25,
+            262
+          ],
+          "bounds": [
+            957,
+            951,
+            1234,
+            1226
+          ]
+        }
+      ],
+      "sha256": "e8e4c3b1e243384be6acead3c6b328f546f5e7882991e1218d69a5c3bf69ac27",
+      "transparentPixelRatio": 0.515328,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": -5.0,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "legendary-atomdust": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 275,
+      "anchor": [
+        93.5,
+        275
+      ],
+      "phaseColor": "#ffcf7e",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            71,
+            12,
+            187,
+            279
+          ],
+          "anchor": [
+            93.5,
+            275
+          ],
+          "bounds": [
+            71,
+            12,
+            258,
+            291
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            384,
+            11,
+            188,
+            280
+          ],
+          "anchor": [
+            94.0,
+            276
+          ],
+          "bounds": [
+            384,
+            11,
+            572,
+            291
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            695,
+            16,
+            193,
+            276
+          ],
+          "anchor": [
+            96.5,
+            270
+          ],
+          "bounds": [
+            695,
+            16,
+            888,
+            292
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            1008,
+            16,
+            195,
+            275
+          ],
+          "anchor": [
+            97.0,
+            271
+          ],
+          "bounds": [
+            1008,
+            16,
+            1203,
+            291
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            58,
+            328,
+            223,
+            275
+          ],
+          "anchor": [
+            106.5,
+            271
+          ],
+          "bounds": [
+            58,
+            328,
+            281,
+            603
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            357,
+            327,
+            248,
+            276
+          ],
+          "anchor": [
+            121.0,
+            272
+          ],
+          "bounds": [
+            357,
+            327,
+            605,
+            603
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            673,
+            328,
+            222,
+            275
+          ],
+          "anchor": [
+            118.5,
+            271
+          ],
+          "bounds": [
+            673,
+            328,
+            895,
+            603
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            971,
+            331,
+            241,
+            272
+          ],
+          "anchor": [
+            134.0,
+            268
+          ],
+          "bounds": [
+            971,
+            331,
+            1212,
+            603
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            55,
+            640,
+            222,
+            276
+          ],
+          "anchor": [
+            109.5,
+            271
+          ],
+          "bounds": [
+            55,
+            640,
+            277,
+            916
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            358,
+            637,
+            253,
+            279
+          ],
+          "anchor": [
+            120.0,
+            275
+          ],
+          "bounds": [
+            358,
+            637,
+            611,
+            916
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            671,
+            642,
+            232,
+            274
+          ],
+          "anchor": [
+            120.5,
+            270
+          ],
+          "bounds": [
+            671,
+            642,
+            903,
+            916
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            980,
+            681,
+            226,
+            235
+          ],
+          "anchor": [
+            125.0,
+            230
+          ],
+          "bounds": [
+            980,
+            681,
+            1206,
+            916
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            66,
+            958,
+            202,
+            273
+          ],
+          "anchor": [
+            98.5,
+            268
+          ],
+          "bounds": [
+            66,
+            958,
+            268,
+            1231
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            362,
+            988,
+            214,
+            244
+          ],
+          "anchor": [
+            116.0,
+            239
+          ],
+          "bounds": [
+            362,
+            988,
+            576,
+            1232
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            675,
+            959,
+            213,
+            272
+          ],
+          "anchor": [
+            116.5,
+            268
+          ],
+          "bounds": [
+            675,
+            959,
+            888,
+            1231
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            984,
+            949,
+            229,
+            283
+          ],
+          "anchor": [
+            121.0,
+            279
+          ],
+          "bounds": [
+            984,
+            949,
+            1213,
+            1232
+          ]
+        }
+      ],
+      "sha256": "0991fdfd02761802e06460fcdad7f0487256099858532aa80418e88a7d974e9f",
+      "transparentPixelRatio": 0.50984,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 7.75,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "legendary-lightning": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 287,
+      "anchor": [
+        80.5,
+        287
+      ],
+      "phaseColor": "#d1b3ff",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            74,
+            9,
+            188,
+            294
+          ],
+          "anchor": [
+            80.5,
+            287
+          ],
+          "bounds": [
+            74,
+            9,
+            262,
+            303
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            372,
+            8,
+            189,
+            295
+          ],
+          "anchor": [
+            96.0,
+            289
+          ],
+          "bounds": [
+            372,
+            8,
+            561,
+            303
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            679,
+            9,
+            208,
+            291
+          ],
+          "anchor": [
+            102.5,
+            285
+          ],
+          "bounds": [
+            679,
+            9,
+            887,
+            300
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            982,
+            10,
+            221,
+            290
+          ],
+          "anchor": [
+            113.0,
+            283
+          ],
+          "bounds": [
+            982,
+            10,
+            1203,
+            300
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            65,
+            321,
+            219,
+            290
+          ],
+          "anchor": [
+            89.5,
+            284
+          ],
+          "bounds": [
+            65,
+            321,
+            284,
+            611
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            335,
+            333,
+            281,
+            278
+          ],
+          "anchor": [
+            133.0,
+            271
+          ],
+          "bounds": [
+            335,
+            333,
+            616,
+            611
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            659,
+            328,
+            235,
+            283
+          ],
+          "anchor": [
+            122.5,
+            276
+          ],
+          "bounds": [
+            659,
+            328,
+            894,
+            611
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            969,
+            324,
+            247,
+            287
+          ],
+          "anchor": [
+            126.0,
+            279
+          ],
+          "bounds": [
+            969,
+            324,
+            1216,
+            611
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            59,
+            640,
+            213,
+            280
+          ],
+          "anchor": [
+            95.5,
+            274
+          ],
+          "bounds": [
+            59,
+            640,
+            272,
+            920
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            339,
+            639,
+            237,
+            280
+          ],
+          "anchor": [
+            129.0,
+            274
+          ],
+          "bounds": [
+            339,
+            639,
+            576,
+            919
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            676,
+            639,
+            211,
+            279
+          ],
+          "anchor": [
+            105.5,
+            273
+          ],
+          "bounds": [
+            676,
+            639,
+            887,
+            918
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            961,
+            689,
+            229,
+            226
+          ],
+          "anchor": [
+            134.0,
+            221
+          ],
+          "bounds": [
+            961,
+            689,
+            1190,
+            915
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            56,
+            957,
+            221,
+            283
+          ],
+          "anchor": [
+            98.5,
+            276
+          ],
+          "bounds": [
+            56,
+            957,
+            277,
+            1240
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            366,
+            957,
+            222,
+            282
+          ],
+          "anchor": [
+            102.0,
+            276
+          ],
+          "bounds": [
+            366,
+            957,
+            588,
+            1239
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            681,
+            955,
+            192,
+            285
+          ],
+          "anchor": [
+            100.5,
+            278
+          ],
+          "bounds": [
+            681,
+            955,
+            873,
+            1240
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            987,
+            946,
+            224,
+            294
+          ],
+          "anchor": [
+            108.0,
+            287
+          ],
+          "bounds": [
+            987,
+            946,
+            1211,
+            1240
+          ]
+        }
+      ],
+      "sha256": "fe5fe6c7c27802c43265b91359b0ef995b20bc9247948b54266b2f7852ffd62d",
+      "transparentPixelRatio": 0.488349,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": -2.25,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "legendary-sonic": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 194,
+      "anchor": [
+        131.25,
+        194
+      ],
+      "phaseColor": "#8bddff",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            28,
+            72,
+            273,
+            199
+          ],
+          "anchor": [
+            131.25,
+            194
+          ],
+          "bounds": [
+            28,
+            72,
+            301,
+            271
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            331,
+            71,
+            282,
+            199
+          ],
+          "anchor": [
+            141.75,
+            194
+          ],
+          "bounds": [
+            331,
+            71,
+            613,
+            270
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            633,
+            72,
+            303,
+            198
+          ],
+          "anchor": [
+            153.25,
+            192
+          ],
+          "bounds": [
+            633,
+            72,
+            936,
+            270
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            954,
+            71,
+            293,
+            199
+          ],
+          "anchor": [
+            145.75,
+            193
+          ],
+          "bounds": [
+            954,
+            71,
+            1247,
+            270
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            13,
+            367,
+            285,
+            195
+          ],
+          "anchor": [
+            146.25,
+            190
+          ],
+          "bounds": [
+            13,
+            367,
+            298,
+            562
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            318,
+            367,
+            320,
+            189
+          ],
+          "anchor": [
+            154.75,
+            184
+          ],
+          "bounds": [
+            318,
+            367,
+            638,
+            556
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            651,
+            355,
+            279,
+            201
+          ],
+          "anchor": [
+            135.25,
+            196
+          ],
+          "bounds": [
+            651,
+            355,
+            930,
+            556
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            958,
+            350,
+            276,
+            206
+          ],
+          "anchor": [
+            141.75,
+            200
+          ],
+          "bounds": [
+            958,
+            350,
+            1234,
+            556
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            24,
+            638,
+            274,
+            223
+          ],
+          "anchor": [
+            135.25,
+            218
+          ],
+          "bounds": [
+            24,
+            638,
+            298,
+            861
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            321,
+            655,
+            295,
+            207
+          ],
+          "anchor": [
+            151.75,
+            201
+          ],
+          "bounds": [
+            321,
+            655,
+            616,
+            862
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            638,
+            660,
+            284,
+            201
+          ],
+          "anchor": [
+            148.25,
+            196
+          ],
+          "bounds": [
+            638,
+            660,
+            922,
+            861
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            950,
+            673,
+            290,
+            189
+          ],
+          "anchor": [
+            149.75,
+            184
+          ],
+          "bounds": [
+            950,
+            673,
+            1240,
+            862
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            18,
+            948,
+            284,
+            231
+          ],
+          "anchor": [
+            141.25,
+            225
+          ],
+          "bounds": [
+            18,
+            948,
+            302,
+            1179
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            320,
+            988,
+            302,
+            190
+          ],
+          "anchor": [
+            152.75,
+            185
+          ],
+          "bounds": [
+            320,
+            988,
+            622,
+            1178
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            637,
+            973,
+            300,
+            205
+          ],
+          "anchor": [
+            149.25,
+            200
+          ],
+          "bounds": [
+            637,
+            973,
+            937,
+            1178
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            954,
+            945,
+            292,
+            233
+          ],
+          "anchor": [
+            145.75,
+            228
+          ],
+          "bounds": [
+            954,
+            945,
+            1246,
+            1178
+          ]
+        }
+      ],
+      "sha256": "a2239c724e93c654319c886fdff2580b999d2b774c570ff277fcb8c685f7ed46",
+      "transparentPixelRatio": 0.519597,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 2.5,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "legendary-styro": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 252,
+      "anchor": [
+        100.5,
+        252
+      ],
+      "phaseColor": "#98e3f3",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            61,
+            28,
+            214,
+            257
+          ],
+          "anchor": [
+            100.5,
+            252
+          ],
+          "bounds": [
+            61,
+            28,
+            275,
+            285
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            376,
+            18,
+            207,
+            267
+          ],
+          "anchor": [
+            99.0,
+            262
+          ],
+          "bounds": [
+            376,
+            18,
+            583,
+            285
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            675,
+            24,
+            211,
+            261
+          ],
+          "anchor": [
+            113.5,
+            255
+          ],
+          "bounds": [
+            675,
+            24,
+            886,
+            285
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            991,
+            25,
+            213,
+            260
+          ],
+          "anchor": [
+            111.0,
+            256
+          ],
+          "bounds": [
+            991,
+            25,
+            1204,
+            285
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            57,
+            339,
+            224,
+            258
+          ],
+          "anchor": [
+            104.5,
+            253
+          ],
+          "bounds": [
+            57,
+            339,
+            281,
+            597
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            346,
+            336,
+            270,
+            261
+          ],
+          "anchor": [
+            129.0,
+            256
+          ],
+          "bounds": [
+            346,
+            336,
+            616,
+            597
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            679,
+            335,
+            222,
+            262
+          ],
+          "anchor": [
+            109.5,
+            257
+          ],
+          "bounds": [
+            679,
+            335,
+            901,
+            597
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            965,
+            337,
+            259,
+            259
+          ],
+          "anchor": [
+            137.0,
+            253
+          ],
+          "bounds": [
+            965,
+            337,
+            1224,
+            596
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            57,
+            648,
+            198,
+            264
+          ],
+          "anchor": [
+            104.5,
+            259
+          ],
+          "bounds": [
+            57,
+            648,
+            255,
+            912
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            348,
+            648,
+            247,
+            264
+          ],
+          "anchor": [
+            127.0,
+            259
+          ],
+          "bounds": [
+            348,
+            648,
+            595,
+            912
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            677,
+            648,
+            223,
+            264
+          ],
+          "anchor": [
+            111.5,
+            259
+          ],
+          "bounds": [
+            677,
+            648,
+            900,
+            912
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            982,
+            673,
+            220,
+            236
+          ],
+          "anchor": [
+            120.0,
+            231
+          ],
+          "bounds": [
+            982,
+            673,
+            1202,
+            909
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            50,
+            990,
+            218,
+            235
+          ],
+          "anchor": [
+            111.5,
+            230
+          ],
+          "bounds": [
+            50,
+            990,
+            268,
+            1225
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            349,
+            990,
+            246,
+            235
+          ],
+          "anchor": [
+            126.0,
+            231
+          ],
+          "bounds": [
+            349,
+            990,
+            595,
+            1225
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            662,
+            974,
+            262,
+            251
+          ],
+          "anchor": [
+            126.5,
+            246
+          ],
+          "bounds": [
+            662,
+            974,
+            924,
+            1225
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            983,
+            952,
+            230,
+            273
+          ],
+          "anchor": [
+            119.0,
+            268
+          ],
+          "bounds": [
+            983,
+            952,
+            1213,
+            1225
+          ]
+        }
+      ],
+      "sha256": "4f8bd9e2fc57005c2a451f7071f3bef7bf7187bec1a41d1f4661e612c991dec1",
+      "transparentPixelRatio": 0.547045,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 4.75,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "legendary-styrodog": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 195,
+      "anchor": [
+        134.0,
+        195
+      ],
+      "phaseColor": "#ffb78c",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            16,
+            62,
+            291,
+            201
+          ],
+          "anchor": [
+            134.0,
+            195
+          ],
+          "bounds": [
+            16,
+            62,
+            307,
+            263
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            326,
+            50,
+            276,
+            213
+          ],
+          "anchor": [
+            137.5,
+            207
+          ],
+          "bounds": [
+            326,
+            50,
+            602,
+            263
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            625,
+            70,
+            295,
+            192
+          ],
+          "anchor": [
+            152.0,
+            187
+          ],
+          "bounds": [
+            625,
+            70,
+            920,
+            262
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            941,
+            64,
+            298,
+            196
+          ],
+          "anchor": [
+            149.5,
+            191
+          ],
+          "bounds": [
+            941,
+            64,
+            1239,
+            260
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            16,
+            354,
+            287,
+            223
+          ],
+          "anchor": [
+            134.0,
+            215
+          ],
+          "bounds": [
+            16,
+            354,
+            303,
+            577
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            324,
+            359,
+            295,
+            210
+          ],
+          "anchor": [
+            139.5,
+            204
+          ],
+          "bounds": [
+            324,
+            359,
+            619,
+            569
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            640,
+            360,
+            279,
+            217
+          ],
+          "anchor": [
+            137.0,
+            209
+          ],
+          "bounds": [
+            640,
+            360,
+            919,
+            577
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            950,
+            330,
+            280,
+            245
+          ],
+          "anchor": [
+            140.5,
+            238
+          ],
+          "bounds": [
+            950,
+            330,
+            1230,
+            575
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            14,
+            715,
+            277,
+            162
+          ],
+          "anchor": [
+            136.0,
+            156
+          ],
+          "bounds": [
+            14,
+            715,
+            291,
+            877
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            311,
+            691,
+            317,
+            178
+          ],
+          "anchor": [
+            152.5,
+            171
+          ],
+          "bounds": [
+            311,
+            691,
+            628,
+            869
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            639,
+            680,
+            292,
+            194
+          ],
+          "anchor": [
+            138.0,
+            188
+          ],
+          "bounds": [
+            639,
+            680,
+            931,
+            874
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            946,
+            722,
+            306,
+            155
+          ],
+          "anchor": [
+            144.5,
+            150
+          ],
+          "bounds": [
+            946,
+            722,
+            1252,
+            877
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            19,
+            1045,
+            286,
+            149
+          ],
+          "anchor": [
+            131.0,
+            143
+          ],
+          "bounds": [
+            19,
+            1045,
+            305,
+            1194
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            323,
+            991,
+            295,
+            210
+          ],
+          "anchor": [
+            140.5,
+            201
+          ],
+          "bounds": [
+            323,
+            991,
+            618,
+            1201
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            632,
+            1010,
+            297,
+            184
+          ],
+          "anchor": [
+            145.0,
+            176
+          ],
+          "bounds": [
+            632,
+            1010,
+            929,
+            1194
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            950,
+            975,
+            287,
+            219
+          ],
+          "anchor": [
+            140.5,
+            213
+          ],
+          "bounds": [
+            950,
+            975,
+            1237,
+            1194
+          ]
+        }
+      ],
+      "sha256": "15919a6a7160b651da08bbdfaa03ccad2473b6f1a31b04541fbc026ef5bfb580",
+      "transparentPixelRatio": 0.496919,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": -6.75,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "legendary-venomis": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 266,
+      "anchor": [
+        129.75,
+        266
+      ],
+      "phaseColor": "#c6fa86",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            30,
+            22,
+            260,
+            271
+          ],
+          "anchor": [
+            129.75,
+            266
+          ],
+          "bounds": [
+            30,
+            22,
+            290,
+            293
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            345,
+            5,
+            256,
+            288
+          ],
+          "anchor": [
+            128.25,
+            282
+          ],
+          "bounds": [
+            345,
+            5,
+            601,
+            293
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            635,
+            33,
+            304,
+            260
+          ],
+          "anchor": [
+            151.75,
+            254
+          ],
+          "bounds": [
+            635,
+            33,
+            939,
+            293
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            953,
+            33,
+            281,
+            258
+          ],
+          "anchor": [
+            147.25,
+            253
+          ],
+          "bounds": [
+            953,
+            33,
+            1234,
+            291
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            35,
+            354,
+            239,
+            250
+          ],
+          "anchor": [
+            124.75,
+            244
+          ],
+          "bounds": [
+            35,
+            354,
+            274,
+            604
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            320,
+            351,
+            306,
+            251
+          ],
+          "anchor": [
+            153.25,
+            245
+          ],
+          "bounds": [
+            320,
+            351,
+            626,
+            602
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            643,
+            351,
+            291,
+            251
+          ],
+          "anchor": [
+            143.75,
+            245
+          ],
+          "bounds": [
+            643,
+            351,
+            934,
+            602
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            967,
+            329,
+            264,
+            273
+          ],
+          "anchor": [
+            133.25,
+            267
+          ],
+          "bounds": [
+            967,
+            329,
+            1231,
+            602
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            26,
+            650,
+            263,
+            268
+          ],
+          "anchor": [
+            133.75,
+            263
+          ],
+          "bounds": [
+            26,
+            650,
+            289,
+            918
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            325,
+            656,
+            303,
+            261
+          ],
+          "anchor": [
+            148.25,
+            255
+          ],
+          "bounds": [
+            325,
+            656,
+            628,
+            917
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            633,
+            656,
+            292,
+            262
+          ],
+          "anchor": [
+            153.75,
+            256
+          ],
+          "bounds": [
+            633,
+            656,
+            925,
+            918
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            946,
+            691,
+            283,
+            227
+          ],
+          "anchor": [
+            154.25,
+            221
+          ],
+          "bounds": [
+            946,
+            691,
+            1229,
+            918
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            31,
+            966,
+            250,
+            264
+          ],
+          "anchor": [
+            128.75,
+            259
+          ],
+          "bounds": [
+            31,
+            966,
+            281,
+            1230
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            320,
+            1017,
+            297,
+            213
+          ],
+          "anchor": [
+            153.25,
+            207
+          ],
+          "bounds": [
+            320,
+            1017,
+            617,
+            1230
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            654,
+            957,
+            261,
+            275
+          ],
+          "anchor": [
+            132.75,
+            269
+          ],
+          "bounds": [
+            654,
+            957,
+            915,
+            1232
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            968,
+            941,
+            266,
+            291
+          ],
+          "anchor": [
+            132.25,
+            285
+          ],
+          "bounds": [
+            968,
+            941,
+            1234,
+            1232
+          ]
+        }
+      ],
+      "sha256": "264b1c09cdcc4f6c752326e3fc506da3ba5e470fbe88b196387443ecfc486f9a",
+      "transparentPixelRatio": 0.434014,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 3.0,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "legendary-wastelander": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 286,
+      "anchor": [
+        108.0,
+        286
+      ],
+      "phaseColor": "#d8ef7c",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            57,
+            10,
+            207,
+            291
+          ],
+          "anchor": [
+            108.0,
+            286
+          ],
+          "bounds": [
+            57,
+            10,
+            264,
+            301
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            375,
+            7,
+            203,
+            294
+          ],
+          "anchor": [
+            103.5,
+            289
+          ],
+          "bounds": [
+            375,
+            7,
+            578,
+            301
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            679,
+            13,
+            230,
+            286
+          ],
+          "anchor": [
+            113.0,
+            280
+          ],
+          "bounds": [
+            679,
+            13,
+            909,
+            299
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            1005,
+            19,
+            212,
+            282
+          ],
+          "anchor": [
+            100.5,
+            276
+          ],
+          "bounds": [
+            1005,
+            19,
+            1217,
+            301
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            41,
+            328,
+            239,
+            282
+          ],
+          "anchor": [
+            124.0,
+            277
+          ],
+          "bounds": [
+            41,
+            328,
+            280,
+            610
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            348,
+            327,
+            277,
+            281
+          ],
+          "anchor": [
+            130.5,
+            276
+          ],
+          "bounds": [
+            348,
+            327,
+            625,
+            608
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            668,
+            342,
+            241,
+            268
+          ],
+          "anchor": [
+            124.0,
+            263
+          ],
+          "bounds": [
+            668,
+            342,
+            909,
+            610
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            976,
+            323,
+            248,
+            287
+          ],
+          "anchor": [
+            129.5,
+            282
+          ],
+          "bounds": [
+            976,
+            323,
+            1224,
+            610
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            47,
+            647,
+            233,
+            277
+          ],
+          "anchor": [
+            118.0,
+            272
+          ],
+          "bounds": [
+            47,
+            647,
+            280,
+            924
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            356,
+            642,
+            272,
+            281
+          ],
+          "anchor": [
+            122.5,
+            276
+          ],
+          "bounds": [
+            356,
+            642,
+            628,
+            923
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            679,
+            642,
+            221,
+            281
+          ],
+          "anchor": [
+            113.0,
+            277
+          ],
+          "bounds": [
+            679,
+            642,
+            900,
+            923
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            967,
+            686,
+            264,
+            231
+          ],
+          "anchor": [
+            138.5,
+            226
+          ],
+          "bounds": [
+            967,
+            686,
+            1231,
+            917
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            48,
+            942,
+            227,
+            297
+          ],
+          "anchor": [
+            117.0,
+            292
+          ],
+          "bounds": [
+            48,
+            942,
+            275,
+            1239
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            346,
+            1021,
+            250,
+            217
+          ],
+          "anchor": [
+            132.5,
+            213
+          ],
+          "bounds": [
+            346,
+            1021,
+            596,
+            1238
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            672,
+            987,
+            229,
+            252
+          ],
+          "anchor": [
+            120.0,
+            247
+          ],
+          "bounds": [
+            672,
+            987,
+            901,
+            1239
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            989,
+            949,
+            233,
+            290
+          ],
+          "anchor": [
+            116.5,
+            286
+          ],
+          "bounds": [
+            989,
+            949,
+            1222,
+            1239
+          ]
+        }
+      ],
+      "sha256": "2c52e7ceb844e6c4aa90f15d1ff8c60c2c5cd568b406e28b778603b709d8a960",
+      "transparentPixelRatio": 0.50376,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 8.25,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "regional-atomdust": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 286,
+      "anchor": [
+        72.75,
+        286
+      ],
+      "phaseColor": "#cda3ff",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            95,
+            9,
+            145,
+            292
+          ],
+          "anchor": [
+            72.75,
+            286
+          ],
+          "bounds": [
+            95,
+            9,
+            240,
+            301
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            409,
+            9,
+            145,
+            292
+          ],
+          "anchor": [
+            72.25,
+            286
+          ],
+          "bounds": [
+            409,
+            9,
+            554,
+            301
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            693,
+            19,
+            193,
+            277
+          ],
+          "anchor": [
+            101.75,
+            272
+          ],
+          "bounds": [
+            693,
+            19,
+            886,
+            296
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            1023,
+            27,
+            195,
+            271
+          ],
+          "anchor": [
+            85.25,
+            266
+          ],
+          "bounds": [
+            1023,
+            27,
+            1218,
+            298
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            54,
+            340,
+            226,
+            264
+          ],
+          "anchor": [
+            113.75,
+            258
+          ],
+          "bounds": [
+            54,
+            340,
+            280,
+            604
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            367,
+            340,
+            226,
+            264
+          ],
+          "anchor": [
+            114.25,
+            258
+          ],
+          "bounds": [
+            367,
+            340,
+            593,
+            604
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            678,
+            340,
+            227,
+            264
+          ],
+          "anchor": [
+            116.75,
+            258
+          ],
+          "bounds": [
+            678,
+            340,
+            905,
+            604
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            1011,
+            336,
+            193,
+            268
+          ],
+          "anchor": [
+            97.25,
+            262
+          ],
+          "bounds": [
+            1011,
+            336,
+            1204,
+            604
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            55,
+            641,
+            219,
+            269
+          ],
+          "anchor": [
+            112.75,
+            263
+          ],
+          "bounds": [
+            55,
+            641,
+            274,
+            910
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            367,
+            642,
+            221,
+            268
+          ],
+          "anchor": [
+            114.25,
+            262
+          ],
+          "bounds": [
+            367,
+            642,
+            588,
+            910
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            691,
+            642,
+            196,
+            268
+          ],
+          "anchor": [
+            103.75,
+            261
+          ],
+          "bounds": [
+            691,
+            642,
+            887,
+            910
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            974,
+            706,
+            251,
+            201
+          ],
+          "anchor": [
+            134.25,
+            196
+          ],
+          "bounds": [
+            974,
+            706,
+            1225,
+            907
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            57,
+            970,
+            206,
+            257
+          ],
+          "anchor": [
+            110.75,
+            251
+          ],
+          "bounds": [
+            57,
+            970,
+            263,
+            1227
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            356,
+            994,
+            226,
+            232
+          ],
+          "anchor": [
+            125.25,
+            225
+          ],
+          "bounds": [
+            356,
+            994,
+            582,
+            1226
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            714,
+            951,
+            156,
+            276
+          ],
+          "anchor": [
+            80.75,
+            270
+          ],
+          "bounds": [
+            714,
+            951,
+            870,
+            1227
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            1000,
+            949,
+            220,
+            277
+          ],
+          "anchor": [
+            108.25,
+            272
+          ],
+          "bounds": [
+            1000,
+            949,
+            1220,
+            1226
+          ]
+        }
+      ],
+      "sha256": "717d6139eb433172d4f03d85f89ca5cb6431bdbcfcf52894c7467bd541568b11",
+      "transparentPixelRatio": 0.634675,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 11.0,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "regional-bushman": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 281,
+      "anchor": [
+        92.75,
+        281
+      ],
+      "phaseColor": "#bdd75e",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            74,
+            8,
+            183,
+            288
+          ],
+          "anchor": [
+            92.75,
+            281
+          ],
+          "bounds": [
+            74,
+            8,
+            257,
+            296
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            366,
+            8,
+            210,
+            288
+          ],
+          "anchor": [
+            114.25,
+            281
+          ],
+          "bounds": [
+            366,
+            8,
+            576,
+            296
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            697,
+            12,
+            196,
+            284
+          ],
+          "anchor": [
+            96.75,
+            278
+          ],
+          "bounds": [
+            697,
+            12,
+            893,
+            296
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            1007,
+            10,
+            203,
+            285
+          ],
+          "anchor": [
+            100.25,
+            279
+          ],
+          "bounds": [
+            1007,
+            10,
+            1210,
+            295
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            52,
+            322,
+            210,
+            286
+          ],
+          "anchor": [
+            114.75,
+            279
+          ],
+          "bounds": [
+            52,
+            322,
+            262,
+            608
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            321,
+            350,
+            347,
+            257
+          ],
+          "anchor": [
+            159.25,
+            250
+          ],
+          "bounds": [
+            321,
+            350,
+            668,
+            607
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            670,
+            353,
+            239,
+            254
+          ],
+          "anchor": [
+            123.75,
+            248
+          ],
+          "bounds": [
+            670,
+            353,
+            909,
+            607
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            975,
+            328,
+            245,
+            280
+          ],
+          "anchor": [
+            132.25,
+            272
+          ],
+          "bounds": [
+            975,
+            328,
+            1220,
+            608
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            52,
+            637,
+            209,
+            281
+          ],
+          "anchor": [
+            114.75,
+            274
+          ],
+          "bounds": [
+            52,
+            637,
+            261,
+            918
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            343,
+            640,
+            279,
+            277
+          ],
+          "anchor": [
+            137.25,
+            270
+          ],
+          "bounds": [
+            343,
+            640,
+            622,
+            917
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            676,
+            636,
+            229,
+            282
+          ],
+          "anchor": [
+            117.75,
+            275
+          ],
+          "bounds": [
+            676,
+            636,
+            905,
+            918
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            963,
+            686,
+            270,
+            232
+          ],
+          "anchor": [
+            144.25,
+            225
+          ],
+          "bounds": [
+            963,
+            686,
+            1233,
+            918
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            41,
+            955,
+            241,
+            280
+          ],
+          "anchor": [
+            125.75,
+            272
+          ],
+          "bounds": [
+            41,
+            955,
+            282,
+            1235
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            350,
+            1010,
+            249,
+            224
+          ],
+          "anchor": [
+            130.25,
+            216
+          ],
+          "bounds": [
+            350,
+            1010,
+            599,
+            1234
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            670,
+            954,
+            222,
+            280
+          ],
+          "anchor": [
+            123.75,
+            272
+          ],
+          "bounds": [
+            670,
+            954,
+            892,
+            1234
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            960,
+            945,
+            274,
+            291
+          ],
+          "anchor": [
+            147.25,
+            283
+          ],
+          "bounds": [
+            960,
+            945,
+            1234,
+            1236
+          ]
+        }
+      ],
+      "sha256": "d835e0a96cdffd4400e87d544107d89483840aed7e31768b7fe9115aa4a486db",
+      "transparentPixelRatio": 0.485874,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 10.0,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "regional-giant-scorpion": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 163,
+      "anchor": [
+        128.5,
+        163
+      ],
+      "phaseColor": "#bc80ef",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            29,
+            87,
+            260,
+            170
+          ],
+          "anchor": [
+            128.5,
+            163
+          ],
+          "bounds": [
+            29,
+            87,
+            289,
+            257
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            343,
+            80,
+            256,
+            177
+          ],
+          "anchor": [
+            128.0,
+            169
+          ],
+          "bounds": [
+            343,
+            80,
+            599,
+            257
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            646,
+            87,
+            269,
+            170
+          ],
+          "anchor": [
+            138.5,
+            162
+          ],
+          "bounds": [
+            646,
+            87,
+            915,
+            257
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            963,
+            91,
+            270,
+            166
+          ],
+          "anchor": [
+            135.0,
+            158
+          ],
+          "bounds": [
+            963,
+            91,
+            1233,
+            257
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            23,
+            390,
+            269,
+            173
+          ],
+          "anchor": [
+            134.5,
+            168
+          ],
+          "bounds": [
+            23,
+            390,
+            292,
+            563
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            332,
+            391,
+            279,
+            172
+          ],
+          "anchor": [
+            139.0,
+            165
+          ],
+          "bounds": [
+            332,
+            391,
+            611,
+            563
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            649,
+            391,
+            262,
+            172
+          ],
+          "anchor": [
+            135.5,
+            166
+          ],
+          "bounds": [
+            649,
+            391,
+            911,
+            563
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            958,
+            371,
+            272,
+            189
+          ],
+          "anchor": [
+            140.0,
+            180
+          ],
+          "bounds": [
+            958,
+            371,
+            1230,
+            560
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            23,
+            698,
+            263,
+            175
+          ],
+          "anchor": [
+            134.5,
+            170
+          ],
+          "bounds": [
+            23,
+            698,
+            286,
+            873
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            335,
+            720,
+            264,
+            153
+          ],
+          "anchor": [
+            136.0,
+            148
+          ],
+          "bounds": [
+            335,
+            720,
+            599,
+            873
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            644,
+            689,
+            270,
+            184
+          ],
+          "anchor": [
+            140.5,
+            178
+          ],
+          "bounds": [
+            644,
+            689,
+            914,
+            873
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            968,
+            751,
+            252,
+            122
+          ],
+          "anchor": [
+            130.0,
+            117
+          ],
+          "bounds": [
+            968,
+            751,
+            1220,
+            873
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            30,
+            955,
+            258,
+            234
+          ],
+          "anchor": [
+            127.5,
+            229
+          ],
+          "bounds": [
+            30,
+            955,
+            288,
+            1189
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            328,
+            1067,
+            287,
+            122
+          ],
+          "anchor": [
+            143.0,
+            117
+          ],
+          "bounds": [
+            328,
+            1067,
+            615,
+            1189
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            647,
+            1031,
+            267,
+            159
+          ],
+          "anchor": [
+            137.5,
+            153
+          ],
+          "bounds": [
+            647,
+            1031,
+            914,
+            1190
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            963,
+            966,
+            259,
+            223
+          ],
+          "anchor": [
+            135.0,
+            216
+          ],
+          "bounds": [
+            963,
+            966,
+            1222,
+            1189
+          ]
+        }
+      ],
+      "sha256": "316700e49812e7da03896a5a504e1addb4d9471d91101f3c7cb2bb8a2e746b19",
+      "transparentPixelRatio": 0.527353,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 0.75,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "regional-trash-monster": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 209,
+      "anchor": [
+        125.5,
+        209
+      ],
+      "phaseColor": "#b0e343",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            35,
+            49,
+            258,
+            213
+          ],
+          "anchor": [
+            125.5,
+            209
+          ],
+          "bounds": [
+            35,
+            49,
+            293,
+            262
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            351,
+            36,
+            249,
+            226
+          ],
+          "anchor": [
+            123.0,
+            221
+          ],
+          "bounds": [
+            351,
+            36,
+            600,
+            262
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            661,
+            55,
+            250,
+            211
+          ],
+          "anchor": [
+            126.5,
+            203
+          ],
+          "bounds": [
+            661,
+            55,
+            911,
+            266
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            971,
+            53,
+            254,
+            208
+          ],
+          "anchor": [
+            130.0,
+            205
+          ],
+          "bounds": [
+            971,
+            53,
+            1225,
+            261
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            21,
+            334,
+            256,
+            219
+          ],
+          "anchor": [
+            139.5,
+            215
+          ],
+          "bounds": [
+            21,
+            334,
+            277,
+            553
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            318,
+            355,
+            312,
+            198
+          ],
+          "anchor": [
+            156.0,
+            194
+          ],
+          "bounds": [
+            318,
+            355,
+            630,
+            553
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            658,
+            360,
+            280,
+            194
+          ],
+          "anchor": [
+            129.5,
+            190
+          ],
+          "bounds": [
+            658,
+            360,
+            938,
+            554
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            969,
+            332,
+            253,
+            222
+          ],
+          "anchor": [
+            132.0,
+            218
+          ],
+          "bounds": [
+            969,
+            332,
+            1222,
+            554
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            34,
+            634,
+            257,
+            229
+          ],
+          "anchor": [
+            126.5,
+            225
+          ],
+          "bounds": [
+            34,
+            634,
+            291,
+            863
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            320,
+            649,
+            301,
+            214
+          ],
+          "anchor": [
+            154.0,
+            210
+          ],
+          "bounds": [
+            320,
+            649,
+            621,
+            863
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            656,
+            658,
+            249,
+            205
+          ],
+          "anchor": [
+            131.5,
+            201
+          ],
+          "bounds": [
+            656,
+            658,
+            905,
+            863
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            915,
+            709,
+            332,
+            165
+          ],
+          "anchor": [
+            186.0,
+            160
+          ],
+          "bounds": [
+            915,
+            709,
+            1247,
+            874
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            42,
+            932,
+            248,
+            249
+          ],
+          "anchor": [
+            118.5,
+            245
+          ],
+          "bounds": [
+            42,
+            932,
+            290,
+            1181
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            324,
+            1012,
+            299,
+            173
+          ],
+          "anchor": [
+            150.0,
+            168
+          ],
+          "bounds": [
+            324,
+            1012,
+            623,
+            1185
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            659,
+            987,
+            248,
+            194
+          ],
+          "anchor": [
+            128.5,
+            190
+          ],
+          "bounds": [
+            659,
+            987,
+            907,
+            1181
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            937,
+            959,
+            299,
+            223
+          ],
+          "anchor": [
+            164.0,
+            218
+          ],
+          "bounds": [
+            937,
+            959,
+            1236,
+            1182
+          ]
+        }
+      ],
+      "sha256": "10b0eec0f5badb6e0527dc1f5915e4f64c53a50f4c48bf6024444e74c10ab1f2",
+      "transparentPixelRatio": 0.487351,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 3.75,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "regional-ultimate-pollution": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 289,
+      "anchor": [
+        103.0,
+        289
+      ],
+      "phaseColor": "#ffbe66",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            64,
+            9,
+            212,
+            293
+          ],
+          "anchor": [
+            103.0,
+            289
+          ],
+          "bounds": [
+            64,
+            9,
+            276,
+            302
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            377,
+            9,
+            212,
+            293
+          ],
+          "anchor": [
+            103.5,
+            289
+          ],
+          "bounds": [
+            377,
+            9,
+            589,
+            302
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            689,
+            9,
+            205,
+            293
+          ],
+          "anchor": [
+            105.0,
+            288
+          ],
+          "bounds": [
+            689,
+            9,
+            894,
+            302
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            978,
+            11,
+            229,
+            290
+          ],
+          "anchor": [
+            129.5,
+            286
+          ],
+          "bounds": [
+            978,
+            11,
+            1207,
+            301
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            62,
+            326,
+            213,
+            278
+          ],
+          "anchor": [
+            105.0,
+            274
+          ],
+          "bounds": [
+            62,
+            326,
+            275,
+            604
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            355,
+            327,
+            265,
+            277
+          ],
+          "anchor": [
+            125.5,
+            272
+          ],
+          "bounds": [
+            355,
+            327,
+            620,
+            604
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            668,
+            326,
+            235,
+            278
+          ],
+          "anchor": [
+            126.0,
+            273
+          ],
+          "bounds": [
+            668,
+            326,
+            903,
+            604
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            970,
+            334,
+            242,
+            270
+          ],
+          "anchor": [
+            137.5,
+            265
+          ],
+          "bounds": [
+            970,
+            334,
+            1212,
+            604
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            55,
+            639,
+            216,
+            279
+          ],
+          "anchor": [
+            112.0,
+            274
+          ],
+          "bounds": [
+            55,
+            639,
+            271,
+            918
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            351,
+            637,
+            256,
+            281
+          ],
+          "anchor": [
+            129.5,
+            276
+          ],
+          "bounds": [
+            351,
+            637,
+            607,
+            918
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            662,
+            643,
+            239,
+            275
+          ],
+          "anchor": [
+            132.0,
+            270
+          ],
+          "bounds": [
+            662,
+            643,
+            901,
+            918
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            962,
+            666,
+            261,
+            252
+          ],
+          "anchor": [
+            145.5,
+            247
+          ],
+          "bounds": [
+            962,
+            666,
+            1223,
+            918
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            39,
+            949,
+            249,
+            288
+          ],
+          "anchor": [
+            128.0,
+            282
+          ],
+          "bounds": [
+            39,
+            949,
+            288,
+            1237
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            345,
+            998,
+            251,
+            237
+          ],
+          "anchor": [
+            135.5,
+            233
+          ],
+          "bounds": [
+            345,
+            998,
+            596,
+            1235
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            667,
+            963,
+            244,
+            274
+          ],
+          "anchor": [
+            127.0,
+            269
+          ],
+          "bounds": [
+            667,
+            963,
+            911,
+            1237
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            965,
+            947,
+            262,
+            290
+          ],
+          "anchor": [
+            142.5,
+            285
+          ],
+          "bounds": [
+            965,
+            947,
+            1227,
+            1237
+          ]
+        }
+      ],
+      "sha256": "5c59b0654f0333f790a9681495fb4015ca221779acbd731d8448fe4c6a170c98",
+      "transparentPixelRatio": 0.489244,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 10.25,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "regional-venomis": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 248,
+      "anchor": [
+        108.75,
+        248
+      ],
+      "phaseColor": "#bdf55f",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            40,
+            41,
+            244,
+            256
+          ],
+          "anchor": [
+            108.75,
+            248
+          ],
+          "bounds": [
+            40,
+            41,
+            284,
+            297
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            344,
+            33,
+            248,
+            263
+          ],
+          "anchor": [
+            118.25,
+            255
+          ],
+          "bounds": [
+            344,
+            33,
+            592,
+            296
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            632,
+            64,
+            275,
+            230
+          ],
+          "anchor": [
+            143.75,
+            223
+          ],
+          "bounds": [
+            632,
+            64,
+            907,
+            294
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            941,
+            78,
+            285,
+            213
+          ],
+          "anchor": [
+            148.25,
+            207
+          ],
+          "bounds": [
+            941,
+            78,
+            1226,
+            291
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            28,
+            352,
+            246,
+            238
+          ],
+          "anchor": [
+            120.75,
+            229
+          ],
+          "bounds": [
+            28,
+            352,
+            274,
+            590
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            302,
+            353,
+            347,
+            236
+          ],
+          "anchor": [
+            160.25,
+            227
+          ],
+          "bounds": [
+            302,
+            353,
+            649,
+            589
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            651,
+            364,
+            251,
+            225
+          ],
+          "anchor": [
+            124.75,
+            217
+          ],
+          "bounds": [
+            651,
+            364,
+            902,
+            589
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            938,
+            337,
+            270,
+            252
+          ],
+          "anchor": [
+            151.25,
+            242
+          ],
+          "bounds": [
+            938,
+            337,
+            1208,
+            589
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            24,
+            649,
+            249,
+            240
+          ],
+          "anchor": [
+            124.75,
+            232
+          ],
+          "bounds": [
+            24,
+            649,
+            273,
+            889
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            320,
+            649,
+            284,
+            241
+          ],
+          "anchor": [
+            142.25,
+            233
+          ],
+          "bounds": [
+            320,
+            649,
+            604,
+            890
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            632,
+            645,
+            247,
+            245
+          ],
+          "anchor": [
+            143.75,
+            238
+          ],
+          "bounds": [
+            632,
+            645,
+            879,
+            890
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            935,
+            691,
+            293,
+            198
+          ],
+          "anchor": [
+            154.25,
+            190
+          ],
+          "bounds": [
+            935,
+            691,
+            1228,
+            889
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            27,
+            1020,
+            250,
+            192
+          ],
+          "anchor": [
+            121.75,
+            185
+          ],
+          "bounds": [
+            27,
+            1020,
+            277,
+            1212
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            319,
+            1012,
+            296,
+            202
+          ],
+          "anchor": [
+            143.25,
+            195
+          ],
+          "bounds": [
+            319,
+            1012,
+            615,
+            1214
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            637,
+            974,
+            264,
+            237
+          ],
+          "anchor": [
+            138.75,
+            230
+          ],
+          "bounds": [
+            637,
+            974,
+            901,
+            1211
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            943,
+            947,
+            273,
+            265
+          ],
+          "anchor": [
+            146.25,
+            257
+          ],
+          "bounds": [
+            943,
+            947,
+            1216,
+            1212
+          ]
+        }
+      ],
+      "sha256": "1f5ef9914b2a1165ed8b37f3d07fc424be6d29626194412f80018fe03bd732c9",
+      "transparentPixelRatio": 0.495337,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": -8.0,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    },
+    "regional-wastelander": {
+      "width": 1254,
+      "height": 1254,
+      "referenceHeight": 261,
+      "anchor": [
+        123.0,
+        261
+      ],
+      "phaseColor": "#d4f358",
+      "frames": [
+        {
+          "name": "idle-a",
+          "crop": [
+            38,
+            18,
+            241,
+            267
+          ],
+          "anchor": [
+            123.0,
+            261
+          ],
+          "bounds": [
+            38,
+            18,
+            279,
+            285
+          ]
+        },
+        {
+          "name": "idle-b",
+          "crop": [
+            355,
+            17,
+            244,
+            268
+          ],
+          "anchor": [
+            119.5,
+            262
+          ],
+          "bounds": [
+            355,
+            17,
+            599,
+            285
+          ]
+        },
+        {
+          "name": "walk-a",
+          "crop": [
+            663,
+            19,
+            245,
+            264
+          ],
+          "anchor": [
+            125.0,
+            258
+          ],
+          "bounds": [
+            663,
+            19,
+            908,
+            283
+          ]
+        },
+        {
+          "name": "walk-b",
+          "crop": [
+            994,
+            18,
+            221,
+            265
+          ],
+          "anchor": [
+            107.5,
+            260
+          ],
+          "bounds": [
+            994,
+            18,
+            1215,
+            283
+          ]
+        },
+        {
+          "name": "melee-windup",
+          "crop": [
+            29,
+            327,
+            263,
+            264
+          ],
+          "anchor": [
+            132.0,
+            259
+          ],
+          "bounds": [
+            29,
+            327,
+            292,
+            591
+          ]
+        },
+        {
+          "name": "melee-active",
+          "crop": [
+            340,
+            330,
+            283,
+            262
+          ],
+          "anchor": [
+            134.5,
+            257
+          ],
+          "bounds": [
+            340,
+            330,
+            623,
+            592
+          ]
+        },
+        {
+          "name": "melee-recovery",
+          "crop": [
+            660,
+            338,
+            242,
+            254
+          ],
+          "anchor": [
+            128.0,
+            249
+          ],
+          "bounds": [
+            660,
+            338,
+            902,
+            592
+          ]
+        },
+        {
+          "name": "hit",
+          "crop": [
+            965,
+            335,
+            260,
+            256
+          ],
+          "anchor": [
+            136.5,
+            251
+          ],
+          "bounds": [
+            965,
+            335,
+            1225,
+            591
+          ]
+        },
+        {
+          "name": "ranged-windup",
+          "crop": [
+            40,
+            642,
+            240,
+            266
+          ],
+          "anchor": [
+            121.0,
+            261
+          ],
+          "bounds": [
+            40,
+            642,
+            280,
+            908
+          ]
+        },
+        {
+          "name": "ranged-active",
+          "crop": [
+            357,
+            643,
+            253,
+            266
+          ],
+          "anchor": [
+            117.5,
+            261
+          ],
+          "bounds": [
+            357,
+            643,
+            610,
+            909
+          ]
+        },
+        {
+          "name": "ranged-recovery",
+          "crop": [
+            670,
+            645,
+            234,
+            265
+          ],
+          "anchor": [
+            118.0,
+            260
+          ],
+          "bounds": [
+            670,
+            645,
+            904,
+            910
+          ]
+        },
+        {
+          "name": "defeat",
+          "crop": [
+            964,
+            656,
+            259,
+            256
+          ],
+          "anchor": [
+            137.5,
+            251
+          ],
+          "bounds": [
+            964,
+            656,
+            1223,
+            912
+          ]
+        },
+        {
+          "name": "ground-windup",
+          "crop": [
+            31,
+            962,
+            253,
+            261
+          ],
+          "anchor": [
+            130.0,
+            256
+          ],
+          "bounds": [
+            31,
+            962,
+            284,
+            1223
+          ]
+        },
+        {
+          "name": "ground-active",
+          "crop": [
+            339,
+            982,
+            259,
+            243
+          ],
+          "anchor": [
+            135.5,
+            238
+          ],
+          "bounds": [
+            339,
+            982,
+            598,
+            1225
+          ]
+        },
+        {
+          "name": "ground-recovery",
+          "crop": [
+            670,
+            979,
+            235,
+            244
+          ],
+          "anchor": [
+            118.0,
+            239
+          ],
+          "bounds": [
+            670,
+            979,
+            905,
+            1223
+          ]
+        },
+        {
+          "name": "phase",
+          "crop": [
+            963,
+            959,
+            266,
+            264
+          ],
+          "anchor": [
+            138.5,
+            259
+          ],
+          "bounds": [
+            963,
+            959,
+            1229,
+            1223
+          ]
+        }
+      ],
+      "sha256": "ddc5f7cb7c427ac3f69ac224f6dbf510c096f1101722133d083231b3bfd10475",
+      "transparentPixelRatio": 0.49143,
+      "generator": "built-in imagegen",
+      "horizontalRootOffset": 4.25,
+      "frameConvention": "row-major 4x4; measured crop and ground anchor; shared horizontal root inferred from first-row silhouettes; one fixed scale per boss"
+    }
+  },
+  "notes": "Original generated PNGs preserved. Crop rectangles and anchors measured without resampling. Runtime mirrors complete right-facing frames for left movement."
+}

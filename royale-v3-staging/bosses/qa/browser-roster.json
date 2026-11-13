@@ -1,0 +1,300 @@
+{
+  "checkedAt": "2026-11-13T02:24:48.069Z",
+  "source": "local managed preview; actual menu interactions",
+  "results": [
+    {
+      "state": "active",
+      "phase": 3,
+      "id": "regional-trash-monster",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "regional-trash-monster",
+        "frame": 9,
+        "family": "ranged",
+        "stage": "active",
+        "progress": 0.7333333333333333,
+        "contact": true,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "regional-wastelander",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "regional-wastelander",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "regional-bushman",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "regional-bushman",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "regional-giant-scorpion",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "regional-giant-scorpion",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "regional-venomis",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "regional-venomis",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "regional-atomdust",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "regional-atomdust",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "regional-ultimate-pollution",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "regional-ultimate-pollution",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "legendary-lightning",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "legendary-lightning",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "legendary-air",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "legendary-air",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "legendary-styrodog",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "legendary-styrodog",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "legendary-sonic",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "legendary-sonic",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "legendary-styro",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "legendary-styro",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "legendary-wastelander",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "legendary-wastelander",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "legendary-venomis",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "legendary-venomis",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    },
+    {
+      "state": "idle",
+      "phase": 3,
+      "id": "legendary-atomdust",
+      "loaded": true,
+      "temporary": false,
+      "redesigned": true,
+      "version": "boss-test-1",
+      "selection": {
+        "id": "legendary-atomdust",
+        "frame": 0,
+        "family": "idle",
+        "stage": "idle",
+        "progress": 0,
+        "contact": false,
+        "face": -1
+      },
+      "error": null
+    }
+  ],
+  "returnToSavedHero": {
+    "verified": true,
+    "level": 1,
+    "hp": 100,
+    "xp": 0,
+    "coins": 0,
+    "roots": 0,
+    "boss": null
+  }
+}

@@ -86,3 +86,4 @@ fs.writeFileSync(path.join(out,'source-provenance.json'),JSON.stringify({baselin
 console.log('Built staging adapter; production files untouched.');
 
 require('./build-staging-power-policy.cjs');
+require('./build-staging-bosses.cjs');

@@ -1,0 +1,27 @@
+{
+  "mode": "built-in image_gen",
+  "referenceRoot": "docs/boss-redesign-review/2026-11-12/concepts",
+  "selectedOutputs": {
+    "regional-trash-monster": "/workspace/scratch/bd61ef499f85/generated_images/exec-76601dd3-581b-45ba-86a5-1635790ef5b7.png",
+    "regional-bushman": "/workspace/scratch/bd61ef499f85/generated_images/exec-c2ed99fc-fec6-4604-aa61-c56c404933af.png",
+    "regional-wastelander": "/workspace/scratch/bd61ef499f85/generated_images/exec-b2af7e2d-ae0e-46b0-a0c7-b7a6e48feb2d.png",
+    "regional-giant-scorpion": "/workspace/scratch/bd61ef499f85/generated_images/exec-bdf07369-b12e-46bb-9d96-7062ece8ffdb.png",
+    "regional-venomis": "/workspace/scratch/bd61ef499f85/generated_images/exec-76ff13c0-4268-4c05-9126-ba6d40fae6ed.png",
+    "regional-atomdust": "/workspace/scratch/bd61ef499f85/generated_images/exec-f788b49f-75d4-42d0-b538-5b455679c55c.png",
+    "regional-ultimate-pollution": "/workspace/scratch/bd61ef499f85/generated_images/exec-cb41eb75-3083-4b48-a6c6-760abf13b65e.png",
+    "legendary-lightning": "/workspace/scratch/bd61ef499f85/generated_images/exec-75b3b4c1-cd09-49cc-b120-deb72116eb69.png",
+    "legendary-air": "/workspace/scratch/bd61ef499f85/generated_images/exec-9e59e937-5c49-4fb7-ab9f-fe0e7152b52b.png",
+    "legendary-styrodog": "/workspace/scratch/bd61ef499f85/generated_images/exec-d0c0c7d9-88d9-41b1-b668-7d0b87bf8da8.png",
+    "legendary-sonic": "/workspace/scratch/bd61ef499f85/generated_images/exec-ecbcf3ee-0fb0-49cf-b899-9157eeb2043b.png",
+    "legendary-styro": "/workspace/scratch/bd61ef499f85/generated_images/exec-f5e46b78-98ae-48c0-958c-2425c937c42a.png",
+    "legendary-wastelander": "/workspace/scratch/bd61ef499f85/generated_images/exec-282459d6-6c65-4409-9698-52bd85439943.png",
+    "legendary-venomis": "/workspace/scratch/bd61ef499f85/generated_images/exec-76b823a2-2a52-4fdc-b540-76ebb76cc557.png",
+    "legendary-atomdust": "/workspace/scratch/bd61ef499f85/generated_images/exec-087cae76-6126-452b-b947-fdeac63a53b7.png"
+  },
+  "postGenerationEdits": {
+    "regional-wastelander": "Built-in imagegen removed mistakenly opaque white backdrop; all 16 poses preserved.",
+    "regional-atomdust": "Built-in imagegen removed external purple flames and energy beyond body silhouettes; all poses retained.",
+    "legendary-lightning": "Built-in imagegen removed external electric halos and hand projectiles; hair and shoulder crystals retained."
+  },
+  "assetScope": "15 distinct reference-derived atlases; 16 authored complete-character poses per boss; 240 poses total. Three action families (melee, ranged, ground/charge) share the same timing slots across each boss's existing attacks. Not 77 individually unique animation atlases."
+}
