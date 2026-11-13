@@ -34,7 +34,7 @@ const runtimePlugin={name:'approved-v3-release',setup(build){
   build.onLoad({filter:/\.m?js$/},args=>{
     const rel=path.relative(root,args.path).replaceAll(path.sep,'/'),source=fs.readFileSync(args.path,'utf8');
     sourceHashes[rel]=hash(source);
-    let contents=transform(rel,source);
+    let contents=require('./staging-ui-transform.cjs')(rel,transform(rel,source),{production:true});
     // Every chunk is directly in /royale/release/. Preserve source-relative asset
     // URLs, including manifests, without publishing the source module itself.
     contents=contents.replaceAll('import.meta.url',`new URL(${JSON.stringify('../../'+rel)},import.meta.url).href`);
@@ -73,6 +73,7 @@ function shell(html,base,script){
   html=html.replace(/(?:Style C|MOBILE PLAYTEST|V3 Test|FULL-BODY SPRITE PROTOTYPE)/g,'Action-Chibi');
   html=html.replace(/<script src="[^\"]*motion-core.js[^\"]*"><\/script>/g,'');
   html=html.replace('</head>',`<style>#pause-primary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#pause-primary button{min-height:48px;margin:0;width:100%}@media(max-width:480px){#pause-primary{grid-template-columns:1fr}}#tab-body,#panel-body{display:none!important}</style></head>`);
+  html=html.replace('</head>','<link rel="stylesheet" href="/hero-showdown-test/royale/interface.css"></head>');
   return html.replace('</body>',`<script src="../assets/animation/motion-core.js"></script><script type="module" src="${script}"></script></body>`);
 }
 async function build(){
@@ -89,7 +90,8 @@ async function build(){
   home=home.replace('</section>',`<button type="button" onclick="location.href='./gameplay/'">HEROES ON THIS BROWSER</button></section>`);
   home=home.replace('</body>',`<script type="module" src="./release/cloud.mjs?v=${sha}"></script></body>`);
   home=home.replace(/<p>V3[^<]*<\/p>/g,'');
-  write('royale/index.html',home);
+  home=home.replace(/<p>Cloud save: automatic every eight seconds during gameplay<\/p>/g,'').replace('</head>','<style>html:has(.staging-session),body.staging-session{width:100%;height:100%;height:100dvh;max-width:none;margin:0;padding:0;overflow:hidden}.staging-session>h1,.staging-session>p,.staging-session>small,.staging-session #refresh{display:none!important}.staging-session #roster{position:fixed;inset:0;border:0;margin:0;padding:0;border-radius:0}.staging-session #game-frame{width:100%;height:100%;height:100dvh}</style></head>');
+  write('royale/index.html',home);write('royale/interface.css',read('royale-v3-staging/interface/interface.css'));
   const gameplayHTML=read('royale-v3-staging/gameplay/index.html').replace(/Clothing Store · \d+ outfits/g,`Clothing Store · ${COLLECTION.length} outfits`);
   write('royale/gameplay/index.html',shell(gameplayHTML,'../',`./release/game.mjs?v=${sha}`));
   let coopHTML=shell(read('royale-v3-staging/local-coop/index.html'),'./',`../release/coop.mjs?v=${sha}`);
