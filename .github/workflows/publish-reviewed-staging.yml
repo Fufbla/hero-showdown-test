@@ -1,0 +1,98 @@
+name: Publish verified V3 staging artifact
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/publish-reviewed-staging.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+  pages: write
+  id-token: write
+concurrency:
+  group: optimized-pages-publish
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Verify the reviewed source and successful build
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner=context.repo.owner,repo=context.repo.repo,run_id=43515370987;
+            const run=(await github.rest.actions.getWorkflowRun({owner,repo,run_id})).data;
+            if(run.head_sha!=='a3c5df49e970cde505fcc822029cabc03b78d86a')throw Error('Unexpected source commit');
+            const jobs=(await github.rest.actions.listJobsForWorkflowRun({owner,repo,run_id})).data.jobs;
+            if(!jobs.some(j=>j.name==='build'&&j.conclusion==='success'))throw Error('Reviewed artifact has not passed validation');
+      - name: Download the verified staging artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          run-id: 43515370987
+          github-token: ${{ github.token }}
+          path: /tmp/review-pages
+      - name: Download the unchanged live baseline for comparison
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          run-id: 43509370838
+          github-token: ${{ github.token }}
+          path: /tmp/live-pages
+      - name: Extract and compare all production files before publication
+        run: |
+          mkdir _site /tmp/live-baseline
+          tar -xf /tmp/review-pages/artifact.tar -C _site
+          tar -xf /tmp/live-pages/artifact.tar -C /tmp/live-baseline
+          python3 - <<'PYCODE'
+          import hashlib, json, pathlib
+          def protected(root):
+              return {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest()
+                      for p in root.rglob('*') if p.is_file()
+                      and p.relative_to(root).parts[0] != 'royale-v3-staging'}
+          baseline=pathlib.Path('/tmp/live-baseline'); review=pathlib.Path('_site')
+          expected=protected(baseline); actual=protected(review)
+          assert expected == actual, 'A production file changed; staging publication refused'
+          manifest=json.loads((review/'royale-v3-staging/interface-manifest.json').read_text())
+          assert manifest['sourceCommit']=='a3c5df49e970cde505fcc822029cabc03b78d86a'
+          assert manifest['productionCommit']=='dceaffdee5fdb45826062dd4d0f9568694d9a548'
+          assert manifest['costumeCount']==28 and manifest['onlineMultiplayer'] is False
+          print(f'Confirmed {len(expected)} unchanged production files; only V3 staging differs.')
+          PYCODE
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    environment:
+      name: github-pages
+      url: https://fufbla.github.io/hero-showdown-test/royale-v3-staging/
+    steps:
+      - name: Publish the staging overlay while retaining the existing live files
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner=context.repo.owner,repo=context.repo.repo;
+            const head=await github.rest.repos.getBranch({owner,repo,branch:'main'});
+            if(head.data.commit.sha!==context.sha)throw Error('Production moved while staging was building. No deployment started.');
+            const response=await github.rest.actions.listWorkflowRunArtifacts({owner,repo,run_id:context.runId,per_page:100});
+            const artifacts=response.data.artifacts.filter(a=>a.name==='github-pages'&&!a.expired);
+            if(artifacts.length!==1)throw Error('Expected one staging Pages artifact');
+            const token=await core.getIDToken();
+            const created=await github.request('POST /repos/{owner}/{repo}/pages/deployments',{owner,repo,artifact_id:artifacts[0].id,pages_build_version:context.sha,oidc_token:token});
+            const id=created.data.id||created.data.status_url?.split('/').pop()||context.sha;
+            const started=Date.now(),terminal=new Set(['deployment_failed','deployment_content_failed','deployment_cancelled','deployment_lost']);
+            let lastStatus='',errors=0;
+            while(Date.now()-started<25*60*1000){
+              await new Promise(resolve=>setTimeout(resolve,20000));
+              let state;
+              try{state=(await github.request('GET /repos/{owner}/{repo}/pages/deployments/{deploymentId}',{owner,repo,deploymentId:id})).data.status;errors=0;}
+              catch(error){if(++errors>=10)throw error;core.warning(error.message);continue;}
+              if(state!==lastStatus){core.info('Pages status: '+state);lastStatus=state;}
+              if(state==='succeed'){core.info('V3 staging published; production files preserved.');return;}
+              if(terminal.has(state))throw Error('Pages deployment ended: '+state);
+            }
+            try{await github.request('POST /repos/{owner}/{repo}/pages/deployments/{deploymentId}/cancel',{owner,repo,deploymentId:id});}catch(error){core.warning(error.message);}
+            throw Error('Pages sync did not finish in 25 minutes.');
