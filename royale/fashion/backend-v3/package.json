@@ -1,0 +1,20 @@
+{
+  "projectId": "adakwbhxiuatjvphutgo",
+  "functionName": "royale-v3-staging",
+  "baselineVersion": 10,
+  "entrypoint": "cloud/backend-v3/index.ts",
+  "verifyJWT": false,
+  "databaseMigration": false,
+  "files": {
+    "cloud/backend-v3/index.ts": "9c91179e83862b691a2fe324b040e229458833e37fc115e29098e0708cd8f8df",
+    "cloud/cosmetics/outfit-policy-base.mjs": "8066dfcf0c31cb3edcf08d81a531d8b8a809461be1b3421a20d37fc6e86d1160",
+    "cloud/cosmetics/save-guard.mjs": "eb43ae55bf7b1947dec519e59e732d0ce14e67bfb567d1542b582dfa3123e512",
+    "cloud/cosmetics/state.mjs": "2845c1a7879f77dc4b1a530e1738bdebbb913e47ce8cdad77c7e6986d52fb20a",
+    "gameplay/economy-save-guard.mjs": "2c5664c11240de514ddd925b7e2376e812b1737d6045fde73c3879d1cde2cbf6",
+    "gameplay/economy.mjs": "1d1b2d804f6abc2b60bf33678c3edba7b29e70bcde317873da16533514e88cce",
+    "power-policy.mjs": "e607930d573f4dd3f1d8f843cc65d311d5207a2278fb1e7c3b031e4fca101210",
+    "cloud/cosmetics/outfit-policy.mjs": "6109e48610cf3e6be66b51f7328e360fb239066b81b1d7ba400498d23f68e4c7",
+    "fashion/definitions.mjs": "e721382d0ddfac309d22b2cbc1bb727dd8e8e969963c9af52b2daaa393c3d649",
+    "fashion/extend-policy.mjs": "772a78995f95d07cd6b69b8c8455a5dc7789467174e007729b5b02b25cebb79b"
+  }
+}

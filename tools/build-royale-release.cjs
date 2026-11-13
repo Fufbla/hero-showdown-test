@@ -3,6 +3,7 @@
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),cp=require('node:child_process');
 const esbuild=require('./release-build/node_modules/esbuild');
 const transform=require('./release-build/transform.cjs');
+const fashionMap=require('./release-build/fashion-map.cjs');
 const root=path.resolve(__dirname,'..'),out=path.resolve(process.argv[2]||path.join(root,'_site'));
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const write=(p,s)=>{const f=path.join(out,p);fs.mkdirSync(path.dirname(f),{recursive:true});fs.writeFileSync(f,s);};
@@ -24,7 +25,9 @@ const runtimePlugin={name:'approved-v3-release',setup(build){
     let rel=path.relative(root,original).replaceAll(path.sep,'/');
     if(rel.startsWith('../'))throw Error('Import escapes project: '+rel);
     // Fallback adapters deliberately import the underlying shared implementation.
-    if(!/[?&](?:costume-base|bossFallback)=1/.test(args.path))rel=mappings.get(rel)||rel;
+    if(!/[?&](?:costume-base|fashion-base|bossFallback)=1/.test(args.path)){
+      rel=mappings.get(rel)||rel;rel=fashionMap[rel]||rel;
+    }
     if(/\/(?:tests?|qa|backend-v3)\//.test(rel)||/(?:practice|launcher|outfit-wardrobe|v2-test-hero|boss-qa|input-qa|vertical-qa|legendary-qa|phase10-qa)\.mjs$/.test(rel))throw Error('Developer module entered release: '+rel);
     return {path:path.join(root,rel)};
   });
@@ -94,7 +97,10 @@ async function build(){
   let index=read('index.html').replace('href="./royale-v3-staging/"','href="./royale/"').replace('Open Hero Showdown Royale V3 in a new browser tab','Open Hero Showdown Royale in a new browser tab');write('index.html',index);
   write('.nojekyll','');
   const sha=cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
+  const {COLLECTION}=await import('../royale/fashion/catalog.mjs');
+  const costumes={count:COLLECTION.length,ids:COLLECTION.map(o=>o.id),price:700};
   const manifest={version:1,productionReady:require('./release-build/readiness.json').productionReady,sourceCommit:sha,sourceTreeDirty:!!cp.execFileSync('git',['status','--porcelain','--untracked-files=no'],{cwd:root,encoding:'utf8'}).trim(),sourceHashes,entrypoints:['royale/index.html','royale/gameplay/index.html','royale/local-coop/index.html'],bundles:Object.fromEntries(Object.entries(result.metafile.outputs).map(([p])=>{const rel=path.relative(out,path.resolve(root,p));return [rel,hash(fs.readFileSync(path.join(out,rel)))];})),saveContract:{endpoint:'royale-v3-staging',profileKey:'healthia.royale.profiles.v2',cloudPrefix:'royale-v3-play:',databaseMigration:false},developerTools:false,modes:{singlePlayer:true,localCoop:true,onlineMultiplayer:false}};
+  manifest.costumes=costumes;
   write('royale/release-manifest.json',JSON.stringify(manifest,null,2)+'\n');
   console.log(JSON.stringify({out,modules:Object.keys(sourceHashes).length,bundles:Object.keys(manifest.bundles).length,sourceCommit:sha}));
 }

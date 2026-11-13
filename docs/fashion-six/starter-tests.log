@@ -1,0 +1,15 @@
+✔ all existing movement and combat clips retain their frame indices and timings (4.848337ms)
+✔ all 116 complete poses render both color regions and preserve head contact (816.664297ms)
+✔ each requested setting changes the rendered artwork independently (23.134256ms)
+✔ suit colors and demo names do not change face, hair, skin or universal body dimensions (6.5246ms)
+✔ drawing either player and speed echoes leaves input appearances and hero state unchanged (35.20577ms)
+✔ back preview uses a different head/cape view and textures have bounded memory (223.332155ms)
+✔ the shared renderer uses the starter for both players and keeps Steel Body separate (365.882891ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2067.750206
