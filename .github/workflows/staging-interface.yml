@@ -1,0 +1,89 @@
+name: Publish pause and clothing interface to V3 staging only
+on:
+  push:
+    branches: [review/pause-clothing-store-20261113]
+    paths:
+      - 'royale-v3-staging/interface/**'
+      - 'tools/build-staging-ui.cjs'
+      - 'tools/staging-ui-transform.cjs'
+      - '.github/workflows/staging-interface.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+  pages: write
+  id-token: write
+concurrency:
+  group: optimized-pages-publish
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Confirm the approved production baseline has not moved
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {data}=await github.rest.repos.getBranch({owner:context.repo.owner,repo:context.repo.repo,branch:'main'});
+            if(data.commit.sha!=='dceaffdee5fdb45826062dd4d0f9568694d9a548')throw Error('Production changed. Rebase staging on the newer deployed artifact before publishing.');
+      - name: Download the already deployed production artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          run-id: 43509370838
+          github-token: ${{ github.token }}
+          path: /tmp/production-pages
+      - name: Extract the immutable production baseline
+        run: |
+          mkdir _site
+          tar -xf /tmp/production-pages/artifact.tar -C _site
+          node -e "const m=require('./_site/royale/release-manifest.json');if(m.sourceCommit!=='dceaffdee5fdb45826062dd4d0f9568694d9a548')throw Error('Wrong production baseline');"
+      - name: Install pinned build and rendering dependencies
+        run: |
+          npm ci --prefix tools/release-build
+          npm install --no-save --no-package-lock @napi-rs/canvas@0.1.100
+      - name: Verify interface transactions and existing save and co-op contracts
+        run: node --import ./tools/release-build/register.mjs --test royale-v3-staging/interface/*.test.mjs royale/fashion/tests/collection.test.mjs royale/fashion/tests/backend.test.mjs royale-v3-staging/gameplay/tests/save-guard.test.mjs royale-v3-staging/gameplay/tests/travel-portals.test.mjs royale-v3-staging/costumes/tests/release-armor.test.mjs royale/tests/menu-navigation.test.mjs royale/local-coop/tests/local-coop.test.mjs
+      - name: Add V3 staging and verify every production file is byte-for-byte unchanged
+        run: node tools/build-staging-ui.cjs
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    environment:
+      name: github-pages
+      url: https://fufbla.github.io/hero-showdown-test/royale-v3-staging/
+    steps:
+      - name: Publish the staging overlay while retaining the existing live files
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner=context.repo.owner,repo=context.repo.repo;
+            const head=await github.rest.repos.getBranch({owner,repo,branch:'main'});
+            if(head.data.commit.sha!=='dceaffdee5fdb45826062dd4d0f9568694d9a548')throw Error('Production moved while staging was building. No deployment started.');
+            const response=await github.rest.actions.listWorkflowRunArtifacts({owner,repo,run_id:context.runId,per_page:100});
+            const artifacts=response.data.artifacts.filter(a=>a.name==='github-pages'&&!a.expired);
+            if(artifacts.length!==1)throw Error('Expected one staging Pages artifact');
+            const token=await core.getIDToken();
+            const created=await github.request('POST /repos/{owner}/{repo}/pages/deployments',{owner,repo,artifact_id:artifacts[0].id,pages_build_version:context.sha,oidc_token:token});
+            const id=created.data.id||created.data.status_url?.split('/').pop()||context.sha;
+            const started=Date.now(),terminal=new Set(['deployment_failed','deployment_content_failed','deployment_cancelled','deployment_lost']);
+            let lastStatus='',errors=0;
+            while(Date.now()-started<25*60*1000){
+              await new Promise(resolve=>setTimeout(resolve,20000));
+              let state;
+              try{state=(await github.request('GET /repos/{owner}/{repo}/pages/deployments/{deploymentId}',{owner,repo,deploymentId:id})).data.status;errors=0;}
+              catch(error){if(++errors>=10)throw error;core.warning(error.message);continue;}
+              if(state!==lastStatus){core.info('Pages status: '+state);lastStatus=state;}
+              if(state==='succeed'){core.info('V3 staging published; production files preserved.');return;}
+              if(terminal.has(state))throw Error('Pages deployment ended: '+state);
+            }
+            try{await github.request('POST /repos/{owner}/{repo}/pages/deployments/{deploymentId}/cancel',{owner,repo,deploymentId:id});}catch(error){core.warning(error.message);}
+            throw Error('Pages sync did not finish in 25 minutes.');
