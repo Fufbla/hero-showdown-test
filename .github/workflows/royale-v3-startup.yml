@@ -1,7 +1,7 @@
 name: Royale V3 playable KingJames startup diagnostic
 on:
   push:
-    branches: [main]
+    branches: [main, feature/v3-approved-economy-20261113]
     paths: 
       - '.github/workflows/royale-v3-startup.yml'
       - 'royale/renderer.mjs'

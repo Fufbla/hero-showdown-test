@@ -11,9 +11,9 @@ module.exports=async frame=>{
  const pixels=new Set();const start=performance.now();
  for(const r of WORLD_REGIONS){
   for(let board=0;board<3;board++){
-   const g=new Game();g.loadRegion(r.id);const camp=regionCamps(r.id)[board];g.hero.x=camp.x+90;g.hero.y=600;g.hero.coins=150;
+   const g=new Game();g.loadRegion(r.id);const camp=regionCamps(r.id)[board];g.hero.x=camp.x+90;g.hero.y=600;g.hero.coins=10000;
    const snapshot=g.save();c.clearRect(0,0,960,720);c.save();c.translate(-(camp.x-150),0);worldLandmarks(c,g,camp.x-150,960);c.restore();if(snapshot!==g.save())throw Error('Rendering mutated saved game');pixels.add(fingerprint());
-   for(const side of [-1,1]){g.loadRegion(r.id);g.hero.x=camp.x+90+side*40;g.hero.y=600;g.combatTimer=0;const coins=g.hero.coins;if(!g.portalTravel(r.id===7?1:r.id+1)||g.hero.coins!==coins)throw Error('Free portal failed');}
+   for(const side of [-1,1]){g.loadRegion(r.id);g.hero.x=camp.x+90+side*40;g.hero.y=600;g.combatTimer=0;const coins=g.hero.coins,destination=r.id===7?1:r.id+1,cost=[0,100,200,300,800,1200,2500,3500][destination];if(g.portalTravel(destination))throw Error('Legacy free portal bypass');if(!g.portalTravel(destination,g.economy.revision)||g.hero.coins!==coins-cost)throw Error('Paid portal failed');}
    visited.push(r.id+':'+board);
   }
   const g=new Game();g.loadRegion(r.id);g.hero.x=5840;g.hero.grounded=true;
@@ -22,7 +22,7 @@ module.exports=async frame=>{
  }
  const {LEGENDARY_IDS}=await import(new URL('./legendary-data.mjs',document.baseURI).href);
  for(const id of LEGENDARY_IDS){const g=new Game();g.hero.level=99;g.hero.x=5840;g.startLegendaryScene(id,'cleared');g.arenaScene.cleared=true;drawArena(c,g);if(!g.leaveBoss()||g.hero.x!==5840)throw Error('Legendary exit changed: '+id);}
- for(const coins of [99,100,150]){const g=new Game();g.hero.coins=coins;const ok=g.fastTravel({region:2,board:1},g.economy.revision);if(ok!==(coins>=100)||g.hero.coins!==(coins>=100?coins-100:coins))throw Error('Fast travel charge changed');}
+ for(const coins of [199,200,250]){const g=new Game();g.hero.coins=coins;const ok=g.fastTravel({region:2,board:1},g.economy.revision);if(ok!==(coins>=200)||g.hero.coins!==(coins>=200?coins-200:coins))throw Error('Fast travel charge changed');}
  c.clearRect(0,0,960,720);drawPortal(c,480,600,1,0,'REGION PORTAL');const before=fingerprint();await new Promise(r=>setTimeout(r,150));c.clearRect(0,0,960,720);drawPortal(c,480,600,1,0,'REGION PORTAL');if(before===fingerprint())throw Error('Vortex froze with simulation paused');
  return {visited:visited.length,legendaryExits:LEGENDARY_IDS.length,uniqueBoards:pixels.size,status:portalStatus(),renderChecksMs:performance.now()-start};
  });
