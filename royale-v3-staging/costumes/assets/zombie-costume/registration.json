@@ -1,0 +1,1694 @@
+{
+  "sourceSize": [
+    1448,
+    1086
+  ],
+  "extraction": "complete-connected-pose",
+  "sourceCell": 181,
+  "padding": 24,
+  "cells": 48,
+  "frames": [
+    {
+      "index": 0,
+      "faceMaskPixels": 4180,
+      "sourceBounds": [
+        44,
+        21,
+        144,
+        173
+      ],
+      "packedBounds": [
+        72,
+        63,
+        183,
+        231
+      ],
+      "face": [
+        91,
+        66,
+        75,
+        72
+      ],
+      "sourceComponentPixels": 10833,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          70.22707423580786,
+          60.53275109170306
+        ],
+        "sourceOrigin": [
+          42,
+          19
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 1,
+      "faceMaskPixels": 3933,
+      "sourceBounds": [
+        226,
+        21,
+        323,
+        173
+      ],
+      "packedBounds": [
+        73,
+        63,
+        180,
+        231
+      ],
+      "face": [
+        93,
+        66,
+        71,
+        70
+      ],
+      "sourceComponentPixels": 10567,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          70.77729257641923,
+          60.53275109170306
+        ],
+        "sourceOrigin": [
+          224,
+          19
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 2,
+      "faceMaskPixels": 3972,
+      "sourceBounds": [
+        391,
+        25,
+        500,
+        172
+      ],
+      "packedBounds": [
+        48,
+        68,
+        168,
+        230
+      ],
+      "face": [
+        93,
+        72,
+        70,
+        72
+      ],
+      "sourceComponentPixels": 10301,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          46.017467248908304,
+          66.03493449781661
+        ],
+        "sourceOrigin": [
+          389,
+          23
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 3,
+      "faceMaskPixels": 3940,
+      "sourceBounds": [
+        576,
+        26,
+        686,
+        170
+      ],
+      "packedBounds": [
+        46,
+        71,
+        167,
+        230
+      ],
+      "face": [
+        94,
+        75,
+        69,
+        72
+      ],
+      "sourceComponentPixels": 9837,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          43.81659388646288,
+          69.33624454148472
+        ],
+        "sourceOrigin": [
+          574,
+          24
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 4,
+      "faceMaskPixels": 3915,
+      "sourceBounds": [
+        762,
+        29,
+        865,
+        171
+      ],
+      "packedBounds": [
+        54,
+        74,
+        167,
+        231
+      ],
+      "face": [
+        94,
+        78,
+        69,
+        72
+      ],
+      "sourceComponentPixels": 9743,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          50.96943231441048,
+          71.53711790393015
+        ],
+        "sourceOrigin": [
+          760,
+          27
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 5,
+      "faceMaskPixels": 3899,
+      "sourceBounds": [
+        940,
+        32,
+        1045,
+        172
+      ],
+      "packedBounds": [
+        52,
+        76,
+        167,
+        230
+      ],
+      "face": [
+        94,
+        79,
+        69,
+        73
+      ],
+      "sourceComponentPixels": 10094,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          48.768558951965076,
+          73.73799126637556
+        ],
+        "sourceOrigin": [
+          938,
+          30
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 6,
+      "faceMaskPixels": 3913,
+      "sourceBounds": [
+        1131,
+        28,
+        1227,
+        172
+      ],
+      "packedBounds": [
+        61,
+        71,
+        167,
+        230
+      ],
+      "face": [
+        94,
+        75,
+        70,
+        72
+      ],
+      "sourceComponentPixels": 9111,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          59.222707423580786,
+          69.33624454148472
+        ],
+        "sourceOrigin": [
+          1129,
+          26
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 7,
+      "faceMaskPixels": 3796,
+      "sourceBounds": [
+        1315,
+        28,
+        1408,
+        172
+      ],
+      "packedBounds": [
+        64,
+        72,
+        166,
+        230
+      ],
+      "face": [
+        94,
+        76,
+        69,
+        70
+      ],
+      "sourceComponentPixels": 8049,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          61.97379912663756,
+          69.33624454148472
+        ],
+        "sourceOrigin": [
+          1313,
+          26
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 8,
+      "faceMaskPixels": 3773,
+      "sourceBounds": [
+        38,
+        210,
+        142,
+        350
+      ],
+      "packedBounds": [
+        52,
+        76,
+        167,
+        230
+      ],
+      "face": [
+        94,
+        79,
+        69,
+        70
+      ],
+      "sourceComponentPixels": 9021,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          49.86899563318778,
+          73.73799126637556
+        ],
+        "sourceOrigin": [
+          36,
+          208
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 9,
+      "faceMaskPixels": 3781,
+      "sourceBounds": [
+        227,
+        210,
+        323,
+        349
+      ],
+      "packedBounds": [
+        61,
+        77,
+        167,
+        230
+      ],
+      "face": [
+        94,
+        80,
+        69,
+        70
+      ],
+      "sourceComponentPixels": 8437,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          58.672489082969435,
+          74.83842794759826
+        ],
+        "sourceOrigin": [
+          225,
+          208
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 10,
+      "faceMaskPixels": 3674,
+      "sourceBounds": [
+        400,
+        210,
+        505,
+        344
+      ],
+      "packedBounds": [
+        51,
+        82,
+        166,
+        230
+      ],
+      "face": [
+        94,
+        86,
+        69,
+        70
+      ],
+      "sourceComponentPixels": 8189,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          48.218340611353725,
+          80.34061135371181
+        ],
+        "sourceOrigin": [
+          398,
+          208
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 11,
+      "faceMaskPixels": 3745,
+      "sourceBounds": [
+        581,
+        212,
+        686,
+        351
+      ],
+      "packedBounds": [
+        51,
+        77,
+        167,
+        231
+      ],
+      "face": [
+        94,
+        81,
+        69,
+        69
+      ],
+      "sourceComponentPixels": 9124,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          48.768558951965076,
+          74.83842794759826
+        ],
+        "sourceOrigin": [
+          579,
+          210
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 12,
+      "faceMaskPixels": 3659,
+      "sourceBounds": [
+        768,
+        213,
+        866,
+        349
+      ],
+      "packedBounds": [
+        58,
+        80,
+        166,
+        231
+      ],
+      "face": [
+        94,
+        84,
+        68,
+        68
+      ],
+      "sourceComponentPixels": 8203,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          55.921397379912676,
+          78.1397379912664
+        ],
+        "sourceOrigin": [
+          766,
+          211
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 13,
+      "faceMaskPixels": 3837,
+      "sourceBounds": [
+        948,
+        211,
+        1046,
+        351
+      ],
+      "packedBounds": [
+        59,
+        76,
+        167,
+        231
+      ],
+      "face": [
+        94,
+        80,
+        70,
+        70
+      ],
+      "sourceComponentPixels": 8800,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          56.47161572052403,
+          73.73799126637556
+        ],
+        "sourceOrigin": [
+          946,
+          209
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 14,
+      "faceMaskPixels": 4076,
+      "sourceBounds": [
+        1110,
+        223,
+        1227,
+        354
+      ],
+      "packedBounds": [
+        38,
+        46,
+        168,
+        191
+      ],
+      "face": [
+        92,
+        50,
+        72,
+        72
+      ],
+      "sourceComponentPixels": 9742,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          36.113537117903945,
+          44.233624454148476
+        ],
+        "sourceOrigin": [
+          1108,
+          221
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 15,
+      "faceMaskPixels": 3875,
+      "sourceBounds": [
+        1302,
+        203,
+        1408,
+        351
+      ],
+      "packedBounds": [
+        49,
+        47,
+        167,
+        210
+      ],
+      "face": [
+        93,
+        51,
+        70,
+        70
+      ],
+      "sourceComponentPixels": 9094,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          47.11790393013101,
+          45.33406113537118
+        ],
+        "sourceOrigin": [
+          1300,
+          201
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 16,
+      "faceMaskPixels": 3794,
+      "sourceBounds": [
+        32,
+        377,
+        149,
+        528
+      ],
+      "packedBounds": [
+        48,
+        47,
+        176,
+        213
+      ],
+      "face": [
+        94,
+        51,
+        70,
+        70
+      ],
+      "sourceComponentPixels": 9563,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          45.46724890829695,
+          44.78384279475983
+        ],
+        "sourceOrigin": [
+          30,
+          375
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 17,
+      "faceMaskPixels": 3713,
+      "sourceBounds": [
+        209,
+        371,
+        337,
+        514
+      ],
+      "packedBounds": [
+        44,
+        48,
+        185,
+        205
+      ],
+      "face": [
+        94,
+        52,
+        69,
+        68
+      ],
+      "sourceComponentPixels": 9614,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          41.615720524017476,
+          45.33406113537118
+        ],
+        "sourceOrigin": [
+          207,
+          369
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 18,
+      "faceMaskPixels": 3872,
+      "sourceBounds": [
+        410,
+        375,
+        505,
+        500
+      ],
+      "packedBounds": [
+        65,
+        46,
+        170,
+        184
+      ],
+      "face": [
+        93,
+        50,
+        70,
+        71
+      ],
+      "sourceComponentPixels": 8190,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          63.62445414847163,
+          44.233624454148476
+        ],
+        "sourceOrigin": [
+          408,
+          373
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 19,
+      "faceMaskPixels": 3688,
+      "sourceBounds": [
+        587,
+        371,
+        683,
+        495
+      ],
+      "packedBounds": [
+        59,
+        48,
+        166,
+        184
+      ],
+      "face": [
+        94,
+        51,
+        69,
+        69
+      ],
+      "sourceComponentPixels": 8147,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          57.57205240174673,
+          45.33406113537118
+        ],
+        "sourceOrigin": [
+          585,
+          369
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 20,
+      "faceMaskPixels": 3647,
+      "sourceBounds": [
+        753,
+        371,
+        877,
+        517
+      ],
+      "packedBounds": [
+        46,
+        48,
+        182,
+        209
+      ],
+      "face": [
+        94,
+        52,
+        68,
+        68
+      ],
+      "sourceComponentPixels": 9665,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          43.81659388646288,
+          46.43449781659389
+        ],
+        "sourceOrigin": [
+          751,
+          369
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 21,
+      "faceMaskPixels": 3718,
+      "sourceBounds": [
+        929,
+        366,
+        1061,
+        530
+      ],
+      "packedBounds": [
+        46,
+        48,
+        191,
+        229
+      ],
+      "face": [
+        94,
+        52,
+        70,
+        68
+      ],
+      "sourceComponentPixels": 10576,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          43.26637554585153,
+          46.43449781659389
+        ],
+        "sourceOrigin": [
+          927,
+          364
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 22,
+      "faceMaskPixels": 3932,
+      "sourceBounds": [
+        1115,
+        383,
+        1234,
+        537
+      ],
+      "packedBounds": [
+        51,
+        47,
+        182,
+        217
+      ],
+      "face": [
+        93,
+        51,
+        71,
+        71
+      ],
+      "sourceComponentPixels": 10382,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          48.768558951965076,
+          45.33406113537118
+        ],
+        "sourceOrigin": [
+          1113,
+          381
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 23,
+      "faceMaskPixels": 3943,
+      "sourceBounds": [
+        1295,
+        400,
+        1415,
+        537
+      ],
+      "packedBounds": [
+        51,
+        47,
+        182,
+        197
+      ],
+      "face": [
+        93,
+        50,
+        71,
+        71
+      ],
+      "sourceComponentPixels": 10081,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          48.218340611353725,
+          44.233624454148476
+        ],
+        "sourceOrigin": [
+          1293,
+          398
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 24,
+      "faceMaskPixels": 3961,
+      "sourceBounds": [
+        36,
+        590,
+        145,
+        715
+      ],
+      "packedBounds": [
+        56,
+        92,
+        175,
+        231
+      ],
+      "face": [
+        93,
+        96,
+        72,
+        71
+      ],
+      "sourceComponentPixels": 9196,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          53.170305676855904,
+          90.24454148471617
+        ],
+        "sourceOrigin": [
+          34,
+          588
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 25,
+      "faceMaskPixels": 3964,
+      "sourceBounds": [
+        221,
+        577,
+        317,
+        714
+      ],
+      "packedBounds": [
+        65,
+        79,
+        172,
+        230
+      ],
+      "face": [
+        93,
+        83,
+        71,
+        70
+      ],
+      "sourceComponentPixels": 9476,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          63.62445414847163,
+          77.03930131004367
+        ],
+        "sourceOrigin": [
+          219,
+          575
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 26,
+      "faceMaskPixels": 3937,
+      "sourceBounds": [
+        399,
+        568,
+        496,
+        714
+      ],
+      "packedBounds": [
+        62,
+        70,
+        169,
+        230
+      ],
+      "face": [
+        93,
+        74,
+        71,
+        70
+      ],
+      "sourceComponentPixels": 10109,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          59.77292576419215,
+          67.13537117903931
+        ],
+        "sourceOrigin": [
+          397,
+          566
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 27,
+      "faceMaskPixels": 3981,
+      "sourceBounds": [
+        582,
+        568,
+        687,
+        714
+      ],
+      "packedBounds": [
+        68,
+        69,
+        183,
+        230
+      ],
+      "face": [
+        92,
+        73,
+        72,
+        70
+      ],
+      "sourceComponentPixels": 10532,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          65.27510917030568,
+          67.13537117903931
+        ],
+        "sourceOrigin": [
+          580,
+          566
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 28,
+      "faceMaskPixels": 3885,
+      "sourceBounds": [
+        756,
+        568,
+        883,
+        714
+      ],
+      "packedBounds": [
+        57,
+        69,
+        196,
+        230
+      ],
+      "face": [
+        93,
+        73,
+        71,
+        70
+      ],
+      "sourceComponentPixels": 10665,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          54.27074235807861,
+          67.13537117903931
+        ],
+        "sourceOrigin": [
+          754,
+          566
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 29,
+      "faceMaskPixels": 4050,
+      "sourceBounds": [
+        941,
+        568,
+        1045,
+        713
+      ],
+      "packedBounds": [
+        63,
+        71,
+        178,
+        231
+      ],
+      "face": [
+        92,
+        75,
+        73,
+        70
+      ],
+      "sourceComponentPixels": 9995,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          60.873362445414855,
+          68.23580786026201
+        ],
+        "sourceOrigin": [
+          939,
+          566
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 30,
+      "faceMaskPixels": 3995,
+      "sourceBounds": [
+        1121,
+        564,
+        1216,
+        713
+      ],
+      "packedBounds": [
+        70,
+        66,
+        175,
+        230
+      ],
+      "face": [
+        92,
+        70,
+        73,
+        70
+      ],
+      "sourceComponentPixels": 9763,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          68.02620087336246,
+          63.8340611353712
+        ],
+        "sourceOrigin": [
+          1119,
+          562
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 31,
+      "faceMaskPixels": 3899,
+      "sourceBounds": [
+        1294,
+        564,
+        1406,
+        716
+      ],
+      "packedBounds": [
+        67,
+        63,
+        190,
+        230
+      ],
+      "face": [
+        93,
+        67,
+        71,
+        69
+      ],
+      "sourceComponentPixels": 9942,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          64.72489082969433,
+          60.53275109170306
+        ],
+        "sourceOrigin": [
+          1292,
+          562
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 32,
+      "faceMaskPixels": 3980,
+      "sourceBounds": [
+        23,
+        744,
+        160,
+        895
+      ],
+      "packedBounds": [
+        67,
+        64,
+        219,
+        230
+      ],
+      "face": [
+        93,
+        67,
+        71,
+        70
+      ],
+      "sourceComponentPixels": 10486,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          65.27510917030568,
+          61.633187772925766
+        ],
+        "sourceOrigin": [
+          21,
+          742
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 33,
+      "faceMaskPixels": 3910,
+      "sourceBounds": [
+        212,
+        746,
+        317,
+        895
+      ],
+      "packedBounds": [
+        74,
+        66,
+        190,
+        230
+      ],
+      "face": [
+        93,
+        69,
+        71,
+        70
+      ],
+      "sourceComponentPixels": 9916,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          72.42794759825328,
+          63.8340611353712
+        ],
+        "sourceOrigin": [
+          210,
+          744
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 34,
+      "faceMaskPixels": 3971,
+      "sourceBounds": [
+        379,
+        755,
+        515,
+        896
+      ],
+      "packedBounds": [
+        88,
+        74,
+        238,
+        230
+      ],
+      "face": [
+        92,
+        78,
+        72,
+        69
+      ],
+      "sourceComponentPixels": 11204,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          85.63318777292577,
+          72.63755458515286
+        ],
+        "sourceOrigin": [
+          377,
+          753
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 35,
+      "faceMaskPixels": 4054,
+      "sourceBounds": [
+        587,
+        753,
+        679,
+        896
+      ],
+      "packedBounds": [
+        74,
+        73,
+        175,
+        230
+      ],
+      "face": [
+        93,
+        77,
+        72,
+        71
+      ],
+      "sourceComponentPixels": 9557,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          71.32751091703057,
+          70.43668122270745
+        ],
+        "sourceOrigin": [
+          585,
+          751
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 36,
+      "faceMaskPixels": 3995,
+      "sourceBounds": [
+        751,
+        769,
+        859,
+        898
+      ],
+      "packedBounds": [
+        50,
+        88,
+        168,
+        230
+      ],
+      "face": [
+        93,
+        92,
+        72,
+        71
+      ],
+      "sourceComponentPixels": 8526,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          47.11790393013101,
+          85.84279475982535
+        ],
+        "sourceOrigin": [
+          749,
+          767
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 37,
+      "faceMaskPixels": 4190,
+      "sourceBounds": [
+        922,
+        793,
+        1052,
+        897
+      ],
+      "packedBounds": [
+        26,
+        116,
+        169,
+        230
+      ],
+      "face": [
+        92,
+        120,
+        74,
+        75
+      ],
+      "sourceComponentPixels": 8416,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          23.4585152838428,
+          113.35371179039302
+        ],
+        "sourceOrigin": [
+          920,
+          791
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 38,
+      "faceMaskPixels": 4252,
+      "sourceBounds": [
+        1107,
+        780,
+        1224,
+        897
+      ],
+      "packedBounds": [
+        40,
+        101,
+        169,
+        230
+      ],
+      "face": [
+        91,
+        105,
+        75,
+        74
+      ],
+      "sourceComponentPixels": 9109,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          37.764192139738,
+          99.04803493449782
+        ],
+        "sourceOrigin": [
+          1105,
+          778
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 39,
+      "faceMaskPixels": 4035,
+      "sourceBounds": [
+        1286,
+        761,
+        1401,
+        896
+      ],
+      "packedBounds": [
+        50,
+        81,
+        176,
+        230
+      ],
+      "face": [
+        92,
+        85,
+        74,
+        70
+      ],
+      "sourceComponentPixels": 9848,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          47.66812227074236,
+          79.2401746724891
+        ],
+        "sourceOrigin": [
+          1284,
+          759
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 40,
+      "faceMaskPixels": 4062,
+      "sourceBounds": [
+        38,
+        930,
+        137,
+        1078
+      ],
+      "packedBounds": [
+        69,
+        67,
+        177,
+        231
+      ],
+      "face": [
+        93,
+        71,
+        72,
+        71
+      ],
+      "sourceComponentPixels": 10016,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          65.82532751091703,
+          64.9344978165939
+        ],
+        "sourceOrigin": [
+          36,
+          928
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 41,
+      "faceMaskPixels": 4007,
+      "sourceBounds": [
+        219,
+        931,
+        318,
+        1078
+      ],
+      "packedBounds": [
+        72,
+        68,
+        181,
+        230
+      ],
+      "face": [
+        93,
+        72,
+        72,
+        71
+      ],
+      "sourceComponentPixels": 9616,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          69.67685589519651,
+          66.03493449781661
+        ],
+        "sourceOrigin": [
+          217,
+          929
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 42,
+      "faceMaskPixels": 4018,
+      "sourceBounds": [
+        397,
+        932,
+        511,
+        1079
+      ],
+      "packedBounds": [
+        69,
+        69,
+        194,
+        230
+      ],
+      "face": [
+        93,
+        73,
+        71,
+        71
+      ],
+      "sourceComponentPixels": 9906,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          66.37554585152839,
+          66.03493449781661
+        ],
+        "sourceOrigin": [
+          395,
+          930
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 43,
+      "faceMaskPixels": 4007,
+      "sourceBounds": [
+        578,
+        931,
+        672,
+        1078
+      ],
+      "packedBounds": [
+        71,
+        68,
+        174,
+        231
+      ],
+      "face": [
+        92,
+        72,
+        72,
+        71
+      ],
+      "sourceComponentPixels": 9702,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          68.57641921397381,
+          66.03493449781661
+        ],
+        "sourceOrigin": [
+          576,
+          929
+        ]
+      },
+      "air": false
+    },
+    {
+      "index": 44,
+      "faceMaskPixels": 3836,
+      "sourceBounds": [
+        767,
+        922,
+        864,
+        1071
+      ],
+      "packedBounds": [
+        70,
+        49,
+        177,
+        214
+      ],
+      "face": [
+        92,
+        53,
+        72,
+        67
+      ],
+      "sourceComponentPixels": 9765,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          67.47598253275109,
+          46.98471615720524
+        ],
+        "sourceOrigin": [
+          765,
+          920
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 45,
+      "faceMaskPixels": 3287,
+      "sourceBounds": [
+        941,
+        918,
+        1042,
+        1063
+      ],
+      "packedBounds": [
+        64,
+        51,
+        175,
+        211
+      ],
+      "face": [
+        95,
+        55,
+        66,
+        63
+      ],
+      "sourceComponentPixels": 9073,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          61.42358078602621,
+          49.185589519650655
+        ],
+        "sourceOrigin": [
+          939,
+          916
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 46,
+      "faceMaskPixels": 3323,
+      "sourceBounds": [
+        1124,
+        917,
+        1222,
+        1054
+      ],
+      "packedBounds": [
+        56,
+        50,
+        164,
+        202
+      ],
+      "face": [
+        95,
+        54,
+        66,
+        64
+      ],
+      "sourceComponentPixels": 8718,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          53.720524017467255,
+          48.6353711790393
+        ],
+        "sourceOrigin": [
+          1122,
+          915
+        ]
+      },
+      "air": true
+    },
+    {
+      "index": 47,
+      "faceMaskPixels": 3414,
+      "sourceBounds": [
+        1299,
+        916,
+        1410,
+        1054
+      ],
+      "packedBounds": [
+        43,
+        50,
+        165,
+        202
+      ],
+      "face": [
+        95,
+        54,
+        67,
+        65
+      ],
+      "sourceComponentPixels": 8807,
+      "packing": {
+        "scale": 1.1004366812227073,
+        "offset": [
+          41.065502183406124,
+          47.5349344978166
+        ],
+        "sourceOrigin": [
+          1297,
+          914
+        ]
+      },
+      "air": true
+    }
+  ],
+  "sourceSHA256": "44fce9ba6a363152185126e3ca2c8d0da882b0c5850bdd2e8e1d222be60ea2ce",
+  "packerVersion": "recovered-sources-20261113"
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "repository": "Fufbla/hero-showdown-test",
   "branch": "codex/face-only-costumes-review",
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
@@ -69,16 +69,18 @@
   ],
   "batches": [],
   "current_batch": {
-    "number": 1,
+    "number": 2,
     "paths": [
-      "royale-v3-staging/costumes/assets/pizza-slice-costume/manifest.json",
-      "royale-v3-staging/costumes/assets/pizza-slice-costume/registration.json",
-      "royale-v3-staging/costumes/assets/reaper-costume/body.webp",
-      "royale-v3-staging/costumes/assets/reaper-costume/manifest.json",
-      "royale-v3-staging/costumes/assets/reaper-costume/registration.json",
-      "royale-v3-staging/costumes/assets/stuffed-animal-costume/body.webp",
-      "royale-v3-staging/costumes/assets/stuffed-animal-costume/manifest.json"
-    ]
+      "royale-v3-staging/costumes/assets/stuffed-animal-costume/registration.json",
+      "royale-v3-staging/costumes/assets/white-business-suit/body.webp",
+      "royale-v3-staging/costumes/assets/white-business-suit/manifest.json",
+      "royale-v3-staging/costumes/assets/white-business-suit/registration.json",
+      "royale-v3-staging/costumes/assets/zombie-costume/body.webp",
+      "royale-v3-staging/costumes/assets/zombie-costume/manifest.json",
+      "royale-v3-staging/costumes/assets/zombie-costume/registration.json",
+      "royale-v3-staging/costumes/engine.mjs"
+    ],
+    "state": "awaiting_remote_verification"
   },
   "errors": [
     {
