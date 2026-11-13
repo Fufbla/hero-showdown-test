@@ -75,6 +75,9 @@ const mappings={
 };
 for(const [file,basePath] of [['index.html','/royale-v3-staging/'],['kingjames/index.html','/royale/'],['gameplay/index.html','/royale/'],['local-coop/index.html','/royale/local-coop/']]){
  const dest='royale-v3-staging/'+file;let html=read(dest).replace('Clothing Store · 36 outfits','Clothing Store · 46 outfits');
+ // The complete costume preview has twelve actions; keep every label readable.
+ html=html.replace(/<style id="costume-motion-layout">[\s\S]*?<\/style>/g,'');
+ html=html.replace('</head>','<style id="costume-motion-layout">.clothing-fit-views[aria-label="Preview walking and running movements"]{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr))}</style></head>');
  html=html.replace(/<script type="importmap">([\s\S]*?)<\/script>/,(_,json)=>{const m=JSON.parse(json),base=new URL(basePath,'https://build.invalid');
   for(const [src,name]of Object.entries(mappings)){const rel=path.posix.relative(basePath,'/royale-v3-staging/costumes/'+name),target=(rel.startsWith('.')?rel:'./'+rel)+'?v=costumes-2';
    for(const [key,value]of Object.entries(m.imports))if(new URL(key,base).pathname===src||new URL(value,base).pathname===src){m.imports[key]=target;if(new URL(value,base).pathname===src)m.imports[value]=target;}

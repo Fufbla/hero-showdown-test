@@ -3,7 +3,7 @@
   "repository": "Fufbla/hero-showdown-test",
   "branch": "codex/face-only-costumes-review",
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
-  "deployment": "Authorized; client publication next. Cloud function v8 verified with all ten costumes.",
+  "deployment": "Live; final fitting-room action layout correction uploading",
   "upload_authorized": true,
   "last_verified_content_commit": "12c8d78f0dcd38cddb6b3166cc890adaad599290",
   "total_required_files": 106,
@@ -823,17 +823,19 @@
     },
     {
       "path": "royale-v3-staging/gameplay/index.html",
-      "git_blob_sha": "69f7e8415537cd17eca39c3145b69775ab649955",
-      "sha256": "18bbff7fde17e651903524cbe05af40ae0b81ba2565abffece7334396fc8fc58",
-      "size_bytes": 43245,
-      "status": "verified"
+      "git_blob_sha": "384f3373ec33fc17e11c18ec42ee023cb844f26c",
+      "sha256": "aa67396c4b1b3df891b338d70aef6a7499b0f3b66e1461eeed3eff936bb31cee",
+      "size_bytes": 43428,
+      "status": "pending-layout-batch",
+      "recovered_git_blob_sha": "69f7e8415537cd17eca39c3145b69775ab649955"
     },
     {
       "path": "royale-v3-staging/index.html",
-      "git_blob_sha": "43c928c6e9970c4fef18afc2155121edb17269c0",
-      "sha256": "7b5d46da7ae069903be42f4e1fbdfc88aa691773aefd5cd15711a3547c4faa7f",
-      "size_bytes": 10223,
-      "status": "verified"
+      "git_blob_sha": "eb05423972420d89420f4a112c82d0ee922f7774",
+      "sha256": "005c04efcc9f6f8cb09ffbc4a287cef8dab1318c920b0f3938825641f3dbed7d",
+      "size_bytes": 10406,
+      "status": "pending-layout-batch",
+      "recovered_git_blob_sha": "43c928c6e9970c4fef18afc2155121edb17269c0"
     },
     {
       "path": "royale-v3-staging/kingjames/app.mjs",
@@ -844,10 +846,11 @@
     },
     {
       "path": "royale-v3-staging/kingjames/index.html",
-      "git_blob_sha": "11c67981e3ecb198b3c5c711d6256d15436b86f6",
-      "sha256": "66bab0901d5b69816cf6e37c4a3fd8bb700b4c7bcd87ba4e927a12016942e10d",
-      "size_bytes": 43572,
-      "status": "verified"
+      "git_blob_sha": "6d1e93963f38ede13d581db9ea9f09f4588eaa21",
+      "sha256": "5d744b9f9989e150f532fa4573d646b2f82b899e8a0b3611b7b97c02d03d05d6",
+      "size_bytes": 43755,
+      "status": "pending-layout-batch",
+      "recovered_git_blob_sha": "11c67981e3ecb198b3c5c711d6256d15436b86f6"
     },
     {
       "path": "royale-v3-staging/kingjames/renderer.mjs",
@@ -858,10 +861,11 @@
     },
     {
       "path": "royale-v3-staging/local-coop/index.html",
-      "git_blob_sha": "1e97e0514f35314f4943de4b1ceb04cbfb4e8ce7",
-      "sha256": "cc752312590d28d40df69b2a497aed2fda5821b685089bab3667d3822a0292ca",
-      "size_bytes": 14280,
-      "status": "verified"
+      "git_blob_sha": "4fcf53380e820ef7591465523e85b3017a049be1",
+      "sha256": "c2ddfcdcdc08bfc956d805cc94668c771401c33e982dbf373775d4d45668e37c",
+      "size_bytes": 14463,
+      "status": "pending-layout-batch",
+      "recovered_git_blob_sha": "1e97e0514f35314f4943de4b1ceb04cbfb4e8ce7"
     },
     {
       "path": "tools/build-approved-costumes.cjs",
@@ -886,10 +890,11 @@
     },
     {
       "path": "tools/build-staging-costumes.cjs",
-      "git_blob_sha": "5b473ae2c2433c30db0e4a74ceb502c17fff3da8",
-      "sha256": "fdd9874ce14f305e48f8c832a98a82337967a717e4604df80dfdc3b640584e03",
-      "size_bytes": 10378,
-      "status": "verified"
+      "git_blob_sha": "3d76c711d4c4e515d6baf69c11e740dbec34ad53",
+      "sha256": "a99c3376f46aa1501c38ef5944ee126386ce004953ae567554116439e11ff02e",
+      "size_bytes": 10761,
+      "status": "pending-layout-batch",
+      "recovered_git_blob_sha": "5b473ae2c2433c30db0e4a74ceb502c17fff3da8"
     },
     {
       "path": "tools/render-costume-review.mjs",
@@ -928,6 +933,7 @@
     },
     "browser_evidence": "Recovered exact tested source and prior browser evidence; local Chromium launch unavailable (socket operation not permitted).",
     "report": "docs/costumes/verification/release.json",
-    "checkpoint": "3ac84c6bba0e650215677f8b7fa6e298bbca409c"
+    "checkpoint": "3ac84c6bba0e650215677f8b7fa6e298bbca409c",
+    "layout": "Wrap twelve action buttons in a responsive grid; no sprite or gameplay changes"
   }
 }
