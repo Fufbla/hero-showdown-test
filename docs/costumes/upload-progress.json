@@ -5,13 +5,10 @@
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
   "deployment": "HOLD — uploaded to review branch only; no merge, Pages or cloud deployment",
   "upload_authorized": true,
-  "last_verified_content_commit": "cf97dae6d0d04d4a0339b2233f9a15813f80eb21",
+  "last_verified_content_commit": "8e9d6b2f86fb984b50305ec8aa46d38143310a2c",
   "total_required_files": 106,
-  "verified_files": 81,
+  "verified_files": 89,
   "remaining_paths": [
-    "docs/costumes/ASSET-CHECKSUMS.sha256",
-    "docs/costumes/README.md",
-    "docs/costumes/review/black-business-suit-sprites.png",
     "docs/costumes/review/costume-animation-review.mp4",
     "docs/costumes/review/dolphin-costume-sprites.png",
     "docs/costumes/review/fishsticks-costume-sprites.png",
@@ -28,12 +25,7 @@
     "docs/costumes/verification/prior-fullbody-tests.log",
     "docs/costumes/verification/prior-shared-tests.log",
     "docs/costumes/verification/source-preservation.json",
-    "docs/costumes/verification/staging-build.log",
-    "tools/build-approved-costumes.cjs",
-    "tools/build-costume-lettering.cjs",
-    "tools/build-kingjames-staging.cjs",
-    "tools/build-staging-costumes.cjs",
-    "tools/render-costume-review.mjs"
+    "docs/costumes/verification/staging-build.log"
   ],
   "batches": [
     {
@@ -99,22 +91,25 @@
       ],
       "verified_at": "2026-11-13T07:06:38.721Z",
       "verification": "GitHub tree matched every expected Git blob SHA"
+    },
+    {
+      "number": 6,
+      "commit": "8e9d6b2f86fb984b50305ec8aa46d38143310a2c",
+      "paths": [
+        "tools/build-approved-costumes.cjs",
+        "tools/build-costume-lettering.cjs",
+        "tools/build-kingjames-staging.cjs",
+        "tools/build-staging-costumes.cjs",
+        "tools/render-costume-review.mjs",
+        "docs/costumes/ASSET-CHECKSUMS.sha256",
+        "docs/costumes/README.md",
+        "docs/costumes/review/black-business-suit-sprites.png"
+      ],
+      "verified_at": "2026-11-13T07:06:56.292Z",
+      "verification": "GitHub tree matched every expected Git blob SHA"
     }
   ],
-  "current_batch": {
-    "number": 6,
-    "paths": [
-      "tools/build-approved-costumes.cjs",
-      "tools/build-costume-lettering.cjs",
-      "tools/build-kingjames-staging.cjs",
-      "tools/build-staging-costumes.cjs",
-      "tools/render-costume-review.mjs",
-      "docs/costumes/ASSET-CHECKSUMS.sha256",
-      "docs/costumes/README.md",
-      "docs/costumes/review/black-business-suit-sprites.png"
-    ],
-    "state": "awaiting_remote_verification"
-  },
+  "current_batch": null,
   "errors": [
     {
       "batch": 1,
@@ -151,14 +146,14 @@
       "git_blob_sha": "48d91c64627b2bb84ea9066e441f6d04daccfadd",
       "sha256": "d8e1d4dc2c5a47e609ad7536d3a62fdb996c9d79c7884e38c9df366a4edb801d",
       "size_bytes": 6104,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/README.md",
       "git_blob_sha": "68573e094de1008351fdefef6a94231a2b880253",
       "sha256": "2cf980ea0e539a133e8bd2979dcc0e67aa0b51870de785663120439797d69074",
       "size_bytes": 4859,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/approved-concepts.jpeg",
@@ -298,7 +293,7 @@
       "git_blob_sha": "7a6e743d6a9fb66d4c6652489380e45cc5dde355",
       "sha256": "c004ce8e61260bf6e263094deb9f0eee2a95ee2bc7ecaafb2ab01177c90d0232",
       "size_bytes": 768371,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "docs/costumes/review/costume-animation-review.mp4",
@@ -844,35 +839,35 @@
       "git_blob_sha": "df4404d2121341d7e9d6b08f2725568936985a97",
       "sha256": "3331e10026727e4afc029106269a80cb2738562848a49079138b45cef4708d78",
       "size_bytes": 9295,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "tools/build-costume-lettering.cjs",
       "git_blob_sha": "50aa11fdc608b2aa1032ad99275095ec69ad3e53",
       "sha256": "a484de797bee9b2a5f84464e03791b26521e9f8bb02a57eb66423fee65205455",
       "size_bytes": 6847,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "tools/build-kingjames-staging.cjs",
       "git_blob_sha": "cdba5af9f8a68f3d4bb748051434e3ea2d723940",
       "sha256": "ec13bf0c958400c201357b0200df5acf6590a10f6ea7c087f482e4ce4834d601",
       "size_bytes": 11189,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "tools/build-staging-costumes.cjs",
       "git_blob_sha": "5b473ae2c2433c30db0e4a74ceb502c17fff3da8",
       "sha256": "fdd9874ce14f305e48f8c832a98a82337967a717e4604df80dfdc3b640584e03",
       "size_bytes": 10378,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "tools/render-costume-review.mjs",
       "git_blob_sha": "c4f7f7a70bcc5d7b1865bdf13450b425048f8d92",
       "sha256": "8bc5f7c7bca1bb80b989e12465673adedbf3ff7a440552db656ea63a4b909965",
       "size_bytes": 4270,
-      "status": "pending"
+      "status": "verified"
     }
   ],
   "status": "upload_in_progress",
