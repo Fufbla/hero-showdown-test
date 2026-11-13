@@ -5,9 +5,9 @@
   "base_commit": "3e594b9338dd1dc4b26d1e0fab4fa0c7fa98aef1",
   "deployment": "HOLD — uploaded to review branch only; no merge, Pages or cloud deployment",
   "upload_authorized": true,
-  "last_verified_content_commit": "06a55fb10a9acb18da1731ef8bc4afed6b52b584",
+  "last_verified_content_commit": "2451a68c9833ac4b146dd00edd2eadb4d53e68ad",
   "total_required_files": 106,
-  "verified_files": 57,
+  "verified_files": 65,
   "remaining_paths": [
     "docs/costumes/ASSET-CHECKSUMS.sha256",
     "docs/costumes/README.md",
@@ -30,14 +30,6 @@
     "docs/costumes/verification/source-preservation.json",
     "docs/costumes/verification/staging-build.log",
     "royale-v3-staging/cloud/cosmetics/outfit-policy.mjs",
-    "royale-v3-staging/costumes/face.mjs",
-    "royale-v3-staging/costumes/game-session.mjs",
-    "royale-v3-staging/costumes/hero-art.mjs",
-    "royale-v3-staging/costumes/outfit-policy.mjs",
-    "royale-v3-staging/costumes/owners.mjs",
-    "royale-v3-staging/costumes/preview.mjs",
-    "royale-v3-staging/costumes/purchase-ui.mjs",
-    "royale-v3-staging/costumes/renderer.mjs",
     "royale-v3-staging/costumes/review.html",
     "royale-v3-staging/costumes/review.mjs",
     "royale-v3-staging/costumes/runtime.mjs",
@@ -75,22 +67,25 @@
       ],
       "verified_at": "2026-11-13T07:05:38.608Z",
       "verification": "GitHub tree matched every expected Git blob SHA"
+    },
+    {
+      "number": 3,
+      "commit": "2451a68c9833ac4b146dd00edd2eadb4d53e68ad",
+      "paths": [
+        "royale-v3-staging/costumes/face.mjs",
+        "royale-v3-staging/costumes/game-session.mjs",
+        "royale-v3-staging/costumes/hero-art.mjs",
+        "royale-v3-staging/costumes/outfit-policy.mjs",
+        "royale-v3-staging/costumes/owners.mjs",
+        "royale-v3-staging/costumes/preview.mjs",
+        "royale-v3-staging/costumes/purchase-ui.mjs",
+        "royale-v3-staging/costumes/renderer.mjs"
+      ],
+      "verified_at": "2026-11-13T07:05:57.725Z",
+      "verification": "GitHub tree matched every expected Git blob SHA"
     }
   ],
-  "current_batch": {
-    "number": 3,
-    "paths": [
-      "royale-v3-staging/costumes/face.mjs",
-      "royale-v3-staging/costumes/game-session.mjs",
-      "royale-v3-staging/costumes/hero-art.mjs",
-      "royale-v3-staging/costumes/outfit-policy.mjs",
-      "royale-v3-staging/costumes/owners.mjs",
-      "royale-v3-staging/costumes/preview.mjs",
-      "royale-v3-staging/costumes/purchase-ui.mjs",
-      "royale-v3-staging/costumes/renderer.mjs"
-    ],
-    "state": "awaiting_remote_verification"
-  },
+  "current_batch": null,
   "errors": [
     {
       "batch": 1,
@@ -659,56 +654,56 @@
       "git_blob_sha": "a9a2db2ad526d785579e4bdfa56d610fed1c8842",
       "sha256": "593cf10e5982b23473c6bc2e74fc6ad3bfa08b5e8413de4bc375a78786acad87",
       "size_bytes": 2383,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/game-session.mjs",
       "git_blob_sha": "23fa3e6ec37cbca64883fdd13ff25dcd46ee5e18",
       "sha256": "e5337d7afe15f8c38e224acddbc3d745070b11d9bedf5820818428f665dc804b",
       "size_bytes": 6145,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/hero-art.mjs",
       "git_blob_sha": "2835a62a72f76f7b359f966bc8656b9699ecd44c",
       "sha256": "4f4b2d04b5db83687a9874656449e31b8046dea8581330ee4c9f2d427f01b5e2",
       "size_bytes": 443,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/outfit-policy.mjs",
       "git_blob_sha": "b9bcad9f536db38118a5ad68c1c4860b99d4893f",
       "sha256": "eb5be3fefc41ea42d2976aabfc2b53332d69d6e949a88a9664383ed70320567e",
       "size_bytes": 6617,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/owners.mjs",
       "git_blob_sha": "c878917f857654a9e1217e4557515eb03bf86413",
       "sha256": "7fee8e5649f1ac276ddc17767666e246a3680bccbe3730f18e819789c0ac1c5e",
       "size_bytes": 358,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/preview.mjs",
       "git_blob_sha": "ad36d03f265508d6aa8aa85abe22dbf205296f7b",
       "sha256": "573a5020f7b5e33f5dcde7e1d3fd0689991df0c71caa9667267381f41aa87f99",
       "size_bytes": 2163,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/purchase-ui.mjs",
       "git_blob_sha": "ec5c8d2174ff141d9e3b4c20ff6954680090996b",
       "sha256": "05fcde67fa1ba4aeeba3cfc04d316846a6f1232977d7bed1518d740fc944751a",
       "size_bytes": 4511,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/renderer.mjs",
       "git_blob_sha": "f1982686545d451423f08682954e6107766a5fb0",
       "sha256": "210c18aa8e1874188cf87a9483560f441497998a6d3350d072ec96fce43d3673",
       "size_bytes": 14720,
-      "status": "pending"
+      "status": "verified"
     },
     {
       "path": "royale-v3-staging/costumes/review.html",
