@@ -55,7 +55,6 @@ export class EnvironmentArt{
   }
   if(region.id===1){const seaY=355-cameraY*.26;const sea=c.createLinearGradient(0,seaY,0,height);sea.addColorStop(0,'#338d9f');sea.addColorStop(1,'#9ed2b2');c.fillStyle=sea;c.fillRect(0,seaY,width,height-seaY);for(let row=0;row<9;row++){const y=seaY+row*30;for(let x=-130;x<width+140;x+=165){const xx=x-cameraX*.12%165+Math.sin(time*.6+row)*13;line(c,[[xx,y],[xx+35,y-2],[xx+76,y]],'#e0f2d54a',1.5);}}}
   const layers=this.scene(region,night);for(let n=0;n<3;n++){const factor=[.045,.12,.32][n],offset=((cameraX*factor)%TILE+TILE)%TILE,dy=-cameraY*factor;for(let x=-offset;x<width;x+=TILE){if(n===0)c.drawImage(layers[n],x,dy+90,TILE,540);else c.drawImage(layers[n],x,dy);}}
-  if(region.id!==1){const haze=c.createLinearGradient(0,height*.65,0,height);haze.addColorStop(0,'#d9ddb000');haze.addColorStop(1,night?'#b7d2a414':'#d6d6aa2b');c.fillStyle=haze;c.fillRect(0,height*.65,width,height*.35);}
   animateLandscape(c,region,width,height,cameraX,cameraY,time);
   animateLivingWorld(c,region,width,height,cameraX,cameraY,time,night);
  }

@@ -173,10 +173,9 @@ dialog.clothing-tryon-dialog button{min-height:38px}
           <div class="eyebrow" id="pause-region"></div><h2 id="pause-title">Paused</h2>
           <nav id="pause-primary" aria-label="Pause menu">
             <button id="resume" class="primary">Resume Game</button><button id="open-my-hero" class="secondary">My Hero</button>
-            <button id="open-inventory" class="secondary">Inventory &amp; Equipment</button>
-            <button id="open-map" class="secondary">World Map</button><button id="tree-from-pause" class="secondary">Tree of Eris</button>
+            <button id="tree-from-pause" class="secondary">Tree of Eris</button>
             <button id="manual-save" class="secondary">Save Game</button><button id="open-controls" class="secondary">Settings</button>
-            <button id="choose-hero" class="text-button">Exit to Main Menu</button>
+            <button id="choose-hero" class="secondary">Exit to Main Menu</button>
           </nav>
           <section id="pause-hero" hidden><h3>My Hero</h3><canvas id="pause-hero-preview" width="360" height="420"></canvas><p id="pause-hero-stats"></p><button id="edit-look" class="secondary">Appearance services at Eris</button></section>
           <section id="pause-powers" class="loadout" hidden><div class="loadout-heading"><strong>Superpowers</strong><span><b id="power-points">0</b> Power Points</span></div><p id="tree-location"></p></section>
@@ -187,7 +186,7 @@ dialog.clothing-tryon-dialog button{min-height:38px}
       <section id="tree-menu" class="overlay game-panel" hidden>
         <div class="eris-card" role="dialog" aria-modal="true" aria-labelledby="tree-title">
           <header class="eris-heading"><div><div class="eyebrow">UPGRADES &amp; CUSTOMIZATION</div><h2 id="tree-title" tabindex="-1">The Tree of <em>Eris</em></h2></div><button id="return-menu" type="button" class="icon-button" aria-label="Return to Pause Menu" title="Return to Pause Menu">☰</button><div class="eris-balances"><span><b id="eris-coins">0</b> ◈</span><span><b id="tree-points">0</b> Power Points</span><small id="eris-capacity">0/20 equipment</small></div><button id="close-tree" class="secondary">Return to Adventure →</button></header>
-          <nav class="eris-nav" aria-label="Tree of Eris services"><button data-eris="powers" aria-pressed="true">Upgrade Powers</button><button data-eris="wardrobe">Armor Equipment</button><button data-eris="clothing">Clothing Store</button></nav>
+          <nav class="eris-nav" aria-label="Tree of Eris services"><button data-eris="powers" aria-pressed="true">Upgrade Powers</button><button data-eris="wardrobe">Armor Equipment</button><button data-eris="clothing">Clothing Store</button><button id="open-inventory" type="button">Inventory &amp; Equipment</button></nav>
           <div class="eris-scroll">
             <section id="eris-appearance-panel" data-eris-panel="appearance" hidden></section>
             <section data-eris-panel="powers" class="eris-powers" hidden><button data-eris="merge" class="secondary">Manage Villain Merge · fourth slot</button><details class="power-loadout" open><summary>Equipped powers</summary><p id="loadout-note"></p><div id="loadout-slots"></div></details><div class="tree-body"><nav id="power-list" aria-label="Choose a superpower"></nav><section id="power-detail" aria-label="Superpower details"></section></div></section>

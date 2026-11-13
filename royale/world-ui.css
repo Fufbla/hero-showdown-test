@@ -58,3 +58,8 @@ body.game-view #world-portal:not([hidden]) {left:50%;right:auto;bottom:70px;tran
 #world-menu .region-copy button {margin:3px 0 0;padding:7px 9px;font-size:12px;}
 #world-menu .region-card[data-region='7'] {grid-column:auto;}
 @media(max-width:700px){#world-menu .region-cards{grid-template-columns:1fr;}#world-menu .region-card{min-height:85px;}#world-menu .region-art{width:68px;}body.game-view #world-portal:not([hidden]){bottom:88px;}}
+
+/* Final six-action pause layout; override older landscape column counts. */
+#pause-menu #pause-primary{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#pause-menu #pause-primary button{min-height:48px;margin:0;width:100%}
+@media(max-width:480px){#pause-menu #pause-primary{grid-template-columns:1fr}}

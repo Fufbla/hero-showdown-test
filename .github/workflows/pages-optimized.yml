@@ -6,6 +6,8 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/pages-optimized.yml'
+      - 'tools/build-royale-release.cjs'
+      - 'tools/release-build/**'
       - 'royale/**'
       - 'royale-v3-staging/**'
       - 'royale-v3-motion-preview/**'
@@ -30,38 +32,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Create smaller deployment without deleting source files
-        shell: bash
+      - name: Enforce verified-release gate
+        run: node tools/release-build/assert-ready.cjs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned build and rendering dependencies
         run: |
-          set -euo pipefail
-          mkdir -p _site
-          rsync -a ./ _site/ \
-            --exclude='/.git/' \
-            --exclude='/.github/' \
-            --exclude='/_site/' \
-            --exclude='/royale-cloud-test/' \
-            --exclude='/docs/' \
-            --exclude='/tools/' \
-            --exclude='/scorpion-test-qa/' \
-            --exclude='/tests/' \
-            --exclude='qa/' \
-            --exclude='tests/' \
-            --exclude='*.md' \
-            --exclude='*.txt' \
-            --exclude='*.command' \
-            --exclude='*.bat' \
-            --exclude='*.py' \
-            --exclude='*.sha256' \
-            --exclude='PACKAGE-MANIFEST.json'
-          touch _site/.nojekyll
-          test -s _site/index.html
-          test -s _site/royale/index.html
-          test -s _site/royale/app.mjs
-          test -s _site/royale/clothing-catalog-preview.mjs
-          test -s _site/royale/cosmetics/catalog.json
-          test -s _site/royale/cosmetics/assets/royal-kimono/atlas.png
-          test -s _site/royale-v3-staging/index.html
-          du -sh _site
+          npm ci --prefix tools/release-build
+          npm install --no-save --no-package-lock @napi-rs/canvas@0.1.100
+      - name: Build filtered production artifact
+        run: node tools/build-royale-release.cjs
+      - name: Verify the production runtime and save compatibility
+        run: node --import ./tools/release-build/register.mjs --test tools/release-build/release.test.mjs royale-v3-staging/gameplay/tests/*.test.mjs royale-v3-staging/bosses/tests/*.test.mjs royale-v3-staging/costumes/tests/*.test.mjs royale/local-coop/tests/local-coop.test.mjs
       - name: Upload optimized Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:

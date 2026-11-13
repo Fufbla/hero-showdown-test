@@ -529,8 +529,8 @@ $('edit-hud-powers').onclick = event => openPowerPicker(0, event.currentTarget);
 const updateCompactSlots=installLandscapeLayout(input,openPowerPicker);
 $('manual-save').onclick=async()=>{if(online()){try{await multiplayerMenu.session.command('save');say('Account progress and exact location confirmed.');}catch(e){say(e.message);}return;}if(!game.canSave()||criticalPending||powerUpgrades.busy)return;const b=$('manual-save');b.disabled=true;try{const result=store.cloud?await store.commit(activeSlot,game.save()):persist({manual:true});say(result.ok?(store.cloud?'Game saved to your account.':'Hero saved on this browser.'):result.error||'Save unavailable.');}catch(e){say(e.message,9);}finally{b.disabled=!game.canSave();}};
 $('chest-close').onclick=resume;
-function openWorld(source='map'){if(typeof source!=='string')source='map';setScreen('world');journeyMenu.map(source);legendaryMenu.map();$('map-title').focus();}
-$('open-map').onclick=openWorld;$('map-close').onclick=showPause;
+function openWorld(source){if(source!=='portal'||!game.nearPortal())return;setScreen('world');journeyMenu.map(source);legendaryMenu.map();$('map-title').focus();}
+$('map-close').onclick=showPause;
 $('open-inventory').onclick=()=>{journeyMenu.groundReward=null;setScreen('inventory');journeyMenu.inventory();$('inventory-title').focus();};$('inventory-close').onclick=()=>{journeyMenu.groundReward=null;showPause();};
 $('tree-from-pause').onclick=()=>openTree();$('close-tree').onclick=returnAdventure;
 $('open-controls').onclick=()=>{setScreen('controls');controlMenu.render();$('settings-title').focus();};$('close-controls').onclick=showPause;

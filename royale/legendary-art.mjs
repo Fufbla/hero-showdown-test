@@ -17,7 +17,7 @@ export function drawLegendarySky(c,g,width,camera){
   else if(id==='venomis'){line(c,[[x,520],[x+40,350],[x+20,250],[x+70,180]],'#244e3a',18);for(let j=0;j<5;j++)ellipse(c,x+20+j*20+Math.sin(time*.8+i+j)*3,230+j*35,42,18,'#37654a');}
   else{c.fillStyle='#322e38';c.fillRect(x+20,170,105,350);c.strokeStyle='#a19167';c.lineWidth=5;c.strokeRect(x+20,170,105,350);for(let j=0;j<3;j++){c.strokeStyle='#d6b35c35';c.beginPath();c.ellipse(x+73,330,42+j*12,90+j*18,0,0,Math.PI*2);c.stroke();}}
  }
- c.restore();c.fillStyle='#101e2990';c.fillRect(0,540,width,180);
+ c.restore();
  const theme={lightning:'energy',air:'energy',styrodog:'final',sonic:'cave',styro:'factory',wastelander:'factory',venomis:'mutant',atomdust:'energy'}[id]||'energy';
  animateLivingWorld(c,{theme},width,720,camera,0,time,true);
 }

@@ -75,8 +75,6 @@ export class Renderer {
     for(const s of game.surfaces)if(visible(s.x,s.y,s.w,s.h+80))this.terrain(s);
     for(const [i,camp] of game.camps.entries()){
       if(!visible(camp.x-85,camp.y-165,170,180))continue;
-      line(c,[[camp.x-30,camp.y],[camp.x-30,camp.y-120]],'#547a62',5);
-      path(c,[[camp.x-28,camp.y-118],[camp.x+22,camp.y-112],[camp.x+12,camp.y-92],[camp.x-28,camp.y-97]],i===game.world.checkpoint.index&&game.regionId===game.world.checkpoint.region?'#e7cd83':'#56a77c',OUTLINE,1.5);
       path(c,[[camp.x+20,camp.y],[camp.x+44,camp.y-45],[camp.x+75,camp.y]],'#e7d2a4',OUTLINE,2);path(c,[[camp.x+34,camp.y],[camp.x+44,camp.y-31],[camp.x+53,camp.y]],'#5b8673',null);
     }
     if(!game.arenaScene){if(visible(150,390,260,230))drawEris(c,t);worldLandmarks(c,game,this.camera,this.width);}else{drawArena(c,game);if(game.arenaScene.legendary)drawLegendaryWorld(c,game);}
@@ -133,8 +131,6 @@ export class Renderer {
     for(const p of this.particles){if(p.life<=0)continue;if(!game.paused){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=210*dt;}c.globalAlpha=Math.max(0,p.life/p.max);oval(c,p.x,p.y,p.size,p.size,p.color);}c.globalAlpha=1;
     // Small foreground details give continuous ground a readable silhouette.
     for(let x=65;!game.arenaScene&&x<WORLD_WIDTH;x+=190){if(x<this.camera-60||x>this.camera+this.width+60)continue;const surface=SURFACES.find(s=>!s.oneWay&&s.kind==='sand'&&x>s.x+20&&x<s.x+s.w-20);if(!surface)continue;const y=surface.y+8;for(let i=0;i<5;i++)line(c,[[x+i*3,y],[x-8+i*6,y-14-(i%2)*10]],'#448d67',2);if(x%3===0)oval(c,x+25,y+4,7,3,'#fff1cb');}
-    if(!game.arenaScene&&5950>this.camera-100&&5950<this.camera+this.width+100){line(c,[[5950,600],[5950,530]],'#8e6d45',6);round(c,5890,509,120,37,5,'#315d55');c.fillStyle='#f4e8b8';c.font='bold 12px system-ui';c.textAlign='center';c.fillText('THE JOURNEY BEGINS',5950,532);}
     c.restore();
-    const grad=c.createLinearGradient(0,this.height-100,0,this.height);grad.addColorStop(0,'#143e4200');grad.addColorStop(1,'#143e4255');c.fillStyle=grad;c.fillRect(0,this.height-100,this.width,100);
   }
 }

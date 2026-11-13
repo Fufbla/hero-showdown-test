@@ -1,0 +1,8 @@
+{
+  "productionReady": false,
+  "blockers": [
+    "Online multiplayer is disabled in current main; the separate prototype persists test copies rather than the production V3 heroes.",
+    "The packaged candidate still needs a live-origin cloud login/save/reload check and a two-controller co-op playtest.",
+    "GitHub Pages must use only the filtered release artifact; repository-branch publishing and raw artifact recovery must not expose developer routes."
+  ]
+}

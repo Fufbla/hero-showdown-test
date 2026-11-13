@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-13",
+  "baseline": "af68f4ea08b0ceee920e7ec5d0e6f9a4098ee97b",
+  "candidateBranch": "release/v3-final-cleanup-20261113",
+  "rollbackBranch": "rollback/pre-v3-final-release-20261113",
+  "deployed": false,
+  "stagingDeployed": false,
+  "productionDataModified": false,
+  "databaseMigrations": 0,
+  "stagingRegressionTests": {"passed":183,"failed":0},
+  "releaseRuntimeTests": {"passed":177,"failed":0},
+  "browser": {
+    "localHeroCreateAndReload":true,
+    "sixActionPauseMenu":true,
+    "treeInventory":true,
+    "costumeStore22":true,
+    "hoodPreview":true,
+    "portalMap":true,
+    "insufficientCoinsBlocked":true,
+    "legacyQaQueryNoPrivileges":true,
+    "responsiveWidths":[390,768,1363],
+    "liveCloudRoundtrip":false,
+    "physicalControllers":false,
+    "physicalMobileDevices":false,
+    "onlineMultiplayer":false
+  },
+  "supabaseInspection":{"project":"adakwbhxiuatjvphutgo","function":"royale-v3-staging","version":10,"status":"ACTIVE","readOnly":true}
+}
