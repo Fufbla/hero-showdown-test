@@ -85,7 +85,20 @@
       "verification": "GitHub tree matched every expected Git blob SHA"
     }
   ],
-  "current_batch": null,
+  "current_batch": {
+    "number": 4,
+    "paths": [
+      "royale-v3-staging/costumes/review.html",
+      "royale-v3-staging/costumes/review.mjs",
+      "royale-v3-staging/costumes/runtime.mjs",
+      "royale-v3-staging/costumes/store.mjs",
+      "royale-v3-staging/costumes/tests/costumes.test.mjs",
+      "royale-v3-staging/costumes/tests/fixture.html",
+      "royale-v3-staging/costumes/tests/loader.mjs",
+      "royale-v3-staging/costumes/tests/register.mjs"
+    ],
+    "state": "awaiting_remote_verification"
+  },
   "errors": [
     {
       "batch": 1,
