@@ -1,0 +1,121 @@
+{
+  "checkedAt": "2026-11-13T18:01:54.009089+00:00",
+  "liveUrl": "https://fufbla.github.io/hero-showdown-test/royale/",
+  "sourceCommit": "f4ef481c85994d237e20d16eb3adaaa3bf71b69a",
+  "deploymentRun": "https://github.com/Fufbla/hero-showdown-test/actions/runs/43477568753",
+  "deploymentStatus": "success",
+  "allSourceHashesMatch": true,
+  "sourceFileCount": 219,
+  "bundles": [
+    {
+      "path": "royale/release/game.mjs",
+      "sha256": "e25677a96045618d8eff8e5935b4b3a9d79ba81b16878174dabfe967341ca79b",
+      "bytes": 268,
+      "matches": true
+    },
+    {
+      "path": "royale/release/coop.mjs",
+      "sha256": "c908bbdd363fe54e797f6b44237c6aa8b3fd84222fa594066c85ba472a2d1575",
+      "bytes": 229,
+      "matches": true
+    },
+    {
+      "path": "royale/release/cloud.mjs",
+      "sha256": "3338fc76e5f1822cf55a2901137ef2e661111436c67af00f9fe890871067198f",
+      "bytes": 10363,
+      "matches": true
+    },
+    {
+      "path": "royale/release/json-worker.mjs",
+      "sha256": "fc0971af6f6355c8a368d6a6c970f9d135355033851134cbbe428e458297e0f8",
+      "bytes": 461,
+      "matches": true
+    },
+    {
+      "path": "royale/release/shared-3I47XR5E.mjs",
+      "sha256": "217a04d0530a4ae655ede41c06ecf36d03e1f8d7709094e4b8b874c0addf2010",
+      "bytes": 16431,
+      "matches": true
+    },
+    {
+      "path": "royale/release/shared-4DJGAQZ5.mjs",
+      "sha256": "5efc1dff12a34c57ac083c5d191051ed2d5d593544f2dd5b662e399e33983993",
+      "bytes": 243,
+      "matches": true
+    },
+    {
+      "path": "royale/release/shared-JNDVNFNW.mjs",
+      "sha256": "d38cc898c7850f94f38f2c9721d76d4eb665819cb233b7166ea0f88e33937efd",
+      "bytes": 310388,
+      "matches": true
+    },
+    {
+      "path": "royale/release/shared-ZVNY27H2.mjs",
+      "sha256": "e9c8ef6ec6846ac804dc90370be70e4d7699eb51bc3cce871c84c7d5ee8ad8a7",
+      "bytes": 6334,
+      "matches": true
+    },
+    {
+      "path": "royale/release/shared-5L3FQUFE.mjs",
+      "sha256": "6ea9c9f5ea37c9cc5348bc5ba8fd638422c0b87bd288c6ac66b568ce93cb2767",
+      "bytes": 105585,
+      "matches": true
+    },
+    {
+      "path": "royale/release/shared-BU5QHWRL.mjs",
+      "sha256": "2d59b2cec9a74fcd519579eaf1daa20f9da154545f2d1d4068efcc7e3df63ab2",
+      "bytes": 2012068,
+      "matches": true
+    },
+    {
+      "path": "royale/release/shared-T54KN4KK.mjs",
+      "sha256": "be1109d156cb75d1bff02fee861d4cf21ea8321d18cdfed4513a95e4488aa236",
+      "bytes": 297012,
+      "matches": true
+    },
+    {
+      "path": "royale/release/shared-LSVDURCP.mjs",
+      "sha256": "ef8831468e7e62a65d9f896160b40e21f37f103d218599a0f8f4cac970c69888",
+      "bytes": 210059,
+      "matches": true
+    },
+    {
+      "path": "royale/release/shared-YRGF3G5A.mjs",
+      "sha256": "9ce5542737a3604697dddb0d08d4e531b7f14d1d6a8db7cec34a49b462473759",
+      "bytes": 3123,
+      "matches": true
+    }
+  ],
+  "entrypoints": [
+    {
+      "path": "royale/index.html",
+      "bytes": 3072
+    },
+    {
+      "path": "royale/gameplay/index.html",
+      "bytes": 33147
+    },
+    {
+      "path": "royale/local-coop/index.html",
+      "bytes": 8321
+    }
+  ],
+  "originalPose70Head": [
+    127,
+    144,
+    0
+  ],
+  "originalManifestSHA256": "f18607f79ed37ba981202d8bb627886e2643b3169ec04ba800bdb789885b68a3",
+  "modes": {
+    "singlePlayer": true,
+    "localCoop": true,
+    "onlineMultiplayer": false
+  },
+  "developerTools": false,
+  "saveContract": {
+    "endpoint": "royale-v3-staging",
+    "profileKey": "healthia.royale.profiles.v2",
+    "cloudPrefix": "royale-v3-play:",
+    "databaseMigration": false
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "commit": "f4ef481c85994d237e20d16eb3adaaa3bf71b69a",
+  "run": "https://github.com/Fufbla/hero-showdown-test/actions/runs/43476973647",
+  "nodeTests": {
+    "headAlignment": 2,
+    "release": 185,
+    "failures": 0
+  },
+  "browsers": [
+    {
+      "engine": "chromium",
+      "mobile": false,
+      "attachedFrames": 3016,
+      "containedCombinations": 1988,
+      "visibleHair": 1981,
+      "uncoveredFrames": 288,
+      "reservedCode": "0000000000",
+      "customizedLookReload": true,
+      "costumeSwitchPreservesLook": true,
+      "cloudWrites": 0,
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "mobile": true,
+      "attachedFrames": 3016,
+      "containedCombinations": 1988,
+      "visibleHair": 1981,
+      "uncoveredFrames": 288,
+      "reservedCode": "0000000000",
+      "customizedLookReload": true,
+      "costumeSwitchPreservesLook": true,
+      "cloudWrites": 0,
+      "errors": []
+    }
+  ]
+}
