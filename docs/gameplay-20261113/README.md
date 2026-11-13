@@ -1,7 +1,7 @@
 # Approved V3 gameplay implementation — 2026-11-13
 
 Branch: `feature/v3-approved-economy-20261113`  
-Review and deployment record: https://github.com/Fufbla/hero-showdown-test/pull/20  
+Review and deployment records: https://github.com/Fufbla/hero-showdown-test/pull/20 and https://github.com/Fufbla/hero-showdown-test/pull/21  
 Target: https://fufbla.github.io/hero-showdown-test/royale-v3-staging/
 
 Started from verified main `f93df6bb68c5c75c09e9be6d2eb12665a5cb1746` and integrated newer main `9c8617e5ed3b6d3afc9f83530c520c2a9a36b3ab`, including the black costume hood lining fix. The shared production game and artwork files are unchanged. Generated adapters apply only through V3 import maps. No save records or database schema were migrated in bulk.
@@ -54,15 +54,17 @@ The approved chart was recovered from the earlier gameplay change discussion; it
 
 The map and physical fast-travel portal display exact prices and require confirmation. Locked destinations, insufficient funds, stale revisions, failed travel and same-board trips do not debit. Successful travel precedes the debit; the destination and transaction are checkpointed together, including legendary entry. Former free command aliases require the same payment/revision checks.
 
-Every one of the 21 overworld boards has four portals: entrance, paid fast travel, regional boss entrance, exit. A shared catalog controls rendering and interaction. Existing ground, environmental art and animated portal atlases are unchanged. Entrance/exit links preserve sequential progression; the outermost first entrance and final exit return to the existing Tree of Eris hub. Boss entrances return to the originating board. The existing shared-screen co-op restriction on individual fast travel remains in force; ordinary entrance/exit travel is free.
+Every one of the 21 overworld boards has four portals: entrance, paid fast travel, regional boss entrance, exit. A shared catalog controls rendering and interaction. Existing ground, environmental art and animated portal atlases are unchanged. Entrance/exit links preserve sequential progression; the outermost first entrance and final exit return to the existing Tree of Eris hub. Boss entrances return to the originating board. The existing shared-screen co-op restriction on individual regional fast travel remains in force; ordinary entrance/exit travel is free. Shared legendary encounters remain available: the menu confirms 3,500 coins per active hero, validates both heroes and both current revisions, and debits each only after successful entry. Both heroes stay paused until their individual travel checkpoints save.
 
 ## Verification
+
+The co-op Legendary menu had a separate direct-entry shortcut. Follow-up PR #21 closes it without removing shared legendary encounters. Its full regression run [43398918122](https://github.com/Fufbla/hero-showdown-test/actions/runs/43398918122) passed **204 tests and Chromium UI verification**. Two new tests cover shared payment, unchanged shared boss identity, both saved debits, duplicate entry, missing/stale confirmations, an ineligible companion and failed entry.
 
 - Integrated latest-main code commit `56fdd9551b929aa0023c7b2bb661abf51879fd77`: [GitHub Actions run 43397699352](https://github.com/Fufbla/hero-showdown-test/actions/runs/43397699352) passed the reproducible build, protected-production-file comparison, 202 automated tests, and Chromium browser test.
 - Tests exercise all 99 monster levels in day/night; all 15 boss HP values; seven regional and eight legendary reward lifecycles; duplicate claims; legacy chest migration; independent co-op eligibility; all 21 board portal destinations and ground accessibility; every price bracket; failed/insufficient/stale/return travel; save normalization; real armor combat effects; costume and boss presentation; local co-op save/controller logic.
 - Costume checks retain all ten approved costumes, 480 poses and 16,464 hood/face combinations. Existing boss tests cover 15 atlases/240 poses and 77 attacks. No costume/boss/portal atlas was regenerated for this work.
 - Chromium used reserved code `0000000000` in an isolated browser profile, with test-only local balances. It verified the displayed 3,500-coin confirmation, one debit, exact destination restoration after reload, unchanged identity/inventory/XP, and disabled travel at 99 coins. No page errors or failed same-origin requests. Browser evidence is attached to the Actions run. This is automated browser testing, not a manual combat playthrough.
-- Initial browser test failed because its selector targeted a hidden HUD button. Correcting it to the actual World Map control passed. No unresolved automated test failures.
+- Initial browser test failed because its selector targeted a hidden HUD button. Correcting it to the actual World Map control passed. The legacy cross-browser portal diagnostic also failed because it explicitly expected free region portals and flat 100-coin travel. Those obsolete assertions were updated to the approved prices; the final cross-browser result is recorded in PR #21.
 - Staging Supabase function `royale-v3-staging` was updated from version 8 to 9 with additive economy guards, then re-fetched and compared against all seven expected source files. Existing authentication, schema, cosmetics guards and optimistic revision checks remain. The new guard rejects reopened first-defeat chests, reward-version rollback, changed coin-only chest amounts and rollback of recorded spending. This is continuity validation, not a replacement for server-authoritative combat.
 
 ## Unfinished or externally blocked
@@ -72,4 +74,4 @@ Every one of the 21 overworld boards has four portals: entrance, paid fast trave
 - Code `0000000000` intentionally uses local saves. Live cloud save/reload testing requires another account. Automatic approval review rejected creating a separate QA account because the task supplied only the existing test code. No new account was created. Live cloud mutation tests remain unrun; the opt-in script is prepared but never invoked by CI.
 - Online multiplayer is unconfigured on main (`royale/multiplayer/config.json` is absent). The separate multiplayer development branch/PR was not changed. No live two-device online test or physical two-controller playthrough was performed. Automated local co-op tests passed.
 
-Deployment status and the final deployment SHA are recorded in PR #20 after the Pages job and live staging verification. Production gameplay assets are byte-identical to the verified baseline.
+Deployment status and the final deployment SHA are recorded in PR #21 after the Pages job and live staging verification. Production gameplay assets are byte-identical to the verified baseline.
