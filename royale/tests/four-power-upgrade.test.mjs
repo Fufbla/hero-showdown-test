@@ -40,3 +40,22 @@ test('seismic smash hits nearest eligible enemies once and enters six second coo
  assert.ok(powers.activate('seismicSmash'));assert.deepEqual(hit.map(x=>x[0]),[1,2]);
  assert.equal(powers.cooldowns.seismicSmash,6);assert.equal(powers.activate('seismicSmash'),false);
 });
+
+test('Animal Allies can activate during flight and attacks nearest target',()=>{
+ const targets=[{id:3,x:120,y:0,w:30,h:40,state:'idle',protection:0},{id:4,x:45,y:0,w:30,h:40,state:'idle',protection:0}];
+ const hit=[];const hero={x:0,y:0,face:1,level:30,grounded:false,dead:false,stun:0};
+ const game={hero,paused:false,disruptedPower:null,equipment:{},enemies:targets,markCombat(){},emit(){},damageEnemy(e,d){hit.push([e.id,d]);}};
+ const data=normalizePowers({levels:Object.fromEntries(POWER_IDS.map(id=>[id,id==='animalAllies'?20:0])),equipped:['animalAllies',null,null]},30);
+ const powers=new PowerSystem(game,data);game.powers=powers;powers.active.flight={age:0,duration:10,cooldown:30};
+ assert.equal(powers.activate('animalAllies'),true);
+ assert.deepEqual(hit.map(x=>x[0]),[4]);
+ assert.equal(powers.cooldowns.animalAllies,6);
+});
+test('Seismic Smash rejects air use, without entering cooldown',()=>{
+ const hero={x:0,y:0,face:1,level:30,grounded:false,dead:false,stun:0};
+ const game={hero,paused:false,disruptedPower:null,equipment:{},enemies:[],markCombat(){},emit(){},damageEnemy(){}};
+ const data=normalizePowers({levels:Object.fromEntries(POWER_IDS.map(id=>[id,id==='seismicSmash'?20:0])),equipped:['seismicSmash',null,null]},30);
+ const powers=new PowerSystem(game,data);game.powers=powers;
+ assert.equal(powers.activate('seismicSmash'),false);
+ assert.equal(powers.cooldowns.seismicSmash,0);
+});
