@@ -1,0 +1,17 @@
+name: Four Powers Isolated Branch Tests
+on:
+  push:
+    branches:
+      - feature/four-powers-test-only-20261114
+permissions:
+  contents: read
+jobs:
+  four-power-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test four power upgrades without deploying
+        run: node --test royale/tests/four-power-upgrade.test.mjs
