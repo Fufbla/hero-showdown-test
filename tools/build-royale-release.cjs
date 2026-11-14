@@ -41,7 +41,7 @@ const runtimePlugin={name:'approved-v3-release',setup(build){
     return {contents,loader:'js',resolveDir:path.dirname(args.path)};
   });
 }};
-const skipDirs=new Set(['.git','.github','dist','_site','node_modules','docs','review','tools','tests','test','qa','backend','backend-v3','release-src','scorpion-test-qa']);
+const skipDirs=new Set(['.git','.github','dist','_site','node_modules','docs','review','tools','tests','test','test-only','qa','backend','backend-v3','release-src','scorpion-test-qa']);
 function copyPublic(dir='',restricted=false){
   for(const entry of fs.readdirSync(path.join(root,dir),{withFileTypes:true})){
     const rel=path.posix.join(dir,entry.name),parts=rel.split('/');
@@ -88,10 +88,14 @@ async function build(){
   home=home.replace(/<small>\s*<\/small>/g,'').replace(/<button id="local-coop"/,'<button id="local-coop"');
   home=home.replace(/location.href='[^']*local-coop[^']*'/,"location.href='./local-coop/'");
   home=home.replace('</section>',`<button type="button" onclick="location.href='./gameplay/'">HEROES ON THIS BROWSER</button></section>`);
-  home=home.replace('</body>',`<script type="module" src="./release/cloud.mjs?v=${sha}"></script></body>`);
+  home=home.replace('</body>',`<script type="module" src="./test-code-entry.mjs?v=${sha}"></script><script type="module" src="./release/cloud.mjs?v=${sha}"></script></body>`);
   home=home.replace(/<p>V3[^<]*<\/p>/g,'');
   home=home.replace(/<p>Cloud save: automatic every eight seconds during gameplay<\/p>/g,'').replace('</head>','<style>html:has(.staging-session),body.staging-session{width:100%;height:100%;height:100dvh;max-width:none;margin:0;padding:0;overflow:hidden}.staging-session>h1,.staging-session>p,.staging-session>small,.staging-session #refresh{display:none!important}.staging-session #roster{position:fixed;inset:0;border:0;margin:0;padding:0;border-radius:0}.staging-session #game-frame{width:100%;height:100%;height:100dvh}</style></head>');
   write('royale/index.html',home);write('royale/interface.css',read('royale-v3-staging/interface/interface.css'));
+  // The reserved code opens a separate local sandbox. Normal cloud/game bundles
+  // and their save contracts remain unchanged.
+  write('royale/test-code-entry.mjs',read('test-only/four-powers/site-entry.mjs'));
+  cp.execFileSync(process.execPath,[path.join(root,'test-only/four-powers/build.cjs'),path.join(out,'four-powers-test')],{cwd:root,stdio:'inherit'});
   const gameplayHTML=read('royale-v3-staging/gameplay/index.html').replace(/Clothing Store · \d+ outfits/g,`Clothing Store · ${COLLECTION.length} outfits`);
   write('royale/gameplay/index.html',shell(gameplayHTML,'../',`./release/game.mjs?v=${sha}`));
   let coopHTML=shell(read('royale-v3-staging/local-coop/index.html'),'./',`../release/coop.mjs?v=${sha}`);

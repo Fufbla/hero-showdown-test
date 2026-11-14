@@ -8,6 +8,7 @@ on:
       - '.github/workflows/pages-optimized.yml'
       - 'tools/build-royale-release.cjs'
       - 'tools/release-build/**'
+      - 'test-only/four-powers/**'
       - 'royale/**'
       - 'royale-v3-staging/**'
       - 'royale-v3-motion-preview/**'
@@ -32,6 +33,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Enforce verified-release gate
         run: node tools/release-build/assert-ready.cjs
       - uses: actions/setup-node@v4
@@ -47,6 +50,8 @@ jobs:
         run: node tools/release-build/check.cjs
       - name: Verify universal starter suit rendering
         run: node --test royale-v3-staging/starter-suit/tests/starter-suit.test.mjs
+      - name: Verify reserved test code and four powers
+        run: node --import ./test-only/four-powers/register.mjs --test test-only/four-powers/tests.test.mjs test-only/four-powers/visual.test.mjs test-only/four-powers/site-entry.test.mjs
       - name: Install browser for local co-op regression
         run: npx playwright install --with-deps chromium
       - name: Verify local co-op and single-player startup before publishing
