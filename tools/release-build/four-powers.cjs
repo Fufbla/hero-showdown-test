@@ -18,8 +18,9 @@ module.exports=function(file,s){
  }
  if(file==='royale-v3-staging/kingjames/renderer.mjs'){
   s="import {drawSlamHero,legacyEffectView} from '../../royale/four-powers/art.mjs';\n"+s;
-  s=s.replace('const attackPresentation=', 'const attackPresentationDisabled=');
-  s=replace(s,'    if(attackPresentation){', '    const attackPresentation=false;\n    if(attackPresentation){');
+  // Keep the approved fireball atlas while replacing only the two melee effects.
+  s=s.replaceAll("!(attackPresentation&&h.attack?.power==='strength')",'true');
+  s=replace(s,'kingJamesAttackFX.hero(c,game,pos,visualHero);','kingJamesAttackFX.hero(c,legacyEffectView(game),pos,{...visualHero,attack:legacyEffectView(game).hero.attack});');
   s=replace(s,'const costumeBody=costume&&', 'const slamBody=drawSlamHero(c,game,pos,spriteHero,costume);\n    const costumeBody=slamBody||costume&&');
   s=s.replaceAll('drawHeroPowerOverlays(c,game,','drawHeroPowerOverlays(c,legacyEffectView(game),');
   s=s.replaceAll('kingJamesFX.draw(c,game,','kingJamesFX.draw(c,legacyEffectView(game),');

@@ -7,6 +7,7 @@ import {Game} from '../../royale/core.mjs';
 import {Renderer} from '../../royale/renderer.mjs';
 import {prepareReleaseArt} from '../../royale/release-src/presentation.mjs';
 import {heroPowerOverlayStatus} from '../../royale/v2-sprites/hero-power-overlays.mjs';
+import {kingJamesAttackFX} from '../../royale-v3-staging/kingjames/attack-fx.mjs';
 import {MotionFX,kingJamesFX} from '../../royale-v3-staging/kingjames/motion-fx.mjs';
 import {costumeSprites} from '../../royale-v3-staging/costumes/engine.mjs';
 import {costumeById} from '../../royale-v3-staging/costumes/catalog.mjs';
@@ -78,4 +79,20 @@ test('two speed trails retain their own hero appearance when the shared sprite e
   assert.equal(fx.state(g.hero,.1).echoes[0].paint.id,id);
   engine.lastPaint={id};fx.draw(c,g,{x:200,y:200},.1,'front',g.hero,engine);
  }
+});
+
+test('Promoted powers preserve the existing fireball cast and projectile atlas in both directions',async()=>{
+ // Node retains the legacy cache query; configure the renderer's exact instance.
+ const {kingJamesSprites:renderSprites}=await import('../../royale-v3-staging/kingjames/outfit-engine.mjs?v=outfits-1');
+ const prior={enabled:renderSprites.enabled,draw:renderSprites.draw,lastFrame:renderSprites.lastFrame};
+ try{
+  renderSprites.enabled=true;renderSprites.draw=body;
+  for(const face of [-1,1]){
+   const g=fixture('fireball',face,false),r=renderer();
+   renderSprites.lastFrame={outfit:'kingjames-original',state:'idle',frame:0,direction:face};
+   kingJamesAttackFX.seen.clear();r.drawPlayer(g,1,0);
+   assert.ok(kingJamesAttackFX.seen.has('projectile:'+face));
+   assert.ok(kingJamesAttackFX.seen.has('fireball:'+face));r.destroy();
+  }
+ }finally{Object.assign(renderSprites,prior);}
 });
