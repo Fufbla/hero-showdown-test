@@ -9,6 +9,7 @@ const tests=['tools/release-build/release.test.mjs','tools/release-build/interfa
  .sort().map(name=>dir+'/'+name)),
  'royale/local-coop/tests/local-coop.test.mjs','royale/local-coop/tests/setup-controller.test.mjs',
  'royale/local-coop/tests/render-view.test.mjs',
+ 'royale/local-coop/tests/presentation.test.mjs',
  'royale/local-coop/tests/asset-cache.test.mjs'];
 const result=spawnSync(process.execPath,['--expose-gc','--import','./tools/release-build/register.mjs',
  '--test','--test-concurrency=1',...tests],{stdio:'inherit'});

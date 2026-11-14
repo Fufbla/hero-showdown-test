@@ -5,20 +5,35 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
 const url=process.env.ROYALE_COOP_URL||'https://fufbla.github.io/hero-showdown-test/royale/local-coop/';
 const report={url,errors:[],rejections:[],requests:[],checks:[],physicalControllers:false};
 const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
+function installVfxProbe(){
+ window.__vfx=[];
+ const draw=CanvasRenderingContext2D.prototype.drawImage;
+ CanvasRenderingContext2D.prototype.drawImage=function(image,...args){
+  const src=image.currentSrc||image.src||'';
+  if(['world','game'].includes(this.canvas.id)&&/\/(ground-root-overlay|whirlwind-overlay|attacks)\.webp(?:\?|$)/.test(src)){
+   window.__vfx.push({asset:new URL(src).pathname.split('/').pop(),frame:args.slice(0,4),destination:args.slice(4)});
+   if(window.__vfx.length>4000)window.__vfx.shift();
+  }
+  return draw.call(this,image,...args);
+ };
+}
 (async()=>{
  await import('./register.mjs'); // Fixtures and saved snapshots use the production decoder.
  const {Game}=await import('../../royale/core.mjs');
  const {styleCDefault}=await import('../../royale/style-c-defaults.mjs');
+ const {costumeById}=await import('../../royale-v3-staging/costumes/catalog.mjs');
  const accounts=[0,1].map(i=>{
   const g=new Game({look:{...styleCDefault(i?'female':'male'),name:i?'Coop QA Nova':'Coop QA Atlas'}});
   g.hero.level=14+i;g.hero.xp=20+i;g.hero.coins=1234+i*100;g.powers.data.points=7+i;
   for(const id of ['fireball','roots','whirlwind'])g.powers.data.levels[id]=2;
   g.powers.data.equipped=['fireball','roots','whirlwind'];
+  if(i===0){const set=costumeById('fishsticks-costume');g.cosmetics={version:1,revision:1,visible:true,owned:set.pieces.map(p=>p.id),equipped:Object.fromEntries(set.pieces.map(p=>[p.category,p.id]))};}
   return {code:i?'2222222222':'1111111111',token:'isolated-fixture-'+i,slots:[1,2,3].map(n=>({slot_number:n,revision:1,snapshot:n===i+1?JSON.parse(g.save()):null})),saves:[]};
  });
  const browser=await chromium.launch({headless:true});
  try{
   const context=await browser.newContext({viewport:{width:1366,height:900}});
+  await context.addInitScript(installVfxProbe);
   await context.addInitScript(()=>{
    window.__testPads=[0,1].map(index=>({index,id:'Isolated standard controller '+index,mapping:'standard',connected:true,axes:[0,0,0,0],buttons:Array.from({length:17},()=>({pressed:false,touched:false,value:0})),timestamp:1}));
    navigator.getGamepads=()=>window.__testPads;
@@ -107,7 +122,8 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
   assert(latest(0).world.location.x>before[0]+5);assert(Math.abs(latest(1).world.location.x-before[1])<2);
   await resume();await move(1,.5,300);await pauseSave();assert(latest(1).world.location.x>before[1]+5);await resume();
   report.checks.push('Separate controllers move only their own heroes; pause/resume retains the world');
-  await pulse(0,4);await pulse(1,4);
+  await page.evaluate(()=>window.__vfx=[]);await pulse(0,4);await pulse(1,4);
+  assert((await page.evaluate(()=>window.__vfx)).some(r=>r.asset==='attacks.webp'),'Player 2 uses solo fireball artwork');
   for(let i=0;i<2;i++)assert.match(await page.locator('#powers-'+i+' .cooldown-icon').first().getAttribute('aria-label'),/\ds|Active/);
   await pulse(0,2);await pulse(1,1);
   report.checks.push('Both controllers cast equipped powers and accept punch/kick input');
@@ -144,10 +160,23 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
   report.checks.push('A later frame exception saves both checkpoints and keeps the setup loop usable');
   assert.deepEqual(report.errors,[]);assert.deepEqual(await page.evaluate(()=>window.__rejections),[]);
   report.observed=await observe();
+  report.powerArtwork=[];
+  for(const [power,button,asset] of [['roots',5,'ground-root-overlay.webp'],['whirlwind',7,'whirlwind-overlay.webp']]){
+   for(let player=0;player<2;player++){
+    await page.evaluate(()=>window.__vfx=[]);await pulse(player,button);await page.waitForTimeout(350);
+    const records=(await page.evaluate(()=>window.__vfx)).filter(r=>r.asset===asset);
+    assert(records.length>0,`Player ${player+1} draws approved ${power} artwork`);
+    assert(records.every(r=>r.frame[2]===256&&r.frame[3]===256),'One approved sprite cell per draw');
+    report.powerArtwork.push({mode:'coop',player:player+1,power,asset,frames:[...new Set(records.map(r=>r.frame.slice(0,2).join(',')))]});
+    await page.screenshot({path:dir+`/${power}-player-${player+1}.png`});await page.waitForTimeout(2200);
+   }
+  }
+  report.checks.push('Both co-op players render the approved solo Roots and Whirlwind sheets; Player 2 uses the solo fireball atlas');
   await page.screenshot({path:dir+'/browser.png',fullPage:true});
   // Independently open the unchanged single-player route with a browser-local
   // fixture; the separate context has no existing player saves.
   const soloContext=await browser.newContext({viewport:{width:1366,height:900}});
+  await soloContext.addInitScript(installVfxProbe);
   const {LocalHeroStore,PROFILE_KEY}=await import('../../royale/saves.mjs');
   const memory=new Map(),store=new LocalHeroStore({getItem:k=>memory.get(k)??null,setItem:(k,v)=>memory.set(k,v)});
   store.writeSlot(0,JSON.stringify(accounts[0].slots[0].snapshot));
@@ -156,7 +185,7 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
   await solo.goto(new URL('../gameplay/?verify='+manifest.sourceCommit,url).href,{waitUntil:'networkidle'});
   await solo.getByRole('button',{name:'Continue →',exact:true}).click();await solo.waitForTimeout(600);
   const first=await solo.locator('#game').evaluate(c=>c.toDataURL());
-  await solo.keyboard.down('d');await solo.waitForTimeout(300);await solo.keyboard.up('d');
+  await solo.keyboard.down('ArrowRight');await solo.waitForTimeout(300);await solo.keyboard.up('ArrowRight');
   assert.notEqual(await solo.locator('#game').evaluate(c=>c.toDataURL()),first,'Single player continues drawing after input');
   await solo.locator('#pause').click();assert(await solo.locator('#pause-menu').isVisible());
   await solo.locator('#resume').click();assert(!await solo.locator('#pause-menu').isVisible());
@@ -168,6 +197,14 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
    return samples>0&&colored>samples*.1;
   });
   assert.deepEqual(soloErrors,[]);await solo.screenshot({path:dir+'/single-player.png',fullPage:true});
+  // The co-op snapshot preserves recovery timers; let those expire naturally.
+  await solo.waitForTimeout(15000);
+  for(const [power,key,asset] of [['roots','Digit2','ground-root-overlay.webp'],['whirlwind','Digit3','whirlwind-overlay.webp']]){
+   await solo.evaluate(()=>window.__vfx=[]);await solo.keyboard.press(key);await solo.waitForTimeout(450);
+   const records=(await solo.evaluate(()=>window.__vfx)).filter(r=>r.asset===asset);assert(records.length>0,`Solo ${power} uses the same approved asset`);
+   report.powerArtwork.push({mode:'solo',power,asset,frames:[...new Set(records.map(r=>r.frame.slice(0,2).join(',')))]});
+   await solo.screenshot({path:dir+`/${power}-solo.png`});await solo.waitForTimeout(2200);
+  }
   report.checks.push('Single-player saved hero loads, responds to input, pauses and resumes without exceptions');
   await soloContext.close();
   report.passed=true;

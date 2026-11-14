@@ -13,8 +13,6 @@ import {CapeCloth} from '../../royale/cape.mjs';
 import {prepareStyleCMaterials} from '../../royale/style-c-materials.mjs';
 import {bindStyleCGame} from '../../royale/style-c-live.mjs';
 import {styleCDefault} from '../../royale/style-c-defaults.mjs';
-import {drawPowerWorld,drawPowerHero} from '../../royale/power-art.mjs';
-import {drawMergeWorld} from '../../royale/legendary-art.mjs';
 import {WORLD_REGIONS} from '../../royale/world.mjs';
 import {POWERS} from '../../royale/powers.mjs';
 import {itemDefinition,ownedArmorOutfits,equipmentItemActive} from '../../royale/equipment.mjs';
@@ -300,7 +298,8 @@ function updateHUD(){
  if(+$('toast').dataset.until<performance.now())$('toast').hidden=true;
 }
 function drawFollower(g,dt,alpha){
- const c=renderer.c,h=g.hero,pos={x:h.prevX+(h.x-h.prevX)*alpha,y:h.prevY+(h.y-h.prevY)*alpha};c.save();c.setTransform(renderer.dpr*renderer.scale,0,0,renderer.dpr*renderer.scale,0,0);c.translate(-renderer.camera,-renderer.cameraY);drawPowerWorld(c,g);drawMergeWorld(c,g);const pose=drawHero(c,pos.x,pos.y,g.look,h,g.time,1,{outfit:g.visualOutfit(),clothing:clothingRuntime.layers(g.cosmetics),cloth,dt:session.paused?0:dt});drawPowerHero(c,g,pos,pose);
+ const c=renderer.c,h=g.hero;c.save();c.setTransform(renderer.dpr*renderer.scale,0,0,renderer.dpr*renderer.scale,0,0);c.translate(-renderer.camera,-renderer.cameraY);
+ const pos=renderer.drawPlayer(g,alpha,session.paused?0:dt,{cloth});
  if(g.teleportEffectUntil>g.time){const t=(g.teleportEffectUntil-g.time)/.3;c.strokeStyle=`rgba(90,255,150,${t})`;c.lineWidth=4;c.beginPath();c.ellipse(h.x,h.y-h.h/2,25+(1-t)*28,60,0,0,Math.PI*2);c.stroke();}
  c.font='bold 13px system-ui';c.textAlign='center';c.lineWidth=3;c.strokeStyle='#132f29';c.fillStyle='#fff1bb';c.strokeText('P2 · '+g.look.name,pos.x,pos.y-112);c.fillText('P2 · '+g.look.name,pos.x,pos.y-112);c.restore();
 }

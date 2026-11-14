@@ -18,7 +18,7 @@ export class MotionFX{
    if(passive&&!h.dead&&h.grounded&&speed>40&&!h.flying){
     const intensity=clamp(speed/504);
     if(time-s.lastDust>.13-.065*intensity){this.emit(s,'dust',h.x-face*8,h.y,face,time,{width:45+intensity*30,height:45+intensity*30,alpha:.5+intensity*.3});s.lastDust=time;}
-    if(time-s.lastEcho>.07&&speed>220&&engine.lastPaint){s.echoes.push({x:h.x-face*18,y:h.y,born:time,paint:{...engine.lastPaint},alpha:.10+intensity*.04});s.lastEcho=time;}
+    if(time-s.lastEcho>.07&&speed>220&&s.lastPaint){s.echoes.push({x:h.x-face*18,y:h.y,born:time,paint:{...s.lastPaint},alpha:.10+intensity*.04});s.lastEcho=time;}
     if(time-(s.lastStreak??-1)>.065){this.emit(s,'streak',h.x-face*13,h.y-13,face,time,{width:80+intensity*65,height:75,alpha:.3+intensity*.5});s.lastStreak=time;}
    }
    if(passive&&!h.dead&&!h.flying&&h.jumpAge<s.jumpAge)this.emit(s,h.jumps>=2?'airJump':'takeoff',h.x,s.grounded?s.y:h.y,face,time,{width:65,height:92,alpha:.6});
@@ -44,6 +44,9 @@ export class MotionFX{
    for(const p of s.particles){const phase=clamp((time-p.born)/this.manifest.clips[p.id].duration);this.sprite(c,p.id,Math.floor(phase*8),p.x,p.y,p.width,p.height,p.face,p.alpha*(1-phase*.35),p.id==='streak'?[.9,.84]:p.id==='landing'?[.5,.84]:[.5,.98]);}
    if(h.steel&&h.flying){this.sprite(c,'shimmer',Math.floor(time*20)%8,pos.x-face*36,pos.y-27,80,42,face,.32,[.7,.5]);this.seen.add('steel-flight');}
   }else{
+   // The shared sprite engine may last have drawn the other co-op hero.
+   // Capture this owner's body only after their own draw for the next frame.
+   s.lastPaint=engine.lastPaint?{...engine.lastPaint}:null;
    if(s.changedSteel!==undefined&&time-s.changedSteel<.32){const p=(time-s.changedSteel)/.32;this.sprite(c,'shimmer',Math.floor(p*8),pos.x,pos.y-110+p*110,90,50,face,.75,[.5,.5]);}
    if(h.steel&&['strength','superKick'].includes(h.attack?.power)){
     const kind=h.attack.kind,start=kind==='punch'?.055:.10,age=h.attack.age;

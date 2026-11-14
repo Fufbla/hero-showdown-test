@@ -6,10 +6,11 @@ import {kingJamesAttackFX} from '../../royale-v3-staging/kingjames/attack-fx.mjs
 import {costumeSprites} from '../../royale-v3-staging/costumes/engine.mjs';
 import {setCosmeticPreviewRenderer} from '../../royale-v3-staging/gameplay/armor-preview.mjs';
 import {starterSuit} from '../../royale-v3-staging/starter-suit/engine.mjs';
+import {prepareHeroPowerOverlays} from '../v2-sprites/hero-power-overlays.mjs';
 
 kingJamesSprites.selected=()=>kingJamesSprites.enabled?'kingjames-original':null;
 export async function prepareReleaseArt(){
-  const ready=await Promise.all([starterSuit.preload(),kingJamesSprites.preload(),kingJamesSprites.preload(STEEL_ID),kingJamesFX.preload(),kingJamesAttackFX.preload()]);
+  const ready=await Promise.all([starterSuit.preload(),kingJamesSprites.preload(),kingJamesSprites.preload(STEEL_ID),kingJamesFX.preload(),kingJamesAttackFX.preload(),prepareHeroPowerOverlays()]);
   if(!ready.every(Boolean))throw Error('Hero artwork could not load. Please reload the game.');
   kingJamesSprites.enabled=true;
   kingJamesSprites.starter=starterSuit;
