@@ -3,7 +3,7 @@ import { CONTROL_NAMES, CONTROL_KEY, normalizeControls } from './controls.mjs';
 import {hudEquipError} from './power-upgrades.mjs';
 const $=id=>document.getElementById(id);
 const node=(tag,text,className)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(className)n.className=className;return n;};
-const labels={animal:'Animal ally',radius:'Shockwave radius (world units)',range:'Summon range (world units)',multiplier:'Damage multiplier',targets:'Maximum targets',damage:'Damage per hit',bossEffectiveness:'Boss damage effectiveness',reach:'Combat reach',kicks:'Kicks per combination',projectiles:'Fireballs per cast',pierce:'Enemies per Fireball',duration:'Duration',reduction:'All-damage reduction',dodge:'Regular enemy dodge chance',legendaryDodge:'Legendary Boss dodge chance',runBonus:'Running speed bonus',attackBonus:'Attack speed bonus',bossHitChance:'Boss hit chance during Flight',cooldown:'Cooldown'};
+const labels={targets:'Maximum targets',damage:'Damage per hit',bossEffectiveness:'Boss damage effectiveness',reach:'Combat reach',kicks:'Kicks per combination',projectiles:'Fireballs per cast',pierce:'Enemies per Fireball',duration:'Duration',reduction:'All-damage reduction',dodge:'Regular enemy dodge chance',legendaryDodge:'Legendary Boss dodge chance',runBonus:'Running speed bonus',attackBonus:'Attack speed bonus',bossHitChance:'Boss hit chance during Flight',cooldown:'Cooldown'};
 const percent=new Set(['bossEffectiveness','reduction','dodge','legendaryDodge','runBonus','attackBonus','bossHitChance']);
 function format(key,value){return `${Number((value*(percent.has(key)?100:1)).toFixed(4))}${percent.has(key)?'%':['duration','cooldown'].includes(key)?' s':key==='reach'?' units':''}`;}
 export class PowerMenu {

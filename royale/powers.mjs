@@ -13,7 +13,7 @@ export function resolveAbilitySlots(data,merge=null) {
     slots.push({id:merge.ability,level:integer(merge.level,1,20),cooldownMultiplier:FUTURE_MERGE_SLOT.cooldownMultiplier});
   return slots;
 }
-export const POWER_IDS = ['strength','superKick','fireball','flight','steel','roots','agility','speed','whirlwind','animalAllies','seismicSmash'];
+export const POWER_IDS = ['strength','superKick','fireball','flight','steel','roots','agility','speed','whirlwind'];
 export const POWERS = Object.freeze({
   strength: { name: 'Super Strength', icon: 'ϟ', cooldown: 8, offensive: true, summary: 'One mighty forward punch. Yellow electricity is visual only.' },
   superKick: { name: 'Super Kick', icon: '⌁', cooldown: 6, after: true, offensive: true, summary: 'A focused martial arts combination. Retargets only within reach.' },
@@ -23,8 +23,6 @@ export const POWERS = Object.freeze({
   roots: { name: 'Ground Roots', icon: '♧', cooldown: 10, after: true, offensive: true, summary: 'Trap grounded foes. Squeeze once per second. Bosses are slowed.' },
   agility: { name: 'Agility', icon: '◇', cooldown: 10, after: true, summary: 'Automatically roll a dodge against each valid incoming attack.' },
   speed: { name: 'Speed', icon: '»', passive: true, summary: 'Permanent running and attack speed. No damage bonus or active slot.' },
-  animalAllies: { name:'Animal Allies',icon:'🐾',cooldown:6,offensive:true,summary:'Summon one animal for a quick strike. Wolf, Hawk, Bear, Panther and Spirit Stag.' },
-  seismicSmash: { name:'Seismic Smash',icon:'✊',cooldown:6,offensive:true,summary:'Ground-only shockwave that grows in range, damage and number of targets.' },
   whirlwind: { name: 'Whirlwind', icon: '≋', cooldown: 12, after: true, offensive: true, summary: 'Lift regular foes. Damage once per second. Bosses stay grounded.' },
 });
 export const BALANCE = Object.freeze({ fireballSpeed: 520, fireballLife: 1.6, burstInterval: .12, controlRange: 260, combatGrace: 5, tree: { x: 290, y: 600 }, flightSpeed: 250 });
@@ -47,21 +45,9 @@ export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
   const armorLevels=level>0 ? integer(({fireball:equipment.fireballLevels,steel:equipment.steelLevels,roots:equipment.rootsLevels,strength:equipment.strengthLevels,whirlwind:equipment.whirlwindLevels,superKick:equipment.superKickLevels,speed:equipment.speedLevels,agility:equipment.agilityLevels,flight:equipment.flightLevels})[id]||0,0,9) : 0;
   level=integer(level,1,20)+armorLevels;const n=tier(level),eq=equipmentStats(equipment),strength=10+2*(heroLevel-1)+eq.strength;
   const base={level,cooldown:POWERS[id]?.cooldown||0};
-  const benchmark=(points,value)=>interpolate(level,points.map(([at,v])=>[at,v]));
   switch(id) {
-    case 'strength': return {...base,targets:n,damage:offensiveDamage(id,45+8*(level-1)+2*(strength-eq.strength),level,heroLevel)+2*eq.strength+eq.damage,bossEffectiveness:scale(Math.min(level,POWER_CAP),.25,1),reach:86};
-    case 'superKick': return {...base,kicks:n+1,damage:offensiveDamage(id,16+2*(level-1)+.5*(strength-eq.strength),level,heroLevel)+.5*eq.strength+eq.damage,reach:105};
-    case 'animalAllies': {
-      const animal=level>=20?'spirit-stag':level>=15?'panther':level>=10?'bear':level>=5?'hawk':'wolf';
-      const multiplier=benchmark([[1,1],[4,1.1],[5,1.2],[9,1.45],[10,1.6],[14,1.85],[15,2],[19,2.35],[20,2.5]]);
-      return {...base,animal,range:260,multiplier,damage:offensiveDamage(id,28+2*(heroLevel-1),level,heroLevel)*multiplier+eq.damage};
-    }
-    case 'seismicSmash': {
-      const radius=level>=20?180:level>=15?144:level>=10?112:level>=5?80:60;
-      const targets=level>=20?5:level>=15?4:level>=10?3:level>=5?2:1;
-      const multiplier=benchmark([[1,1],[4,1.15],[5,1.3],[9,1.55],[10,1.7],[14,2.05],[15,2.2],[19,2.65],[20,2.8]]);
-      return {...base,radius,targets,multiplier,damage:offensiveDamage(id,25+2*(heroLevel-1),level,heroLevel)*multiplier+eq.damage};
-    }
+    case 'strength': return {...base,targets:n,damage:offensiveDamage(id,45+8*(level-1)+2*(strength-eq.strength),level,heroLevel)+2*eq.strength+eq.damage,bossEffectiveness:scale(Math.min(level,POWER_CAP),.25,1),reach:59};
+    case 'superKick': return {...base,kicks:n+1,damage:offensiveDamage(id,16+2*(level-1)+.5*(strength-eq.strength),level,heroLevel)+.5*eq.strength+eq.damage,reach:76};
     case 'fireball': return {...base,projectiles:level>=20?3:level>=10?2:1,damage:offensiveDamage(id,24+5*(level-1),level,heroLevel)+eq.fireball,pierce:level>=20?2:1};
     case 'flight': return {...base,duration:level+2,bossHitChance:.5};
     case 'steel': return {...base,reduction:interpolate(level,[[1,.2],[5,.3],[10,.45],[15,.6],[20,.75],[29,.84]]),duration:interpolate(level,[[1,3],[5,4],[10,5],[15,6],[20,8],[29,10.25]])};
@@ -76,7 +62,7 @@ export function normalizePowers(raw,heroLevel,{strict=false,allowOverBudget=fals
   const levels=Object.fromEntries(POWER_IDS.map(id=>[id,integer(raw?.levels?.[id],0,20)]));
   const spent=Object.values(levels).reduce((a,b)=>a+b,0),earned=Math.max(0,heroLevel-1);
   // Never silently refund or redistribute an invalid ledger.
-  if((!allowOverBudget&&spent>earned) || (strict && (!raw || !raw.levels || POWER_IDS.some(id=>!Number.isInteger(raw.levels[id]??(['animalAllies','seismicSmash'].includes(id)?0:undefined))||(raw.levels[id]??0)<0||(raw.levels[id]??0)>20)))) return null;
+  if((!allowOverBudget&&spent>earned) || (strict && (!raw || !raw.levels || POWER_IDS.some(id=>!Number.isInteger(raw.levels[id])||raw.levels[id]<0||raw.levels[id]>20)))) return null;
   const used=new Set(),equipped=Array.from({length:ACTIVE_SLOTS},(_,i)=>{
     const id=raw?.equipped?.[i];if(!POWER_IDS.includes(id)||POWERS[id].passive||!levels[id]||used.has(id))return null;used.add(id);return id;
   });
@@ -97,7 +83,7 @@ export function segmentHit(x,y,nx,ny,rect,r=0) {
 }
 export class PowerSystem {
   constructor(game,data) {
-    Object.defineProperty(this,'game',{value:game});this.data=data;this.cooldowns={...data.recovery};this.active={};this.projectiles=[];this.projectilePool=new ProjectilePool(12);this.bursts=[];this.effects=[];
+    Object.defineProperty(this,'game',{value:game});this.data=data;this.cooldowns={...data.recovery};this.active={};this.projectiles=[];this.projectilePool=new ProjectilePool(12);this.bursts=[];
     // The slot resolver is extensible; Phase 3 exposes only three standard slots.
     this.mergeEntitlement=null;
   }
@@ -113,8 +99,7 @@ export class PowerSystem {
     if(g.paused||h.dead||g.disruptedPower===id||!POWER_IDS.includes(id)||def.passive||!resolved)return false;
     slot=slot||resolved;
     if(id==='flight'&&this.flying){this.end('flight');return true;}
-    if(!slot.level||this.active[id]||(this.cooldowns[id]||0)>EPS||h.stun>0||(this.flying&&def.offensive&&!['fireball','animalAllies'].includes(id)))return false;
-    if(id==='seismicSmash'&&(!h.grounded||this.flying))return false;
+    if(!slot.level||this.active[id]||(this.cooldowns[id]||0)>EPS||h.stun>0||(this.flying&&def.offensive&&id!=='fireball'))return false;
     if(id==='flight'&&(!h.grounded||h.attack||this.active.superKick))return false;
     if(['strength','superKick'].includes(id)&&(h.attack||this.active.superKick))return false;
     const s=powerStats(id,slot.level,{heroLevel:h.level,equipment:g.equipment});s.cooldown*=slot.cooldownMultiplier;
@@ -126,19 +111,6 @@ export class PowerSystem {
     if(def.offensive)g.markCombat();
     if(id==='strength'){g.startAttack('punch');Object.assign(h.attack,{power:id,stats:s});}
     if(id==='superKick'){state.left=s.kicks;state.target=null;this.nextKick(state);}
-    if(id==='animalAllies'){
-      const target=g.enemies.filter(e=>e.state!=='dead'&&e.protection<=0&&Math.hypot(e.x-h.x,e.y-h.y)<s.range).sort((a,b)=>Math.hypot(a.x-h.x,a.y-h.y)-Math.hypot(b.x-h.x,b.y-h.y)||a.id-b.id)[0];
-      if(target){
-        const hits=s.animal==='panther'?2:1;
-        for(let i=0;i<hits;i++)g.damageEnemy(target,s.damage/hits,{kind:'animalAllies',stagger:s.animal!=='wolf'&&s.animal!=='hawk',knock:s.animal==='spirit-stag'?35:0,face:Math.sign(target.x-h.x)||h.face});
-        this.effects.push({id,animal:s.animal,x:h.x,y:h.y,targetX:target.x,targetY:target.y,face:Math.sign(target.x-h.x)||h.face,age:0,duration:.48});
-      }else this.effects.push({id,animal:s.animal,x:h.x,y:h.y,targetX:h.x+h.face*60,targetY:h.y,face:h.face,age:0,duration:.3});
-    }
-    if(id==='seismicSmash'){
-      const targets=g.enemies.filter(e=>e.state!=='dead'&&e.protection<=0&&Math.hypot(e.x-h.x,e.y-h.y)<=s.radius+e.w/2).sort((a,b)=>Math.hypot(a.x-h.x,a.y-h.y)-Math.hypot(b.x-h.x,b.y-h.y)||a.id-b.id).slice(0,s.targets);
-      for(const target of targets)g.damageEnemy(target,s.damage,{kind:'seismicSmash',stagger:true,knock:12+s.level,face:Math.sign(target.x-h.x)||h.face});
-      this.effects.push({id,x:h.x,y:h.y,radius:s.radius,level:s.level,age:0,duration:.42});
-    }
     if(id==='fireball'){this.bursts.push({...state,left:s.projectiles,next:0});h.castAge=0;}
     if(id==='flight'){for(const effect of this.game.mergeEffects.filter(e=>e.offensive))this.game.endMergeEffect(effect);this.game.mergeShots=[];for(const other of ['roots','whirlwind'])this.end(other);h.attack=null;h.attackBuffer=null;h.jumpBuffer=0;h.grounded=false;h.vy=-170;h.jumpAge=100;h.jumps=1;}
     if(id==='roots'||id==='whirlwind'){
@@ -165,7 +137,7 @@ export class PowerSystem {
     this.sync();
   }
   sync(){const h=this.game.hero;h.flying=this.flying;h.steel=!!this.active.steel;h.agile=!!this.active.agility;}
-  cancelEffects(){for(const id of Object.keys(this.active))this.end(id);this.bursts.length=0;this.effects.length=0;clearProjectiles(this.projectiles,this.projectilePool);}
+  cancelEffects(){for(const id of Object.keys(this.active))this.end(id);this.bursts.length=0;clearProjectiles(this.projectiles,this.projectilePool);}
   incoming(amount,source={}) {
     const g=this.game;
     if(this.flying&&(!isBoss(source)||g.random()>=.5))return null;
@@ -191,7 +163,6 @@ export class PowerSystem {
     }
   }
   step(dt) {
-    this.effects=this.effects.filter(f=>(f.age+=dt)<f.duration);
     const g=this.game,h=g.hero;
     for(const id of POWER_IDS)this.cooldowns[id]=Math.max(0,(this.cooldowns[id]||0)-dt);
     for(const [id,a] of Object.entries(this.active)){

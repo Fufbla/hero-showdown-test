@@ -13,31 +13,7 @@ export function drawEris(c,time){
   ellipse(c,-2,-82,11,14,'#eed69a');line(c,[[-5,-85],[-1,-91],[4,-82],[-2,-72]],'#7b8056',1.5);
   c.fillStyle='#183f40';c.beginPath();c.roundRect(-61,12,122,23,7);c.fill();c.fillStyle='#ecdfb3';c.font='10px system-ui';c.textAlign='center';c.fillText('TREE OF ERIS',0,27);c.restore();
 }
-function drawNewPowerEffects(c,game){
-  for(const f of game.powers.effects||[]){
-    const p=f.age/f.duration;
-    c.save();c.globalAlpha=Math.max(0,1-p);c.lineCap='round';
-    if(f.id==='seismicSmash'){
-      const radius=Math.max(9,f.radius*p);c.strokeStyle='#cafa65';c.lineWidth=3+f.level*.13;
-      c.beginPath();c.ellipse(f.x,f.y,radius,radius*.2,0,0,Math.PI*2);c.stroke();
-      c.strokeStyle='#ffe486';c.lineWidth=2;
-      for(let i=0;i<7;i++){const a=(i/7)*Math.PI*2;const x=f.x+Math.cos(a)*radius*.75,y=f.y+Math.sin(a)*radius*.16;
-        c.beginPath();c.moveTo(x,y);c.lineTo(x+Math.cos(a)*radius*.2,y+Math.sin(a)*radius*.06);c.stroke();}
-    }else if(f.id==='animalAllies'){
-      const t=Math.min(1,p*2.7),x=f.x+(f.targetX-f.x)*t,y=f.y+(f.targetY-f.y)*t-25;
-      c.translate(x,y);c.scale(f.face,1);c.shadowBlur=13;c.shadowColor='#77ff7e';
-      c.fillStyle=f.animal==='spirit-stag'?'#73f4e9':f.animal==='bear'?'#8b5a34':f.animal==='hawk'?'#bb8a4d':f.animal==='panther'?'#244a37':'#c7d0ce';
-      c.beginPath();c.ellipse(0,0,f.animal==='bear'?28:21,15,0,0,Math.PI*2);c.fill();
-      c.beginPath();c.ellipse(17,-6,12,11,0,0,Math.PI*2);c.fill();
-      c.fillStyle='#fff7ba';c.beginPath();c.arc(23,-9,2.6,0,Math.PI*2);c.fill();
-      if(f.animal==='hawk'){c.strokeStyle='#d7b57e';c.lineWidth=8;c.beginPath();c.moveTo(-5,0);c.lineTo(-25,-22);c.lineTo(-10,-7);c.stroke();}
-      if(f.animal==='spirit-stag'){c.strokeStyle='#7afcf4';c.lineWidth=3;for(const side of [-1,1]){c.beginPath();c.moveTo(16,-16);c.lineTo(16+side*10,-37);c.lineTo(16+side*20,-42);c.stroke();}}
-    }
-    c.restore();
-  }
-}
 export function drawPowerWorld(c,game){
-  drawNewPowerEffects(c,game);
   const time=game.time;
   const effect=drawEnemyControlVfx(c,game);
   // Retain a conservative fallback only while the atlases are loading, or
@@ -67,16 +43,6 @@ export function drawPowerHero(c,game,pos,pose){
       line(c,points,j%2?'#fff6a0':'#ffe342',1.4+level*.035);
     }
     c.restore();
-  }
-  if(h.attack?.power==='strength'||h.attack?.power==='superKick'){
-    const a=h.attack,reach=a.stats?.reach||70,level=a.stats?.level||1;
-    const startup=a.power==='strength'?.055:.10,age=a.age;
-    if(age>=startup&&age<startup+.16){
-      const alpha=Math.max(0,1-(age-startup)/.16),x=pos.x+a.face*(reach-9),y=pos.y-(a.power==='strength'?45:29);
-      c.save();c.translate(x,y);c.globalAlpha=alpha;c.strokeStyle=a.power==='strength'?'#ffe761':'#8aefeb';c.lineWidth=2+level*.14;
-      for(let j=0;j<7;j++){const angle=j*Math.PI*2/7;const length=(9+level*.48)*(1+Math.sin((age-startup)*22)*.15);c.beginPath();c.moveTo(Math.cos(angle)*5,Math.sin(angle)*5);c.lineTo(Math.cos(angle)*length,Math.sin(angle)*length);c.stroke();}
-      c.strokeStyle='#fff9d2';c.lineWidth=2;c.beginPath();c.arc(0,0,6+level*.25,0,Math.PI*2);c.stroke();c.restore();
-    }
   }
   if(h.agile){c.save();c.globalAlpha=.5;for(let i=0;i<3;i++)line(c,[[pos.x-h.face*(29+i*6),pos.y-58+i*15],[pos.x-h.face*(38+i*6),pos.y-50+i*15]],'#dbeec8',1.5);c.restore();}
   if(h.flying){for(let i=0;i<2;i++)line(c,[[pos.x-15-i*7,pos.y+8+i*9],[pos.x-3,pos.y+12+i*9],[pos.x+15+i*7,pos.y+8+i*9]],'#edf2c48c',1.4);}

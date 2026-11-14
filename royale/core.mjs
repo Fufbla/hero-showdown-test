@@ -141,7 +141,7 @@ export class Game {
     // Visual flinch never resets an attack or recovery timer. Brief pauses have a refractory window.
     if(!isBoss(e))e.desperate=e.hp>0&&e.hp<=e.maxHp*.5;
     if(stagger&&!isBoss(e)&&(e.flinchGuard||0)<=0){e.stagger=Math.max(e.stagger||0,.045);e.flinchGuard=.55;}
-    if(knock&&(this.hero.attack?.power==='strength'||kind==='seismicSmash'||kind==='animalAllies'||kind.startsWith('merge:'))&&!e.rooted&&!e.lifted&&!isBoss(e))e.x=clamp(e.x+face*knock,e.surface.x+e.w/2,e.surface.x+e.surface.w-e.w/2);
+    if(knock&&(this.hero.attack?.power==='strength'||kind.startsWith('merge:'))&&!e.rooted&&!e.lifted&&!isBoss(e))e.x=clamp(e.x+face*knock,e.surface.x+e.w/2,e.surface.x+e.surface.w-e.w/2);
     this.emit('hit',{x:e.x,y:e.y-e.h/2,kind});
     if(isBoss(e)&&e.type.startsWith('boss-')){this.bossDamaged(e);}else if(e.hp<=0){e.state='dead';e.deadAge=0;e.respawn=e.summoned?0:this.respawnDelay(e);e.rooted=false;e.lifted=false;this.reward(e);}
     return true;
@@ -164,7 +164,7 @@ export class Game {
   attackBox() {
     const h = this.hero, a = h.attack;
     if (!a) return null;
-    const reach = a.stats?.reach || ATTACKS[a.kind].reach;
+    const reach = ATTACKS[a.kind].reach;
     return { x: a.face > 0 ? h.x + 3 : h.x - reach - 3, y: h.y - 71, w: reach, h: 69 };
   }
   emit(type, data = {}) { this.events.push({ type, ...data }); }
