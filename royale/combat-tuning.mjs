@@ -21,8 +21,8 @@ export function damageToHero(amount,heroLevel,source){
  const gap=Number.isFinite(source.level)?Math.max(0,source.level-heroLevel):0;
  return amount*(1+gap/50);
 }
-const MASTERY=Object.freeze({strength:6,superKick:4.5,fireball:3,roots:14,whirlwind:12});
-const HERO_GROWTH=Object.freeze({strength:0,superKick:0,fireball:2,roots:.45,whirlwind:.6});
+const MASTERY=Object.freeze({strength:6,superKick:4.5,fireball:3,roots:14,whirlwind:12,animalAllies:1,seismicSmash:1});
+const HERO_GROWTH=Object.freeze({strength:0,superKick:0,fireball:2,roots:.45,whirlwind:.6,animalAllies:.4,seismicSmash:.4});
 export function offensiveDamage(id,innate,effectiveLevel,heroLevel){
  const learnedBand=Math.max(0,Math.min(19,effectiveLevel-1));
  const heroMastery=.35+.65*Math.min(1,Math.max(0,heroLevel-1)/98);
