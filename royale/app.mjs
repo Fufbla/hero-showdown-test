@@ -171,7 +171,8 @@ const input=new Input(document,()=>{
  else backToPause();
 },loadControls(storage),()=>backToPause());
 const journeyMenu=new JourneyMenu(()=>game,persist,say,resume,transaction,confirmTravelSave);
-const powerUpgrades=new InstantPowerUpgrades(()=>({game,store,index:activeSlot,heroId:activeId,blocked:!online()&&activeId&&multiplayerMenu.isLinked(activeId),remote:online()?multiplayerMenu.session:null}));
+const skillResetReplies=new Map();let skillResetBlocked=false;
+const powerUpgrades=new InstantPowerUpgrades(()=>({game,store,index:activeSlot,heroId:activeId,blocked:skillResetBlocked||!online()&&activeId&&multiplayerMenu.isLinked(activeId),remote:online()?multiplayerMenu.session:null,resetAccount:codePlay?resetSkillsOnAccount:null}));
 const powerMenu=new PowerMenu(()=>game,persist,say,powerUpgrades),controlMenu=new ControlMenu(input,storage,say);
 const renderer=new Renderer($('game')),creator=new Creator(),powerButtons=[...document.querySelectorAll('.power-button')];
 // Shared transparent overlays are appearance-independent; failures fall back to canvas VFX.
@@ -685,7 +686,7 @@ requestAnimationFrame(frame);
 // The code-save game is opt-in and isolated from ordinary browser hero slots.
 // Send exact in-memory progress every eight seconds; the parent owns cloud writes.
 function sendCodeProgress(force=false){
- if(!codePlay||!game.started||(!force&&screen!=='play')||criticalPending||powerUpgrades.busy||online())return;
+ if(skillResetBlocked||!codePlay||!game.started||(!force&&screen!=='play')||criticalPending||powerUpgrades.busy||online())return;
  try{const selected=Number(activeSlot);if(!Number.isInteger(selected)||selected<0||selected>2)return;const snapshot=game.save();if(!snapshot)return;const parsed=JSON.parse(snapshot);console.info('[V3 live hero]',{slot:selected+1,x:game.hero.x,y:game.hero.y,savedX:parsed.world?.location?.x,savedY:parsed.world?.location?.y,xp:game.hero.xp,coins:game.hero.coins});window.parent.postMessage({type:'royale-code-progress',slot:selected,snapshot,heroId:activeId},location.origin);}catch{}
 }
 if(codePlay)setInterval(sendCodeProgress,8000);
@@ -698,3 +699,19 @@ function pausePanel(panel){
 $('open-my-hero').onclick=()=>pausePanel('hero');$('pause-back').onclick=()=>pausePanel('home');
 
 const brightness=$('display-brightness');brightness.value=storage.getItem('healthia.royale.brightness')||100;const setBrightness=()=>{$('game').style.filter=`brightness(${Number(brightness.value)/100})`;try{storage.setItem('healthia.royale.brightness',brightness.value);}catch{}};brightness.oninput=setBrightness;setBrightness();
+
+// Paid resets are acknowledged by the authenticated parent before the hero changes.
+
+window.addEventListener('message',e=>{
+ if(e.origin!==location.origin||e.source!==parent||e.data?.type!=='royale-skills-reset')return;
+ const finish=skillResetReplies.get(e.data.requestId);if(finish){skillResetReplies.delete(e.data.requestId);finish(e.data.result);}
+});
+function resetSkillsOnAccount(snapshot){
+ if(!codePlay||params.get('codePlay')!=='v3'||parent===window||skillResetBlocked)return Promise.resolve({ok:false,error:'Reload this hero through its account before resetting skills.'});
+ return new Promise(resolve=>{
+  const requestId=crypto.randomUUID();
+  const timer=setTimeout(()=>{if(skillResetReplies.delete(requestId)){skillResetBlocked=true;resolve({ok:false,error:'Cloud reset was not acknowledged. Reload this hero before retrying; no second charge will be attempted.'});}},20000);
+  skillResetReplies.set(requestId,result=>{clearTimeout(timer);if(!result?.ok)skillResetBlocked=true;resolve(result);});
+  parent.postMessage({type:'royale-skills-reset',requestId,slot:activeSlot,snapshot},location.origin);
+ });
+}

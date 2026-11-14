@@ -1,5 +1,6 @@
 import {decodeSave} from './core.mjs';
 import {POWERS, POWER_IDS, POWER_CAP, ACTIVE_SLOTS} from './powers.mjs';
+import {skillResetPreview,applySkillReset} from './skill-reset.mjs';
 
 const fail=error=>({ok:false,error});
 
@@ -47,6 +48,31 @@ export function powerUpgradeSnapshot(game,previous,id){
 
 export class InstantPowerUpgrades{
   constructor(context){this.context=context;this.busy=false;}
+  async reset({confirmed=false}={}){
+    if(!confirmed)return fail('Confirm the 1,000-coin skill reset.');
+    if(this.busy)return fail('A power change is being saved.');
+    const {game,store,index,heroId,blocked,remote,resetAccount}=this.context();
+    if(blocked||remote||store.cloud)return fail('Reconnect this hero through the game’s account login before resetting.');
+    const record=store.slot(index),quote=skillResetPreview(game);
+    if(!quote.ok)return quote;
+    if(!record||record.id!==heroId||!store.writable)return fail('Select a writable hero before resetting.');
+    this.busy=true;
+    try{
+      // Save the complete pre-reset hero first so exact coin deduction and the
+      // point refund can be validated without discarding recent gameplay.
+      const baseline=decodeSave(game.save());
+      const prepared=store.writeSlot(index,baseline,{expectedId:heroId,region:record.lastRegion,requireDurable:true});
+      if(!prepared?.ok)return prepared||fail('Hero could not be saved. No coins were spent.');
+      const result=resetAccount?await resetAccount(baseline):{ok:true,...quote};
+      if(!result?.ok)return result||fail('Skill reset was not confirmed. Reload to reconcile before retrying.');
+      const snapshot=decodeSave(JSON.stringify(result.snapshot));
+      if(!snapshot)return fail('Skill reset response was invalid. Reload this hero.');
+      const saved=store.writeSlot(index,snapshot,{expectedId:heroId,region:record.lastRegion,requireDurable:true,allowPowerReset:true});
+      if(!saved?.ok)return fail(resetAccount?'Cloud reset saved. Reload this hero to restore its confirmed points.':saved?.error||'Reset was not saved. No coins were spent.');
+      applySkillReset(game,snapshot);
+      return {ok:true,points:snapshot.powers.points,refunded:quote.refunded,cost:quote.cost,storage:resetAccount?'cloud':'local'};
+    }catch(error){return fail(error.message);}finally{this.busy=false;}
+  }
   async remoteChange(remote,method,args){this.busy=true;try{const result=await remote.command(method,args);return result===false?fail('This power change is unavailable.'):typeof result==='object'?result:{ok:true};}catch(error){return fail(error.message);}finally{this.busy=false;}}
   async equip(slot, id) {
     if (this.busy) return fail('A power change is being saved.');

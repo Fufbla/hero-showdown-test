@@ -27,7 +27,7 @@ test('Reserved code supports Enter and ignores other buttons and composing text'
  const p=page('0000000000');p.listeners.click({...p.event,target:{}});p.listeners.keydown({...p.event,isComposing:true});
  assert.equal(p.destinations.length,0);p.listeners.keydown(p.event);assert.equal(p.destinations.length,1);
 });
-test('Website packages the sandbox separately from unchanged production save contracts',()=>{
+test('Website packages the sandbox separately while production receives the approved powers',()=>{
  const read=p=>fs.readFileSync('_site/'+p,'utf8');
  assert.match(read('royale/index.html'),/src="\.\/test-code-entry\.mjs\?v=/);
  assert.equal(read('royale/test-code-entry.mjs'),fs.readFileSync('test-only/four-powers/site-entry.mjs','utf8'));
@@ -35,7 +35,8 @@ test('Website packages the sandbox separately from unchanged production save con
  assert.equal(sandbox.testAccount,'0000000000');assert.equal(sandbox.cloudWrites,false);
  assert.equal(normal.saveContract.profileKey,'healthia.royale.profiles.v2');
  assert.equal(normal.saveContract.cloudPrefix,'royale-v3-play:');assert.equal(normal.saveContract.databaseMigration,false);
- for(const file of Object.keys(normal.bundles))assert.equal(/["']0000000000["']|animalAllies|seismicSmash|fourPowerReview/.test(read(file)),false,file);
+ for(const file of Object.keys(normal.bundles))assert.equal(/["']0000000000["']|fourPowerReview/.test(read(file)),false,file);
+ const production=Object.keys(normal.bundles).map(read).join('\n');assert.match(production,/animalAllies/);assert.match(production,/seismicSmash/);assert.match(production,/royale-skills-reset/);assert.match(production,/reset-powers/);
  assert.equal(fs.existsSync('_site/test-only'),false);
  for(const file of ['gameplay/index.html','local-coop/index.html','release/game.mjs','release/coop.mjs'])assert.ok(read('four-powers-test/'+file).length);
 });

@@ -4,6 +4,7 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
 const esbuild=require('./release-build/node_modules/esbuild');
 const transform=require('./release-build/transform.cjs');
 const fashionMap=require('./release-build/fashion-map.cjs');
+const powerMap=require('./release-build/four-powers-map.cjs');
 const root=path.resolve(__dirname,'..'),out=path.resolve(process.argv[2]||path.join(root,'_site'));
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const write=(p,s)=>{const f=path.join(out,p);fs.mkdirSync(path.dirname(f),{recursive:true});fs.writeFileSync(f,s);};
@@ -25,8 +26,8 @@ const runtimePlugin={name:'approved-v3-release',setup(build){
     let rel=path.relative(root,original).replaceAll(path.sep,'/');
     if(rel.startsWith('../'))throw Error('Import escapes project: '+rel);
     // Fallback adapters deliberately import the underlying shared implementation.
-    if(!/[?&](?:costume-base|fashion-base|bossFallback)=1/.test(args.path)){
-      rel=mappings.get(rel)||rel;rel=fashionMap[rel]||rel;
+    if(!/[?&](?:costume-base|fashion-base|bossFallback|four-base)=1/.test(args.path)){
+      rel=mappings.get(rel)||rel;rel=fashionMap[rel]||rel;rel=powerMap[rel]||rel;
     }
     if(/\/(?:tests?|qa|backend-v3)\//.test(rel)||/(?:practice|launcher|outfit-wardrobe|v2-test-hero|boss-qa|input-qa|vertical-qa|legendary-qa|phase10-qa)\.mjs$/.test(rel))throw Error('Developer module entered release: '+rel);
     return {path:path.join(root,rel)};

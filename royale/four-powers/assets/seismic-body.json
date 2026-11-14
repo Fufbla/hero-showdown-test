@@ -1,0 +1,189 @@
+{
+  "version": 1,
+  "id": "seismic-starter",
+  "atlas": "seismic-body.png",
+  "cell": [
+    256,
+    256
+  ],
+  "foot": [
+    128,
+    230
+  ],
+  "worldScale": 0.62,
+  "head": {
+    "scale": 0.62
+  },
+  "frames": [
+    {
+      "rect": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourceRect": [
+        108,
+        136,
+        301,
+        447
+      ],
+      "paintRect": [
+        75.905,
+        76.82,
+        103.845,
+        154.215
+      ],
+      "sourceNeck": [
+        172,
+        114
+      ],
+      "head": [
+        135.245,
+        116.15,
+        0
+      ],
+      "hand": [
+        155.245,
+        146.15
+      ],
+      "chest": [
+        136.245,
+        145.15,
+        0
+      ]
+    },
+    {
+      "rect": [
+        256,
+        0,
+        256,
+        256
+      ],
+      "sourceRect": [
+        637,
+        238,
+        364,
+        344
+      ],
+      "paintRect": [
+        74.87,
+        112.01,
+        125.58,
+        118.68
+      ],
+      "sourceNeck": [
+        217,
+        27
+      ],
+      "head": [
+        149.735,
+        121.325,
+        0.12
+      ],
+      "hand": [
+        169.735,
+        151.325
+      ],
+      "chest": [
+        150.735,
+        150.325,
+        0.12
+      ]
+    },
+    {
+      "rect": [
+        512,
+        0,
+        256,
+        256
+      ],
+      "sourceRect": [
+        1151,
+        289,
+        396,
+        296
+      ],
+      "paintRect": [
+        59.69,
+        129.605,
+        136.62,
+        102.12
+      ],
+      "sourceNeck": [
+        248,
+        31
+      ],
+      "head": [
+        145.25,
+        140.3,
+        0.2
+      ],
+      "hand": [
+        165.25,
+        230
+      ],
+      "chest": [
+        146.25,
+        169.3,
+        0.2
+      ]
+    },
+    {
+      "rect": [
+        768,
+        0,
+        256,
+        256
+      ],
+      "sourceRect": [
+        1722,
+        238,
+        344,
+        346
+      ],
+      "paintRect": [
+        72.8,
+        112.01,
+        118.68,
+        119.37
+      ],
+      "sourceNeck": [
+        209,
+        27
+      ],
+      "head": [
+        144.905,
+        121.325,
+        0.1
+      ],
+      "hand": [
+        164.905,
+        151.325
+      ],
+      "chest": [
+        145.905,
+        150.325,
+        0.1
+      ]
+    }
+  ],
+  "animations": {
+    "seismicSmash": {
+      "frames": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "times": [
+        0,
+        0.1,
+        0.2,
+        0.42
+      ],
+      "duration": 0.58
+    }
+  },
+  "note": "Complete authored body frames. Recolor with existing starter suit palette routine; composite existing UniversalHead with unchanged head scale. Draw existing cape per complete frame only; no independent limb transforms."
+}

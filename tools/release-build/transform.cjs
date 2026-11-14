@@ -79,5 +79,6 @@ module.exports=function transform(file,s){
   if(file==='royale-v3-staging/gameplay/serialize.mjs'){
     s=s.replace("new URL('../../royale/local-coop/json-worker.mjs',import.meta.url)","new URL('../../royale/release/json-worker.mjs',import.meta.url)");
   }
+  s=require('./four-powers.cjs')(file,s);
   return s.replaceAll('V3 cloud hero','hero').replaceAll('V3 cloud','cloud');
 };

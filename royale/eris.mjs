@@ -10,7 +10,7 @@ export function normalizeEconomy(raw){
   if(raw==null)return emptyEconomy();
   const keys=['revision','purchased','sold','discarded','coinsSpent','coinsSold'];
   if(keys.some(k=>!Number.isSafeInteger(raw[k])||raw[k]<0)||!Array.isArray(raw.recent)||raw.recent.length>20)return null;
-  if(raw.recent.some(r=>!r||!Number.isSafeInteger(r.id)||r.id<1||r.id>raw.revision||!['purchase','sale','discard','reward','appearance','roots','upgrade','equip','chest','heal','legendary'].includes(r.kind)||!Number.isFinite(r.coins)))return null;
+  if(raw.recent.some(r=>!r||!Number.isSafeInteger(r.id)||r.id<1||r.id>raw.revision||!['purchase','sale','discard','reward','appearance','roots','upgrade','power-reset','equip','chest','heal','legendary'].includes(r.kind)||!Number.isFinite(r.coins)))return null;
   return {...Object.fromEntries(keys.map(k=>[k,raw[k]])),recent:raw.recent.map(r=>({id:r.id,kind:r.kind,coins:r.coins}))};
 }
 export function normalizeSanctuary(raw,world,arena){

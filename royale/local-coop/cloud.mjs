@@ -34,6 +34,21 @@ export class CloudProfile {
     this.slots=structuredClone(slots);return this.slots;
   }
   key(slot){return PREFIX+this.identity+':'+slot;}
+  async resetPowers(slot,snapshot){
+    if(this.blocked.has(slot)||this.mutating.has(slot))throw Error('Reload this hero before resetting skills.');
+    this.mutating.add(slot);
+    try{
+      await this.queues.get(slot);
+      const row=this.slots.find(r=>r.slot_number===slot);
+      if(!row?.snapshot)throw Error('Choose an existing hero.');
+      const result=await this.call('reset-powers',{slot,revision:row.revision,snapshot,confirmed:true});
+      if(!result.snapshot||result.revision!==row.revision+1)throw Error('Skill reset acknowledgement was incomplete.');
+      Object.assign(row,result);
+      this.archiveLatest(slot);this.storage?.removeItem(this.key(slot));
+      return {ok:true,...result};
+    }catch(error){this.blocked.add(slot);throw Error(error.message+' Reload this hero before retrying the reset.');}
+    finally{this.mutating.delete(slot);}
+  }
   async manage(slot,revision,action){
     if(![1,2,3].includes(slot)||!Number.isSafeInteger(revision))throw Error('Choose a current hero slot.');
     if(this.activeSlots.has(slot))throw Error('Leave Local Co-op before changing this hero slot.');

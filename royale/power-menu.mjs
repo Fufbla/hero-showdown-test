@@ -1,6 +1,7 @@
 import { POWERS, POWER_IDS, powerStats } from './powers.mjs';
 import { CONTROL_NAMES, CONTROL_KEY, normalizeControls } from './controls.mjs';
 import {hudEquipError} from './power-upgrades.mjs';
+import {skillResetPreview} from './skill-reset.mjs';
 const $=id=>document.getElementById(id);
 const node=(tag,text,className)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(className)n.className=className;return n;};
 const labels={targets:'Maximum targets',damage:'Damage per hit',bossEffectiveness:'Boss damage effectiveness',reach:'Combat reach',kicks:'Kicks per combination',projectiles:'Fireballs per cast',pierce:'Enemies per Fireball',duration:'Duration',reduction:'All-damage reduction',dodge:'Regular enemy dodge chance',legendaryDodge:'Legendary Boss dodge chance',runBonus:'Running speed bonus',attackBonus:'Attack speed bonus',bossHitChance:'Boss hit chance during Flight',cooldown:'Cooldown'};
@@ -69,7 +70,32 @@ export class PowerMenu {
     $('tree-from-pause').disabled=!safe;
     $('tree-location').textContent='Power Point upgrades save immediately. Loadout changes use your normal Save Game.';
   }
-  open(){this.loadout();this.renderList();this.detail();}
+  open(){this.loadout();this.renderList();this.detail();this.renderReset();}
+  renderReset(){
+    const quote=skillResetPreview(this.getGame());
+    if($('eris-coins'))$('eris-coins').textContent=this.getGame().hero.coins.toLocaleString();
+    let area=$('skill-reset-area');
+    if(!area){area=node('section',undefined,'skill-reset-area');area.id='skill-reset-area';$('power-list').parentElement.before(area);}
+    area.replaceChildren();
+    const button=node('button','Reset skills · 1,000 coins');button.type='button';button.disabled=this.busy||!quote.ok;
+    button.onclick=()=>this.confirmReset();
+    area.append(button,node('span',quote.ok?`Refund ${quote.refunded} spent points and choose your powers again.`:quote.error));
+  }
+  confirmReset(){
+    const quote=skillResetPreview(this.getGame());if(this.busy||!quote.ok)return;
+    const dialog=node('dialog',undefined,'power-reset-dialog'),title=node('h3','Reset all skills?'),message=node('p',`Spend 1,000 coins to refund ${quote.refunded} spent skill points? You will have ${quote.points} points to assign. Your learned powers and three equipped slots will be cleared. Your hero level, items, and Villain Merge stay unchanged.`),status=node('p');
+    const confirm=node('button','Confirm reset · 1,000 coins'),cancel=node('button','Keep my skills');
+    title.id='power-reset-title';dialog.setAttribute('aria-labelledby',title.id);status.setAttribute('role','status');
+    confirm.type=cancel.type='button';cancel.id='cancel-skill-reset';cancel.onclick=()=>dialog.close();dialog.onclose=()=>dialog.remove();dialog.oncancel=e=>{if(this.busy)e.preventDefault();};
+    confirm.onclick=async()=>{
+      if(this.busy)return;this.busy=true;confirm.disabled=cancel.disabled=true;status.textContent='Saving your skill reset…';
+      try{const result=await this.upgrades.reset({confirmed:true});
+        if(result.ok){this.message=`Skills reset. ${result.points} Power Points available. 1,000 coins spent.`;this.say(this.message);dialog.close();}
+        else status.textContent=result.error;
+      }finally{this.busy=false;confirm.disabled=cancel.disabled=false;this.open();}
+    };
+    dialog.append(title,message,status,cancel,confirm);document.body.append(dialog);dialog.showModal();cancel.focus();
+  }
   renderList(){
     const g=this.getGame(),list=$('power-list'),left=list.scrollLeft,top=list.scrollTop,focus=document.activeElement?.dataset;
     $('tree-points').textContent=g.powers.data.points;list.replaceChildren();list.setAttribute('aria-busy',String(this.busy));
@@ -78,7 +104,7 @@ export class PowerMenu {
       choice.type=arrow.type='button';choice.dataset.power=id;choice.setAttribute('aria-pressed',String(this.selected===id));
       choice.append(node('b',def.icon),node('span',def.name),node('small',`Level ${g.powers.data.levels[id]} / 20${def.passive?' · PASSIVE':''}`));
       choice.onclick=()=>{this.selected=id;this.renderList();this.detail();};
-      arrow.dataset.upgrade=id;arrow.setAttribute('aria-label',`Upgrade ${def.name} by one level`);arrow.title='1 Power Point · permanent';
+      arrow.dataset.upgrade=id;arrow.setAttribute('aria-label',`Upgrade ${def.name} by one level`);arrow.title='1 Power Point · reset available for 1,000 coins';
       arrow.disabled=this.busy||!g.upgradePreview(id,1).ok;
       arrow.onclick=()=>void this.upgrade(id);
       arrow.onkeydown=e=>{if(e.repeat&&(e.key==='Enter'||e.key===' '))e.preventDefault();};
@@ -103,7 +129,7 @@ export class PowerMenu {
       const result=await this.upgrades.spend(id);
       this.message=result.ok?`${POWERS[id].name} is now Level ${result.level}. ${result.points} Power Points available.${result.storage==='local'?' Saved on this browser.':''}`:result.error;
       if(result.ok)this.say(this.message);return result;
-    }finally{this.busy=false;this.renderList();this.detail();this.loadout();const arrow=$('power-list').querySelector(`[data-upgrade="${id}"]`);if(this.selected===id&&!arrow.disabled)arrow.focus({preventScroll:true});}
+    }finally{this.busy=false;this.renderList();this.detail();this.loadout();this.renderReset();const arrow=$('power-list').querySelector(`[data-upgrade="${id}"]`);if(this.selected===id&&!arrow.disabled)arrow.focus({preventScroll:true});}
   }
   detail(){
     const g=this.getGame(),id=this.selected,def=POWERS[id],level=g.powers.data.levels[id],panel=$('power-detail');panel.replaceChildren();
@@ -113,7 +139,7 @@ export class PowerMenu {
     const table=node('table'),head=node('tr');for(const label of ['Ability',`Level ${level}`])head.append(node('th',label));const thead=node('thead');thead.append(head);table.append(thead);
     const body=node('tbody'),stats=powerStats(id,Math.max(1,level),{heroLevel:g.hero.level,equipment:g.equipment});
     for(const [key,label] of Object.entries(labels)){if(!(key in stats))continue;const row=node('tr');row.append(node('th',label),node('td',level?format(key,stats[key]):'Not learned'));body.append(row);}table.append(body);preview.append(table);
-    const status=node('p',this.message|| (level===20?'Maximum level reached.':g.powers.data.points?'↑ spends one Power Point immediately. Upgrades are permanent.':'Earn one Power Point with each hero level.'),'upgrade-status');status.id='upgrade-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');panel.append(status);
+    const status=node('p',this.message|| (level===20?'Maximum level reached.':g.powers.data.points?'↑ spends one Power Point immediately. Skill resets cost 1,000 coins.':'Earn one Power Point with each hero level.'),'upgrade-status');status.id='upgrade-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');panel.append(status);
     if(level && stats.level>level)panel.append(node('p',`Learned level ${level} · Armor +${stats.level-level} · Effective level ${stats.level}`));
     if(id==='fireball'&&level&&stats.pierce===2)panel.append(node('p','Piercing: first enemy 100% damage; second enemy 50%.'));
     if(id==='speed')panel.append(node('p','Total attack speed, including equipment, is capped at +50%. No damage increase.'));

@@ -104,3 +104,27 @@ window.addEventListener('message',async e=>{
  let result;try{const snapshot=typeof e.data.snapshot==='string'?JSON.parse(e.data.snapshot):e.data.snapshot;result=snapshot?.world?.location?await save(e.data.slot,snapshot):{ok:false,error:'Missing travel snapshot.'};}catch(error){result={ok:false,error:error.message};}
  e.source.postMessage({type:'royale-travel-saved',requestId:e.data.requestId,result},e.origin);
 });
+
+window.addEventListener('message',async e=>{
+ if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow||e.data?.type!=='royale-skills-reset'||typeof e.data.requestId!=='string')return;
+ const slot=e.data.slot;let result,acquired=false;
+ try{
+  if(!Number.isInteger(slot)||slot<0||slot>2||!access||blocked||!slots[slot]?.snapshot||clothingSavesPending.has(slot))throw Error('Reload the current account hero before resetting skills.');
+  const snapshot=e.data.snapshot;
+  if(!snapshot||typeof snapshot!=='object'||!snapshot.world?.location)throw Error('Invalid skill reset snapshot.');
+  clothingSavesPending.add(slot);acquired=true;
+  queue=queue.then(async()=>{
+   if(blocked||!access)throw Error('Cloud saving is paused. Reload your hero.');
+   const saved=await call('reset-powers',{slot:slot+1,revision:slots[slot].revision,snapshot,confirmed:true});
+   if(!saved.snapshot||saved.revision!==slots[slot].revision+1)throw Error('Skill reset acknowledgement was incomplete.');
+   slots[slot]={...slots[slot],snapshot:saved.snapshot,revision:saved.revision,updated_at:saved.updated_at};
+   last[slot]=JSON.stringify(saved.snapshot);
+   localStorage.removeItem(prefix+'journal:'+slot);
+   status('Skill reset saved · '+new Date().toLocaleTimeString());
+   return {ok:true,...saved};
+  }).catch(error=>{blocked=true;return {ok:false,error:error.message+' Reload the hero to reconcile before retrying.'};});
+  result=await queue;
+ }catch(error){result={ok:false,error:error.message};}
+ finally{if(acquired)clothingSavesPending.delete(slot);}
+ e.source.postMessage({type:'royale-skills-reset',requestId:e.data.requestId,result},e.origin);
+});

@@ -3,7 +3,7 @@ import {travelQuote} from './portal-layout.mjs?v=phase-portals-1';
 import {coopRenderView} from '../../royale/local-coop/render-view.mjs';
 // Generated staging equipment labels; co-op behavior is shared.
 import {CloudProfile} from '../../royale/local-coop/cloud.mjs?v=20261108-coop-menus';
-import {LocalSession,AUTOSAVE_MS} from '../../royale/local-coop/session.mjs?v=20261108-coop-menus';
+import {LocalSession,AUTOSAVE_MS,captureProgress} from '../../royale/local-coop/session.mjs?v=20261108-coop-menus';
 import {HeroManager} from '../../royale/local-coop/hero-manager.mjs';
 import {makePowerHUD} from '../../royale/local-coop/power-hud.mjs';
 import {LocalInput,samplePad} from '../../royale/local-coop/input.mjs';
@@ -15,6 +15,7 @@ import {bindStyleCGame} from '../../royale/style-c-live.mjs';
 import {styleCDefault} from '../../royale/style-c-defaults.mjs';
 import {WORLD_REGIONS} from '../../royale/world.mjs';
 import {POWERS} from '../../royale/powers.mjs';
+import {skillResetPreview,applySkillReset} from '../../royale/skill-reset.mjs';
 import {itemDefinition,ownedArmorOutfits,equipmentItemActive} from '../../royale/equipment.mjs';
 import {clothingRuntime} from '../../royale/cosmetics/runtime.mjs';
 import {selectedOutfit} from '../../royale/cosmetics/state.mjs';
@@ -140,7 +141,7 @@ async function recoverSession(error,{save=true}={}){
 $('start').onclick=start;
 function toast(text){$('toast').textContent=text;$('toast').hidden=false;$('toast').dataset.until=String(performance.now()+4500);}
 async function saveOne(i){
- const active=session;if(!active?.active.has(i))return {ok:true};
+ const active=session;if(!active?.active.has(i)||players[i].powerResetPending)return {ok:true};
  const result=await active.saveOne(i);if(session!==active)return result;
  if(result.ok&&players[i].travelPending){players[i].travelPending=false;renderPanel(i);}
  const label=$('save-'+i);label.textContent=result.ok?(qa?'Practice checkpoint':`Saved ${new Date().toLocaleTimeString()}`):'Save pending · retrying';label.dataset.error=String(!result.ok);
@@ -153,7 +154,7 @@ function openMenu(){
  if(!$('menu').open)$('menu').showModal();renderPanels();audio.update('',false);
 }
 function markReady(i){
- if(players.some(p=>p.travelPending))return;
+ if(players.some(p=>p.travelPending||p.powerResetPending))return;
  if(players[i].leaving)return;
  if(players[i].profile.blocked?.has(players[i].slot)){panelNote(i,'A newer cloud save exists. Reload before continuing. Your checkpoint is retained.');return;}
  const source=input.sources[i],pad=getPads()[+source.slice(4)];if(!pad?.connected){panelNote(i,'Reconnect your assigned controller before selecting Ready.');return;}
@@ -161,7 +162,7 @@ function markReady(i){
  if(resumed){$('menu').close();input.clear();input.enabled=true;last=performance.now();accumulator=0;}
 }
 async function leave(i){
- if(players[i].leaving)return;players[i].leaving=true;renderPanel(i);
+ if(players[i].leaving||players.some(p=>p.powerResetPending))return;players[i].leaving=true;renderPanel(i);
  const result=await session.leave(i);players[i].leaving=false;
  if(!result.ok){panelNote(i,'Final save is pending. Retry Leave when connected. '+result.error);renderPanel(i);return;}
  players[i].profile.forget?.();$('hud-'+i).hidden=true;$('panel-'+i).hidden=true;
@@ -173,12 +174,27 @@ $('pause').onclick=openMenu;$('menu').addEventListener('cancel',e=>{e.preventDef
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('play').requestFullscreen();}catch{note('Full screen is unavailable in this browser.');}};
 $('frame-rate').onchange=()=>{frameCap=+$('frame-rate').value;};
 async function act(i,method,args=[]){
- if(!session.active.has(i)||session.ready[i]||players[i].leaving||players[i].travelPending)return false;
+ if(method==='enterLegendary'&&players.some(p=>p.powerResetPending))return false;
+ if(!session.active.has(i)||session.ready[i]||players[i].leaving||players[i].travelPending||players[i].powerResetPending||players[i].profile.blocked?.has(players[i].slot))return false;
  try{const result=session.command(i,method,args);if(result===false||result?.ok===false){panelNote(i,result?.error||'Check this action’s requirements and leave combat first.');return false;}
   if(method==='enterLegendary'){for(const n of session.active)players[n].travelPending=true;renderPanels();updateHUD();await Promise.all([...session.active].map(n=>saveOne(n)));return true;}
   if(method==='fastTravel')players[i].travelPending=true;
   renderPanel(i);updateHUD();if(method==='fastTravel')await saveOne(i);else void saveOne(i);return true;
  }catch(e){panelNote(i,e.message);return false;}
+}
+async function resetPlayerSkills(i){
+ const p=players[i],g=session.games[i],choice=p.resetChoice;
+ if(!choice||p.powerResetPending||session.ready[i]||p.profile.blocked?.has(p.slot))return;
+ delete p.resetChoice;
+ if(choice.revision!==g.economy.revision){renderPanel(i);panelNote(i,'Your hero changed. Review the reset again.');return;}
+ const quote=skillResetPreview(g);if(!quote.ok){renderPanel(i);panelNote(i,quote.error);return;}
+ p.powerResetPending=true;renderPanels();
+ try{
+  const result=await p.profile.resetPowers(p.slot,captureProgress(g));
+  if(!result?.ok||!result.snapshot)throw Error('The reset was not confirmed. Reload this hero before continuing.');
+  applySkillReset(g,result.snapshot);p.selectedPower=null;delete p.chooseSlot;
+  p.statusText=`Skills reset for 1,000 coins. ${g.powers.data.points} Power Points available.`;
+ }catch(error){p.statusText=error.message;}finally{p.powerResetPending=false;renderPanels();updateHUD();}
 }
 function renderPanels(){$('pause-panels').classList.toggle('solo',session.active.size===1);$('menu').querySelector('.pause-header p').textContent=session.active.size===2?'D-pad / stick: move · A / Cross: select · B / Circle: back · LB / RB: tabs. Both select Ready to resume.':'Your hero continues solo. Select Ready to resume.';for(let i=0;i<2;i++)renderPanel(i);}
 function renderPanel(i){
@@ -217,6 +233,11 @@ function renderPanel(i){
     const upgrade=button('+1',()=>act(i,'upgradePower',[id,1]),!g.nearTree()||!g.canSave()||!g.powers.data.points||g.powers.data.levels[id]>=20);upgrade.setAttribute('aria-label',`Upgrade ${def.name}`);row('',choice,upgrade);
    }
    if(p.selectedPower||p.chooseSlot!==undefined)content.append(button('Cancel power selection',()=>{p.selectedPower=null;delete p.chooseSlot;renderPanel(i);}));
+   const reset=skillResetPreview(g);
+   const resetButton=button('Reset skills · 1,000 coins',()=>{p.resetChoice={revision:g.economy.revision};renderPanel(i);},!reset.ok||!p.profile.resetPowers);
+   resetButton.setAttribute('aria-label',`Player ${i+1} Reset skills · 1,000 coins`);content.append(resetButton);
+   if(!reset.ok)content.append(el('p',reset.error));
+   if(p.resetChoice&&reset.ok)content.append(el('p',`Spend 1,000 coins to refund ${reset.refunded} invested points? You will have ${reset.points} Power Points to reassign. Your three power slots will be cleared. Your hero level, equipment and Villain Merge stay the same.`),button('Confirm reset · 1,000 coins',()=>void resetPlayerSkills(i)),button('Keep my skills',()=>{delete p.resetChoice;renderPanel(i);}));
    const merge=g.mergeAbility();if(merge)content.append(el('p',`Slot 4 · ${merge.icon} ${merge.name} · Villain Merge`));
    if(g.treeVisit)content.append(button('Buy Health Root · 50 coins',()=>act(i,'buyHealthRoot'),!g.canSave()));
   }
@@ -254,9 +275,10 @@ function renderPanel(i){
    for(const [id,record] of Object.entries(g.legendary.defeated))if(record.claimed)content.append(button('Activate '+LEGENDARY[id].name,()=>act(i,'activateMergeSet',[id]),!g.treeVisit||!g.canSave()));
   }
  }
+ if(p.powerResetPending)root.append(el('p','Saving skill reset…'));
  if(p.travelPending)root.append(el('p','Fast travel save pending. Retry before resuming.'),button('Retry travel save',()=>void saveOne(i)));
  const status=el('p',p.statusText);status.className='menu-status';status.setAttribute('role','status');root.append(status);
- const footer=el('footer');footer.className='menu-actions';footer.append(button(session.ready[i]?'Cancel Ready':'Ready / Resume',()=>markReady(i),p.leaving||p.travelPending),button(p.leaving?'Saving…':'Leave Local Co-op',()=>void leave(i),p.leaving));root.append(footer);const restored=menuItems(root).findIndex(n=>(n.dataset.menuKey||n.getAttribute('aria-label')||n.textContent)===focusKey);if(restored>=0)p.focus=restored;highlight(root,p);
+ const footer=el('footer');footer.className='menu-actions';footer.append(button(session.ready[i]?'Cancel Ready':'Ready / Resume',()=>markReady(i),p.leaving||p.travelPending||players.some(p=>p.powerResetPending)),button(p.leaving?'Saving…':'Leave Local Co-op',()=>void leave(i),p.leaving||players.some(p=>p.powerResetPending)));root.append(footer);if(p.powerResetPending||p.profile.blocked?.has(p.slot))root.querySelectorAll('button,select,input').forEach(n=>n.disabled=true);const restored=menuItems(root).findIndex(n=>(n.dataset.menuKey||n.getAttribute('aria-label')||n.textContent)===focusKey);if(restored>=0)p.focus=restored;highlight(root,p);
 }
 const menuItems=root=>[...root.querySelectorAll('button,select,input'),...(!session&&root.classList.contains('player-card')&&!$('start').disabled?[$('start')]:[])].filter(n=>!n.disabled&&n.getClientRects().length);
 function highlight(root,p){const controls=menuItems(root);p.focus=Math.max(0,Math.min(p.focus,controls.length-1));root.querySelectorAll('.controller-focus').forEach(n=>n.classList.remove('controller-focus'));controls[p.focus]?.classList.add('controller-focus');return controls;}
@@ -277,7 +299,7 @@ function navigateController(i,now,managementHandled=false){
  const controls=highlight(root,p),active=controls[p.focus];if(!active)return;
  if(state.edges.has('kick')){
   if(p.selectMenu){closeSelector(i);return;}
-  if(session){if(session.ready[i]){session.ready[i]=false;}else if(p.rewardChoice)p.rewardChoice=null;else if(p.selectedPower||p.chooseSlot!==undefined){p.selectedPower=null;delete p.chooseSlot;}else{p.tab='stats';p.focus=0;}renderPanel(i);}return;
+  if(session){if(session.ready[i]){session.ready[i]=false;}else if(p.resetChoice)delete p.resetChoice;else if(p.rewardChoice)p.rewardChoice=null;else if(p.selectedPower||p.chooseSlot!==undefined){p.selectedPower=null;delete p.chooseSlot;}else{p.tab='stats';p.focus=0;}renderPanel(i);}return;
  }
  if(session&&!p.selectMenu&&!session.ready[i]&&(state.edges.has('power0')||state.edges.has('power1'))){const tabs=['stats','tree','gear','travel'];p.tab=tabs[(tabs.indexOf(p.tab)+tabs.length+(state.edges.has('power1')?1:-1))%tabs.length];p.focus=0;p.portal=false;if(p.tab==='tree')void act(i,'visitTree');else renderPanel(i);return;}
  if(state.edges.has('jump')){

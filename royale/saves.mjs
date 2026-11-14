@@ -1,6 +1,7 @@
 import { legendaryDominates } from './legendary-state.mjs';
 import {checkAppearanceSave} from './customization/migration.mjs';
 import { decodeSave, SAVE_KEY } from './core.mjs';
+import {isPowerReset} from '../royale-v3-staging/power-reset.mjs';
 import { CAMPS, regionAt } from './world.mjs';
 export const PROFILE_KEY='healthia.royale.profiles.v2';
 export const SLOT_COUNT=3;
@@ -47,7 +48,7 @@ export class LocalHeroStore{
       const raw=JSON.stringify(candidate);this.storage.setItem(PROFILE_KEY,raw);this.lastRaw=raw;this.data=candidate;this.durable=true;return {ok:true};
     }catch{if(!atomic)this.data=candidate;this.durable=false;this.message='Saving is unavailable. Keep this tab open; this patrol is only in memory.';return {ok:false,retained:!atomic,error:this.message};}
   }
-  writeSlot(index,snapshot,{region='Coastal Beginnings',expectedId,requireDurable=false}={}){
+  writeSlot(index,snapshot,{region='Coastal Beginnings',expectedId,requireDurable=false,allowPowerReset=false}={}){
     if(![0,1,2].includes(index))throw Error('Invalid hero slot');
     const state=decodeSave(typeof snapshot==='string'?snapshot:JSON.stringify(snapshot),{allowOverBudgetPowers:this.allowOverBudgetPowers});if(!state)throw Error('Invalid hero snapshot');
     const current=this.data.slots[index];
@@ -56,7 +57,9 @@ export class LocalHeroStore{
       const appearance=checkAppearanceSave(current.snapshot,state);if(!appearance.ok)return appearance;
       const old=decodeSave(JSON.stringify(current.snapshot),{allowOverBudgetPowers:this.allowOverBudgetPowers});
       if(!old)return {ok:false,error:'The previous hero snapshot requires recovery.'};
-      if(!legendaryDominates(state.legendary,old.legendary)||state.economy.revision<old.economy.revision||state.inventory.nextId<old.inventory.nextId||Object.keys(old.inventory.retired).some(uid=>!state.inventory.retired[uid])||state.level<old.level||Object.keys(old.powers.levels).some(id=>state.powers.levels[id]<old.powers.levels[id]))return {ok:false,error:'This snapshot predates permanent progress. Reload the latest hero before saving.'};
+      const paidReset=allowPowerReset&&isPowerReset(old,state);
+      if(!paidReset&&((state.powers.resetRevision||0)!==(old.powers.resetRevision||0)||Object.keys(old.powers.levels).some(id=>state.powers.levels[id]<old.powers.levels[id])))return {ok:false,error:'Power progress changed. Reload the latest hero before saving.'};
+      if(!legendaryDominates(state.legendary,old.legendary)||state.economy.revision<old.economy.revision||state.inventory.nextId<old.inventory.nextId||Object.keys(old.inventory.retired).some(uid=>!state.inventory.retired[uid])||state.level<old.level)return {ok:false,error:'This snapshot predates permanent progress. Reload the latest hero before saving.'};
     }
     const next=copy(this.data),now=this.now();
     next.slots[index]={id:current?.id||this.id(),createdAt:current?.createdAt||now,updatedAt:now,lastRegion:String(region).slice(0,100),snapshot:state};next.activeSlot=index;next.legacyImported=true;
