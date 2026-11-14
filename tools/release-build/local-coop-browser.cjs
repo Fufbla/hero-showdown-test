@@ -28,7 +28,8 @@ function installVfxProbe(){
   for(const id of ['fireball','roots','whirlwind'])g.powers.data.levels[id]=2;
   g.powers.data.equipped=['fireball','roots','whirlwind'];
   if(i===0){const set=costumeById('fishsticks-costume');g.cosmetics={version:1,revision:1,visible:true,owned:set.pieces.map(p=>p.id),equipped:Object.fromEntries(set.pieces.map(p=>[p.category,p.id]))};}
-  return {code:i?'2222222222':'1111111111',token:'isolated-fixture-'+i,slots:[1,2,3].map(n=>({slot_number:n,revision:1,snapshot:n===i+1?JSON.parse(g.save()):null})),saves:[]};
+  const selectedSlot=i?3:1;
+  return {code:i?'2222222222':'1111111111',token:'isolated-fixture-'+i,selectedSlot,slots:[1,2,3].map(n=>({slot_number:n,revision:1,snapshot:n===selectedSlot?JSON.parse(g.save()):null})),saves:[]};
  });
  const browser=await chromium.launch({headless:true});
  try{
@@ -57,7 +58,7 @@ function installVfxProbe(){
     return text.call(this,label,x,y,...rest);
    };
   });
-  await context.route('**/*.supabase.co/**',async route=>{
+  const cloudRoute=async route=>{
    const req=route.request(),b=req.postDataJSON()||{};
    const a=b.action==='verify'?accounts.find(a=>a.code===b.code):accounts.find(a=>'Bearer '+a.token===req.headers().authorization);
    assert(a,'Unexpected account or request');
@@ -71,7 +72,8 @@ function installVfxProbe(){
     else{Object.assign(row,{snapshot:structuredClone(b.snapshot),revision:row.revision+1,updated_at:new Date().toISOString()});a.saves.push(structuredClone(row));result=row;}
    }else throw Error('Unexpected cloud action '+b.action);
    await route.fulfill({status,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify(result)});
-  });
+  };
+  await context.route('**/*.supabase.co/**',cloudRoute);
   const page=await context.newPage();
   page.on('pageerror',e=>{report.errors.push(e.stack);console.log('BROWSER ERROR:',e.stack);});
   const manifest=await (await page.request.get(new URL('../release-manifest.json?v='+(process.env.ROYALE_EXPECTED_COMMIT||Date.now()),url).href)).json();
@@ -96,7 +98,7 @@ function installVfxProbe(){
   assert(await page.locator('#play').isVisible(),'Both heroes entered gameplay');
   report.checks.push('Two separate accounts and saved slots entered gameplay');
   const until=async(fn,timeout=12000)=>{const end=Date.now()+timeout;while(!fn()){assert(Date.now()<end,'Timed out waiting for independent saves');await page.waitForTimeout(100);}};
-  const latest=i=>accounts[i].slots[i].snapshot;
+  const latest=i=>accounts[i].slots.find(r=>r.slot_number===accounts[i].selectedSlot).snapshot;
   const observe=()=>page.evaluate(()=>window.__observed);
   const pulse=async(i,button)=>{await page.evaluate(([i,b])=>window.__testPads[i].buttons[b].pressed=true,[i,button]);await page.waitForTimeout(90);await page.evaluate(([i,b])=>window.__testPads[i].buttons[b].pressed=false,[i,button]);await page.waitForTimeout(100);};
   const move=async(i,axis,ms)=>{await page.evaluate(([i,x])=>window.__testPads[i].axes[0]=x,[i,axis]);await page.waitForTimeout(ms);await page.evaluate(i=>window.__testPads[i].axes[0]=0,i);await page.waitForTimeout(150);};
@@ -114,9 +116,9 @@ function installVfxProbe(){
   for(let i=0;i<2;i++){
    assert.equal(latest(i).level,14+i);assert.equal(latest(i).xp,20+i);assert.equal(latest(i).coins,1234+i*100);
    assert.equal(latest(i).look.name,i?'Coop QA Nova':'Coop QA Atlas');assert.equal(latest(i).powers.levels.fireball,2);
-   assert(accounts[i].slots.filter((_,j)=>j!==i).every(r=>r.snapshot===null));
+   assert(accounts[i].slots.filter(r=>r.slot_number!==accounts[i].selectedSlot).every(r=>r.snapshot===null));
   }
-  report.checks.push('Both eight-second autosaves retain independent progress, appearance, power levels and other slots');
+  report.checks.push('Both eight-second autosaves retain independent progress, appearance, power levels and other slots, including Player 2 in Slot 3');
   const before=accounts.map((_,i)=>latest(i).world.location.x);
   await move(0,.5,300);await pauseSave();
   assert(latest(0).world.location.x>before[0]+5);assert(Math.abs(latest(1).world.location.x-before[1])<2);
@@ -173,6 +175,7 @@ function installVfxProbe(){
   }
   report.checks.push('Both co-op players render the approved solo Roots and Whirlwind sheets; Player 2 uses the solo fireball atlas');
   await page.screenshot({path:dir+'/browser.png',fullPage:true});
+  await context.close();
   // Independently open the unchanged single-player route with a browser-local
   // fixture; the separate context has no existing player saves.
   const soloContext=await browser.newContext({viewport:{width:1366,height:900}});
@@ -207,6 +210,46 @@ function installVfxProbe(){
   }
   report.checks.push('Single-player saved hero loads, responds to input, pauses and resumes without exceptions');
   await soloContext.close();
+  // Exercise the real account launcher and iframe on a phone-sized viewport.
+  // Only the cloud transport is mocked; creation, gameplay and saving use the shipped UI.
+  const cloudContext=await browser.newContext({viewport:{width:390,height:844}});
+  await cloudContext.route('**/*.supabase.co/**',cloudRoute);
+  const cloudPage=await cloudContext.newPage(),cloudErrors=[];
+  cloudPage.on('pageerror',e=>cloudErrors.push(e.message));
+  const untouched=structuredClone(accounts[0].slots.slice(0,2)),otherAccount=structuredClone(accounts[1].slots);
+  const enterCloud=async()=>{
+   await cloudPage.getByRole('button',{name:'ENTER MY 10-DIGIT CODE',exact:true}).click();
+   await cloudPage.locator('#input').fill(accounts[0].code);
+   await cloudPage.locator('#load').click();
+   const frame=cloudPage.frameLocator('#game-frame');
+   await frame.locator('#hero-slots .hero-slot').nth(2).waitFor({state:'visible',timeout:60000});
+   assert.equal(await frame.locator('#hero-slots .hero-slot').count(),3,'Every code account shows all three hero slots');
+   return frame;
+  };
+  await cloudPage.goto(new URL('../?verify='+manifest.sourceCommit,url).href,{waitUntil:'networkidle'});
+  let cloudGame=await enterCloud();
+  await cloudGame.locator('#hero-slots .hero-slot').nth(2).getByRole('button',{name:'Create Hero +',exact:true}).click();
+  await cloudGame.locator('#name').fill('Slot Three QA');
+  await cloudGame.locator('#begin').click();
+  await cloudGame.locator('#hud').waitFor({state:'visible'});
+  await cloudPage.waitForFunction(()=>document.querySelector('#status').textContent.includes('Saved Slot 3'));
+  assert.equal(accounts[0].slots[2].snapshot.look.name,'Slot Three QA');
+  assert.deepEqual(accounts[0].slots.slice(0,2),untouched);
+  await cloudGame.locator('#pause').click();
+  await cloudGame.locator('#manual-save').click();
+  await cloudPage.screenshot({path:dir+'/slot-three-mobile.png',fullPage:true});
+  await cloudPage.reload({waitUntil:'networkidle'});
+  cloudGame=await enterCloud();
+  const third=cloudGame.locator('#hero-slots .hero-slot').nth(2);
+  assert.match(await third.innerText(),/Slot Three QA/);
+  await third.getByRole('button',{name:'Continue →',exact:true}).click();
+  await cloudGame.locator('#hud').waitFor({state:'visible'});
+  assert.match(await cloudGame.locator('#hud').innerText(),/Slot Three QA/);
+  assert.deepEqual(accounts[0].slots.slice(0,2),untouched);
+  assert.deepEqual(accounts[1].slots,otherAccount);
+  assert.deepEqual(cloudErrors,[]);
+  report.checks.push('Mobile code login exposes Slot 3, creates and plays its hero, confirms its cloud save, and resumes it after reload without changing other slots or accounts');
+  await cloudContext.close();
   report.passed=true;
  }finally{await browser.close();}
 })().catch(e=>{report.failure=e.stack;process.exitCode=1;}).finally(()=>{fs.writeFileSync(dir+'/browser.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));});
