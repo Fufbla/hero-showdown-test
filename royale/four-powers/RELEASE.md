@@ -2,14 +2,14 @@
 
 Promotes the approved Super Strength, Super Kick, Animal Allies and Seismic Smash implementation from the isolated four-powers branch. The production renderer uses the existing approved art, character appearance and authored animations. The reserved test-code route remains isolated, with its free review controls excluded from production bundles.
 
-Animal Allies selects distinct nearest valid enemies in range. Each selected enemy receives the full listed damage; the Panther's two contacts divide that target's damage. The six-second cooldown is unchanged.
+Animal Allies selects distinct nearest valid enemies in range. Its fourth form reaches the requested five-enemy cap; the existing final Spirit Stag retains that cap and its stronger damage. All five approved animal forms remain available. Each selected enemy receives the full listed damage; the Panther's two contacts divide that target's damage. The six-second cooldown is unchanged.
 
 | Skill level | Animal | Maximum enemies |
 | --- | --- | --- |
 | 1–4 | Wolf | 1 |
 | 5–9 | Hawk | 2 |
 | 10–14 | Bear | 3 |
-| 15–19 | Panther | 4 |
+| 15–19 | Panther | 5 |
 | 20 | Spirit Stag | 5 |
 
 ## Paid skill reset

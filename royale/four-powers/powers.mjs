@@ -23,7 +23,7 @@ export const POWERS = Object.freeze({
   steel: { name: 'Steel Body', icon: '⬡', cooldown: 15, after: true, summary: 'Reduce all incoming damage. Ignore knockback without slowing down.' },
   roots: { name: 'Ground Roots', icon: '♧', cooldown: 10, after: true, offensive: true, summary: 'Trap grounded foes. Squeeze once per second. Bosses are slowed.' },
   speed: { name: 'Speed', icon: '»', passive: true, summary: 'Permanent running and attack speed. No damage bonus or active slot.' },
-  animalAllies: { name:'Animal Allies',icon:'🐾',cooldown:6,offensive:true,summary:'Evolving allies strike the closest enemies within 260 units, then vanish. Wolf hits 1 → Hawk 2 → Bear 3 → Panther 4 → Spirit Stag 5. Each target takes the full listed damage. Works on ground or in air. Six-second cooldown.' },
+  animalAllies: { name:'Animal Allies',icon:'🐾',cooldown:6,offensive:true,summary:'Evolving allies strike the closest enemies within 260 units, then vanish. Wolf hits 1 → Hawk 2 → Bear 3 → Panther 5 → Spirit Stag 5. Each target takes the full listed damage. Works on ground or in air. Six-second cooldown.' },
   seismicSmash: { name:'Seismic Smash',icon:'✊',cooldown:6,offensive:true,summary:'Slam both fists into the ground. Hit the nearest 1–5 enemies once, within a 1.5–4.5 m shockwave. Damage increases every level. Ground only; six-second cooldown.' },
   whirlwind: { name: 'Whirlwind', icon: '≋', cooldown: 12, after: true, offensive: true, summary: 'Lift regular foes. Damage once per second. Bosses stay grounded.' },
 });
@@ -54,7 +54,7 @@ export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
     case 'animalAllies': {
       const animal=level>=20?'spirit-stag':level>=15?'panther':level>=10?'bear':level>=5?'hawk':'wolf';
       const multiplier=benchmark([[1,1],[4,1.1],[5,1.2],[9,1.45],[10,1.6],[14,1.85],[15,2],[19,2.35],[20,2.5]]);
-      return {...base,animal,targets:tier(Math.min(level,20)),range:260,multiplier,damage:offensiveDamage('fireball',28,1,heroLevel)*multiplier+eq.damage};
+      return {...base,animal,targets:level>=15?5:level>=10?3:level>=5?2:1,range:260,multiplier,damage:offensiveDamage('fireball',28,1,heroLevel)*multiplier+eq.damage};
     }
     case 'seismicSmash': {
       const radius=level>=20?180:level>=15?144:level>=10?112:level>=5?80:60;
