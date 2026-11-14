@@ -160,6 +160,13 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
   assert.notEqual(await solo.locator('#game').evaluate(c=>c.toDataURL()),first,'Single player continues drawing after input');
   await solo.locator('#pause').click();assert(await solo.locator('#pause-menu').isVisible());
   await solo.locator('#resume').click();assert(!await solo.locator('#pause-menu').isVisible());
+  // Resuming can resize/clear the canvas before the next animation frame.
+  // Wait for actual world pixels, so a blank canvas cannot pass this check.
+  await solo.waitForFunction(()=>{
+   const c=document.querySelector('#game'),d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
+   let samples=0,colored=0;for(let i=0;i<d.length;i+=4000){samples++;if(d[i]+d[i+1]+d[i+2]>30)colored++;}
+   return samples>0&&colored>samples*.1;
+  });
   assert.deepEqual(soloErrors,[]);await solo.screenshot({path:dir+'/single-player.png',fullPage:true});
   report.checks.push('Single-player saved hero loads, responds to input, pauses and resumes without exceptions');
   await soloContext.close();
