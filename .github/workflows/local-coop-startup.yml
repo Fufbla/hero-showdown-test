@@ -3,23 +3,33 @@ on:
   push:
     branches: [fix/local-coop-startup-20261113]
   workflow_dispatch:
+  workflow_run:
+    workflows: [Publish optimized Hero Showdown site]
+    types: [completed]
+    branches: [main]
 permissions:
   contents: read
 jobs:
   browser:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-22.04
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm install --no-save --no-package-lock playwright@1.56.1
       - run: npx playwright install --with-deps chromium
       - run: npm ci --prefix tools/release-build
+        if: github.event_name != 'workflow_run'
       - name: Build the exact production artifact
+        if: github.event_name != 'workflow_run'
         run: node tools/build-royale-release.cjs
       - name: Test the repaired production bundle
+        if: github.event_name != 'workflow_run'
         env:
           ROYALE_COOP_URL: http://127.0.0.1:8174/hero-showdown-test/royale/local-coop/
         run: |
@@ -27,6 +37,11 @@ jobs:
           ln -s "$PWD/_site" /tmp/coop-site/hero-showdown-test
           python3 -m http.server 8174 --directory /tmp/coop-site >/tmp/coop-server.log 2>&1 &
           node tools/release-build/local-coop-browser.cjs
+      - name: Verify the deployed live game
+        if: github.event_name == 'workflow_run'
+        env:
+          ROYALE_EXPECTED_COMMIT: ${{ github.event.workflow_run.head_sha }}
+        run: node tools/release-build/local-coop-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

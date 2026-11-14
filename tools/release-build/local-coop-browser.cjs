@@ -58,7 +58,10 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
   });
   const page=await context.newPage();
   page.on('pageerror',e=>{report.errors.push(e.stack);console.log('BROWSER ERROR:',e.stack);});
-  await page.goto(url,{waitUntil:'networkidle',timeout:120000});
+  const manifest=await (await page.request.get(new URL('../release-manifest.json?v='+(process.env.ROYALE_EXPECTED_COMMIT||Date.now()),url).href)).json();
+  report.sourceCommit=manifest.sourceCommit;
+  if(process.env.ROYALE_EXPECTED_COMMIT)assert.equal(manifest.sourceCommit,process.env.ROYALE_EXPECTED_COMMIT,'The deployed commit matches the tested release');
+  await page.goto(url+'?verify='+manifest.sourceCommit,{waitUntil:'networkidle',timeout:120000});
   async function login(){for(let i=0;i<2;i++){
    const card=page.locator('.player-card').nth(i);
    await page.locator('#code-'+i).fill(accounts[i].code);
@@ -114,7 +117,9 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
   await move(1,-1,4500);const teleported=await observe();
   assert(teleported.follower.x>=teleported.follower.cameraX-32,'Off-screen Player 2 returns near Player 1');
   report.checks.push('Off-screen follower teleport remains active');
-  await pauseSave();const saved=accounts.map((_,i)=>structuredClone(latest(i)));
+  await pauseSave();
+  for(let i=0;i<2;i++){assert(latest(i).xp>20+i,'Both heroes receive fight XP');assert(latest(i).coins>1234+i*100,'Both heroes receive their own coin reward');}
+  report.checks.push('Combat defeats an enemy and awards independent coins and shared XP to both saved heroes');
   await page.locator('#panel-0').getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
   await page.waitForTimeout(350);await page.locator('#pause').click();await page.locator('#panel-1').getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
   await page.locator('#setup').waitFor({state:'visible'});assert.equal((await observe()).timers,0);
@@ -136,6 +141,24 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
   assert.deepEqual(report.errors,[]);assert.deepEqual(await page.evaluate(()=>window.__rejections),[]);
   report.observed=await observe();
   await page.screenshot({path:dir+'/browser.png',fullPage:true});
+  // Independently open the unchanged single-player route with a browser-local
+  // fixture; the separate context has no existing player saves.
+  const soloContext=await browser.newContext({viewport:{width:1366,height:900}});
+  const {LocalHeroStore,PROFILE_KEY}=await import('../../royale/saves.mjs');
+  const memory=new Map(),store=new LocalHeroStore({getItem:k=>memory.get(k)??null,setItem:(k,v)=>memory.set(k,v)});
+  store.writeSlot(0,JSON.stringify(accounts[0].slots[0].snapshot));
+  await soloContext.addInitScript(({key,value})=>localStorage.setItem(key,value),{key:PROFILE_KEY,value:memory.get(PROFILE_KEY)});
+  const solo=await soloContext.newPage(),soloErrors=[];solo.on('pageerror',e=>soloErrors.push(e.message));
+  await solo.goto(new URL('../gameplay/?verify='+manifest.sourceCommit,url).href,{waitUntil:'networkidle'});
+  await solo.getByRole('button',{name:'Continue →',exact:true}).click();await solo.waitForTimeout(600);
+  const first=await solo.locator('#game').evaluate(c=>c.toDataURL());
+  await solo.keyboard.down('d');await solo.waitForTimeout(300);await solo.keyboard.up('d');
+  assert.notEqual(await solo.locator('#game').evaluate(c=>c.toDataURL()),first,'Single player continues drawing after input');
+  await solo.locator('#pause').click();assert(await solo.locator('#pause-menu').isVisible());
+  await solo.locator('#resume').click();assert(!await solo.locator('#pause-menu').isVisible());
+  assert.deepEqual(soloErrors,[]);await solo.screenshot({path:dir+'/single-player.png',fullPage:true});
+  report.checks.push('Single-player saved hero loads, responds to input, pauses and resumes without exceptions');
+  await soloContext.close();
   report.passed=true;
  }finally{await browser.close();}
 })().catch(e=>{report.failure=e.stack;process.exitCode=1;}).finally(()=>{fs.writeFileSync(dir+'/browser.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));});
