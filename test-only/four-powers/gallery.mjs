@@ -10,7 +10,9 @@ const games=scenarios.map(([id,level])=>{
 });
 let impact=false,paused=false,face=1,time=0,last=performance.now();document.getElementById('play-pause').onclick=e=>{paused=!paused;e.target.textContent=paused?'Resume animation':'Pause animation';};document.getElementById('direction').onclick=e=>{face*=-1;e.target.textContent=face===1?'Face left':'Face right';};
 document.getElementById('impact').onclick=e=>{impact=!impact;e.target.textContent=impact?'Show full animation':'Show impact frames';};
-function frame(now){if(!paused)time+=(now-last)/1000;last=now;
+// A queued first animation frame can predate initialization on a busy page.
+// Effect ages must never become negative (Canvas ellipse radii depend on them).
+function frame(now){if(!paused)time+=Math.max(0,now-last)/1000;last=now;
  for(const {id,level,g,canvas,stats}of games){const h=g.hero,age=impact?(id==='strength'?.09:id==='superKick'?.15:.34):time%2.8;
   Object.assign(h,{x:320,y:260,prevX:320,prevY:260,face,grounded:true,vx:0,vy:0,stun:0,dead:false,respawnAge:100,invulnerable:0,castAge:100,attack:null,powerPose:null});g.time=time;g.powers.effects=[];g.powers.active={};
   if(id==='strength'||id==='superKick'){const d=id==='strength'?.27:.39;if(age<d*(stats.kicks||1))h.attack={kind:id==='strength'?'punch':'kick',power:id,face,age:age%d,stats,comboIndex:Math.floor(age/d)};}

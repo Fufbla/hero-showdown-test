@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {createRequire} from 'node:module';
 import {Game} from '../../royale/core.mjs';
 import {Renderer} from '../../royale/renderer.mjs';
-import {prepareReleaseArt} from '../../royale/release-src/presentation.mjs';
+import {prepareReleaseArt,drawHero} from '../../royale/release-src/presentation.mjs';
 import {heroPowerOverlayStatus} from '../../royale/v2-sprites/hero-power-overlays.mjs';
 import {MotionFX,kingJamesFX} from '../../royale-v3-staging/kingjames/motion-fx.mjs';
 import {costumeSprites} from '../../royale-v3-staging/costumes/engine.mjs';
@@ -28,9 +28,31 @@ kingJamesSprites.draw=costumeSprites.draw=body;
 await prepareReleaseArt();
 const originalPreload=Object.getPrototypeOf(starterSuit).preload;
 if(originalPreload)await originalPreload.call(starterSuit);
-const {prepareFourPowerArt}=await import('./art.mjs');
-const {powerStats}=await import('./powers.mjs');
+const {prepareFourPowerArt,drawFourWorld,drawPowerHero,drawSlamHero,artStatus}=await import('./art.mjs');
+const {powerStats,POWERS}=await import('./powers.mjs');
+const {createTestSnapshot}=await import('./review.mjs');
 await prepareFourPowerArt();
+
+test('gallery renders every preview when its first animation timestamp predates initialization',async()=>{
+ const canvases=[],controls=new Map();let nextFrame;
+ const document={body:{dataset:{}},getElementById(id){if(!controls.has(id))controls.set(id,{append(){}});return controls.get(id);},createElement(tag){
+  if(tag!=='canvas')return {append(){}};
+  const canvas=createCanvas(640,300);canvas.dataset={};canvas.setAttribute=()=>{};canvases.push(canvas);return canvas;
+ }};
+ const source=(await readFile(new URL('./gallery.mjs',import.meta.url),'utf8')).replace(/^import .*;\n/gm,'');
+ const dependencies={prepareReleaseArt:async()=>{},drawHero,prepareFourPowerArt:async()=>{},drawFourWorld,drawPowerHero,drawSlamHero,artStatus,createTestSnapshot,Game,powerStats,POWERS,document,requestAnimationFrame:fn=>{nextFrame=fn;},performance:{now:()=>1000}};
+ const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor;
+ await new AsyncFunction(...Object.keys(dependencies),source)(...Object.values(dependencies));
+ nextFrame(800);
+ assert.equal(canvases.length,14);
+ assert(canvases.every(c=>Number(c.dataset.age)>=0),'No preview may render a negative effect age');
+ controls.get('impact').onclick({target:{}});
+ for(const direction of [1,-1]){
+  if(direction===-1)controls.get('direction').onclick({target:{}});
+  nextFrame(1016);
+  assert(canvases.every(c=>Number(c.dataset.age)>0),'Every power renders its impact frame');
+ }
+});
 
 function fixture(power,face,costume){
  const g=new Game({look:styleCDefault('female')});g.loadRegion(2,{x:2500,y:600});g.time=1;
