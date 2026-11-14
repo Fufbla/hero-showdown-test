@@ -21,9 +21,9 @@ export function normalizeSanctuary(raw,world,arena){
   return {returnLocation:{region:r.region,board:r.board,x:r.x,y:r.y,face:l.face,vx:l.vx,vy:l.vy,jumps:l.jumps}};
 }
 export function appearanceQuote(current,draft){
-  const next=sanitizeLook({...draft,name:current.name}),groups=Object.entries(GROUPS).filter(([,keys])=>keys.some(k=>next[k]!==current[k])).map(([id])=>id);
+  const next=sanitizeLook({...draft,name:current.name,...(current.legacyAppearance?{legacyAppearance:current.legacyAppearance}:{})}),groups=Object.entries(GROUPS).filter(([,keys])=>keys.some(k=>next[k]!==current[k])).map(([id])=>id);
   const subtotal=groups.reduce((s,id)=>s+APPEARANCE_PRICES[id],0),cost=Math.min(APPEARANCE_PRICES.makeover,subtotal);
-  const changed=Object.keys(next).some(k=>next[k]!==current[k]);
+  const changed=Object.keys(next).some(k=>k!=='legacyAppearance'&&next[k]!==current[k]);
   return {next,groups,cost,subtotal,makeover:subtotal>=APPEARANCE_PRICES.makeover,changed};
 }
 const failed=error=>({ok:false,error});

@@ -3,6 +3,7 @@ import {OutfitEngine,STEEL_ID} from '../kingjames/outfit-engine.mjs';
 import {sanitizeLook} from '../../royale/appearance.mjs';
 import {COSTUMES,costumeById} from './catalog.mjs';
 import {CostumeFace,appearanceKey,browserCanvas,FACE_CLEARANCE} from './face.mjs';
+import {removeDetachedPixels} from '../../royale/customization/connected-art.mjs';
 const browserImage=url=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(Error('Costume atlas unavailable'));image.src=url.href;});
 const browserJSON=async url=>{const response=await fetch(url);if(!response.ok)throw Error('Costume manifest unavailable');return response.json();};
 export class CostumeEngine {
@@ -37,10 +38,17 @@ export class CostumeEngine {
   const m=loaded.manifest,f=m.frames[index],body=this.factory(...m.cell),c=body.getContext('2d',{willReadFrequently:true});c.drawImage(loaded.atlas,...f.rect,0,0,...m.cell);
   const pixels=c.getImageData(0,0,...m.cell),mask=this.factory(...m.cell),mc=mask.getContext('2d'),face=mc.createImageData(...m.cell),skin=[];
   const [fx,fy,fw,fh]=f.face,skinKeys=!['stuffed-animal-costume','reaper-costume','fishsticks-costume'].includes(id);
+  const repair=['zombie-costume','black-business-suit','white-business-suit'].includes(id),markers=[];
   for(let y=0;y<m.cell[1];y++)for(let x=0;x<m.cell[0];x++){
    const i=(y*m.cell[0]+x)*4,[r,g,b,a]=pixels.data.subarray(i,i+4);if(a<8){pixels.data[i+3]=0;continue;}
-   if(x>=fx-3&&x<=fx+fw+3&&y>=fy-3&&y<=fy+fh+3&&r>70&&b>70&&r>g*1.5&&b>g*1.5){face.data[i]=face.data[i+1]=face.data[i+2]=255;face.data[i+3]=a;pixels.data[i+3]=0;}
+   if((repair||x>=fx-3&&x<=fx+fw+3&&y>=fy-3&&y<=fy+fh+3)&&r>70&&b>70&&r>g*1.5&&b>g*1.5){face.data[i]=face.data[i+1]=face.data[i+2]=255;face.data[i+3]=a;pixels.data[i+3]=0;if(repair)markers.push([x,y]);}
    
+  }
+  if(repair)for(const [x,y]of markers)for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){
+   const nx=x+dx,ny=y+dy;if(nx<0||nx>=m.cell[0]||ny<0||ny>=m.cell[1]||ny>=f.head[1]-1)continue;
+   // Remove the keyed placeholder's antialiased rim, following its contour.
+   // Preserve the authored collar and neck rather than clearing a rectangle.
+   pixels.data[(ny*m.cell[0]+nx)*4+3]=0;
   }
   if(skinKeys){
    const W=m.cell[0],H=m.cell[1],allowed=new Uint8Array(W*H),seedSeen=new Uint8Array(W*H);
@@ -56,7 +64,8 @@ export class CostumeEngine {
    const candidate=n=>{const i=n*4,r=pixels.data[i],g=pixels.data[i+1],b=pixels.data[i+2];return allowed[n]&&pixels.data[i+3]>8&&g>8&&b>8&&r<Math.min(g,b)*.96&&Math.abs(g-b)<Math.max(g,b)*.4;};
    for(let n=0;n<W*H;n++)if(candidate(n)){const i=n*4;skin.push([i,(pixels.data[i+1]+pixels.data[i+2])/510]);}
   }
-  c.putImageData(pixels,0,0);if(!costumeById(id).hideHair)c.clearRect(fx-FACE_CLEARANCE,fy-FACE_CLEARANCE,fw+2*FACE_CLEARANCE,fh+2*FACE_CLEARANCE);mc.putImageData(face,0,0);
+  if(repair)removeDetachedPixels(pixels.data,...m.cell);
+  c.putImageData(pixels,0,0);if(!costumeById(id).hideHair&&!repair)c.clearRect(fx-FACE_CLEARANCE,fy-FACE_CLEARANCE,fw+2*FACE_CLEARANCE,fh+2*FACE_CLEARANCE);mc.putImageData(face,0,0);
   const result={body,mask,skin};loaded.masks.set(index,result);return result;
  }
  compose(id,index,raw,closed=false,direction=1){

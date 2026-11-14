@@ -7,13 +7,14 @@ import {Game,decodeSave} from '../../royale/core.mjs';
 import {LocalHeroStore,PROFILE_KEY} from '../../royale/saves.mjs';
 import {EQUIPMENT,emptyInventory} from '../../royale/equipment.mjs';
 import {selectedOutfit} from '../../royale-v3-staging/kingjames/selection.mjs';
+import {sanitizeLook} from '../../royale/appearance.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url)),out=path.join(root,'_site');
 const read=p=>fs.readFileSync(path.join(out,p),'utf8');
 const manifest=JSON.parse(read('royale/release-manifest.json'));
 const memory=()=>{const m=new Map();return {getItem:k=>m.get(k)??null,setItem:(k,v)=>m.set(k,String(v)),m};};
 function progressed(){
  const g=new Game();g.hero.level=73;g.hero.xp=123;g.hero.coins=6874;g.loadRegion(5,{x:2350,y:600});
- g.look={...g.look,name:'Existing Hero',hair:'box-braids',skin:'#59352e',hairColor:'#48302c',mouth:'smile'};
+ g.look={...g.look,version:2,name:'Existing Hero',hair:'box-braids',skin:'#59352e',hairColor:'#48302c',mouth:'smile'};
  const defs=Object.values(EQUIPMENT).filter(d=>d.setId==='shore-ordinary'&&['chest','boots'].includes(d.part));
  assert.equal(defs.length,2);const items=defs.map((d,i)=>({uid:'drop-'+(12+i),catalogId:d.id}));g.inventory={...emptyInventory(),items,nextId:14,equipped:Object.fromEntries(items.map((item,i)=>[defs[i].part,item.uid]))};
  g.powers.data.levels.strength=15;g.powers.data.levels.fireball=20;g.powers.data.equipped=['strength','fireball',null];g.powers.data.points=37;g.refreshEquipment();
@@ -21,7 +22,8 @@ function progressed(){
 }
 test('release keeps existing save version and exact progression, position, appearance and equipped gear',()=>{
  const g=progressed(),before=JSON.parse(g.save()),decoded=decodeSave(JSON.stringify(before));assert(decoded,'fixture is a valid existing save');const restored=new Game({save:decoded}),after=JSON.parse(restored.save());
- for(const key of ['version','look','level','xp','coins','inventory','cosmetics','world','powers','economy','legendary','journey','bossProgress'])assert.deepEqual(after[key],before[key],key);
+ for(const key of ['version','level','xp','coins','inventory','cosmetics','world','powers','economy','legendary','journey','bossProgress'])assert.deepEqual(after[key],before[key],key);
+ assert.deepEqual(after.look,sanitizeLook(before.look));assert.deepEqual(after.look.legacyAppearance,before.look);
  assert.equal(restored.hero.x,2350);assert.equal(restored.hero.y,600);assert.equal(restored.regionId,5);assert(restored.equipment.defense>0);
 });
 test('three occupied original slots survive release loading and one-slot save without touching the other slots',()=>{

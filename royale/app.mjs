@@ -339,7 +339,7 @@ function renderRoster(){
     if(slot){const del=document.createElement('button');del.className='text-button delete-hero';del.textContent='Delete Hero';del.disabled=!store.writable||multiplayerMenu.isLinked(slot.id);del.onclick=()=>{deleteTarget={index:i,id:slot.id,name:slot.snapshot.look.name};$('delete-description').textContent=`Delete ${slot.snapshot.look.name}, level ${slot.snapshot.level}?`;setScreen('delete');$('cancel-delete').focus();};card.append(del);}
     container.append(card);
     const c=canvas.getContext('2d');c.fillStyle='#c4d4a41c';c.beginPath();c.ellipse(180,284,62,10,0,0,Math.PI*2);c.fill();
-    if(slot)drawHero(c,180,282,slot.snapshot.look,previewHero('idle',0),0,2.2,{view:'front',outfit:equipmentOutfit(slot.snapshot.inventory,slot.snapshot.outfit),clothing:clothingRuntime.layers(slot.snapshot.cosmetics)});
+    if(slot)drawHero(c,180,282,slot.snapshot.look,previewHero('idle',0),0,1.75,{view:'front',outfit:equipmentOutfit(slot.snapshot.inventory,slot.snapshot.outfit),clothing:clothingRuntime.layers(slot.snapshot.cosmetics)});
     else{c.fillStyle='#b6cda77a';c.font='66px Georgia';c.textAlign='center';c.fillText('✦',180,190);}
   }
   $('back-to-patrol').hidden=!game.started;storageNotice();

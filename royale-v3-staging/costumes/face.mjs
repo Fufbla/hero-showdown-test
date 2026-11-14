@@ -13,6 +13,7 @@ export class CostumeFace {
  plate(look,closed){return this.fullHead.facePlate(look,closed);}
  draw(c,raw,frame,{hideHair,closed=false}={}){
   const look=sanitizeLook(raw),[x,y,w,h]=frame.face,p=this.plate(look,closed),[bx,by,bw,bh]=p.bounds,s=Math.min(w/bw,h/bh);
+  if(!hideHair){this.fullHead.draw(c,look,frame.faceAnchor||frame.head,.35,{closed});return;}
   // Register the actual face ink, not transparent source padding. The full head
   // uses precisely the same transform regardless of the saved hairstyle.
   // Uncovered necks start at the lower edge of the cleared placeholder, not
@@ -21,6 +22,7 @@ export class CostumeFace {
   const dy=hideHair?y+h-bh*s-by*s:y+h+FACE_CLEARANCE-p.origin[1]*s;
   // The exposed face keeps its own skin tone; the space inside the hood is dark.
   if(hideHair){c.fillStyle='#000000';c.fillRect(x-3,y-3,w+6,h+6);}
-  c.drawImage(this.fullHead.plate(look,closed).image,dx,dy,256*s,256*s);
+  const picture=this.fullHead.plate(look,closed).image;
+  c.drawImage(picture,dx,dy,picture.width*s,picture.height*s);
  }
 }

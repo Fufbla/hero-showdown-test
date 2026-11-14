@@ -2,6 +2,7 @@ import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.0';
 import {migratePowerSnapshot,guardPowerSave} from '../../power-policy.mjs';
 import {guardEconomySave} from '../../gameplay/economy-save-guard.mjs';
 import {checkCosmeticSave} from '../cosmetics/save-guard.mjs';
+import {checkAppearanceSave} from '../../customization/migration.mjs';
 const origin='https://fufbla.github.io',project='royale-v3-staging';
 const headers={'Content-Type':'application/json','Access-Control-Allow-Origin':origin,'Access-Control-Allow-Headers':'content-type,authorization,apikey','Access-Control-Allow-Methods':'POST,OPTIONS','Cache-Control':'no-store'};
 const db=createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,{auth:{persistSession:false,autoRefreshToken:false}});
@@ -62,6 +63,8 @@ Deno.serve(async req=>{
    // hero and checks the raw matching-outfit selection before storing it.
    const clothing=checkCosmeticSave(current.data.snapshot,snapshot);
    if(!clothing.ok)return out({error:clothing.error},409);
+   const appearance=checkAppearanceSave(current.data.snapshot,snapshot);
+   if(!appearance.ok)return out({error:appearance.error},409);
    const r=await db.from('royale_v3_hero_slots').update({snapshot,revision:revision+1,updated_at:new Date().toISOString()}).eq('profile_id',profile).eq('slot_number',slot).eq('revision',revision).select('revision,updated_at').maybeSingle();
    if(r.error)throw Error('Save failed');if(!r.data)return out({error:'Revision conflict'},409);
    return out(r.data);

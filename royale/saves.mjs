@@ -1,4 +1,5 @@
 import { legendaryDominates } from './legendary-state.mjs';
+import {checkAppearanceSave} from './customization/migration.mjs';
 import { decodeSave, SAVE_KEY } from './core.mjs';
 import { CAMPS, regionAt } from './world.mjs';
 export const PROFILE_KEY='healthia.royale.profiles.v2';
@@ -52,6 +53,7 @@ export class LocalHeroStore{
     const current=this.data.slots[index];
     if(expectedId!==undefined&&(current?.id??null)!==expectedId)return {ok:false,error:'This hero slot changed. Select it again before saving.'};
     if(current){
+      const appearance=checkAppearanceSave(current.snapshot,state);if(!appearance.ok)return appearance;
       const old=decodeSave(JSON.stringify(current.snapshot),{allowOverBudgetPowers:this.allowOverBudgetPowers});
       if(!old)return {ok:false,error:'The previous hero snapshot requires recovery.'};
       if(!legendaryDominates(state.legendary,old.legendary)||state.economy.revision<old.economy.revision||state.inventory.nextId<old.inventory.nextId||Object.keys(old.inventory.retired).some(uid=>!state.inventory.retired[uid])||state.level<old.level||Object.keys(old.powers.levels).some(id=>state.powers.levels[id]<old.powers.levels[id]))return {ok:false,error:'This snapshot predates permanent progress. Reload the latest hero before saving.'};

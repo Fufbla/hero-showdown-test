@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {fileURLToPath} from 'node:url';import {readFile} from 'node:fs/promises';import {createHash} from 'node:crypto';
 import {CostumeEngine} from '../engine.mjs';import {COSTUMES,costumeForState} from '../catalog.mjs';import {CostumeOwners} from '../owners.mjs';import {motionHero} from '../preview.mjs';
-import {FullBodyAnimator,REQUIRED_STATES} from '../../kingjames/animation.mjs';import {HAIR_STYLES} from '../../../royale/appearance.mjs';import {styleCDefault} from '../../../royale/style-c-defaults.mjs';
+import {FullBodyAnimator,REQUIRED_STATES} from '../../kingjames/animation.mjs';import {HAIR_STYLES,sanitizeLook} from '../../../royale/appearance.mjs';import {styleCDefault} from '../../../royale/style-c-defaults.mjs';
 import {Game,STEP,decodeSave,ATTACKS} from '../../../royale/core.mjs';import {catalogIndex,cosmeticTransaction,emptyCosmetics,normalizeCosmetics,cosmeticAppearance} from '../../../royale/cosmetics/state.mjs';
 import {checkCosmeticSave} from '../../cloud/cosmetics/save-guard.mjs';import {LocalHeroStore} from '../../../royale/saves.mjs';import {captureProgress} from '../../../royale/local-coop/session.mjs';
 const {createCanvas,loadImage}=createRequire(import.meta.url)('@napi-rs/canvas');
@@ -92,7 +92,7 @@ test('700-coin ownership, duplicate protection, equip and remove survive saved h
  const purchase=transact(g.cosmetics,g.hero.coins,'purchase',o.id);assert.equal(purchase.debit,700);assert.equal(purchase.coins,9300);assert.equal(transact(purchase.state,purchase.coins,'purchase',o.id).ok,false);
  const worn=transact(purchase.state,purchase.coins,'equip',o.id);g.cosmetics=worn.state;g.hero.coins=worn.coins;const saved=g.save(),parsed=decodeSave(saved);assert(parsed);assert.deepEqual(parsed.look,original.look);assert.equal(costumeForState(parsed.cosmetics).id,o.id);assert.deepEqual(parsed.inventory,original.inventory);assert.deepEqual(parsed.powers,original.powers);
  const values=new Map(),storage={getItem:k=>values.get(k)||null,setItem:(k,v)=>values.set(k,v)};const store=new LocalHeroStore(storage);assert(store.writeSlot(0,JSON.parse(saved),{expectedId:null}).ok);const reload=new LocalHeroStore(storage);assert.equal(costumeForState(reload.slot(0).snapshot.cosmetics).id,o.id);
- const removed=transact(parsed.cosmetics,parsed.coins,'unequip');assert(removed.ok);assert.equal(costumeForState(removed.state),null);assert.equal(parsed.look.hair,look.hair);assert(removed.state.owned.includes(o.id+'.fullbody'));
+ const removed=transact(parsed.cosmetics,parsed.coins,'unequip');assert(removed.ok);assert.equal(costumeForState(removed.state),null);assert.equal(parsed.look.hair,sanitizeLook(look).hair);assert(removed.state.owned.includes(o.id+'.fullbody'));
  const stale=cosmeticTransaction({state:worn.state,coins:9300,index,operation:{type:'unequip',revision:0},safe:true});assert.equal(stale.ok,false);
  }
 });
