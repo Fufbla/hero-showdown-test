@@ -464,7 +464,7 @@ function updateHud() {
   document.getElementById('boss-hud').dataset.cleared=String(!!game.arenaScene?.cleared);
   updateBossHud(game,game.started&&['play','pause','tree','controls','world','inventory','chest','mergeReward'].includes(screen));
 
-  hudText($('world-region'),game.treeVisit?'PEACEFUL SANCTUARY':game.getRegion().name.toUpperCase());$('world-clock').hidden=game.regionId<3;hudText($('world-clock'),formatClock(game.clock()));$('world-clock').title=clockSynchronized()?'Synchronized with account server time':'Offline clock uses this device time; server synchronization awaits the account service.';
+  hudText($('world-region'),game.treeVisit?'PEACEFUL SANCTUARY':game.getRegion().name.toUpperCase());$('world-clock').hidden=false;hudText($('world-clock'),formatClock(game.clock()));$('world-clock').title=clockSynchronized()?'Synchronized with account server time':'Offline clock uses this device time; server synchronization awaits the account service.';
   hudText($('root-count'),game.healthRoots);hudText($('health-root').querySelector('kbd'),input.controls.keys.heal[0].replace('Key','').replace('Digit',''));$('health-root').disabled=screen!=='play'||h.dead||game.healthRoots===0||h.hp>=h.maxHp;
   hudAttr($('health-root'),'aria-label',`Use Health Root · ${game.healthRoots} of 10 · restore 25% HP`);
   if (region.name !== regionName) { regionName = region.name; $('region').textContent = region.name;$('stage').setAttribute('aria-label',`${game.getRegion().name} game`);$('game').setAttribute('aria-label',`${game.getRegion().name}, ${region.name}. Move, double-jump, punch, kick and use your equipped powers.`); }

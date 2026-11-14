@@ -1,3 +1,4 @@
+import {armorPurchasePrice} from '../../royale/armor-prices.mjs';
 // Generated staging presentation; all catalog, equipment and bonus rules remain shared.
 import {armorFreeAppearance} from './armor-appearance.mjs';
 import { MERGE_CATALOG } from '../../royale/legendary-data.mjs';
@@ -35,7 +36,7 @@ export function armorOutfitStats(selection){
 }
 export function armorOutfitPrice(selection){
   const key=selectionKey(selection);
-  if(!wholePrices.has(key))wholePrices.set(key,familyDefinitions(key).reduce((n,d)=>n+(d.catalogValue||0),0));
+  if(!wholePrices.has(key))wholePrices.set(key,armorPurchasePrice(familyDefinitions(key)));
   return wholePrices.get(key);
 }
 export function activeArmorShopDefinitions(selection){

@@ -12,7 +12,8 @@ export function xpMultiplier(heroLevel,monsterLevel){
 export const monsterXP=(base,heroLevel,monsterLevel)=>Math.max(0,Math.floor(base*xpMultiplier(heroLevel,monsterLevel)));
 export const CLOCK=Object.freeze({day:30*60*1000,night:10*60*1000});
 export function worldClock(reference,now=Date.now(),region=1){
-  if(region<=2)return {night:false,remaining:null,phase:'Permanent day'};
+  // Every region shares the existing epoch and 30-minute day / 10-minute night.
+  // A hero's starting region must not opt their account out of the cycle.
   const phase=Math.max(0,now-reference)%(CLOCK.day+CLOCK.night),night=phase>=CLOCK.day;
   return {night,remaining:Math.ceil(((night?CLOCK.day+CLOCK.night:CLOCK.day)-phase)/1000),phase:night?'Night':'Day'};
 }

@@ -1,3 +1,4 @@
+import {armorPurchasePrice} from './armor-prices.mjs';
 import { MERGE_CATALOG } from './legendary-data.mjs';
 import {WARDROBE_CATALOG} from './flight-armor.mjs';
 import { COSTUME_PARTS, ARMOR_OUTFIT_PARTS, STAT_KEYS, costumeDrop } from './costume-catalog.mjs';
@@ -33,7 +34,7 @@ export function armorOutfitStats(selection){
 }
 export function armorOutfitPrice(selection){
   const key=selectionKey(selection);
-  if(!wholePrices.has(key))wholePrices.set(key,familyDefinitions(key).reduce((n,d)=>n+(d.catalogValue||0),0));
+  if(!wholePrices.has(key))wholePrices.set(key,armorPurchasePrice(familyDefinitions(key)));
   return wholePrices.get(key);
 }
 export function activeArmorShopDefinitions(selection){

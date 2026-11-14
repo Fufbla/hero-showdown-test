@@ -145,5 +145,6 @@ export const journeyMethods={
   },
   respawnDelay(e){return RESPAWN[TYPES[e.type]?.rank]||RESPAWN.common;},
   ...travelMethods,
-  monsterDamage(e){if(e.legendaryHelper)return e.damage;if(isBoss(e))return e.damage??TYPES[e.type]?.damage??0;return TYPES[e.type].damage*(this.clock().night&&!isBoss(e)?2:1);},
+  // Lighting is universal; retain the established region 3–7 night difficulty.
+  monsterDamage(e){if(e.legendaryHelper)return e.damage;if(isBoss(e))return e.damage??TYPES[e.type]?.damage??0;return TYPES[e.type].damage*(this.regionId>2&&this.clock().night&&!isBoss(e)?2:1);},
 };

@@ -60,15 +60,16 @@ test('active rewards and quotes contain no headwear while historical definitions
  assert.equal(pickupLoot(game,'loot-2'),false);
 });
 
-test('complete modern outfits preserve every authored three-piece total and price',()=>{
+test('complete modern outfits preserve authored stats and use the approved purchase prices',()=>{
  const families=new Set(Object.values(EQUIPMENT).filter(d=>!d.legacy).map(armorOutfitKey));
  for(const setId of families){
   const all=Object.values(EQUIPMENT).filter(d=>d.setId===setId),inv=inventoryFor(setId);
   const expected=Object.fromEntries(STAT_KEYS.map(k=>[k,Number(all.reduce((n,d)=>n+(d.stats[k]||0),0).toFixed(4))]));
   assert.deepEqual(equipmentBonuses(inv,99),expected,setId);
   assert.deepEqual(armorOutfitStats(setId),expected,setId);
-  assert.equal(armorOutfitPrice(setId),all.reduce((n,d)=>n+d.catalogValue,0));
   const shop=activeArmorShopDefinitions({setId});
+  const prices={10:100,20:300,30:700,40:1300,50:2200,60:3500,70:5200,80:7300,90:10000};
+  assert.equal(armorOutfitPrice(setId),prices[shop[0]?.level]??all.reduce((n,d)=>n+d.catalogValue,0));
   if(all.some(d=>d.shop)){assert.deepEqual(shop.map(d=>d.part),['chest','boots']);assert.equal(armorOutfitPrice(shop),armorOutfitPrice(setId));}
  }
  assert.equal(armorOutfitStats('fireball-flare').fireball,4);
@@ -103,10 +104,10 @@ test('legacy body and boots match by region and rarity without manufacturing or 
  assert.equal(decodeSave(g.save()).inventory.items.length,4);
 });
 
-test('whole outfit purchase keeps the old full price and consumes only two capacity slots',()=>{
+test('whole outfit purchase uses the approved price and consumes only two capacity slots',()=>{
  const g=new Game();g.gainXP(1e9);g.hero.coins=10000;g.visitTree();
- const q=g.costumePreview({setId:'fireball-flare'});assert(q.ok);assert.equal(q.cost,4500);assert.equal(q.definitions.length,2);
- const r=g.buyCostume({setId:'fireball-flare'},{confirmed:true,revision:q.revision});assert(r.ok);assert.equal(g.hero.coins,5500);assert.equal(g.inventory.items.length,2);
+ const q=g.costumePreview({setId:'fireball-flare'});assert(q.ok);assert.equal(q.cost,1300);assert.equal(q.definitions.length,2);
+ const r=g.buyCostume({setId:'fireball-flare'},{confirmed:true,revision:q.revision});assert(r.ok);assert.equal(g.hero.coins,8700);assert.equal(g.inventory.items.length,2);
  assert(g.inventory.items.every(i=>!isRetiredHeadwear(i)));assert(g.equipItem(g.inventory.items[0].uid));
  assert.equal(g.salePreview(g.inventory.items[1].uid).ok,false,'a worn component cannot be sold');
  assert.equal(g.costumePreview({catalogId:'fireball-flare-helmet'}).ok,false);

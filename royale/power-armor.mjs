@@ -1,6 +1,7 @@
 // Each ID identifies one permanent catalog design in saved inventories.
 // Prices are whole coins. For a half-coin quarter the boots take the remainder.
 import {COSTUME_CATALOG, COSTUME_PARTS, matchingArmorSet} from './costume-catalog.mjs';
+import {ARMOR_PRICES} from './armor-prices.mjs';
 
 const designs = [
   ['ember', 'Ember Scout', 500],
@@ -14,14 +15,15 @@ const designs = [
   ['supernova', 'Supernova Sovereign', 40000],
 ];
 
-export const FIREBALL_SUITS = Object.freeze(designs.map(([art, name, price], i) => ({
-  setId: 'fireball-'+art, art, name, price, level:10*(i+1), fireballLevels:i+1,
+export const FIREBALL_SUITS = Object.freeze(designs.map(([art, name], i) => ({
+  setId: 'fireball-'+art, art, name, price:ARMOR_PRICES[10*(i+1)], level:10*(i+1), fireballLevels:i+1,
   color:'#bd2132', accent:'#ffbd5a', rarity:'ordinary',
 })));
 
-export const FIREBALL_PIECES = Object.freeze(Object.fromEntries(FIREBALL_SUITS.flatMap(suit => {
-  const helmet = Math.floor(suit.price/4), chest = suit.price/2;
-  const prices = {helmet, chest, boots:suit.price-helmet-chest};
+export const FIREBALL_PIECES = Object.freeze(Object.fromEntries(FIREBALL_SUITS.flatMap((suit,index) => {
+  const originalValue=designs[index][2];
+  const helmet = Math.floor(originalValue/4), chest = originalValue/2;
+  const prices = {helmet, chest, boots:originalValue-helmet-chest};
   return COSTUME_PARTS.map(part => {
     const id = suit.setId+'-'+part;
     return [id, {id, setId:suit.setId, art:suit.art, setName:suit.name,
