@@ -1,0 +1,36 @@
+name: Four Powers Isolated Test Build
+on:
+  push:
+    branches: [feature/four-powers-test-only-20261114]
+permissions:
+  contents: read
+concurrency:
+  group: four-powers-test-build
+  cancel-in-progress: true
+jobs:
+  test-build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned build and rendering dependencies
+        run: |
+          npm ci --prefix tools/release-build
+          npm install --no-save --no-package-lock @napi-rs/canvas@0.1.100
+      - name: Verify powers, visuals, gameplay and save compatibility
+        run: |
+          node --import ./test-only/four-powers/register.mjs --test test-only/four-powers/tests.test.mjs test-only/four-powers/visual.test.mjs royale/local-coop/tests/render-view.test.mjs royale-v3-staging/gameplay/tests/rewards.test.mjs royale-v3-staging/gameplay/tests/save-guard.test.mjs royale-v3-staging/gameplay/tests/travel-portals.test.mjs
+          node --import ./tools/release-build/register.mjs --test royale/local-coop/tests/local-coop.test.mjs
+      - name: Package isolated playable test
+        run: node test-only/four-powers/package.cjs dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: four-powers-playable-test
+          path: dist
+          retention-days: 30
+      # No Pages permission, environment, deployment or main push.
+      # Publish the playable copy separately at its isolated test Site.

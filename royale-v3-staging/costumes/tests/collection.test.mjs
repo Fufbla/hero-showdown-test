@@ -12,18 +12,22 @@ import {Game,decodeSave} from '../../../royale/core.mjs';
 import {emptyCosmetics,cosmeticTransaction,normalizeCosmetics,selectedOutfit,catalogIndex,ownsOutfit} from '../../../royale/cosmetics/state.mjs';
 import {checkCosmeticSave} from '../../cloud/cosmetics/save-guard.mjs';
 import {APPROVED_OUTFITS} from '../../kingjames/outfit-catalog.mjs';
+import {FASHION_OUTFITS} from '../../../royale/fashion/definitions.mjs';
 const {createCanvas,loadImage}=createRequire(import.meta.url)('@napi-rs/canvas');
 const engine=new CostumeEngine({canvasFactory:createCanvas,imageLoader:u=>loadImage(fileURLToPath(u)),jsonLoader:async u=>JSON.parse(await readFile(u))});
 const {data,index}=await new ClothingRuntime({readJSON:()=>{throw Error('Old catalog must not be loaded');}}).catalog();
 const transaction=(g,type,id)=>cosmeticTransaction({state:g.cosmetics,coins:g.hero.coins,index,operation:{type,id,confirmed:true,revision:g.cosmetics.revision},safe:true,atWardrobe:true});
 
-test('one catalog provides exactly the 22 approved shop and free-trial outfits',async()=>{
- assert.equal(COLLECTION.length,22);assert.equal(COSTUMES.length,10);
+test('shop and free trial retain the approved base collection and included fashion additions',async()=>{
+ const fashion=COLLECTION.filter(o=>o.renderer==='fashion');
+ assert.equal(COLLECTION.length,fashion.length?28:22);assert.equal(COSTUMES.length,10);
+ if(fashion.length)assert.deepEqual(fashion.map(o=>o.id),FASHION_OUTFITS.map(o=>o.id));
  assert.strictEqual(data.sets,COLLECTION);assert.strictEqual(trialOutfits(),COLLECTION);
  assert.deepEqual(COLLECTION.filter(o=>o.renderer==='approved').map(o=>o.id),APPROVED_OUTFITS.map(o=>o.id));
  for(const o of COLLECTION){assert.equal(o.collection,'Mascots & Formal');assert.equal(o.coinPrice,700);assert.equal(o.pieces.length,1);await access(new URL(o.thumbnail,new URL('../',import.meta.url)));}
  const source=JSON.parse(await readFile(new URL('../collection.json',import.meta.url)));
- assert.deepEqual(source.map(o=>o.id),trialOutfits().map(o=>o.id));
+ assert.equal(source.length,22);
+ assert.deepEqual([...source,...fashion].map(o=>o.id),trialOutfits().map(o=>o.id));
 });
 test('every old outfit is absent, cannot be bought or equipped, and migrates without deleting ownership',async()=>{
  const legacy=JSON.parse(await readFile(new URL('../../../royale/cosmetics/catalog.json',import.meta.url)));
@@ -41,7 +45,7 @@ test('every old outfit is absent, cannot be bought or equipped, and migrates wit
  }
  assert.throws(()=>catalogIndex(legacy));
 });
-test('all 22 outfits can be purchased once, worn, saved, restored, and removed under the same cloud policy',()=>{
+test('all included outfits can be purchased once, worn, saved, restored, and removed under the same cloud policy',()=>{
  for(const o of COLLECTION){
   const g=new Game();g.hero.coins=700;const before=JSON.parse(g.save());
   const bought=transaction(g,'purchase',o.id);assert(bought.ok,o.id);assert.equal(bought.coins,0);g.cosmetics=bought.state;g.hero.coins=bought.coins;
