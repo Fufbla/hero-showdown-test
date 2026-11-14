@@ -130,13 +130,13 @@ export class PowerSystem {
       const target=g.enemies.filter(e=>e.state!=='dead'&&e.protection<=0&&Math.hypot(e.x-h.x,e.y-h.y)<s.range).sort((a,b)=>Math.hypot(a.x-h.x,a.y-h.y)-Math.hypot(b.x-h.x,b.y-h.y)||a.id-b.id)[0];
       if(target){
         const hits=s.animal==='panther'?2:1;
-        for(let i=0;i<hits;i++)g.damageEnemy(target,s.damage/hits,{kind:'animalAllies',stagger:s.animal!=='wolf'&&s.animal!=='hawk'});
+        for(let i=0;i<hits;i++)g.damageEnemy(target,s.damage/hits,{kind:'animalAllies',stagger:s.animal!=='wolf'&&s.animal!=='hawk',knock:s.animal==='spirit-stag'?35:0,face:Math.sign(target.x-h.x)||h.face});
         this.effects.push({id,animal:s.animal,x:h.x,y:h.y,targetX:target.x,targetY:target.y,face:Math.sign(target.x-h.x)||h.face,age:0,duration:.48});
       }else this.effects.push({id,animal:s.animal,x:h.x,y:h.y,targetX:h.x+h.face*60,targetY:h.y,face:h.face,age:0,duration:.3});
     }
     if(id==='seismicSmash'){
       const targets=g.enemies.filter(e=>e.state!=='dead'&&e.protection<=0&&Math.hypot(e.x-h.x,e.y-h.y)<=s.radius+e.w/2).sort((a,b)=>Math.hypot(a.x-h.x,a.y-h.y)-Math.hypot(b.x-h.x,b.y-h.y)||a.id-b.id).slice(0,s.targets);
-      for(const target of targets)g.damageEnemy(target,s.damage,{kind:'seismicSmash',stagger:true});
+      for(const target of targets)g.damageEnemy(target,s.damage,{kind:'seismicSmash',stagger:true,knock:12+s.level,face:Math.sign(target.x-h.x)||h.face});
       this.effects.push({id,x:h.x,y:h.y,radius:s.radius,level:s.level,age:0,duration:.42});
     }
     if(id==='fireball'){this.bursts.push({...state,left:s.projectiles,next:0});h.castAge=0;}
