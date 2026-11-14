@@ -164,7 +164,7 @@ export class Game {
   attackBox() {
     const h = this.hero, a = h.attack;
     if (!a) return null;
-    const reach = ATTACKS[a.kind].reach;
+    const reach = a.stats?.reach || ATTACKS[a.kind].reach;
     return { x: a.face > 0 ? h.x + 3 : h.x - reach - 3, y: h.y - 71, w: reach, h: 69 };
   }
   emit(type, data = {}) { this.events.push({ type, ...data }); }
