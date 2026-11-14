@@ -68,6 +68,16 @@ export function drawPowerHero(c,game,pos,pose){
     }
     c.restore();
   }
+  if(h.attack?.power==='strength'||h.attack?.power==='superKick'){
+    const a=h.attack,reach=a.stats?.reach||70,level=a.stats?.level||1;
+    const startup=a.power==='strength'?.055:.10,age=a.age;
+    if(age>=startup&&age<startup+.16){
+      const alpha=Math.max(0,1-(age-startup)/.16),x=pos.x+a.face*(reach-9),y=pos.y-(a.power==='strength'?45:29);
+      c.save();c.translate(x,y);c.globalAlpha=alpha;c.strokeStyle=a.power==='strength'?'#ffe761':'#8aefeb';c.lineWidth=2+level*.14;
+      for(let j=0;j<7;j++){const angle=j*Math.PI*2/7;const length=(9+level*.48)*(1+Math.sin((age-startup)*22)*.15);c.beginPath();c.moveTo(Math.cos(angle)*5,Math.sin(angle)*5);c.lineTo(Math.cos(angle)*length,Math.sin(angle)*length);c.stroke();}
+      c.strokeStyle='#fff9d2';c.lineWidth=2;c.beginPath();c.arc(0,0,6+level*.25,0,Math.PI*2);c.stroke();c.restore();
+    }
+  }
   if(h.agile){c.save();c.globalAlpha=.5;for(let i=0;i<3;i++)line(c,[[pos.x-h.face*(29+i*6),pos.y-58+i*15],[pos.x-h.face*(38+i*6),pos.y-50+i*15]],'#dbeec8',1.5);c.restore();}
   if(h.flying){for(let i=0;i<2;i++)line(c,[[pos.x-15-i*7,pos.y+8+i*9],[pos.x-3,pos.y+12+i*9],[pos.x+15+i*7,pos.y+8+i*9]],'#edf2c48c',1.4);}
 }
