@@ -92,6 +92,9 @@ const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
   }
   async function resume(){for(let i=0;i<2;i++)await page.locator('#panel-'+i).getByRole('button',{name:'Ready / Resume',exact:true}).click();assert(!await page.locator('#menu').isVisible());await page.waitForTimeout(150);}
   assert((await observe()).frames>5,'Both heroes continuously render');
+  // An unchanged checkpoint is intentionally not sent again. Move each hero
+  // before waiting for the autosave so both accounts have new progress.
+  await move(0,.25,150);await move(1,.25,150);
   await until(()=>accounts.every(a=>a.saves.length));
   for(let i=0;i<2;i++){
    assert.equal(latest(i).level,14+i);assert.equal(latest(i).xp,20+i);assert.equal(latest(i).coins,1234+i*100);
