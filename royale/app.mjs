@@ -194,6 +194,28 @@ if(v2TestHero){
   button.setAttribute('aria-label','Switch V2 test hero between generated and original artwork');
   button.disabled=true;
   root.prepend(button);
+  // Private 0000000000 prototype only: modify the local practice hero's
+  // power level and first equipped slot without touching cloud accounts.
+  const testTools=document.createElement('div');testTools.id='four-power-test-controls';
+  testTools.style.cssText='display:flex;gap:5px;flex-wrap:wrap;align-items:center';
+  const powerSelect=document.createElement('select');powerSelect.setAttribute('aria-label','Select power to test');
+  for(const [id,name] of [['strength','Super Strength'],['superKick','Super Kick'],['animalAllies','Animal Allies'],['seismicSmash','Seismic Smash']]){
+   const option=document.createElement('option');option.value=id;option.textContent=name;powerSelect.append(option);
+  }
+  const levelSelect=document.createElement('select');levelSelect.setAttribute('aria-label','Test power level');
+  for(let n=1;n<=20;n++){const option=document.createElement('option');option.value=String(n);option.textContent='Level '+n;levelSelect.append(option);}
+  levelSelect.value='20';
+  const apply=document.createElement('button');apply.type='button';apply.textContent='Try Power Level';
+  apply.onclick=()=>{
+   if(!game?.started||!game?.testPowers){say('Open your 0000000000 test hero first.');return;}
+   const id=powerSelect.value,level=Number(levelSelect.value);
+   game.powers.data.levels[id]=level;
+   game.powers.data.equipped[0]=id;
+   for(let i=1;i<game.powers.data.equipped.length;i++)if(game.powers.data.equipped[i]===id)game.powers.data.equipped[i]=null;
+   game.powers.cooldowns[id]=0;
+   powerMenu.render?.();updateHud();say(POWERS[id].name+' Level '+level+' equipped in slot 1 (prototype only).',5);
+  };
+  testTools.append(powerSelect,levelSelect,apply);root.prepend(testTools);
   void v2GeneratedSprites.preload().then(ok=>{
    button.disabled=!ok;
    button.textContent=ok?'V2 Sprites: ON (tap for original)': 'V2 Sprites unavailable · Original art';
