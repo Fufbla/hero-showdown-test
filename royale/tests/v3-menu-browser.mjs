@@ -27,7 +27,7 @@ async function load(width,height,prior=null,encounter=false){
  const store=new LocalHeroStore(storage);if(prior)storage.setItem(PROFILE_KEY,JSON.stringify(prior));else for(let slot=0;slot<3;slot++)store.writeSlot(slot,fixture(slot,encounter));
  await new Promise(resolve=>{frame.onload=resolve;frame.src='../?codePlay=v3&touch=1&qa&testSession='+session;});
  const d=frame.contentDocument,w=frame.contentWindow;
- await until(()=>d.querySelectorAll('.hero-slot').length===2&&d.getElementById('hero-art-status').hidden,'two-slot roster and artwork');
+ await until(()=>d.querySelectorAll('.hero-slot').length===3&&d.getElementById('hero-art-status').hidden,'three-slot roster and artwork');
  return {d,w,prefix,expected:JSON.parse(storage.getItem(PROFILE_KEY))};
 }
 async function start(d,slot=0){d.querySelector(`[data-slot="${slot}"] [data-action=continue]`).click();await until(()=>d.body.classList.contains('playing'),'gameplay');}
@@ -90,8 +90,8 @@ $('saves').onclick=()=>task(async()=>{
   check(same(sent.at(-1).snapshot.world.location,expected.slots[slot].snapshot.world.location),'Cloud snapshot preserves exact position/health slot '+(slot+1));
   d.getElementById('pause').click();d.getElementById('choose-hero').click();
  }
- const saved=JSON.parse(sessionStorage.getItem(prefix+PROFILE_KEY));check(same(saved.slots[2],expected.slots[2]),'Hidden third slot untouched');
- const reloaded=await load(844,390,saved);check(reloaded.d.querySelectorAll('.hero-slot').length===2,'Two visible slots after browser document reload');
+ const saved=JSON.parse(sessionStorage.getItem(prefix+PROFILE_KEY));check(same(saved.slots[2],expected.slots[2]),'Unselected third slot untouched');
+ const reloaded=await load(844,390,saved);check(reloaded.d.querySelectorAll('.hero-slot').length===3,'Three visible slots after browser document reload');
  for(const slot of [0,1]){await start(reloaded.d,slot);reloaded.d.getElementById('pause').click();check(same(JSON.parse(sessionStorage.getItem(reloaded.prefix+PROFILE_KEY)).slots[slot].snapshot.inventory,expected.slots[slot].snapshot.inventory),'All 20 equipment records restored in slot '+(slot+1));reloaded.d.getElementById('choose-hero').click();}
 });
 

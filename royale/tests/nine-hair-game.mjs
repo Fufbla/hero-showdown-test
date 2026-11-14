@@ -24,8 +24,8 @@ async function load(prior){
  if(prior){storage().setItem(PROFILE_KEY,JSON.stringify(prior));expected=prior;}else fixtures();
  messages.length=0;
  await new Promise(resolve=>{frame.onload=resolve;frame.src='../?codePlay=v3&touch=1&qa&testSession='+session;});
- await until(()=>{try{return frame.contentDocument?.querySelectorAll('.hero-slot').length===2&&frame.contentDocument?.getElementById('hero-art-status')?.hidden}catch{return false}},'roster and hair artwork');
- check(frame.contentDocument.querySelectorAll('.hero-slot').length===2,'two visible slots; Slot 3 hidden');
+ await until(()=>{try{return frame.contentDocument?.querySelectorAll('.hero-slot').length===3&&frame.contentDocument?.getElementById('hero-art-status')?.hidden}catch{return false}},'roster and hair artwork');
+ check(frame.contentDocument.querySelectorAll('.hero-slot').length===3,'three visible slots; Slot 3 available');
  $('reference').src='../qa/nine-hair-review/references/'+$('hair').value+'.jpeg';
 }
 async function start(slot=0){const d=frame.contentDocument;d.querySelector(`[data-slot="${slot}"] [data-action=continue]`).click();await until(()=>d.body.classList.contains('playing'),'gameplay');return d;}
@@ -84,7 +84,7 @@ $('save').onclick=()=>task(async()=>{
   check(same(sent.at(-1).snapshot.world.location,original.slots[slot].snapshot.world.location),`slot ${slot+1} preserves exact position and health`);
   d.getElementById('pause').click();d.getElementById('choose-hero').click();
  }
- const saved=JSON.parse(storage().getItem(PROFILE_KEY));check(same(saved.slots[2],original.slots[2]),'hidden third slot unchanged');
+ const saved=JSON.parse(storage().getItem(PROFILE_KEY));check(same(saved.slots[2],original.slots[2]),'unselected third slot unchanged');
  await load(saved);
  for(const slot of [0,1]){const d=await start(slot);d.getElementById('pause').click();const after=JSON.parse(storage().getItem(PROFILE_KEY)).slots[slot].snapshot;check(same(after.look,original.slots[slot].snapshot.look)&&same(after.world.location,original.slots[slot].snapshot.world.location),`slot ${slot+1} appearance and position restored after document reload`);d.getElementById('choose-hero').click();}
 });

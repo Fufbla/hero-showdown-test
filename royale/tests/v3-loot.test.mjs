@@ -144,16 +144,19 @@ test('invalid stat payloads fail closed; no legacy reroll, duplicate identity, o
  assert.equal(normalizeInventory({...emptyInventory(),items:[item,item]},{legacy:true}),null);
  assert.equal(rollHelmetStats(item,()=>{throw Error('Rerolled');}),item);
 });
-test('both visible slots round-trip independently; stored third slot remains untouched',()=>{
+test('all three hero slots round-trip independently without changing other slots',()=>{
  const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v)};let store=new LocalHeroStore(storage);
  for(const slot of [2,0,1]){
-  const {g}=fixture(seedRandom(slot+1));fill(g,slot===2?1:20);g.healthRoots=10;g.hero.x=200+slot*50;g.hero.coins=100+slot;g.hero.xp=10+slot;g.paused=true;g.equipItem(g.inventory.items[0].uid);
+  const {g}=fixture(seedRandom(slot+1));fill(g,20);g.healthRoots=10;g.hero.x=200+slot*50;g.hero.coins=100+slot;g.hero.xp=10+slot;g.paused=true;g.equipItem(g.inventory.items[0].uid);
   assert.ok(store.writeSlot(slot,g.save()).ok);
  }
- const hidden=store.slot(2),before=[store.slot(0),store.slot(1)];store=new LocalHeroStore(storage);
- for(const slot of [0,1]){assert.deepEqual(store.slot(slot),before[slot]);const g=new Game({save:store.slot(slot).snapshot});assert.deepEqual(g.inventory.items,before[slot].snapshot.inventory.items);assert.equal(g.hero.x,200+slot*50);}
- assert.deepEqual(store.slot(2),hidden);
- const app=readFileSync(new URL('../app.mjs',import.meta.url),'utf8');assert.match(app,/codePlay&&params.get\('codePlay'\)==='v3'\?2:3/);assert.match(app,/if\(codePlay\)setInterval\(sendCodeProgress,8000\)/);
+ const before=[0,1,2].map(slot=>store.slot(slot));store=new LocalHeroStore(storage);
+ for(const slot of [0,1,2]){
+  assert.deepEqual(store.slot(slot),before[slot]);const g=new Game({save:store.slot(slot).snapshot});assert.deepEqual(g.inventory.items,before[slot].snapshot.inventory.items);assert.equal(g.hero.x,200+slot*50);
+  g.hero.coins++;assert.ok(store.writeSlot(slot,g.save(),{expectedId:before[slot].id}).ok);before[slot]=store.slot(slot);store=new LocalHeroStore(storage);
+  for(const other of [0,1,2])assert.deepEqual(store.slot(other),before[other]);
+ }
+ const app=readFileSync(new URL('../app.mjs',import.meta.url),'utf8');assert.match(app,/if\(codePlay\)setInterval\(sendCodeProgress,8000\)/);
 });
 test('painted capes pin shoulders, react to speed/takeoff/double jump/fall, settle and remain bounded',()=>{
  const owner={},h={face:1,grounded:true,vx:0,vy:0};let t=0,s;

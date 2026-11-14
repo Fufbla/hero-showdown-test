@@ -36,10 +36,10 @@ async function openFrame(s){
  const session='v3-loot-'+Date.now(),prefix='royale-test-'+session+':';
  sessionStorage.setItem(prefix+PROFILE_KEY,JSON.stringify(s.data));
  await new Promise(resolve=>{frame.onload=resolve;frame.src='../?codePlay=v3&qa&testSession='+session;});
- await until(()=>frame.contentDocument?.querySelectorAll('.hero-slot').length===2,'two-slot roster');
+ await until(()=>frame.contentDocument?.querySelectorAll('.hero-slot').length===3,'three-slot roster');
  await until(()=>frame.contentDocument?.getElementById('hero-art-status')?.hidden,'approved artwork');
- check(frame.contentDocument.querySelectorAll('.hero-slot').length===2,'Only two visible V3 hero slots');
- check(!frame.contentDocument.querySelector('.hero-slot[data-slot="2"]'),'Slot 3 remains hidden');
+ check(frame.contentDocument.querySelectorAll('.hero-slot').length===3,'All three V3 hero slots are visible');
+ check(!!frame.contentDocument.querySelector('.hero-slot[data-slot="2"]'),'Slot 3 is accessible');
  return {d:frame.contentDocument,prefix};
 }
 $('reload').onclick=()=>location.reload();
