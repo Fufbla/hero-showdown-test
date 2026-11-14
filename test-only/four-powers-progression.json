@@ -1,0 +1,107 @@
+{
+  "scope": "test-only",
+  "account": "0000000000",
+  "release_to_all_players": false,
+  "max_level": 20,
+  "active_power_slots": 3,
+  "powers": {
+    "animal_allies": {
+      "cooldown_seconds": 6,
+      "use": [
+        "ground",
+        "air"
+      ],
+      "targeting": "closest-valid-enemy",
+      "damage_type": "physical",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 4,
+          "animal": "wolf",
+          "multiplier": 1,
+          "attack": "bite"
+        },
+        {
+          "min": 5,
+          "max": 9,
+          "animal": "hawk",
+          "multiplier": 1.2,
+          "attack": "dive"
+        },
+        {
+          "min": 10,
+          "max": 14,
+          "animal": "bear",
+          "multiplier": 1.6,
+          "attack": "swipe-stagger"
+        },
+        {
+          "min": 15,
+          "max": 19,
+          "animal": "panther",
+          "multiplier": 2,
+          "attack": "two-strikes"
+        },
+        {
+          "min": 20,
+          "max": 20,
+          "animal": "spirit-stag",
+          "multiplier": 2.5,
+          "attack": "charge-knockback"
+        }
+      ]
+    },
+    "seismic_smash": {
+      "cooldown_seconds": 6,
+      "use": [
+        "ground"
+      ],
+      "damage_type": "physical-area",
+      "targeting": "nearest-valid-monsters-once-per-activation",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 4,
+          "radius_m": 1.5,
+          "max_targets": 1,
+          "multiplier": 1
+        },
+        {
+          "min": 5,
+          "max": 9,
+          "radius_m": 2,
+          "max_targets": 2,
+          "multiplier": 1.3
+        },
+        {
+          "min": 10,
+          "max": 14,
+          "radius_m": 2.8,
+          "max_targets": 3,
+          "multiplier": 1.7
+        },
+        {
+          "min": 15,
+          "max": 19,
+          "radius_m": 3.6,
+          "max_targets": 4,
+          "multiplier": 2.2
+        },
+        {
+          "min": 20,
+          "max": 20,
+          "radius_m": 4.5,
+          "max_targets": 5,
+          "multiplier": 2.8
+        }
+      ]
+    }
+  },
+  "implementation_notes": [
+    "Reference values are tier benchmarks; interpolate damage monotonically within tiers.",
+    "Convert illustrative radii to actual world-unit scale only after inspecting existing combat.",
+    "Do not wire into production UI or shared powers catalogue before test-only account gating.",
+    "Retain current super strength damage and super kick hit counts (2 to 6).",
+    "Both co-op and solo must invoke identical rendering and hit detection."
+  ]
+}
