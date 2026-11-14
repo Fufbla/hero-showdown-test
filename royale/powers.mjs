@@ -113,7 +113,7 @@ export class PowerSystem {
     if(g.paused||h.dead||g.disruptedPower===id||!POWER_IDS.includes(id)||def.passive||!resolved)return false;
     slot=slot||resolved;
     if(id==='flight'&&this.flying){this.end('flight');return true;}
-    if(!slot.level||this.active[id]||(this.cooldowns[id]||0)>EPS||h.stun>0||(this.flying&&def.offensive&&id!=='fireball'))return false;
+    if(!slot.level||this.active[id]||(this.cooldowns[id]||0)>EPS||h.stun>0||(this.flying&&def.offensive&&!['fireball','animalAllies'].includes(id)))return false;
     if(id==='seismicSmash'&&(!h.grounded||this.flying))return false;
     if(id==='flight'&&(!h.grounded||h.attack||this.active.superKick))return false;
     if(['strength','superKick'].includes(id)&&(h.attack||this.active.superKick))return false;
