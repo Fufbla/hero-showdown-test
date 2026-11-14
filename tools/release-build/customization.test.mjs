@@ -1,14 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {readFile} from 'node:fs/promises';
+import {readFile,access} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {createCanvas,loadImage} from '@napi-rs/canvas';
-import {NEW_HAIR,NEW_FEATURES,EYE_COLORS} from '../../royale/customization/catalog.mjs';
-import {checkAppearanceSave} from '../../royale/customization/migration.mjs';
-import {UniversalHead,HEAD_BOUNDS,HEAD_ORIGIN} from '../../royale/customization/head.mjs';
-import {HAIR_CATALOG} from '../../royale/hair-catalog.mjs';
-import {DEFAULT_LOOK,sanitizeLook} from '../../royale/appearance.mjs';
+import {checkAppearanceSave,REDESIGN_TO_ORIGINAL,RESTORED_FACE_FIELDS} from '../../royale/customization/migration.mjs';
+import {UniversalHead} from '../../royale-v3-staging/kingjames/head.mjs';
+import {DEFAULT_LOOK,LOOK_OPTIONS,HAIR_STYLES,sanitizeLook} from '../../royale/appearance.mjs';
+import {styleCDefault} from '../../royale/style-c-defaults.mjs';
 import {Game,decodeSave} from '../../royale/core.mjs';
 import {LocalHeroStore,PROFILE_KEY} from '../../royale/saves.mjs';
 import {appearanceQuote} from '../../royale/eris.mjs';
@@ -18,68 +17,90 @@ const head=new UniversalHead(options);await head.preload();
 const pixels=c=>c.getContext('2d').getImageData(0,0,c.width,c.height).data;
 const hash=c=>createHash('sha256').update(pixels(c)).digest('hex');
 const oldLook={...DEFAULT_LOOK,version:2,name:'Saved Coast Hero',hair:'long-locs',eyeShape:'almond',brows:'bold',nose:'broad',mouth:'smile',facialHair:'beard',skin:'#67412f',hairColor:'#241a18',eyes:'#30b4c7',suit:'#b92737',cape:false};
-test('forty fresh hairstyles and every required feature have distinct visible artwork',()=>{
- for(const sex of ['male','female']){const styles=NEW_HAIR.filter(h=>h.presentation===sex);assert.equal(styles.length,20);assert.equal(new Set(styles.map(h=>hash(head.plate({...DEFAULT_LOOK,hair:h.id}).image))).size,20);}
- const counts={brows:12,eyeShape:16,nose:12,mouth:16,facialHair:16};
- for(const [key,n] of Object.entries(counts)){assert.equal(NEW_FEATURES[key].length,n);assert.equal(new Set(NEW_FEATURES[key].map(c=>hash(head.facePlate({...DEFAULT_LOOK,[key]:c.id}).image))).size,n,key);}
- assert.equal(EYE_COLORS.length,16);assert.equal(new Set(EYE_COLORS.map(c=>c.color)).size,16);
+const redesigned=original=>({...original,version:3,hair:'m12-long-locs',eyeShape:'e02-round',brows:'b01-natural',nose:'n01-button',mouth:'l06-full-lips',facialHair:'h04-full-beard',legacyAppearance:structuredClone(original)});
+const originalHashes={
+ "royale-v3-staging/kingjames/head.mjs": "1509a5983d7706a44b251c1d57e2650786e4ff93d71dba80d9013c2e0c7d3cd5",
+ "royale-v3-staging/starter-suit/rear-head.mjs": "1544c3193247dc445d752e5b312881c24895ad9253f6b6a9b201357093ec1d4e",
+ "royale/style-c-face.mjs": "46bbeac001a925704d96d378be2072ca20cef9356700057aca14b475e5a4048f",
+ "royale/style-c-hair.mjs": "8dfcfd125fb561375191bf1de07bcb3109496f22071a9c0f8e06f60bff097dec",
+ "royale/hair-catalog.mjs": "06539ca64601346323921728cdf6ed05d8d785764d537ed585ff68a2542a7d72",
+ "royale/hair-reference-material.mjs": "805d53dc4af19e99c53249aeca61ca014a038b4408ad9e526606599e0f58fc1b",
+ "royale/hair-fit-corrections.mjs": "a70d34766ac46777974992090776a20861c7cbbdc3a3aabe64d7dd82de09a693",
+ "royale/assets/hero/style-c-accurate/hair/frames.mjs": "6484677836e59410a1fd27cf2533551e7b684a469177e13e0b61bcc204fbd5b8",
+ "royale/assets/hero/style-c-accurate/hair/fit.mjs": "1e60c04316386e385b1855d61a38f708de582ff43416f168c26b3af3f68f18f8"
+};
+const preservedHashes={
+ "royale/armor-prices.mjs": "46e1dc2a4696f955eebaed75ca56e76c86311a4bfdbd7f8e7742730be8b3d7ef",
+ "royale/equipment.mjs": "f9ead5cc5a3b2e5bc61d5166d38db13ebea1334e89db1ec381926e2883186fb0",
+ "royale/power-armor.mjs": "bb0aa5fedc0c14dfa6022e848187a46748a3377d8af00e574201cc9dc7cafa6a",
+ "royale/progression.mjs": "d47e64b91bc740ea116235242d6c4a471e2ed5b3d75444ef91c660f69d057bb8",
+ "royale/journey.mjs": "c6018c8e82a433ad986b5ef1787195f6b6d5a07bcd0ea433901635f0f20745f5",
+ "royale-v3-staging/gameplay/equipment.mjs": "fc4e247c9307ade81fc9d14cbfc60bea53d0a3f2925d6c07ad1a76f2de11d62e",
+ "royale-v3-staging/gameplay/journey.mjs": "a591dfea8242c1ea60dc747f77adba7f3f3527d9cb0a866315b074c9683aa898",
+ "royale-v3-staging/costumes/engine.mjs": "31becdd9e2859f92bb2ee07ad07af190295f1a320f620bdd5bfef0497cf861a9",
+ "royale-v3-staging/costumes/face.mjs": "598885aaba51f5c7617852caf0ac499441ed6f359645425128432d1ce8a91a8c",
+ "royale-v3-staging/costumes/assets/zombie-costume/manifest.json": "c26ea6878dc86146c9f0e6859f3884402497c4ec8d44107f7d578a1c2437c596",
+ "royale-v3-staging/costumes/assets/black-business-suit/manifest.json": "1431a4da5a64879dee435d3fc8ffe30ae0341c532951ea8b0a66040a028a9d6e",
+ "royale-v3-staging/costumes/assets/white-business-suit/manifest.json": "61d545c44844d622ce2c96471ef00c09a01f27cde0db1b8890727bbaa1a01407"
+};
+test('original male/female head, face and hair rendering code is byte-identical to the rollback source',async()=>{
+ for(const [file,expected]of Object.entries(originalHashes))assert.equal(createHash('sha256').update(await readFile(new URL('../../'+file,import.meta.url))).digest('hex'),expected,file);
 });
-test('male and female heads have identical pixels, dimensions and anchors with every face shape',()=>{
- for(const face of ['oval','round','angular'])for(const jaw of [.85,1,1.15]){
-  const a=head.facePlate({...DEFAULT_LOOK,hair:'none',face,jaw,presentation:'male'}),b=head.facePlate({...DEFAULT_LOOK,hair:'none',face,jaw,presentation:'female'});
-  assert.deepEqual(a.bounds,[...HEAD_BOUNDS]);assert.deepEqual(a.origin,[...HEAD_ORIGIN]);assert.deepEqual(a.bounds,b.bounds);assert.deepEqual(a.origin,b.origin);assert.equal(hash(a.image),hash(b.image));
+test('armor prices, universal clock, repaired costume bodies and anchors are byte-identical to production',async()=>{
+ for(const [file,expected]of Object.entries(preservedHashes))assert.equal(createHash('sha256').update(await readFile(new URL('../../'+file,import.meta.url))).digest('hex'),expected,file);
+});
+test('the unwanted artwork and renderer are absent',async()=>{
+ for(const file of ['head.mjs','catalog.mjs','asset-map.mjs','assets/head.png','assets/female-hair.png','assets/male-hair.png'])await assert.rejects(access(new URL('../../royale/customization/'+file,import.meta.url)));
+});
+test('the original feature choices and male/female presets are restored',()=>{
+ for(const [key,values]of Object.entries({eyeShape:['almond','round','wide'],brows:['soft','straight','bold'],nose:['small','straight','broad'],mouth:['neutral','smile','full'],facialHair:['none','stubble','beard']}))assert.deepEqual(LOOK_OPTIONS[key],values);
+ assert.equal(HAIR_STYLES.length,49);assert.equal(styleCDefault('male').hair,'short-locs');assert.equal(styleCDefault('female').hair,'curly-ponytail');
+ assert.equal(styleCDefault('male').legacyAppearance,undefined);assert.equal(styleCDefault('female').legacyAppearance,undefined);
+ assert.notEqual(hash(head.facePlate({...DEFAULT_LOOK,presentation:'male'}).image),hash(head.facePlate({...DEFAULT_LOOK,presentation:'female'}).image));
+});
+test('every original hairstyle and facial option renders with the original plate dimensions',()=>{
+ for(const presentation of ['male','female']){
+  for(const hair of HAIR_STYLES){const look=sanitizeLook({...DEFAULT_LOOK,presentation,hair});assert.equal(look.hair,hair);const p=head.plate(look);assert.equal(p.image.width,256);assert.equal(p.image.height,256);assert(pixels(p.image).some(Boolean));}
+  for(const key of ['eyeShape','brows','nose','mouth','facialHair'])for(const choice of LOOK_OPTIONS[key]){const look=sanitizeLook({...DEFAULT_LOOK,presentation,[key]:choice});assert.equal(look[key],choice);assert(pixels(head.facePlate(look).image).some(Boolean));}
+  assert.notEqual(hash(head.facePlate({...DEFAULT_LOOK,presentation,eyes:'#3344aa'}).image),hash(head.facePlate({...DEFAULT_LOOK,presentation,eyes:'#ddbb22'}).image));
  }
- assert.equal(new Set(['oval','round','angular'].map(face=>hash(head.facePlate({...DEFAULT_LOOK,face}).image))).size,3);
 });
-test('all eye shapes accept all sixteen iris colors without moving or recoloring the sclera',()=>{
- for(const shape of NEW_FEATURES.eyeShape){
-  const results=EYE_COLORS.map(color=>head.facePlate({...DEFAULT_LOOK,eyeShape:shape.id,eyes:color.color}).image);
-  assert.equal(new Set(results.map(hash)).size,16,shape.name);
-  const a=pixels(results[0]);for(const result of results.slice(1)){const b=pixels(result);let n=0;
-   for(let i=0;i<a.length;i+=4)if(a[i]!==b[i]||a[i+1]!==b[i+1]||a[i+2]!==b[i+2]){n++;const x=i/4%512,y=Math.floor(i/4/512);assert(x>=208&&x<=344&&y>=210&&y<=254);assert.equal(a[i+3],b[i+3]);}
-   assert(n>50,shape.name+' visible iris');
-  }
+test('every original hairstyle is recovered exactly from the immutable backup without changing current suit colors or name',()=>{
+ for(const presentation of ['male','female'])for(const hair of HAIR_STYLES){
+  const original={...oldLook,presentation,hair},raw={...redesigned(original),name:'Current Hero Name',suit:'#112233'},before=JSON.stringify(raw),next=sanitizeLook(raw);
+  assert.equal(next.version,4);for(const key of RESTORED_FACE_FIELDS)assert.deepEqual(next[key],original[key],key);
+  assert.equal(next.name,raw.name);assert.equal(next.suit,raw.suit);assert.deepEqual(next.legacyAppearance,original);assert.equal(JSON.stringify(raw),before);assert.deepEqual(sanitizeLook(next),next);
  }
 });
-test('mixed facial choices keep their neck anchor, stay inside the plate and preserve their input',()=>{
- for(let i=0;i<64;i++){
-  const look={...DEFAULT_LOOK,hair:NEW_HAIR[i%40].id,skin:['#eac5a5','#a96943','#38231c'][i%3],hairColor:['#211613','#a34e27','#d8c09a'][i%3]};for(const [key,choices]of Object.entries(NEW_FEATURES))look[key]=choices[i%choices.length].id;
-  const before=JSON.stringify(look),p=head.plate(look),d=pixels(p.image);assert.deepEqual(p.origin,[...HEAD_ORIGIN]);assert.equal(JSON.stringify(look),before);
-  for(let x=0;x<512;x++)assert.equal(d[x*4+3]+d[((511*512)+x)*4+3],0,'vertical padding');
-  for(let y=0;y<512;y++)assert.equal(d[(y*512)*4+3]+d[(y*512+511)*4+3],0,'horizontal padding');
-  const c=createCanvas(512,512),ctx=c.getContext('2d');ctx.translate(512,0);ctx.scale(-1,1);ctx.drawImage(p.image,0,0);assert.notEqual(hash(c),hash(p.image),'left/right views');
- }
- assert(head.cache.size<=12);assert(head.faces.size<=12);assert(head.parts.size<=64);
+test('unmigrated original heroes keep all selections and colors',()=>{
+ const next=sanitizeLook(oldLook);for(const key of Object.keys(oldLook).filter(k=>k!=='version'))assert.deepEqual(next[key],oldLook[key],key);
+ assert.deepEqual(next.legacyAppearance,oldLook);assert.deepEqual(sanitizeLook(next),next);
 });
-test('every legacy hairstyle maps without losing the original appearance or chosen colors',()=>{
- for(const presentation of ['male','female'])for(const hair of ['curls','locs','short','waves','ponytail','braids','none',...HAIR_CATALOG.map(h=>h.id)]){
-  const raw={...oldLook,presentation,hair},original=JSON.stringify(raw),next=sanitizeLook(raw);
-  assert.equal(JSON.stringify(raw),original);assert.equal(next.version,3);assert(next.hair==='none'||NEW_HAIR.some(h=>h.id===next.hair),hair);assert.deepEqual(next.legacyAppearance,raw);
-  for(const key of ['name','skin','hairColor','eyes','suit','trim','cape','capeColor','emblem','emblemColor'])assert.equal(next[key],raw[key]);assert.deepEqual(sanitizeLook(next),next);
+test('new Change-3-only choices have stable original equivalents without replacing colors or names',()=>{
+ for(const [key,choices]of Object.entries(REDESIGN_TO_ORIGINAL))for(const [choice,expected]of Object.entries(choices)){
+  const raw={...DEFAULT_LOOK,version:3,name:'Newly Created Hero',[key]:choice},before=JSON.stringify(raw),restored=sanitizeLook(raw);
+  assert.equal(restored[key],expected);assert(LOOK_OPTIONS[key].includes(expected));assert.equal(restored.name,raw.name);assert.equal(restored.eyes,raw.eyes);assert.equal(restored.hairColor,raw.hairColor);assert.equal(JSON.stringify(raw),before);assert.deepEqual(sanitizeLook(restored),restored);
  }
 });
-test('migration preserves every non-appearance field and survives editing, save and reload',()=>{
- const g=new Game();g.hero.level=25;g.hero.xp=81;g.hero.coins=5678;g.powers.data.points=24;const before=JSON.parse(g.save()),baseline=decodeSave(JSON.stringify(before));before.look=oldLook;
- const after=decodeSave(JSON.stringify(before));assert(after);for(const key of Object.keys(baseline).filter(k=>k!=='look'))assert.deepEqual(after[key],baseline[key],key);
- assert.deepEqual(after.look.legacyAppearance,oldLook);const quote=appearanceQuote(after.look,{...after.look,hair:NEW_HAIR[38].id,legacyAppearance:undefined});assert.deepEqual(quote.next.legacyAppearance,oldLook);
- const save=JSON.parse(new Game({save:{...after,look:quote.next}}).save());assert.deepEqual(save.look.legacyAppearance,oldLook);assert.deepEqual(decodeSave(JSON.stringify(save)).look,save.look);
- assert.equal(appearanceQuote(save.look,save.look).changed,false);
+test('restored heroes can change original features and reload without reapplying the recovery copy',()=>{
+ const restored=sanitizeLook(redesigned(oldLook)),edited=appearanceQuote(restored,{...restored,hair:'bob',eyes:'#aabbcc',legacyAppearance:undefined}).next;
+ assert.equal(edited.hair,'bob');assert.equal(edited.eyes,'#aabbcc');assert.deepEqual(edited.legacyAppearance,oldLook);assert.deepEqual(sanitizeLook(edited),edited);assert.equal(appearanceQuote(edited,edited).changed,false);
 });
-test('cloud guard rejects stale appearances, lost backups and altered recovery copies',()=>{
- const old={look:oldLook},next={look:sanitizeLook(oldLook)};assert(checkAppearanceSave(old,next).ok);assert(checkAppearanceSave(next,structuredClone(next)).ok);
- for(const look of [oldLook,{...next.look,version:2},{...next.look,legacyAppearance:undefined},{...next.look,legacyAppearance:{...oldLook,hair:'none'}}])assert.equal(checkAppearanceSave(next,{look}).ok,false);
- assert.equal(checkAppearanceSave(next,{}).ok,false);assert.equal(checkAppearanceSave(old,{look:{...next.look,legacyAppearance:undefined}}).ok,false);
- assert(checkAppearanceSave(old,old).ok);assert(checkAppearanceSave(null,{look:DEFAULT_LOOK}).ok);
+test('save guard allows selective restoration and blocks old tabs or lost recovery records',()=>{
+ const before={look:redesigned(oldLook)},after={look:sanitizeLook(before.look)};
+ assert(checkAppearanceSave(before,after).ok);assert(checkAppearanceSave(after,structuredClone(after)).ok);
+ for(const look of [before.look,oldLook,{...after.look,legacyAppearance:undefined},{...after.look,legacyAppearance:{...oldLook,hair:'none'}}])assert.equal(checkAppearanceSave(after,{look}).ok,false);
+ assert(checkAppearanceSave({look:oldLook},{look:sanitizeLook(oldLook)}).ok);assert(checkAppearanceSave(null,{look:DEFAULT_LOOK}).ok);
 });
-test('two accounts keep separate upgraded looks, backups, progress and purchased clothing on reload',()=>{
- const storages=[0,1].map(()=>{const m=new Map();return {getItem:k=>m.get(k)??null,setItem:(k,v)=>m.set(k,String(v))};});
- for(let i=0;i<2;i++){
-  const g=new Game(),raw=JSON.parse(g.save());raw.look={...oldLook,name:'Saved Hero '+i,presentation:i?'female':'male',hair:i?'curly-ponytail':'short-locs'};raw.coins=1200+i*700;
-  const store=new LocalHeroStore(storages[i]);assert(store.writeSlot(i,raw).ok);const reloaded=new LocalHeroStore(storages[i]),snapshot=reloaded.slot(i).snapshot;
-  assert.equal(snapshot.coins,raw.coins);assert.deepEqual(snapshot.look.legacyAppearance,raw.look);assert.deepEqual(snapshot.cosmetics,raw.cosmetics);assert.deepEqual(snapshot.inventory,raw.inventory);assert.equal(snapshot.look.name,raw.look.name);
-  const unchanged=storages[i].getItem(PROFILE_KEY);assert.equal(reloaded.writeSlot(i,{...snapshot,look:{...snapshot.look,legacyAppearance:undefined}}).ok,false);assert.equal(storages[i].getItem(PROFILE_KEY),unchanged);
- }
- assert.notEqual(new LocalHeroStore(storages[0]).slot(0).snapshot.look.hair,new LocalHeroStore(storages[1]).slot(1).snapshot.look.hair);
+test('restoration changes no non-appearance save fields and local slots retain independent progress and purchases',()=>{
+ const g=new Game();g.hero.level=25;g.hero.xp=81;g.hero.coins=5678;g.powers.data.points=24;const base=decodeSave(g.save());
+ const raw={...base,look:redesigned(oldLook)},before=JSON.stringify(raw),decoded=decodeSave(before);assert(decoded);
+ for(const key of Object.keys(base).filter(k=>k!=='look'))assert.deepEqual(decoded[key],base[key],key);assert.equal(JSON.stringify(raw),before);
+ const m=new Map(),storage={getItem:k=>m.get(k)??null,setItem:(k,v)=>m.set(k,String(v))};const store=new LocalHeroStore(storage);
+ assert(store.writeSlot(0,raw).ok);assert(store.writeSlot(1,{...base,look:redesigned({...oldLook,name:'Second Hero',hair:'curly-ponytail',presentation:'female'})}).ok);
+ const reloaded=new LocalHeroStore(storage),first=reloaded.slot(0).snapshot,second=reloaded.slot(1).snapshot;
+ assert.equal(first.look.hair,'long-locs');assert.equal(second.look.hair,'curly-ponytail');assert.equal(first.coins,5678);assert.deepEqual(first.cosmetics,base.cosmetics);assert.deepEqual(first.inventory,base.inventory);
+ const unchanged=storage.getItem(PROFILE_KEY);assert.equal(reloaded.writeSlot(0,{...first,look:{...first.look,legacyAppearance:undefined}}).ok,false);assert.equal(storage.getItem(PROFILE_KEY),unchanged);
 });
 test('all repaired costume poses remove magenta markers and keep complete body pixels outside the head',async()=>{
  const engine=new CostumeEngine(options);let checked=0;

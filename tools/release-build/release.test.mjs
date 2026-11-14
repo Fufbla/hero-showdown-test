@@ -23,7 +23,7 @@ function progressed(){
 test('release keeps existing save version and exact progression, position, appearance and equipped gear',()=>{
  const g=progressed(),before=JSON.parse(g.save()),decoded=decodeSave(JSON.stringify(before));assert(decoded,'fixture is a valid existing save');const restored=new Game({save:decoded}),after=JSON.parse(restored.save());
  for(const key of ['version','level','xp','coins','inventory','cosmetics','world','powers','economy','legendary','journey','bossProgress'])assert.deepEqual(after[key],before[key],key);
- assert.deepEqual(after.look,sanitizeLook(before.look));assert.deepEqual(after.look.legacyAppearance,before.look);
+ assert.deepEqual(after.look,sanitizeLook(before.look));assert.equal(after.look.hair,before.look.hair);assert.equal(after.look.mouth,before.look.mouth);
  assert.equal(restored.hero.x,2350);assert.equal(restored.hero.y,600);assert.equal(restored.regionId,5);assert(restored.equipment.defense>0);
 });
 test('three occupied original slots survive release loading and one-slot save without touching the other slots',()=>{
