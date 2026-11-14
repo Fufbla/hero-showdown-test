@@ -76,7 +76,7 @@ export function normalizePowers(raw,heroLevel,{strict=false,allowOverBudget=fals
   const levels=Object.fromEntries(POWER_IDS.map(id=>[id,integer(raw?.levels?.[id],0,20)]));
   const spent=Object.values(levels).reduce((a,b)=>a+b,0),earned=Math.max(0,heroLevel-1);
   // Never silently refund or redistribute an invalid ledger.
-  if((!allowOverBudget&&spent>earned) || (strict && (!raw || !raw.levels || POWER_IDS.some(id=>!Number.isInteger(raw.levels[id])||raw.levels[id]<0||raw.levels[id]>20)))) return null;
+  if((!allowOverBudget&&spent>earned) || (strict && (!raw || !raw.levels || POWER_IDS.some(id=>!Number.isInteger(raw.levels[id]??(['animalAllies','seismicSmash'].includes(id)?0:undefined))||(raw.levels[id]??0)<0||(raw.levels[id]??0)>20)))) return null;
   const used=new Set(),equipped=Array.from({length:ACTIVE_SLOTS},(_,i)=>{
     const id=raw?.equipped?.[i];if(!POWER_IDS.includes(id)||POWERS[id].passive||!levels[id]||used.has(id))return null;used.add(id);return id;
   });
