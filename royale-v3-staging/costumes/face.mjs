@@ -22,7 +22,7 @@ export class CostumeFace {
   const dy=hideHair?y+h-bh*s-by*s:y+h+FACE_CLEARANCE-p.origin[1]*s;
   // The exposed face keeps its own skin tone; the space inside the hood is dark.
   if(hideHair){c.fillStyle='#000000';c.fillRect(x-3,y-3,w+6,h+6);}
-  const picture=this.fullHead.plate(look,closed).image;
-  c.drawImage(picture,dx,dy,picture.width*s,picture.height*s);
+  const head=this.fullHead.plate(look,closed),picture=head.image,[px,py]=head.offset||[0,0];
+  c.drawImage(picture,dx-px*s,dy-py*s,picture.width*s,picture.height*s);
  }
 }

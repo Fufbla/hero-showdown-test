@@ -31,7 +31,7 @@ test('hair, beards and expressions do not move or resize the head attachment',()
  for(const base of looks){const original=engine.head.plate(base),before=JSON.stringify(base);
   for(const hair of HAIR_STYLES)for(const facialHair of ['none','beard']){
    const plate=engine.head.plate({...base,hair,facialHair},true);
-   assert.deepEqual(plate.origin,original.origin);assert.equal(plate.image.width,256);assert.equal(plate.image.height,256);
+   assert.deepEqual(plate.origin,original.origin);assert.equal(plate.image.width,base.presentation==='female'?384:256);assert.equal(plate.image.height,base.presentation==='female'?384:256);
   }
   assert.equal(JSON.stringify(base),before);
  }

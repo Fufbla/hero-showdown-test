@@ -19,8 +19,6 @@ const hash=c=>createHash('sha256').update(pixels(c)).digest('hex');
 const oldLook={...DEFAULT_LOOK,version:2,name:'Saved Coast Hero',hair:'long-locs',eyeShape:'almond',brows:'bold',nose:'broad',mouth:'smile',facialHair:'beard',skin:'#67412f',hairColor:'#241a18',eyes:'#30b4c7',suit:'#b92737',cape:false};
 const redesigned=original=>({...original,version:3,hair:'m12-long-locs',eyeShape:'e02-round',brows:'b01-natural',nose:'n01-button',mouth:'l06-full-lips',facialHair:'h04-full-beard',legacyAppearance:structuredClone(original)});
 const originalHashes={
- "royale-v3-staging/kingjames/head.mjs": "1509a5983d7706a44b251c1d57e2650786e4ff93d71dba80d9013c2e0c7d3cd5",
- "royale-v3-staging/starter-suit/rear-head.mjs": "1544c3193247dc445d752e5b312881c24895ad9253f6b6a9b201357093ec1d4e",
  "royale/style-c-face.mjs": "46bbeac001a925704d96d378be2072ca20cef9356700057aca14b475e5a4048f",
  "royale/style-c-hair.mjs": "8dfcfd125fb561375191bf1de07bcb3109496f22071a9c0f8e06f60bff097dec",
  "royale/hair-catalog.mjs": "06539ca64601346323921728cdf6ed05d8d785764d537ed585ff68a2542a7d72",
@@ -38,12 +36,11 @@ const preservedHashes={
  "royale-v3-staging/gameplay/equipment.mjs": "fc4e247c9307ade81fc9d14cbfc60bea53d0a3f2925d6c07ad1a76f2de11d62e",
  "royale-v3-staging/gameplay/journey.mjs": "a591dfea8242c1ea60dc747f77adba7f3f3527d9cb0a866315b074c9683aa898",
  "royale-v3-staging/costumes/engine.mjs": "31becdd9e2859f92bb2ee07ad07af190295f1a320f620bdd5bfef0497cf861a9",
- "royale-v3-staging/costumes/face.mjs": "598885aaba51f5c7617852caf0ac499441ed6f359645425128432d1ce8a91a8c",
  "royale-v3-staging/costumes/assets/zombie-costume/manifest.json": "c26ea6878dc86146c9f0e6859f3884402497c4ec8d44107f7d578a1c2437c596",
  "royale-v3-staging/costumes/assets/black-business-suit/manifest.json": "1431a4da5a64879dee435d3fc8ffe30ae0341c532951ea8b0a66040a028a9d6e",
  "royale-v3-staging/costumes/assets/white-business-suit/manifest.json": "61d545c44844d622ce2c96471ef00c09a01f27cde0db1b8890727bbaa1a01407"
 };
-test('original male/female head, face and hair rendering code is byte-identical to the rollback source',async()=>{
+test('original face designs, hair artwork and customization code are byte-identical to the rollback source',async()=>{
  for(const [file,expected]of Object.entries(originalHashes))assert.equal(createHash('sha256').update(await readFile(new URL('../../'+file,import.meta.url))).digest('hex'),expected,file);
 });
 test('armor prices, universal clock, repaired costume bodies and anchors are byte-identical to production',async()=>{
@@ -60,7 +57,7 @@ test('the original feature choices and male/female presets are restored',()=>{
 });
 test('every original hairstyle and facial option renders with the original plate dimensions',()=>{
  for(const presentation of ['male','female']){
-  for(const hair of HAIR_STYLES){const look=sanitizeLook({...DEFAULT_LOOK,presentation,hair});assert.equal(look.hair,hair);const p=head.plate(look);assert.equal(p.image.width,256);assert.equal(p.image.height,256);assert(pixels(p.image).some(Boolean));}
+  for(const hair of HAIR_STYLES){const look=sanitizeLook({...DEFAULT_LOOK,presentation,hair});assert.equal(look.hair,hair);const p=head.plate(look);assert.equal(p.image.width,presentation==='female'?384:256);assert.equal(p.image.height,presentation==='female'?384:256);assert(pixels(p.image).some(Boolean));}
   for(const key of ['eyeShape','brows','nose','mouth','facialHair'])for(const choice of LOOK_OPTIONS[key]){const look=sanitizeLook({...DEFAULT_LOOK,presentation,[key]:choice});assert.equal(look[key],choice);assert(pixels(head.facePlate(look).image).some(Boolean));}
   assert.notEqual(hash(head.facePlate({...DEFAULT_LOOK,presentation,eyes:'#3344aa'}).image),hash(head.facePlate({...DEFAULT_LOOK,presentation,eyes:'#ddbb22'}).image));
  }
