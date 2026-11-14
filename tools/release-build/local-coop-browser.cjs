@@ -6,6 +6,7 @@ const url=process.env.ROYALE_COOP_URL||'https://fufbla.github.io/hero-showdown-t
 const report={url,errors:[],rejections:[],requests:[],checks:[],physicalControllers:false};
 const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
 (async()=>{
+ await import('./register.mjs'); // Fixtures and saved snapshots use the production decoder.
  const {Game}=await import('../../royale/core.mjs');
  const {styleCDefault}=await import('../../royale/style-c-defaults.mjs');
  const accounts=[0,1].map(i=>{
