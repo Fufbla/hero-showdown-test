@@ -22,7 +22,8 @@ mappings.set('royale/hero-art.mjs','royale/release-src/presentation.mjs');
 
 const sourceHashes={};
 function mediaShell(html,script){
- const head='<link rel="stylesheet" href="/hero-showdown-test/royale/media/media.css"><script>try{if(!parent.royaleSoundtrack){document.documentElement.classList.add("royale-intro-pending");setTimeout(()=>document.documentElement.classList.remove("royale-intro-pending"),5000);}}catch{}</script>';
+ html=html.replace(/<meta name="theme-color" content="[^"]+">/,'<meta name="theme-color" content="#116cc7">');
+ const head=`<link rel="stylesheet" href="/hero-showdown-test/royale/media/media.css?v=${hash(read('royale/media/media.css')).slice(0,12)}"><script>try{if(!parent.royaleSoundtrack){document.documentElement.classList.add("royale-intro-pending");setTimeout(()=>document.documentElement.classList.remove("royale-intro-pending"),5000);}}catch{}</script>`;
  return html.replace('</head>',head+'</head>').replace('</body>',`<script type="module" src="${script}"></script></body>`);
 }
 const runtimePlugin={name:'approved-v3-release',setup(build){

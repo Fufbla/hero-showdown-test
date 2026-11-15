@@ -1,15 +1,20 @@
 html.royale-intro-pending body{visibility:hidden}
-#royale-intro{position:fixed;inset:0;box-sizing:border-box;width:100vw;max-width:none;height:100vh;height:100dvh;max-height:none;margin:0;padding:0;border:0;background:#071c21;color:#f8efd6;overflow:hidden}
-#royale-intro::backdrop{background:#071c21}
-#royale-intro video{width:100%;height:100%;object-fit:contain;display:block;background:#071c21}
-#royale-intro .intro-start{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:linear-gradient(180deg,#071c21dd,#102e33ee);font:16px system-ui}
+#royale-intro{position:fixed;inset:0;box-sizing:border-box;width:100vw;max-width:none;height:100vh;height:100dvh;max-height:none;margin:0;padding:0;border:0;background:linear-gradient(145deg,#173d7a,#152555 55%,#352465);color:#f3fbff;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color-scheme:dark}
+#royale-intro::backdrop{background:#152555}
+#royale-intro video{width:100%;height:100%;object-fit:contain;display:block;background:transparent}
+#royale-intro .intro-start{position:absolute;inset:0;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(ellipse at 50% 40%,#347ed599,transparent 65%),linear-gradient(160deg,#112c63e8,#30296de8);font:16px Arial,Helvetica,sans-serif}
 #royale-intro .intro-start[hidden]{display:none}
-#royale-intro h1{font-size:clamp(24px,6vw,64px);line-height:1.04;letter-spacing:.02em;margin:12px 0 28px}
-#royale-intro h1 em{font-style:normal;color:#e8cd86}
-#royale-intro .intro-start>p:first-child{font-size:12px;letter-spacing:.22em;color:#9bdbc1}
-#royale-intro button{font:700 16px system-ui;cursor:pointer;border-radius:12px;padding:14px 26px;border:1px solid #92d9bc;background:#9be0bd;color:#112e27}
-#royale-intro #intro-skip{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));right:max(20px,env(safe-area-inset-right));background:#10292ed9;color:#fff;border:1px solid #ffffff55;padding:10px 15px;font-size:13px;min-height:44px}
-#royale-intro .intro-status{font-size:14px;color:#c0cfc9}
+#royale-intro h1{font-family:Impact,'Arial Black',Arial,sans-serif;font-weight:1000;font-style:italic;font-size:clamp(48px,12vw,82px);line-height:.94;letter-spacing:-.035em;margin:12px 0 32px;color:#f8ffff;paint-order:stroke fill;-webkit-text-stroke:3px #152555;text-shadow:0 4px #7799d0,0 7px #10214b;transform:rotate(-2deg)}
+#royale-intro h1 em{font-style:inherit;color:#ffdd35;text-shadow:0 4px #e59715,0 7px #10214b}
+#royale-intro .intro-start>p:first-child{margin:0 0 8px;font-size:12px;font-weight:800;letter-spacing:.2em;color:#e5f3ff;text-shadow:0 2px #10214b}
+#royale-intro button{box-sizing:border-box;font:900 18px Arial,Helvetica,sans-serif;cursor:pointer;touch-action:manipulation;border-radius:18px;padding:16px 28px;border:3px solid #fffbd4;outline:2px solid #152555;background:linear-gradient(#fff159,#ffcd09 38%,#ffab00 85%,#ffdf2e);color:#152555;box-shadow:inset 0 2px #ffffffb3,inset 0 -4px #de8d21,0 5px #10214b;transition:transform .15s,filter .15s}
+#royale-intro #intro-start{min-height:60px;min-width:220px;max-width:100%}
+#royale-intro #intro-skip{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));right:max(20px,env(safe-area-inset-right));background:linear-gradient(#538bd3,#2861aa);color:#fff;border-color:#d6eeff;padding:10px 18px;font-size:14px;min-height:48px;box-shadow:inset 0 2px #ffffff66,inset 0 -3px #17417e,0 4px #10214b;text-shadow:0 2px #173e79}
+#royale-intro button:focus-visible{outline:3px solid #fff;outline-offset:4px;box-shadow:0 0 0 7px #7e4fba,0 5px #10214b}
+#royale-intro button:active{transform:translateY(3px)}
+#royale-intro .intro-status{max-width:100%;font-size:14px;line-height:1.4;color:#e5f3ff;text-shadow:0 2px #152555;margin:18px 0 0}
+@media(hover:hover){#royale-intro button:hover{filter:brightness(1.08)}}
+@media(max-height:500px){#royale-intro .intro-start{padding:16px 24px 70px}#royale-intro h1{font-size:clamp(32px,9vh,48px);margin:8px 0 16px}#royale-intro #intro-start{min-height:48px;padding:11px 24px}#royale-intro .intro-status{margin-top:12px}}
 .royale-music-controls{font:14px system-ui;border:1px solid #6a9584;border-radius:10px;padding:10px;margin:12px 0;max-width:320px;color:inherit}
 .royale-music-controls summary{cursor:pointer}.royale-music-controls label{display:block}.royale-music-controls input{display:block;width:100%;box-sizing:border-box;accent-color:#8dddb9;padding:0;min-height:32px;margin:4px 0}.royale-music-controls button{padding:8px 12px;margin:8px 0}
 .royale-intro-finished{animation:royale-reveal .3s ease-out}@keyframes royale-reveal{from{opacity:.25}to{opacity:1}}@media(prefers-reduced-motion:reduce){.royale-intro-finished{animation:none}}
