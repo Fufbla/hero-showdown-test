@@ -269,7 +269,7 @@ function installVfxProbe(){
     await solo.waitForFunction(n=>document.querySelector('#tree-points').textContent===String(n-1),Number(points));
     assert.match(await solo.locator('#upgrade-status').innerText(),/Super Strength is now Level 1/);
    }
-   await solo.locator('[data-eris="wardrobe"]').click();
+   await solo.getByRole('button',{name:'Armor Equipment',exact:true}).click();
    await solo.locator('#shop-category').selectOption('flight');
    assert.equal(await solo.locator('#mobile-armor-select option').count(),9);
    await solo.locator('#mobile-armor-select').selectOption({label:'Swift Start · Lv 10'});
