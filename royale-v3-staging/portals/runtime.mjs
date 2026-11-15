@@ -20,7 +20,6 @@ export function drawPortal(c,x,y,region,time,label='FAST TRAVEL · PAID',game=nu
  const id=kind==='world'?7:kind==='return'?15:kind==='boss'?region+7:Math.max(0,Math.min(6,region-1));
  const near=!!game?.hero&&Math.abs(game.hero.x-x)<=90&&Math.abs(game.hero.y-y)<100;
  renderer.draw(c,id,x,y,t,{size:kind==='boss'?202:184,near,activation:t-pulse});
- c.save();c.font='bold 10px system-ui';c.textAlign='center';c.fillStyle='#102330ee';c.fillRect(x-86,y+10,172,20);c.fillStyle='#f6ecd6';c.fillText(label,x,y+24,166);c.restore();
 }
 export function worldPortalPreview(parent){
  const canvas=createCanvas(200,180);canvas.setAttribute('aria-label','World Portal — destination price shown before travel');canvas.style.cssText='width:160px;height:144px;display:block;margin:auto';parent.prepend(canvas);

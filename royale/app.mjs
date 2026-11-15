@@ -227,7 +227,7 @@ function online(){return !!multiplayerMenu.session?.active;}
 
 function say(message,seconds=3){$('toast').textContent=message;$('toast').classList.add('visible');toastUntil=performance.now()+seconds*1000;}
 function storageNotice(){
-  const message=online()?'Account progress and exact position are saved by the server.':store.cloud?store.message:store.durable?store.message||'Local heroes stay on this browser. Use Pause → Save Game before leaving.':store.message;
+  const message=online()?'Account progress and exact position are saved by the server.':store.cloud?store.message:store.durable?store.message||'Local heroes save automatically on this browser.':store.message;
   $('roster-note').textContent=message;$('save-note').textContent=message;
   $('storage-warning').textContent=!store.durable?message:ledgerError?'Legendary storage: '+ledgerError:'';$('storage-warning').hidden=store.durable&&!ledgerError;
 }
@@ -382,7 +382,7 @@ async function begin(){
   else{activeSlot=creatorSlot;activeId=null;game=new Game({look});if(v2TestHero)game=new Game({save:maxV2TestPowers(JSON.parse(game.save()),{starterLoadout:true}),testPowers:true});if(store.cloud){$('begin').disabled=true;try{await store.create(activeSlot,game.save());activeId=store.slot(activeSlot).id;}catch(e){say(e.message,8);return;}finally{$('begin').disabled=false;}}startPatrol(false);}
 }
 function pause(){if(!game.started||screen!=='play')return;if(codePlay)sendCodeProgress(true);showPause();persist();}
-function showPause(){pausePanel('home');$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero','manual-save'])$(id).disabled=!game.canSave();$('safe-save-note').textContent=game.canSave()?(online()?'Server saving is active. Save Game confirms your current position.':store.cloud?'Manual cloud saving is available.':'Saving is available · browser-local only.'):'Saving is locked. Resume and spend five seconds without attacking or taking damage.';$('resume').focus();}
+function showPause(){pausePanel('home');$('pause-region').textContent=game.getRegion().name.toUpperCase();controlMenu.capture=null;setScreen('pause');powerMenu.loadout();for(const id of ['edit-look','choose-hero'])$(id).disabled=!game.canSave();$('safe-save-note').textContent=game.canSave()?(online()?'Automatic account saving is active.':store.cloud?'Automatic cloud saving is active.':'Saving is available · browser-local only.'):'Saving is locked. Resume and spend five seconds without attacking or taking damage.';menuExitBack.focus();}
 async function openTree(panel='powers'){if(powerUpgrades.busy)return;if(typeof panel!=='string')panel='powers';if(!await game.visitTree()){say('Leave combat for five seconds before visiting the Tree.');return;}setScreen('tree');persist();erisMenu.open(panel);$('tree-title').focus();}
 function openConfirmation(){
  const overlay=$(menuExitOverlays[screen]||'');
@@ -409,7 +409,7 @@ function backToPause(){
  if(journeyMenu.cancelTravel())return;
  const route=backRoute(screen,{pauseSubmenu:$('pause-primary').hidden,editing,gameStarted:game.started});
  if(route==='welcome'){void saveAndReturnToWelcome();return;}
- if(route==='pause-home'){pausePanel('home');$('resume').focus();return;}
+ if(route==='pause-home'){pausePanel('home');menuExitBack.focus();return;}
  if(route==='resume'){resume();return;}
  if(route==='close-picker'){closePowerPicker();return;}
  if(route==='cancel-creator'){cancelCreator();return;}
@@ -546,7 +546,6 @@ $('slot-picker').oncancel = event => { event.preventDefault(); closePowerPicker(
 $('picker-close').onclick = closePowerPicker;
 $('edit-hud-powers').onclick = event => openPowerPicker(0, event.currentTarget);
 const updateCompactSlots=installLandscapeLayout(input,openPowerPicker);
-$('manual-save').onclick=async()=>{if(online()){try{await multiplayerMenu.session.command('save');say('Account progress and exact location confirmed.');}catch(e){say(e.message);}return;}if(!game.canSave()||criticalPending||powerUpgrades.busy)return;const b=$('manual-save');b.disabled=true;try{const result=store.cloud?await store.commit(activeSlot,game.save()):persist({manual:true});say(result.ok?(store.cloud?'Game saved to your account.':'Hero saved on this browser.'):result.error||'Save unavailable.');}catch(e){say(e.message,9);}finally{b.disabled=!game.canSave();}};
 $('chest-close').onclick=resume;
 function openWorld(source){if(source!=='portal'||!game.nearPortal())return;setScreen('world');journeyMenu.map(source);legendaryMenu.map();$('map-title').focus();}
 $('map-close').onclick=showPause;
@@ -557,7 +556,7 @@ $('creator-form').addEventListener('submit',e=>{e.preventDefault();begin();});
 $('cancel-look').onclick=cancelCreator;
 $('pause').onclick=()=>{if(screen==='play')pause();else if(game.started)resume();else backToPause();};
 $('return-menu').onclick=()=>backToPause();
-$('resume').onclick=resume;$('edit-look').onclick=()=>openTree('appearance');
+$('edit-look').onclick=()=>openTree('appearance');
 
 $('choose-hero').onclick=openRoster;$('back-to-patrol').onclick=resume;
 $('cancel-delete').onclick=closeDelete;
@@ -710,11 +709,11 @@ function sendCodeProgress(force=false){
 if(codePlay)setInterval(sendCodeProgress,8000);
 
 function pausePanel(panel){
- $('pause-primary').hidden=panel!=='home';$('pause-hero').hidden=panel!=='hero';$('pause-powers').hidden=panel!=='powers';$('pause-back').hidden=panel==='home';
+ $('pause-primary').hidden=panel!=='home';$('pause-hero').hidden=panel!=='hero';$('pause-powers').hidden=panel!=='powers';
  if(panel==='hero'){drawEquipmentPreview($('pause-hero-preview'),game);const h=game.hero;$('pause-hero-stats').textContent=`${game.look.name} · Level ${h.level} · HP ${Math.ceil(h.hp)}/${h.maxHp} · XP ${h.xp}/${xpForLevel(h.level)} · Strength ${10+2*(h.level-1)} · ${game.getRegion().name}`;}
  updateMenuExitActions('pause');
 }
-$('open-my-hero').onclick=()=>pausePanel('hero');$('pause-back').onclick=()=>pausePanel('home');
+$('open-my-hero').onclick=()=>pausePanel('hero');
 
 const brightness=$('display-brightness');brightness.value=storage.getItem('healthia.royale.brightness')||100;const setBrightness=()=>{$('game').style.filter=`brightness(${Number(brightness.value)/100})`;try{storage.setItem('healthia.royale.brightness',brightness.value);}catch{}};brightness.oninput=setBrightness;setBrightness();
 

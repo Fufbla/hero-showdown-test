@@ -15,7 +15,7 @@ export function installInterface(hooks){
   const cards=new Map();
   const openButton=button('Clothing Store',hooks.open,'secondary');openButton.id='open-clothing-store';$('tree-from-pause').after(openButton);
   const pauseCard=$('pause-menu').querySelector('.pause-card');
-  const topActions=document.querySelector('.top-actions'),actionsHome=document.createComment('Gameplay controls');topActions.before(actionsHome);
+  const topActions=document.querySelector('.top-actions');
   const brand=element('div',undefined,'pause-brand');brand.innerHTML='<span aria-hidden="true">✦</span><div><small>JAMES CLAN COMICS</small><strong>HERO ROYALE</strong></div>';
   pauseCard.prepend(brand);
   const footer=element('footer',undefined,'pause-save-footer');
@@ -127,7 +127,7 @@ export function installInterface(hooks){
     saved(){const info=hooks.saved();saved.textContent=info?.updatedAt?'Saved Slot '+(info.slot+1)+' · '+new Date(info.updatedAt).toLocaleTimeString():'Slot '+((info?.slot??0)+1)+' · Not saved yet';},
     async screen(next){
       currentScreen=next;page.hidden=next!=='clothing';document.body.dataset.screen=next;this.saved();
-      if(next==='pause')brand.append(topActions);else actionsHome.after(topActions);
+      topActions.hidden=next==='pause';
       if(next!=='clothing'){stop();thumbObserver?.disconnect();if(dialog.open&&!controller.busy){controller.cancel();}return;}
       look=structuredClone(hooks.hero());frame||=requestAnimationFrame(animate);$('store-back').focus();
       try{

@@ -52,9 +52,10 @@ test('published graph contains approved bosses, rewards, armor and cosmetics wit
  const code=Object.keys(manifest.bundles).map(read).join('\n');
  for(const marker of ['Boss Test · Choose Opponent','Try Outfits ·','Outfit artwork:','launchCharacterTest','"0000000000"','__ROYAL_QA','window.__royale','mp-review='])assert(!code.includes(marker),marker);
 });
-test('release menu contains the exact six player actions, with gear only in Eris and no map entry',()=>{
+test('release pause menu omits redundant resume, save and back actions while retaining Eris access',()=>{
  const html=read('royale/gameplay/index.html');const menu=html.match(/<nav id="pause-primary"[\s\S]*?<\/nav>/)[0];
- assert.deepEqual([...menu.matchAll(/<button[^>]*>([^<]*)<\/button>/g)].map(m=>m[1]),['Resume Game','My Hero','Tree of Eris','Save Game','Settings','Exit to Main Menu']);
+ assert.deepEqual([...menu.matchAll(/<button[^>]*>([^<]*)<\/button>/g)].map(m=>m[1]),['My Hero','Tree of Eris','Settings','Exit to Main Menu']);
+ assert(!/id="(?:resume|manual-save|pause-back)"/.test(html));
  assert(!html.includes('id="open-map"'));assert(!menu.includes('open-inventory'));assert.match(html,/<nav[^>]*aria-label="Tree of Eris services"[\s\S]*?id="open-inventory"/);
  assert.match(html,/min-height:48px/);assert(!html.includes('qa-tools'));assert(!html.includes('diagnostics'));
  assert(html.includes(`Up to ${PROGRESSION.defeatFraction*100}% of next-level XP is lost.`),'Packaged death-screen text must match the actual XP penalty');

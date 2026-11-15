@@ -15,7 +15,7 @@ import { drawLegendarySky, drawLegendaryWorld, drawMergeWorld } from '../../roya
 import { BossArt } from '../../royale/boss-art.mjs';
 import { drawArena } from '../../royale/boss-ui.mjs';
 import { worldLandmarks } from '../../royale/world-art.mjs';
-import { drawEris, drawPowerWorld, drawPowerHero } from '../../royale/power-art.mjs';
+import { drawPowerWorld, drawPowerHero } from '../../royale/power-art.mjs';
 import { SURFACES, WORLD_WIDTH, CAMPS, TYPES } from '../../royale/world.mjs';
 import { clamp, ATTACKS } from '../../royale/core.mjs';
 import { drawHero } from '../../royale/hero-art.mjs';
@@ -136,11 +136,7 @@ export class Renderer {
     if(!game.arenaScene&&!this.environment.illustrated.ready(this.regionTheme)&&game.regionId===1)for(const x of [40,330,1350,1860,2720,2990,3980,4550,5430,6080]){if(x>this.camera-150&&x<this.camera+this.width+150)this.palm(x,600,.7+(x%3)*.11,t);}
     if(!game.arenaScene&&!this.environment.illustrated.ready(this.regionTheme)&&game.regionId===1&&5750>this.camera-100&&5750<this.camera+this.width+100)this.lighthouse(5750,600,.9);
     for(const s of game.surfaces)if(visible(s.x,s.y,s.w,s.h+80))this.terrain(s);
-    for(const [i,camp] of game.camps.entries()){
-      if(!visible(camp.x-85,camp.y-165,170,180))continue;
-      path(c,[[camp.x+20,camp.y],[camp.x+44,camp.y-45],[camp.x+75,camp.y]],'#e7d2a4',OUTLINE,2);path(c,[[camp.x+34,camp.y],[camp.x+44,camp.y-31],[camp.x+53,camp.y]],'#5b8673',null);
-    }
-    if(!game.arenaScene){if(visible(150,390,260,230))drawEris(c,t);worldLandmarks(c,game,this.camera,this.width);}else{drawArena(c,game);if(game.arenaScene.legendary)drawLegendaryWorld(c,game);}
+    if(!game.arenaScene){worldLandmarks(c,game,this.camera,this.width);}else{drawArena(c,game);if(game.arenaScene.legendary)drawLegendaryWorld(c,game);}
     for(const shot of game.enemyShots){if(!visible(shot.x-12,shot.y-12,24,24))continue;if(drawBossShot(c,shot,t))continue;oval(c,shot.x,shot.y,7,5,shot.color,'#283b43',2);line(c,[[shot.x-shot.vx*.025,shot.y-shot.vy*.025],[shot.x,shot.y]],'#eadcac',2);}
     for(const e of game.enemies){const vw=e.boss||e.legendaryHelper?e.w:Math.max(e.w,192),vh=e.boss||e.legendaryHelper?e.h:Math.max(e.h,MONSTER_HEIGHT[e.type]||e.h);if(visible(e.x-vw/2,e.y-vh-40,vw,vh+50))this.enemy(e,t,alpha);}
     this.drawPlayer(game,alpha,dt);

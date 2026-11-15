@@ -80,7 +80,7 @@ function shell(html,base,script){
   html=html.replace(/(?:Style C|MOBILE PLAYTEST|V3 Test|FULL-BODY SPRITE PROTOTYPE)/g,'Action-Chibi');
   html=html.replace(/<script src="[^\"]*motion-core.js[^\"]*"><\/script>/g,'');
   html=html.replace('</head>',`<style>#pause-primary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#pause-primary button{min-height:48px;margin:0;width:100%}@media(max-width:480px){#pause-primary{grid-template-columns:1fr}}#tab-body,#panel-body{display:none!important}</style></head>`);
-  html=html.replace('</head>','<link rel="stylesheet" href="/hero-showdown-test/royale/interface.css"></head>');
+  html=html.replace('</head>',`<link rel="stylesheet" href="/hero-showdown-test/royale/interface.css"><link rel="stylesheet" href="/hero-showdown-test/royale/welcome/game.css?v=${hash(read('royale/welcome/game.css')).slice(0,12)}"></head>`);
   return html.replace('</body>',`<script src="../assets/animation/motion-core.js"></script><script type="module" src="${script}"></script></body>`);
 }
 async function build(){

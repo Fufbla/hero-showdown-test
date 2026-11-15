@@ -1,0 +1,141 @@
+/* The welcome palette continues through the patrol HUD and pause menus.
+   Keep the established touch geometry, safe areas and cooldown behavior. */
+.game-view,body:has(#play:not([hidden])){
+  --ink:#f4f8ff;--muted:#c5d8f6;--gold:#ffe354;--line:#87b9ee;--dark:#183765;
+  color:#f4f8ff;font-family:Arial,Helvetica,sans-serif;
+}
+.game-view .topbar,.game-view .controls-footer,#play .playbar{
+  background:linear-gradient(110deg,#173564f5,#204b83f5);border-color:#8fcfff;color:#fff;
+}
+.landscape-game.game-view .topbar,.landscape-game.game-view .controls-footer{background:none;border:0}
+.game-view .brand-mark{color:#ffe354}
+.game-view .brand :is(small,em),.game-view .desktop-guide,.game-view .desktop-guide small{color:#d4e8ff}
+.game-view .brand strong{color:#ffe354;font-weight:900}
+.game-view .hero-hud,#play .hero-hud,#play #hud-1{
+  background:linear-gradient(135deg,#255c9aed,#152d5cf5);border:1px solid #a4d7ff;
+  color:#fff;box-shadow:inset 0 1px #ffffff40,0 3px 0 #101f4799,0 6px 18px #10214b30;
+}
+.game-view .level-seal{
+  background:linear-gradient(#9863e5,#593ab0);border-color:#decbff;color:#fff;
+  box-shadow:inset 0 1px #fff7,0 2px 0 #172452;
+}
+.game-view .bar,#play .health{background:#0e2248}
+.game-view .health>span,#play .health span{background:linear-gradient(90deg,#19b4f4,#83ebff)}
+.game-view .health>small{color:#fff;text-shadow:0 1px 2px #0a1b39,1px 0 #0a1b39,-1px 0 #0a1b39}
+.game-view .xp>span{background:linear-gradient(90deg,#ffb900,#ffe96a)}
+.game-view .xp-line>small,#play .hero-hud small{color:#e1edff}
+.game-view .coins,.game-view .world-clock,.game-view .health-root-button,
+.game-view .top-actions .icon-button,#play .playbar button,#play .playbar select{
+  background:linear-gradient(#366baaeF,#1b3e76f5);border:1px solid #a4d7ff;color:#fff;
+  box-shadow:inset 0 1px #ffffff50,0 3px 0 #10214b80;text-shadow:0 1px #10214b;
+}
+.game-view .coins>span,.game-view .health-root-button{color:#ffe679}
+.game-view .coins small{color:#deebff}
+.game-view .world-clock{border-radius:12px}
+.game-view #stick,.landscape-game.game-view #stick{
+  background:radial-gradient(circle,#4077ba70,#18386da8);border:2px solid #b4dcffab;
+  box-shadow:inset 0 0 20px #10214b66,0 3px 0 #10214b66;
+}
+.game-view #stick-knob,.landscape-game.game-view #stick-knob{
+  background:radial-gradient(circle at 35% 25%,#e0f6ff,#65b8ed 45%,#3478bb);
+  border:2px solid #e5f7ff;box-shadow:inset 0 2px #fff8,0 3px 8px #10214b99;
+}
+.game-view .stick-arrows{color:#d6edff}
+.game-view .action-buttons button,.landscape-game.game-view .action-buttons button{
+  border:2px solid #d3ecff;background:linear-gradient(#4ca5e9dc,#2362abdF);
+  color:#fff;box-shadow:inset 0 2px #fff6,inset 0 -4px #10214b33,0 3px 0 #10214b9c;
+  text-shadow:0 1px 2px #10214b;
+}
+.game-view .action-buttons button[data-control="kick"],.landscape-game.game-view .action-buttons button[data-control="kick"]{
+  background:linear-gradient(#b96cf0e8,#7131bde8);border-color:#ebd7ff;
+}
+.game-view .action-buttons .jump-button,.landscape-game.game-view .action-buttons .jump-button{
+  background:linear-gradient(#fff16aeF,#ffc118ed);border-color:#fff5b4;color:#182a53;
+  text-shadow:0 1px #fff5;
+}
+.game-view.game-view .power-button::before{
+  background:linear-gradient(#477ab6ef,#234778f5);border-color:#bee4ff;
+  box-shadow:inset 0 1px #fff6;
+}
+.game-view.game-view .power-button>b{color:#fff}
+.game-view.game-view .power-button::after{background:#101b3de8;border-top-color:#ffe354}
+.game-view.game-view .power-button.active::before{background:linear-gradient(#a65fea,#6239b3);border-color:#ffe354}
+.game-view.game-view .power-button.cooldown::before{border-color:#728cba}
+.game-view.game-view #edit-hud-powers{background:linear-gradient(#386ba8,#244c84);border-color:#b8dfff;color:#fff}
+.game-view .rest-button,.game-view #world-portal{background:linear-gradient(#fff16a,#ffc118);color:#182a53;border:2px solid #fff6ba;box-shadow:0 3px #172b57}
+.game-view .boss-hud,#play .boss{background:#162e5ceF;border-color:#a4d7ff;color:#fff}
+.game-view .boss-heading small,.game-view .boss-cue{color:#deebff}
+#play .cooldown-icon{background:linear-gradient(#527cbd,#2b427d);border-color:#b8dfff;color:#fff}
+#play #hud-1{border-color:#d1b2ff;background:linear-gradient(135deg,#61449aed,#242d64f5)}
+#play #hud-1 .health span{background:linear-gradient(90deg,#9d76ee,#d6bbff)}
+
+/* One clear return control on the first pause page; nested pages keep navigation. */
+body[data-screen="pause"] #pause-menu{
+  background:linear-gradient(120deg,#112650a6,#253573bb),url('./assets/coastal-city.webp') center/cover no-repeat;
+  backdrop-filter:none;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));
+}
+body[data-screen="pause"] #pause-menu .pause-card{
+  width:min(580px,100%);max-width:580px;max-height:none!important;overflow:visible;
+  padding:24px;gap:14px;border:3px solid #c6e8ff;border-radius:24px;
+  background:linear-gradient(135deg,#214e88f5,#192e62f5);color:#fff;
+  box-shadow:inset 0 2px #fff5,0 6px 0 #10214b,0 16px 45px #10214b66;
+}
+#pause-menu .menu-exit-actions{position:static;padding:0;margin:0 0 4px;background:none;gap:10px}
+#pause-menu .menu-exit-actions button,#pause-menu #edit-look,#pause-menu #restore-cloud-heroes{
+  border:2px solid #c3e5ff;border-radius:13px;background:linear-gradient(#508bd1,#2a5b9f);
+  color:#fff;font:800 14px/1.3 Arial,Helvetica,sans-serif;letter-spacing:0;
+  min-height:44px;box-shadow:inset 0 2px #fff5,0 4px #10214b;text-shadow:0 1px #172452;
+}
+#pause-menu #menu-exit-actions button:first-child{
+  background:linear-gradient(#fff16a,#ffbf19);border-color:#fff6b5;color:#182a53;text-shadow:none;
+}
+#pause-menu .pause-brand{margin:8px 0 0;gap:12px;min-height:34px}
+#pause-menu .pause-brand>span{color:#ffe354;font-size:32px;text-shadow:0 2px #a57320}
+#pause-menu .pause-brand small{font:800 9px/1.4 Arial,Helvetica,sans-serif;color:#d6eaff;letter-spacing:.2em}
+#pause-menu .pause-brand strong{font:italic 1000 24px/1 Impact,'Arial Black',Arial,sans-serif;letter-spacing:.02em;color:#ffe354;text-shadow:0 2px #10214b;margin-top:4px}
+#pause-menu #pause-title{font:900 clamp(30px,5vw,42px)/1.05 Arial,Helvetica,sans-serif;color:#fff;margin:8px 0 6px;letter-spacing:-.04em;text-shadow:0 3px #10214b}
+#pause-menu #pause-primary{display:grid!important;grid-template-columns:1fr;gap:12px}
+#pause-menu #pause-primary[hidden]{display:none!important}
+#pause-menu #pause-primary button{
+  border:2px solid #c8e8ff;border-radius:15px;min-height:52px;margin:0;padding:12px 18px;
+  background:linear-gradient(#528cce,#2b5da1);color:#fff;font:800 18px/1.2 Arial,Helvetica,sans-serif;
+  letter-spacing:0;text-align:left;text-shadow:0 2px #172452;
+  box-shadow:inset 0 2px #ffffff77,inset 0 -4px #10214b33,0 4px #10214b;
+}
+#pause-menu #pause-primary #open-my-hero{background:linear-gradient(#bc76f3,#7940c1);border-color:#ead2ff}
+#pause-menu #pause-primary #open-clothing-store{background:linear-gradient(#41c9f0,#177cb9)}
+#pause-menu #pause-primary #choose-hero{background:linear-gradient(#3a649f,#243c72)}
+#pause-menu button:hover{filter:brightness(1.09)}
+#pause-menu button:focus-visible{outline:3px solid #ffe354;outline-offset:3px}
+#pause-menu .pause-save-footer{border-top:1px solid #a4d7ff66;margin-top:8px;padding-top:16px;color:#d8eaff;font-size:12px}
+#pause-menu #restore-cloud-heroes{font-size:12px;background:linear-gradient(#486caa,#293f76);max-width:55%}
+#pause-menu #pause-hero{display:grid;grid-template-columns:minmax(90px,.6fr) 1.4fr;gap:12px 18px;align-items:center}
+#pause-menu #pause-hero[hidden]{display:none}
+#pause-menu #pause-hero h3{grid-column:1/-1;margin:4px 0;font-size:20px}
+#pause-menu #pause-hero canvas{width:100%;height:auto;max-height:220px;object-fit:contain;grid-column:1;grid-row:2}
+#pause-menu #pause-hero-stats{font-size:14px;line-height:1.8;margin:0;color:#e3efff}
+#pause-menu #edit-look{grid-column:1/-1;margin:0 0 4px}
+#menu{border:3px solid #c3e5ff;background:linear-gradient(135deg,#214e88,#192e62);color:#fff;box-shadow:0 6px #10214b}
+#menu .pause-header{background:#193765;color:#fff}
+#menu .menu-panel{background:#203f73;border-color:#a4d7ff55}
+#menu .menu-panel:nth-child(2){background:#343366}
+#menu button,#menu select{background:linear-gradient(#487fbf,#2b528d);border-color:#a4d7ff;color:#fff;min-height:44px}
+#menu .menu-actions button:first-child{background:linear-gradient(#fff16a,#ffc118);color:#182a53;border-color:#fff5b5}
+#menu .menu-tabs button[aria-pressed="true"]{background:linear-gradient(#ac6ceb,#6f43b5);color:#fff;border-color:#ffe354}
+@media(orientation:landscape) and (max-height:600px){
+  body[data-screen="pause"] #pause-menu{align-items:flex-start;padding-block:max(10px,env(safe-area-inset-top))}
+  body[data-screen="pause"] #pause-menu .pause-card{width:min(680px,100%);max-width:680px;padding:14px 18px;gap:10px}
+  #pause-menu .pause-brand{margin:0;min-height:26px}
+  #pause-menu .pause-brand strong{font-size:20px}
+  #pause-menu #pause-title{font-size:28px;margin:2px 0}
+  #pause-menu #pause-primary{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  #pause-menu #pause-primary button{min-height:44px;padding:9px 14px;font-size:15px}
+  #pause-menu .pause-save-footer{margin-top:0;padding-top:10px}
+  #pause-menu #pause-hero canvas{max-height:120px}
+  #pause-menu #pause-hero{grid-template-columns:120px 1fr;gap:8px 14px}
+}
+@media(max-width:420px){
+  body[data-screen="pause"] #pause-menu .pause-card{padding:18px 16px;border-radius:20px}
+  #pause-menu #pause-hero-stats{font-size:13px;line-height:1.65}
+  #pause-menu .pause-save-footer{gap:8px;font-size:11px}
+}

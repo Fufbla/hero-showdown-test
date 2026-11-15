@@ -17,5 +17,5 @@ export function drawPortal(c,x,y,region,time,label='WORLD PORTAL'){
  }
  c.fillStyle=stone;c.strokeStyle='#142333';c.lineWidth=2;c.beginPath();c.roundRect(-43,-7,86,11,3);c.fill();c.stroke();c.fillStyle=edge;c.fillRect(-35,-5,70,2);
  for(let i=0;i<5;i++){const a=time*.4+i*1.256;c.fillStyle=energy;c.globalAlpha=.35+.3*(.5+.5*Math.sin(a));c.beginPath();c.arc(Math.cos(a)*43,-53+Math.sin(a)*48,1.3,0,Math.PI*2);c.fill();c.strokeStyle=energy;c.lineWidth=1;c.beginPath();c.ellipse(0,-53,43,48,0,a-.12,a);c.stroke();}c.globalAlpha=1;
- c.fillStyle='#102330ee';c.beginPath();c.roundRect(-77,9,154,19,5);c.fill();c.fillStyle='#f6ecd6';c.font='bold 10px system-ui';c.textAlign='center';c.fillText(label,0,22,146);c.restore();
+ c.restore();
 }

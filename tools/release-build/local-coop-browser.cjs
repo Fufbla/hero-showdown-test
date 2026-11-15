@@ -231,7 +231,7 @@ function installVfxProbe(){
   await solo.locator('#sound').click();assert.equal(await solo.evaluate(()=>royaleSoundtrack.settings.muted),true);
   await solo.locator('#sound').click();assert.equal(await solo.evaluate(()=>royaleSoundtrack.settings.muted),false);
   await solo.locator('#close-controls').click();
-  await solo.locator('#resume').click();assert(!await solo.locator('#pause-menu').isVisible());
+  await solo.getByRole('button',{name:'‹ Back to Game',exact:true}).click();assert(!await solo.locator('#pause-menu').isVisible());
   // Resuming can resize/clear the canvas before the next animation frame.
   // Wait for actual world pixels, so a blank canvas cannot pass this check.
   await solo.waitForFunction(()=>{
@@ -277,8 +277,18 @@ function installVfxProbe(){
   await cloudPage.waitForFunction(()=>document.querySelector('#status').textContent.includes('Saved Slot 3'));
   assert.equal(accounts[0].slots[2].snapshot.look.name,'Slot Three QA');
   assert.deepEqual(accounts[0].slots.slice(0,2),untouched);
+  // Observe a normal eight-second autosave before pausing and reloading.
+  const savedRevision=accounts[0].slots[2].revision;
+  const savedX=accounts[0].slots[2].snapshot.world.location.x;
+  await cloudGame.locator('#game').click();
+  await cloudPage.keyboard.down('ArrowRight');await cloudPage.waitForTimeout(250);await cloudPage.keyboard.up('ArrowRight');
+  await cloudPage.waitForTimeout(8500);
+  assert(accounts[0].slots[2].revision>savedRevision,'Automatic cloud save advances Slot 3 without a manual save button');
+  assert(accounts[0].slots[2].snapshot.world.location.x>savedX,'Autosave preserves the changed position');
   await cloudGame.locator('#pause').click();
-  await cloudGame.locator('#manual-save').click();
+  assert.equal(await cloudGame.locator('#manual-save, #resume, #pause-back').count(),0);
+  assert(!await cloudGame.locator('#sound').isVisible());
+  assert(!await cloudGame.locator('#pause').isVisible());
   await cloudPage.screenshot({path:dir+'/slot-three-mobile.png',fullPage:true});
   await cloudPage.reload({waitUntil:'domcontentloaded'});
   cloudGame=await enterCloud();

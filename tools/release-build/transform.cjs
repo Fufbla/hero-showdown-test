@@ -22,8 +22,6 @@ function game(s){
   s=between(s,'function beginMeasurement(', 'const menuGamepad=');
   s=s.replace(/^  if\(measurement.*\n/gm,'');
   s=s.replaceAll("$('diagnostics').hidden = !false;",'');
-  s=replace(s,"const result=store.cloud?await store.commit(activeSlot,game.save()):persist({manual:true});","const result=codePlay?await confirmTravelSave(()=>({ok:true})):store.cloud?await store.commit(activeSlot,game.save()):persist({manual:true});");
-  s=replace(s,"store.cloud?'Game saved to your account.':'Hero saved on this browser.'","codePlay||store.cloud?'Game saved to your account.':'Hero saved on this browser.'");
   // Local heroes retain their original namespace and may buy cosmetics normally.
   s=replace(s,'function saveClothingToAccount(snapshot){','function saveClothingToAccount(snapshot){\n if(!codePlay)return Promise.resolve(store.writeSlot(activeSlot,snapshot,{expectedId:activeId,requireDurable:true}));');
   s=replace(s,'const ready=clothingCloudVerified&&game.started', 'const ready=(clothingCloudVerified||!codePlay)&&game.started');
