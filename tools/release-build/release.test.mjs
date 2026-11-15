@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {Game,decodeSave} from '../../royale/core.mjs';
+import {PROGRESSION} from '../../royale/progression.mjs';
 import {LocalHeroStore,PROFILE_KEY} from '../../royale/saves.mjs';
 import {EQUIPMENT,emptyInventory} from '../../royale/equipment.mjs';
 import {selectedOutfit} from '../../royale-v3-staging/kingjames/selection.mjs';
@@ -56,6 +57,7 @@ test('release menu contains the exact six player actions, with gear only in Eris
  assert.deepEqual([...menu.matchAll(/<button[^>]*>([^<]*)<\/button>/g)].map(m=>m[1]),['Resume Game','My Hero','Tree of Eris','Save Game','Settings','Exit to Main Menu']);
  assert(!html.includes('id="open-map"'));assert(!menu.includes('open-inventory'));assert.match(html,/<nav[^>]*aria-label="Tree of Eris services"[\s\S]*?id="open-inventory"/);
  assert.match(html,/min-height:48px/);assert(!html.includes('qa-tools'));assert(!html.includes('diagnostics'));
+ assert(html.includes(`Up to ${PROGRESSION.defeatFraction*100}% of next-level XP is lost.`),'Packaged death-screen text must match the actual XP penalty');
 });
 test('artifact preserves cloud save contract and does not ship backend migrations or test entrypoints',()=>{
  assert.deepEqual(manifest.saveContract,{endpoint:'royale-v3-staging',profileKey:PROFILE_KEY,cloudPrefix:'royale-v3-play:',databaseMigration:false});
