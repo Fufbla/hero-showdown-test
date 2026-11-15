@@ -239,7 +239,8 @@ function installVfxProbe(){
   const untouched=structuredClone(accounts[0].slots.slice(0,2)),otherAccount=structuredClone(accounts[1].slots);
   const enterCloud=async()=>{
    await skipIntro(cloudPage);
-   await cloudPage.getByRole('button',{name:'ENTER MY 10-DIGIT CODE',exact:true}).click();
+   await cloudPage.getByRole('button',{name:'PLAY GAME',exact:true}).click();
+   await cloudPage.getByRole('button',{name:'Enter My 10-Digit Code',exact:true}).click();
    await cloudPage.locator('#input').fill(accounts[0].code);
    await cloudPage.locator('#load').click();
    const frame=cloudPage.frameLocator('#game-frame');
