@@ -8,7 +8,16 @@ function ready(s){s.markReady(0);s.markReady(1);}
 function bossVictory(s){s.command(0,'enterBoss');const room=s.authority.state.rooms.get(s.heroes[0].room),world=room.worlds.get(s.heroes[0].zone);for(const e of world.enemies){e.hp=0;e.state='dead';}s.authority.completeWorld(room,world);return {room,world};}
 
 test('regular full coin rewards accrue independently without duplicate deaths',()=>{const {s}=setup(),e=kill(s);assert.deepEqual(s.games.map(g=>g.hero.coins),[1,1]);s.authority.reward(s.heroes[0],e);assert.deepEqual(s.games.map(g=>g.hero.coins),[1,1]);});
-test('odd XP remainder alternates deterministically and conserves base XP',()=>{const {s}=setup();s.command(0,'travel',[2]);s.games.forEach(g=>g.hero.level=10);const odd=s.games[0].enemies.filter(e=>TYPES[e.type].xp%2);assert(odd.length>=2);const balances=[0,0];for(const e of odd.slice(0,2)){e.protection=0;e.hp=1;const before=s.games.map(g=>g.hero.xp);s.games[0].damageEnemy(e,999999);const gained=s.games.map((g,i)=>g.hero.xp-before[i]);assert.equal(gained[0]+gained[1],TYPES[e.type].xp);gained.forEach((v,i)=>balances[i]+=v);}assert.equal(balances[0],balances[1]);});
+test('odd XP remainder alternates deterministically and conserves eligible XP',()=>{
+ const {s}=setup();s.command(0,'travel',[2]);s.games.forEach(g=>g.hero.level=10);
+ const reward=e=>monsterXP(TYPES[e.type].xp,10,e.level),odd=s.games[0].enemies.filter(e=>reward(e)%2);
+ assert(odd.length>=2);const balances=[0,0];
+ for(const e of odd.slice(0,2)){
+  e.protection=0;e.hp=1;const before=s.games.map(g=>g.hero.xp);s.games[0].damageEnemy(e,999999);
+  const gained=s.games.map((g,i)=>g.hero.xp-before[i]);assert.equal(gained[0]+gained[1],reward(e));gained.forEach((v,i)=>balances[i]+=v);
+ }
+ assert.equal(balances[0],balances[1]);
+});
 test('both heroes get boss XP and full first-victory coins without final-hit ownership',()=>{const {s}=setup();const {room,world}=bossVictory(s);assert.deepEqual(s.games.map(g=>g.hero.coins),[100,100]);assert(s.games.every(g=>g.bossProgress.records[1].wins===1));const before=s.games.map(g=>captureProgress(g));s.authority.completeWorld(room,world);assert.deepEqual(s.games.map(g=>captureProgress(g)),before);});
 test('first-defeat boss coin eligibility stays per account',()=>{const {s}=setup();const g=s.games[0];g.world.bossVictories=[1];g.bossProgress.records[1]={wins:1,chest:{state:'claimed',coins:0,roots:0,items:[]}};bossVictory(s);assert.deepEqual(s.games.map(g=>g.hero.coins),[10,100]);});
 test('boss chest claims are independent and cannot repeat',()=>{const {s}=setup();bossVictory(s);s.games.forEach(g=>g.combatTimer=0);assert(s.command(0,'claimChest'));assert(s.games[1].availableChest());const coins=s.games[0].hero.coins;assert.equal(s.command(0,'claimChest'),false);assert.equal(s.games[0].hero.coins,coins);assert(s.command(1,'claimChest'));});
@@ -33,12 +42,15 @@ for(const departing of [0,1])test(`player ${departing+1} leaves, other preserves
 test('failed final save keeps departing hero and pending session available',async()=>{const {s,profiles}=setup();profiles[1].save=async()=>{throw Error('Offline');};const result=await s.leave(1);assert.equal(result.ok,false);assert.equal(s.active.size,2);assert(s.paused);});
 test('region travel joins both heroes to the same authoritative enemies',()=>{const {s}=setup();assert(s.command(1,'travel',[2]));assert.deepEqual(s.games.map(g=>g.regionId),[2,2]);assert.equal(s.games[0].enemies,s.games[1].enemies);assert.equal(s.leader,0);});
 test('checkpoint capture is equivalent to solo save outside combat',()=>{const {s}=setup(),g=s.games[0];assert.deepEqual(captureProgress(g),JSON.parse(g.save()));});
-test('boss XP is conserved exactly across independent level-ups',()=>{
- const {s}=setup();bossVictory(s);const total=g=>g.hero.xp+Array.from({length:g.hero.level-1},(_,n)=>xpForLevel(n+1)).reduce((a,b)=>a+b,0);
- assert.equal(total(s.games[0])+total(s.games[1]),BOSSES[1].xp);assert(Math.abs(total(s.games[0])-total(s.games[1]))<=1);
+test('eligible boss XP is conserved exactly across independent level-ups',()=>{
+ const {s}=setup(),before=[xpForLevel(1)-1,0];s.games[0].hero.xp=before[0];bossVictory(s);
+ const total=g=>g.hero.xp+Array.from({length:g.hero.level-1},(_,n)=>xpForLevel(n+1)).reduce((a,b)=>a+b,0);
+ const earned=s.games.map((g,i)=>total(g)-before[i]);
+ assert.equal(earned[0]+earned[1],monsterXP(BOSSES[1].xp,1,BOSSES[1].level));assert(Math.abs(earned[0]-earned[1])<=1);
+ assert.deepEqual(s.games.map(g=>g.hero.level),[2,1]);
 });
 test('dead active partner still receives their share without duplicate deaths',()=>{
- const {s}=setup();s.games[1].hero.dead=true;s.games[1].hero.hp=0;const e=kill(s);assert.equal(s.games[0].hero.xp+s.games[1].hero.xp,TYPES[e.type].xp);assert.equal(s.games[1].hero.coins,1);assert(decodeSave(JSON.stringify(captureProgress(s.games[1]))));
+ const {s}=setup();s.games[1].hero.dead=true;s.games[1].hero.hp=0;const e=kill(s);assert.equal(s.games[0].hero.xp+s.games[1].hero.xp,monsterXP(TYPES[e.type].xp,1,e.level));assert.equal(s.games[1].hero.coins,1);assert(decodeSave(JSON.stringify(captureProgress(s.games[1]))));
 });
 test('one authority advances each shared enemy once per simulation tick',()=>{
  const {s}=setup();let count=0;const original=Game.prototype.stepEnemy;Game.prototype.stepEnemy=function(...args){count++;return original.apply(this,args);};
