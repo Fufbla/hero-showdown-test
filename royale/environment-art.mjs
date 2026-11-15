@@ -1,4 +1,5 @@
 import {paintHorizon,animateLivingWorld,animateSurfaceFringe} from './environment-living.mjs';
+import {IllustratedEnvironment} from './environment-paintings.mjs';
 import {paintLandscape,paintTerrain,animateLandscape} from './environment-detail.mjs';
 // Local canvas textures preserve the comic linework without new shared assets.
 const TAU=Math.PI*2,INK='#1b3542';
@@ -43,10 +44,11 @@ function backdrop(theme,night,near){
  return canvas;
 }
 export class EnvironmentArt{
- constructor(){this.scenes=new Map();this.terrain=new Map();this.time=0;this.cameraX=0;this.width=1280;}
+ constructor(){this.illustrated=new IllustratedEnvironment();this.scenes=new Map();this.terrain=new Map();this.time=0;this.cameraX=0;this.width=1280;}
  scene(region,night){const key=`${region.id}:${night}`;if(!this.scenes.has(key)){const far=document.createElement('canvas');far.width=768;far.height=360;paintHorizon(far.getContext('2d'),region.theme,night);this.scenes.set(key,[far,backdrop(region.theme,night,false),backdrop(region.theme,night,true)]);while(this.scenes.size>2)this.scenes.delete(this.scenes.keys().next().value);}return this.scenes.get(key);}
  sky(c,region,width,height,cameraX,cameraY,time,night){
   this.time=time;this.cameraX=cameraX;this.width=width;
+  if(this.illustrated.sky(c,region,width,height,cameraX,cameraY,time,night))return;
   const gradient=c.createLinearGradient(0,0,0,height);gradient.addColorStop(0,night?'#122239':region.sky[0]);gradient.addColorStop(.65,night?'#3a4c63':region.sky[1]);gradient.addColorStop(1,night?'#526474':region.sky[1]);c.fillStyle=gradient;c.fillRect(0,0,width,height);
   if(region.theme!=='cave'){
    const sx=width*.78-cameraX*.018,sy=115-cameraY*.08;oval(c,sx,sy,night?30:52,night?30:52,night?'#f5efcc':'#fff0bc');oval(c,sx,sy,night?42:76,night?42:76,'#fff1bd16');
@@ -59,6 +61,7 @@ export class EnvironmentArt{
   animateLivingWorld(c,region,width,height,cameraX,cameraY,time,night);
  }
  surface(c,s,region){
+  if(this.illustrated.surface(c,s,region))return;
   const key=`${region.id}:${s.kind}:${s.w}:${s.h}:${!!s.oneWay}`;let tile=this.terrain.get(key);
   if(!tile){
    tile=document.createElement('canvas');tile.width=s.w+8;tile.height=s.oneWay?104:s.h+20;const t=tile.getContext('2d'),wood=s.kind==='wood',metal=s.kind==='metal',top=12,w=s.w;
