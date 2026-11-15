@@ -1,0 +1,242 @@
+{
+  "url": "http://127.0.0.1:8175/hero-showdown-test/royale/local-coop/",
+  "errors": [],
+  "rejections": [],
+  "requests": [
+    {
+      "action": "verify",
+      "player": 0
+    },
+    {
+      "action": "slots",
+      "player": 0
+    },
+    {
+      "action": "verify",
+      "player": 1
+    },
+    {
+      "action": "slots",
+      "player": 1
+    },
+    {
+      "action": "slots",
+      "player": 0
+    },
+    {
+      "action": "slots",
+      "player": 1
+    },
+    {
+      "action": "save",
+      "player": 0
+    },
+    {
+      "action": "save",
+      "player": 1
+    },
+    {
+      "action": "save",
+      "player": 0
+    },
+    {
+      "action": "save",
+      "player": 1
+    },
+    {
+      "action": "save",
+      "player": 0
+    },
+    {
+      "action": "save",
+      "player": 1
+    },
+    {
+      "action": "save",
+      "player": 0
+    },
+    {
+      "action": "save",
+      "player": 1
+    },
+    {
+      "action": "save",
+      "player": 1
+    },
+    {
+      "action": "verify",
+      "player": 0
+    },
+    {
+      "action": "slots",
+      "player": 0
+    },
+    {
+      "action": "verify",
+      "player": 1
+    },
+    {
+      "action": "slots",
+      "player": 1
+    },
+    {
+      "action": "slots",
+      "player": 0
+    },
+    {
+      "action": "slots",
+      "player": 1
+    },
+    {
+      "action": "slots",
+      "player": 0
+    },
+    {
+      "action": "slots",
+      "player": 1
+    },
+    {
+      "action": "save",
+      "player": 0
+    },
+    {
+      "action": "save",
+      "player": 1
+    },
+    {
+      "action": "slots",
+      "player": 0
+    },
+    {
+      "action": "slots",
+      "player": 1
+    },
+    {
+      "action": "save",
+      "player": 0
+    },
+    {
+      "action": "save",
+      "player": 1
+    },
+    {
+      "action": "verify",
+      "player": 0
+    },
+    {
+      "action": "slots",
+      "player": 0
+    },
+    {
+      "action": "save",
+      "player": 0
+    },
+    {
+      "action": "verify",
+      "player": 0
+    },
+    {
+      "action": "slots",
+      "player": 0
+    }
+  ],
+  "checks": [
+    "Two separate accounts and saved slots entered gameplay",
+    "Both eight-second autosaves retain independent progress, appearance, power levels and other slots, including Player 2 in Slot 3",
+    "Separate controllers move only their own heroes; pause/resume retains the world",
+    "Both controllers cast equipped powers and accept punch/kick input; music mute keeps sound effects enabled",
+    "Player 1 moves the shared camera and Player 2 remains inside its viewport",
+    "Off-screen follower teleport remains active",
+    "Combat awards independent coins and preserves zero XP for overlevelled coastal farming",
+    "Returning to setup, reloading saved heroes and restarting co-op use one loop and one autosave timer",
+    "First-frame exception displays a recoverable error; retry succeeds without reload",
+    "A later frame exception saves both checkpoints and keeps the setup loop usable",
+    "Co-op setup, gameplay, pause and restart retain one soundtrack",
+    "Both co-op players render the approved solo Roots and Whirlwind sheets; Player 2 uses the solo fireball atlas",
+    "Single-player saved hero loads, responds to input, pauses and resumes without exceptions",
+    "Mobile code login exposes Slot 3, creates and plays its hero, confirms its cloud save, and resumes it after reload without changing other slots or accounts"
+  ],
+  "physicalControllers": false,
+  "sourceCommit": "d0a76f08591ede14ac8c23af3bbcd9feedb29989",
+  "text": "HERO SHOWDOWN ROYALE\nLocal co-op · autosave on\nFrame rate \n60 FPS target\n30 FPS fallback\nPause\nFull screen\nP1 · Coop QA Atlas\n◉\n♧\n≋\nLV 14 · HP 100/295 · 1234 coins\n20/1090 XP\nAutosave every 8 seconds\nP2 · Coop QA Nova\n◉\n♧\n≋\nLV 15 · HP 100/310 · 1334 coins\n21/1226 XP\nAutosave every 8 seconds\nP1: Fast Travel · Coins required · P2: Entrance · Previous phase",
+  "observed": {
+    "frames": 1236,
+    "loopMax": 1,
+    "timers": 1,
+    "follower": {
+      "x": 1167.5902777777778,
+      "y": 600,
+      "cameraX": 793.9584350585938,
+      "cameraY": 9.600000381469727,
+      "width": 1151.662781471144,
+      "height": 720.000011256484
+    }
+  },
+  "powerArtwork": [
+    {
+      "mode": "coop",
+      "player": 1,
+      "power": "roots",
+      "asset": "ground-root-overlay.webp",
+      "frames": [
+        "0,0",
+        "256,0",
+        "512,0"
+      ]
+    },
+    {
+      "mode": "coop",
+      "player": 2,
+      "power": "roots",
+      "asset": "ground-root-overlay.webp",
+      "frames": [
+        "0,0",
+        "256,0",
+        "512,0"
+      ]
+    },
+    {
+      "mode": "coop",
+      "player": 1,
+      "power": "whirlwind",
+      "asset": "whirlwind-overlay.webp",
+      "frames": [
+        "0,0",
+        "256,0",
+        "512,0"
+      ]
+    },
+    {
+      "mode": "coop",
+      "player": 2,
+      "power": "whirlwind",
+      "asset": "whirlwind-overlay.webp",
+      "frames": [
+        "0,0",
+        "256,0",
+        "512,0"
+      ]
+    },
+    {
+      "mode": "solo",
+      "power": "roots",
+      "asset": "ground-root-overlay.webp",
+      "frames": [
+        "0,0",
+        "256,0",
+        "512,0"
+      ]
+    },
+    {
+      "mode": "solo",
+      "power": "whirlwind",
+      "asset": "whirlwind-overlay.webp",
+      "frames": [
+        "0,0",
+        "256,0",
+        "512,0"
+      ]
+    }
+  ],
+  "passed": true
+}

@@ -65,6 +65,7 @@ module.exports=function transform(file,s){
   if(file==='royale-v3-staging/portals/journey-menu.mjs')s=replace(s,"import {pickupForGame} from '../../royale/multiplayer/game-session.mjs';","function pickupForGame(game,...args){return game.pickupLoot?game.pickupLoot(...args):pickupLoot(game,...args);}");
   if(file==='royale/journey-menu.mjs')s=replace(s,"import {pickupForGame} from './multiplayer/game-session.mjs';","function pickupForGame(game,...args){return game.pickupLoot?game.pickupLoot(...args):pickupLoot(game,...args);}");
   if(file==='royale/app.mjs')s=game(s);
+  if(file==='royale/app.mjs')s=s.replace(/\$\('sound'\)\.onclick=async\(\)=>.*?;\n/,"setTimeout(()=>window.dispatchEvent(new Event('royale-audio-controls-ready')),0);\n");
   if(file==='royale-v3-staging/kingjames/renderer.mjs')s=renderer(s);
   if(file==='royale-v3-staging/app.mjs')s=cloud(s);
   if(file==='royale-v3-staging/gameplay/local-coop-app.mjs')s=coop(s);

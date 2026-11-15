@@ -1,0 +1,18 @@
+{
+  "url": "http://127.0.0.1:8176/hero-showdown-test/royale/",
+  "checks": [],
+  "engines": [
+    {
+      "engine": "WebKit",
+      "device": "iPhone 13 emulation",
+      "passed": true
+    },
+    {
+      "engine": "WebKit",
+      "device": "iPad (gen 7) emulation",
+      "passed": true
+    }
+  ],
+  "physicalDevices": false,
+  "passed": true
+}

@@ -5,6 +5,10 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
 const url=process.env.ROYALE_COOP_URL||'https://fufbla.github.io/hero-showdown-test/royale/local-coop/';
 const report={url,errors:[],rejections:[],requests:[],checks:[],physicalControllers:false};
 const dir='docs/local-coop-startup-20261113';fs.mkdirSync(dir,{recursive:true});
+async function skipIntro(page){
+ await page.locator('#intro-skip').click();
+ await page.locator('#royale-intro').waitFor({state:'detached'});
+}
 function installVfxProbe(){
  window.__vfx=[];
  const draw=CanvasRenderingContext2D.prototype.drawImage;
@@ -79,7 +83,10 @@ function installVfxProbe(){
   const manifest=await (await page.request.get(new URL('../release-manifest.json?v='+(process.env.ROYALE_EXPECTED_COMMIT||Date.now()),url).href)).json();
   report.sourceCommit=manifest.sourceCommit;
   if(process.env.ROYALE_EXPECTED_COMMIT)assert.equal(manifest.sourceCommit,process.env.ROYALE_EXPECTED_COMMIT,'The deployed commit matches the tested release');
-  await page.goto(url+'?verify='+manifest.sourceCommit,{waitUntil:'networkidle',timeout:120000});
+  await page.goto(url+'?verify='+manifest.sourceCommit,{waitUntil:'domcontentloaded',timeout:120000});
+  await skipIntro(page);
+  await page.waitForFunction(()=>!!window.royaleSoundtrack?.source);
+  await page.evaluate(()=>{window.originalMusic=royaleSoundtrack.source;window.effectCount=0;const create=royaleSoundtrack.context.createOscillator.bind(royaleSoundtrack.context);royaleSoundtrack.context.createOscillator=()=>{window.effectCount++;return create();};});
   async function login(){for(let i=0;i<2;i++){
    const card=page.locator('.player-card').nth(i);
    await page.locator('#code-'+i).fill(accounts[i].code);
@@ -124,11 +131,13 @@ function installVfxProbe(){
   assert(latest(0).world.location.x>before[0]+5);assert(Math.abs(latest(1).world.location.x-before[1])<2);
   await resume();await move(1,.5,300);await pauseSave();assert(latest(1).world.location.x>before[1]+5);await resume();
   report.checks.push('Separate controllers move only their own heroes; pause/resume retains the world');
-  await page.evaluate(()=>window.__vfx=[]);await pulse(0,4);await pulse(1,4);
+  await page.evaluate(()=>{window.__vfx=[];royaleSoundtrack.toggle();window.effectCount=0;});await pulse(0,4);await pulse(1,4);
   assert((await page.evaluate(()=>window.__vfx)).some(r=>r.asset==='attacks.webp'),'Player 2 uses solo fireball artwork');
   for(let i=0;i<2;i++)assert.match(await page.locator('#powers-'+i+' .cooldown-icon').first().getAttribute('aria-label'),/\ds|Active/);
   await pulse(0,2);await pulse(1,1);
-  report.checks.push('Both controllers cast equipped powers and accept punch/kick input');
+  assert(await page.evaluate(()=>royaleSoundtrack.settings.muted&&effectCount>0&&royaleSoundtrack.source===originalMusic),'Music mute leaves combat sound effects active and preserves the original soundtrack');
+  await page.evaluate(()=>royaleSoundtrack.toggle());
+  report.checks.push('Both controllers cast equipped powers and accept punch/kick input; music mute keeps sound effects enabled');
   await pulse(1,9);assert(await page.locator('#menu').isVisible(),'Player 2 controller can pause');
   const paused=await observe();await move(0,1,250);assert.equal((await observe()).follower.cameraX,paused.follower.cameraX);await resume();
   await move(0,1,3300);const camera=await observe();
@@ -164,6 +173,8 @@ function installVfxProbe(){
   await page.locator('#start').click();await page.locator('#play').waitFor({state:'visible'});await page.waitForTimeout(400);
   report.checks.push('A later frame exception saves both checkpoints and keeps the setup loop usable');
   assert.deepEqual(report.errors,[]);assert.deepEqual(await page.evaluate(()=>window.__rejections),[]);
+  assert(await page.evaluate(()=>royaleSoundtrack.source===originalMusic),'Pause, leave and restart co-op never replace the soundtrack');
+  report.checks.push('Co-op setup, gameplay, pause and restart retain one soundtrack');
   report.observed=await observe();
   report.powerArtwork=[];
   for(const [power,button,asset] of [['roots',5,'ground-root-overlay.webp'],['whirlwind',7,'whirlwind-overlay.webp']]){
@@ -188,12 +199,18 @@ function installVfxProbe(){
   store.writeSlot(0,JSON.stringify(accounts[0].slots[0].snapshot));
   await soloContext.addInitScript(({key,value})=>localStorage.setItem(key,value),{key:PROFILE_KEY,value:memory.get(PROFILE_KEY)});
   const solo=await soloContext.newPage(),soloErrors=[];solo.on('pageerror',e=>soloErrors.push(e.message));
-  await solo.goto(new URL('../gameplay/?verify='+manifest.sourceCommit,url).href,{waitUntil:'networkidle'});
+  await solo.goto(new URL('../gameplay/?verify='+manifest.sourceCommit,url).href,{waitUntil:'domcontentloaded'});
+  await skipIntro(solo);
   await solo.getByRole('button',{name:'Continue →',exact:true}).click();await solo.waitForTimeout(600);
   const first=await solo.locator('#game').evaluate(c=>c.toDataURL());
   await solo.keyboard.down('ArrowRight');await solo.waitForTimeout(300);await solo.keyboard.up('ArrowRight');
   assert.notEqual(await solo.locator('#game').evaluate(c=>c.toDataURL()),first,'Single player continues drawing after input');
   await solo.locator('#pause').click();assert(await solo.locator('#pause-menu').isVisible());
+  await solo.locator('#open-controls').click();await solo.locator('#volume-music').fill('37');
+  assert.equal(await solo.evaluate(()=>royaleSoundtrack.settings.volume),.37);
+  await solo.locator('#sound').click();assert.equal(await solo.evaluate(()=>royaleSoundtrack.settings.muted),true);
+  await solo.locator('#sound').click();assert.equal(await solo.evaluate(()=>royaleSoundtrack.settings.muted),false);
+  await solo.locator('#close-controls').click();
   await solo.locator('#resume').click();assert(!await solo.locator('#pause-menu').isVisible());
   // Resuming can resize/clear the canvas before the next animation frame.
   // Wait for actual world pixels, so a blank canvas cannot pass this check.
@@ -221,6 +238,7 @@ function installVfxProbe(){
   cloudPage.on('pageerror',e=>cloudErrors.push(e.message));
   const untouched=structuredClone(accounts[0].slots.slice(0,2)),otherAccount=structuredClone(accounts[1].slots);
   const enterCloud=async()=>{
+   await skipIntro(cloudPage);
    await cloudPage.getByRole('button',{name:'ENTER MY 10-DIGIT CODE',exact:true}).click();
    await cloudPage.locator('#input').fill(accounts[0].code);
    await cloudPage.locator('#load').click();
@@ -229,7 +247,7 @@ function installVfxProbe(){
    assert.equal(await frame.locator('#hero-slots .hero-slot').count(),3,'Every code account shows all three hero slots');
    return frame;
   };
-  await cloudPage.goto(new URL('../?verify='+manifest.sourceCommit,url).href,{waitUntil:'networkidle'});
+  await cloudPage.goto(new URL('../?verify='+manifest.sourceCommit,url).href,{waitUntil:'domcontentloaded'});
   let cloudGame=await enterCloud();
   await cloudGame.locator('#hero-slots .hero-slot').nth(2).getByRole('button',{name:'Create Hero +',exact:true}).click();
   await cloudGame.locator('#name').fill('Slot Three QA');
@@ -241,7 +259,7 @@ function installVfxProbe(){
   await cloudGame.locator('#pause').click();
   await cloudGame.locator('#manual-save').click();
   await cloudPage.screenshot({path:dir+'/slot-three-mobile.png',fullPage:true});
-  await cloudPage.reload({waitUntil:'networkidle'});
+  await cloudPage.reload({waitUntil:'domcontentloaded'});
   cloudGame=await enterCloud();
   const third=cloudGame.locator('#hero-slots .hero-slot').nth(2);
   assert.match(await third.innerText(),/Slot Three QA/);

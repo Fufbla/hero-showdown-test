@@ -1,0 +1,15 @@
+html.royale-intro-pending body{visibility:hidden}
+#royale-intro{position:fixed;inset:0;box-sizing:border-box;width:100vw;max-width:none;height:100vh;height:100dvh;max-height:none;margin:0;padding:0;border:0;background:#071c21;color:#f8efd6;overflow:hidden}
+#royale-intro::backdrop{background:#071c21}
+#royale-intro video{width:100%;height:100%;object-fit:contain;display:block;background:#071c21}
+#royale-intro .intro-start{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:linear-gradient(180deg,#071c21dd,#102e33ee);font:16px system-ui}
+#royale-intro .intro-start[hidden]{display:none}
+#royale-intro h1{font-size:clamp(24px,6vw,64px);line-height:1.04;letter-spacing:.02em;margin:12px 0 28px}
+#royale-intro h1 em{font-style:normal;color:#e8cd86}
+#royale-intro .intro-start>p:first-child{font-size:12px;letter-spacing:.22em;color:#9bdbc1}
+#royale-intro button{font:700 16px system-ui;cursor:pointer;border-radius:12px;padding:14px 26px;border:1px solid #92d9bc;background:#9be0bd;color:#112e27}
+#royale-intro #intro-skip{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));right:max(20px,env(safe-area-inset-right));background:#10292ed9;color:#fff;border:1px solid #ffffff55;padding:10px 15px;font-size:13px;min-height:44px}
+#royale-intro .intro-status{font-size:14px;color:#c0cfc9}
+.royale-music-controls{font:14px system-ui;border:1px solid #6a9584;border-radius:10px;padding:10px;margin:12px 0;max-width:320px;color:inherit}
+.royale-music-controls summary{cursor:pointer}.royale-music-controls label{display:block}.royale-music-controls input{display:block;width:100%;box-sizing:border-box;accent-color:#8dddb9;padding:0;min-height:32px;margin:4px 0}.royale-music-controls button{padding:8px 12px;margin:8px 0}
+.royale-intro-finished{animation:royale-reveal .3s ease-out}@keyframes royale-reveal{from{opacity:.25}to{opacity:1}}@media(prefers-reduced-motion:reduce){.royale-intro-finished{animation:none}}

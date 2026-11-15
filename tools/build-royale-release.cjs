@@ -16,17 +16,22 @@ for(const [from,to] of Object.entries(map)){
   mappings.set(new URL(from,'https://build.test/royale/').pathname.slice(1),new URL(to,'https://build.test/royale/').pathname.slice(1));
 }
 mappings.delete('royale/app.mjs');
+mappings.set('royale/audio.mjs','royale/media/game-audio.mjs');
 mappings.set('royale/renderer.mjs','royale-v3-staging/kingjames/renderer.mjs');
 mappings.set('royale/hero-art.mjs','royale/release-src/presentation.mjs');
 
 const sourceHashes={};
+function mediaShell(html,script){
+ const head='<link rel="stylesheet" href="/hero-showdown-test/royale/media/media.css"><script>try{if(!parent.royaleSoundtrack){document.documentElement.classList.add("royale-intro-pending");setTimeout(()=>document.documentElement.classList.remove("royale-intro-pending"),5000);}}catch{}</script>';
+ return html.replace('</head>',head+'</head>').replace('</body>',`<script type="module" src="${script}"></script></body>`);
+}
 const runtimePlugin={name:'approved-v3-release',setup(build){
   build.onResolve({filter:/^[./]/},args=>{
     const original=path.resolve(args.resolveDir||root,args.path.split('?')[0]);
     let rel=path.relative(root,original).replaceAll(path.sep,'/');
     if(rel.startsWith('../'))throw Error('Import escapes project: '+rel);
     // Fallback adapters deliberately import the underlying shared implementation.
-    if(!/[?&](?:costume-base|fashion-base|bossFallback|four-base)=1/.test(args.path)){
+    if(!/[?&](?:costume-base|fashion-base|bossFallback|four-base|media-base)=1/.test(args.path)){
       rel=mappings.get(rel)||rel;rel=fashionMap[rel]||rel;rel=powerMap[rel]||rel;
     }
     if(/\/(?:tests?|qa|backend-v3)\//.test(rel)||/(?:practice|launcher|outfit-wardrobe|v2-test-hero|boss-qa|input-qa|vertical-qa|legendary-qa|phase10-qa)\.mjs$/.test(rel))throw Error('Developer module entered release: '+rel);
@@ -82,27 +87,27 @@ async function build(){
   const sha=cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   const {COLLECTION}=await import('../royale/fashion/catalog.mjs');
   fs.rmSync(out,{recursive:true,force:true});fs.mkdirSync(out,{recursive:true});copyPublic();
-  const result=await esbuild.build({absWorkingDir:root,entryPoints:{game:'royale-v3-staging/interface/game-entry.mjs',coop:'royale/release-src/coop-entry.mjs',cloud:'royale-v3-staging/app.mjs','json-worker':'royale/local-coop/json-worker.mjs'},outdir:path.join(out,'royale/release'),outExtension:{'.js':'.mjs'},chunkNames:'shared-[hash]',bundle:true,splitting:true,format:'esm',platform:'browser',target:['es2022'],minifySyntax:true,minifyWhitespace:false,legalComments:'none',drop:['console','debugger'],metafile:true,plugins:[runtimePlugin]});
+  const result=await esbuild.build({absWorkingDir:root,entryPoints:{game:'royale-v3-staging/interface/game-entry.mjs',coop:'royale/release-src/coop-entry.mjs',cloud:'royale-v3-staging/app.mjs',media:'royale/media/launch.mjs','json-worker':'royale/local-coop/json-worker.mjs'},outdir:path.join(out,'royale/release'),outExtension:{'.js':'.mjs'},chunkNames:'shared-[hash]',bundle:true,splitting:true,format:'esm',platform:'browser',target:['es2022'],minifySyntax:true,minifyWhitespace:false,legalComments:'none',drop:['console','debugger'],metafile:true,plugins:[runtimePlugin]});
   let home=read('royale-v3-staging/index.html');
   home=home.replace(/<script type="importmap">[\s\S]*?<\/script>/g,'').replace(/<script type="module" src="[^"]+"><\/script>/g,'');
   home=home.replace('Hero Showdown Royale V3 Test','Hero Showdown Royale').replace('V3 isolated test — original saves remain untouched.','');
   home=home.replace(/<small>\s*<\/small>/g,'').replace(/<button id="local-coop"/,'<button id="local-coop"');
   home=home.replace(/location.href='[^']*local-coop[^']*'/,"location.href='./local-coop/'");
-  home=home.replace('</section>',`<button type="button" onclick="location.href='./gameplay/'">HEROES ON THIS BROWSER</button></section>`);
+  home=home.replace('</section>',`<button type="button" id="browser-heroes" onclick="location.href='./gameplay/'">HEROES ON THIS BROWSER</button></section>`);
   home=home.replace('</body>',`<script type="module" src="./test-code-entry.mjs?v=${sha}"></script><script type="module" src="./release/cloud.mjs?v=${sha}"></script></body>`);
   home=home.replace(/<p>V3[^<]*<\/p>/g,'');
   home=home.replace(/<p>Cloud save: automatic every eight seconds during gameplay<\/p>/g,'').replace('</head>','<style>html:has(.staging-session),body.staging-session{width:100%;height:100%;height:100dvh;max-width:none;margin:0;padding:0;overflow:hidden}.staging-session>h1,.staging-session>p,.staging-session>small,.staging-session #refresh{display:none!important}.staging-session #roster{position:fixed;inset:0;border:0;margin:0;padding:0;border-radius:0}.staging-session #game-frame{width:100%;height:100%;height:100dvh}</style></head>');
-  write('royale/index.html',home);write('royale/interface.css',read('royale-v3-staging/interface/interface.css'));
+  write('royale/index.html',mediaShell(home,`./release/media.mjs?v=${sha}`));write('royale/interface.css',read('royale-v3-staging/interface/interface.css'));
   // The reserved code opens a separate local sandbox. Normal cloud/game bundles
   // and their save contracts remain unchanged.
   write('royale/test-code-entry.mjs',read('test-only/four-powers/site-entry.mjs'));
   cp.execFileSync(process.execPath,[path.join(root,'test-only/four-powers/build.cjs'),path.join(out,'four-powers-test')],{cwd:root,stdio:'inherit'});
-  const gameplayHTML=read('royale-v3-staging/gameplay/index.html').replace(/Clothing Store · \d+ outfits/g,`Clothing Store · ${COLLECTION.length} outfits`);
-  write('royale/gameplay/index.html',shell(gameplayHTML,'../',`./release/game.mjs?v=${sha}`));
+  const gameplayHTML=read('royale-v3-staging/gameplay/index.html').replace('Enable sound using the music button. Original looping themes change with the region and encounter.','The music button mutes only the soundtrack. Sound effects have their own volume.').replace('id="volume-music-value">35%', 'id="volume-music-value">20%').replace('value="35" aria-label="Music volume"','value="20" aria-label="Music volume"').replace(/Clothing Store · \d+ outfits/g,`Clothing Store · ${COLLECTION.length} outfits`);
+  write('royale/gameplay/index.html',mediaShell(shell(gameplayHTML,'../',`./release/game.mjs?v=${sha}`),`./release/media.mjs?v=${sha}`));
   let coopHTML=shell(read('royale-v3-staging/local-coop/index.html'),'./',`../release/coop.mjs?v=${sha}`);
   // Co-op base remains /royale/local-coop/, one level deeper than the solo base.
   coopHTML=coopHTML.replace('src="../assets/animation/motion-core.js"','src="../../assets/animation/motion-core.js"');
-  write('royale/local-coop/index.html',coopHTML);
+  write('royale/local-coop/index.html',mediaShell(coopHTML,`../release/media.mjs?v=${sha}`));
   write('royale-v3-staging/index.html','<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hero Showdown Royale</title><meta http-equiv="refresh" content="0;url=../royale/"><a href="../royale/">Open Hero Showdown Royale</a>');
   let index=read('index.html').replace('href="./royale-v3-staging/"','href="./royale/"').replace('Open Hero Showdown Royale V3 in a new browser tab','Open Hero Showdown Royale in a new browser tab');write('index.html',index);
   write('.nojekyll','');

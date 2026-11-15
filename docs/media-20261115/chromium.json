@@ -1,0 +1,29 @@
+{
+  "url": "http://127.0.0.1:8174/hero-showdown-test/royale/",
+  "checks": [
+    "Complete 30-second video plays with audio, correct aspect ratio, and no concurrent music; ended releases the video and starts music",
+    "Default 20%, mute/unmute and 0–100% volume use the same source and persist preferences",
+    "Browser hero menu is embedded in the persistent launch page, shares one soundtrack, and never replays the intro",
+    "Missing video falls through to a working main menu",
+    "Missing soundtrack leaves menu navigation and sound-effects context available",
+    "Autoplay rejection offers Tap to Start and Skip always remains usable",
+    "Actual three-minute boundary crossed on the original audio source without a new player",
+    "Fresh launch replays intro once and restores local music preferences"
+  ],
+  "engines": [
+    {
+      "engine": "Chromium",
+      "device": "Android Chrome emulation",
+      "passed": true
+    }
+  ],
+  "physicalDevices": false,
+  "loop": {
+    "same": true,
+    "loop": true,
+    "duration": 180,
+    "elapsed": 182.00961451247164,
+    "state": "running"
+  },
+  "passed": true
+}
