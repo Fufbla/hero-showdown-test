@@ -16,7 +16,7 @@ export function installInterface(hooks){
   const openButton=button('Clothing Store',hooks.open,'secondary');openButton.id='open-clothing-store';$('tree-from-pause').after(openButton);
   const pauseCard=$('pause-menu').querySelector('.pause-card');
   const topActions=document.querySelector('.top-actions'),actionsHome=document.createComment('Gameplay controls');topActions.before(actionsHome);
-  const brand=element('div',undefined,'pause-brand');brand.innerHTML='<span aria-hidden="true">✦</span><div><small>JAMES CLAN COMICS</small><strong>HERO SHOWDOWN</strong></div>';
+  const brand=element('div',undefined,'pause-brand');brand.innerHTML='<span aria-hidden="true">✦</span><div><small>JAMES CLAN COMICS</small><strong>HERO ROYALE</strong></div>';
   pauseCard.prepend(brand);
   const footer=element('footer',undefined,'pause-save-footer');
   const saved=element('span');saved.id='pause-saved-slot';
@@ -26,7 +26,7 @@ export function installInterface(hooks){
 
   const page=element('section',undefined,'overlay clothing-page');page.id='clothing-menu';page.hidden=true;page.setAttribute('aria-label','Clothing Store');
   page.innerHTML=`<div class="store-shell">
-    <header class="store-header"><button type="button" id="store-back" aria-label="Back to pause menu">←</button><div class="store-brand"><small>JAMES CLAN COMICS</small><strong>HERO SHOWDOWN</strong></div><h1>Clothing Store</h1><div class="store-wallet" aria-label="Available coins"><span aria-hidden="true">◉</span><b id="store-coins">0</b><span class="sr-only">coins</span></div></header>
+    <header class="store-header"><button type="button" id="store-back" aria-label="Back to pause menu">←</button><div class="store-brand"><small>JAMES CLAN COMICS</small><strong>HERO ROYALE</strong></div><h1>Clothing Store</h1><div class="store-wallet" aria-label="Available coins"><span aria-hidden="true">◉</span><b id="store-coins">0</b><span class="sr-only">coins</span></div></header>
     <section class="store-preview" aria-label="Costume Preview"><div class="preview-copy"><span class="preview-label">Costume Preview</span><p>This is your hero in the<br>selected costume.</p><i aria-hidden="true"></i></div><div class="preview-cloud cloud-one"></div><div class="preview-cloud cloud-two"></div><div class="preview-hills" aria-hidden="true"></div><canvas id="store-hero" width="600" height="520" role="img" aria-label="Your hero running in place"></canvas><div class="preview-caption"><h2 id="store-preview-name">Your hero</h2><span id="preview-price"></span><div class="preview-actions"><button type="button" id="preview-left" aria-label="Preview running left" aria-pressed="false">←</button><button type="button" id="preview-right" aria-label="Preview running right" aria-pressed="true">→</button><button type="button" id="preview-equip" hidden>Equip</button></div></div></section>
     <div class="store-collection-heading"><h2><span aria-hidden="true">✦</span> Available Costumes</h2><label><span class="sr-only">Costume collection</span><select id="store-filter"><option value="all">All Costumes</option></select></label></div>
     <div class="store-carousel-wrap"><button id="costumes-previous" type="button" aria-label="Previous costumes">‹</button><div id="costume-carousel" role="list" aria-label="Available costumes" tabindex="0"></div><button id="costumes-next" type="button" aria-label="Next costumes">›</button></div>

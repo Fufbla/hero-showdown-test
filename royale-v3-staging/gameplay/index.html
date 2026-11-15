@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#173d40">
-  <meta name="description" content="Create your Style C hero, equip Power Armor and explore Hero Showdown Royale on mobile or desktop.">
-<title>Hero Showdown Royale · Refined Adventures</title>
+  <meta name="description" content="Create your own superhero, equip Power Armor and explore James Clan Comics: Hero Royale on mobile or desktop.">
+<title>James Clan Comics: Hero Royale</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23173d40'/%3E%3Cpath d='M32 8 53 32 32 56 11 32Z' fill='%23e8d298'/%3E%3Cpath d='m24 41 16-20-6 23Z' fill='%232b8067'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="royale.css?v=24d4433e">
   <link rel="stylesheet" href="powers.css">
@@ -83,10 +83,10 @@ dialog.clothing-tryon-dialog button{min-height:38px}
 <body>
 <div id="app">
     <header class="topbar">
-      <a class="brand" href="../index.html" aria-label="Return to Hero Showdown"><span class="brand-mark">✦</span><span><small>JAMES CLAN COMICS</small><strong>HERO SHOWDOWN <em>ROYALE</em></strong></span></a>
+      <div class="brand" aria-label="James Clan Comics: Hero Royale"><span class="brand-mark">✦</span><span><small>JAMES CLAN COMICS</small><strong>HERO <em>ROYALE</em></strong></span></div>
       <div class="top-actions"><span class="phase-label"><i></i> MOBILE PLAYTEST</span><button id="account-open" class="account-button" hidden>Account</button><button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false">♪</button><button id="pause" class="icon-button" aria-label="Pause game" disabled>Ⅱ</button></div>
     </header>
-    <main id="stage" aria-label="Hero Showdown Royale game">
+    <main id="stage" aria-label="Hero Royale game">
       <canvas id="game" aria-label="2D side-scrolling adventure. Use the left and right arrow keys to move, Space to jump, J to punch and K to kick."></canvas>
       <div id="hud" class="hud" hidden>
         <section class="hero-hud" aria-label="Hero status">
@@ -106,7 +106,7 @@ dialog.clothing-tryon-dialog button{min-height:38px}
       <output id="diagnostics" hidden></output><button id="measure-performance" hidden>Measure performance</button><output id="performance-result" hidden></output>
       <section id="roster" class="overlay" aria-label="Choose your hero">
         <div class="roster-card" role="dialog" aria-modal="true" aria-labelledby="roster-title">
-          <div class="eyebrow">HERO SHOWDOWN ROYALE</div>
+          <div class="eyebrow">HERO ROYALE</div>
           <h1 id="roster-title" tabindex="-1">My <em>Heroes.</em></h1>
           <p class="roster-cache-note">⚠️ Recently replaced a hero? If your new character isn’t showing, close any old game tabs, clear your browser’s cache, and reload the page. ⚠️<span>Cached files only—keep cookies and saved website data to protect local heroes.</span></p>
           <div id="hero-slots" class="hero-slots"></div>
@@ -117,7 +117,7 @@ dialog.clothing-tryon-dialog button{min-height:38px}
       </section>
       <section id="account-menu" class="overlay game-panel" hidden>
         <div id="account-panel" class="account-card" role="dialog" aria-modal="true" aria-labelledby="account-title">
-          <header><div><div class="eyebrow">HERO SHOWDOWN ROYALE</div><h2 id="account-title" tabindex="-1">Your account. Your heroes.</h2></div><button id="account-close" class="secondary">Back to heroes</button></header>
+          <header><div><div class="eyebrow">HERO ROYALE</div><h2 id="account-title" tabindex="-1">Your account. Your heroes.</h2></div><button id="account-close" class="secondary">Back to heroes</button></header>
           <div class="account-scroll"><p id="account-session"></p><p class="account-warning">Cloud progress saves when you choose Pause → Save Game. Save before switching accounts or leaving. Permanent Legendary events are recorded immediately.</p><div class="account-columns">
           <section><h3>Sign in or begin again</h3><form id="account-form">
             <label class="field">Action<select id="account-mode"><option value="login">Sign in</option><option value="signup">Create account</option><option value="reset">Reset password from email link</option></select></label>
@@ -207,7 +207,7 @@ dialog.clothing-tryon-dialog button{min-height:38px}
       <section id="permanent-save" class="overlay permanent-save" hidden><div class="pause-card" role="alertdialog" aria-modal="true" aria-labelledby="permanent-title"><div class="eyebrow">PROTECTING PERMANENT PROGRESS</div><h2 id="permanent-title">Recording your legacy.</h2><p id="permanent-status" role="status">Saving the complete transaction…</p><button id="permanent-retry" class="primary" hidden>Retry permanent save</button><button id="permanent-reload" class="secondary" hidden>Reload latest hero</button></div></section>
       <section id="delete-dialog" class="overlay" hidden><div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="delete-title"><div class="eyebrow">DELETE LOCAL HERO</div><h2 id="delete-title">Retire this hero?</h2><p id="delete-description"></p><p>This removes this slot’s hero and progress from this browser. Other slots are kept.</p><button id="cancel-delete" class="secondary">Keep my hero</button><button id="confirm-delete" class="primary danger">Delete this hero</button></div></section>
       <div id="storage-warning" role="status" hidden></div>
-      <noscript><div class="noscript">Enable JavaScript to play Hero Showdown Royale.</div></noscript>
+      <noscript><div class="noscript">Enable JavaScript to play Hero Royale.</div></noscript>
     </main>
     <footer class="controls-footer">
       <div id="power-bar" class="power-bar" aria-label="Equipped superpowers"><button id="edit-hud-powers" class="edit-hud-powers" type="button" aria-label="Change equipped powers" aria-haspopup="dialog" title="Change equipped powers" disabled>⇄ <span>Change</span></button><button type="button" data-control="power0" class="power-button" aria-label="Power slot 1"><kbd>1</kbd><b>+</b><span>Empty slot</span></button><button type="button" data-control="power1" class="power-button" aria-label="Power slot 2"><kbd>2</kbd><b>+</b><span>Empty slot</span></button><button type="button" data-control="power2" class="power-button" aria-label="Power slot 3"><kbd>3</kbd><b>+</b><span>Empty slot</span></button><button type="button" data-control="power3" class="power-button merge-slot" aria-label="Villain Merge power" hidden><kbd>4</kbd><b>✦</b><span>Villain Merge</span></button><span id="power-context">Learn powers at the Tree of Eris</span></div>

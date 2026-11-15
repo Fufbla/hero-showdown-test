@@ -91,7 +91,6 @@ async function build(){
   const result=await esbuild.build({absWorkingDir:root,entryPoints:{game:'royale-v3-staging/interface/game-entry.mjs',coop:'royale/release-src/coop-entry.mjs',cloud:'royale-v3-staging/app.mjs',media:'royale/media/launch.mjs',welcome:'royale/welcome/menu.mjs','json-worker':'royale/local-coop/json-worker.mjs'},outdir:path.join(out,'royale/release'),outExtension:{'.js':'.mjs'},chunkNames:'shared-[hash]',bundle:true,splitting:true,format:'esm',platform:'browser',target:['es2022'],minifySyntax:true,minifyWhitespace:false,legalComments:'none',drop:['console','debugger'],metafile:true,plugins:[runtimePlugin]});
   let home=read('royale/welcome/index.html');
   home=home.replace(/<script type="importmap">[\s\S]*?<\/script>/g,'').replace(/<script type="module" src="[^"]+"><\/script>/g,'');
-  home=home.replace('Hero Showdown Royale V3 Test','Hero Showdown Royale').replace('V3 isolated test — original saves remain untouched.','');
   home=home.replace(/<small>\s*<\/small>/g,'').replace(/<button id="local-coop"/,'<button id="local-coop"');
   home=home.replace(/location.href='[^']*local-coop[^']*'/,"location.href='./local-coop/'");
   home=home.replace('</body>',`<script type="module" src="./test-code-entry.mjs?v=${sha}"></script><script type="module" src="./release/cloud.mjs?v=${sha}"></script><script type="module" src="./release/welcome.mjs?v=${sha}"></script></body>`);
@@ -105,8 +104,7 @@ async function build(){
   cp.execFileSync(process.execPath,[path.join(root,'test-only/four-powers/build.cjs'),path.join(out,'four-powers-test')],{cwd:root,stdio:'inherit'});
   const gameplayHTML=read('royale-v3-staging/gameplay/index.html').replace('Enable sound using the music button. Original looping themes change with the region and encounter.','The music button mutes only the soundtrack. Sound effects have their own volume.').replace('id="volume-music-value">35%', 'id="volume-music-value">20%').replace('value="35" aria-label="Music volume"','value="20" aria-label="Music volume"').replace(/Clothing Store · \d+ outfits/g,`Clothing Store · ${COLLECTION.length} outfits`);
   const rosterHTML=gameplayHTML
-    .replace('<strong>HERO SHOWDOWN <em>ROYALE</em></strong>','<strong><span class="patrol-brand">HERO SHOWDOWN <em>ROYALE</em></span><span class="roster-brand">HERO ROYALE</span></strong>')
-    .replace(/(<div class="roster-card"[^>]*>\s*<div class="eyebrow">)HERO SHOWDOWN ROYALE/,'$1HERO ROYALE')
+    .replace('<strong>HERO <em>ROYALE</em></strong>','<strong><span class="patrol-brand">HERO <em>ROYALE</em></span><span class="roster-brand">HERO ROYALE</span></strong>')
     .replace('<h1 id="roster-title" tabindex="-1">My <em>Heroes.</em></h1>','<h1 id="roster-title" tabindex="-1">My <em>Heroes</em></h1><p class="roster-subtitle">Choose a hero. Continue your adventure.</p>')
     .replace('</head>',`<link rel="stylesheet" href="welcome/roster.css?v=${sha}"></head>`);
   write('royale/gameplay/index.html',mediaShell(shell(rosterHTML,'../',`./release/game.mjs?v=${sha}`),`./release/media.mjs?v=${sha}`));
@@ -114,8 +112,8 @@ async function build(){
   // Co-op base remains /royale/local-coop/, one level deeper than the solo base.
   coopHTML=coopHTML.replace('src="../assets/animation/motion-core.js"','src="../../assets/animation/motion-core.js"');
   write('royale/local-coop/index.html',mediaShell(coopHTML,`../release/media.mjs?v=${sha}`));
-  write('royale-v3-staging/index.html','<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hero Showdown Royale</title><meta http-equiv="refresh" content="0;url=../royale/"><a href="../royale/">Open Hero Showdown Royale</a>');
-  let index=read('index.html').replace('href="./royale-v3-staging/"','href="./royale/"').replace('Open Hero Showdown Royale V3 in a new browser tab','Open Hero Showdown Royale in a new browser tab');write('index.html',index);
+  write('royale-v3-staging/index.html','<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>James Clan Comics: Hero Royale</title><meta http-equiv="refresh" content="0;url=../royale/"><a href="../royale/">Open Hero Royale</a>');
+  write('index.html',read('index.html'));
   write('.nojekyll','');
   const costumes={count:COLLECTION.length,ids:COLLECTION.map(o=>o.id),price:700};
   const manifest={version:1,productionReady:require('./release-build/readiness.json').productionReady,sourceCommit:sha,sourceTreeDirty:!!cp.execFileSync('git',['status','--porcelain','--untracked-files=no'],{cwd:root,encoding:'utf8'}).trim(),sourceHashes,entrypoints:['royale/index.html','royale/gameplay/index.html','royale/local-coop/index.html'],bundles:Object.fromEntries(Object.entries(result.metafile.outputs).map(([p])=>{const rel=path.relative(out,path.resolve(root,p));return [rel,hash(fs.readFileSync(path.join(out,rel)))];})),saveContract:{endpoint:'royale-v3-staging',profileKey:'healthia.royale.profiles.v2',cloudPrefix:'royale-v3-play:',databaseMigration:false},developerTools:false,modes:{singlePlayer:true,localCoop:true,onlineMultiplayer:false}};
