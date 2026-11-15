@@ -7,8 +7,10 @@ import {monsterXP} from '../progression.mjs';
 function sharedReward(base,level,players){
   if(!players.length||!Number.isFinite(base))return 0;
   // Equal shares of one eligible pool, with the same level/pace rules as solo.
-  // The least eligible member bounds carries in either direction.
-  return Math.min(...players.map(h=>monsterXP(base,h.game.hero.level,level)));
+  // The least eligible leveling member bounds carries in either direction.
+  // A companion already at the cap must not zero a growing hero's whole pool.
+  const learning=players.filter(h=>h.game.hero.level<99);
+  return learning.length?Math.min(...learning.map(h=>monsterXP(base,h.game.hero.level,level))):0;
 }
 
 // One local death event, one loot roll, one entitlement for each active hero.

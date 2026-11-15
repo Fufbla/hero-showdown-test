@@ -106,6 +106,12 @@ test('co-op conserves the tuned eligible pool, alternates odd remainders and pre
  const pool=Math.min(monsterXP(TYPES.guardian.xp,1,90),monsterXP(TYPES.guardian.xp,98,90));
  s.authority.reward(s.heroes[0],foe);assert.equal(credits[0]+credits[1],6+pool);
  assert(pool<10);
+ // A max-level companion does not make a same-level fight worthless for P1.
+ s.games[0].hero.level=66;s.games[1].hero.level=99;credits.fill(0);
+ const capped=s.games[0].enemies[3];Object.assign(capped,{type:'wisp',level:66,state:'dead',hp:0});
+ s.authority.reward(s.heroes[0],capped);
+ assert.equal(credits[0]+credits[1],monsterXP(TYPES.wisp.xp,66,66));
+ assert(credits[0]>0);assert(Math.abs(credits[0]-credits[1])<=1);
 });
 test('each co-op hero gets independent hit protection, including the same enemy volley',()=>{
  const profiles=[0,1].map(i=>({identity:'balance-hurt-'+i,slots:[{slot_number:1,snapshot:captureProgress(fixture(66,'wisp'))}],async save(){}}));
