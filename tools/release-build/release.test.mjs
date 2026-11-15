@@ -63,7 +63,7 @@ test('artifact preserves cloud save contract and does not ship backend migration
  assert.deepEqual(manifest.saveContract,{endpoint:'royale-v3-staging',profileKey:PROFILE_KEY,cloudPrefix:'royale-v3-play:',databaseMigration:false});
  assert.equal(manifest.developerTools,false);assert(!fs.existsSync(path.join(out,'royale-v3-staging/backend-v3')));
  for(const entry of manifest.entrypoints)assert(fs.statSync(path.join(out,entry)).size>0);
- const home=read('royale/index.html');assert(!home.includes('Test Account'));assert(home.includes('HEROES ON THIS BROWSER'));assert(home.includes('local-coop/'));
+ const home=read('royale/index.html');assert(!home.includes('Test Account'));assert(home.includes('id="browser-heroes"'));assert(home.includes('MY HEROES'));assert(home.includes('id="local-coop"'));
 });
 
 test('release offers local co-op only and excludes online transports and room routes',async()=>{

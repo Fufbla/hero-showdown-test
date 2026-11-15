@@ -87,16 +87,16 @@ async function build(){
   const sha=cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   const {COLLECTION}=await import('../royale/fashion/catalog.mjs');
   fs.rmSync(out,{recursive:true,force:true});fs.mkdirSync(out,{recursive:true});copyPublic();
-  const result=await esbuild.build({absWorkingDir:root,entryPoints:{game:'royale-v3-staging/interface/game-entry.mjs',coop:'royale/release-src/coop-entry.mjs',cloud:'royale-v3-staging/app.mjs',media:'royale/media/launch.mjs','json-worker':'royale/local-coop/json-worker.mjs'},outdir:path.join(out,'royale/release'),outExtension:{'.js':'.mjs'},chunkNames:'shared-[hash]',bundle:true,splitting:true,format:'esm',platform:'browser',target:['es2022'],minifySyntax:true,minifyWhitespace:false,legalComments:'none',drop:['console','debugger'],metafile:true,plugins:[runtimePlugin]});
-  let home=read('royale-v3-staging/index.html');
+  const result=await esbuild.build({absWorkingDir:root,entryPoints:{game:'royale-v3-staging/interface/game-entry.mjs',coop:'royale/release-src/coop-entry.mjs',cloud:'royale-v3-staging/app.mjs',media:'royale/media/launch.mjs',welcome:'royale/welcome/menu.mjs','json-worker':'royale/local-coop/json-worker.mjs'},outdir:path.join(out,'royale/release'),outExtension:{'.js':'.mjs'},chunkNames:'shared-[hash]',bundle:true,splitting:true,format:'esm',platform:'browser',target:['es2022'],minifySyntax:true,minifyWhitespace:false,legalComments:'none',drop:['console','debugger'],metafile:true,plugins:[runtimePlugin]});
+  let home=read('royale/welcome/index.html');
   home=home.replace(/<script type="importmap">[\s\S]*?<\/script>/g,'').replace(/<script type="module" src="[^"]+"><\/script>/g,'');
   home=home.replace('Hero Showdown Royale V3 Test','Hero Showdown Royale').replace('V3 isolated test — original saves remain untouched.','');
   home=home.replace(/<small>\s*<\/small>/g,'').replace(/<button id="local-coop"/,'<button id="local-coop"');
   home=home.replace(/location.href='[^']*local-coop[^']*'/,"location.href='./local-coop/'");
-  home=home.replace('</section>',`<button type="button" id="browser-heroes" onclick="location.href='./gameplay/'">HEROES ON THIS BROWSER</button></section>`);
-  home=home.replace('</body>',`<script type="module" src="./test-code-entry.mjs?v=${sha}"></script><script type="module" src="./release/cloud.mjs?v=${sha}"></script></body>`);
+  home=home.replace('</body>',`<script type="module" src="./test-code-entry.mjs?v=${sha}"></script><script type="module" src="./release/cloud.mjs?v=${sha}"></script><script type="module" src="./release/welcome.mjs?v=${sha}"></script></body>`);
   home=home.replace(/<p>V3[^<]*<\/p>/g,'');
   home=home.replace(/<p>Cloud save: automatic every eight seconds during gameplay<\/p>/g,'').replace('</head>','<style>html:has(.staging-session),body.staging-session{width:100%;height:100%;height:100dvh;max-width:none;margin:0;padding:0;overflow:hidden}.staging-session>h1,.staging-session>p,.staging-session>small,.staging-session #refresh{display:none!important}.staging-session #roster{position:fixed;inset:0;border:0;margin:0;padding:0;border-radius:0}.staging-session #game-frame{width:100%;height:100%;height:100dvh}</style></head>');
+  home=home.replace('./welcome/welcome.css','./welcome/welcome.css?v='+sha);
   write('royale/index.html',mediaShell(home,`./release/media.mjs?v=${sha}`));write('royale/interface.css',read('royale-v3-staging/interface/interface.css'));
   // The reserved code opens a separate local sandbox. Normal cloud/game bundles
   // and their save contracts remain unchanged.

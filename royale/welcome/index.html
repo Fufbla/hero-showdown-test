@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+ <meta name="theme-color" content="#116cc7">
+ <meta name="description" content="Your Heroes. Your Adventure. Create your own superhero and explore James Clan Comics: Hero Royale, solo or in local two-player co-op.">
+ <title>James Clan Comics: Hero Royale</title>
+ <link rel="preload" href="./welcome/assets/coastal-city.webp" as="image">
+ <link rel="stylesheet" href="./welcome/welcome.css">
+</head>
+<body>
+ <div class="city-light" aria-hidden="true"></div>
+ <div class="sky-motes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+ <main id="welcome-stage">
+  <div class="hero-showcase">
+   <header class="game-brand">
+    <div class="brand-spark" aria-hidden="true">✦</div>
+    <p class="brand-banner"><span aria-hidden="true">★</span> JAMES CLAN COMICS <span aria-hidden="true">★</span></p>
+    <h1 aria-label="Hero Royale"><span class="title-hero">HERO</span><span class="title-royale">ROYALE</span></h1>
+    <div class="brand-wings" aria-hidden="true"><span></span>★<span></span></div>
+   </header>
+   <div class="hero-team" role="img" aria-label="Five customized Hero Royale adventurers: a hero in Santa Street clothing, a heroine in Summer Chic, a violet lightning hero, a teal star heroine, and a hero in Midnight Leather.">
+    <div class="team-aura" aria-hidden="true"></div>
+    <div class="team-member santa"><img src="./welcome/assets/santa.webp" width="400" height="500" alt="" fetchpriority="high"></div>
+    <div class="team-member chic"><img src="./welcome/assets/chic.webp" width="400" height="500" alt="" fetchpriority="high"></div>
+    <div class="team-member volt"><img src="./welcome/assets/volt.webp" width="400" height="500" alt="" fetchpriority="high"><span class="power-spark" aria-hidden="true">ϟ</span></div>
+    <div class="team-member nova"><img src="./welcome/assets/nova.webp" width="400" height="500" alt="" fetchpriority="high"><span class="power-orb" aria-hidden="true"></span></div>
+    <div class="team-member ace"><img src="./welcome/assets/ace.webp" width="400" height="500" alt="" fetchpriority="high"></div>
+   </div>
+  </div>
+  <div class="menu-column">
+   <p class="tagline">Your Heroes. Your Adventure.</p>
+   <section id="welcome" aria-label="Main menu">
+    <nav id="main-actions" aria-label="Choose your adventure">
+     <button class="game-button play-button" id="play-game" type="button" aria-controls="play-options" aria-expanded="false"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M10 5 27 16 10 27Z"/></svg><span>PLAY GAME</span><span class="button-chevron" aria-hidden="true">›</span></button>
+     <button class="game-button coop-button" id="local-coop" type="button"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="10" r="5"/><circle cx="23" cy="11" r="4"/><path d="M2 27v-4a9 9 0 0 1 18 0v4Zm20 0v-4a11 11 0 0 0-2-7 7 7 0 0 1 10 7v4Z"/></svg><span>LOCAL CO-OP <small>2 PLAYERS</small></span><span class="button-chevron" aria-hidden="true">›</span></button>
+     <button class="game-button heroes-button" id="browser-heroes" type="button"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 8q8-4 14 1 6-5 14-1v9q-7 12-14 2Q9 29 2 17Z"/><path class="mask-eyes" d="m6 12 7 3-6 2Zm20 0-7 3 6 2Z"/></svg><span>MY HEROES</span><span class="button-chevron" aria-hidden="true">›</span></button>
+    </nav>
+    <div id="play-options" class="menu-panel" hidden aria-labelledby="play-heading">
+     <button type="button" id="play-back" class="back-button">‹ Back</button>
+     <h2 id="play-heading">Your adventure starts here</h2>
+     <button id="new" class="account-button" type="button">Get a 10-Digit Code &amp; Play</button>
+     <button id="enter" class="account-button secondary" type="button" aria-controls="input-area">Enter My 10-Digit Code</button>
+     <div id="input-area" hidden><label for="input">Your 10-digit code</label><div class="code-row"><input id="input" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="off" placeholder="0000000000"><button id="load" type="button">Continue</button></div></div>
+    </div>
+    <footer class="welcome-footer">
+     <button type="button" id="welcome-settings" class="utility-button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span> Settings</button>
+     <div id="welcome-music"></div>
+     <button type="button" id="welcome-help" class="utility-button" aria-haspopup="dialog"><span class="help-icon" aria-hidden="true">?</span> How to Play</button>
+    </footer>
+   </section>
+   <section id="new-code" class="menu-panel" hidden aria-labelledby="code-heading"><h2 id="code-heading">Your hero journey begins!</h2><p>Keep this code safe. Use it to open your heroes on another device.</p><h2 id="code"></h2><button id="copy" type="button" class="account-button secondary">Copy Code</button><button id="continue" type="button" class="account-button">Continue</button></section>
+   <p id="status" role="status" aria-live="polite"></p>
+  </div>
+ </main>
+ <section id="roster" hidden><button id="refresh" type="button">Reload Cloud Heroes</button><iframe id="game-frame" title="Hero Royale — your heroes and adventure"></iframe></section>
+ <dialog id="settings-panel" class="welcome-dialog" aria-labelledby="settings-heading"><button class="dialog-close" type="button" data-close aria-label="Close settings">×</button><p class="dialog-eyebrow">MAKE IT YOURS</p><h2 id="settings-heading">Settings</h2><label class="volume-label" for="welcome-volume">Music volume <output id="welcome-volume-value">20%</output></label><input id="welcome-volume" type="range" min="0" max="100" value="20"><button type="button" id="welcome-mute" class="account-button secondary">Mute music</button><label class="motion-choice"><input type="checkbox" id="welcome-motion"> Reduce welcome-screen motion</label><p class="dialog-note">You can adjust sound effects and controller settings from the pause menu while playing.</p></dialog>
+ <dialog id="help-panel" class="welcome-dialog" aria-labelledby="help-heading"><button class="dialog-close" type="button" data-close aria-label="Close how to play">×</button><p class="dialog-eyebrow">EVERY HERO STARTS SOMEWHERE</p><h2 id="help-heading">Ready for adventure?</h2><ol class="help-steps"><li><strong>Make it your hero.</strong> Choose Play Game, get a 10-digit code, and customize a hero in one of your three slots. Keep your code safe.</li><li><strong>Explore your world.</strong> Use the on-screen controls, a controller, or your keyboard. On the default keyboard layout: arrows move, Space jumps, J punches, K kicks, and 1–3 use your powers.</li><li><strong>Team up at home.</strong> Local Co-op connects two controllers on one computer. Each player uses their own code and saved hero.</li></ol><p class="dialog-note">Returning? Enter your code for cloud heroes, or choose My Heroes to open heroes saved on this browser.</p><button type="button" class="account-button" data-close>LET’S GO</button></dialog>
+</body>
+</html>

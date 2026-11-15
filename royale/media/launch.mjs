@@ -20,7 +20,7 @@ function compactControls(){
  return box;
 }
 // Each visible menu gets one set; gameplay reuses its existing sound/settings UI.
-if(doc.querySelector('#welcome')){const controls=compactControls();doc.querySelector('#welcome').append(controls);bindControls(controls);}
+if(doc.querySelector('#welcome')){const controls=compactControls();(doc.querySelector('#welcome-music')||doc.querySelector('#welcome')).append(controls);bindControls(controls);}
 if(doc.querySelector('#setup')){
  const controls=compactControls();doc.querySelector('#setup').append(controls);bindControls(controls);
  const move=()=>{const parent=doc.querySelector('#menu').open?doc.querySelector('#menu .pause-header'):doc.querySelector('#setup');if(controls.parentNode!==parent)parent.append(controls);};

@@ -18,9 +18,15 @@ async function skip(page){await page.locator('#intro-skip').click();await page.l
   assert.equal(await page.locator('#royale-intro video').evaluate(v=>v.muted),false);
   if(await page.locator('#intro-start').isVisible())await page.locator('#intro-start').click();
   await page.waitForFunction(()=>document.querySelector('#royale-intro video').currentTime>1);
-  assert.equal(await page.locator('#royale-intro video').evaluate(v=>v.videoWidth/v.videoHeight),512/918);
+  // The currently uploaded MP4 is 602x1080; the retained WebM is 512x918.
+  // Both must preserve their authored portrait aspect, with contain-fit display.
+  const shape=await page.locator('#royale-intro video').evaluate(v=>({width:v.videoWidth,height:v.videoHeight,duration:v.duration,fit:getComputedStyle(v).objectFit}));
+  assert([[602,1080],[512,918]].some(([w,h])=>shape.width===w&&shape.height===h));
+  assert(shape.duration>29&&shape.duration<31);assert.equal(shape.fit,'contain');
+  await page.locator('#royale-intro video').evaluate(v=>{window.royaleIntroObservedEnded=false;v.addEventListener('ended',()=>{window.royaleIntroObservedEnded=true;},{once:true});});
   await page.screenshot({path:'/tmp/royale-intro-desktop.png'});
-  await page.locator('#royale-intro').waitFor({state:'detached',timeout:45000});await waitTrack(page);
+  await page.locator('#royale-intro').waitFor({state:'detached',timeout:45000});
+  assert(await page.evaluate(()=>window.royaleIntroObservedEnded),'Intro must end naturally, not exit through its watchdog');await waitTrack(page);
   report.checks.push('Complete 30-second video plays with audio, correct aspect ratio, and no concurrent music; ended releases the video and starts music');
   const start=await page.evaluate(()=>{window.firstSource=royaleSoundtrack.source;return royaleSoundtrack.startedAt;});
   await page.locator('.royale-music-controls summary').click();
@@ -59,9 +65,9 @@ async function skip(page){await page.locator('#intro-skip').click();await page.l
   report.engines.push({engine:'Chromium',device:'Android Chrome emulation',passed:true});
   await mobile.close();
   const failure=await browser.newContext(),f=await failure.newPage();await failure.route('**/intro.{mp4,webm}',r=>r.abort());await f.goto(base);
-  await f.locator('#royale-intro').waitFor({state:'detached',timeout:20000});await f.locator('#enter').click();assert(await f.locator('#input').isVisible());
+  await f.locator('#royale-intro').waitFor({state:'detached',timeout:20000});await f.locator('#play-game').click();await f.locator('#enter').click();assert(await f.locator('#input').isVisible());
   report.checks.push('Missing video falls through to a working main menu');await failure.close();
-  const musicFailure=await browser.newContext(),mf=await musicFailure.newPage();await musicFailure.route('**/soundtrack.mp3',r=>r.abort());await mf.goto(base);await mf.locator('#intro-skip').click();await mf.locator('#enter').click();assert(await mf.locator('#input').isVisible());
+  const musicFailure=await browser.newContext(),mf=await musicFailure.newPage();await musicFailure.route('**/soundtrack.mp3',r=>r.abort());await mf.goto(base);await mf.locator('#intro-skip').click();await mf.locator('#play-game').click();await mf.locator('#enter').click();assert(await mf.locator('#input').isVisible());
   await mf.waitForFunction(()=>royaleSoundtrack.failed);report.checks.push('Missing soundtrack leaves menu navigation and sound-effects context available');await musicFailure.close();
   const blocked=await browser.newContext();await blocked.addInitScript(()=>{HTMLMediaElement.prototype.play=()=>Promise.reject(new DOMException('Autoplay blocked','NotAllowedError'));});
   const b=await blocked.newPage();await b.goto(base);await b.locator('#intro-start').waitFor();assert.match(await b.locator('.intro-status').innerText(),/Tap/);await skip(b);report.checks.push('Autoplay rejection offers Tap to Start and Skip always remains usable');await blocked.close();
