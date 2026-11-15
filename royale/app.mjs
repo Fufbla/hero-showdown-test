@@ -408,7 +408,7 @@ function abandonUnconfirmedAppearance(){
 function backToPause(){
  if(journeyMenu.cancelTravel())return;
  const route=backRoute(screen,{pauseSubmenu:$('pause-primary').hidden,editing,gameStarted:game.started});
- if(route==='welcome'){returnToWelcome();return;}
+ if(route==='welcome'){void saveAndReturnToWelcome();return;}
  if(route==='pause-home'){pausePanel('home');$('resume').focus();return;}
  if(route==='resume'){resume();return;}
  if(route==='close-picker'){closePowerPicker();return;}
@@ -422,6 +422,18 @@ function backToPause(){
   if(!leaveTreeForNavigation())return;
   showPause();return;
  }
+}
+let returningToWelcome=false;
+async function saveAndReturnToWelcome(){
+ if(returningToWelcome||!canLeaveMenu())return;
+ returningToWelcome=true;menuExitBack.disabled=true;
+ try{
+  if(game.started){
+   const result=codePlay?await confirmTravelSave(()=>({ok:true})):persist({manual:true});
+   if(!result.ok){$('roster-note').textContent='Your hero is still here. '+(result.error||'Save pending. Try Back again when connected.');return;}
+  }
+  returnToWelcome();
+ }finally{returningToWelcome=false;menuExitBack.disabled=false;}
 }
 function returnAdventure(){resume();}
 function showChest(){if(!game.availableChest()||!game.canSave())return;setScreen('chest');openChestMenu(game,async()=>{if((await transaction(()=>game.claimChest())).ok){setScreen('inventory');journeyMenu.inventory();say('Coins and Roots collected. Choose which equipment to keep.');}});$('chest-title').focus();}

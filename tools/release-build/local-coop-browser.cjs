@@ -292,6 +292,13 @@ function installVfxProbe(){
   assert.match(await cloudGame.locator('#hud').innerText(),/Slot Three QA/);
   assert.deepEqual(accounts[0].slots.slice(0,2),untouched);
   assert.deepEqual(accounts[1].slots,otherAccount);
+  await cloudGame.locator('#pause').click();
+  await cloudGame.locator('#choose-hero').click();
+  await cloudGame.getByRole('button',{name:'‹ Back to Welcome',exact:true}).click();
+  await cloudPage.locator('#main-actions').waitFor({state:'visible'});
+  assert.equal(await cloudPage.locator('#royale-intro').count(),0);
+  assert.equal(accounts[0].slots[2].snapshot.look.name,'Slot Three QA');
+  report.checks.push('Returning from an active cloud patrol to Welcome saves first and never replays the intro');
   assert.deepEqual(cloudErrors,[]);
   report.checks.push('Mobile code login exposes Slot 3, creates and plays its hero, confirms its cloud save, and resumes it after reload without changing other slots or accounts');
   await cloudContext.close();

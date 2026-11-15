@@ -12,7 +12,7 @@ $('play-back').addEventListener('click',()=>{if(!$('input-area').hidden){$('inpu
 window.addEventListener('royale-show-welcome',()=>{showOptions(false);$('input-area').hidden=true;window.scrollTo(0,0);});
 $('enter').addEventListener('click',()=>{ $('input-area').hidden=false;$('input').focus(); });
 $('input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('load').click();}});
-options.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();showOptions(false);}});
+options.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();$('play-back').click();}});
 for(const [button,panel]of [['welcome-settings','settings-panel'],['welcome-help','help-panel']]){
  const dialog=$(panel);
  $(button).addEventListener('click',()=>dialog.showModal());

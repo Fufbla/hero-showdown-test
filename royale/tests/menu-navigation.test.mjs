@@ -35,4 +35,4 @@ test('entering and exiting Tree of Eris retains exact position and progression',
  assert.deepEqual(g.look,before.look);assert.deepEqual(g.powers.data,before.powers);assert.deepEqual(g.inventory,before.inventory);
 });
 
-test('roster returns to welcome before play and to the current game afterwards',()=>{assert.equal(backRoute('roster'),'welcome');assert.equal(backRoute('roster',{gameStarted:true}),'resume');});
+test('roster always offers a route to welcome, including after a patrol',()=>{assert.equal(backRoute('roster'),'welcome');assert.equal(backRoute('roster',{gameStarted:true}),'welcome');});
