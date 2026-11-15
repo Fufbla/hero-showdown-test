@@ -8,6 +8,7 @@ module.exports=function(file,s){
  if(file==='royale/power-menu.mjs'){
   s="import {appendPowerPreview} from './four-powers/preview.mjs';\n"+s;
   s=s.replace("const labels={", "const labels={animal:'Animal ally',radius:'Shockwave radius',range:'Summon range',multiplier:'Damage multiplier',");
+  s=replace(s,"node('th',label),node('td',level?format", "node('th',key==='damage'&&['animalAllies','seismicSmash'].includes(id)?'Damage per use / target':label),node('td',level?format");
   s=replace(s,'function format(key,value){',"function format(key,value){if(typeof value==='string')return value.replaceAll('-',' ');if(key==='radius')return (value/40).toFixed(1)+' m';if(key==='multiplier')return value.toFixed(2)+'×';");
   s=s.replace("    if(def.after)panel.append", "    appendPowerPreview(panel,id,g);\n    if(def.after)panel.append");
   s=s.replaceAll('(index+8)%9','(index+POWER_IDS.length-1)%POWER_IDS.length').replaceAll('(index+1)%9','(index+1)%POWER_IDS.length').replace("e.key==='End'?8:","e.key==='End'?POWER_IDS.length-1:");

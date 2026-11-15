@@ -47,25 +47,24 @@ export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
   const armorLevels=level>0 ? integer(({fireball:equipment.fireballLevels,steel:equipment.steelLevels,roots:equipment.rootsLevels,strength:equipment.strengthLevels,whirlwind:equipment.whirlwindLevels,superKick:equipment.superKickLevels,speed:equipment.speedLevels,flight:equipment.flightLevels})[id]||0,0,9) : 0;
   level=integer(level,1,20)+armorLevels;const n=tier(level),eq=equipmentStats(equipment),strength=10+2*(heroLevel-1)+eq.strength;
   const base={level,cooldown:POWERS[id]?.cooldown||0};
-  const benchmark=points=>interpolate(Math.min(20,level),points);
-  // Burst powers need both innate rank growth and learned-rank mastery. Using
-  // rank 1 here left maxed allies/slams at roughly one fifth of control-power
-  // DPS. Seven base damage per rank brings their six-second casts alongside
-  // Roots/Whirlwind over a full effect + cooldown cycle, without changing rank 1.
-  const burstDamage=(innate,multiplier)=>offensiveDamage('fireball',innate+7*(level-1),level,heroLevel)*multiplier+eq.damage;
+  // Match one complete Whirlwind cast at the same learned rank and hero level.
+  // Keep the burst powers' existing generic equipment bonus, applied once per
+  // target; Whirlwind-specific equipment remains exclusive to Whirlwind.
+  const burstDamage=()=>{
+    const reference=powerStats('whirlwind',level,{heroLevel});
+    return reference.damage*reference.duration+eq.damage;
+  };
   switch(id) {
     case 'strength': return {...base,targets:n,damage:offensiveDamage(id,45+8*(level-1)+2*(strength-eq.strength),level,heroLevel)+2*eq.strength+eq.damage,bossEffectiveness:scale(Math.min(level,POWER_CAP),.25,1),reach:86};
     case 'superKick': return {...base,kicks:n+1,damage:offensiveDamage(id,16+2*(level-1)+.5*(strength-eq.strength),level,heroLevel)+.5*eq.strength+eq.damage,reach:105};
     case 'animalAllies': {
       const animal=level>=20?'spirit-stag':level>=15?'panther':level>=10?'bear':level>=5?'hawk':'wolf';
-      const multiplier=benchmark([[1,1],[4,1.1],[5,1.2],[9,1.45],[10,1.6],[14,1.85],[15,2],[19,2.35],[20,2.5]]);
-      return {...base,animal,targets:level>=15?5:level>=10?3:level>=5?2:1,range:260,multiplier,damage:burstDamage(28,multiplier)};
+      return {...base,animal,targets:level>=15?5:level>=10?3:level>=5?2:1,range:260,damage:burstDamage()};
     }
     case 'seismicSmash': {
       const radius=level>=20?180:level>=15?144:level>=10?112:level>=5?80:60;
       const targets=level>=20?5:level>=15?4:level>=10?3:level>=5?2:1;
-      const multiplier=benchmark([[1,1],[4,1.15],[5,1.3],[9,1.55],[10,1.7],[14,2.05],[15,2.2],[19,2.65],[20,2.8]]);
-      return {...base,radius,targets,multiplier,damage:burstDamage(25,multiplier)};
+      return {...base,radius,targets,damage:burstDamage()};
     }
     case 'fireball': return {...base,projectiles:level>=20?3:level>=10?2:1,damage:offensiveDamage(id,24+5*(level-1),level,heroLevel)+eq.fireball,pierce:level>=20?2:1};
     case 'flight': return {...base,duration:level+2,bossHitChance:.5};

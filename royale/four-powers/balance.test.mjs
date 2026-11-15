@@ -31,28 +31,33 @@ function cast(g,id){
   assert.ok(g.powers.activate(id));
   for(let i=0;i<45;i++)g.powers.step(STEP);
 }
-const cycleDps=(id,heroLevel)=>{
-  const s=powerStats(id,20,{heroLevel});
-  return IDS.includes(id)?s.damage/s.cooldown:s.damage*s.duration/(s.duration+s.cooldown);
-};
-
 for(const id of IDS){
-  test(`${id}: every skill point increases damage and rank 1 keeps its original strength`,()=>{
+  test(`${id}: every skill point increases damage and retains the six-second cooldown`,()=>{
     for(const heroLevel of [21,30,50,99]){
-      close(powerStats(id,1,{heroLevel}).damage,(id==='animalAllies'?28:25)+2*(heroLevel-1));
-      for(let rank=2;rank<=20;rank++){
+      for(let rank=1;rank<=20;rank++){
         const stats=powerStats(id,rank,{heroLevel});
-        assert.ok(stats.damage>powerStats(id,rank-1,{heroLevel}).damage);
+        if(rank>1)assert.ok(stats.damage>powerStats(id,rank-1,{heroLevel}).damage);
         assert.equal(stats.cooldown,6);
+        assert.equal('multiplier' in stats,false,'the old evolution multipliers no longer describe damage');
       }
     }
   });
-  test(`${id}: maximum sustained damage stays alongside Roots and Whirlwind at every eligible hero level`,()=>{
-    // Account for all six control ticks AND their cooldown after the effect.
-    // Comparing the burst to only one tick concealed the original shortfall.
-    for(let heroLevel=21;heroLevel<=99;heroLevel++)for(const reference of ['roots','whirlwind']){
-      const ratio=cycleDps(id,heroLevel)/cycleDps(reference,heroLevel);
-      assert.ok(ratio>=.85&&ratio<=1.30,`${id} vs ${reference}, hero ${heroLevel}: ${ratio}`);
+  test(`${id}: one use equals a full Whirlwind at all 20 skill ranks and every eligible hero level`,()=>{
+    for(let rank=1;rank<=20;rank++)for(let heroLevel=rank+1;heroLevel<=99;heroLevel++){
+      const reference=powerStats('whirlwind',rank,{heroLevel});
+      close(powerStats(id,rank,{heroLevel}).damage,reference.damage*reference.duration);
+    }
+  });
+  test(`${id}: actual HP loss equals every Whirlwind tick at every rank, including both Panther contacts`,()=>{
+    for(let rank=1;rank<=20;rank++)for(const heroLevel of [rank+1,99]){
+      const burst=game(id,rank,heroLevel),wind=game('whirlwind',rank,heroLevel);
+      const [burstTarget]=enemies(burst,'titan',[50],true),[windTarget]=enemies(wind,'titan',[50],true);
+      cast(burst,id);assert.ok(wind.powers.activate('whirlwind'));
+      const frames=Math.ceil((powerStats('whirlwind',rank,{heroLevel}).duration+.25)/STEP);
+      for(let i=0;i<frames;i++)wind.powers.step(STEP);
+      close(burstTarget.hp,windTarget.hp);
+      assert.ok(burstTarget.hp<burstTarget.maxHp);
+      assert.equal(burst.powers.effects.length,0);
     }
   });
   test(`${id}: max rank defeats actual early-region monsters in one contact`,()=>{
@@ -64,7 +69,7 @@ for(const id of IDS){
   });
   test(`${id}: actual hits respect late monster armor and boss level scaling`,()=>{
     for(const heroLevel of [21,50,99])for(const boss of [false,true]){
-      const g=game(id,20,heroLevel),[e]=enemies(g,'titan');e.boss=boss;
+      const g=game(id,20,heroLevel),[e]=enemies(g,'titan',[50],true);e.boss=boss;
       const before=e.hp,expected=damageToEnemy(powerStats(id,20,{heroLevel}).damage,heroLevel,e);
       cast(g,id);close(before-e.hp,expected);
       const after=e.hp;for(let i=0;i<100;i++)g.powers.step(STEP);
@@ -86,9 +91,10 @@ for(const id of IDS){
   test(`${id}: equipment damage applies once and existing max-rank saves gain the fix without a reset`,()=>{
     const g=game(id),before=captureProgress(g),restored=new Game({save:decodeSave(JSON.stringify(before)),now});
     assert.deepEqual(captureProgress(restored),before);
-    assert.ok(restored.powers.stats(id).damage>2500);
+    close(restored.powers.stats(id).damage,9057.6);
     const base=powerStats(id,20,{heroLevel:99}).damage;
     close(powerStats(id,20,{heroLevel:99,equipment:{damage:100}}).damage,base+100);
+    close(powerStats(id,20,{heroLevel:99,equipment:{damage:100,whirlwind:20,whirlwindLevels:9}}).damage,base+100);
   });
 }
 
