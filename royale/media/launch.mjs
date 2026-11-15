@@ -46,7 +46,7 @@ if(owned){
  const overlay=doc.createElement('dialog');overlay.id='royale-intro';overlay.setAttribute('aria-label','Hero Showdown Royale intro');
  overlay.innerHTML='<video playsinline webkit-playsinline preload="metadata" aria-label="Hero Showdown Royale opening video"></video><div class="intro-start"><p>JAMES CLAN COMICS</p><h1>HERO SHOWDOWN<br><em>ROYALE</em></h1><button type="button" id="intro-start">Tap to Start</button><p class="intro-status" role="status">Your adventure begins here.</p></div><button type="button" id="intro-skip">Skip Intro</button>';
  doc.body.append(overlay);const video=overlay.querySelector('video'),start=overlay.querySelector('.intro-start'),status=overlay.querySelector('.intro-status');
- video.poster=asset('intro-poster.jpg');video.src=asset(video.canPlayType('video/mp4; codecs="avc1.4D401F, mp4a.40.2"')?'intro.mp4':'intro.webm');video.volume=1;video.muted=false;
+ video.poster=asset('intro-poster.jpg');video.src=asset(video.canPlayType('video/mp4; codecs="avc1.4D401F, mp4a.40.2"')?'intro.mp4':'intro.webm?v=5e3bbfc65294');video.volume=1;video.muted=false;
  let finished=false,watchdog=null,lastTime=0,lastProgress=Date.now(),attempting=false;
  function finish(smooth=false){
   if(finished)return;finished=true;clearInterval(watchdog);

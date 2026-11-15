@@ -49,7 +49,7 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:4px solid
 .heroes-button{background:linear-gradient(#d383ff,#ab3af1 42%,#7b25d8)}
 @media(hover:hover){.game-button:hover{transform:translateY(-2px);filter:brightness(1.08)}.utility-button:hover,.royale-music-controls summary:hover{background:#305b9bcc}}
 .game-button:active{transform:translateY(4px);filter:brightness(.97)}
-.welcome-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:24px}
+.welcome-footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:24px}
 .utility-button,.royale-music-controls summary{border:1px solid #d4eaff90;border-radius:13px;background:#153564d9;color:#f3fbff;padding:10px 12px;min-height:44px;display:flex;gap:7px;align-items:center;justify-content:center;font-size:13px;font-weight:700;text-shadow:0 1px #12234c;box-shadow:inset 0 1px #ffffff33,0 3px 0 #14224966;transition:background .15s}
 .utility-button>span{font-size:20px;line-height:1}.help-icon{font-weight:1000;border:2px solid currentColor;border-radius:50%;width:20px;height:20px;font-size:14px!important}
 #welcome-music{position:relative}
@@ -57,7 +57,9 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:4px solid
 #welcome-music summary{list-style:none;min-width:95px}
 #welcome-music summary::-webkit-details-marker{display:none}
 #welcome-music summary:before{content:'♫';font-size:20px}
-#welcome-music .royale-music-controls[open]{position:absolute;bottom:0;width:250px;left:50%;transform:translateX(-50%);background:#effaff;border:2px solid #fff;border-radius:15px;padding:14px;box-shadow:0 12px 50px #071b5d77}
+/* Reserve space below the footer so expanded controls cannot cover game actions. */
+#welcome-music:has(.royale-music-controls[open]){flex:0 0 100%;order:1}
+#welcome-music .royale-music-controls[open]{width:min(250px,100%);margin:0 auto;background:#effaff;border:2px solid #fff;border-radius:15px;padding:14px;box-shadow:0 12px 50px #071b5d77}
 #welcome-music .royale-music-controls[open] summary{margin-bottom:8px}
 #welcome-music .royale-music-controls button{border:0;border-radius:8px;background:#235fa6;color:white;min-height:44px}
 #welcome-music .royale-music-controls input{accent-color:#306bc0}

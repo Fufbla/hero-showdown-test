@@ -64,7 +64,7 @@ async function skip(page){await page.locator('#intro-skip').click();await page.l
   await m.screenshot({path:'/tmp/royale-media-android.png'});
   report.engines.push({engine:'Chromium',device:'Android Chrome emulation',passed:true});
   await mobile.close();
-  const failure=await browser.newContext(),f=await failure.newPage();await failure.route('**/intro.{mp4,webm}',r=>r.abort());await f.goto(base);
+  const failure=await browser.newContext(),f=await failure.newPage();await failure.route('**/intro.{mp4,webm}*',r=>r.abort());await f.goto(base);
   await f.locator('#royale-intro').waitFor({state:'detached',timeout:20000});await f.locator('#play-game').click();await f.locator('#enter').click();assert(await f.locator('#input').isVisible());
   report.checks.push('Missing video falls through to a working main menu');await failure.close();
   const musicFailure=await browser.newContext(),mf=await musicFailure.newPage();await musicFailure.route('**/soundtrack.mp3',r=>r.abort());await mf.goto(base);await mf.locator('#intro-skip').click();await mf.locator('#play-game').click();await mf.locator('#enter').click();assert(await mf.locator('#input').isVisible());
