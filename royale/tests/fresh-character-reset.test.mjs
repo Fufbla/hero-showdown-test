@@ -74,7 +74,7 @@ async function parentFixture(run,{forbidGameImports=false}={}){
  const globals=['document','window','location','localStorage','sessionStorage','indexedDB','fetch','setInterval','console'];
  const previous=new Map(globals.map(key=>[key,Object.getOwnPropertyDescriptor(globalThis,key)]));
  const nodes=new Map(),listeners=[],intervals=[],requests=[],messages=[],note={hidden:false};
- const get=id=>{if(!nodes.has(id))nodes.set(id,{hidden:false,textContent:'',value:'',src:'',querySelector:()=>note,contentWindow:{postMessage:data=>messages.push(data)}});return nodes.get(id);};
+ const get=id=>{if(!nodes.has(id))nodes.set(id,{hidden:false,textContent:'',value:'',src:'',events:{},addEventListener(type,handler){this.events[type]=handler;},focus(){},querySelector:()=>note,contentWindow:{postMessage:data=>messages.push(data)}});return nodes.get(id);};
  const localStorage=memory([[legacy+'profile','old test'],['healthia.royale.profiles.v2','real local hero']]);
  const sessionStorage=memory([[legacy+'journal','old test journal']]);const indexedDB=database();
  const fixtures={
