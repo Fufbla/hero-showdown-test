@@ -18,7 +18,7 @@ async function skip(page){await page.locator('#intro-skip').click();await page.l
   assert.equal(await page.locator('#royale-intro video').evaluate(v=>v.muted),false);
   if(await page.locator('#intro-start').isVisible())await page.locator('#intro-start').click();
   await page.waitForFunction(()=>document.querySelector('#royale-intro video').currentTime>1);
-  assert.equal(await page.locator('#royale-intro video').evaluate(v=>v.videoWidth/v.videoHeight),16/9);
+  assert.equal(await page.locator('#royale-intro video').evaluate(v=>v.videoWidth/v.videoHeight),512/918);
   await page.screenshot({path:'/tmp/royale-intro-desktop.png'});
   await page.locator('#royale-intro').waitFor({state:'detached',timeout:45000});await waitTrack(page);
   report.checks.push('Complete 30-second video plays with audio, correct aspect ratio, and no concurrent music; ended releases the video and starts music');

@@ -4,7 +4,7 @@ Scope: production media integration only, based on `d0a76f08591ede14ac8c23af3bbc
 
 ## Media
 
-- Owner-provided `hero royale.mov`: complete 30.113-second video, original audio, original 16:9 canvas, encoded at 1280×720. H.264/AAC fast-start MP4 (7.24 MB), with VP9/Opus WebM for browsers lacking H.264. The browser selects one format before requesting the video. Poster extracted from the same video.
+- Replacement owner-provided `hero royale.mp4`: complete 30.133-second video with original audio and original 512×918 portrait canvas. H.264/AAC fast-start MP4, with VP9/Opus WebM fallback. Poster extracted from the replacement video; display uses contain without cropping.
 - Owner-provided `instrumental.wav`: complete three-minute stereo track, 160 kbps MP3 (3.60 MB). A 2.5 dB reduction provides peak headroom (source measured -14.03 LUFS, +0.60 dBTP). No generated music or artwork.
 - Music defaults to 20%; existing saved volume is retained where available. A mix trim accommodates the game's existing quiet synthesized effects; short combat/boss ducking restores smoothly. Volume is controlled by Web Audio, including on iOS.
 
