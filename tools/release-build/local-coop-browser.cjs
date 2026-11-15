@@ -151,11 +151,8 @@ function installVfxProbe(){
   assert(teleported.follower.x>=teleported.follower.cameraX-32,'Off-screen Player 2 returns near Player 1');
   report.checks.push('Off-screen follower teleport remains active');
   await pauseSave();
-  // These level-14/15 fixtures have outgrown the coastal enemies. The eligible
-  // shared pool rounds to zero; equal-XP behavior at matching levels is tested
-  // with real deaths in game-balance.test.mjs. Do not bypass the new XP rules.
-  for(let i=0;i<2;i++){assert.equal(latest(i).xp,20+i,'Overlevelled coastal farming grants no shared XP');assert(latest(i).coins>1234+i*100,'Both heroes receive their own coin reward');}
-  report.checks.push('Combat awards independent coins and preserves zero XP for overlevelled coastal farming');
+  for(let i=0;i<2;i++){assert(latest(i).xp>20+i,'Both heroes receive restored shared fight XP');assert(latest(i).coins>1234+i*100,'Both heroes receive their own coin reward');}
+  report.checks.push('Combat awards restored shared XP and independent coins to both saved heroes');
   const p1=page.locator('#panel-0'),p2=page.locator('#panel-1');
   const beforeLeave=accounts.map(a=>structuredClone(a.slots));
   await p1.getByRole('button',{name:'Leave Local Co-op',exact:true}).click();

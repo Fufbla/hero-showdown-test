@@ -5,7 +5,7 @@ import {HIT_GRACE,regularMonsterDamage,damageToEnemy} from '../../royale/combat-
 import {maximumHP,monsterXP,xpForLevel,PROGRESSION} from '../../royale/progression.mjs';
 import {TYPES} from '../../royale/world.mjs';
 import {LocalSession,captureProgress} from '../../royale/local-coop/session.mjs';
-import {fixture,pressure,active,offense,levelingModel} from './game-balance-audit.mjs';
+import {fixture,pressure,active,offense} from './game-balance-audit.mjs';
 
 test('simultaneous enemies give one hit and recovery, with real danger after recovery',()=>{
  const g=fixture(66,'wisp',{night:true,count:8}),before=g.hero.hp;
@@ -75,11 +75,21 @@ test('progression has no threshold migration and preserves every old level, XP a
   assert.deepEqual(restored.powers.data.levels,saved.powers.levels);assert.deepEqual(restored.look,saved.look);
  }
 });
-test('campaign pace estimates are multi-session, with a disclosed fast-farming sensitivity',()=>{
- assert(levelingModel(15).hours>=40&&levelingModel(15).hours<=60);
- assert(levelingModel(30).hours>24,'fast sustained ordinary-monster farming must exceed 24 estimated hours');
- assert(monsterXP(TYPES.titan.xp,1,99)<=monsterXP(TYPES.bottle.xp,1,1));
- assert.equal(monsterXP(TYPES.bottle.xp,99,1),0);
+test('kill rewards match the pre-balance progression across every hero and monster level',()=>{
+ for(let hero=1;hero<=99;hero++)for(let enemy=1;enemy<=99;enemy++){
+  const gap=hero-enemy,multiplier=gap<=3?1:gap<=6?.75:gap<=10?.35:gap<=15?.1:0;
+  for(const base of [13,125,1000,5000])assert.equal(monsterXP(base,hero,enemy),Math.floor(base*multiplier));
+ }
+});
+test('restored solo kill XP crosses a level threshold and grants the existing Power Point',()=>{
+ const g=fixture(66,'wisp'),e=g.enemies[0],points=g.powers.data.points;
+ g.hero.xp=xpForLevel(66)-1;Object.assign(e,{state:'dead',hp:0});
+ Game.prototype.reward.call(g,e);
+ assert.equal(g.hero.level,67);assert.equal(g.hero.xp,TYPES.wisp.xp-1);
+ assert.equal(g.powers.data.points,points+1);
+ const restored=new Game({save:decodeSave(JSON.stringify(captureProgress(g)))});
+ assert.equal(restored.hero.level,67);assert.equal(restored.hero.xp,g.hero.xp);
+ assert.equal(restored.powers.data.points,g.powers.data.points);
 });
 test('defeat loses two percent of the next level at most, with no lost levels or negative XP',()=>{
  const g=fixture(66,'wisp');g.hero.xp=10000;g.defeat();
@@ -94,18 +104,18 @@ test('summoned helper waves grant no XP in solo or co-op',()=>{
  Object.assign(foe,{summoned:true,state:'dead',hp:0});s.authority.reward(s.heroes[0],foe);
  assert.deepEqual(s.games.map(g=>g.hero.xp),[0,0]);
 });
-test('co-op conserves the tuned eligible pool, alternates odd remainders and prevents distant-level carries',()=>{
+test('co-op restores full shared rewards across differing levels and a capped companion',()=>{
  const profiles=[0,1].map(i=>({identity:'balance-share-'+i,slots:[{slot_number:1,snapshot:captureProgress(new Game())}],async save(){}}));
  const s=new LocalSession(profiles.map(profile=>({profile,slot:1}))),credits=[0,0];
  s.games.forEach((g,i)=>g.gainXP=x=>{credits[i]+=x;});
  const victims=s.games[0].enemies.slice(0,2);
  for(const foe of victims){Object.assign(foe,{type:'bottle',level:1,state:'dead',hp:0});s.authority.reward(s.heroes[0],foe);}
- assert.deepEqual(credits,[3,3]);
+ assert.deepEqual(credits,[TYPES.bottle.xp,TYPES.bottle.xp]);
  s.games[0].hero.level=1;s.games[1].hero.level=98;
  const foe=s.games[0].enemies[2];Object.assign(foe,{type:'guardian',level:90,state:'dead',hp:0});
- const pool=Math.min(monsterXP(TYPES.guardian.xp,1,90),monsterXP(TYPES.guardian.xp,98,90));
- s.authority.reward(s.heroes[0],foe);assert.equal(credits[0]+credits[1],6+pool);
- assert(pool<10);
+ const pool=TYPES.guardian.xp;
+ s.authority.reward(s.heroes[0],foe);assert.equal(credits[0]+credits[1],2*TYPES.bottle.xp+pool);
+ assert(Math.abs(credits[0]-credits[1])<=1);
  // A max-level companion does not make a same-level fight worthless for P1.
  s.games[0].hero.level=66;s.games[1].hero.level=99;credits.fill(0);
  const capped=s.games[0].enemies[3];Object.assign(capped,{type:'wisp',level:66,state:'dead',hp:0});

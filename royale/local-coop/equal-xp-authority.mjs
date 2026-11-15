@@ -2,17 +2,6 @@ import {Authority} from './authority.mjs';
 import {Game} from '../core.mjs';
 import {TYPES} from '../world.mjs';
 import {BOSSES} from '../boss-data.mjs';
-import {monsterXP} from '../progression.mjs';
-
-function sharedReward(base,level,players){
-  if(!players.length||!Number.isFinite(base))return 0;
-  // Equal shares of one eligible pool, with the same level/pace rules as solo.
-  // The least eligible leveling member bounds carries in either direction.
-  // A companion already at the cap must not zero a growing hero's whole pool.
-  const learning=players.filter(h=>h.game.hero.level<99);
-  return learning.length?Math.min(...learning.map(h=>monsterXP(base,h.game.hero.level,level))):0;
-}
-
 // One local death event, one loot roll, one entitlement for each active hero.
 export class EqualXPAuthority extends Authority {
   constructor(...args){super(...args);this.dropSerial=0;this.sharedDrops=new Map();}
@@ -21,7 +10,7 @@ export class EqualXPAuthority extends Authority {
     if(enemy.rewarded||enemy.hp>0||enemy.state!=='dead')return;enemy.rewarded=true;
     const room=this.state.rooms.get(attacker.room),players=this.contributors(room,attacker.zone),offset=(room.xpTurn||0)%Math.max(1,players.length);
     const info=TYPES[enemy.type];
-    this.pool=enemy.summoned?0:sharedReward(info?.xp,enemy.level??info?.level,players);let newDrops=[];
+    this.pool=enemy.summoned?0:info?.xp;let newDrops=[];
     try{
       players.forEach((h,i)=>{
         const g=h.game,previous=new Set(g.loot),random=g.random;
@@ -53,7 +42,7 @@ export class EqualXPAuthority extends Authority {
     if(world.cleared||!world.fight)return;
     const players=this.contributors(room,world.key).filter(h=>h.game.arenaScene),offset=(room.xpTurn||0)%Math.max(1,players.length);
     const boss=BOSSES[world.fight.region];
-    this.pool=boss?sharedReward(boss.xp,boss.level,players):null;
+    this.pool=boss?.xp??null;
     try{players.forEach((h,i)=>{
       const g=h.game,dead=g.hero.dead;g.hero.dead=false;
       try{

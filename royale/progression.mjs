@@ -7,21 +7,10 @@ export function xpForLevel(level, curve=PROGRESSION){
 export const maximumHP=level=>100+15*(level-1);
 export function xpMultiplier(heroLevel,monsterLevel){
   const gap=heroLevel-monsterLevel;
-  // A small challenge above the hero remains fully rewarded. Distant-region
-  // carries must not turn one kill into several early levels.
-  if(gap < -7)return 1/(1+((-gap-7)/5)**2);
   return gap<=3?1:gap<=6?.75:gap<=10?.35:gap<=15?.1:0;
 }
-const XP_PACE=Object.freeze([[1,.25],[10,.09],[20,.055],[35,.04],[50,.034],[65,.03],[80,.03],[99,.038]].map(Object.freeze));
-export function earnedXPRate(level){
-  level=Math.max(1,Math.min(99,level));
-  for(let i=1;i<XP_PACE.length;i++)if(level<=XP_PACE[i][0]){
-    const [a,x]=XP_PACE[i-1],[b,y]=XP_PACE[i];return x+(y-x)*(level-a)/(b-a);
-  }
-}
-// Adjust future earnings only: saved XP, level thresholds and Power Points stay
-// compatible with existing cloud saves. No daily caps or waiting timers.
-export const monsterXP=(base,heroLevel,monsterLevel)=>Math.max(0,Math.floor(base*xpMultiplier(heroLevel,monsterLevel)*earnedXPRate(heroLevel)));
+// Restore the pre-balance kill rewards without changing saved XP, thresholds or Power Points.
+export const monsterXP=(base,heroLevel,monsterLevel)=>Math.max(0,Math.floor(base*xpMultiplier(heroLevel,monsterLevel)));
 export const CLOCK=Object.freeze({day:30*60*1000,night:10*60*1000});
 export function worldClock(reference,now=Date.now(),region=1){
   // Every region shares the existing epoch and 30-minute day / 10-minute night.

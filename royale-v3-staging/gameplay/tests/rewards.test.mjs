@@ -61,10 +61,10 @@ for(const id of Object.keys(LEGENDARY))test(`Legendary ${id}: original equipment
  assert(!g.claimMergeReward(id,pieces.map(p=>p.uid),[],{confirmed:true,revision:g.legendary.revision}));
  const saved=decodeSave(g.save());assert(saved);const loaded=new Game({save:saved});assert.deepEqual(loaded.inventory.items,g.inventory.items);assert(loaded.legendary.defeated[id].claimed);
 });
-test('co-op shares the eligible level-adjusted XP and full monster coins without drops or repeated death payouts',()=>{
+test('co-op shares the full pre-balance XP and full monster coins without drops or repeated death payouts',()=>{
  const profiles=[0,1].map(i=>{const g=new Game();g.loadRegion(7);return {identity:'monsters-'+i,slots:[{slot_number:1,snapshot:JSON.parse(g.save())}],async save(){}};});
  const s=new LocalSession(profiles.map(profile=>({profile,slot:1}))),g=s.games[0],e=g.enemies.find(e=>e.type==='titan');
  s.games.forEach(g=>{g.hero.level=99;g.random=()=>{throw Error('No loot roll expected');};});e.protection=0;e.hp=1;g.damageEnemy(e,999999);assert.deepEqual(s.games.map(g=>g.hero.coins),[35,35]);assert(s.games.every(g=>g.loot.length===0));s.authority.reward(s.heroes[0],e);assert.deepEqual(s.games.map(g=>g.hero.coins),[35,35]);
  const foe=g.enemies.find(e=>e.type==='guardian');s.games[0].hero.level=1;s.games[0].hero.xp=0;s.games[1].hero.level=98;s.games[1].hero.xp=0;
- const credits=[0,0];s.games.forEach((g,i)=>g.gainXP=n=>{credits[i]+=n;});foe.protection=0;foe.hp=1;g.damageEnemy(foe,999999);assert.equal(credits[0]+credits[1],Math.min(monsterXP(TYPES.guardian.xp,1,90),monsterXP(TYPES.guardian.xp,98,90)));assert(Math.abs(credits[0]-credits[1])<=1);
+ const credits=[0,0];s.games.forEach((g,i)=>g.gainXP=n=>{credits[i]+=n;});foe.protection=0;foe.hp=1;g.damageEnemy(foe,999999);assert.equal(credits[0]+credits[1],TYPES.guardian.xp);assert(Math.abs(credits[0]-credits[1])<=1);
 });
