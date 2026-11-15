@@ -75,7 +75,7 @@ export class PowerMenu {
     const quote=skillResetPreview(this.getGame());
     if($('eris-coins'))$('eris-coins').textContent=this.getGame().hero.coins.toLocaleString();
     let area=$('skill-reset-area');
-    if(!area){area=node('section',undefined,'skill-reset-area');area.id='skill-reset-area';$('power-list').parentElement.before(area);}
+    if(!area){area=node('section',undefined,'skill-reset-area');area.id='skill-reset-area';$('power-list').parentElement.after(area);}
     area.replaceChildren();
     const button=node('button','Reset skills · 1,000 coins');button.type='button';button.disabled=this.busy||!quote.ok;
     button.onclick=()=>this.confirmReset();
@@ -99,6 +99,23 @@ export class PowerMenu {
   renderList(){
     const g=this.getGame(),list=$('power-list'),left=list.scrollLeft,top=list.scrollTop,focus=document.activeElement?.dataset;
     $('tree-points').textContent=g.powers.data.points;list.replaceChildren();list.setAttribute('aria-busy',String(this.busy));
+    let chooser=$('mobile-power-chooser');
+    if(!chooser){
+      chooser=node('div',undefined,'mobile-power-chooser');chooser.id='mobile-power-chooser';
+      const label=node('label','Choose a power','field'),select=node('select'),upgrade=node('button','Upgrade +1','primary');
+      select.id='mobile-power-select';select.setAttribute('aria-label','Choose a power');
+      select.onchange=()=>{this.selected=select.value;this.message='';this.renderList();this.detail();};
+      upgrade.id='mobile-power-upgrade';upgrade.type='button';upgrade.onclick=()=>void this.upgrade(this.selected);
+      label.append(select);chooser.append(label,upgrade);list.before(chooser);
+    }
+    const select=$('mobile-power-select');select.replaceChildren();
+    for(const id of POWER_IDS){const option=node('option',`${POWERS[id].name} · Lv ${g.powers.data.levels[id]}/20`);option.value=id;select.append(option);}
+    select.value=this.selected;select.disabled=this.busy;
+    const upgrade=$('mobile-power-upgrade'),level=g.powers.data.levels[this.selected];
+    upgrade.textContent=level===20?'Max level':'Upgrade +1';
+    upgrade.setAttribute('aria-label',`Upgrade ${POWERS[this.selected].name} by one level`);
+    upgrade.disabled=this.busy||!g.upgradePreview(this.selected,1).ok;
+
     for(const id of POWER_IDS){
       const def=POWERS[id],row=node('div',undefined,'power-row'),choice=node('button',undefined,'power-choice'),arrow=node('button','↑','power-upgrade');
       choice.type=arrow.type='button';choice.dataset.power=id;choice.setAttribute('aria-pressed',String(this.selected===id));
@@ -116,7 +133,7 @@ export class PowerMenu {
     list.onkeydown=e=>{
       if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
       const current=document.activeElement,id=current?.dataset?.upgrade||current?.dataset?.power,index=POWER_IDS.indexOf(id);if(index<0)return;
-      e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?8:e.key==='ArrowDown'?(index+1)%9:e.key==='ArrowUp'?(index+8)%9:index;
+      e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?POWER_IDS.length-1:e.key==='ArrowDown'?(index+1)%POWER_IDS.length:e.key==='ArrowUp'?(index+POWER_IDS.length-1)%POWER_IDS.length:index;
       const kind=e.key==='ArrowLeft'?'power':e.key==='ArrowRight'?'upgrade':current.dataset.upgrade?'upgrade':'power';
       const target=list.querySelector(`[data-${kind}="${POWER_IDS[next]}"]`);
       (target.disabled?list.querySelector(`[data-power="${POWER_IDS[next]}"]`):target).focus();
@@ -159,8 +176,20 @@ export class PowerMenu {
       return;
     }
     if(!enabled||this.busy)return;
+    const compact=$('mobile-power-select');
+    if(compact?.getClientRects().length){
+      if(edges.includes(12)||edges.includes(13)){
+        const step=edges.includes(12)?-1:1,index=POWER_IDS.indexOf(this.selected);
+        this.selected=POWER_IDS[(index+POWER_IDS.length+step)%POWER_IDS.length];this.message='';this.renderList();this.detail();compact.focus();
+      }
+      const upgrade=$('mobile-power-upgrade');
+      if(edges.includes(14))compact.focus();
+      if(edges.includes(15)&&!upgrade.disabled)upgrade.focus();
+      if(edges.includes(0)&&document.activeElement===upgrade&&!upgrade.disabled)upgrade.click();
+      return;
+    }
     const list=$('power-list'),active=document.activeElement,id=active?.dataset?.upgrade||active?.dataset?.power||this.selected;let index=POWER_IDS.indexOf(id),kind=active?.dataset?.power?'power':'upgrade';
-    if(edges.includes(12))index=(index+8)%9;if(edges.includes(13))index=(index+1)%9;if(edges.includes(14))kind='power';if(edges.includes(15))kind='upgrade';
+    if(edges.includes(12))index=(index+POWER_IDS.length-1)%POWER_IDS.length;if(edges.includes(13))index=(index+1)%POWER_IDS.length;if(edges.includes(14))kind='power';if(edges.includes(15))kind='upgrade';
     const target=list.querySelector(`[data-${kind}="${POWER_IDS[index]}"]`);if(!target)return;
     if(edges.some(i=>i!==0))(target.disabled?list.querySelector(`[data-power="${POWER_IDS[index]}"]`):target).focus();
     if(edges.includes(0)&&!target.disabled){target.focus();target.click();}

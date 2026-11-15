@@ -67,7 +67,8 @@ export class ErisMenu{
     this.selectPanel(panel);
   }
   selectPanel(panel){
-    if(panel==='home')panel='powers';this.panel=panel;this.confirm=null;
+    if(panel==='home')panel='powers';const changed=this.panel!==panel;this.panel=panel;this.confirm=null;
+    if(changed)document.querySelector('.eris-scroll').scrollTop=0;
     for(const n of document.querySelectorAll('[data-eris-panel]'))n.hidden=n.dataset.erisPanel!==panel;
     for(const b of document.querySelectorAll('[data-eris]'))b.setAttribute('aria-pressed',String(b.dataset.eris===panel));
     this.update();if(panel==='merge')this.mergeMenu?.tree();if(panel==='powers')this.powerMenu.open();if(panel==='wardrobe')this.wardrobe();if(panel==='roots')this.roots();
@@ -79,13 +80,22 @@ export class ErisMenu{
     const g=this.getGame();this.update();$('shop-confirm').hidden=true;this.confirm=null;
     $('shop-category-wrap').hidden=this.mode!=='buy';$('wardrobe-note').textContent=this.mode==='buy'?'Choose a complete matching outfit. Power Armor collections each have nine tiers.':this.mode==='sell'?'Resale is 25% of original catalog value, rounded down. Legendary equipment can never be sold.':'Wear a complete matching outfit. Collect its body armor and boots, then equip them together.';
     for(const b of document.querySelectorAll('[data-wardrobe]'))b.setAttribute('aria-pressed',String(b.dataset.wardrobe===this.mode));
-    const list=$('shop-items');list.replaceChildren();list.closest('.wardrobe-layout').classList.toggle('selling',this.mode==='sell');$('shop-detail').hidden=this.mode==='sell';
+    const list=$('shop-items'),scrollTop=list.scrollTop;list.replaceChildren();list.closest('.wardrobe-layout').classList.toggle('selling',this.mode==='sell');$('shop-detail').hidden=this.mode==='sell';
     let entries;
     if(this.mode==='buy')entries=shopEntries(this.category);
     else if(this.mode==='owned')entries=ownedArmorOutfits(g.inventory,g.hero.level).map(outfit=>({...outfit.definitions[0],...outfit}));
     else entries=g.inventory.items.filter(equipmentItemActive).map(i=>({...itemDefinition(i),uid:i.uid,catalogId:i.catalogId,price:resaleValue(itemDefinition(i))}));
     const key=e=>e.uid||e.catalogId||e.setId;
     this.selected=entries.find(e=>key(e)===key(this.selected||{}))||entries[0]||null;
+    let picker=$('mobile-armor-picker');
+    if(!picker){picker=el('label','Choose armor','field mobile-armor-picker');picker.id='mobile-armor-picker';const select=el('select');select.id='mobile-armor-select';select.setAttribute('aria-label','Choose armor');picker.append(select);list.closest('.shop-layout').before(picker);}
+    picker.hidden=this.mode==='sell';
+    const select=$('mobile-armor-select');select.replaceChildren();
+    for(const entry of entries){const option=el('option',`${entry.name} · Lv ${entry.level||1}${entry.equipped?' · Equipped':''}`);option.value=key(entry);select.append(option);}
+    if(!entries.length){const empty=el('option','No armor in this section');empty.value='';select.append(empty);}
+    select.value=this.selected?key(this.selected):'';select.disabled=!entries.length;
+    select.onchange=()=>{this.selected=entries.find(entry=>key(entry)===select.value)||null;this.wardrobe();};
+
     for(const e of entries){
       if(this.mode==='sell'){list.append(this.saleCard(e));continue;}
       const locked=g.hero.level<e.level,card=this.mode==='owned'?el('article',undefined,'shop-item'):button('',()=>{this.selected=e;this.wardrobe();},'shop-item');
@@ -109,6 +119,7 @@ export class ErisMenu{
       list.append(card);
     }
     if(!entries.length)list.append(el('p','Your starter suit is always available. Buy or earn equipment to fill your wardrobe.','empty-equipment'));
+    list.scrollTop=scrollTop;
     if(this.mode!=='sell')this.detail();
   }
   saleCard(e){

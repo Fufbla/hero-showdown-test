@@ -16,7 +16,7 @@ export function appendPowerPreview(panel,id,game){
   if(id==='strength'||id==='superKick'){const d=id==='strength'?.27:.39,hitAge=age%d;if(age<d*(id==='strength'?1:s.kicks))h.attack={kind:id==='strength'?'punch':'kick',power:id,face:1,age:hitAge,stats:s,comboIndex:Math.floor(age/d)};}
   else if(id==='animalAllies'&&age<.64){demo.powers.effects=[{id,...s,x:100,y:155,targetX:285,targetY:155,face:1,age,duration:s.animal==='panther'?.64:.52,contact:.32}];}
   else if(id==='seismicSmash'&&age<.70){h.powerPose=age<.58?{id,age,face:1}:null;demo.powers.effects=[{id,...s,x:200,y:155,face:1,age,duration:.70,contact:.20}];h.x=200;}
-  const c=canvas.getContext('2d');c.clearRect(0,0,420,175);c.fillStyle='#0c2b34';c.fillRect(0,0,420,175);c.strokeStyle='#49655b';c.beginPath();c.moveTo(0,156);c.lineTo(420,156);c.stroke();
+  const c=canvas.getContext('2d');c.clearRect(0,0,420,175);c.fillStyle='#152f5b';c.fillRect(0,0,420,175);c.strokeStyle='#87b9ee';c.beginPath();c.moveTo(0,156);c.lineTo(420,156);c.stroke();
   drawFourWorld(c,demo);drawSlamHero(c,demo,{x:h.x,y:h.y},h,null);drawHero(c,h.x,h.y,game.look,h,t,.85);drawPowerHero(c,demo,{x:h.x,y:h.y},null);
   requestAnimationFrame(draw);
  };requestAnimationFrame(draw);

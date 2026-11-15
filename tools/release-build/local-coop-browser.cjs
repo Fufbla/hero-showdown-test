@@ -228,10 +228,10 @@ function installVfxProbe(){
   await solo.locator('#pause').click();assert(await solo.locator('#pause-menu').isVisible());
   await solo.locator('#open-controls').click();await solo.locator('#volume-music').fill('37');
   assert.equal(await solo.evaluate(()=>royaleSoundtrack.settings.volume),.37);
+  await solo.locator('#menu-exit-actions').getByRole('button',{name:'‹ Back',exact:true}).click();
+  await solo.getByRole('button',{name:'‹ Back to Game',exact:true}).click();assert(!await solo.locator('#pause-menu').isVisible());
   await solo.locator('#sound').click();assert.equal(await solo.evaluate(()=>royaleSoundtrack.settings.muted),true);
   await solo.locator('#sound').click();assert.equal(await solo.evaluate(()=>royaleSoundtrack.settings.muted),false);
-  await solo.locator('#close-controls').click();
-  await solo.getByRole('button',{name:'‹ Back to Game',exact:true}).click();assert(!await solo.locator('#pause-menu').isVisible());
   // Resuming can resize/clear the canvas before the next animation frame.
   // Wait for actual world pixels, so a blank canvas cannot pass this check.
   await solo.waitForFunction(()=>{
@@ -249,6 +249,44 @@ function installVfxProbe(){
    await solo.screenshot({path:dir+`/${power}-solo.png`});await solo.waitForTimeout(2200);
   }
   report.checks.push('Single-player saved hero loads, responds to input, pauses and resumes without exceptions');
+  // Exercise the compact service menus using the same isolated saved hero.
+  await solo.waitForTimeout(5500); // Let the last combat action leave the normal save lock.
+  const returnBar=async()=>{
+   const rects=await solo.locator('#menu-exit-actions button:not([hidden])').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height};}));
+   assert.equal(rects.length,2);assert(Math.abs(rects[0].y-rects[1].y)<2,'Back and Resume share one row');
+   assert(Math.abs(rects[0].w-rects[1].w)<2&&rects.every(r=>r.h>=44),'Equal-width, touch-sized return buttons');
+   assert(rects[1].x>=rects[0].x+rects[0].w,'Return buttons do not overlap');
+  };
+  for(const viewport of [{width:390,height:844},{width:844,height:390}]){
+   await solo.setViewportSize(viewport);await solo.locator('#pause').click();
+   await solo.locator('#tree-from-pause').click();await returnBar();
+   assert(!await solo.locator('#hud').isVisible(),'Service menus use the full phone screen');
+   const points=await solo.locator('#tree-points').innerText();
+   await solo.locator('#mobile-power-select').selectOption('strength');
+   assert.equal(await solo.locator('#tree-points').innerText(),points,'Browsing powers does not spend points');
+   if(viewport.width===390){
+    await solo.locator('#mobile-power-upgrade').click();
+    await solo.waitForFunction(n=>document.querySelector('#tree-points').textContent===String(n-1),Number(points));
+    assert.match(await solo.locator('#upgrade-status').innerText(),/Super Strength is now Level 1/);
+   }
+   await solo.locator('[data-eris="wardrobe"]').click();
+   await solo.locator('#shop-category').selectOption('flight');
+   assert.equal(await solo.locator('#mobile-armor-select option').count(),9);
+   await solo.locator('#mobile-armor-select').selectOption({label:'Swift Start · Lv 10'});
+   assert.equal(await solo.locator('#shop-detail h3').innerText(),'Swift Start');
+   await solo.locator('#review-purchase').click();await solo.locator('#cancel-purchase').click();
+   await solo.locator('#open-inventory').click();await returnBar();
+   await solo.locator('#menu-exit-actions').getByRole('button',{name:'‹ Back',exact:true}).click();
+   await solo.locator('#open-controls').click();await returnBar();
+   await solo.locator('#menu-exit-actions').getByRole('button',{name:'‹ Back',exact:true}).click();
+   await solo.locator('#open-clothing-store').click();assert(await solo.locator('#store-back').isVisible());
+   await solo.locator('#store-back').click();await solo.locator('#tree-from-pause').click();
+   await solo.screenshot({path:dir+`/tree-${viewport.width}.png`,fullPage:true});
+   await solo.getByRole('button',{name:'Resume Game',exact:true}).click();
+   assert(!await solo.locator('#tree-menu').isVisible());
+  }
+  assert.deepEqual(soloErrors,[]);
+  report.checks.push('Portrait and landscape menus share a compact Back/Resume row; powers upgrade once, armor filters/review work, and Inventory, Settings and Clothing return safely');
   await soloContext.close();
   // Exercise the real account launcher and iframe on a phone-sized viewport.
   // Only the cloud transport is mocked; creation, gameplay and saving use the shipped UI.

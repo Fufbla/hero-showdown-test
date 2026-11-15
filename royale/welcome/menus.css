@@ -1,0 +1,282 @@
+/* Service menus share the welcome screen's palette and reserve the screen for
+   browsing, with one scroll surface and a compact return bar on phones. */
+#menu-exit-actions.menu-exit-actions{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;flex:none;
+  width:100%;min-width:0;margin:0;padding:10px;background:#1b3d70;isolation:isolate;
+}
+#menu-exit-actions.menu-exit-actions:has(button[hidden]){grid-template-columns:1fr}
+#menu-exit-actions.menu-exit-actions button{
+  width:100%;min-width:0;min-height:44px;margin:0;padding:10px 8px;justify-content:center;
+  border:2px solid #bfe5ff;border-radius:12px;background:linear-gradient(#508bd1,#2a5b9f);
+  color:#fff;font:800 14px/1.2 Arial,Helvetica,sans-serif;letter-spacing:0;text-align:center;
+  box-shadow:inset 0 2px #ffffff66,0 3px #10214b;text-shadow:0 1px #172452;
+}
+#menu-exit-actions.menu-exit-actions button.primary{background:linear-gradient(#fff16a,#ffbf19);border-color:#fff6b5;color:#182a53;text-shadow:none}
+#pause-menu #menu-exit-actions{padding:0;background:none}
+body:has(:is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward):not([hidden])) :is(.topbar,#hud,#mission,#boss-hud,#power-bar,.touch-controls,.controls-footer,#storage-warning){display:none!important}
+body.game-view :is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward){
+  position:fixed;inset:0;z-index:80;overflow:hidden;align-items:center;justify-content:center;
+  padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+  background:linear-gradient(120deg,#112650bb,#253573cc),url('./assets/coastal-city.webp') center/cover no-repeat;
+  backdrop-filter:none;font-family:Arial,Helvetica,sans-serif;color:#f4f8ff;
+  --ink:#f4f8ff;--muted:#c5d8f6;--gold:#ffe354;--line:#87b9ee;--dark:#183765;
+}
+body.game-view :is(#tree-menu .eris-card,#controls-menu .settings-card,#inventory-menu .journey-card,#world-menu .journey-card,#chest-menu .journey-card,#merge-reward .journey-card){
+  width:min(1040px,100%);max-width:100%;max-height:100%!important;min-height:0;margin:0;
+  border:2px solid #bfe3ff;border-radius:20px;background:linear-gradient(135deg,#214e88f7,#192e62fa);
+  color:#f4f8ff;box-shadow:inset 0 2px #ffffff44,0 5px #10214b,0 16px 40px #10214b66;
+}
+#tree-menu .eris-card{height:100%;overflow:hidden!important}
+#controls-menu .settings-card{width:min(760px,100%)!important;padding:0 18px 18px;overflow:auto!important;overscroll-behavior:contain}
+#controls-menu #menu-exit-actions{margin:0 -18px 8px;width:calc(100% + 36px);position:sticky;top:0;z-index:10}
+#controls-menu .settings-card>header{position:static;background:none;min-height:0;padding:8px 0;margin:0}
+#controls-menu :is(#close-controls),#tree-menu :is(#return-menu,#close-tree),#inventory-menu #inventory-close,#world-menu #map-close{display:none}
+:is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward) :is(h2,h3,h4){font-family:Arial,Helvetica,sans-serif;font-weight:800;color:#fff;letter-spacing:-.025em}
+#controls-menu h2,#inventory-menu h2,#world-menu h2,#chest-menu h2{font-size:clamp(24px,4vw,32px);line-height:1.1;margin:8px 0}
+:is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward) :is(.eyebrow,.field){color:#c7e2ff}
+:is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward) :is(p,small,.journey-note,.storage-note){color:#d4e5ff;font-size:13px;line-height:1.55}
+:is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward) button{
+  min-height:44px;border:1px solid #a4d7ff;border-radius:10px;padding:10px 12px;
+  background:linear-gradient(#497fbd,#2b528d);color:#fff;font:700 13px/1.3 Arial,Helvetica,sans-serif;
+  letter-spacing:0;box-shadow:inset 0 1px #ffffff55,0 2px #10214b;
+}
+:is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward) button.primary{
+  background:linear-gradient(#fff16a,#ffbf19);border-color:#fff6b5;color:#182a53;justify-content:center;font-weight:800;
+}
+:is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward) button.danger{background:linear-gradient(#a94e6a,#7b3151);border-color:#f3b2cc;color:#fff}
+:is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward) :is(button,select,summary):focus-visible{outline:3px solid #ffe354;outline-offset:3px}
+:is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward) :is(select,input:not([type=range]):not([type=checkbox])){
+  width:100%;height:46px;min-height:46px;min-width:0;padding:10px 12px;font-size:16px;
+  background:#102b58;color:#fff;border:1px solid #a4d7ff;border-radius:10px;color-scheme:dark;
+}
+:is(#tree-menu,#controls-menu) :is(input[type=range],input[type=checkbox]){accent-color:#b57afa}
+#tree-menu .eris-heading{display:flex;padding:10px 16px;gap:12px;flex-wrap:nowrap;background:#193d72;border-color:#90c9ff55}
+#tree-menu .eris-heading .eyebrow{display:none}
+#tree-menu .eris-heading h2{font-size:24px;line-height:1.1;margin:0;white-space:nowrap}
+#tree-menu .eris-heading em{font-style:normal;color:#ffe354;font-weight:800}
+#tree-menu .eris-balances{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:11px;color:#e2edff;white-space:nowrap}
+#tree-menu .eris-balances b{color:#ffe354;font-size:15px}
+#tree-menu #eris-capacity{display:none}
+#tree-menu .eris-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:8px 10px;background:#173563;border-color:#8cc6ff66;overflow:visible}
+#tree-menu .eris-nav button{white-space:normal;padding:8px 5px;min-width:0;font-size:13px;line-height:1.15}
+#tree-menu .eris-nav button[aria-pressed=true],#tree-menu .wardrobe-tabs button[aria-pressed=true]{background:linear-gradient(#ae71eb,#6e3fb8);border-color:#ffe354;color:#fff}
+#tree-menu .eris-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-color:#93bbeb #1b3561}
+#tree-menu .eris-footer{padding:7px 14px;font-size:10px;color:#c7ddfa;border-color:#90c9ff44}
+#tree-menu .eris-footer span:last-child{display:none}
+#tree-menu .eris-powers{height:auto;min-height:0;display:block}
+#tree-menu .tree-body{display:grid;grid-template-columns:285px minmax(0,1fr);height:auto;min-height:0;align-items:start}
+#tree-menu #power-list{max-height:480px;min-height:0;padding:12px;border-color:#90c9ff44;scrollbar-color:#93bbeb #1b3561}
+#tree-menu #power-detail{overflow:visible;min-height:0;padding:18px}
+#tree-menu #power-detail h3{font-size:26px;margin:10px 0}
+#tree-menu #power-detail p{font-size:13px;line-height:1.55}
+#tree-menu .power-choice{display:grid;grid-template-columns:28px 1fr;text-align:left;min-height:58px;padding:8px;box-shadow:none;background:#20477f;border-color:#87b9ee55}
+#tree-menu .power-choice[aria-pressed=true]{background:#56399b;border-color:#e4c2ff}
+#tree-menu .power-choice>b{color:#ffe354}
+#tree-menu .power-choice>small{color:#d6e7ff;font-size:11px}
+#tree-menu .power-choice>span{font-weight:700;font-size:13px}
+#tree-menu .power-upgrade{padding:5px;background:linear-gradient(#fff16a,#ffbf19);border-color:#fff6b5;color:#182a53;font-size:26px}
+#tree-menu .slot-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:14px}
+#tree-menu .slot-actions button{min-width:0;padding:8px 5px;font-size:12px}
+#tree-menu :is(#upgrade-preview table,.gear-stats){width:100%;font-size:12px;border-collapse:collapse;margin:12px 0}
+#tree-menu :is(#upgrade-preview,.gear-stats) :is(th,td){padding:9px 5px;border-color:#96bfee44;color:#e6efff;font-size:12px}
+#tree-menu :is(#upgrade-preview,.gear-stats) th{color:#c9ddfb;font-weight:600;text-align:left}
+#tree-menu .gear-stats td:last-child{color:#ffe78b}
+#tree-menu :is(.power-loadout,.skill-reset-area){padding:12px 16px;border-block:1px solid #87b9ee55;background:#183865;margin:0}
+#tree-menu .power-loadout summary,#tree-menu .armor-preview-disclosure>summary{min-height:44px;cursor:pointer;padding:12px;font-size:14px;font-weight:700;color:#fff}
+#tree-menu .skill-reset-area{display:flex;gap:8px;align-items:center}
+#tree-menu .skill-reset-area span{color:#c7ddfa;font-size:12px}
+#tree-menu [data-eris-panel=powers]>button{width:calc(100% - 32px);margin:12px 16px}
+#tree-menu #loadout-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#tree-menu .mobile-power-chooser,#tree-menu .mobile-armor-picker{display:none}
+#tree-menu [data-eris-panel=wardrobe]>button{display:inline-block;width:calc(50% - 18px);margin:12px 0 0 12px}
+#tree-menu .wardrobe-layout{display:flex;flex-direction:column;min-height:0}
+#tree-menu .wardrobe-main{padding:14px 16px;min-width:0;display:flex;flex-direction:column}
+#tree-menu .wardrobe-heading{order:0}
+#tree-menu .wardrobe-tabs{order:1}
+#tree-menu .mobile-armor-picker{order:2}
+#tree-menu .shop-layout{order:3}
+#tree-menu #wardrobe-note,#tree-menu #shop-confirm{order:4}
+#tree-menu .wardrobe-heading{align-items:flex-end;gap:16px}
+#tree-menu .wardrobe-heading h3{font-size:22px;margin:4px 0}
+#tree-menu .wardrobe-heading .eyebrow{display:none}
+#tree-menu .wardrobe-heading .field{min-width:200px;width:44%;font-size:12px}
+#tree-menu .wardrobe-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 0;border:0}
+#tree-menu .wardrobe-tabs button{white-space:normal;padding:8px 5px;font-size:13px}
+#tree-menu #wardrobe-note{font-size:12px;line-height:1.5;margin:12px 0}
+#tree-menu .shop-layout{display:grid;grid-template-columns:minmax(230px,.8fr) minmax(0,1.2fr);gap:18px}
+#tree-menu #shop-items{max-height:440px;min-width:0;padding:3px;scrollbar-color:#93bbeb #1b3561}
+#tree-menu .shop-item{background:#244b81;border-color:#92caff66;border-radius:12px;box-shadow:none;color:#fff}
+#tree-menu .shop-item[aria-pressed=true]{background:#56399b;border-color:#e7ccff}
+#tree-menu .shop-item b{font-size:13px;font-weight:700}
+#tree-menu .shop-item small{font-size:11px;color:#cddfff}
+#tree-menu #shop-detail h3{font-size:23px}
+#tree-menu #shop-detail p,#tree-menu #shop-confirm p{font-size:13px;line-height:1.5}
+#tree-menu .applied-details{font-size:12px;color:#cddfff}
+#tree-menu .set-note{color:#c7ddfa!important;font-size:12px!important}
+#tree-menu .shop-warning{color:#ffe394!important}
+#tree-menu .armor-preview-disclosure{order:2;margin:0 16px 16px;background:#183865;border:1px solid #92caff77;border-radius:12px}
+#tree-menu .armor-preview-disclosure:not([open])>aside{display:none!important}
+#tree-menu .wardrobe-preview{position:static;height:auto;min-height:0;padding:14px;background:radial-gradient(ellipse,#5675af,#253566);border:0;display:flex;align-items:center;text-align:center}
+#tree-menu .wardrobe-preview .eyebrow{display:none}
+#tree-menu .wardrobe-preview p{display:block;font-size:12px;max-width:500px;text-align:center;color:#d4e5ff}
+#tree-menu #gear-preview{position:static;width:220px;height:230px;max-height:230px}
+#tree-menu .view-toggle{display:flex;background:#182f61;border-color:#a4d7ff66;max-width:100%}
+#tree-menu .view-toggle button{min-width:0;flex:1;min-height:44px;background:transparent;box-shadow:none}
+#tree-menu .view-toggle button[aria-pressed=true]{background:#7949b5;border-color:#e4c2ff;color:#fff}
+#tree-menu .selling .shop-layout{display:block}
+#tree-menu .selling #shop-items{display:grid;max-height:none;overflow:visible}
+#tree-menu .sale-card{background:#214777;border-color:#92caff77;color:#fff}
+#tree-menu .sale-card :is(p,small,li){color:#d4e5ff}
+#tree-menu .selling .armor-preview-disclosure{display:none}
+#tree-menu .eris-roots{min-height:0;padding:18px;grid-template-columns:1fr;gap:12px}
+#tree-menu .root-emblem{display:none}
+#tree-menu #root-shop{width:100%;max-width:600px;margin:auto}
+#controls-menu details{border-top:1px solid #92caff55;padding:10px 0;margin:0}
+#controls-menu summary{min-height:44px;padding:10px 0;color:#ffe354;font-weight:800;font-size:16px;cursor:pointer}
+#controls-menu :is(#controller-status,#mapping-note){font-size:12px;margin:8px 0}
+#controls-menu .mapping-row{gap:8px;border-color:#92caff55;font-size:12px}
+#controls-menu .audio-settings,#controls-menu #touch-settings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#controls-menu .field{font-size:13px}
+#controls-menu input[type=range]{min-height:44px;cursor:pointer}
+:is(#inventory-menu,#world-menu,#chest-menu) .journey-heading{position:static;background:transparent;padding:10px 16px}
+:is(#inventory-menu,#world-menu,#chest-menu) .journey-note{padding:0 16px;margin:0 0 12px}
+:is(#inventory-menu,#world-menu,#chest-menu) .journey-scroll{padding:0 16px 16px}
+#inventory-menu .equipment-card{position:relative;grid-template-columns:48px minmax(0,1fr) 44px;background:#244b81;border-color:#92caff77;color:#fff;border-radius:14px}
+#inventory-menu .wardrobe-quick-equip{position:static;grid-column:3;grid-row:1;width:44px;height:44px;margin:0;transform:none}
+#inventory-menu .equipment-actions{grid-column:1/-1;display:flex;flex-direction:row;gap:8px}
+#inventory-menu .equipment-actions button{flex:1}
+#inventory-menu .equipment-card h3{font:800 18px/1.2 Arial,Helvetica,sans-serif;color:#fff}
+#inventory-menu .equipment-card :is(p,small){color:#d4e5ff}
+#inventory-menu .equipment-card .text-button{color:#ffe394}
+#inventory-menu .equipment-confirm,#tree-menu .upgrade-confirm{background:#1b3764;border-color:#ffe354;color:#fff}
+#inventory-menu .equipment-confirm :is(p,td,th){color:#e5efff;border-color:#92caff55}
+:is(.power-reset-dialog,.sale-dialog,#slot-picker){background:linear-gradient(135deg,#214e88,#192e62);color:#fff;border:2px solid #bfe3ff;border-radius:18px;font-family:Arial,Helvetica,sans-serif}
+:is(.power-reset-dialog,.sale-dialog,#slot-picker)::backdrop{background:#10214bcc}
+:is(.power-reset-dialog,.sale-dialog,#slot-picker) button{background:linear-gradient(#508bd1,#2a5b9f);color:#fff;border-color:#bfe3ff;min-height:44px}
+:is(.power-reset-dialog,.sale-dialog,#slot-picker) :is(h3,p){color:#e5efff}
+#slot-picker #picker-note,#slot-picker .picker-heading small{color:#c7ddfa}
+#slot-picker #picker-slots button[aria-pressed=true]{background:#7949b5;color:#fff}
+#slot-picker .picker-power b{color:#ffe354}
+
+/* Clothing preview and catalog retain their artwork, with the same menu chrome. */
+#clothing-menu{background:linear-gradient(120deg,#112650c9,#253573db),url('./assets/coastal-city.webp') center/cover fixed;color:#f3f8ff;font-family:Arial,Helvetica,sans-serif}
+#clothing-menu .store-shell{max-width:1240px}
+#clothing-menu .store-header{gap:16px}
+#clothing-menu .store-brand{border-color:#a4d7ff66;color:#d4e5ff}
+#clothing-menu .store-brand strong{color:#ffe354}
+#clothing-menu .store-header h1{font:900 clamp(28px,4vw,42px)/1.1 Arial,Helvetica,sans-serif;color:#fff;text-shadow:0 3px #10214b}
+#clothing-menu #store-back{background:linear-gradient(#fff16a,#ffbf19);color:#182a53;border:2px solid #fff6b5;box-shadow:0 4px #10214b}
+#clothing-menu .store-wallet{background:#244b81;color:#fff;border:1px solid #a4d7ff;box-shadow:0 3px #10214b}
+#clothing-menu .store-wallet span[aria-hidden]{color:#ffe354}
+#clothing-menu .store-preview{background:linear-gradient(#5f9ddd,#b8dbfa 66%,#a3bbef 66%,#6d69ba);border-color:#cce8ff;box-shadow:0 6px #10214b}
+#clothing-menu .preview-label{background:#6d45b8ed;color:#fff;border-color:#e7d2ff;font-weight:800}
+#clothing-menu .preview-hills{background:linear-gradient(170deg,#6b91cf,#a4bdea 45%,#7d75bd)}
+#clothing-menu .preview-caption{color:#152555}
+#clothing-menu .preview-actions button{background:linear-gradient(#508bd1,#2a5b9f);border-color:#d0eaff;color:#fff;box-shadow:0 3px #172452}
+#clothing-menu .preview-actions button[aria-pressed=true]{background:linear-gradient(#b476ed,#7546b9);border-color:#ffe354;color:#fff}
+#clothing-menu #preview-equip{background:linear-gradient(#fff16a,#ffbf19);border-color:#fff6b5;color:#182a53}
+#clothing-menu .store-collection-heading select{background:#244b81;border-color:#a4d7ff;color:#fff;font-size:16px!important}
+#clothing-menu .store-carousel-wrap>button{background:linear-gradient(#508bd1,#2a5b9f);border-color:#a4d7ff;color:#fff}
+#clothing-menu #costume-carousel{scrollbar-color:#a5c8f3 #1e3565}
+#clothing-menu .costume-card{background:#eaf2ff;border-color:#a6c8f1;box-shadow:0 4px #10214b}
+#clothing-menu .costume-card.selected{background:#f1e7ff;border-color:#ffe354;box-shadow:0 4px #10214b}
+#clothing-menu .costume-select{color:#152555!important}
+#clothing-menu .costume-select canvas{background:linear-gradient(#daeafa,#cbd8f7)}
+#clothing-menu .selected .costume-select canvas{background:linear-gradient(#e9d6ff,#d1ccf4)}
+#clothing-menu .costume-selected{background:#7444b7;color:#fff}
+#clothing-menu .costume-price{color:#152555}
+#clothing-menu .costume-action{background:linear-gradient(#508bd1,#2a5b9f);color:#fff}
+#clothing-menu .costume-action:disabled{background:#d4c2f1!important;color:#4b2f7b!important}
+#clothing-menu #store-message{color:#d4e5ff}
+#clothing-menu :is(button,select):focus-visible{outline-color:#ffe354}
+#clothing-menu #costume-confirm{color:#152555;border-color:#bfe3ff;background:#ecf3ff;box-shadow:0 12px 55px #10214b99}
+#clothing-menu #costume-confirm::backdrop{background:#10214bcc}
+#clothing-menu #purchase-close,#clothing-menu #purchase-title{color:#152555}
+#clothing-menu #purchase-thumbnail{background:#d7e5fb}
+#clothing-menu #purchase-message{color:#375486}
+#clothing-menu .purchase-actions button{background:linear-gradient(#508bd1,#2a5b9f);border-color:#bfe3ff;color:#fff}
+#clothing-menu #purchase-buy{background:linear-gradient(#fff16a,#ffbf19);border-color:#e2b339;color:#182a53}
+
+@media(max-width:1024px),(max-height:600px){
+  #tree-menu .tree-body{display:block}
+  #tree-menu #power-list{display:none}
+  #tree-menu .mobile-power-chooser{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:10px;padding:12px 14px;position:sticky;top:0;z-index:3;background:#1b3d70;border-bottom:1px solid #92caff55}
+  #tree-menu .mobile-power-chooser .field{font-size:12px;gap:5px}
+  #tree-menu #mobile-power-upgrade{min-width:100px;height:46px;padding:10px}
+  #tree-menu .mobile-armor-picker{display:flex;font-size:12px;margin:10px 0;gap:5px;position:sticky;top:0;z-index:3;background:#21477e;padding:8px;border-radius:10px}
+  #tree-menu .shop-layout{display:block}
+  #tree-menu .wardrobe-layout:not(.selling) #shop-items{display:none}
+  #tree-menu .selling #shop-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+  #tree-menu .wardrobe-heading h3{font-size:20px}
+}
+@media(max-width:600px){
+  body.game-view :is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward){padding:8px max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
+  #tree-menu .eris-card{border-radius:16px}
+  #tree-menu .eris-heading{padding:10px;gap:6px}
+  #tree-menu .eris-heading h2{font-size:21px}
+  #tree-menu .eris-balances{font-size:10px}
+  #tree-menu .eris-balances b{font-size:14px}
+  #tree-menu .eris-nav{padding:7px;gap:5px}
+  #tree-menu .eris-nav button{font-size:12px}
+  #tree-menu #power-detail{padding:14px}
+  #tree-menu .wardrobe-main{padding:12px}
+  #tree-menu .wardrobe-heading{display:block}
+  #tree-menu .wardrobe-heading h3{display:none}
+  #tree-menu .wardrobe-heading .field{width:100%;min-width:0}
+  #tree-menu #loadout-slots{grid-template-columns:1fr}
+  #tree-menu #wardrobe-note{font-size:11px}
+  #tree-menu .skill-reset-area{display:block}
+  #tree-menu .skill-reset-area span{display:block;margin-top:8px}
+  #controls-menu .audio-settings,#controls-menu #touch-settings{grid-template-columns:1fr}
+  #inventory-menu .equipment-list{grid-template-columns:1fr}
+  #inventory-menu .equipment-card{grid-template-columns:48px minmax(0,1fr) 44px;gap:8px}
+  #clothing-menu .store-header h1{font-size:30px;white-space:normal}
+  #clothing-menu .store-header{gap:10px}
+  #clothing-menu .store-preview{height:360px;min-height:360px}
+  #clothing-menu .preview-copy{top:12px;left:14px}
+  #clothing-menu .preview-copy p,#clothing-menu .preview-copy i{display:none}
+  #clothing-menu .preview-label{font-size:14px;padding:6px 12px}
+  #clothing-menu #store-hero{width:100%;height:250px;bottom:80px}
+  #clothing-menu .preview-caption{left:12px;right:12px;bottom:12px;gap:4px;grid-template-columns:1fr}
+  #clothing-menu .preview-caption h2{font-size:17px;grid-column:1;margin:0}
+  #clothing-menu .preview-caption>span{font-size:12px;grid-column:1}
+  #clothing-menu .preview-actions{grid-column:1;grid-row:auto;justify-content:flex-end;position:absolute;bottom:0;right:0;max-width:55%}
+  #clothing-menu .preview-caption:has(#preview-equip:not([hidden])) h2,#clothing-menu .preview-caption:has(#preview-equip:not([hidden]))>span{max-width:45%}
+  #clothing-menu .preview-actions button{padding:7px;font-size:12px!important}
+}
+@media(orientation:landscape) and (max-height:600px){
+  body.game-view :is(#tree-menu,#controls-menu,#inventory-menu,#world-menu,#chest-menu,#merge-reward){padding:max(6px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
+  #tree-menu .eris-card{max-width:1100px;border-radius:14px}
+  #tree-menu #menu-exit-actions{padding:7px 10px}
+  #tree-menu .eris-heading{padding:6px 12px}
+  #tree-menu .eris-heading h2{font-size:21px}
+  #tree-menu .eris-balances{flex-direction:row;gap:14px}
+  #tree-menu .eris-nav{padding:6px 10px}
+  #tree-menu .eris-footer{display:none}
+  #tree-menu .mobile-power-chooser{grid-template-columns:minmax(0,1fr) 140px;padding:8px 12px;gap:12px}
+  #tree-menu .mobile-power-chooser .field{flex-direction:row;align-items:center;gap:10px;white-space:nowrap}
+  #tree-menu .mobile-power-chooser select{flex:1}
+  #tree-menu #power-detail{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.2fr);gap:6px 22px;padding:12px 18px}
+  #tree-menu #power-detail>*{grid-column:1;margin-block:3px}
+  #tree-menu #power-detail #upgrade-preview{grid-column:2;grid-row:1/span 8}
+  #tree-menu #power-detail .slot-actions{grid-column:1/-1}
+  #tree-menu #power-detail:has(.slot-actions) #upgrade-preview{grid-row:2/span 8}
+  #tree-menu .wardrobe-heading h3{font-size:18px}
+  #tree-menu .wardrobe-heading .field{width:50%}
+  #tree-menu .wardrobe-tabs{margin-top:10px}
+  #tree-menu #wardrobe-note{font-size:11px;margin:8px 0}
+  #tree-menu .mobile-armor-picker{flex-direction:row;align-items:center;white-space:nowrap}
+  #tree-menu .mobile-armor-picker select{flex:1}
+  #tree-menu .wardrobe-main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;padding:10px 14px}
+  #tree-menu .wardrobe-heading{grid-column:1;grid-row:1}
+  #tree-menu .wardrobe-heading h3{display:none}
+  #tree-menu .wardrobe-heading .field{width:100%;min-width:0}
+  #tree-menu .mobile-armor-picker{grid-column:2;grid-row:1;margin:0;padding:0;background:none;display:flex;flex-direction:column;align-items:stretch;font-size:12px;gap:5px;position:static}
+  #tree-menu .wardrobe-main:has(#shop-category-wrap[hidden]) .mobile-armor-picker{grid-column:1/-1}
+  #tree-menu .wardrobe-tabs{grid-column:1/-1;grid-row:2;margin:0}
+  #tree-menu .shop-layout,#tree-menu #shop-confirm,#tree-menu #wardrobe-note{grid-column:1/-1}
+  #tree-menu #shop-detail{display:block}
+  #controls-menu .settings-card>header{padding:4px 0}
+  #controls-menu h2{font-size:24px}
+  #clothing-menu .store-preview{height:250px;min-height:250px}
+}
