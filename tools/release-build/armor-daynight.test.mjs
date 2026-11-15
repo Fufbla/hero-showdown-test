@@ -1,3 +1,4 @@
+import {regularMonsterDamage} from '../../royale/combat-tuning.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Game,decodeSave} from '../../royale/core.mjs';
@@ -63,9 +64,9 @@ test('both local co-op players share the cycle and pay independently; saves pres
  now=WORLD_CLOCK_REFERENCE+CLOCK.day+CLOCK.night;assert(s.games.every(g=>!g.clock().night));
  assert.deepEqual(s.games.map(captureProgress).map(x=>x.look),profiles.map(p=>p.saved[0].look));
 });
-test('universal lighting preserves existing region-specific monster difficulty',()=>{
+test('universal lighting uses balanced region-specific monster difficulty',()=>{
  for(let region=1;region<=7;region++){
   const g=new Game({now:()=>WORLD_CLOCK_REFERENCE+CLOCK.day});g.loadRegion(region);const e=g.enemies.find(e=>!e.boss);
-  assert.equal(g.monsterDamage(e),TYPES[e.type].damage*(region>2?2:1));
+  assert.equal(g.monsterDamage(e),regularMonsterDamage(TYPES[e.type].damage,region,true));
  }
 });

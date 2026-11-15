@@ -126,6 +126,13 @@ export class PowerSystem {
     if(!slot.level||this.active[id]||(this.cooldowns[id]||0)>EPS||h.stun>0||(this.flying&&def.offensive&&!['fireball','animalAllies'].includes(id)))return false;
     if(id==='seismicSmash'&&(!h.grounded||this.flying))return false;
     if(id==='flight'&&(!h.grounded||h.attack||this.active.superKick))return false;
+    // A held basic attack must yield once its contact window has finished.
+    // Otherwise chaining basics keeps h.attack populated forever and starves
+    // ready melee powers. Never cancel a basic before its hit or a power combo.
+    if(['strength','superKick','seismicSmash'].includes(id)&&h.attack&&!h.attack.power){
+      const basic=g.attackDefinition(h.attack.kind);
+      if(h.attack.age>=basic.startup+basic.active){h.attack=null;h.attackBuffer=null;}
+    }
     if(['strength','superKick','seismicSmash'].includes(id)&&(h.attack||this.active.superKick||h.powerPose))return false;
     const s=powerStats(id,slot.level,{heroLevel:h.level,equipment:g.equipment});s.cooldown*=slot.cooldownMultiplier;
     // The 0000000000 V2 prototype tests two-second control effects. Keep

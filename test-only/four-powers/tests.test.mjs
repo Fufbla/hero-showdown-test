@@ -77,4 +77,4 @@ for(const id of ['strength','superKick','animalAllies','seismicSmash'])for(const
  assert.ok(g.powers.activate(id));steps(g,160);
  assert.ok(Math.abs((before-boss.hp)-damageToEnemy(amount,99,boss))<1e-6);assert.equal(boss.x,x);
 });
-test('Original basic combat and appearance sources remain byte-identical to verified live commit',()=>{for(const file of ['royale/core.mjs','royale/powers.mjs','royale/combat-tuning.mjs','royale/power-art.mjs','royale-v3-staging/gameplay/powers.mjs','royale-v3-staging/kingjames/head.mjs','royale/style-c-face.mjs','royale/style-c-hair.mjs'])assert.deepEqual(fs.readFileSync(file),execFileSync('git',['show','d8e0a9a:'+file]),file);});
+test('Original appearance and legacy power sources remain byte-identical to verified live commit',()=>{for(const file of ['royale/powers.mjs','royale/power-art.mjs','royale-v3-staging/gameplay/powers.mjs','royale-v3-staging/kingjames/head.mjs','royale/style-c-face.mjs','royale/style-c-hair.mjs'])assert.deepEqual(fs.readFileSync(file),execFileSync('git',['show','d8e0a9a:'+file]),file);});

@@ -2,6 +2,14 @@ import {Authority} from './authority.mjs';
 import {Game} from '../core.mjs';
 import {TYPES} from '../world.mjs';
 import {BOSSES} from '../boss-data.mjs';
+import {monsterXP} from '../progression.mjs';
+
+function sharedReward(base,level,players){
+  if(!players.length||!Number.isFinite(base))return 0;
+  // Equal shares of one eligible pool, with the same level/pace rules as solo.
+  // The least eligible member bounds carries in either direction.
+  return Math.min(...players.map(h=>monsterXP(base,h.game.hero.level,level)));
+}
 
 // One local death event, one loot roll, one entitlement for each active hero.
 export class EqualXPAuthority extends Authority {
@@ -10,7 +18,8 @@ export class EqualXPAuthority extends Authority {
   reward(attacker,enemy){
     if(enemy.rewarded||enemy.hp>0||enemy.state!=='dead')return;enemy.rewarded=true;
     const room=this.state.rooms.get(attacker.room),players=this.contributors(room,attacker.zone),offset=(room.xpTurn||0)%Math.max(1,players.length);
-    this.pool=TYPES[enemy.type]?.xp;let newDrops=[];
+    const info=TYPES[enemy.type];
+    this.pool=enemy.summoned?0:sharedReward(info?.xp,enemy.level??info?.level,players);let newDrops=[];
     try{
       players.forEach((h,i)=>{
         const g=h.game,previous=new Set(g.loot),random=g.random;
@@ -41,7 +50,8 @@ export class EqualXPAuthority extends Authority {
   completeWorld(room,world){
     if(world.cleared||!world.fight)return;
     const players=this.contributors(room,world.key).filter(h=>h.game.arenaScene),offset=(room.xpTurn||0)%Math.max(1,players.length);
-    this.pool=world.fight.region?BOSSES[world.fight.region]?.xp:null;
+    const boss=BOSSES[world.fight.region];
+    this.pool=boss?sharedReward(boss.xp,boss.level,players):null;
     try{players.forEach((h,i)=>{
       const g=h.game,dead=g.hero.dead;g.hero.dead=false;
       try{

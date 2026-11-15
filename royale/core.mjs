@@ -1,4 +1,4 @@
-import {BASIC_GROWTH,damageToEnemy,damageToHero} from './combat-tuning.mjs';
+import {BASIC_GROWTH,HIT_GRACE,damageToEnemy,damageToHero} from './combat-tuning.mjs';
 import {normalizeLoot,expireLoot,nearbyInteractions,stepLoot,selectedInteraction,pickupLoot} from './world-loot.mjs';
 import {sharedNow} from './shared-clock.mjs';
 import { legendaryMethods, stepLegendaryBoss } from './legendary-bosses.mjs';
@@ -201,8 +201,8 @@ export class Game {
     const h = this.hero;
     if (Object.hasOwn(TYPES,source.type)&&!isBoss(source)&&this.isSafeCamp())return false;
     if (h.invulnerable > 0 || h.dead || !Number.isFinite(amount) || amount<=0) return false;
-    // Different attackers do not share recovery. Regular strikes have an explicit
-    // event token; legacy hazards/boss volleys retain their own recovery window.
+    // Keep per-attack deduplication as well as shared post-hit protection, so a
+    // lingering volley cannot hit again when the short protection expires.
     this.hitRecovery??=new Map();this.hitEvents??=new Map();
     const event=source.damageEvent, key=source, recovery=!!(source.boss&&source.attack);
     if(event?this.hitEvents.get(key)===event:recovery&&(this.hitRecovery.get(key)||0)>this.time)return false;
@@ -212,6 +212,7 @@ export class Game {
     const incoming=this.powers.incoming(damageToHero(amount,h.level,source),source);if(incoming===null){if(h.agile)h.dodgeAge=0;return false;}this.markCombat();
     if(recovery)this.hitRecovery.set(key,this.time+1.05);
     h.hp = Math.max(0, h.hp - incoming); h.hurtAge = 0;
+    h.invulnerable=Math.max(h.invulnerable,HIT_GRACE);
     if(!this.powers.active.steel){h.stun=.16;h.vx = (h.x >= fromX ? 1 : -1) * 210;h.attack=null;h.attackBuffer=null;}
     this.emit('hurt');
     if (h.hp <= 0) this.defeat();

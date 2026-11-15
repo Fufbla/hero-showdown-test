@@ -1,3 +1,4 @@
+import {regularMonsterDamage} from './combat-tuning.mjs';
 import {matchingFlightBonus,refreshFlightEffect} from './flight-armor.mjs';
 import {matchingAgilityBonus,refreshAgilityEffect} from './agility-armor.mjs';
 import {matchingSpeedBonus} from './speed-armor.mjs';
@@ -115,7 +116,7 @@ export const journeyMethods={
     if(e.rewarded||!Number.isFinite(e.hp)||e.hp>0||e.state!=='dead')return;e.rewarded=true;
     const h=this.hero,info=TYPES[e.type];if(!info)return;
     this.kills++;this.species.add(e.type);this.world.kills[e.type]=(this.world.kills[e.type]||0)+1;
-    const xp=monsterXP(info.xp,h.level,e.level||info.level),summoned=e.summoned===true,regular=!isBoss(e),coins=regular&&!summoned?(this.clock().night?2:1):0;
+    const summoned=e.summoned===true,xp=summoned?0:monsterXP(info.xp,h.level,e.level||info.level),regular=!isBoss(e),coins=regular&&!summoned?(this.clock().night?2:1):0;
     h.coins=Math.min(999999,h.coins+coins);this.gainXP(xp);
     let root=false,item=null;
     if(regular&&!summoned){
@@ -187,5 +188,5 @@ export const journeyMethods={
   },
   respawnDelay(e){return RESPAWN[TYPES[e.type]?.rank]||RESPAWN.common;},
   // Lighting is universal; retain the established region 3–7 night difficulty.
-  monsterDamage(e){if(e.legendaryHelper)return e.damage;if(isBoss(e))return e.damage??TYPES[e.type]?.damage??0;return TYPES[e.type].damage*(this.regionId>2&&this.clock().night&&!isBoss(e)?2:1);},
+  monsterDamage(e){if(e.legendaryHelper)return e.damage;if(isBoss(e))return e.damage??TYPES[e.type]?.damage??0;return regularMonsterDamage(TYPES[e.type].damage,this.regionId,this.clock().night);},
 };

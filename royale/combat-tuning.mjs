@@ -1,6 +1,13 @@
 // Solo combat tuning. Timing, target milestones, earned upgrades and item
 // bonuses remain in their existing systems.
-export const BASIC_GROWTH=Object.freeze({punch:.18,kick:.25});
+export const BASIC_GROWTH=Object.freeze({punch:1.4,kick:2});
+// Shared post-hit protection gives a hero time to move or use a power when
+// several enemies attack together. It does not interrupt enemy attack clocks.
+export const HIT_GRACE=.8;
+export const NIGHT_DAMAGE=1.2;
+export function regularMonsterDamage(amount,region,night=false){
+ return amount*(region>1?.85:1)*(region>2&&night?NIGHT_DAMAGE:1);
+}
 // Enemy defense grows with late-game offensive mastery. Keep early-region
 // durability and saved HP unchanged; every damage source uses this same armor.
 export function monsterArmor(level){

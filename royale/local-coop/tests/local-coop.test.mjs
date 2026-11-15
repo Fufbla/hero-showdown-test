@@ -1,3 +1,4 @@
+import {monsterXP} from '../../progression.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Game,decodeSave} from '../../core.mjs';
@@ -103,12 +104,12 @@ test('two independent inputs move heroes simultaneously in one shared world',()=
  assert(s.games[0].hero.x>start[0]);assert(s.games[1].hero.x<start[1]);assert(s.games[0].hero.y<600);assert.equal(s.games[0].enemies,s.games[1].enemies);
  const before=s.games.map(g=>g.hero.x);s.setPaused(true);s.step([{move:1},{move:1}]);assert.deepEqual(s.games.map(g=>g.hero.x),before);
 });
-test('joint kill splits base XP, one monster health, one reward per hero',()=>{
+test('joint kill splits level-adjusted XP, one monster health, one reward per hero',()=>{
  const {s}=local(),[a,b]=s.games,e=a.enemies[0];e.protection=0;e.hp=12;e.maxHp=12;a.random=b.random=()=>.9;
- a.damageEnemy(e,1);b.damageEnemy(e,999999);assert.equal(e.hp,0);assert.equal(e.state,'dead');assert(a.hero.xp>0&&b.hero.xp>0);assert.equal(a.hero.xp+b.hero.xp,TYPES[e.type].xp);assert(Math.abs(a.hero.xp-b.hero.xp)<=1);
+ a.damageEnemy(e,1);b.damageEnemy(e,999999);assert.equal(e.hp,0);assert.equal(e.state,'dead');assert(a.hero.xp>0&&b.hero.xp>0);assert.equal(a.hero.xp+b.hero.xp,monsterXP(TYPES[e.type].xp,1,e.level));assert(Math.abs(a.hero.xp-b.hero.xp)<=1);
  const xp=a.hero.xp+b.hero.xp;s.authority.reward(s.heroes[0],e);assert.equal(a.hero.xp+b.hero.xp,xp);
 });
-test('both active heroes earn XP even if only one attacks',()=>{const {s}=local(),[a,b]=s.games,e=a.enemies[0];e.protection=0;a.damageEnemy(e,99999);assert(a.hero.xp>0);assert(b.hero.xp>0);assert.equal(a.hero.xp+b.hero.xp,TYPES[e.type].xp);});
+test('both active heroes earn XP even if only one attacks',()=>{const {s}=local(),[a,b]=s.games,e=a.enemies[0];e.protection=0;a.damageEnemy(e,99999);assert(a.hero.xp>0);assert(b.hero.xp>0);assert.equal(a.hero.xp+b.hero.xp,monsterXP(TYPES[e.type].xp,1,e.level));});
 test('shared boss preserves object identity and receives combined damage',()=>{
  const {s}=local();s.command(0,'enterBoss');const [a,b]=s.games;assert.equal(a.arenaScene.boss,b.arenaScene.boss);const e=a.arenaScene.boss,before=e.hp;a.damageEnemy(e,10);const mid=e.hp;b.damageEnemy(e,10);assert(mid<before&&e.hp<mid);
 });
