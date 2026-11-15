@@ -8,7 +8,8 @@ function showOptions(open){
  (open?$('new'):play).focus();
 }
 play.addEventListener('click',()=>showOptions(true));
-$('play-back').addEventListener('click',()=>showOptions(false));
+$('play-back').addEventListener('click',()=>{if(!$('input-area').hidden){$('input-area').hidden=true;$('enter').focus();}else showOptions(false);});
+window.addEventListener('royale-show-welcome',()=>{showOptions(false);$('input-area').hidden=true;window.scrollTo(0,0);});
 $('enter').addEventListener('click',()=>{ $('input-area').hidden=false;$('input').focus(); });
 $('input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('load').click();}});
 options.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();showOptions(false);}});

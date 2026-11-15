@@ -4,20 +4,22 @@ const $=id=>document.getElementById(id),url='https://adakwbhxiuatjvphutgo.supaba
 const storage={getItem:k=>localStorage.getItem(prefix+k),setItem:(k,v)=>localStorage.setItem(prefix+k,v)};
 let access='',refresh='',code='',slots=[],last=[null,null,null],busy=false,blocked=false,queue=Promise.resolve();
 let characterTestSession=false;
+let navigationVersion=0,runSequence=0;
 const clothingSavesPending=new Set(); // Pause ordinary autosaves while a purchase awaits durable cloud acknowledgement.
 function status(s){$('status').textContent=s;}
 function showCloudNote(visible){const note=$('roster').querySelector('p');if(note)note.hidden=!visible;}
 async function api(action,body={},auth=true){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json',...(auth?{Authorization:'Bearer '+access}:{})},body:JSON.stringify({action,...body}),cache:'no-store'});const d=await r.json();if(!r.ok){const e=Error((d.error||'Cloud error')+' (HTTP '+r.status+', '+action+')');e.status=r.status;e.retryAfter=r.headers.get('Retry-After');throw e;}return d;}
 async function renew(){const r=await api('renew',{refresh},false);access=r.access;refresh=r.refresh;}
 async function call(action,body){try{return await api(action,body);}catch(e){if(e.status!==401||!refresh)throw e;await renew();return api(action,body);}}
-async function run(fn){if(busy)return;busy=true;try{await fn();}catch(e){status(e.message);}finally{busy=false;}}
-async function launch(){
+async function run(fn){if(busy)return;busy=true;const ticket=++runSequence;try{await fn();}catch(e){if(ticket===runSequence)status(e.message);}finally{if(ticket===runSequence)busy=false;}}
+async function launch(version=navigationVersion){
  characterTestSession=false;
  document.body?.classList?.remove('kingjames-session');
  showCloudNote(true);
  $('refresh').textContent='Reload Cloud Heroes';
  // Always resolve each slot by its server-assigned number, never by array order.
  const response=await call('slots');
+ if(version!==navigationVersion)return;
  const incoming=response.slots?.map(row=>({...row,snapshot:row.snapshot?migratePowerSnapshot(row.snapshot):null}));
  if(!Array.isArray(incoming))throw Error('Cloud slot response missing; existing heroes were not changed.');
  const byNumber=new Map(incoming.map(entry=>[entry.slot_number,entry]));
@@ -30,6 +32,7 @@ console.info('[V3 cloud slot inventory]',slots.map(entry=>({slot:entry.slot_numb
 for(let i=0;i<3;i++){let snap=slots[i]?.snapshot||null;const journal=localStorage.getItem(prefix+'journal:'+i);if(journal){let j;try{j=JSON.parse(journal);}catch{}if(j?.snapshot&&snap===null&&j.revision===slots[i].revision){const saved=await call('save',{slot:i+1,revision:j.revision,snapshot:j.snapshot});slots[i].revision=saved.revision;snap=j.snapshot;localStorage.removeItem(prefix+'journal:'+i);}else if(j?.snapshot&&JSON.stringify(snap)!==JSON.stringify(j.snapshot)){const backup=prefix+'conflict:'+crypto.randomUUID();localStorage.setItem(backup,journal);if(localStorage.getItem(backup)!==journal)throw Error('Recovery backup failed');localStorage.removeItem(prefix+'journal:'+i);}}
 next.slots[i]=snap?{id:'v3-slot-'+i,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),lastRegion:'Cloud',snapshot:snap}:null;}
 const original=storage.getItem('healthia.royale.profiles.v2');if(original){const backup=prefix+'backup:'+crypto.randomUUID();localStorage.setItem(backup,original);if(localStorage.getItem(backup)!==original)throw Error('Local backup failed');}
+if(version!==navigationVersion)return;
 const saved=store.flush(next,{atomic:true});if(!saved.ok)throw Error(saved.error||'Local restore failed');
 last=slots.map(x=>x.snapshot?JSON.stringify(x.snapshot):null);console.info('[V3 cloud restored]',slots.map(x=>({slot:x.slot_number,revision:x.revision,x:x.snapshot?.world?.location?.x,y:x.snapshot?.world?.location?.y,xp:x.snapshot?.xp,coins:x.snapshot?.coins})));$('welcome').hidden=true;$('new-code').hidden=true;$('roster').hidden=false;$('game-frame').src='./gameplay/?codePlay=v3&v=armor-stats-1&cloudLoad='+Date.now();status('V3 cloud loaded. Choose a hero.');
 }
@@ -91,10 +94,36 @@ window.addEventListener('message',async e=>{
  finally{clothingSavesPending.delete(slot);}
  e.source.postMessage({type:'royale-clothing-saved',requestId,result},e.origin);
 });
-$('new').onclick=()=>void run(async()=>{const r=await api('create',{},false);access=r.access;refresh=r.refresh;code=r.code;$('code').textContent=code;$('welcome').hidden=true;$('new-code').hidden=false;});
+$('new').onclick=()=>void run(async()=>{
+ const version=++navigationVersion;
+ $('welcome').hidden=true;$('new-code').hidden=false;$('code').textContent='Generating…';
+ $('copy').disabled=$('continue').disabled=true;$('code-back')?.focus();status('');
+ try{
+  const r=await api('create',{},false);if(version!==navigationVersion)return;
+  access=r.access;refresh=r.refresh;code=r.code;blocked=false;$('code').textContent=code;
+  $('copy').disabled=$('continue').disabled=false;
+ }catch(e){if(version===navigationVersion){$('code').textContent='Try again';status(e.message+' Use Back to retry.');}}
+});
+function cancelCode(){
+ ++navigationVersion;++runSequence;busy=false;$('new-code').hidden=true;$('welcome').hidden=false;status('');
+ $('new').focus();
+}
+$('code-back')?.addEventListener('click',cancelCode);
+$('new-code').addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();cancelCode();}});
+$('play-back')?.addEventListener('click',()=>{++navigationVersion;++runSequence;busy=false;});
+// Only the currently displayed same-origin child may request this transition.
+window.addEventListener('message',async e=>{
+ if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow||e.data?.type!=='royale-return-welcome')return;
+ if(clothingSavesPending.size)return;
+ const child=e.source;await queue;
+ if(child!==$('game-frame').contentWindow)return;
+ ++navigationVersion;$('roster').hidden=true;$('game-frame').src='about:blank';
+ $('new-code').hidden=true;$('welcome').hidden=false;document.body.classList.remove('staging-session');status('');
+ window.dispatchEvent(new Event('royale-show-welcome'));
+});
 $('enter').onclick=()=>$('input-area').hidden=false;
 $('copy').onclick=()=>void navigator.clipboard.writeText(code).then(()=>status('Code copied. Keep it safe.'),()=>status('Copy the code displayed above.'));
-$('load').onclick=()=>void run(async()=>{code=$('input').value.trim();if(!/^\d{10}$/.test(code))throw Error('Enter 10 digits');if(isCharacterTestCode(code)){launchCharacterTest();return;}const r=await api('verify',{code},false);access=r.access;refresh=r.refresh;await launch();});
+$('load').onclick=()=>void run(async()=>{const version=++navigationVersion;code=$('input').value.trim();if(!/^\d{10}$/.test(code))throw Error('Enter 10 digits');if(isCharacterTestCode(code)){launchCharacterTest();return;}const r=await api('verify',{code},false);if(version!==navigationVersion)return;access=r.access;refresh=r.refresh;blocked=false;await launch(version);});
 $('continue').onclick=()=>void run(launch);
 $('refresh').onclick=()=>void run(async()=>{if(characterTestSession){launchCharacterTest();return;}await launch();});
 setInterval(()=>{if(refresh&&!blocked)void renew().catch(e=>status('Session renewal failed: '+e.message));},12*60000);

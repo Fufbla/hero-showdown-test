@@ -1,6 +1,7 @@
 import {encodeRuntime,decodeRuntime} from './multiplayer/runtime.mjs';
 import {MenuGamepad} from './menu-gamepad.mjs';
 import {backRoute,hasResumeActions} from './menu-navigation.mjs';
+import {returnToWelcome} from './welcome/navigation.mjs';
 import {createMultiplayerMenu} from './multiplayer-gate.mjs';
 import {rewardNotice} from './reward-notice.mjs';
 import {installLandscapeLayout} from './landscape-layout.mjs';
@@ -157,12 +158,16 @@ const menuExitActions=document.createElement('nav');menuExitActions.id='menu-exi
 const menuExitBack=document.createElement('button');menuExitBack.type='button';menuExitBack.className='secondary';menuExitBack.textContent='Back to Pause Menu';menuExitBack.onclick=()=>backToPause();
 const menuExitResume=document.createElement('button');menuExitResume.type='button';menuExitResume.className='primary';menuExitResume.textContent='Resume Game';menuExitResume.onclick=()=>resume();
 menuExitActions.append(menuExitBack,menuExitResume);
-const menuExitOverlays={pause:'pause-menu',tree:'tree-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',controls:'controls-menu',creator:'creator',account:'account-menu'};
+const menuExitOverlays={roster:'roster',delete:'delete-dialog',mergeReward:'merge-reward',pause:'pause-menu',tree:'tree-menu',world:'world-menu',inventory:'inventory-menu',chest:'chest-menu',controls:'controls-menu',creator:'creator',account:'account-menu'};
 function updateMenuExitActions(next){
- const enabled=hasResumeActions(next,{gameStarted:game.started,editing,pauseSubmenu:$('pause-primary').hidden});
- const overlay=enabled?$(menuExitOverlays[next]):null;
+ const overlay=$(menuExitOverlays[next]||'');
  if(!overlay){menuExitActions.hidden=true;return;}
- overlay.append(menuExitActions);menuExitActions.hidden=true;
+ const host=next==='creator'?overlay.querySelector('.creator-heading'):overlay.firstElementChild;
+ (host||overlay).prepend(menuExitActions);
+ const route=backRoute(next,{gameStarted:game.started,editing,pauseSubmenu:$('pause-primary').hidden});
+ menuExitBack.textContent=route==='welcome'?'‹ Back to Welcome':route==='resume'?'‹ Back to Game':route==='cancel-creator'||route==='close-delete'?'‹ Back to My Heroes':'‹ Back';
+ menuExitResume.hidden=!hasResumeActions(next,{gameStarted:game.started,editing,pauseSubmenu:$('pause-primary').hidden});
+ menuExitActions.hidden=false;
 }
 const input=new Input(document,()=>{
  if(criticalPending||powerUpgrades.busy||screen==='mergeReward')return;
@@ -403,13 +408,14 @@ function abandonUnconfirmedAppearance(){
 function backToPause(){
  if(journeyMenu.cancelTravel())return;
  const route=backRoute(screen,{pauseSubmenu:$('pause-primary').hidden,editing,gameStarted:game.started});
+ if(route==='welcome'){returnToWelcome();return;}
  if(route==='pause-home'){pausePanel('home');$('resume').focus();return;}
  if(route==='resume'){resume();return;}
  if(route==='close-picker'){closePowerPicker();return;}
  if(route==='cancel-creator'){cancelCreator();return;}
  if(route==='close-delete'){closeDelete();return;}
  if(route==='close-account'){accountMenu?.hooks.close();return;}
- if(route==='resolve-reward'){say('Finish or cancel the Villain Merge reward choices first.',7);return;}
+ if(route==='resolve-reward'){if(!criticalPending)showPause();return;}
  if(route==='pause'){
   if(!canLeaveMenu())return;
   abandonUnconfirmedAppearance();

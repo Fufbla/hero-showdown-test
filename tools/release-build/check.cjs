@@ -4,7 +4,7 @@ const {readdirSync}=require('node:fs');
 const {spawnSync}=require('node:child_process');
 const groups=['royale-v3-staging/gameplay/tests','royale-v3-staging/bosses/tests',
  'royale-v3-staging/costumes/tests','royale/fashion/tests'];
-const tests=['tools/release-build/media.test.mjs','tools/release-build/game-balance.test.mjs','royale/four-powers/balance.test.mjs','royale/four-powers/reset.test.mjs','tools/release-build/release.test.mjs','tools/release-build/interface-release.test.mjs','tools/release-build/armor-daynight.test.mjs','tools/release-build/customization.test.mjs','tools/release-build/female-head-size.test.mjs',...readdirSync('royale-v3-staging/interface').filter(n=>n.endsWith('.test.mjs')).map(n=>'royale-v3-staging/interface/'+n),...groups.flatMap(dir=>readdirSync(dir)
+const tests=['royale/tests/menu-navigation.test.mjs','tools/release-build/welcome-navigation.test.mjs','tools/release-build/media.test.mjs','tools/release-build/game-balance.test.mjs','royale/four-powers/balance.test.mjs','royale/four-powers/reset.test.mjs','tools/release-build/release.test.mjs','tools/release-build/interface-release.test.mjs','tools/release-build/armor-daynight.test.mjs','tools/release-build/customization.test.mjs','tools/release-build/female-head-size.test.mjs',...readdirSync('royale-v3-staging/interface').filter(n=>n.endsWith('.test.mjs')).map(n=>'royale-v3-staging/interface/'+n),...groups.flatMap(dir=>readdirSync(dir)
  .filter(name=>name.endsWith('.test.mjs')&&!(dir.endsWith('costumes/tests')&&name==='collection.test.mjs'))
  .sort().map(name=>dir+'/'+name)),
  'royale/local-coop/tests/local-coop.test.mjs','royale/local-coop/tests/setup-controller.test.mjs',

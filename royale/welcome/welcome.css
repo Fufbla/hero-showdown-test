@@ -144,3 +144,5 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:4px solid
  .back-button{margin-top:-10px;min-height:32px}.menu-panel h2{margin-bottom:8px}.account-button{margin-top:9px}#input-area{margin-top:10px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+.welcome-dialog .dialog-close{position:static;width:auto;min-height:44px;padding:6px 0;margin:-12px 0 10px;font-size:15px}.welcome-dialog .dialog-eyebrow{margin-top:8px}

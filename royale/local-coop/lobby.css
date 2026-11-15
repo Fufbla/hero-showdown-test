@@ -1,0 +1,42 @@
+/* Welcome's coastal artwork and comic palette, scoped to co-op setup. */
+body:has(#setup:not([hidden])){color-scheme:light;background:#2885d2 url('../welcome/assets/coastal-city.webp') center/cover fixed no-repeat}
+#setup{max-width:none;min-height:100dvh;padding:0 max(28px,env(safe-area-inset-right)) max(32px,env(safe-area-inset-bottom)) max(28px,env(safe-area-inset-left));background:linear-gradient(#153b6d22,#102859b3);color:#19345d;font-family:Arial,Helvetica,sans-serif}
+#setup .coop-nav{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 -28px 30px;padding:12px max(28px,env(safe-area-inset-right)) 12px max(28px,env(safe-area-inset-left));background:linear-gradient(110deg,#173564f5,#204b83f5);border-bottom:2px solid #a1dfff;box-shadow:0 3px #122650}
+.coop-nav span{display:grid;gap:5px;text-align:right}.coop-nav small{color:#eef8ff;font-size:10px;font-weight:800;letter-spacing:.16em}.coop-nav strong{color:#ffe354;font:italic 1000 26px/.95 Impact,'Arial Black',Arial,sans-serif}
+#setup .coop-nav button{min-height:44px;min-width:86px;border:2px solid #a4d7f7;border-radius:12px;background:linear-gradient(#386ba8,#244c84);color:white;font-weight:800;box-shadow:0 3px #10214b}
+#setup .title{margin:0 auto 30px;max-width:720px;color:white;text-shadow:0 2px 3px #142d5b}
+#setup .title .eyebrow{display:table;margin:0 auto 18px;padding:8px 21px;transform:rotate(-2deg);border:2px solid #fff8bf;outline:2px solid #142b55;border-radius:9px;background:linear-gradient(#fff58b,#ffd63c);box-shadow:0 4px #b77819;color:#193568;font-size:11px;letter-spacing:.15em;text-shadow:none}
+#setup .title h1{margin:0 0 16px;font:italic 1000 clamp(42px,6vw,74px)/1.05 Impact,'Arial Black',Arial,sans-serif;letter-spacing:-.035em;transform:rotate(-2deg);-webkit-text-stroke:2px #152755;paint-order:stroke fill;text-shadow:0 4px #152755,0 6px #0d2046}
+#setup .title h1 em{font:inherit;color:#ffdd35;text-shadow:0 3px #a56c17,0 6px #152755}
+#setup .title h2{font-size:clamp(19px,2.5vw,25px);margin:0 0 8px}#setup .title>p:last-child{font-size:15px;font-weight:600;margin:0}
+#setup .players{max-width:1120px;margin:auto;gap:26px;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+#setup .player-card{--player-accent:#168aca;--player-tint:#dff4ff;min-width:0;padding:24px;border:3px solid #f2fbff;outline:3px solid #183465;border-radius:24px;background:linear-gradient(145deg,#fffdf6,#eef8ff 55%,var(--player-tint));box-shadow:0 8px #17315c,0 14px 22px #12265266;color:#19345d}
+#setup .player-card:nth-child(2){--player-accent:#7839be;--player-tint:#eee5ff}
+#setup .player-card h2{display:table;margin:0 0 20px;border-radius:22px;padding:8px 16px;background:var(--player-accent);color:white;font-size:16px;letter-spacing:.02em;box-shadow:inset 0 1px #fff8}
+#setup input,#setup select{min-height:48px;max-width:100%;padding:12px;border:2px solid #99b9d7;background:#fff;color:#19345d;border-radius:12px;font-size:15px}
+#setup input::placeholder{color:#62758d;letter-spacing:.02em}#setup select{font-size:14px;text-overflow:ellipsis}
+#setup label{display:block;font-weight:800;font-size:14px;margin-top:16px}
+#setup .profile-status{color:#526781;font-size:13px;line-height:1.5}
+#setup button{min-height:44px;touch-action:manipulation}
+#setup .login button,#setup .ready-button,#setup #start{border:2px solid #fff7bd;outline:2px solid #193561;border-radius:13px;background:linear-gradient(#fff16a,#ffcf22 45%,#ffb610);color:#19315a;font-weight:900;box-shadow:inset 0 2px #fffc,0 4px #b57819;text-shadow:0 1px #fff9}
+#setup .login{gap:10px;align-items:stretch}#setup .login button{font-size:14px;flex:none;padding:11px 14px}
+#setup .ready-button{min-height:50px;margin-top:16px;background:linear-gradient(#4ae1ff,#12a5e9 50%,#0777cc);border-color:#d8fbff;color:white;box-shadow:inset 0 2px #fff9,0 4px #193e76;text-shadow:0 2px #184174;font-size:17px}
+#setup button:disabled{opacity:.55;filter:saturate(.3)}
+#setup .ready-button[aria-pressed=true]{background:linear-gradient(#b9f5cb,#54c597);color:#113b37;text-shadow:none}
+#setup .hero-choices{gap:10px}#setup .hero-choice{background:#ffffffad;color:#19345d;border:2px solid #bad2e5;box-shadow:0 3px #adcae5;border-radius:12px;font-weight:800;overflow-wrap:anywhere}
+#setup .hero-choice[aria-pressed=true]{border-color:var(--player-accent);background:var(--player-tint);box-shadow:0 0 0 2px var(--player-accent)}
+#setup .hero-choice small{display:block;font-weight:500;font-size:11px;margin:5px 0;color:#526781}
+#setup .delete-hero{border:0;background:transparent;color:#775169;box-shadow:none;font-size:11px}
+#setup .launch{max-width:700px;margin:32px auto 22px;color:white}#setup #start{width:min(400px,100%);min-width:0;min-height:60px;font-size:21px}#setup #setup-status{font-size:14px;line-height:1.5;text-shadow:0 2px 3px #142d5b}
+#setup .guide{max-width:850px;margin:auto;padding:18px 22px;border:1px solid #a9d6f6;border-radius:16px;background:#17365ee8;color:#eef7ff;font-size:13px;line-height:1.65}#setup .guide summary{color:#ffe46b;font-size:14px;font-weight:800;min-height:28px}
+#setup>.royale-music-controls{max-width:280px;margin:22px auto 0;background:#17365ee8;color:white;border-radius:12px;padding:10px}
+#setup :is(button,input,select,summary):focus-visible,#setup .controller-focus{outline:3px solid #176fae;outline-offset:4px;box-shadow:0 0 0 6px #fff}
+#setup .local-selector{background:#f1f8ff;color:#19345d;max-width:100%}#setup .local-selector button{background:#ddecfc;color:#19345d}
+.leave-confirm{margin:16px 0;padding:22px;border:3px solid #fff6bb;border-radius:18px;background:linear-gradient(135deg,#f7fcff,#e1edff);color:#19345d;box-shadow:0 5px #142d55}
+.leave-confirm h4{font-size:23px;line-height:1.2;margin:0 0 14px}.leave-confirm p{font-size:14px;line-height:1.6}
+.leave-confirm button{display:block;width:100%;min-height:48px;margin-top:12px;border:2px solid #fff7bd;border-radius:12px;background:linear-gradient(#ffe96b,#ffbf25);color:#19345d;font-size:15px;font-weight:800;box-shadow:0 3px #b57819}
+.leave-confirm [data-keep-playing]{background:linear-gradient(#4ae1ff,#0777cc);border-color:#d8fbff;color:white;box-shadow:0 3px #193e76}
+.coop-panel-back{min-height:44px;margin-bottom:12px}#coop-creator-back{min-height:44px;margin-bottom:12px}
+@media(max-width:760px){#setup{padding:0 max(18px,env(safe-area-inset-right)) max(26px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}#setup .coop-nav{margin-inline:-18px;margin-bottom:26px;padding-inline:max(18px,env(safe-area-inset-left))}#setup .players{grid-template-columns:minmax(0,1fr);gap:24px;max-width:560px}#setup .title{margin-bottom:26px}#setup .title h1{font-size:48px}#setup .title>p:last-child{font-size:13px;line-height:1.6}#setup .player-card{padding:20px 17px}#setup .login{flex-wrap:wrap}#setup .login input{flex:1 1 170px;width:100%}#setup .login button{flex:1 1 100px}#setup .hero-choice canvas{height:100px}#setup .coop-nav strong{font-size:23px}.leave-confirm{padding:14px}.leave-confirm h4{font-size:19px}}
+@media(max-width:360px){#setup .title h1{font-size:41px}.coop-nav small{font-size:8px}#setup .hero-choices{flex-wrap:wrap}#setup .hero-slot{flex:1 1 80px}}
+@media(prefers-reduced-motion:reduce){#setup *{transition:none!important}}

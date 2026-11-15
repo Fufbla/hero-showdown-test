@@ -40,7 +40,7 @@ void prepareStyleCMaterials()`);
   if(!production)s=fs.readFileSync(path.join(root,file),'utf8');
   if(!production)s=replace(s,"$('game-frame').src='./kingjames/index.html?v2TestCharacter='+CHARACTER_TEST_CODE+'&v=black-hood-1'+qa;", "$('game-frame').src='./gameplay/?testAccount='+CHARACTER_TEST_CODE;");
   s=s.replace("status('KINGJAMES PROTOTYPE · 0000000000 · Progress saves on this browser every eight seconds.');","status('Test hero ready.');");
-  s=replace(s,"function showCloudNote(visible){const note=$('roster').querySelector('p');if(note)note.hidden=!visible;}","function showCloudNote(){document.body.classList.add('staging-session');}");
+  s=replace(s,"function showCloudNote(visible){const note=$('roster').querySelector('p');if(note)note.hidden=!visible;}","function showCloudNote(){}");
   s+=`\nwindow.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==$('game-frame').contentWindow||e.data?.type!=='royale-restore-cloud-heroes')return;void run(async()=>{if(characterTestSession){launchCharacterTest();return;}if(clothingSavesPending.size)throw Error('Wait for the outfit save to finish.');await launch();});});\n`;
  }
  if(production)s=s.replace(/if\(characterTestSession\)\{launchCharacterTest\(\);return;\}/g,'').replace(/if\(v2TestHero&&!store.slot\(0\)&&store.writable\)\{[\s\S]*?\n\}/,'');

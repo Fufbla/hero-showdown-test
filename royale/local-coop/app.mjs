@@ -1,3 +1,4 @@
+import {returnToWelcome} from '../welcome/navigation.mjs';
 import {CloudProfile} from './cloud.mjs?v=20261108-coop-menus';
 import {LocalSession,AUTOSAVE_MS} from './session.mjs?v=20261108-coop-menus';
 import {HeroManager} from './hero-manager.mjs';
@@ -104,6 +105,8 @@ async function start(){
  }catch(e){session=null;$('setup').hidden=false;$('play').hidden=true;note(e.message);updateStart();}
 }
 $('start').onclick=start;
+$('setup-back')?.addEventListener('click',()=>{if(!session&&!manager.active)returnToWelcome();});
+$('coop-creator-back')?.addEventListener('click',()=>manager.cancel());
 function toast(text){$('toast').textContent=text;$('toast').hidden=false;$('toast').dataset.until=String(performance.now()+4500);}
 async function saveOne(i){
  const active=session;if(!active?.active.has(i))return {ok:true};
@@ -120,22 +123,30 @@ function openMenu(){
 }
 function markReady(i){
  if(players.some(p=>p.travelPending))return;
- if(players[i].leaving)return;
+ if(players.some(p=>p.leaveRequested||p.leaving))return;
  if(players[i].profile.blocked?.has(players[i].slot)){panelNote(i,'A newer cloud save exists. Reload before continuing. Your checkpoint is retained.');return;}
  const source=input.sources[i],pad=getPads()[+source.slice(4)];if(!pad?.connected){panelNote(i,'Reconnect your assigned controller before selecting Ready.');return;}
  const resumed=session.markReady(i,!session.ready[i]);renderPanels();
  if(resumed){$('menu').close();input.clear();input.enabled=true;last=performance.now();accumulator=0;}
 }
+function requestLeave(i){
+ if(!session?.active.has(i)||players[i].leaving||players.some(p=>p.powerResetPending))return;
+ players[i].leaveRequested=true;session.ready[i]=false;players[i].focus=0;renderPanel(i);
+ $('panel-'+i).querySelector('[data-keep-playing]')?.focus();
+}
+function cancelLeave(i){players[i].leaveRequested=false;players[i].focus=0;renderPanel(i);}
 async function leave(i){
+ if(!players[i].leaveRequested){requestLeave(i);return;}
+ players[i].leaveRequested=false;
  if(players[i].leaving)return;players[i].leaving=true;renderPanel(i);
  const result=await session.leave(i);players[i].leaving=false;
  if(!result.ok){panelNote(i,'Final save is pending. Retry Leave when connected. '+result.error);renderPanel(i);return;}
  players[i].profile.forget?.();$('hud-'+i).hidden=true;$('panel-'+i).hidden=true;
  if(!session.active.size){clearInterval(timer);session=null;input.enabled=false;input.clear();$('menu').close();$('play').hidden=true;$('setup').hidden=false;players.forEach((p,i)=>{p.profile=null;p.slot=null;p.ready=false;p.choices.replaceChildren();profileStatus(i,'Signed out. Enter your code to play again.');});updateStart();note('Both heroes saved.');return;}
- if(session.leaving.size){renderPanels();return;}
+ if(session.leaving.size||players.some(p=>p.leaveRequested)){session.setPaused(true);renderPanels();return;}
  $('menu').close();input.clear();input.enabled=true;last=performance.now();accumulator=0;renderer.scene=null;visual=Object.create(session.games[session.leader]);bindStyleCGame(renderer.cloth,session.games[session.leader]);note(`Player ${session.leader+1} continues solo · autosave on`);
 }
-$('pause').onclick=openMenu;$('menu').addEventListener('cancel',e=>{e.preventDefault();});
+$('pause').onclick=openMenu;$('menu').addEventListener('cancel',e=>{e.preventDefault();const panel=document.activeElement?.closest('.menu-panel'),i=panel?Number(panel.id.slice(-1)):-1;if(players[i]?.leaveRequested)cancelLeave(i);});
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('play').requestFullscreen();}catch{note('Full screen is unavailable in this browser.');}};
 $('frame-rate').onchange=()=>{frameCap=+$('frame-rate').value;};
 async function act(i,method,args=[]){
@@ -149,6 +160,13 @@ function renderPanels(){$('pause-panels').classList.toggle('solo',session.active
 function renderPanel(i){
  const root=$('panel-'+i),p=players[i],g=session.games[i];const previous=menuItems(root)[p.focus],focusKey=previous?.dataset.menuKey||previous?.getAttribute('aria-label')||previous?.textContent;p.selectMenu=null;root.hidden=!session.active.has(i);if(root.hidden)return;root.replaceChildren();
  root.append(el('h3',`PLAYER ${i+1} · ${g.look.name}`),el('p',`LV ${g.hero.level} · ${g.hero.coins} coins · ${g.powers.data.points} Power Points`));
+ if(p.leaveRequested){
+  const prompt=el('section');prompt.className='leave-confirm';prompt.setAttribute('role','group');prompt.setAttribute('aria-label',`Confirm Player ${i+1} leaving co-op`);
+  const keep=button('Keep Playing',()=>cancelLeave(i));keep.dataset.keepPlaying='';
+  prompt.append(el('h4','Are you sure you want to leave co-op?'),el('p',session.active.size>1?'Your hero will be saved before you leave. The other player can keep playing.':'Your hero will be saved before returning to co-op setup.'),keep,button('Yes, Save & Leave',()=>void leave(i)));
+  root.append(prompt);highlight(root,p);return;
+ }
+ const back=button('‹ Back',()=>{if(p.tab==='stats')markReady(i);else{p.tab='stats';p.focus=0;renderPanel(i);}});back.className='coop-panel-back';root.prepend(back);
  if(session.ready[i]){const message=el('p',`PLAYER ${i+1} READY — WAITING FOR PLAYER ${i===0?2:1}`);message.className='ready-message';root.append(message);}
  else{
   const nav=el('nav');nav.className='menu-tabs';
@@ -220,9 +238,9 @@ function renderPanel(i){
  }
  if(p.travelPending)root.append(el('p','Fast travel save pending. Retry before resuming.'),button('Retry travel save',()=>void saveOne(i)));
  const status=el('p',p.statusText);status.className='menu-status';status.setAttribute('role','status');root.append(status);
- const footer=el('footer');footer.className='menu-actions';footer.append(button(session.ready[i]?'Cancel Ready':'Ready / Resume',()=>markReady(i),p.leaving||p.travelPending),button(p.leaving?'Saving…':'Leave Local Co-op',()=>void leave(i),p.leaving));root.append(footer);const restored=menuItems(root).findIndex(n=>(n.dataset.menuKey||n.getAttribute('aria-label')||n.textContent)===focusKey);if(restored>=0)p.focus=restored;highlight(root,p);
+ const footer=el('footer');footer.className='menu-actions';footer.append(button(session.ready[i]?'Cancel Ready':'Ready / Resume',()=>markReady(i),p.leaving||p.travelPending),button(p.leaving?'Saving…':'Leave Local Co-op',()=>requestLeave(i),p.leaving));root.append(footer);const restored=menuItems(root).findIndex(n=>(n.dataset.menuKey||n.getAttribute('aria-label')||n.textContent)===focusKey);if(restored>=0)p.focus=restored;highlight(root,p);
 }
-const menuItems=root=>[...root.querySelectorAll('button,select,input'),...(!session&&root.classList.contains('player-card')&&!$('start').disabled?[$('start')]:[])].filter(n=>!n.disabled&&n.getClientRects().length);
+const menuItems=root=>[...root.querySelectorAll('button,select,input'),...(!session&&root.classList.contains('player-card')?[$('setup-back'),...(!$('start').disabled?[$('start')]:[])]:[])].filter(n=>!n.disabled&&n.getClientRects().length);
 function highlight(root,p){const controls=menuItems(root);p.focus=Math.max(0,Math.min(p.focus,controls.length-1));root.querySelectorAll('.controller-focus').forEach(n=>n.classList.remove('controller-focus'));controls[p.focus]?.classList.add('controller-focus');return controls;}
 function focusMenu(i,key){const root=$('panel-'+i),p=players[i],controls=menuItems(root);const index=controls.findIndex(n=>n.dataset.menuKey===key);if(index>=0)p.focus=index;highlight(root,p);controls[p.focus]?.scrollIntoView({block:'nearest'});}
 function closeSelector(i){const p=players[i],menu=p.selectMenu;if(!menu)return;menu.remove();p.selectMenu=null;p.focus=p.selectorFocus;highlight(session?$('panel-'+i):p.card,p);}
@@ -241,9 +259,10 @@ function navigateController(i,now,managementHandled=false){
  const controls=highlight(root,p),active=controls[p.focus];if(!active)return;
  if(state.edges.has('kick')){
   if(p.selectMenu){closeSelector(i);return;}
-  if(session){if(session.ready[i]){session.ready[i]=false;}else if(p.rewardChoice)p.rewardChoice=null;else if(p.selectedPower||p.chooseSlot!==undefined){p.selectedPower=null;delete p.chooseSlot;}else{p.tab='stats';p.focus=0;}renderPanel(i);}return;
+  if(!session){returnToWelcome();return;}
+  if(session){if(p.leaveRequested){cancelLeave(i);return;}if(session.ready[i]){session.ready[i]=false;}else if(p.rewardChoice)p.rewardChoice=null;else if(p.selectedPower||p.chooseSlot!==undefined){p.selectedPower=null;delete p.chooseSlot;}else{p.tab='stats';p.focus=0;}renderPanel(i);}return;
  }
- if(session&&!p.selectMenu&&!session.ready[i]&&(state.edges.has('power0')||state.edges.has('power1'))){const tabs=['stats','tree','gear','travel'];p.tab=tabs[(tabs.indexOf(p.tab)+tabs.length+(state.edges.has('power1')?1:-1))%tabs.length];p.focus=0;p.portal=false;if(p.tab==='tree')void act(i,'visitTree');else renderPanel(i);return;}
+ if(session&&!p.selectMenu&&!p.leaveRequested&&!session.ready[i]&&(state.edges.has('power0')||state.edges.has('power1'))){const tabs=['stats','tree','gear','travel'];p.tab=tabs[(tabs.indexOf(p.tab)+tabs.length+(state.edges.has('power1')?1:-1))%tabs.length];p.focus=0;p.portal=false;if(p.tab==='tree')void act(i,'visitTree');else renderPanel(i);return;}
  if(state.edges.has('jump')){
   if(active.type==='checkbox'){active.checked=!active.checked;active.dispatchEvent(new Event('change'));}
   else if(active.tagName==='INPUT')manager.text(i,active);

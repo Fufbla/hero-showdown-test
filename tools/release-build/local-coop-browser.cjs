@@ -62,6 +62,7 @@ function installVfxProbe(){
     return text.call(this,label,x,y,...rest);
    };
   });
+  let rejectLeaveSave=false;
   const cloudRoute=async route=>{
    const req=route.request(),b=req.postDataJSON()||{};
    const a=b.action==='verify'?accounts.find(a=>a.code===b.code):accounts.find(a=>'Bearer '+a.token===req.headers().authorization);
@@ -72,7 +73,8 @@ function installVfxProbe(){
    else if(b.action==='slots')result={slots:a.slots};
    else if(b.action==='save'){
     const row=a.slots.find(r=>r.slot_number===b.slot);
-    if(row.revision!==b.revision){status=409;result={error:'Revision conflict'};}
+    if(rejectLeaveSave){status=503;result={error:'Temporary save outage'};}
+    else if(row.revision!==b.revision){status=409;result={error:'Revision conflict'};}
     else{Object.assign(row,{snapshot:structuredClone(b.snapshot),revision:row.revision+1,updated_at:new Date().toISOString()});a.saves.push(structuredClone(row));result=row;}
    }else throw Error('Unexpected cloud action '+b.action);
    await route.fulfill({status,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify(result)});
@@ -154,8 +156,29 @@ function installVfxProbe(){
   // with real deaths in game-balance.test.mjs. Do not bypass the new XP rules.
   for(let i=0;i<2;i++){assert.equal(latest(i).xp,20+i,'Overlevelled coastal farming grants no shared XP');assert(latest(i).coins>1234+i*100,'Both heroes receive their own coin reward');}
   report.checks.push('Combat awards independent coins and preserves zero XP for overlevelled coastal farming');
-  await page.locator('#panel-0').getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
-  await page.waitForTimeout(350);await page.locator('#pause').click();await page.locator('#panel-1').getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
+  const p1=page.locator('#panel-0'),p2=page.locator('#panel-1');
+  const beforeLeave=accounts.map(a=>structuredClone(a.slots));
+  await p1.getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
+  await p1.getByRole('heading',{name:'Are you sure you want to leave co-op?'}).waitFor();
+  assert(await p1.getByRole('button',{name:'Keep Playing',exact:true}).evaluate(n=>n===document.activeElement),'Keep Playing receives default focus');
+  assert(await p2.isVisible());assert.deepEqual(accounts.map(a=>a.slots),beforeLeave,'Opening confirmation never changes saves');
+  await p1.getByRole('button',{name:'Keep Playing',exact:true}).click();
+  assert(await p1.getByRole('button',{name:'Leave Local Co-op',exact:true}).isVisible());assert(await p2.isVisible());
+  await p1.getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
+  // B/Circle cancels on the owning controller, without leaving either hero.
+  await pulse(0,1);assert.equal(await p1.locator('.leave-confirm').count(),0);assert(await p2.isVisible());
+  await resume();await move(0,.2,120);await page.locator('#pause').click();
+  rejectLeaveSave=true;
+  await p1.getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
+  await p1.getByRole('button',{name:'Yes, Save & Leave',exact:true}).click();
+  await p1.getByText(/Final save is pending/).waitFor();assert(await p1.isVisible());assert(await p2.isVisible());
+  rejectLeaveSave=false;
+  await p1.getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
+  await p1.getByRole('button',{name:'Yes, Save & Leave',exact:true}).click();
+  await page.locator('#menu').waitFor({state:'hidden'});assert(await page.locator('#hud-1').isVisible());
+  await page.locator('#pause').click();await p2.getByRole('button',{name:'Leave Local Co-op',exact:true}).click();
+  await p2.getByRole('button',{name:'Yes, Save & Leave',exact:true}).click();
+  report.checks.push('Leave requires confirmation, defaults to Keep Playing, supports controller cancel, retains both heroes on save failure, and saves before the other continues');
   await page.locator('#setup').waitFor({state:'visible'});assert.equal((await observe()).timers,0);
   await login();
   // The first frame failure must leave the account selections usable and must

@@ -2,6 +2,7 @@
 // Never change a hero or any save data here; the game handles safe transitions.
 export const PAUSE_NESTED_SCREENS = Object.freeze(['tree','controls','world','inventory','chest','creator','account']);
 export function backRoute(screen,{pauseSubmenu=false,editing=false,gameStarted=false}={}){
+  if(screen==='roster')return gameStarted?'resume':'welcome';
   if(screen==='play')return 'pause';
   if(screen==='pause')return pauseSubmenu?'pause-home':'resume';
   if(screen==='powerPicker')return 'close-picker';

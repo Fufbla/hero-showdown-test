@@ -48,6 +48,32 @@ async function skip(page){await page.locator('#intro-skip').click();await page.l
   assert(await page.locator('#game-frame').evaluate(f=>f.contentWindow.royaleSoundtrack===undefined));
   await page.screenshot({path:'/tmp/royale-media-menu.png'});
   report.checks.push('Browser hero menu is embedded in the persistent launch page, shares one soundtrack, and never replays the intro');
+  await game.locator('#hero-slots').getByRole('button',{name:'Create Hero +',exact:true}).first().click();
+  await game.getByRole('button',{name:'‹ Back to My Heroes',exact:true}).click();
+  await game.getByRole('button',{name:'‹ Back to Welcome',exact:true}).click();
+  await page.locator('#main-actions').waitFor({state:'visible'});
+  assert.equal(await page.locator('#royale-intro').count(),0);
+  assert(await page.evaluate(()=>royaleSoundtrack.source===firstSource));
+  // Cancel before a fake create response arrives, then cancel a completed code.
+  let finishCreate;
+  await page.route('**/*.supabase.co/**',async route=>{
+   assert.equal(route.request().postDataJSON().action,'create');
+   await new Promise(resolve=>finishCreate=resolve);
+   await route.fulfill({status:200,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify({access:'navigation-fixture',refresh:'navigation-fixture',code:'1234567891'})});
+  });
+  await page.locator('#play-game').click();await page.locator('#new').click();
+  await page.getByText('Generating…',{exact:true}).waitFor();
+  await page.locator('#code-back').click();
+  while(!finishCreate)await page.waitForTimeout(20);finishCreate();await page.waitForTimeout(150);
+  assert.equal(await page.locator('#new-code').isVisible(),false);assert(await page.locator('#play-options').isVisible());
+  finishCreate=null;await page.locator('#new').click();while(!finishCreate)await page.waitForTimeout(20);finishCreate();
+  await page.getByText('1234567891',{exact:true}).waitFor();await page.locator('#code-back').click();
+  await page.locator('#enter').click();await page.locator('#play-back').click();assert.equal(await page.locator('#input-area').isVisible(),false);
+  await page.locator('#play-back').click();await page.locator('#local-coop').click();
+  await page.frameLocator('#game-frame').locator('#players .player-card').nth(1).waitFor({timeout:60000});
+  await page.frameLocator('#game-frame').getByRole('button',{name:'‹ Back',exact:true}).click();
+  await page.locator('#main-actions').waitFor({state:'visible'});assert(await page.evaluate(()=>royaleSoundtrack.source===firstSource));
+  report.checks.push('Creator, roster, co-op, code entry, pending code generation and completed codes all return safely without reloading or restarting music');
   assert.deepEqual(errors,[]);
   // Observe the real three-minute loop while other contexts exercise failure/mobile paths.
   const loopCheck=(async()=>{
@@ -61,7 +87,11 @@ async function skip(page){await page.locator('#intro-skip').click();await page.l
   const mobile=await browser.newContext({...devices['Pixel 7']}),m=await mobile.newPage();await m.goto(base);await skip(m);
   await m.locator('#local-coop').click();const coop=m.frameLocator('#game-frame');await coop.locator('#setup').waitFor();
   assert.equal(await coop.locator('#royale-intro').count(),0);assert(await m.evaluate(()=>!!royaleSoundtrack.source));
+  await coop.locator('#players .player-card').nth(1).waitFor({timeout:60000});
+  const layout=await coop.locator('body').evaluate(el=>({width:innerWidth,content:el.scrollWidth,back:document.getElementById('setup-back').getBoundingClientRect().top}));
+  assert(layout.content<=layout.width+1,'Mobile co-op has no sideways overflow');assert(layout.back>=0&&layout.back<100,'Back is visible without scrolling');
   await m.screenshot({path:'/tmp/royale-media-android.png'});
+  await coop.getByRole('button',{name:'‹ Back',exact:true}).click();await m.locator('#main-actions').waitFor({state:'visible'});
   report.engines.push({engine:'Chromium',device:'Android Chrome emulation',passed:true});
   await mobile.close();
   const failure=await browser.newContext(),f=await failure.newPage();await failure.route('**/intro.{mp4,webm}*',r=>r.abort());await f.goto(base);
