@@ -103,7 +103,12 @@ async function build(){
   write('royale/test-code-entry.mjs',read('test-only/four-powers/site-entry.mjs'));
   cp.execFileSync(process.execPath,[path.join(root,'test-only/four-powers/build.cjs'),path.join(out,'four-powers-test')],{cwd:root,stdio:'inherit'});
   const gameplayHTML=read('royale-v3-staging/gameplay/index.html').replace('Enable sound using the music button. Original looping themes change with the region and encounter.','The music button mutes only the soundtrack. Sound effects have their own volume.').replace('id="volume-music-value">35%', 'id="volume-music-value">20%').replace('value="35" aria-label="Music volume"','value="20" aria-label="Music volume"').replace(/Clothing Store · \d+ outfits/g,`Clothing Store · ${COLLECTION.length} outfits`);
-  write('royale/gameplay/index.html',mediaShell(shell(gameplayHTML,'../',`./release/game.mjs?v=${sha}`),`./release/media.mjs?v=${sha}`));
+  const rosterHTML=gameplayHTML
+    .replace('<strong>HERO SHOWDOWN <em>ROYALE</em></strong>','<strong><span class="patrol-brand">HERO SHOWDOWN <em>ROYALE</em></span><span class="roster-brand">HERO ROYALE</span></strong>')
+    .replace(/(<div class="roster-card"[^>]*>\s*<div class="eyebrow">)HERO SHOWDOWN ROYALE/,'$1HERO ROYALE')
+    .replace('<h1 id="roster-title" tabindex="-1">My <em>Heroes.</em></h1>','<h1 id="roster-title" tabindex="-1">My <em>Heroes</em></h1><p class="roster-subtitle">Choose a hero. Continue your adventure.</p>')
+    .replace('</head>',`<link rel="stylesheet" href="welcome/roster.css?v=${sha}"></head>`);
+  write('royale/gameplay/index.html',mediaShell(shell(rosterHTML,'../',`./release/game.mjs?v=${sha}`),`./release/media.mjs?v=${sha}`));
   let coopHTML=shell(read('royale-v3-staging/local-coop/index.html'),'./',`../release/coop.mjs?v=${sha}`);
   // Co-op base remains /royale/local-coop/, one level deeper than the solo base.
   coopHTML=coopHTML.replace('src="../assets/animation/motion-core.js"','src="../../assets/animation/motion-core.js"');
