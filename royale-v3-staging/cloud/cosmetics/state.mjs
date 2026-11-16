@@ -34,7 +34,7 @@ export function quoteOutfit(state,set){
  // even if they never bought the now-retired hat or face accessory.
  if(!missing.length)return {ok:false,error:'Already owned.',debit:0,missing};
  const credit=policy.historicalPieces.reduce((sum,p)=>sum+(owned.has(p.id)?p.coinPrice:0),0);
- return {ok:true,debit:Math.max(0,OUTFIT_PRICE-credit),missing};
+ return {ok:true,debit:Math.max(0,policy.coinPrice-credit),missing};
 }
 
 function readCosmetics(raw){
@@ -80,7 +80,7 @@ export function catalogIndex(catalog){
 }
 export function saleReady(entry){
  const policy=policyFor(entry),parts=activeSetPieces(entry);
- return entry?.category==='set'&&!!policy&&entry.availability==='released'&&entry.coinPrice===OUTFIT_PRICE&&
+ return entry?.category==='set'&&!!policy&&entry.availability==='released'&&entry.coinPrice===policy.coinPrice&&
   ['referenceFidelity','universalFit','animations','hairCompatibility'].every(k=>entry.review?.[k]===true)&&
   parts.length===policy.pieces.length&&parts.every(p=>!!p.assetManifest);
 }

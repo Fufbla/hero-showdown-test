@@ -17,15 +17,26 @@ const id=ROBOT_OUTFIT.id,index=catalogIndex({sets:COLLECTION}),costume=COLLECTIO
 const engine=new CostumeEngine(options);assert(await engine.preload(id),engine.error);
 function act(g,type){const r=cosmeticTransaction({state:g.cosmetics,look:g.look,coins:g.hero.coins,index,operation:{type,id,confirmed:true,revision:g.cosmetics.revision},safe:true,atWardrobe:true});assert(r.ok,r.error);g.cosmetics=r.state;g.hero.coins=r.coins;return r;}
 
-test('both presentations buy Robot once for 700, retain their original appearance and reload ownership',()=>{
- assert.equal(costume.unisex,true);assert.equal(costumeHairVisible(costume),false);
+test('both presentations claim Flex Bot once with zero coins, retain their appearance and reload ownership',()=>{
+ assert.equal(costume.unisex,true);assert.equal(costume.name,'Flex Bot');assert.equal(costume.coinPrice,0);assert.equal(costumeHairVisible(costume),false);
  for(const presentation of ['male','female']){
-  const g=new Game({look:{presentation}});g.hero.coins=700;const before=captureProgress(g),look=structuredClone(g.look);
+  const g=new Game({look:{presentation}});g.hero.coins=0;const before=captureProgress(g),look=structuredClone(g.look);
   act(g,'purchase');act(g,'equip');assert.equal(g.hero.coins,0);assert.deepEqual(g.look,look);
   const after=captureProgress(g);assert(checkCosmeticSave(before,after).ok);
   const restored=new Game({save:decodeSave(g.save())});assert.equal(costumeForState(restored.cosmetics,restored.look).id,id);
   act(restored,'unequip');assert.deepEqual(restored.look,look);assert.deepEqual(restored.cosmetics.owned,[id+'.fullbody']);
  }
+});
+
+test('previous Robot owners retain Flex Bot without paying again or changing their balance',()=>{
+ const g=new Game({look:{presentation:'female'}});g.hero.coins=300;
+ g.cosmetics={version:1,revision:2,owned:[id+'.fullbody'],equipped:{fullbody:id+'.fullbody'},visible:true};
+ const saved=g.save(),restored=new Game({save:decodeSave(saved)});
+ assert.equal(costumeForState(restored.cosmetics,restored.look).name,'Flex Bot');
+ const duplicate=cosmeticTransaction({state:restored.cosmetics,look:restored.look,coins:restored.hero.coins,index,operation:{type:'purchase',id,confirmed:true,revision:restored.cosmetics.revision},safe:true,atWardrobe:true});
+ assert.equal(duplicate.ok,false);assert.match(duplicate.error,/Already owned/);
+ act(restored,'unequip');act(restored,'equip');assert.equal(restored.hero.coins,300);
+ assert.deepEqual(restored.cosmetics.owned,[id+'.fullbody']);assert.deepEqual(restored.look,g.look);
 });
 
 test('the same complete robot renders identically for both presentations, with distinct authored attacks and horizontal flight',()=>{
@@ -52,7 +63,7 @@ test('co-op keeps each robot purchase, coin balance and save independent',async(
  act(session.heroes[0].game,'purchase');act(session.heroes[0].game,'equip');
  assert.equal(session.heroes[1].game.hero.coins,1000);assert.deepEqual(session.heroes[1].game.cosmetics.owned,[]);
  act(session.heroes[1].game,'purchase');act(session.heroes[1].game,'equip');await session.saveAll('robot-purchase');
- for(let i=0;i<2;i++){const saved=saves[i].at(-1);assert.equal(saved.coins,300);assert.equal(saved.cosmetics.equipped.fullbody,id+'.fullbody');assert(checkCosmeticSave(originals[i],saved).ok);}
+ for(let i=0;i<2;i++){const saved=saves[i].at(-1);assert.equal(saved.coins,1000);assert.equal(saved.cosmetics.equipped.fullbody,id+'.fullbody');assert(checkCosmeticSave(originals[i],saved).ok);}
 });
 
 test('failed robot loads report failure and can retry without caching a broken outfit',async()=>{

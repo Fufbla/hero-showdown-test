@@ -116,7 +116,7 @@ async function build(){
   write('royale-v3-staging/index.html','<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>James Clan Comics: Hero Royale</title><meta http-equiv="refresh" content="0;url=../royale/"><a href="../royale/">Open Hero Royale</a>');
   write('index.html',read('index.html'));
   write('.nojekyll','');
-  const costumes={count:COLLECTION.length,ids:COLLECTION.map(o=>o.id),price:700};
+  const costumes={count:COLLECTION.length,ids:COLLECTION.map(o=>o.id),price:700,prices:Object.fromEntries(COLLECTION.map(o=>[o.id,o.coinPrice]))};
   const manifest={version:1,productionReady:require('./release-build/readiness.json').productionReady,sourceCommit:sha,sourceTreeDirty:!!cp.execFileSync('git',['status','--porcelain','--untracked-files=no'],{cwd:root,encoding:'utf8'}).trim(),sourceHashes,entrypoints:['royale/index.html','royale/gameplay/index.html','royale/local-coop/index.html'],bundles:Object.fromEntries(Object.entries(result.metafile.outputs).map(([p])=>{const rel=path.relative(out,path.resolve(root,p));return [rel,hash(fs.readFileSync(path.join(out,rel)))];})),saveContract:{endpoint:'royale-v3-staging',profileKey:'healthia.royale.profiles.v2',cloudPrefix:'royale-v3-play:',databaseMigration:false},developerTools:false,modes:{singlePlayer:true,localCoop:true,onlineMultiplayer:false}};
   manifest.costumes=costumes;
   write('royale/release-manifest.json',JSON.stringify(manifest,null,2)+'\n');

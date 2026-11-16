@@ -31,7 +31,7 @@ test('owned outfit cannot be purchased again; Equip is a separate saved operatio
  const f=fixture();f.controller.request(outfit);await f.controller.buy();assert.equal(f.controller.request(outfit),false);assert.equal(f.calls(),1);assert.equal((await f.controller.equip(outfit)).ok,true);assert.equal(f.status().coins,700);assert.equal(f.status().cosmetics.equipped.fullbody,outfit.pieces[0].id);
 });
 test('all 29 catalog prices come from existing quotes and preserve outfit identities',()=>{
- const f=fixture({presentation:'female'});for(const set of COLLECTION){assert(f.controller.request(set));assert.equal(f.controller.confirming.price,quoteOutfit(f.status().cosmetics,set).debit);assert.equal(set.coinPrice,700);f.controller.cancel();}assert.equal(COLLECTION.length,29);assert.equal(f.calls(),0);
+ const f=fixture({presentation:'female'});for(const set of COLLECTION){assert(f.controller.request(set));assert.equal(f.controller.confirming.price,quoteOutfit(f.status().cosmetics,set).debit);assert.equal(set.coinPrice,set.id==='robot-costume'?0:700);f.controller.cancel();}assert.equal(COLLECTION.length,29);assert.equal(f.calls(),0);
 });
 test('purchase and equipment survive real local serialization while armor, XP, powers and position remain unchanged',()=>{
  const memory=new Map(),storage={getItem:k=>memory.get(k)||null,setItem:(k,v)=>memory.set(k,v)},store=new LocalHeroStore(storage),game=new Game();

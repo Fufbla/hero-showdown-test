@@ -13,13 +13,13 @@ test('deployed policy is identical to the client for new, existing and historica
  assert.deepEqual(server,client);
  for(const outfit of Object.values(client))for(const piece of outfit.historicalPieces)assert.deepEqual(serverPiece(piece.id),clientPiece(piece.id));
 });
-test('exact live save guard accepts all 29 paid outfits, preserves old ownership, and rejects unknown IDs/stale writes',()=>{
+test('exact live save guard accepts 28 paid outfits and free Flex Bot, preserves ownership, and rejects unknown IDs/stale writes',()=>{
  const g=new Game({look:{presentation:'female'}});g.hero.coins=30000;
  for(const outfit of COLLECTION){
   const before=JSON.parse(g.save());
   for(const type of ['purchase','equip']){
    const r=cosmeticTransaction({state:g.cosmetics,look:g.look,coins:g.hero.coins,index,operation:{type,id:outfit.id,revision:g.cosmetics.revision,confirmed:true},safe:true,atWardrobe:true});
-   assert(r.ok,r.error);if(type==='purchase')assert.equal(r.debit,700);g.cosmetics=r.state;g.hero.coins=r.coins;
+   assert(r.ok,r.error);if(type==='purchase')assert.equal(r.debit,outfit.id==='robot-costume'?0:700);g.cosmetics=r.state;g.hero.coins=r.coins;
   }
   const after=JSON.parse(g.save());assert(checkCosmeticSave(before,after).ok,outfit.id);
   for(const piece of before.cosmetics.owned)assert(after.cosmetics.owned.includes(piece));
@@ -27,7 +27,7 @@ test('exact live save guard accepts all 29 paid outfits, preserves old ownership
   const unknown=structuredClone(after);unknown.cosmetics.owned.push('unregistered.fullbody');assert.equal(checkCosmeticSave(before,unknown).ok,false);
   const stale=structuredClone(after);stale.cosmetics.revision=before.cosmetics.revision;assert.equal(checkCosmeticSave(before,stale).ok,false);
  }
- assert.equal(g.cosmetics.owned.length,29);assert.equal(g.hero.coins,9700);
+ assert.equal(g.cosmetics.owned.length,29);assert.equal(g.hero.coins,10400);
 });
 test('live service auth, account handlers, save schema, economy and power guards remain byte-for-byte unchanged',async()=>{
  const files=['cloud/backend-v3/index.ts','power-policy.mjs','gameplay/economy-save-guard.mjs','gameplay/economy.mjs','cloud/cosmetics/save-guard.mjs','cloud/cosmetics/state.mjs'];

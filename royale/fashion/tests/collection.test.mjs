@@ -23,7 +23,7 @@ test('one catalog provides exactly the 29 approved shop and free-trial outfits',
  assert.equal(COLLECTION.length,29);assert.equal(COSTUMES.length,10);
  assert.strictEqual(data.sets,COLLECTION);assert.strictEqual(trialOutfits(),COLLECTION);
  assert.deepEqual(COLLECTION.filter(o=>o.renderer==='approved').map(o=>o.id),APPROVED_OUTFITS.map(o=>o.id));
- for(const o of COLLECTION){assert.equal(o.collection,'Mascots & Formal');assert.equal(o.coinPrice,700);assert.equal(o.pieces.length,1);await access(new URL(o.thumbnail,new URL('../../../royale-v3-staging/costumes/',import.meta.url)));}
+ for(const o of COLLECTION){assert.equal(o.collection,'Mascots & Formal');assert.equal(o.coinPrice,o.id==='robot-costume'?0:700);assert.equal(o.pieces.length,1);await access(new URL(o.thumbnail,new URL('../../../royale-v3-staging/costumes/',import.meta.url)));}
  const source=JSON.parse(await readFile(new URL('../../../royale-v3-staging/costumes/collection.json',import.meta.url)));
  assert.equal(source.length,22);assert.deepEqual([...source,...FASHION_OUTFITS,ROBOT_OUTFIT].map(o=>o.id),trialOutfits().map(o=>o.id));
 });
@@ -46,7 +46,7 @@ test('every old outfit is absent, cannot be bought or equipped, and migrates wit
 test('all 29 outfits can be purchased once, worn, saved, restored, and removed under the same cloud policy',()=>{
  for(const o of COLLECTION){
   const g=new Game({look:{presentation:'female'}});g.hero.coins=700;const before=JSON.parse(g.save());
-  const bought=transaction(g,'purchase',o.id);assert(bought.ok,o.id);assert.equal(bought.coins,0);g.cosmetics=bought.state;g.hero.coins=bought.coins;
+  const bought=transaction(g,'purchase',o.id);assert(bought.ok,o.id);assert.equal(bought.coins,o.id==='robot-costume'?700:0);g.cosmetics=bought.state;g.hero.coins=bought.coins;
   const worn=transaction(g,'equip',o.id);assert(worn.ok,o.id);g.cosmetics=worn.state;
   const snapshot=JSON.parse(g.save());assert(checkCosmeticSave(before,snapshot).ok,o.id);
   const restored=new Game({save:decodeSave(JSON.stringify(snapshot))});assert.equal(costumeForState(restored.cosmetics).id,o.id);

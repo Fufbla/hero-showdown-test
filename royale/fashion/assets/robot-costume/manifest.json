@@ -1,7 +1,7 @@
 {
   "version": 1,
   "id": "robot-costume",
-  "label": "Robot Costume",
+  "label": "Flex Bot",
   "rig": "action-chibi-v1",
   "atlas": "body.png",
   "cell": [

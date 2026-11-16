@@ -29,7 +29,7 @@ test('production appends six fashion IDs and the unisex robot while preserving e
 
 test('published manifest registers exactly the production catalog and contains no review/backend files',async()=>{
  const release=JSON.parse(await readFile(new URL('../../../_site/royale/release-manifest.json',import.meta.url)));
- assert.deepEqual(release.costumes,{count:29,ids:COLLECTION.map(o=>o.id),price:700});
+ assert.deepEqual(release.costumes,{count:29,ids:COLLECTION.map(o=>o.id),price:700,prices:Object.fromEntries(COLLECTION.map(o=>[o.id,o.coinPrice]))});
  assert.equal(release.modes.onlineMultiplayer,false);
  assert(release.sourceHashes['royale/fashion/engine.mjs']);
  assert(release.sourceHashes['royale/fashion/catalog.mjs']);

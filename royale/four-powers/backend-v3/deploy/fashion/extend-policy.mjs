@@ -2,12 +2,12 @@
 import {FASHION_OUTFITS,ROBOT_OUTFIT} from './definitions.mjs';
 export function extendPolicy(base){
  const pieces=new Map();
- const additions=Object.fromEntries([...FASHION_OUTFITS,ROBOT_OUTFIT].map(({id,name})=>{
+ const additions=Object.fromEntries([...FASHION_OUTFITS,ROBOT_OUTFIT].map(({id,name,coinPrice=base.OUTFIT_PRICE})=>{
   if(base.OUTFIT_POLICIES[id])throw Error('Costume ID already registered: '+id);
-  const piece=Object.freeze({id:id+'.fullbody',category:'fullbody',coinPrice:base.OUTFIT_PRICE,setId:id});
+  const piece=Object.freeze({id:id+'.fullbody',category:'fullbody',coinPrice,setId:id});
   pieces.set(piece.id,piece);
   const parts=Object.freeze([piece]);
-  return [id,Object.freeze({id,name,category:'set',coinPrice:base.OUTFIT_PRICE,pieces:parts,historicalPieces:parts})];
+  return [id,Object.freeze({id,name,category:'set',coinPrice,pieces:parts,historicalPieces:parts})];
  }));
  const OUTFIT_POLICIES=Object.freeze({...base.OUTFIT_POLICIES,...additions});
  const historicalPiece=id=>pieces.get(id)||base.historicalPiece(id);

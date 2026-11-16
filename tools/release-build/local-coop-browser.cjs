@@ -293,10 +293,12 @@ function installVfxProbe(){
    if(viewport.width===390){
     // The store formats balances with locale grouping (for example, 1,234).
     const coins=Number((await solo.locator('#store-coins').textContent()).replace(/[^0-9]/g,''));
-    assert(Number.isSafeInteger(coins)&&coins>=700,'The isolated hero has enough coins for Robot');
+    assert(Number.isSafeInteger(coins)&&coins>=0,'The isolated hero has a valid balance');
     await solo.locator('#costume-carousel [data-outfit="robot-costume"] .costume-action').click();
+    assert.equal(await solo.locator('#purchase-title').innerText(),'Buy Flex Bot for 0 coins?');
     await solo.locator('#purchase-buy').click();
-    await solo.waitForFunction(expected=>Number(document.querySelector('#store-coins').textContent.replace(/[^0-9]/g,''))===expected,coins-700);
+    await solo.locator('#costume-confirm').waitFor({state:'hidden'});
+    assert.equal(Number((await solo.locator('#store-coins').textContent()).replace(/[^0-9]/g,'')),coins,'Free Flex Bot leaves the wallet unchanged');
     await solo.locator('#preview-equip').click();
     await solo.waitForFunction(()=>document.querySelector('#preview-equip').textContent==='Remove outfit'&&document.querySelector('#store-hero').dataset.outfit==='robot-costume');
     await solo.screenshot({path:dir+'/robot-male.png',fullPage:true});
@@ -319,7 +321,7 @@ function installVfxProbe(){
   // Female heroes keep the full live catalog, including men's suits.
   const femaleContext=await browser.newContext({viewport:{width:390,height:844}});
   const femaleMemory=new Map(),femaleStore=new LocalHeroStore({getItem:k=>femaleMemory.get(k)??null,setItem:(k,v)=>femaleMemory.set(k,v)});
-  const femaleHero=new Game({look:{...styleCDefault('female'),name:'Wardrobe QA Nova'}});femaleHero.hero.coins=1400;
+  const femaleHero=new Game({look:{...styleCDefault('female'),name:'Wardrobe QA Nova'}});femaleHero.hero.coins=700;
   femaleStore.writeSlot(0,femaleHero.save());
   await femaleContext.addInitScript(({key,value})=>{if(!localStorage.getItem(key))localStorage.setItem(key,value);},{key:PROFILE_KEY,value:femaleMemory.get(PROFILE_KEY)});
   const femalePage=await femaleContext.newPage(),femaleErrors=[];femalePage.on('pageerror',e=>femaleErrors.push(e.message));
@@ -330,19 +332,21 @@ function installVfxProbe(){
   assert.equal(await femalePage.locator('#costume-carousel [data-outfit="black-business-suit"]').count(),1);
   const dress=femalePage.locator('#costume-carousel [data-outfit="little-black-dress"]');
   await dress.locator('.costume-action').click();await femalePage.locator('#purchase-buy').click();
-  await femalePage.waitForFunction(()=>document.querySelector('#store-coins').textContent==='700');
+  await femalePage.waitForFunction(()=>document.querySelector('#store-coins').textContent==='0');
   await femalePage.locator('#preview-equip').click();
   await femalePage.waitForFunction(()=>document.querySelector('#preview-equip').textContent==='Remove outfit');
   await femalePage.waitForFunction(()=>document.querySelector('#store-hero').dataset.outfit==='little-black-dress');
   await femalePage.locator('#costume-carousel [data-outfit="robot-costume"] .costume-action').click();
+  assert.equal(await femalePage.locator('#purchase-title').innerText(),'Buy Flex Bot for 0 coins?');
   await femalePage.locator('#purchase-buy').click();
+  await femalePage.locator('#costume-confirm').waitFor({state:'hidden'});
   await femalePage.waitForFunction(()=>document.querySelector('#store-coins').textContent==='0');
   await femalePage.locator('#preview-equip').click();
   await femalePage.waitForFunction(()=>document.querySelector('#preview-equip').textContent==='Remove outfit'&&document.querySelector('#store-hero').dataset.outfit==='robot-costume');
   await femalePage.screenshot({path:dir+'/robot-female.png',fullPage:true});
   assert.deepEqual(femaleErrors,[]);await femaleContext.close();
   report.checks.push('Male costume carousel has 18 eligible outfits; female carousel has all 29 and can purchase, preview and equip a female-only outfit');
-  report.checks.push('Male and female heroes each buy and equip the same Robot Costume for exactly 700 coins through the shipped store');
+  report.checks.push('Male and female heroes claim and equip Flex Bot for 0 coins; a zero-coin hero succeeds and other costume prices stay unchanged');
   // Exercise the real account launcher and iframe on a phone-sized viewport.
   // Only the cloud transport is mocked; creation, gameplay and saving use the shipped UI.
   const cloudContext=await browser.newContext({viewport:{width:390,height:844}});

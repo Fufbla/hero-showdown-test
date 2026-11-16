@@ -26,4 +26,4 @@ export const FASHION_OUTFITS=Object.freeze([
   }
 ].map(Object.freeze));
 // A complete enclosed mascot; the same design is worn by both presentations.
-export const ROBOT_OUTFIT=Object.freeze({id:'robot-costume',name:'Robot Costume',unisex:true});
+export const ROBOT_OUTFIT=Object.freeze({id:'robot-costume',name:'Flex Bot',unisex:true,coinPrice:0});

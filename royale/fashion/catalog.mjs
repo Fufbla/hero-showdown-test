@@ -10,11 +10,11 @@ export const COLLECTION=Object.freeze([...ORIGINAL,...FASHION_OUTFITS.map(o=>Obj
  review:Object.freeze({referenceFidelity:true,universalFit:true,animations:true,hairCompatibility:true}),
  pieces:Object.freeze([Object.freeze({id:o.id+'.fullbody',category:'fullbody',coinPrice:COSTUME_PRICE,
   assetManifest:'../../royale/fashion/assets/'+o.id+'/manifest.json'})])
-})),Object.freeze({...ROBOT_OUTFIT,hideHair:true,renderer:'robot',coinPrice:COSTUME_PRICE,
+})),Object.freeze({...ROBOT_OUTFIT,hideHair:true,renderer:'robot',
  category:'set',collection:'Mascots & Formal',availability:'released',
  thumbnail:'../../royale/fashion/assets/robot-costume/preview.png',
  review:Object.freeze({referenceFidelity:true,universalFit:true,animations:true,hairCompatibility:true}),
- pieces:Object.freeze([Object.freeze({id:ROBOT_OUTFIT.id+'.fullbody',category:'fullbody',coinPrice:COSTUME_PRICE,
+ pieces:Object.freeze([Object.freeze({id:ROBOT_OUTFIT.id+'.fullbody',category:'fullbody',coinPrice:ROBOT_OUTFIT.coinPrice,
   assetManifest:'../../royale/fashion/assets/robot-costume/manifest.json'})])})]);
 export const costumeById=id=>COLLECTION.find(o=>o.id===id)||null;
 export const costumeForState=(state,look)=>{
