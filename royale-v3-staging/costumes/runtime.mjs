@@ -1,3 +1,4 @@
+import {canWearSelection} from '../../royale/cosmetics/eligibility.mjs';
 import {COLLECTION,costumeById,costumeForState} from './catalog.mjs';
 import {costumeSprites} from './engine.mjs';
 import {ClothingAssets,bodyClothingLayers} from '../../royale/cosmetics/assets.mjs';
@@ -65,7 +66,8 @@ export class ClothingRuntime {
   });
   return entry.promise;
  }
- layers(state){
+ layers(state,look){
+  if(look&&!canWearSelection(state,look))return [];
   const costume=costumeForState(state);
   if(costume){if(!costumeSprites.outfits.has(costume.id))void costumeSprites.preload(costume.id).then(ok=>{if(ok)this.notify();});return [{id:costume.pieces[0].id,category:'fullbody',costumeId:costume.id}];}
   if(!state?.visible)return [];

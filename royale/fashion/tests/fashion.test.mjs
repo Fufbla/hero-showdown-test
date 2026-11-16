@@ -14,7 +14,7 @@ import {combatHero,measure,reload} from '../../../royale-v3-staging/kingjames/te
 const e=await engine(),index=catalogIndex({sets:COLLECTION});
 const hash=c=>createHash('sha256').update(pixels(c)).digest('hex');
 const transact=(g,type,id)=>{
- const r=cosmeticTransaction({state:g.cosmetics,coins:g.hero.coins,index,
+ const r=cosmeticTransaction({state:g.cosmetics,look:g.look,coins:g.hero.coins,index,
   operation:{type,id,revision:g.cosmetics.revision,confirmed:true},safe:true,atWardrobe:true});
  assert(r.ok,r.error);g.cosmetics=r.state;g.hero.coins=r.coins;return r;
 };
@@ -93,7 +93,7 @@ test('each new costume preserves measured armor offense/defense through purchase
  const bare=measure(combatHero()),expected=measure(combatHero('shore-ordinary'));
  assert(expected.offense.punch.damage>bare.offense.punch.damage);assert(expected.incoming<bare.incoming);
  for(const o of FASHION_OUTFITS){
-  const g=combatHero('shore-ordinary');g.hero.coins=5000;
+  const g=combatHero('shore-ordinary');g.look.presentation='female';g.hero.coins=5000;
   const original=structuredClone({look:g.look,inventory:g.inventory,levels:g.powers.data.levels});
   transact(g,'purchase',o.id);transact(g,'equip',o.id);
   assert.equal(g.hero.coins,4300);assert.deepEqual(measure(g),expected);assert.deepEqual(measure(reload(g)),expected);

@@ -117,7 +117,7 @@ function requestClothingSession(){
 }
 function currentClothingStatus(){
  const ready=(clothingCloudVerified||v2TestHero)&&game.started&&game.treeVisit&&!online()&&game.canSave();
- return {cosmetics:normalizeCosmetics(game.cosmetics),coins:game.hero.coins,ready,
+ return {look:game.look,cosmetics:normalizeCosmetics(game.cosmetics),coins:game.hero.coins,ready,
   reason:ready?(v2TestHero?'Local test hero; saves on this browser':'V3 cloud hero verified'):clothingCloudReason,
   checks:{cloudSession:clothingCloudVerified,heroLoaded:game.started,atTree:game.treeVisit,safe:game.canSave()}};
 }
@@ -136,7 +136,7 @@ window.addEventListener('royale-clothing-operation',e=>{
   try{
    const {index}=await clothingRuntime.catalog();
    const operation={...e.detail.operation,revision};
-   const result=cosmeticTransaction({state:game.cosmetics,coins:game.hero.coins,index,operation,safe:true,atWardrobe:true});
+   const result=cosmeticTransaction({state:game.cosmetics,look:game.look,coins:game.hero.coins,index,operation,safe:true,atWardrobe:true});
    if(!result.ok)return complete(result);
    const snapshotText=game.save();
    if(!snapshotText)return complete({ok:false,error:'Hero snapshot is unavailable.'});

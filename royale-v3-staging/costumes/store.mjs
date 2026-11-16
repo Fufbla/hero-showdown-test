@@ -1,3 +1,4 @@
+import {canWearOutfit} from '../../royale/cosmetics/eligibility.mjs';
 import {openTryOn,initializeTryOn} from '../../royale/clothing-tryon.mjs';
 import {initializeStoreActions,storeControls,myClothingPanel} from '../../royale/clothing-purchase-ui.mjs';
 import {clothingRuntime} from '../../royale/cosmetics/runtime.mjs';
@@ -22,7 +23,8 @@ function render(){
  root.replaceChildren();
  myClothingPanel(root.parentElement);
  const category=filter.value;
- const visible=sets.filter(s=>category==='all'||s.collection===category);
+ let hero=null;window.dispatchEvent(new CustomEvent('royale-clothing-preview-request',{detail:{receive(value){hero=value;}}}));
+ const visible=sets.filter(s=>canWearOutfit(s,hero?.look)&&(category==='all'||s.collection===category));
  count.textContent=`${visible.length} complete matching outfits`;
  for(const set of visible){
   const card=node('article',undefined,'clothing-catalog-card');

@@ -1,3 +1,4 @@
+import {wearableCosmetics} from './cosmetics/eligibility.mjs';
 import {LOOT} from './progression.mjs';
 import { resaleValue } from './costume-catalog.mjs';
 import { itemDefinition, activeArmorShopDefinitions, armorOutfitPrice, isRetiredHeadwear } from './equipment.mjs';
@@ -104,6 +105,6 @@ export const erisMethods={
   },
   applyMakeover(draft,{confirmed=false,revision}={}){
     if(!confirmed||revision!==this.economy.revision)return failed('Review these appearance changes again.');
-    const q=this.makeoverPreview(draft);if(!q.ok)return q;this.look=q.next;this.hero.coins-=q.cost;this.recordEconomy('appearance',-q.cost);return q;
+    const q=this.makeoverPreview(draft);if(!q.ok)return q;this.look=q.next;this.cosmetics=wearableCosmetics(this.cosmetics,this.look);this.hero.coins-=q.cost;this.recordEconomy('appearance',-q.cost);return q;
   },
 };

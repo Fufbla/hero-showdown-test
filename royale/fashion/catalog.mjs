@@ -1,3 +1,4 @@
+import {canWearSelection} from '../cosmetics/eligibility.mjs';
 // Production additions. The approved 22-entry source collection is untouched.
 import {COLLECTION as ORIGINAL,COSTUME_PRICE,COSTUMES} from '../../royale-v3-staging/costumes/catalog.mjs?fashion-base=1';
 import {FASHION_OUTFITS} from './definitions.mjs';
@@ -11,8 +12,8 @@ export const COLLECTION=Object.freeze([...ORIGINAL,...FASHION_OUTFITS.map(o=>Obj
   assetManifest:'../../royale/fashion/assets/'+o.id+'/manifest.json'})])
 }))]);
 export const costumeById=id=>COLLECTION.find(o=>o.id===id)||null;
-export const costumeForState=state=>{
- if(!state?.visible)return null;
+export const costumeForState=(state,look)=>{
+ if(!state?.visible||look&&!canWearSelection(state,look))return null;
  const piece=state.equipped?.fullbody;
  if(Array.isArray(state.owned)&&!state.owned.includes(piece))return null;
  return COLLECTION.find(o=>o.pieces[0].id===piece)||null;

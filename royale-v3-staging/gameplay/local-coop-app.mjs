@@ -61,7 +61,7 @@ function renderChoices(i){
   if(snap){
    const canvas=el('canvas');canvas.width=240;canvas.height=180;choice.append(canvas);const g=new Game({save:decodeSave(JSON.stringify(snap))});
    const draw=clothing=>{const c=canvas.getContext('2d');c.clearRect(0,0,canvas.width,canvas.height);drawHero(c,120,170,g.look,g.hero,0,1.45,{outfit:g.visualOutfit(),clothing});};
-   draw(clothingRuntime.layers(g.cosmetics));
+   draw(clothingRuntime.layers(g.cosmetics,g.look));
    const outfit=selectedOutfit(g.cosmetics);if(outfit&&g.cosmetics.visible)void clothingRuntime.loadOutfit(outfit).then(layers=>{if(canvas.isConnected)draw(layers);}).catch(()=>{});
    choice.append(el('span',snap.look.name),el('small',`Slot ${row.slot_number} · Level ${snap.level}`));
   }holder.append(choice);if(snap){const remove=button('Delete Hero',()=>manager.open(i,row.slot_number,'delete'));remove.className='delete-hero';remove.setAttribute('aria-label',`Delete ${snap.look.name} from Player ${i+1} Slot ${row.slot_number}`);holder.append(remove);}p.choices.append(holder);

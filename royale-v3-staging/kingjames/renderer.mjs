@@ -69,7 +69,7 @@ export class Renderer {
     if(e.state==='strike')line(c,[[x+e.face*24,y-28],[x+e.face*42,y-20],[x+e.face*31,y-8]],'#fff2c8',2);
   }
   // Shared solo/co-op presentation; the caller owns the world camera.
-  drawPlayer(game,alpha,dt,{cloth=this.cloth}={}){const savedCostume=costumeForState(game.cosmetics),costume=this.prototypeSession?outfitTrial.selected(savedCostume):savedCostume;const c=this.c,h=game.hero,t=game.time;
+  drawPlayer(game,alpha,dt,{cloth=this.cloth}={}){const savedCostume=costumeForState(game.cosmetics,game.look),costume=this.prototypeSession?outfitTrial.selected(savedCostume):savedCostume;const c=this.c,h=game.hero,t=game.time;
     const attackPresentation=this.prototypeSession&&!costume&&kingJamesSprites.selected(game.look)&&kingJamesAttackFX.ready;
     if(attackPresentation){drawPowerWorld(c,{...game,powers:{...game.powers,projectiles:[]}});kingJamesAttackFX.world(c,game);}else drawPowerWorld(c,game);
     drawMergeWorld(c,game);
@@ -112,7 +112,7 @@ export class Renderer {
     const generated=!!fullBody||!steelMode&&(approved||(this.v2SpriteTest&&v2GeneratedSprites.draw(c,pos.x,pos.y,spriteHero,t,1)));
     const pose=fullBody||(generated||steelMode?poseFor(game.look,visualHero,t,'game'):
       drawHero(c,pos.x,pos.y,game.look,visualHero,t,1,{
-        outfit:game.visualOutfit(),clothing:clothingRuntime.layers(game.cosmetics),
+        outfit:game.visualOutfit(),clothing:clothingRuntime.layers(game.cosmetics,game.look),
         cloth,dt:game.paused?0:dt
       }));
     if(fullBody){Object.assign(this.canvas.dataset,{motionFx:JSON.stringify(kingJamesFX.lastStats),attackFx:JSON.stringify([...kingJamesAttackFX.seen]),powerPolicy:String(game.powers.data.movementPolicy?.version||0)});const f=costumeBody?costumeSprites.lastFrame:kingJamesSprites.lastFrame;this.steelSeen??=new Set();if(f.outfit==='steel-universal')this.steelSeen.add(f.state+':'+f.frame+':'+f.direction);this.canvas.dataset.steelSeen=JSON.stringify([...this.steelSeen]);this.spriteSeen??=new Set();this.spriteSeen.add(f.state+':'+f.frame+':'+f.direction);Object.assign(this.canvas.dataset,{outfit:f.outfit,spriteState:f.state,spriteFrame:String(f.frame),spriteDirection:String(f.direction),spriteSeen:[...this.spriteSeen].join(',')});}else{delete this.canvas.dataset.outfit;delete this.canvas.dataset.spriteState;delete this.canvas.dataset.spriteFrame;delete this.canvas.dataset.spriteDirection;}

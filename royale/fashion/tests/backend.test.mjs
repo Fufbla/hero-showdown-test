@@ -14,11 +14,11 @@ test('deployed policy is identical to the client for new, existing and historica
  for(const outfit of Object.values(client))for(const piece of outfit.historicalPieces)assert.deepEqual(serverPiece(piece.id),clientPiece(piece.id));
 });
 test('exact live save guard accepts all 28 paid outfits, preserves old ownership, and rejects unknown IDs/stale writes',()=>{
- const g=new Game();g.hero.coins=30000;
+ const g=new Game({look:{presentation:'female'}});g.hero.coins=30000;
  for(const outfit of COLLECTION){
   const before=JSON.parse(g.save());
   for(const type of ['purchase','equip']){
-   const r=cosmeticTransaction({state:g.cosmetics,coins:g.hero.coins,index,operation:{type,id:outfit.id,revision:g.cosmetics.revision,confirmed:true},safe:true,atWardrobe:true});
+   const r=cosmeticTransaction({state:g.cosmetics,look:g.look,coins:g.hero.coins,index,operation:{type,id:outfit.id,revision:g.cosmetics.revision,confirmed:true},safe:true,atWardrobe:true});
    assert(r.ok,r.error);if(type==='purchase')assert.equal(r.debit,700);g.cosmetics=r.state;g.hero.coins=r.coins;
   }
   const after=JSON.parse(g.save());assert(checkCosmeticSave(before,after).ok,outfit.id);

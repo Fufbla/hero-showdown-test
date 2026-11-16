@@ -1,3 +1,4 @@
+import {canWearOutfit,canWearSelection,OUTFIT_RESTRICTION} from './eligibility.mjs';
 // Cosmetics never enter equipmentStats, hitboxes, inventory capacity or powers.
 import {CLOTHING_SLOTS,LEGACY_CLOTHING_SLOTS,OUTFIT_PRICE,OUTFIT_POLICIES,
  historicalPiece,outfitForPiece,isRetiredCosmeticId} from './outfit-policy.mjs';
@@ -85,7 +86,7 @@ export function saleReady(entry){
   parts.length===policy.pieces.length&&parts.every(p=>!!p.assetManifest);
 }
 const fail=error=>({ok:false,error});
-export function cosmeticTransaction({state,coins,index,operation,safe=false,atWardrobe=false}){
+export function cosmeticTransaction({state,coins,index,operation,look,safe=false,atWardrobe=false}){
  const current=normalizeCosmetics(state);
  if(!current||!Number.isSafeInteger(coins)||coins<0)return fail('Invalid wardrobe or wallet.');
  if(!safe)return fail('Clothing can only change outside combat.');
@@ -96,12 +97,14 @@ export function cosmeticTransaction({state,coins,index,operation,safe=false,atWa
  if(type==='purchase'){
   if(!atWardrobe||operation.confirmed!==true)return fail('Confirm this purchase in the Clothing Store.');
   if(!saleReady(entry))return fail('Choose a released complete outfit.');
+  if(!canWearOutfit(entry,look))return fail(OUTFIT_RESTRICTION);
   const quote=quoteOutfit(next,entry);if(!quote.ok)return fail(quote.error);
   debit=quote.debit;
   if(!Number.isSafeInteger(debit)||coins<debit)return fail('Not enough coins.');
   next.owned.push(...quote.missing);
  }else if(type==='equip'){
   if(!entry||entry.category!=='set'||!saleReady(entry))return fail('Choose a released complete outfit.');
+  if(!canWearOutfit(entry,look))return fail(OUTFIT_RESTRICTION);
   if(!ownsOutfit(next,entry))return fail('Own the complete outfit before wearing it.');
   // Replace the whole selection so a previous cape/accessory cannot linger.
   next.equipped=outfitSelection(entry);
@@ -111,6 +114,7 @@ export function cosmeticTransaction({state,coins,index,operation,safe=false,atWa
   next.equipped={};
  }else if(type==='visible'){
   if(typeof operation.value!=='boolean'||operation.value===next.visible)return fail('No appearance change.');
+  if(operation.value&&!canWearSelection(next,look))return fail(OUTFIT_RESTRICTION);
   next.visible=operation.value;
  }else return fail('Unknown clothing action.');
  next.revision++;

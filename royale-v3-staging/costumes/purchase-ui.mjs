@@ -1,3 +1,4 @@
+import {canWearOutfit,OUTFIT_RESTRICTION} from '../../royale/cosmetics/eligibility.mjs';
 // Clothing Store UI. All mutations wait for a V3 cloud-save acknowledgment.
 import {saleReady,normalizeCosmetics,ownsOutfit,selectedOutfit,quoteOutfit} from '../../royale/cosmetics/state.mjs';
 const node=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
@@ -35,20 +36,21 @@ export function storeControls(set){
  const state=status();
  const current=normalizeCosmetics(state?.cosmetics);
  const ready=!!state?.ready,coins=state?.coins??0;
- const allOwned=ownsOutfit(current,set);
+ const allOwned=ownsOutfit(current,set),allowed=canWearOutfit(set,state?.look);
  const wearing=current?.visible&&selectedOutfit(current)?.id===set.id;
  const quote=current?quoteOutfit(current,set):null;
  if(allOwned){
   wrap.append(node('strong',wearing?'Wearing · complete outfit':'Owned · complete outfit'));
   wrap.append(wearing?btn('Remove outfit',()=>void action({type:'unequip'}),!ready):
-   btn('Wear complete outfit',()=>void action({type:'equip',id:set.id}),!ready));
+   btn('Wear complete outfit',()=>void action({type:'equip',id:set.id}),!ready||!allowed));
  }else{
   const cost=quote?.ok?quote.debit:set.coinPrice;
-  wrap.append(btn('Buy outfit · '+cost+' coins',()=>purchase(set.id,set.name,cost),!ready||!saleReady(set)||!quote?.ok||coins<cost));
+  wrap.append(btn('Buy outfit · '+cost+' coins',()=>purchase(set.id,set.name,cost),!ready||!allowed||!saleReady(set)||!quote?.ok||coins<cost));
   if(quote?.ok&&cost<set.coinPrice)wrap.append(node('small','Previous purchases credited · '+(set.coinPrice-cost)+' coins'));
   if(ready&&quote?.ok&&coins<cost)wrap.append(node('small','Not enough coins.'));
   if(ready&&!quote?.ok&&quote?.error)wrap.append(node('small',quote.error));
  }
+ if(!allowed)wrap.append(node('small',OUTFIT_RESTRICTION));
  if(!ready)wrap.append(node('small',state?.reason||'Waiting for a verified V3 cloud session. Your fitting room remains free to use.'));
  else wrap.append(node('small','Coins: '+coins.toLocaleString()+' · Purchases save before being confirmed.'));
  return wrap;

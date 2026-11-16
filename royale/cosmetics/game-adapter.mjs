@@ -3,7 +3,7 @@ import {cosmeticTransaction} from './state.mjs';
 // acknowledgement before showing a purchase as confirmed. Production sales
 // remain gated by the catalog release and review flags.
 export function applyClothingAction(game,index,operation){
- const result=cosmeticTransaction({state:game.cosmetics,coins:game.hero.coins,index,operation,safe:game.paused&&game.canSave(),atWardrobe:!!game.treeVisit});
+ const result=cosmeticTransaction({state:game.cosmetics,look:game.look,coins:game.hero.coins,index,operation,safe:game.paused&&game.canSave(),atWardrobe:!!game.treeVisit});
  if(!result.ok)return result;
  game.cosmetics=result.state;game.hero.coins=result.coins;
  game.recordEconomy(result.debit?'purchase':'equip',-result.debit);

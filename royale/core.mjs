@@ -17,6 +17,7 @@ export { xpForLevel } from './progression.mjs';
 import { PowerSystem, POWERS, normalizePowers, equipmentStats, BALANCE, isBoss } from './powers.mjs';
 import { DEFAULT_LOOK, sanitizeLook, sanitizeOutfit } from './appearance.mjs';
 import {normalizeCosmetics,emptyCosmetics} from './cosmetics/state.mjs';
+import {wearableCosmetics} from './cosmetics/eligibility.mjs';
 import { WORLD_WIDTH, DEATH_Y, SURFACES, TYPES, SPAWNS, CAMPS, regionSurfaces, regionSpawns, regionCamps, boardIndex } from './world.mjs';
 export const STEP = 1 / 60;
 export const LEVEL_CAP = 99;
@@ -52,7 +53,7 @@ export function decodeSave(text,{allowOverBudgetPowers=false}={}) {
     const arena=legendaryArena===undefined?normalizeArena(data.version>=5?data.arena:null,world,bossProgress):legendaryArena;if(arena===false)return null;
     const economy=normalizeEconomy(data.version>=6?data.economy:null),sanctuary=normalizeSanctuary(data.version>=6?data.sanctuary:null,world,arena);
     if(!economy||sanctuary===false)return null;
-    const cosmetics=normalizeCosmetics(data.cosmetics);
+    const cosmetics=wearableCosmetics(normalizeCosmetics(data.cosmetics),sanitizeLook(data.look));
     if(!cosmetics)return null; // Reject invalid wardrobe snapshots rather than silently erase purchases.
     const loot=normalizeLoot(data.loot,undefined,{legacy});if(!loot)return null;
     const owned=new Set([...inventory.items,...inventory.pending].map(i=>i.uid));
@@ -76,7 +77,7 @@ export class Game {
       save=decodeSave(JSON.stringify(save),{allowOverBudgetPowers:this.testPowers});
       if(!save)throw Error('The saved hero requires recovery. No progress was replaced.');
     }
-    this.look = sanitizeLook(look ?? save?.look); this.outfit = sanitizeOutfit(save?.outfit); this.cosmetics=normalizeCosmetics(save?.cosmetics)??emptyCosmetics(); this.surfaces = surfaces||regionSurfaces(save?.world?.region||1); this.time = 0; this.paused = false;
+    this.look = sanitizeLook(look ?? save?.look); this.outfit = sanitizeOutfit(save?.outfit); this.cosmetics=wearableCosmetics(normalizeCosmetics(save?.cosmetics)??emptyCosmetics(),this.look); this.surfaces = surfaces||regionSurfaces(save?.world?.region||1); this.time = 0; this.paused = false;
     this.checkpoint = save?.checkpoint || 0; this.kills = save?.kills || 0;
     this.species = new Set(save?.species || []); this.reachedEnd = save?.reachedEnd || false;
     this.legendary=structuredClone(save?.legendary||emptyLegendary());this.initializeLegendaryRuntime();this.initializeMergeRuntime();
@@ -357,7 +358,7 @@ export class Game {
     for(const region of this.world.bossVictories)if(!this.bossProgress.records[region])this.bossProgress.records[region]=initialBossProgress([region]).records[region];
     const world={...this.world,region:this.regionId,location,monsters:(this.arenaScene?.enemies||this.enemies).filter(e=>!isBoss(e)&&!e.summoned).map(e=>({id:e.id,type:e.type,hp:e.hp,respawn:Math.max(0,e.respawn)}))};
     const legendary={...this.legendary,recovery:this.mergeSnapshot()};
-    return JSON.stringify({version:9,loot:this.loot,legendary,economy:this.economy,cosmetics:this.cosmetics,sanctuary:this.sanctuary,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?(this.arenaScene.legendary?{legendary:this.arenaScene.legendary,mode:'cleared'}:{region:this.regionId,mode:'cleared'}):null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
+    return JSON.stringify({version:9,loot:this.loot,legendary,economy:this.economy,cosmetics:wearableCosmetics(this.cosmetics,this.look),sanctuary:this.sanctuary,bossProgress:this.bossProgress,arena:this.pendingBossEntry||(this.arenaScene?.cleared?(this.arenaScene.legendary?{legendary:this.arenaScene.legendary,mode:'cleared'}:{region:this.regionId,mode:'cleared'}):null),powers:this.powers.snapshot(),look:this.look,outfit:this.outfit,level:h.level,xp:h.xp,coins:h.coins,checkpoint:this.checkpoint,kills:this.kills,species:[...this.species],reachedEnd:this.reachedEnd,healthRoots:this.healthRoots,inventory:this.inventory,world});
   }
 }
 Object.assign(Game.prototype,journeyMethods,bossMethods,erisMethods,legendaryMethods,mergeMethods);

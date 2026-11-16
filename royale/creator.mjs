@@ -82,7 +82,7 @@ export class Creator{
   draw(now=performance.now()){
     const canvas=$('hero-preview'),c=canvas.getContext('2d'),time=now/1000,h=previewHero('idle',time);
     c.clearRect(0,0,480,480);c.fillStyle='#112f3933';c.beginPath();c.ellipse(240,430,70,9,0,0,Math.PI*2);c.fill();
-    drawHero(c,240,428,this.look,h,time,2.45,{view:this.view,outfit:this.outfit,clothing:clothingRuntime.layers(this.cosmetics)});
+    drawHero(c,240,428,this.look,h,time,2.45,{view:this.view,outfit:this.outfit,clothing:clothingRuntime.layers(this.cosmetics,this.look)});
     canvas.setAttribute('aria-label',`${title(this.view)} view of ${this.look.name}, Idle`);
   }
 }

@@ -1,3 +1,4 @@
+import {canWearOutfit,canWearSelection,wearableCosmetics,OUTFIT_RESTRICTION} from './eligibility.mjs';
 import {normalizeCosmetics,hasCanonicalOutfitSelection,ownsOutfit} from './state.mjs';
 import {historicalPiece,outfitForPiece,isRetiredCosmeticId} from './outfit-policy.mjs';
 const sameSelection=(a,b)=>a.visible===b.visible&&a.owned.length===b.owned.length&&a.owned.every(id=>b.owned.includes(id))&&Object.keys(a.equipped).length===Object.keys(b.equipped).length&&Object.entries(a.equipped).every(([slot,id])=>b.equipped[slot]===id);
@@ -6,8 +7,11 @@ const sameSelection=(a,b)=>a.visible===b.visible&&a.owned.length===b.owned.lengt
 // Old clients must not erase purchases or restore a pre-purchase wallet.
 export function checkCosmeticSave(previous,incoming){
  if(Number(previous?.version)>=9&&!(Number(incoming?.version)>=9))return {ok:false,error:'This game tab predates matching outfits. Reload before saving.'};
- const before=normalizeCosmetics(previous?.cosmetics),after=normalizeCosmetics(incoming?.cosmetics);
+ // Apply the new hero's eligibility to the old selection too, allowing a
+ // load/makeover to remove an ineligible outfit at the same wardrobe revision.
+ const before=wearableCosmetics(normalizeCosmetics(previous?.cosmetics),incoming?.look),after=normalizeCosmetics(incoming?.cosmetics);
  if(!before||!after)return {ok:false,error:'Unsupported clothing save; retain original snapshot.'};
+ if(!canWearSelection(after,incoming?.look))return {ok:false,error:OUTFIT_RESTRICTION};
  if(before.revision>0&&!incoming?.cosmetics)return {ok:false,error:'This game tab predates clothing support. Reload before saving.'};
  // Loading an old snapshot may reconcile its selection. The write boundary
  // must inspect the raw incoming selection because the handler stores it as-is.
@@ -18,6 +22,7 @@ export function checkCosmeticSave(previous,incoming){
   if(before.owned.includes(id))continue;
   if(isRetiredCosmeticId(id))return {ok:false,error:'This outfit is no longer available.'};
   const piece=historicalPiece(id),set=outfitForPiece(id);
+  if(set&&!canWearOutfit(set,incoming?.look))return {ok:false,error:OUTFIT_RESTRICTION};
   if(!piece||!set||!ownsOutfit(after,set))return {ok:false,error:'Clothing can only be purchased as a complete matching outfit.'};
  }
  // Postgres jsonb reorders object keys; that must not reject an unchanged

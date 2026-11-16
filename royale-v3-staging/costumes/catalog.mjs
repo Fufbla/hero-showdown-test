@@ -1,3 +1,4 @@
+import {canWearSelection} from '../../royale/cosmetics/eligibility.mjs';
 // Generated from collection.json. Every released entry is also free to try.
 export const COSTUME_PRICE=700;
 export const COLLECTION=Object.freeze([
@@ -142,8 +143,8 @@ export const COLLECTION=Object.freeze([
 // Keep the original mascot atlas review suite scoped to its 48-frame format.
 export const COSTUMES=Object.freeze(COLLECTION.filter(o=>o.renderer==='mascot'));
 export const costumeById=id=>COLLECTION.find(c=>c.id===id)||null;
-export const costumeForState=state=>{
- if(!state?.visible)return null;
+export const costumeForState=(state,look)=>{
+ if(!state?.visible||look&&!canWearSelection(state,look))return null;
  const piece=state.equipped?.fullbody;
  if(Array.isArray(state.owned)&&!state.owned.includes(piece))return null;
  return COLLECTION.find(c=>c.pieces[0].id===piece)||null;

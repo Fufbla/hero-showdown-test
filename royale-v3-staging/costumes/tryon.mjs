@@ -1,8 +1,9 @@
+import {canWearOutfit,OUTFIT_RESTRICTION} from '../../royale/cosmetics/eligibility.mjs';
 // Persistent read-only clothing fitting room. No state, wallet, or save mutations.
 import {clothingRuntime} from '../../royale/cosmetics/runtime.mjs';
 import {drawOutfitPreview} from '../../royale/cosmetics/preview.mjs';
 
-let serial=0, ui=null, layers=[], frameHandle=0, lastFrame=0;
+let serial=0, ui=null, selected=null, layers=[], frameHandle=0, lastFrame=0;
 const node=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 function currentHero(){
  let value=null;
@@ -19,6 +20,7 @@ function draw(time=0){
   note.textContent='Load a hero before using Try On. Your original clothing stays unchanged.';
   return;
  }
+ if(selected&&!canWearOutfit(selected,hero.look)){layers=[];note.textContent=OUTFIT_RESTRICTION;}
  try{
   const pose=drawOutfitPreview(canvas,{look:hero.look,layers,view:'game',motion,direction,time,scale:1.7});
   if(!pose?.arms?.length||!pose?.legs?.length&&pose?.artSource!=='full-body-costume'){
@@ -67,11 +69,14 @@ export function initializeTryOn(holder){
     item.setAttribute('aria-pressed',String(item===b));draw();updateAnimation();};
   motionButtons.append(b);
  }
+ window.addEventListener('royale-clothing-context-updated',()=>draw());
  draw();
 }
 export async function openTryOn(set){
  if(!ui){throw Error('Fitting room not initialized');}
  const request=++serial;
+ if(!canWearOutfit(set,currentHero()?.look)){selected=null;layers=[];draw();ui.note.textContent=OUTFIT_RESTRICTION;return false;}
+ selected=set;
  layers=[];ui.title.textContent='Trying on: '+set.name;
  ui.note.textContent='Loading your hero and the complete outfit…';
  ui.section.scrollIntoView({block:'nearest',behavior:'smooth'});
@@ -79,6 +84,7 @@ export async function openTryOn(set){
  try{
   const result=await clothingRuntime.loadOutfit(set,{review:true,retry:true});
   if(request!==serial)return;
+  if(!canWearOutfit(set,currentHero()?.look)){layers=[];draw();ui.note.textContent=OUTFIT_RESTRICTION;return false;}
   layers=result;
   ui.note.textContent='Wearing '+set.name+' in preview only. No changes saved.';
   draw();

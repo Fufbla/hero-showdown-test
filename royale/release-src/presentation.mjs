@@ -1,3 +1,4 @@
+import {canWearOutfit} from '../cosmetics/eligibility.mjs';
 // The approved complete-frame character presentation, shared by ordinary heroes.
 // Rendering does not write appearance, equipment, currency, or power snapshots.
 import {kingJamesSprites,STEEL_ID} from '../../royale-v3-staging/kingjames/outfit-engine.mjs';
@@ -20,6 +21,6 @@ export function drawHero(c,x,y,look,hero,time,scale=1,options={}){
   const face=options.view==='left'||options.view==='back'?-1:options.view?1:hero.face;
   const h={...hero,face},owner=options.owner||hero;
   const id=options.clothing?.find(layer=>layer.costumeId)?.costumeId;
-  if(id){const pose=costumeSprites.draw(c,x,y,look,h,time,{id,owner,scale});if(pose)return pose;}
+  if(id&&canWearOutfit(id,look)){const pose=costumeSprites.draw(c,x,y,look,h,time,{id,owner,scale});if(pose)return pose;}
   return kingJamesSprites.draw(c,x,y,look,h,time,{owner,scale,view:options.view||'game'});
 }

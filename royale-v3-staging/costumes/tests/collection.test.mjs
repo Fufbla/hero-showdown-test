@@ -15,7 +15,7 @@ import {APPROVED_OUTFITS} from '../../kingjames/outfit-catalog.mjs';
 const {createCanvas,loadImage}=createRequire(import.meta.url)('@napi-rs/canvas');
 const engine=new CostumeEngine({canvasFactory:createCanvas,imageLoader:u=>loadImage(fileURLToPath(u)),jsonLoader:async u=>JSON.parse(await readFile(u))});
 const {data,index}=await new ClothingRuntime({readJSON:()=>{throw Error('Old catalog must not be loaded');}}).catalog();
-const transaction=(g,type,id)=>cosmeticTransaction({state:g.cosmetics,coins:g.hero.coins,index,operation:{type,id,confirmed:true,revision:g.cosmetics.revision},safe:true,atWardrobe:true});
+const transaction=(g,type,id)=>cosmeticTransaction({state:g.cosmetics,look:g.look,coins:g.hero.coins,index,operation:{type,id,confirmed:true,revision:g.cosmetics.revision},safe:true,atWardrobe:true});
 
 test('one catalog provides exactly the 22 approved shop and free-trial outfits',async()=>{
  assert.equal(COLLECTION.length,22);assert.equal(COSTUMES.length,10);
@@ -43,7 +43,7 @@ test('every old outfit is absent, cannot be bought or equipped, and migrates wit
 });
 test('all 22 outfits can be purchased once, worn, saved, restored, and removed under the same cloud policy',()=>{
  for(const o of COLLECTION){
-  const g=new Game();g.hero.coins=700;const before=JSON.parse(g.save());
+  const g=new Game({look:{presentation:'female'}});g.hero.coins=700;const before=JSON.parse(g.save());
   const bought=transaction(g,'purchase',o.id);assert(bought.ok,o.id);assert.equal(bought.coins,0);g.cosmetics=bought.state;g.hero.coins=bought.coins;
   const worn=transaction(g,'equip',o.id);assert(worn.ok,o.id);g.cosmetics=worn.state;
   const snapshot=JSON.parse(g.save());assert(checkCosmeticSave(before,snapshot).ok,o.id);

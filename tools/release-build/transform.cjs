@@ -30,7 +30,7 @@ function game(s){
 }
 function renderer(s){
   s=s.replace(/^import \{outfitTrial\}.*\n/m,'');
-  s=replace(s,'const savedCostume=costumeForState(game.cosmetics),costume=this.prototypeSession?outfitTrial.selected(savedCostume):savedCostume;', 'const costume=costumeForState(game.cosmetics);');
+  s=replace(s,'const savedCostume=costumeForState(game.cosmetics,game.look),costume=this.prototypeSession?outfitTrial.selected(savedCostume):savedCostume;', 'const costume=costumeForState(game.cosmetics,game.look);');
   s=s.replaceAll('this.prototypeSession&&','').replaceAll('this.v2SpriteTest','false');
   s=replace(s,'this.height=720;false=false;', 'this.height=720;');
   s=s.replace('this.width=1280;this.height=720;false=false;','this.width=1280;this.height=720;');
