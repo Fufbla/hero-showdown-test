@@ -3,6 +3,7 @@ import {FullBodyAnimator,validateManifest} from '../../royale-v3-staging/kingjam
 import {STEEL_ID} from '../../royale-v3-staging/kingjames/outfit-engine.mjs';
 import {sanitizeLook} from '../appearance.mjs';
 import {FASHION_OUTFITS} from './definitions.mjs';
+import {flightPose} from '../flight-pose.mjs';
 
 export const FASHION_CACHE_LIMIT=128;
 const ids=new Set(FASHION_OUTFITS.map(o=>o.id));
@@ -111,15 +112,15 @@ export class CostumeEngine extends ExistingCostumeEngine{
   const look=sanitizeLook(raw),m=loaded.manifest;
   let animator=this.states.get(owner);
   if(!animator||animator.manifest!==m){animator=new FullBodyAnimator(m);this.states.set(owner,animator);}
-  const sample=animator.sample(hero,time),f=sample.frame;
+  const sample=animator.sample(hero,time),f=sample.frame,flight=flightPose(hero,m,f,time);
   c.save();c.translate(x,y);c.scale(sample.direction*m.worldScale*scale,m.worldScale*scale);c.translate(-m.foot[0],-m.foot[1]);
   if(hero.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;
-  c.drawImage(this.frame(id,sample.frameIndex,look),0,0);
-  this.approved.head.draw(c,look,f.head,m.head.scale,{closed:sample.state==='defeat'||sample.state==='idle'&&time%3.9>3.73});
+  c.save();flight?.apply(c);c.drawImage(this.frame(id,sample.frameIndex,look),0,0);c.restore();
+  this.approved.head.draw(c,look,flight?.head||f.head,m.head.scale,{closed:sample.state==='defeat'||sample.state==='idle'&&time%3.9>3.73});
   c.restore();
-  const world=p=>[(p[0]-m.foot[0])*m.worldScale,(p[1]-m.foot[1])*m.worldScale];
+  const world=p=>{p=flight?flight.point(p):p;return [(p[0]-m.foot[0])*m.worldScale,(p[1]-m.foot[1])*m.worldScale];};
   const neck=world(f.head),hand=world(f.hand),elbow=[(neck[0]+hand[0])*.5,(neck[1]+hand[1])*.5+8];
-  this.lastFrame={outfit:id,state:sample.state,frame:sample.frameIndex,direction:sample.direction,hairVisible:true,hairContained:false,head:[...f.head],foot:[...m.foot]};
+  this.lastFrame={outfit:id,state:sample.state,frame:sample.frameIndex,direction:sample.direction,hairVisible:true,hairContained:false,head:[...(flight?.head||f.head)],foot:[...m.foot]};
   return {artSource:'full-body-costume',clip:sample.state,head:neck,faceCenter:neck,shoulder:neck,hip:[0,-35],arms:[[neck,elbow,hand],[neck,elbow,hand]],legs:[],opacity:1};
  }
 }

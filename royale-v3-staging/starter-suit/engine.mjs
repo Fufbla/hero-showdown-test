@@ -5,6 +5,7 @@ import {emblem,curve,tone} from '../../royale/style-c-paint.mjs';
 import {UniversalHead} from '../kingjames/head.mjs';
 import {FullBodyAnimator,validateManifest} from '../kingjames/animation.mjs';
 import {rearHead} from './rear-head.mjs';
+import {flightPose} from '../../royale/flight-pose.mjs';
 
 export const STARTER_SUIT_ID='starter-superhero';
 export const STARTER_CACHE_LIMIT=96;
@@ -116,20 +117,21 @@ export class StarterSuitEngine{
   if(!this.ready)return false;const look=sanitizeLook(raw),m=this.manifest;
   let animator=this.states.get(owner);if(!animator){animator=new FullBodyAnimator(m);this.states.set(owner,animator);}
   const sample=animator.sample(hero,time),f=sample.frame;
-  const paint={id:STARTER_SUIT_ID,frame:sample.frameIndex,direction:sample.direction,look,view};
+  const flight=flightPose(hero,m,f,time);
+  const paint={id:STARTER_SUIT_ID,frame:sample.frameIndex,direction:sample.direction,look,view,flight};
   this.paint(c,x,y,paint,{scale,closed:sample.state==='defeat'||sample.state==='idle'&&time%3.9>3.73,alpha:hero.invulnerable>0&&Math.floor(time*14)%2===0?.78:1});
-  const toWorld=p=>[(p[0]-m.foot[0])*m.worldScale,(p[1]-m.foot[1])*m.worldScale];
+  const toWorld=p=>{p=flight?flight.point(p):p;return [(p[0]-m.foot[0])*m.worldScale,(p[1]-m.foot[1])*m.worldScale];};
   const neck=toWorld(f.head),hand=toWorld(f.hand),elbow=[(neck[0]+hand[0])*.5,(neck[1]+hand[1])*.5+8];
-  this.lastFrame={outfit:STARTER_SUIT_ID,state:sample.state,frame:sample.frameIndex,direction:sample.direction,head:[...f.head],foot:[...m.foot]};this.lastPaint=paint;
+  this.lastFrame={outfit:STARTER_SUIT_ID,state:sample.state,frame:sample.frameIndex,direction:sample.direction,head:[...(flight?.head||f.head)],foot:[...m.foot]};this.lastPaint=paint;
   return {artSource:'full-body-atlas',clip:sample.state,head:neck,faceCenter:neck,shoulder:neck,hip:[0,-35],arms:[[neck,elbow,hand],[neck,elbow,hand]],legs:[],opacity:1};
  }
  paint(c,x,y,paint,{scale=1,closed=false,alpha=1}={}){
-  const m=this.manifest,f=m.frames[paint.frame];if(!f)return;
+  const m=this.manifest,f=m.frames[paint.frame];if(!f)return;const head=paint.flight?.head||f.head;
   c.save();c.translate(x,y);c.scale(paint.direction*m.worldScale*scale,m.worldScale*scale);c.translate(-m.foot[0],-m.foot[1]);c.globalAlpha*=alpha;
-  c.drawImage(this.frame(paint.frame,paint.look,{back:paint.view==='back'}),0,0);
+  c.save();paint.flight?.apply(c);c.drawImage(this.frame(paint.frame,paint.look,{back:paint.view==='back'}),0,0);c.restore();
   if(paint.view==='back'){
-   const p=rearHead(this.head,paint.look,this.factory);c.save();c.translate(f.head[0],f.head[1]);c.rotate(f.head[2]);c.scale(m.head.scale,m.head.scale);c.drawImage(p.image,-p.origin[0],-p.origin[1]);c.restore();
-  }else this.head.draw(c,paint.look,f.head,m.head.scale,{closed});
+   const p=rearHead(this.head,paint.look,this.factory);c.save();c.translate(head[0],head[1]);c.rotate(head[2]);c.scale(m.head.scale,m.head.scale);c.drawImage(p.image,-p.origin[0],-p.origin[1]);c.restore();
+  }else this.head.draw(c,paint.look,paint.flight?.head||f.head,m.head.scale,{closed});
   c.restore();
  }
  drawEcho(c,x,y,paint){if(this.ready&&paint)this.paint(c,x,y,paint);}

@@ -1,3 +1,4 @@
+import {flightPose} from '../../royale/flight-pose.mjs';
 import {FullBodyAnimator,validateManifest} from '../kingjames/animation.mjs';
 import {OutfitEngine,STEEL_ID} from '../kingjames/outfit-engine.mjs';
 import {sanitizeLook} from '../../royale/appearance.mjs';
@@ -68,12 +69,14 @@ export class CostumeEngine {
   c.putImageData(pixels,0,0);if(!costumeById(id).hideHair&&!repair)c.clearRect(fx-FACE_CLEARANCE,fy-FACE_CLEARANCE,fw+2*FACE_CLEARANCE,fh+2*FACE_CLEARANCE);mc.putImageData(face,0,0);
   const result={body,mask,skin};loaded.masks.set(index,result);return result;
  }
- compose(id,index,raw,closed=false,direction=1){
-  const look=sanitizeLook(raw),costume=costumeById(id),loaded=this.outfits.get(id),key=id+'|'+index+'|'+closed+'|'+(id==='fishsticks-costume'?direction:1)+'|'+appearanceKey(look);
+ compose(id,index,raw,closed=false,direction=1,flight=null){
+  const look=sanitizeLook(raw),costume=costumeById(id),loaded=this.outfits.get(id),key=id+'|'+index+'|'+closed+'|'+(id==='fishsticks-costume'?direction:1)+'|'+appearanceKey(look)+'|'+!!flight;
   if(this.composites.has(key)){const old=this.composites.get(key);this.composites.delete(key);this.composites.set(key,old);return old;}
   const m=loaded.manifest,f=m.frames[index],{body,mask,skin}=this.masks(id,index),canvas=this.factory(...m.cell),c=canvas.getContext('2d');c.drawImage(body,0,0);
   if(skin.length){const data=c.getImageData(0,0,...m.cell),rgb=[1,3,5].map(i=>parseInt(look.skin.slice(i,i+2),16));for(const [i,shade]of skin)for(let k=0;k<3;k++)data.data[i+k]=Math.min(255,rgb[k]*(.55+.55*shade));c.putImageData(data,0,0);}
-  const head=this.factory(...m.cell),hc=head.getContext('2d');this.face.draw(hc,look,f,{hideHair:costume.hideHair,closed});
+  const head=this.factory(...m.cell),hc=head.getContext('2d');
+  if(flight&&!costume.hideHair){hc.translate(f.head[0],f.head[1]);hc.rotate(-flight.angle);hc.translate(-f.head[0],-f.head[1]);}
+  this.face.draw(hc,look,f,{hideHair:costume.hideHair,closed});
   if(costume.hideHair){
    hc.globalCompositeOperation='destination-in';hc.drawImage(mask,0,0);
    // Solid costume pixels sit in front of the unchanged hairstyle. The exact
@@ -100,10 +103,12 @@ export class CostumeEngine {
   }
   if(!this.face.ready)return false;
   const m=loaded.manifest;let animator=this.states.get(owner);if(!animator||animator.manifest!==m){animator=new FullBodyAnimator(m);this.states.set(owner,animator);}
-  const sample=animator.sample(hero,time),f=sample.frame,closed=sample.state==='defeat'||sample.state==='idle'&&time%3.9>3.73;
-  const picture=this.compose(id,sample.frameIndex,look,closed,sample.direction),s=m.worldScale*scale;
-  c.save();c.translate(x,y);c.scale(sample.direction*s,s);c.translate(-m.foot[0],-m.foot[1]);if(hero.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;c.drawImage(picture,0,0);
-  c.restore();const world=p=>[(p[0]-m.foot[0])*m.worldScale,(p[1]-m.foot[1])*m.worldScale],neck=world(f.head),hand=world(f.hand),elbow=[(neck[0]+hand[0])/2,(neck[1]+hand[1])/2+8];
+  const sampled=animator.sample(hero,time),flightFrame=m.animations.fly?.frames[Math.min(2,m.animations.fly.frames.length-1)];
+  const sample=['fly','hover','flightStart'].includes(sampled.state)&&flightFrame!==undefined?{...sampled,frameIndex:flightFrame,frame:m.frames[flightFrame]}:sampled;
+  const f=sample.frame,flight=flightPose(hero,m,f,time,{authored:true}),closed=sample.state==='defeat'||sample.state==='idle'&&time%3.9>3.73;
+  const picture=this.compose(id,sample.frameIndex,look,closed,sample.direction,flight),s=m.worldScale*scale;
+  c.save();c.translate(x,y);c.scale(sample.direction*s,s);c.translate(-m.foot[0],-m.foot[1]);if(hero.invulnerable>0&&Math.floor(time*14)%2===0)c.globalAlpha*=.78;flight?.apply(c);c.drawImage(picture,0,0);
+  c.restore();const world=p=>{p=flight?flight.point(p):p;return [(p[0]-m.foot[0])*m.worldScale,(p[1]-m.foot[1])*m.worldScale];},neck=world(f.head),hand=world(f.hand),elbow=[(neck[0]+hand[0])/2,(neck[1]+hand[1])/2+8];
   this.lastFrame={outfit:id,state:sample.state,frame:sample.frameIndex,direction:sample.direction,hairVisible:true,hairContained:!!costumeById(id).hideHair};
   return {artSource:'full-body-costume',clip:sample.state,head:neck,faceCenter:neck,shoulder:neck,hip:[0,-35],arms:[[neck,elbow,hand],[neck,elbow,hand]],legs:[],opacity:1};
  }

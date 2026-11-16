@@ -24,7 +24,7 @@ function stateFor(h,m){
  if(h.castAge>=0&&h.castAge<(m.animations.fireball?.duration||0))return !h.grounded&&m.animations.fireballAir?'fireballAir':'fireball';
  if(!h.grounded){
   if(h.flying&&m.animations.fly)return (h.v2Active?.flight?.age??1)<m.animations.flightStart.duration?'flightStart':Math.abs(h.vx||0)>15||Math.abs(h.vy||0)>35?'fly':'hover';
-  if(h.flying)return 'fall';
+  if(h.flying)return 'fly';
   if(h.jumpAge<.11||h.vy<-65)return h.jumps>=2?'doubleJump':'jump';
   return 'fall';
  }
@@ -52,7 +52,7 @@ export class FullBodyAnimator{
    if(next==='run'&&this.phase===0)this.phase=0;
   }
   this.lastJumpAge=h.jumpAge??100;
-  const a=m.animations[next],n=a.frames.length,age=Math.max(0,time-this.entered);
+  const a=m.animations[next]||(next==='fly'?{frames:[m.animations.run.frames[Math.min(3,m.animations.run.frames.length-1)]],duration:1,loop:true}:null),n=a.frames.length,age=Math.max(0,time-this.entered);
   let index=0;
   if(['punch','kick','strength','superKick'].includes(next)){
    // Contact artwork begins at the existing simulation's active hit window.
