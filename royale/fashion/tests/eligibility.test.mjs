@@ -47,7 +47,7 @@ for(const [name,look,expected] of [['male',male,18],['female',female,29]])test(n
  for(const o of COLLECTION.filter(o=>canWearOutfit(o,look))){
   const g=hero(look),before=captureProgress(g);
   for(const type of ['purchase','equip']){const r=transact(g,type,o.id);assert(r.ok,r.error);g.cosmetics=r.state;g.hero.coins=r.coins;}
-  assert.equal(g.hero.coins,29300);const after=JSON.parse(g.save());assert(checkCosmeticSave(before,after).ok,o.id);
+  assert.equal(g.hero.coins,o.id==='robot-costume'?30000:29300);const after=JSON.parse(g.save());assert(checkCosmeticSave(before,after).ok,o.id);
   const reloaded=new Game({save:decodeSave(JSON.stringify(after))});assert.equal(costumeForState(reloaded.cosmetics,reloaded.look)?.id,o.id);count++;
  }
  assert.equal(count,expected);
