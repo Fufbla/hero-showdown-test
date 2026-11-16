@@ -53,6 +53,7 @@ jobs:
       - name: Verify reserved test code and four powers
         run: node --import ./test-only/four-powers/register.mjs --test test-only/four-powers/tests.test.mjs test-only/four-powers/visual.test.mjs test-only/four-powers/site-entry.test.mjs
       - name: Install browser for local co-op regression
+        timeout-minutes: 5
         run: npx playwright install --with-deps chromium
       - name: Verify local co-op and single-player startup before publishing
         env:
