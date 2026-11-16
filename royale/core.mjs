@@ -46,7 +46,9 @@ export function decodeSave(text,{allowOverBudgetPowers=false}={}) {
     const bossProgress=normalizeBossProgress(data.version>=5?data.bossProgress:null,world.bossVictories,{strict:data.version>=5,legacy});if(!bossProgress)return null;
     const legendary=normalizeLegendary(data.version>=7?data.legendary:null,inventory,level,{legacy});if(!legendary||data.version>=7&&!data.legendary)return null;
     const legendaryArena=normalizeLegendaryArena(data.arena,legendary,level);
-    if(legendaryArena?.mode==='restart'&&!powers.equipped.some(id=>id&&powers.levels[id]))return null;
+    // Older heroes could enter with Flight as their only equipped power.
+    // Making it passive must not invalidate an unfinished encounter save.
+    if(legendaryArena?.mode==='restart'&&!powers.equipped.some(id=>id&&powers.levels[id])&&!powers.levels.flight)return null;
     const arena=legendaryArena===undefined?normalizeArena(data.version>=5?data.arena:null,world,bossProgress):legendaryArena;if(arena===false)return null;
     const economy=normalizeEconomy(data.version>=6?data.economy:null),sanctuary=normalizeSanctuary(data.version>=6?data.sanctuary:null,world,arena);
     if(!economy||sanctuary===false)return null;
@@ -278,10 +280,12 @@ export class Game {
     if(h.dropThrough){h.dropThrough.time-=dt;if(h.dropThrough.time<=0)h.dropThrough=null;}
     const support=input.jump&&input.vertical>.5&&h.grounded&&!this.powers.flying&&this.surfaces.find(s=>s.oneWay&&Math.abs(s.y-h.y)<.1&&h.x+h.w/2>s.x&&h.x-h.w/2<s.x+s.w);
     if(support){h.dropThrough={id:support.id,time:.24};h.y+=2;h.vy=60;h.grounded=false;h.jumps=1;h.coyote=0;h.jumpBuffer=0;}
+    else if(input.jump&&this.powers.flying)this.powers.jumpInFlight?.();
     else if (input.jump&&!this.powers.flying) h.jumpBuffer = .13;
     if (!this.powers.flying && h.jumpBuffer > 0 && h.jumps < 2 && h.stun <= 0) {
       h.vy = h.jumps === 0 ? -565 : -520; h.jumps++; h.jumpAge = 0; h.grounded = false; h.coyote = 0; h.jumpBuffer = 0;
       this.emit('jump', { x: h.x, y: h.y, double: h.jumps === 2 });
+      if(h.jumps===2)this.powers.startFlight?.();
     }
     const axis = clamp(Number(input.move) || 0, -1, 1);
     if (h.stun <= 0) {
@@ -294,7 +298,7 @@ export class Game {
     if(input.heal)this.useHealthRoot();
     if(input.nextTarget){const previous=selectedInteraction(this)?.id;this.portalPickupGuard=null;const list=nearbyInteractions(this),i=list.findIndex(t=>t.id===previous);this.interactionTarget=list[(i+1)%list.length]?.id;}
     if (input.interact) this.interact();
-    else if(input.portal)this.enterPortal();
+    else if(input.portal&&!this.powers.flying)this.enterPortal();
     if(input.tree&&this.nearTree()&&!this.inCombat())this.emit('tree');
     if (h.attackBuffer) { h.attackBuffer.life -= dt; if (h.attackBuffer.life <= 0) h.attackBuffer = null; }
     if (input.punch&&!this.powers.flying&&!this.powers.active.superKick) h.attackBuffer = { kind: 'punch', life: .18 };

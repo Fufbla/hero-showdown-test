@@ -235,6 +235,7 @@ function renderPanel(i){
    if(p.treeSection==='wardrobe'){content.append(button('Equipment & wardrobe',()=>{p.tab='gear';renderPanel(i);}),button('Villain Merge',()=>{p.tab='merge';renderPanel(i);}));}
    else{
    content.append(button(g.treeVisit?'At Tree of Eris':'Visit Tree of Eris',()=>act(i,'visitTree'),!g.canTravel()));
+   content.append(el('p','Flight is passive: double-jump to fly, steer with the directions, and double-tap Jump again to cancel. It uses no power slot.'));
    if(!g.canSave())content.append(el('p','Resume and spend five seconds out of combat before changing powers.'));
    const slots=el('div');slots.className='slot-actions';content.append(el('p',p.selectedPower?`Assign ${POWERS[p.selectedPower].name} to a slot. An equipped power swaps places.`:'Select an owned power below, then choose a slot.'),slots);
    for(let slot=0;slot<3;slot++){

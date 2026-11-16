@@ -9,7 +9,7 @@ export const ACTIVE_SLOTS = 3;
 export const FUTURE_MERGE_SLOT = Object.freeze({ index: 3, requiredPieces: 2, cooldownMultiplier: .5 });
 // Villain Merge adapter remains reserved; production has no merge entitlement.
 export function resolveAbilitySlots(data,merge=null) {
-  const slots=Array.from({length:ACTIVE_SLOTS},(_,index)=>({id:data.equipped[index],level:data.levels[data.equipped[index]]||0,cooldownMultiplier:1}));
+  const slots=Array.from({length:ACTIVE_SLOTS},(_,index)=>{const id=data.equipped[index];return {id:POWERS[id]?.passive?null:id,level:POWERS[id]?.passive?0:data.levels[id]||0,cooldownMultiplier:1};});
   if(merge?.completePieces===FUTURE_MERGE_SLOT.requiredPieces&&((POWER_IDS.includes(merge.ability)&&!POWERS[merge.ability].passive)||Object.hasOwn(MERGE_POWERS,merge.ability?.replace('merge:',''))))
     slots.push({id:merge.ability,level:integer(merge.level,1,20),cooldownMultiplier:FUTURE_MERGE_SLOT.cooldownMultiplier});
   return slots;
@@ -19,7 +19,7 @@ export const POWERS = Object.freeze({
   strength: { name: 'Super Strength', icon: 'ϟ', cooldown: 8, offensive: true, summary: 'A heavy forward punch with an 86-unit force burst, beyond a normal punch. Only enemies in front can be struck.' },
   superKick: { name: 'Super Kick', icon: '⌁', cooldown: 6, after: true, offensive: true, summary: 'Two to six forward kicks with 105-unit motion trails, slightly beyond Super Strength. Each kick has its own impact.' },
   fireball: { name: 'Fireball', icon: '◉', cooldown: 5, offensive: true, summary: 'Straight shots. No homing, burning or ongoing damage.' },
-  flight: { name: 'Flight', icon: '↟', cooldown: 30, after: true, summary: 'Launch from the ground. Press again to land. Fireball and Animal Allies can attack.' },
+  flight: { name: 'Flight', icon: '↟', passive: true, cooldown: 30, after: true, summary: 'Double-jump to fly without using a power slot. Steer with the directional controls. Double-tap Jump again to cancel. Fireball and Animal Allies can attack.' },
   steel: { name: 'Steel Body', icon: '⬡', cooldown: 15, after: true, summary: 'Reduce all incoming damage. Ignore knockback without slowing down.' },
   roots: { name: 'Ground Roots', icon: '♧', cooldown: 10, after: true, offensive: true, summary: 'Trap grounded foes. Squeeze once per second. Bosses are slowed.' },
   speed: { name: 'Speed', icon: '»', passive: true, summary: 'Permanent running and attack speed. No damage bonus or active slot.' },
@@ -113,6 +113,23 @@ export class PowerSystem {
   }
   stats(id) {return powerStats(id,this.data.levels[id],{heroLevel:this.game.hero.level,equipment:this.game.equipment});}
   get flying(){return !!this.active.flight;}
+  startFlight(){
+    const g=this.game,h=g.hero;
+    if(g.paused||h.dead||g.disruptedPower==='flight'||!this.data.levels.flight||this.flying||
+      (this.cooldowns.flight||0)>EPS||h.stun>0||h.grounded||h.jumps!==2||h.attack||this.active.superKick||h.powerPose)return false;
+    this.active.flight={...this.stats('flight'),age:0,targets:[],cancelTapAge:-Infinity};
+    for(const effect of g.mergeEffects.filter(e=>e.offensive))g.endMergeEffect(effect);
+    g.mergeShots=[];for(const other of ['roots','whirlwind'])this.end(other);
+    h.attackBuffer=null;h.jumpBuffer=0;h.vy=-170;h.jumpAge=100;h.coyote=0;
+    this.sync();g.emit('power',{id:'flight'});return true;
+  }
+  jumpInFlight(){
+    const state=this.active.flight;
+    if(!state||this.game.paused||this.game.hero.dead)return false;
+    // Only two new Jump presses count; the activation jump is never a cancel tap.
+    if(state.age-state.cancelTapAge<=.4+EPS){this.end('flight');return true;}
+    state.cancelTapAge=state.age;return false;
+  }
   get speed(){return Math.min(.6,speedScale(this.data.levels.speed,.05,.6,this.game.equipment.speedLevels)+this.game.equipment.moveSpeed);}
   get attackRate(){return 1+Math.min(.5,speedScale(this.data.levels.speed,.03,.5,this.game.equipment.speedLevels)+this.game.equipment.attackSpeed);}
   ready(id){return this.game.disruptedPower!==id&&POWER_IDS.includes(id)&&!!this.data.levels[id]&&!POWERS[id]?.passive&&!this.active[id]&&(this.cooldowns[id]||0)<=EPS;}
@@ -122,10 +139,8 @@ export class PowerSystem {
     const resolved=resolveAbilitySlots(this.data,this.mergeEntitlement).find(s=>s.id===id);
     if(g.paused||h.dead||g.disruptedPower===id||!POWER_IDS.includes(id)||def.passive||!resolved)return false;
     slot=slot||resolved;
-    if(id==='flight'&&this.flying){this.end('flight');return true;}
     if(!slot.level||this.active[id]||(this.cooldowns[id]||0)>EPS||h.stun>0||(this.flying&&def.offensive&&!['fireball','animalAllies'].includes(id)))return false;
     if(id==='seismicSmash'&&(!h.grounded||this.flying))return false;
-    if(id==='flight'&&(!h.grounded||h.attack||this.active.superKick))return false;
     // A held basic attack must yield once its contact window has finished.
     // Otherwise chaining basics keeps h.attack populated forever and starves
     // ready melee powers. Never cancel a basic before its hit or a power combo.
@@ -159,7 +174,6 @@ export class PowerSystem {
         damage:s.damage,targets:s.targets,face:h.face,age:0,duration:.70,contact:.20,hitCount:0});
     }
     if(id==='fireball'){this.bursts.push({...state,left:s.projectiles,next:0});h.castAge=0;}
-    if(id==='flight'){for(const effect of this.game.mergeEffects.filter(e=>e.offensive))this.game.endMergeEffect(effect);this.game.mergeShots=[];for(const other of ['roots','whirlwind'])this.end(other);h.attack=null;h.attackBuffer=null;h.jumpBuffer=0;h.grounded=false;h.vy=-170;h.jumpAge=100;h.jumps=1;}
     if(id==='roots'||id==='whirlwind'){
       state.targets=g.enemies.filter(e=>e.state!=='dead'&&e.protection<=0&&Math.abs(e.x-h.x)<=BALANCE.controlRange&&Math.abs(e.y-h.y)<120&&
         (id!=='roots'||groundedForRoots(e))&&(id!=='whirlwind'||!e.rooted||isBoss(e)))
@@ -219,7 +233,7 @@ export class PowerSystem {
   end(id) {
     const state=this.active[id];if(!state)return;
     this.cooldowns[id]=state.cooldown;delete this.active[id];
-    if(id==='flight')this.game.hero.vy=Math.max(0,this.game.hero.vy);
+    if(id==='flight'){const h=this.game.hero;h.vy=Math.max(0,h.vy);h.jumpBuffer=0;if(!h.grounded)h.jumps=2;}
     if(id==='roots'||id==='whirlwind')for(const e of this.game.enemies)if(state.targets.includes(e.id)){
       if(id==='roots')e.rooted=!!e.mergeRooted;else if(e.lifted){e.lifted=!!e.mergeLifted;e.airborne=true;e.vy=0;}
     }

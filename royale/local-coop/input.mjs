@@ -53,7 +53,7 @@ export class LocalInput {
   if(!this.enabled)return {};
   const p=this.pad[player]||{},held=action=>p.held?.has(action)||(this.sources[player]==='keyboard'&&this.keys.has(KEYSETS[player][action]))||[...this.pointers.values()].some(x=>x.player===player&&x.action===action);
   const edge=this.edges[player],move=p.x||Number(held('right'))-Number(held('left'));
-  const result={move,vertical:p.y||Number(held('down'))-Number(held('up')),run:held('run')||this.sources[player]==='touch'||Math.abs(p.x||0)>.72,punchHeld:!!held('punch'),kickHeld:!!held('kick'),powers:[0,1,2,3].map(i=>edge.has('power'+i))};
+  const result={move,vertical:p.y||Number(!!held('down'))-Number(!!held('up')||!!p.held?.has('portal')),run:held('run')||this.sources[player]==='touch'||Math.abs(p.x||0)>.72,punchHeld:!!held('punch'),kickHeld:!!held('kick'),powers:[0,1,2,3].map(i=>edge.has('power'+i))};
   for(const k of ['jump','punch','kick','interact','portal','heal','tree','nextTarget'])result[k]=edge.has(k);
   edge.clear();return result;
  }

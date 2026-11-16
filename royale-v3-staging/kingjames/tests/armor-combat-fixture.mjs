@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import {Game,STEP,decodeSave} from '../../../royale/core.mjs';
-import {PowerSystem,normalizePowers} from '../../../royale/powers.mjs';
+import {PowerSystem,normalizePowers,POWERS} from '../../../royale/powers.mjs';
 import {EQUIPMENT,armorOutfitKey,emptyInventory} from '../../../royale/equipment.mjs';
 import {inventoryFor,testedPowers} from './armor-fixture.mjs';
 
@@ -45,7 +45,11 @@ export function incomingLost(g,steel=false){
 export function measure(g){
  const offense=Object.fromEntries(attacks.map(id=>[id,hitPointsLost(g,id)]));
  const incoming=incomingLost(g),steelIncoming=incomingLost(g,true);
- ready(g);g.powers.data.equipped=['flight',null,null];assert(g.powers.activateSlot(0));
+ ready(g);
+ if(POWERS.flight.passive){
+  g.powers.data.equipped=[null,null,null];g.hero.jumps=0;g.hero.jumpBuffer=0;
+  g.step(STEP,{jump:true});g.step(STEP,{jump:true});assert(g.powers.flying);
+ }else{g.powers.data.equipped=['flight',null,null];assert(g.powers.activateSlot(0));}
  let flightFrames=0;while(g.powers.flying&&flightFrames<3000){g.powers.step(STEP);flightFrames++;}
  ready(g);for(let i=0;i<120;i++)g.step(STEP,{move:1,run:true});
  return {offense,incoming,steelIncoming,flightFrames,runVelocity:Number(g.hero.vx.toFixed(8)),attackRate:Number(g.powers.attackRate.toFixed(8)),maxHp:g.hero.maxHp};

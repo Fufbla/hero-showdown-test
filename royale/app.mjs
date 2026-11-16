@@ -529,7 +529,7 @@ function updatePowers(){
     hudAttr(b,'aria-label',!id&&!special?`Choose a power for empty slot ${i+1}`:`${def?.name||`Power slot ${i+1}`}${disrupted?' · disrupted until boss reaches half health':cooldown?' · recovering':active?(id==='flight'?' · flying, press to cancel':' · active'):' · ready'}${special?' · protected fourth power':''}`);hudAttr(b,'aria-pressed',String(!!active));
   }
   updateCompactSlots(canEdit,game);
-  hudText($('power-context'),game.disruptedPower?'ONE POWER DISRUPTED · restored at half boss HP':game.powers.flying?'FLIGHT · steer ↑ ↓ · press Flight to land':game.inCombat()?'IN COMBAT':game.powers.data.points?`${game.powers.data.points} Power Points · ↑ at Tree of Eris`:'Manage powers at the Tree of Eris');
+  hudText($('power-context'),game.disruptedPower?'ONE POWER DISRUPTED · restored at half boss HP':game.powers.flying?'FLIGHT · steer with directions · double-tap Jump to cancel':game.inCombat()?'IN COMBAT':game.powers.data.levels.flight?(game.powers.cooldowns.flight>0?`Flight recovering · ${Math.ceil(game.powers.cooldowns.flight)} s`:'Double-jump to fly · no power slot needed'):game.powers.data.points?`${game.powers.data.points} Power Points · ↑ at Tree of Eris`:'Manage powers at the Tree of Eris');
 }
 let pickerReturn = null;
 function openPowerPicker(slot, trigger = powerButtons[slot]) {
