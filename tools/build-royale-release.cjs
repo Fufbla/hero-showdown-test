@@ -65,7 +65,7 @@ function copyPublic(dir='',restricted=false){
   }
 }
 function shell(html,base,script){
-  html=html.replace(/href="((?:royale|menu-navigation|lobby)\.css)(?:\?[^"]*)?"/g,(_,file)=>`href="${file}?v=${hash(read('royale/'+(file==='lobby.css'?'local-coop/':'')+file)).slice(0,12)}"`);
+  html=html.replace(/href="((?:royale|menu-navigation|lobby|powers|landscape|interface-controls)\.css)(?:\?[^"]*)?"/g,(_,file)=>`href="${file}?v=${hash(read('royale/'+(file==='lobby.css'?'local-coop/':'')+file)).slice(0,12)}"`);
   html=html.replace(/<base href="[^"]+">/,'<base href="'+base+'">');
   html=html.replace(/<script type="importmap">[\s\S]*?<\/script>/g,'');
   html=html.replace(/<script type="module" src="[^"]+"><\/script>/g,'');

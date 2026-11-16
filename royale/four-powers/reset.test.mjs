@@ -15,10 +15,10 @@ const memory=()=>{const map=new Map();return {getItem:k=>map.get(k)??null,setIte
 function game(){const g=new Game();g.hero.level=30;g.hero.coins=1500;g.powers.data=normalizePowers({levels:Object.fromEntries(POWER_IDS.map(id=>[id,id==='animalAllies'?15:id==='strength'?10:0])),equipped:['strength','animalAllies',null]},30);g.treeVisit=true;g.paused=true;g.started=true;g.combatTimer=0;return g;}
 const snapshot=()=>JSON.parse(game().save());
 function local(){const g=game(),storage=memory(),store=new LocalHeroStore(storage);assert.ok(store.writeSlot(0,g.save()).ok);const heroId=store.slot(0).id,transaction=new InstantPowerUpgrades(()=>({game:g,store,index:0,heroId}));return {g,storage,store,transaction,heroId};}
-test('Paid reset returns every invested point, clears three slots and preserves all other progress',()=>{
+test('Paid reset returns every invested point, clears four slots and preserves all other progress',()=>{
  const before=snapshot(),original=structuredClone(before),result=preparePowerReset(before),next=result.snapshot;
  assert.equal(result.refunded,25);assert.equal(result.points,29);assert.equal(next.coins,500);assert.equal(next.economy.coinsSpent,before.economy.coinsSpent+1000);assert.equal(next.economy.revision,before.economy.revision+1);
- assert.ok(POWER_IDS.every(id=>next.powers.levels[id]===0));assert.deepEqual(next.powers.equipped,[null,null,null]);assert.equal(next.powers.resetRevision,1);assert.ok(isPowerReset(before,next));assert.ok(decodeSave(JSON.stringify(next)));
+ assert.ok(POWER_IDS.every(id=>next.powers.levels[id]===0));assert.deepEqual(next.powers.equipped,[null,null,null,null]);assert.equal(next.powers.resetRevision,1);assert.ok(isPowerReset(before,next));assert.ok(decodeSave(JSON.stringify(next)));
  for(const key of Object.keys(before).filter(k=>!['coins','economy','powers'].includes(k)))assert.deepEqual(next[key],before[key],key);
  assert.deepEqual(before,original);for(const id of POWER_IDS.filter(id=>id!=='speed'))assert.equal(next.powers.recovery[id],before.powers.recovery[id]);
 });

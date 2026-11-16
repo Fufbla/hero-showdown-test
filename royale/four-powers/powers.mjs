@@ -1,12 +1,12 @@
-import {retireMovementPower} from '../../royale-v3-staging/power-policy.mjs';
+import {retireMovementPower,ACTIVE_POWER_SLOTS} from '../../royale-v3-staging/power-policy.mjs';
 import {offensiveDamage} from '../../royale/combat-tuning.mjs';
 import {groundedForRoots,releaseInvalidRoots} from '../../royale/roots-armor.mjs';
 import { MERGE_POWERS } from '../../royale/legendary-data.mjs';
 import {ProjectilePool,clearProjectiles,compactProjectiles} from '../../royale/projectiles.mjs';
 // Phase 3 rules. Values not specified by the design are collected here for balancing.
 export const POWER_CAP = 20;
-export const ACTIVE_SLOTS = 3;
-export const FUTURE_MERGE_SLOT = Object.freeze({ index: 3, requiredPieces: 2, cooldownMultiplier: .5 });
+export const ACTIVE_SLOTS = ACTIVE_POWER_SLOTS;
+export const FUTURE_MERGE_SLOT = Object.freeze({ index: ACTIVE_SLOTS, requiredPieces: 2, cooldownMultiplier: .5 });
 // Villain Merge adapter remains reserved; production has no merge entitlement.
 export function resolveAbilitySlots(data,merge=null) {
   const slots=Array.from({length:ACTIVE_SLOTS},(_,index)=>{const id=data.equipped[index];return {id:POWERS[id]?.passive?null:id,level:POWERS[id]?.passive?0:data.levels[id]||0,cooldownMultiplier:1};});
@@ -82,7 +82,7 @@ export function normalizePowers(raw,heroLevel,{strict=false,allowOverBudget=fals
   const added=['animalAllies','seismicSmash'];
   raw={...migrated,levels:{...migrated.levels,...Object.fromEntries(added.map(id=>[id,raw?.levels?.[id]??0]))},
     recovery:{...migrated.recovery,...Object.fromEntries(added.map(id=>[id,raw?.recovery?.[id]??0]))},
-    equipped:Array.from({length:3},(_,i)=>added.includes(raw?.equipped?.[i])?raw.equipped[i]:migrated.equipped[i])};
+    equipped:Array.from({length:ACTIVE_SLOTS},(_,i)=>added.includes(raw?.equipped?.[i])?raw.equipped[i]:migrated.equipped[i])};
   const levels=Object.fromEntries(POWER_IDS.map(id=>[id,integer(raw?.levels?.[id],0,20)]));
   const spent=Object.values(levels).reduce((a,b)=>a+b,0),earned=Math.max(0,heroLevel-1);
   // Never silently refund or redistribute an invalid ledger.
@@ -108,7 +108,7 @@ export function segmentHit(x,y,nx,ny,rect,r=0) {
 export class PowerSystem {
   constructor(game,data) {
     Object.defineProperty(this,'game',{value:game});this.data=data;this.cooldowns={...data.recovery};this.active={};this.projectiles=[];this.projectilePool=new ProjectilePool(12);this.bursts=[];this.effects=[];this.effectSerial=0;
-    // The slot resolver is extensible; Phase 3 exposes only three standard slots.
+    // The slot resolver is extensible; Every hero has four standard slots; Merge is a separate bonus.
     this.mergeEntitlement=null;
   }
   stats(id) {return powerStats(id,this.data.levels[id],{heroLevel:this.game.hero.level,equipment:this.game.equipment});}
@@ -133,7 +133,7 @@ export class PowerSystem {
   get speed(){return Math.min(.6,speedScale(this.data.levels.speed,.05,.6,this.game.equipment.speedLevels)+this.game.equipment.moveSpeed);}
   get attackRate(){return 1+Math.min(.5,speedScale(this.data.levels.speed,.03,.5,this.game.equipment.speedLevels)+this.game.equipment.attackSpeed);}
   ready(id){return this.game.disruptedPower!==id&&POWER_IDS.includes(id)&&!!this.data.levels[id]&&!POWERS[id]?.passive&&!this.active[id]&&(this.cooldowns[id]||0)<=EPS;}
-  activateSlot(index){if(index===3&&this.game.legendary?.active)return this.game.activateMerge();const slot=resolveAbilitySlots(this.data,this.mergeEntitlement)[index];return slot?.id?this.activate(slot.id,slot):false;}
+  activateSlot(index){if(index===ACTIVE_SLOTS&&this.game.legendary?.active)return this.game.activateMerge();const slot=resolveAbilitySlots(this.data,this.mergeEntitlement)[index];return slot?.id?this.activate(slot.id,slot):false;}
   activate(id,slot=null) {
     const g=this.game,h=g.hero,def=POWERS[id];
     const resolved=resolveAbilitySlots(this.data,this.mergeEntitlement).find(s=>s.id===id);

@@ -1,5 +1,5 @@
 /* Compact visible squares retain separate 48px pointer targets. */
-.game-view.game-view .power-bar{position:absolute;display:flex;flex-direction:column;left:auto;right:24px;bottom:100px;transform:none;width:48px;gap:4px;padding:0;border:0;background:none;pointer-events:auto}
+.game-view.game-view .power-bar{position:absolute;display:grid;grid-template-columns:repeat(2,48px);left:auto;right:24px;bottom:100px;transform:none;width:100px;gap:4px;padding:0;border:0;background:none;pointer-events:auto}
 .game-view.game-view .compact-power-slot{display:block;width:48px;height:48px;border:0;background:none;overflow:visible}
 .game-view.game-view .power-button{position:relative;isolation:isolate;display:grid;place-items:center;width:48px;height:48px;min-width:48px;min-height:48px;max-width:48px;padding:2px;border:0;border-radius:7px;background:none;box-shadow:none;overflow:hidden;gap:0}
 .game-view.game-view .power-button::before{content:'';position:absolute;inset:2px;border:1px solid #c2e7b4;background:#153c3fee;border-radius:6px;z-index:-2}
@@ -8,10 +8,10 @@
 .game-view.game-view .power-button>span,.game-view.game-view .power-button>kbd,.game-view.game-view #power-context,.game-view.game-view .slot-select{display:none!important}
 .game-view.game-view .power-button.cooldown::before{border-color:#778591}.game-view.game-view .power-button.cooldown>b{opacity:.6}.game-view.game-view .power-button.active::before{border:2px solid #ffe39b;background:#496446}
 .game-view.game-view .power-button.disrupted::before{border-color:#ef8f89;background:#5c303b}.game-view.game-view .power-button:disabled{opacity:.6}
-.game-view.game-view #edit-hud-powers{display:grid!important;place-items:center;position:absolute;right:54px;bottom:2px;width:44px;height:44px;min-width:44px;padding:0;border:1px solid #c7d5ae88;border-radius:8px;background:#173b3de0;color:#ffe0a4;font-size:23px}
+.game-view.game-view #edit-hud-powers{display:grid!important;place-items:center;position:absolute;right:108px;bottom:2px;width:44px;height:44px;min-width:44px;padding:0;border:1px solid #c7d5ae88;border-radius:8px;background:#173b3de0;color:#ffe0a4;font-size:23px}
 .game-view.game-view #edit-hud-powers span{display:none}
-/* The fourth, suit-only ability keeps its entitlement and lives beside slot 3. */
-.game-view.game-view .compact-power-slot:has(.merge-slot){position:absolute;right:54px;bottom:54px}
+/* The suit-only bonus ability stays separate from the four regular slots. */
+.game-view.game-view .compact-power-slot:has(.merge-slot){position:absolute;right:108px;bottom:54px}
 .landscape-game.game-view{--action-size:clamp(44px,var(--touch-size,52px),64px)}
 .landscape-game.game-view.game-view .action-buttons{grid-template-columns:repeat(3,var(--action-size));right:calc(env(safe-area-inset-right,0px) + 10px + var(--touch-right));bottom:calc(env(safe-area-inset-bottom,0px) + 10px + min(var(--touch-rise),20px));gap:8px}
 .landscape-game.game-view.game-view .action-buttons button,.landscape-game.game-view.game-view .action-buttons .jump-button{width:var(--action-size);height:var(--action-size);margin:0}

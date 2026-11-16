@@ -1,3 +1,4 @@
+import {ACTIVE_SLOTS} from './powers.mjs';
 import { normalizeControls } from './controls.mjs';
 // Every physical pointer owns its action. Releasing one finger never releases another.
 export class Input {
@@ -146,7 +147,7 @@ export class Input {
     }
     const left = held('left'), right = held('right');
     const result = { move: this.axis || this.padX || Number(right) - Number(left), run: Math.abs(this.axis) > .72 || Math.abs(this.padX)> .72 || held('run'),
-      vertical:this.vertical||this.padY||(held('down')?1:held('up')||this.keys.has('ArrowUp')||this.padHeld.has('portal')?-1:0),powers:[0,1,2,3].map(i=>this.edges.has(`power${i}`)),heal:this.edges.has('heal'),tree:this.edges.has('tree'),
+      vertical:this.vertical||this.padY||(held('down')?1:held('up')||this.keys.has('ArrowUp')||this.padHeld.has('portal')?-1:0),powers:Array.from({length:ACTIVE_SLOTS+1},(_,i)=>this.edges.has(`power${i}`)),heal:this.edges.has('heal'),tree:this.edges.has('tree'),
       portal:this.edges.has('portal'),nextTarget:this.edges.has('nextTarget'),jump: this.edges.has('jump'), punch: this.edges.has('punch'), kick: this.edges.has('kick'), interact: this.edges.has('interact'),
       punchHeld: held('punch'), kickHeld: held('kick') };
     this.edges.clear(); return result;

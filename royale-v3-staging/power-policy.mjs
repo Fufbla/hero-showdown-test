@@ -1,5 +1,6 @@
 // Shared production and staging policy. The point ledger is derived, never additively credited.
 export const MOVEMENT_POLICY_VERSION=1;
+export const ACTIVE_POWER_SLOTS=4;
 export const NEW_POWER_IDS=Object.freeze(['animalAllies','seismicSmash']);
 export const CURRENT_POWER_IDS=Object.freeze(['strength','superKick','fireball','flight','steel','roots','speed','whirlwind',...NEW_POWER_IDS]);
 const int=n=>Number.isInteger(n)&&n>=0&&n<=20;
@@ -17,7 +18,7 @@ export function retireMovementPower(raw,heroLevel,{allowOverBudget=false}={}){
  }
  const levels=Object.fromEntries(CURRENT_POWER_IDS.map(id=>[id,raw?.levels?.[id]??0]));
  const recovery=Object.fromEntries(CURRENT_POWER_IDS.filter(id=>id!=='speed').map(id=>[id,raw?.recovery?.[id]??0]));
- const equipped=Array.from({length:3},(_,i)=>{
+ const equipped=Array.from({length:ACTIVE_POWER_SLOTS},(_,i)=>{
   const id=raw?.equipped?.[i];return CURRENT_POWER_IDS.includes(id)&&id!=='speed'?id:null;
  });
  return {...raw,levels,equipped,recovery,resetRevision,points:Math.max(0,earned-Object.values(levels).reduce((a,b)=>a+b,0)),
@@ -34,6 +35,7 @@ export function guardPowerSave(previous,incoming){
  const before=previous?migratePowerSnapshot(previous):null;
  const next=migratePowerSnapshot(incoming);
  if(before){
+  if(before.powers.equipped[3]&&(!Array.isArray(incoming.powers?.equipped)||incoming.powers.equipped.length<ACTIVE_POWER_SLOTS))throw Error('This game tab has only three power slots. Reload before saving your four-slot hero.');
   if(next.powers.resetRevision!==before.powers.resetRevision)throw Error('Skill reset changed; reload the latest hero');
   if(next.level<before.level||CURRENT_POWER_IDS.some(id=>next.powers.levels[id]<before.powers.levels[id]))throw Error('Power progress changed; reload your hero');
   if(previous.powers?.movementPolicy?.version===1&&(incoming.powers?.levels?.agility||incoming.powers?.equipped?.includes('agility')))throw Error('Power rules changed; reload this game tab');

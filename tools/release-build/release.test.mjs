@@ -23,7 +23,8 @@ function progressed(){
 }
 test('release keeps existing save version and exact progression, position, appearance and equipped gear',()=>{
  const g=progressed(),before=JSON.parse(g.save()),decoded=decodeSave(JSON.stringify(before));assert(decoded,'fixture is a valid existing save');const restored=new Game({save:decoded}),after=JSON.parse(restored.save());
- for(const key of ['version','level','xp','coins','inventory','cosmetics','world','powers','economy','legendary','journey','bossProgress'])assert.deepEqual(after[key],before[key],key);
+ for(const key of ['version','level','xp','coins','inventory','cosmetics','world','economy','legendary','journey','bossProgress'])assert.deepEqual(after[key],before[key],key);
+ assert.deepEqual(after.powers,{...before.powers,equipped:[...before.powers.equipped,null]},'Existing powers are preserved and the new fourth slot starts empty');
  assert.deepEqual(after.look,sanitizeLook(before.look));assert.equal(after.look.hair,before.look.hair);assert.equal(after.look.mouth,before.look.mouth);
  assert.equal(restored.hero.x,2350);assert.equal(restored.hero.y,600);assert.equal(restored.regionId,5);assert(restored.equipment.defense>0);
 });
@@ -65,6 +66,15 @@ test('artifact preserves cloud save contract and does not ship backend migration
  assert.equal(manifest.developerTools,false);assert(!fs.existsSync(path.join(out,'royale-v3-staging/backend-v3')));
  for(const entry of manifest.entrypoints)assert(fs.statSync(path.join(out,entry)).size>0);
  const home=read('royale/index.html');assert(!home.includes('Test Account'));assert(home.includes('id="browser-heroes"'));assert(home.includes('MY HEROES'));assert(home.includes('id="local-coop"'));
+});
+
+test('published gameplay exposes four regular power controls and a separate Merge bonus',()=>{
+ const html=read('royale/gameplay/index.html');
+ for(let slot=0;slot<4;slot++)assert.match(html,new RegExp('<button[^>]*data-control="power'+slot+'"[^>]*>'),'regular slot '+(slot+1));
+ const merge=html.match(/<button[^>]*data-control="power4"[^>]*>/)?.[0]||'';
+ assert.match(merge,/merge-slot/);assert.match(merge,/\bhidden\b/);
+ assert(!html.includes('Manage Villain Merge · fourth slot'));
+ for(const source of ['royale/four-powers/powers.mjs','royale-v3-staging/power-policy.mjs','royale/controls.mjs','royale/local-coop/protocol.mjs','royale/local-coop/input.mjs','royale/local-coop/power-hud.mjs'])assert(Object.hasOwn(manifest.sourceHashes,source),source);
 });
 
 test('release offers local co-op only and excludes online transports and room routes',async()=>{

@@ -29,7 +29,7 @@ import { BOSSES, ARENA } from './boss-data.mjs';
 import { JourneyMenu } from './journey-menu.mjs';
 import { formatClock } from './progression.mjs';
 import { equipmentOutfit } from './equipment.mjs';
-import { POWERS } from './powers.mjs';
+import { POWERS, ACTIVE_SLOTS } from './powers.mjs';
 import { PowerMenu, ControlMenu } from './power-menu.mjs';
 import {InstantPowerUpgrades} from './power-upgrades.mjs';
 import { loadControls } from './controls.mjs';
@@ -523,10 +523,10 @@ function updatePowers(){
   const canEdit = screen==='play' && game.canSave() && !criticalPending && !powerUpgrades.busy;
   $('edit-hud-powers').disabled = !canEdit;
   for(const [i,b] of powerButtons.entries()){
-    const special=i===3,id=special?merge?.id:game.powers.data.equipped[i],def=special?merge:POWERS[id],active=id&&(special?game.mergeEffects.some(e=>e.id===id&&!e.ended):!!game.powers.active[id]),cooldown=id&&(special?(game.mergeCooldowns[id]||0)>0:(game.powers.cooldowns[id]||0)>0),disrupted=!special&&!!id&&id===game.disruptedPower;
+    const special=i===ACTIVE_SLOTS,id=special?merge?.id:game.powers.data.equipped[i],def=special?merge:POWERS[id],active=id&&(special?game.mergeEffects.some(e=>e.id===id&&!e.ended):!!game.powers.active[id]),cooldown=id&&(special?(game.mergeCooldowns[id]||0)>0:(game.powers.cooldowns[id]||0)>0),disrupted=!special&&!!id&&id===game.disruptedPower;
     b.hidden=special&&!merge;hudText(b.querySelector('b'),disrupted?'⊘':def?.icon||'+');hudText(b.querySelector('span'),def?.name||'Empty slot');hudText(b.querySelector('kbd'),input.controls.keys[`power${i}`][0].replace('Digit','').replace('Key',''));
     b.classList.toggle('cooldown',!!cooldown);b.classList.toggle('active',!!active);b.classList.toggle('disrupted',!!disrupted);b.classList.toggle('flight-locked',!!(game.powers.flying&&def?.offensive&&id!=='fireball'));b.disabled=screen!=='play'||game.hero.dead||!!disrupted||!!criticalPending||(!id&&(special||!canEdit));
-    hudAttr(b,'aria-label',!id&&!special?`Choose a power for empty slot ${i+1}`:`${def?.name||`Power slot ${i+1}`}${disrupted?' · disrupted until boss reaches half health':cooldown?' · recovering':active?(id==='flight'?' · flying, press to cancel':' · active'):' · ready'}${special?' · protected fourth power':''}`);hudAttr(b,'aria-pressed',String(!!active));
+    hudAttr(b,'aria-label',!id&&!special?`Choose a power for empty slot ${i+1}`:`${def?.name||`Power slot ${i+1}`}${disrupted?' · disrupted until boss reaches half health':cooldown?' · recovering':active?(id==='flight'?' · flying, press to cancel':' · active'):' · ready'}${special?' · protected bonus power':''}`);hudAttr(b,'aria-pressed',String(!!active));
   }
   updateCompactSlots(canEdit,game);
   hudText($('power-context'),game.disruptedPower?'ONE POWER DISRUPTED · restored at half boss HP':game.powers.flying?'FLIGHT · steer with directions · double-tap Jump to cancel':game.inCombat()?'IN COMBAT':game.powers.data.levels.flight?(game.powers.cooldowns.flight>0?`Flight recovering · ${Math.ceil(game.powers.cooldowns.flight)} s`:'Double-jump to fly · no power slot needed'):game.powers.data.points?`${game.powers.data.points} Power Points · ↑ at Tree of Eris`:'Manage powers at the Tree of Eris');
@@ -681,7 +681,7 @@ function frame(now){
   if(screen==='play'&&!waitingForArt&&!criticalPending){
     accumulator+=elapsed;while(accumulator>=(online()?STEP*2:STEP)){
       const action = phase10QA?.sample() || input.sample();
-      const empty = action.powers?.findIndex((pressed,i) => pressed && i<3 && !game.powers.data.equipped[i]) ?? -1;
+      const empty = action.powers?.findIndex((pressed,i) => pressed && i<ACTIVE_SLOTS && !game.powers.data.equipped[i]) ?? -1;
       if (empty!==-1 && game.canSave()) {openPowerPicker(empty);accumulator=0;break;}
       if(online()){if(!multiplayerMenu.session.client.ready){accumulator=0;break;}multiplayerMenu.session.input(action);}else game.step(STEP,action);accumulator-=online()?STEP*2:STEP;
     }

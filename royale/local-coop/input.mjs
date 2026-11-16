@@ -1,8 +1,9 @@
+import {ACTIVE_SLOTS} from '../powers.mjs';
 export const KEYSETS=[
- {left:'KeyA',right:'KeyD',up:'KeyW',down:'KeyS',run:'ShiftLeft',jump:'Space',punch:'KeyF',kick:'KeyG',interact:'KeyE',heal:'KeyR',portal:'KeyQ',nextTarget:'KeyT',power0:'Digit1',power1:'Digit2',power2:'Digit3',power3:'Digit4'},
- {left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown',run:'ShiftRight',jump:'Enter',punch:'KeyJ',kick:'KeyK',interact:'KeyL',heal:'KeyU',portal:'KeyO',nextTarget:'KeyI',power0:'Digit7',power1:'Digit8',power2:'Digit9',power3:'Digit0'}
+ {left:'KeyA',right:'KeyD',up:'KeyW',down:'KeyS',run:'ShiftLeft',jump:'Space',punch:'KeyF',kick:'KeyG',interact:'KeyE',heal:'KeyR',portal:'KeyQ',nextTarget:'KeyT',power0:'Digit1',power1:'Digit2',power2:'Digit3',power3:'Digit4',power4:'Digit5'},
+ {left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown',run:'ShiftRight',jump:'Enter',punch:'KeyJ',kick:'KeyK',interact:'KeyL',heal:'KeyU',portal:'KeyO',nextTarget:'KeyI',power0:'Digit7',power1:'Digit8',power2:'Digit9',power3:'Digit0',power4:'Digit6'}
 ];
-export const PAD={jump:0,kick:1,punch:2,interact:3,power0:4,power1:5,run:6,power2:7,power3:8,pause:9,tree:10,heal:11,portal:12,down:13,left:14,right:15,nextTarget:16};
+export const PAD={jump:0,kick:1,punch:2,interact:3,power0:4,power1:5,run:-1,power2:7,power3:6,power4:8,pause:9,tree:10,heal:11,portal:12,down:13,left:14,right:15,nextTarget:16};
 export function samplePad(pad,previous=new Set()){
  const held=new Set();if(pad?.connected)for(const [action,n] of Object.entries(PAD))if(pad.buttons[n]?.pressed)held.add(action);
  const edges=new Set([...held].filter(x=>!previous.has(x))),axis=n=>Math.abs(pad?.axes[n]||0)>.18?Math.max(-1,Math.min(1,pad.axes[n])):0;
@@ -53,7 +54,7 @@ export class LocalInput {
   if(!this.enabled)return {};
   const p=this.pad[player]||{},held=action=>p.held?.has(action)||(this.sources[player]==='keyboard'&&this.keys.has(KEYSETS[player][action]))||[...this.pointers.values()].some(x=>x.player===player&&x.action===action);
   const edge=this.edges[player],move=p.x||Number(held('right'))-Number(held('left'));
-  const result={move,vertical:p.y||Number(!!held('down'))-Number(!!held('up')||!!p.held?.has('portal')),run:held('run')||this.sources[player]==='touch'||Math.abs(p.x||0)>.72,punchHeld:!!held('punch'),kickHeld:!!held('kick'),powers:[0,1,2,3].map(i=>edge.has('power'+i))};
+  const result={move,vertical:p.y||Number(!!held('down'))-Number(!!held('up')||!!p.held?.has('portal')),run:held('run')||this.sources[player]==='touch'||Math.abs(p.x||0)>.72,punchHeld:!!held('punch'),kickHeld:!!held('kick'),powers:Array.from({length:ACTIVE_SLOTS+1},(_,i)=>edge.has('power'+i))};
   for(const k of ['jump','punch','kick','interact','portal','heal','tree','nextTarget'])result[k]=edge.has(k);
   edge.clear();return result;
  }

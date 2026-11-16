@@ -1,20 +1,20 @@
-import {POWERS} from '../powers.mjs';
+import {POWERS,ACTIVE_SLOTS} from '../powers.mjs';
 
 // These are the same icon glyphs used by the game's power buttons. Each view
 // reads only its own hero; no timers, network messages or per-frame DOM rebuilds.
 export function powerSlots(game) {
  const merge=game.mergeAbility();
- return [...game.powers.data.equipped.map(id=>({id,def:POWERS[id],remaining:game.powers.cooldowns[id]||0,active:!!game.powers.active[id],disrupted:!!id&&game.disruptedPower===id})),
+ return [...Array.from({length:ACTIVE_SLOTS},(_,slot)=>game.powers.data.equipped[slot]??null).map(id=>({id,def:POWERS[id],remaining:game.powers.cooldowns[id]||0,active:!!game.powers.active[id],disrupted:!!id&&game.disruptedPower===id})),
   ...(merge?[{id:merge.id,def:merge,remaining:game.mergeCooldowns[merge.id]||0,active:game.mergeEffects.some(e=>e.id===merge.id&&!e.ended),merge:true}]:[])];
 }
 export function makePowerHUD(root,player) {
- const cells=Array.from({length:4},(_,slot)=>{
+ const cells=Array.from({length:ACTIVE_SLOTS+1},(_,slot)=>{
   const cell=document.createElement('span');cell.className='cooldown-icon';cell.setAttribute('role','img');
   const icon=document.createElement('b'),shade=document.createElement('i'),time=document.createElement('small');
   shade.className='cooldown-shade';time.className='cooldown-time';cell.append(icon,shade,time);root.append(cell);
   return {cell,icon,shade,time,key:'',peak:0,id:null};
  });
- return game=>powerSlots(game).concat([null,null,null,null]).slice(0,4).forEach((power,slot)=>{
+ return game=>powerSlots(game).concat(Array(ACTIVE_SLOTS+1).fill(null)).slice(0,ACTIVE_SLOTS+1).forEach((power,slot)=>{
   const view=cells[slot];view.cell.hidden=!power;if(!power)return;
   const {id,def,remaining,active,disrupted}=power;
   if(view.id!==id){view.id=id;view.peak=0;}

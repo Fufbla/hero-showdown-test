@@ -28,9 +28,9 @@ function installVfxProbe(){
  const {costumeById}=await import('../../royale-v3-staging/costumes/catalog.mjs');
  const accounts=[0,1].map(i=>{
   const g=new Game({look:{...styleCDefault(i?'female':'male'),name:i?'Coop QA Nova':'Coop QA Atlas'}});
-  g.hero.level=14+i;g.hero.xp=20+i;g.hero.coins=1234+i*100;g.powers.data.points=7+i;
+  g.hero.level=14+i;g.hero.xp=20+i;g.hero.coins=1234+i*100;g.powers.data.points=6+i;
   for(const id of ['fireball','roots','whirlwind'])g.powers.data.levels[id]=2;
-  g.powers.data.equipped=['fireball','roots','whirlwind'];
+  g.powers.data.levels.steel=1;g.powers.data.equipped=['fireball','roots','whirlwind','steel'];
   if(i===0){const set=costumeById('fishsticks-costume');g.cosmetics={version:1,revision:1,visible:true,owned:set.pieces.map(p=>p.id),equipped:Object.fromEntries(set.pieces.map(p=>[p.category,p.id]))};}
   const selectedSlot=i?3:1;
   return {code:i?'2222222222':'1111111111',token:'isolated-fixture-'+i,selectedSlot,slots:[1,2,3].map(n=>({slot_number:n,revision:1,snapshot:n===selectedSlot?JSON.parse(g.save()):null})),saves:[]};
@@ -118,6 +118,11 @@ function installVfxProbe(){
   }
   async function resume(){for(let i=0;i<2;i++)await page.locator('#panel-'+i).getByRole('button',{name:'Ready / Resume',exact:true}).click();assert(!await page.locator('#menu').isVisible());await page.waitForTimeout(150);}
   assert((await observe()).frames>5,'Both heroes continuously render');
+  for(let i=0;i<2;i++){
+   assert.equal(await page.locator('#powers-'+i+' .cooldown-icon:not([hidden])').count(),4,'Each player has four regular powers');
+   await pulse(i,6);assert.match(await page.locator('#powers-'+i+' .cooldown-icon').nth(3).getAttribute('aria-label'),/Steel Body.*Active/,'LT activates the fourth power independently');
+  }
+  report.checks.push('Both co-op players have four regular HUD slots and independently activate slot 4 with LT');
   // An unchanged checkpoint is intentionally not sent again. Move each hero
   // before waiting for the autosave so both accounts have new progress.
   await move(0,.25,150);await move(1,.25,150);
@@ -222,6 +227,9 @@ function installVfxProbe(){
   await solo.goto(new URL('../gameplay/?verify='+manifest.sourceCommit,url).href,{waitUntil:'domcontentloaded'});
   await skipIntro(solo);
   await solo.getByRole('button',{name:'Continue →',exact:true}).click();await solo.waitForTimeout(600);
+  assert.equal(await solo.locator('.power-button:not([hidden])').count(),4);
+  await solo.keyboard.press('Digit4');
+  await solo.waitForFunction(()=>document.querySelector('[data-control="power3"]').classList.contains('active'));
   const first=await solo.locator('#game').evaluate(c=>c.toDataURL());
   await solo.keyboard.down('ArrowRight');await solo.waitForTimeout(300);await solo.keyboard.up('ArrowRight');
   assert.notEqual(await solo.locator('#game').evaluate(c=>c.toDataURL()),first,'Single player continues drawing after input');
@@ -286,8 +294,15 @@ function installVfxProbe(){
    await solo.screenshot({path:dir+`/tree-${viewport.width}.png`,fullPage:true});
    await solo.getByRole('button',{name:'Resume Game',exact:true}).click();
    assert(!await solo.locator('#tree-menu').isVisible());
+   const powerRects=await solo.locator('.power-button:not([hidden]),#edit-hud-powers,.jump-button').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height};}));
+   assert.equal(powerRects.length,6,'Four powers, loadout edit and Jump remain visible');
+   assert(powerRects.every(r=>r.w>=44&&r.h>=44&&r.x>=0&&r.y>=0&&r.x+r.w<=viewport.width+1&&r.y+r.h<=viewport.height+1),'Power controls remain inside the phone viewport');
+   for(let a=0;a<powerRects.length;a++)for(let b=a+1;b<powerRects.length;b++){const x=powerRects[a],y=powerRects[b];assert(x.x+x.w<=y.x+.5||y.x+y.w<=x.x+.5||x.y+x.h<=y.y+.5||y.y+y.h<=x.y+.5,'Power controls do not overlap');}
+   if(viewport.width===390){await solo.locator('[data-control="power3"]').click();await solo.waitForFunction(()=>document.querySelector('[data-control="power3"]').classList.contains('active'));await solo.waitForTimeout(3300);}
+
   }
   assert.deepEqual(soloErrors,[]);
+  report.checks.push('Four regular power buttons fit portrait and landscape without overlap; keyboard 4 and the fourth touch button activate Steel Body');
   report.checks.push('Portrait and landscape menus share a compact Back/Resume row; powers upgrade once, armor filters/review work, and Inventory, Settings and Clothing return safely');
   await soloContext.close();
   // Female heroes keep the full live catalog, including men's suits.

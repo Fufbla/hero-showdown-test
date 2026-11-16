@@ -15,7 +15,7 @@ import {prepareStyleCMaterials} from '../../royale/style-c-materials.mjs';
 import {bindStyleCGame} from '../../royale/style-c-live.mjs';
 import {styleCDefault} from '../../royale/style-c-defaults.mjs';
 import {WORLD_REGIONS} from '../../royale/world.mjs';
-import {POWERS} from '../../royale/powers.mjs';
+import {POWERS,ACTIVE_SLOTS} from '../../royale/powers.mjs';
 import {skillResetPreview,applySkillReset} from '../../royale/skill-reset.mjs';
 import {itemDefinition,ownedArmorOutfits,equipmentItemActive} from '../../royale/equipment.mjs';
 import {clothingRuntime} from '../../royale/cosmetics/runtime.mjs';
@@ -228,7 +228,7 @@ function renderPanel(i){
    const stats=el('p',`Health ${Math.ceil(g.hero.hp)} / ${g.hero.maxHp}\nXP ${g.hero.xp} / ${xpForLevel(g.hero.level)}\nHealth Roots ${g.healthRoots} / 10\nEquipment ${g.inventory.items.length} / 20\n${g.getRegion().name}`);stats.className='stats';stats.style.whiteSpace='pre-line';content.append(stats);
    content.append(el('p',`Natural strength ${10+2*(g.hero.level-1)} · Running speed +${formatStat('moveSpeed',g.powers.speed)} · Attack speed +${formatStat('attackSpeed',g.powers.attackRate-1)}`),el('p','Equipment bonuses: '+(statText(g.equipment)||'None')));
    content.append(button('Save My Hero',()=>void saveOne(i)),button('Use Health Root',()=>act(i,'useHealthRoot'),!g.healthRoots||g.hero.dead));
-   content.append(el('p','Autosave every 8 seconds. If your controller disconnects, reconnect the same controller. Your assignment is retained.'));
+   content.append(el('p','Power slots: LB, RB, RT, LT. Push the left stick fully to run. View/Select: Villain Merge. Autosave every 8 seconds. If your controller disconnects, reconnect the same controller. Your assignment is retained.'));
   }
   if(p.tab==='tree'){
    content.append(el('h4','Tree of Eris'),button('Upgrade Powers',()=>{p.treeSection='powers';renderPanel(i);}),button('Costume Wardrobe',()=>{p.treeSection='wardrobe';renderPanel(i);}));
@@ -238,7 +238,7 @@ function renderPanel(i){
    content.append(el('p','Flight is passive: double-jump to fly, steer with the directions, and double-tap Jump again to cancel. It uses no power slot.'));
    if(!g.canSave())content.append(el('p','Resume and spend five seconds out of combat before changing powers.'));
    const slots=el('div');slots.className='slot-actions';content.append(el('p',p.selectedPower?`Assign ${POWERS[p.selectedPower].name} to a slot. An equipped power swaps places.`:'Select an owned power below, then choose a slot.'),slots);
-   for(let slot=0;slot<3;slot++){
+   for(let slot=0;slot<ACTIVE_SLOTS;slot++){
     const current=g.powers.data.equipped[slot],choose=button(`Slot ${slot+1} · ${POWERS[current]?.name||'Empty'}`,()=>{
      if(p.selectedPower)void act(i,'equipPower',[slot,p.selectedPower]);
      else{p.chooseSlot=slot;renderPanel(i);focusMenu(i,`power-choice-${Object.keys(POWERS).find(id=>!POWERS[id].passive&&g.powers.data.levels[id])}`);}
@@ -256,7 +256,7 @@ function renderPanel(i){
    const resetButton=button('Reset skills · 1,000 coins',()=>{p.resetChoice={revision:g.economy.revision};renderPanel(i);},!reset.ok||!p.profile.resetPowers);
    resetButton.setAttribute('aria-label',`Player ${i+1} Reset skills · 1,000 coins`);content.append(resetButton);
    if(!reset.ok)content.append(el('p',reset.error));
-   if(p.resetChoice&&reset.ok)content.append(el('p',`Spend 1,000 coins to refund ${reset.refunded} invested points? You will have ${reset.points} Power Points to reassign. Your three power slots will be cleared. Your hero level, equipment and Villain Merge stay the same.`),button('Confirm reset · 1,000 coins',()=>void resetPlayerSkills(i)),button('Keep my skills',()=>{delete p.resetChoice;renderPanel(i);}));
+   if(p.resetChoice&&reset.ok)content.append(el('p',`Spend 1,000 coins to refund ${reset.refunded} invested points? You will have ${reset.points} Power Points to reassign. Your four power slots will be cleared. Your hero level, equipment and Villain Merge stay the same.`),button('Confirm reset · 1,000 coins',()=>void resetPlayerSkills(i)),button('Keep my skills',()=>{delete p.resetChoice;renderPanel(i);}));
    const merge=g.mergeAbility();if(merge)content.append(el('p',`Slot 4 · ${merge.icon} ${merge.name} · Villain Merge`));
    if(g.treeVisit)content.append(button('Buy Health Root · 50 coins',()=>act(i,'buyHealthRoot'),!g.canSave()));
   }

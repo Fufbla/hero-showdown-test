@@ -1,4 +1,5 @@
 // The client sends intentions, never coordinates, damage, loot or progression.
+import {ACTIVE_SLOTS} from '../powers.mjs';
 export const PROTOCOL = 4;
 export const ROOM_CODE = /^\d{6}$/;
 export const INPUT_KEYS = ['move','vertical','run','jump','punch','kick','punchHeld','kickHeld','heal','interact','portal','tree','nextTarget','powers'];
@@ -11,8 +12,8 @@ export function inputPacket(raw) {
   for(const key of INPUT_KEYS.filter(k=>!['move','vertical','powers'].includes(k))) {
     if(raw[key]!==undefined&&typeof raw[key]!=='boolean')throw Error('Invalid button.');input[key]=raw[key]===true;
   }
-  if(raw.powers!==undefined&&(!Array.isArray(raw.powers)||raw.powers.length>4||raw.powers.some(v=>typeof v!=='boolean')))throw Error('Invalid ability input.');
-  input.powers=Array.from({length:4},(_,i)=>raw.powers?.[i]===true);return input;
+  if(raw.powers!==undefined&&(!Array.isArray(raw.powers)||raw.powers.length>ACTIVE_SLOTS+1||raw.powers.some(v=>typeof v!=='boolean')))throw Error('Invalid ability input.');
+  input.powers=Array.from({length:ACTIVE_SLOTS+1},(_,i)=>raw.powers?.[i]===true);return input;
 }
 export function consumeEdges(input) {
   return {move:input.move,vertical:input.vertical,run:input.run,punchHeld:input.punchHeld,kickHeld:input.kickHeld};

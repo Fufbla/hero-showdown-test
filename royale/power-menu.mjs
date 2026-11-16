@@ -1,4 +1,4 @@
-import { POWERS, POWER_IDS, powerStats } from './powers.mjs';
+import { POWERS, POWER_IDS, powerStats, ACTIVE_SLOTS } from './powers.mjs';
 import { CONTROL_NAMES, CONTROL_KEY, normalizeControls } from './controls.mjs';
 import {hudEquipError} from './power-upgrades.mjs';
 import {skillResetPreview} from './skill-reset.mjs';
@@ -57,9 +57,9 @@ export class PowerMenu {
   }
   loadout(){
     const g=this.getGame(),safe=!g.inCombat()&&!g.hero.dead&&!this.busy;
-    $('loadout-note').textContent=safe?'Choose three learned powers. Selecting an equipped power swaps its slot.':'Loadout locked until safe.';
+    $('loadout-note').textContent=safe?'Choose four learned powers. Selecting an equipped power swaps its slot.':'Loadout locked until safe.';
     $('loadout-slots').replaceChildren();
-    for(let i=0;i<3;i++){
+    for(let i=0;i<ACTIVE_SLOTS;i++){
       const label=node('label',`Slot ${i+1}`,'field'),select=node('select');select.id=`slot-${i}`;select.setAttribute('aria-label',`Power slot ${i+1}`);
       const empty=node('option','Empty');empty.value='';select.append(empty);
       for(const id of POWER_IDS.filter(id=>!POWERS[id].passive&&g.powers.data.levels[id])){const option=node('option',`${POWERS[id].name} · ${g.powers.data.levels[id]}`);option.value=id;select.append(option);}
@@ -83,7 +83,7 @@ export class PowerMenu {
   }
   confirmReset(){
     const quote=skillResetPreview(this.getGame());if(this.busy||!quote.ok)return;
-    const dialog=node('dialog',undefined,'power-reset-dialog'),title=node('h3','Reset all skills?'),message=node('p',`Spend 1,000 coins to refund ${quote.refunded} spent skill points? You will have ${quote.points} points to assign. Your learned powers and three equipped slots will be cleared. Your hero level, items, and Villain Merge stay unchanged.`),status=node('p');
+    const dialog=node('dialog',undefined,'power-reset-dialog'),title=node('h3','Reset all skills?'),message=node('p',`Spend 1,000 coins to refund ${quote.refunded} spent skill points? You will have ${quote.points} points to assign. Your learned powers and four equipped slots will be cleared. Your hero level, items, and Villain Merge stay unchanged.`),status=node('p');
     const confirm=node('button','Confirm reset · 1,000 coins'),cancel=node('button','Keep my skills');
     title.id='power-reset-title';dialog.setAttribute('aria-labelledby',title.id);status.setAttribute('role','status');
     confirm.type=cancel.type='button';cancel.id='cancel-skill-reset';cancel.onclick=()=>dialog.close();dialog.onclose=()=>dialog.remove();dialog.oncancel=e=>{if(this.busy)e.preventDefault();};
@@ -150,7 +150,7 @@ export class PowerMenu {
   }
   detail(){
     const g=this.getGame(),id=this.selected,def=POWERS[id],level=g.powers.data.levels[id],panel=$('power-detail');panel.replaceChildren();
-    if(level&&!def.passive){const actions=node('div',undefined,'slot-actions');for(let slot=0;slot<3;slot++){const b=node('button',`Assign to Slot ${slot+1}`,'secondary');b.disabled=!g.canSave()||this.busy;b.onclick=async()=>{if(this.busy)return;this.busy=true;const r=await this.upgrades.equip(slot,id);this.busy=false;this.message=r.ok?`${def.name} assigned to Slot ${slot+1}.`:r.error;if(r.ok)this.persist();this.open();};actions.append(b);}panel.append(actions);}
+    if(level&&!def.passive){const actions=node('div',undefined,'slot-actions');for(let slot=0;slot<ACTIVE_SLOTS;slot++){const b=node('button',`Assign to Slot ${slot+1}`,'secondary');b.disabled=!g.canSave()||this.busy;b.onclick=async()=>{if(this.busy)return;this.busy=true;const r=await this.upgrades.equip(slot,id);this.busy=false;this.message=r.ok?`${def.name} assigned to Slot ${slot+1}.`:r.error;if(r.ok)this.persist();this.open();};actions.append(b);}panel.append(actions);}
     panel.append(node('div',def.passive?'PASSIVE SUPERPOWER':'ACTIVE SUPERPOWER','eyebrow'),node('h3',def.name),node('p',def.summary));
     const preview=node('div');preview.id='upgrade-preview';panel.append(preview);
     const table=node('table'),head=node('tr');for(const label of ['Ability',`Level ${level}`])head.append(node('th',label));const thead=node('thead');thead.append(head);table.append(thead);
@@ -210,7 +210,7 @@ export class ControlMenu {
   apply(){const t=this.input.controls.touch;for(const [name,value] of Object.entries(t))document.documentElement.style.setProperty(`--touch-${name}`,`${value}px`);}
   save(){this.apply();try{this.storage.setItem(CONTROL_KEY,JSON.stringify(this.input.controls));}catch{this.say('Controls changed for this session. Browser storage is unavailable.',5);}}
   render(){
-    this.capture=null;$('mapping-note').textContent='Choose a key to rebind it. Esc always closes a menu. Left stick also moves and steers Flight.';$('mapping-list').replaceChildren();
+    this.capture=null;$('mapping-note').textContent='Choose a key to rebind it. Esc always closes a menu. Push the left stick fully to run; it also steers Flight. Default powers: LB, RB, RT, LT. View/Select activates Villain Merge.';$('mapping-list').replaceChildren();
     for(const [id,name] of Object.entries(CONTROL_NAMES)){
       const row=node('div',undefined,'mapping-row');row.append(node('span',name));
       const key=node('button',this.input.controls.keys[id].map(x=>x.replace('Key','').replace('Digit','')).join(' / '),'secondary');key.dataset.map=id;key.setAttribute('aria-label',`Rebind ${name}`);

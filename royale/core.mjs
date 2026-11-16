@@ -14,7 +14,7 @@ import { normalizeInventory, emptyInventory, itemDefinition } from './equipment.
 import {migrateArmorSnapshot} from './armor-migration.mjs';
 import { xpForLevel, PROGRESSION, RESPAWN } from './progression.mjs';
 export { xpForLevel } from './progression.mjs';
-import { PowerSystem, POWERS, normalizePowers, equipmentStats, BALANCE, isBoss } from './powers.mjs';
+import { PowerSystem, POWERS, ACTIVE_SLOTS, normalizePowers, equipmentStats, BALANCE, isBoss } from './powers.mjs';
 import { DEFAULT_LOOK, sanitizeLook, sanitizeOutfit } from './appearance.mjs';
 import {normalizeCosmetics,emptyCosmetics} from './cosmetics/state.mjs';
 import {wearableCosmetics} from './cosmetics/eligibility.mjs';
@@ -131,7 +131,7 @@ export class Game {
     this.recordEconomy('upgrade');this.emit('upgrade',{id,count});return preview;
   }
   equipPower(index,id){
-    if(!Number.isInteger(index)||index<0||index>=3||this.inCombat()||!this.paused||this.hero.dead)return false;
+    if(!Number.isInteger(index)||index<0||index>=ACTIVE_SLOTS||this.inCombat()||!this.paused||this.hero.dead)return false;
     if(id!==null&&(!Object.hasOwn(POWERS,id)||POWERS[id].passive||!this.powers.data.levels[id]))return false;
     const slots=this.powers.data.equipped,old=slots[index],other=slots.indexOf(id);
     if(id!==null&&other>=0&&other!==index)slots[other]=old;else if(old&&old!==id)this.powers.end(old);slots[index]=id;return true;
@@ -274,7 +274,7 @@ export class Game {
     if (h.dead) { h.defeatAge += dt; this.deathTimer -= dt; if (this.deathTimer <= 0) this.respawn(); return; }
     this.activateCheckpoint();
     h.dodgeAge=(h.dodgeAge??100)+dt;h.jumpAge += dt; h.hurtAge += dt; h.respawnAge += dt;h.castAge=(h.castAge??100)+dt;
-    for(let i=0;i<4;i++)if(input.powers?.[i])this.powers.activateSlot(i);
+    for(let i=0;i<=ACTIVE_SLOTS;i++)if(input.powers?.[i])this.powers.activateSlot(i);
     h.invulnerable = Math.max(0, h.invulnerable - dt); h.stun = Math.max(0, h.stun - dt); h.landing = Math.max(0, h.landing - dt);
     h.coyote = Math.max(0, h.coyote - dt); h.jumpBuffer = Math.max(0, h.jumpBuffer - dt);
     if (!h.grounded && h.coyote <= 0 && h.jumps === 0) h.jumps = 1;

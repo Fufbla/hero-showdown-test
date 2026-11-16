@@ -14,7 +14,7 @@ const now=()=>Date.UTC(2026,10,16,12);
 function game(rank=10){
   const g=new Game({now,random:()=>.99});
   Object.assign(g.hero,{level:99,x:1000,prevX:1000,y:600,prevY:600,grounded:true,invulnerable:60});
-  g.powers.data=normalizePowers({levels:Object.fromEntries(POWER_IDS.map(id=>[id,id==='flight'?rank:['fireball','steel','animalAllies'].includes(id)?1:0])),equipped:['fireball','steel','animalAllies']},99);
+  g.powers.data=normalizePowers({levels:Object.fromEntries(POWER_IDS.map(id=>[id,id==='flight'?rank:['fireball','steel','animalAllies','roots'].includes(id)?1:0])),equipped:['fireball','steel','animalAllies','roots']},99);
   g.enemies=[];g.started=true;return g;
 }
 function frames(g,count,input={}){for(let i=0;i<count;i++)g.step(STEP,input);}
@@ -25,7 +25,7 @@ test('Flight frees only its old slot, preserving levels, recovery, points and sa
   const g=game(),raw=captureProgress(g);raw.powers.equipped=['fireball','flight','steel'];raw.powers.recovery.flight=12;
   const original=structuredClone(raw),decoded=decodeSave(JSON.stringify(raw));assert.ok(decoded);
   assert.deepEqual(raw,original,'reading never mutates the original save');
-  assert.deepEqual(decoded.powers.equipped,['fireball',null,'steel']);
+  assert.deepEqual(decoded.powers.equipped,['fireball',null,'steel',null]);
   assert.deepEqual(decoded.powers.levels,raw.powers.levels);assert.equal(decoded.powers.recovery.flight,12);
   for(const key of ['world','inventory','cosmetics','economy','legendary','level','xp','coins','look'])assert.deepEqual(decoded[key],raw[key]);
   const restored=new Game({save:decoded,now});
@@ -38,7 +38,7 @@ test('Flight frees only its old slot, preserving levels, recovery, points and sa
   assert.equal(resolveAbilitySlots(raw.powers)[1].id,null,'a stale loadout cannot expose an active Flight button');
 });
 
-test('first jump stays normal; second jump starts Flight with all three combat slots occupied',()=>{
+test('first jump stays normal; second jump starts Flight with all four combat slots occupied',()=>{
   const g=game(),equipped=[...g.powers.data.equipped];g.step(STEP,{jump:true});
   assert.equal(g.powers.flying,false);assert.equal(g.hero.jumps,1);assert.ok(g.hero.vy<0);
   frames(g,4);g.step(STEP,{jump:true});assert.equal(g.powers.flying,true);
@@ -49,7 +49,7 @@ test('first jump stays normal; second jump starts Flight with all three combat s
 test('a legacy Flight-only hero can resume an unfinished legendary encounter and save again',()=>{
   const g=game();g.powers.data.equipped=['flight',null,null];g.startLegendaryScene(Object.keys(LEGENDARY)[0]);
   const old=captureProgress(g),decoded=decodeSave(JSON.stringify(old));assert.ok(decoded);
-  assert.deepEqual(decoded.powers.equipped,[null,null,null]);
+  assert.deepEqual(decoded.powers.equipped,[null,null,null,null]);
   const restored=new Game({save:decoded,now});assert.ok(restored.arenaScene?.legendary);
   assert.ok(decodeSave(JSON.stringify(captureProgress(restored))));
 });
@@ -141,5 +141,5 @@ for(const player of [0,1])test(`local co-op player ${player+1} flies and cancels
   jump();assert.equal(session.games[player].powers.flying,true);jump();assert.equal(session.games[player].powers.flying,false);
   assert.equal(session.games[1-player].powers.cooldowns.flight||0,0);
   assert.ok((await session.saveAll()).every(r=>r.ok));
-  for(const snapshots of saved){const decoded=decodeSave(JSON.stringify(snapshots[0]));assert.ok(decoded);assert.equal(decoded.powers.levels.flight,10);assert.deepEqual(decoded.powers.equipped,['fireball','steel','animalAllies']);}
+  for(const snapshots of saved){const decoded=decodeSave(JSON.stringify(snapshots[0]));assert.ok(decoded);assert.equal(decoded.powers.levels.flight,10);assert.deepEqual(decoded.powers.equipped,['fireball','steel','animalAllies','roots']);}
 });
