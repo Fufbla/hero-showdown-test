@@ -2,8 +2,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {checkCosmeticSave} from '../backend-v3/deploy/cloud/cosmetics/save-guard.mjs';
-import {OUTFIT_POLICIES as server,historicalPiece as serverPiece} from '../backend-v3/deploy/cloud/cosmetics/outfit-policy.mjs';
+import {checkCosmeticSave} from '../../four-powers/backend-v3/deploy/cloud/cosmetics/save-guard.mjs';
+import {OUTFIT_POLICIES as server,historicalPiece as serverPiece} from '../../four-powers/backend-v3/deploy/cloud/cosmetics/outfit-policy.mjs';
 import {OUTFIT_POLICIES as client,historicalPiece as clientPiece} from '../outfit-policy.mjs';
 import {COLLECTION} from '../catalog.mjs';
 import {Game,decodeSave} from '../../core.mjs';
@@ -13,7 +13,7 @@ test('deployed policy is identical to the client for new, existing and historica
  assert.deepEqual(server,client);
  for(const outfit of Object.values(client))for(const piece of outfit.historicalPieces)assert.deepEqual(serverPiece(piece.id),clientPiece(piece.id));
 });
-test('exact live save guard accepts all 28 paid outfits, preserves old ownership, and rejects unknown IDs/stale writes',()=>{
+test('exact live save guard accepts all 29 paid outfits, preserves old ownership, and rejects unknown IDs/stale writes',()=>{
  const g=new Game({look:{presentation:'female'}});g.hero.coins=30000;
  for(const outfit of COLLECTION){
   const before=JSON.parse(g.save());
@@ -27,7 +27,7 @@ test('exact live save guard accepts all 28 paid outfits, preserves old ownership
   const unknown=structuredClone(after);unknown.cosmetics.owned.push('unregistered.fullbody');assert.equal(checkCosmeticSave(before,unknown).ok,false);
   const stale=structuredClone(after);stale.cosmetics.revision=before.cosmetics.revision;assert.equal(checkCosmeticSave(before,stale).ok,false);
  }
- assert.equal(g.cosmetics.owned.length,28);assert.equal(g.hero.coins,10400);
+ assert.equal(g.cosmetics.owned.length,29);assert.equal(g.hero.coins,9700);
 });
 test('live service auth, account handlers, save schema, economy and power guards remain byte-for-byte unchanged',async()=>{
  const files=['cloud/backend-v3/index.ts','power-policy.mjs','gameplay/economy-save-guard.mjs','gameplay/economy.mjs','cloud/cosmetics/save-guard.mjs','cloud/cosmetics/state.mjs'];

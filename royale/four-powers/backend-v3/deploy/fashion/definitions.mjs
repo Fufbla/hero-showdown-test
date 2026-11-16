@@ -25,4 +25,5 @@ export const FASHION_OUTFITS=Object.freeze([
     "name": "Midnight Glamour"
   }
 ].map(Object.freeze));
-
+// A complete enclosed mascot; the same design is worn by both presentations.
+export const ROBOT_OUTFIT=Object.freeze({id:'robot-costume',name:'Robot Costume',unisex:true});

@@ -1,8 +1,8 @@
 // Pure policy extension, shared verbatim with the existing live save service.
-import {FASHION_OUTFITS} from './definitions.mjs';
+import {FASHION_OUTFITS,ROBOT_OUTFIT} from './definitions.mjs';
 export function extendPolicy(base){
  const pieces=new Map();
- const additions=Object.fromEntries(FASHION_OUTFITS.map(({id,name})=>{
+ const additions=Object.fromEntries([...FASHION_OUTFITS,ROBOT_OUTFIT].map(({id,name})=>{
   if(base.OUTFIT_POLICIES[id])throw Error('Costume ID already registered: '+id);
   const piece=Object.freeze({id:id+'.fullbody',category:'fullbody',coinPrice:base.OUTFIT_PRICE,setId:id});
   pieces.set(piece.id,piece);
