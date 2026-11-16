@@ -47,11 +47,11 @@ export function installInterface(hooks){
     frame=requestAnimationFrame(animate);
   }
   async function select(set){
-    controller.select(set);layers=[];const request=++serial;
+    if(!controller.select(set))return false;layers=[];const request=++serial;
     canvas.dataset.animating='false';canvas.dataset.outfit='';
     canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
     canvas.setAttribute('aria-label',hooks.hero().name+' running in '+set.name);
-    try{const next=await clothingRuntime.loadOutfit(set,{review:true});if(request!==serial||currentScreen!=='clothing')return;layers=next;heroScale=fitScale(next,canvas);canvas.dataset.outfit=set.id;drawThumbnail($('purchase-thumbnail'),next);}
+    try{const next=await clothingRuntime.loadOutfit(set,{review:true});if(request!==serial||currentScreen!=='clothing'||!controller.eligible(set))return;layers=next;heroScale=fitScale(next,canvas);canvas.dataset.outfit=set.id;drawThumbnail($('purchase-thumbnail'),next);}
     catch(error){if(request===serial){controller.message='Unable to load '+set.name+'. '+error.message;update();}}
   }
   function fitScale(next,target){
@@ -74,7 +74,7 @@ export function installInterface(hooks){
   function renderCards(){
     thumbObserver?.disconnect();cards.clear();carousel.replaceChildren();
     thumbObserver=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){thumbObserver.unobserve(e.target);thumbnail(e.target,e.target.costume).catch(()=>e.target.classList.add('art-unavailable'));}},{root:carousel,rootMargin:'180px'});
-    for(const set of catalog.filter(s=>$('store-filter').value==='all'||s.collection===$('store-filter').value)){
+    for(const set of controller.available(catalog).filter(s=>$('store-filter').value==='all'||s.collection===$('store-filter').value)){
       const card=element('article',undefined,'costume-card');card.setAttribute('role','listitem');card.dataset.outfit=set.id;card.costume=set;
       const choose=button('',()=>void select(set),'costume-select');choose.setAttribute('aria-label','Preview '+set.name);
       const badge=element('span','Selected','costume-selected');const art=element('canvas');art.width=280;art.height=240;art.setAttribute('aria-hidden','true');choose.append(badge,art,element('h3',set.name));
@@ -91,14 +91,14 @@ export function installInterface(hooks){
       const owned=ownsOutfit(state?.cosmetics,set),quote=quoteOutfit(state?.cosmetics,set);
       const picked=set.id===selected?.id;card.classList.toggle('selected',picked);choose.setAttribute('aria-pressed',String(picked));
       price.textContent=owned?(wearing===set.id?'Equipped':'Owned'):'◉ '+money(quote.ok?quote.debit:set.coinPrice);
-      action.textContent=owned?(wearing===set.id?'✓':'Equip'):'+';action.disabled=controller.busy||(owned&&wearing===set.id);
+      action.textContent=owned?(wearing===set.id?'✓':'Equip'):'+';action.disabled=controller.busy||!controller.eligible(set)||(owned&&wearing===set.id);
       action.setAttribute('aria-label',owned?(wearing===set.id?'Equipped '+set.name:'Equip '+set.name):'Buy '+set.name);
       action.onclick=owned?()=>void controller.equip(set):()=>{if(controller.request(set)){void select(set);if(!dialog.open)dialog.showModal();$('purchase-cancel').focus();}};
     }
     if(selected){
       const owned=ownsOutfit(state?.cosmetics,selected),quote=quoteOutfit(state?.cosmetics,selected);
       $('store-preview-name').textContent=selected.name;$('preview-price').textContent=owned?(wearing===selected.id?'Currently equipped':'Owned outfit'):'◉ '+money(quote.ok?quote.debit:selected.coinPrice)+' coins';
-      const equip=$('preview-equip');equip.hidden=!owned;equip.textContent=wearing===selected.id?'Remove outfit':'Equip';equip.disabled=controller.busy;equip.onclick=()=>void controller.equip(wearing===selected.id?null:selected);
+      const equip=$('preview-equip');equip.hidden=!owned;equip.textContent=wearing===selected.id?'Remove outfit':'Equip';equip.disabled=controller.busy||!controller.eligible(selected);equip.onclick=()=>void controller.equip(wearing===selected.id?null:selected);
     }
     if(controller.confirming){
       $('purchase-title').textContent='Buy '+controller.confirming.set.name+' for '+money(controller.confirming.price)+' coins?';
@@ -133,7 +133,8 @@ export function installInterface(hooks){
       try{
         if(!catalog.length){catalog=(await clothingRuntime.catalog()).data.sets;for(const name of [...new Set(catalog.map(s=>s.collection))]){const option=element('option',name);option.value=name;$('store-filter').append(option);}}
         if(currentScreen!=='clothing')return;renderCards();
-        const chosen=controller.selected||catalog.find(s=>s.id===selectedOutfit(hooks.status()?.cosmetics)?.id)||catalog[0];
+        const available=controller.available(catalog);
+        const chosen=(controller.selected&&controller.eligible(controller.selected)?controller.selected:null)||available.find(s=>s.id===selectedOutfit(hooks.status()?.cosmetics)?.id)||available[0];
         if(chosen)await select(chosen);
       }catch(error){controller.message='Clothing Store unavailable: '+error.message;update();}
     }

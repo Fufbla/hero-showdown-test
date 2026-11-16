@@ -14,3 +14,9 @@ test('production cloud launcher retains autosave and removes the banner',()=>{
  assert.match(runtime,/8e3|8000/);assert.match(cloud,/royale-restore-cloud-heroes/);
  assert.doesNotMatch(fs.readFileSync('_site/royale/index.html','utf8'),/Cloud save: automatic every eight/);
 });
+
+test('the shipped costume carousel and transaction controller include hero eligibility',()=>{
+ const manifest=JSON.parse(fs.readFileSync('_site/royale/release-manifest.json','utf8'));
+ for(const source of ['royale/cosmetics/eligibility.mjs','royale-v3-staging/interface/interface.mjs','royale-v3-staging/interface/store-controller.mjs'])assert(manifest.sourceHashes[source],source);
+ assert.match(runtime,/available\(catalog\)/);assert.match(runtime,/controller\.eligible\(set\)/);
+});

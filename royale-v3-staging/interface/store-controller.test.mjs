@@ -6,11 +6,11 @@ import {emptyCosmetics,catalogIndex,cosmeticTransaction,quoteOutfit,ownsOutfit} 
 import {Game} from '../../royale/core.mjs';
 import {LocalHeroStore} from '../../royale/saves.mjs';
 const index=catalogIndex({sets:COLLECTION}),outfit=COLLECTION[1];
-function fixture({coins=1400,delay=false,reject=false}={}){
- let state={cosmetics:emptyCosmetics(),coins,ready:true},calls=0,release;
+function fixture({coins=1400,delay=false,reject=false,presentation='male'}={}){
+ let state={look:{presentation},cosmetics:emptyCosmetics(),coins,ready:true},calls=0,release;
  const controller=new StoreController({status:()=>state,quote:quoteOutfit,owns:ownsOutfit,operate:async operation=>{
   calls++;if(delay)await new Promise(r=>release=r);if(reject)return {ok:false,error:'Cloud acknowledgement failed.'};
-  const result=cosmeticTransaction({state:state.cosmetics,coins:state.coins,index,operation:{...operation,revision:state.cosmetics.revision},safe:true,atWardrobe:true});
+  const result=cosmeticTransaction({state:state.cosmetics,look:state.look,coins:state.coins,index,operation:{...operation,revision:state.cosmetics.revision},safe:true,atWardrobe:true});
   if(result.ok)state={...state,cosmetics:result.state,coins:result.coins};return result;
  }});
  return {controller,status:()=>state,calls:()=>calls,release:()=>release?.()};
@@ -31,7 +31,7 @@ test('owned outfit cannot be purchased again; Equip is a separate saved operatio
  const f=fixture();f.controller.request(outfit);await f.controller.buy();assert.equal(f.controller.request(outfit),false);assert.equal(f.calls(),1);assert.equal((await f.controller.equip(outfit)).ok,true);assert.equal(f.status().coins,700);assert.equal(f.status().cosmetics.equipped.fullbody,outfit.pieces[0].id);
 });
 test('all 28 catalog prices come from existing quotes and preserve outfit identities',()=>{
- const f=fixture();for(const set of COLLECTION){assert(f.controller.request(set));assert.equal(f.controller.confirming.price,quoteOutfit(f.status().cosmetics,set).debit);assert.equal(set.coinPrice,700);f.controller.cancel();}assert.equal(COLLECTION.length,28);assert.equal(f.calls(),0);
+ const f=fixture({presentation:'female'});for(const set of COLLECTION){assert(f.controller.request(set));assert.equal(f.controller.confirming.price,quoteOutfit(f.status().cosmetics,set).debit);assert.equal(set.coinPrice,700);f.controller.cancel();}assert.equal(COLLECTION.length,28);assert.equal(f.calls(),0);
 });
 test('purchase and equipment survive real local serialization while armor, XP, powers and position remain unchanged',()=>{
  const memory=new Map(),storage={getItem:k=>memory.get(k)||null,setItem:(k,v)=>memory.set(k,v)},store=new LocalHeroStore(storage),game=new Game();
@@ -42,4 +42,15 @@ test('purchase and equipment survive real local serialization while armor, XP, p
  const restored=new LocalHeroStore(storage).slot(0).snapshot;
  assert.equal(restored.coins,700);assert.equal(restored.cosmetics.equipped.fullbody,outfit.pieces[0].id);
  for(const field of ['look','inventory','powers','world','level','xp'])assert.deepEqual(restored[field],original[field],field);
+});
+
+for(const presentation of ['male','female'])test(presentation+' carousel and actions follow the current hero eligibility',async()=>{
+ const f=fixture({presentation}),women=COLLECTION.filter(s=>['holiday-velvet','blossom-kimono','plum-gold-kimono','emerald-gala','sapphire-starlight','summer-chic','tropical-beauty','sunset-elegance','little-black-dress','red-carpet-romance','midnight-glamour'].includes(s.id));
+ assert.equal(f.controller.available(COLLECTION).length,presentation==='female'?28:17);
+ for(const set of women){assert.equal(f.controller.select(set),presentation==='female');assert.equal(f.controller.request(set),presentation==='female');if(presentation==='male')assert.equal((await f.controller.equip(set)).ok,false);else f.controller.cancel();}
+ assert.equal(f.calls(),0);
+});
+test('confirming a purchase rechecks the hero when its presentation changes',async()=>{
+ const f=fixture({presentation:'female'}),dress=COLLECTION.find(s=>s.id==='little-black-dress');
+ assert(f.controller.request(dress));f.status().look.presentation='male';assert.equal((await f.controller.buy()).ok,false);assert.equal(f.calls(),0);assert.equal(f.status().coins,1400);
 });

@@ -280,6 +280,8 @@ function installVfxProbe(){
    await solo.locator('#open-controls').click();await returnBar();
    await solo.locator('#menu-exit-actions').getByRole('button',{name:'‹ Back',exact:true}).click();
    await solo.locator('#open-clothing-store').click();assert(await solo.locator('#store-back').isVisible());
+   await solo.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===17);
+   assert.equal(await solo.locator('#costume-carousel [data-outfit="little-black-dress"]').count(),0,'Male carousel excludes female-only costumes');
    await solo.locator('#store-back').click();await solo.locator('#tree-from-pause').click();
    await solo.screenshot({path:dir+`/tree-${viewport.width}.png`,fullPage:true});
    await solo.getByRole('button',{name:'Resume Game',exact:true}).click();
@@ -288,6 +290,26 @@ function installVfxProbe(){
   assert.deepEqual(soloErrors,[]);
   report.checks.push('Portrait and landscape menus share a compact Back/Resume row; powers upgrade once, armor filters/review work, and Inventory, Settings and Clothing return safely');
   await soloContext.close();
+  // Female heroes keep the full live catalog, including men's suits.
+  const femaleContext=await browser.newContext({viewport:{width:390,height:844}});
+  const femaleMemory=new Map(),femaleStore=new LocalHeroStore({getItem:k=>femaleMemory.get(k)??null,setItem:(k,v)=>femaleMemory.set(k,v)});
+  const femaleHero=new Game({look:{...styleCDefault('female'),name:'Wardrobe QA Nova'}});femaleHero.hero.coins=1400;
+  femaleStore.writeSlot(0,femaleHero.save());
+  await femaleContext.addInitScript(({key,value})=>{if(!localStorage.getItem(key))localStorage.setItem(key,value);},{key:PROFILE_KEY,value:femaleMemory.get(PROFILE_KEY)});
+  const femalePage=await femaleContext.newPage(),femaleErrors=[];femalePage.on('pageerror',e=>femaleErrors.push(e.message));
+  await femalePage.goto(new URL('../gameplay/?wardrobe='+manifest.sourceCommit,url).href,{waitUntil:'domcontentloaded'});await skipIntro(femalePage);
+  await femalePage.getByRole('button',{name:'Continue →',exact:true}).click();await femalePage.locator('#pause').click();
+  await femalePage.locator('#open-clothing-store').click();
+  await femalePage.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===28);
+  assert.equal(await femalePage.locator('#costume-carousel [data-outfit="black-business-suit"]').count(),1);
+  const dress=femalePage.locator('#costume-carousel [data-outfit="little-black-dress"]');
+  await dress.locator('.costume-action').click();await femalePage.locator('#purchase-buy').click();
+  await femalePage.waitForFunction(()=>document.querySelector('#store-coins').textContent==='700');
+  await femalePage.locator('#preview-equip').click();
+  await femalePage.waitForFunction(()=>document.querySelector('#preview-equip').textContent==='Remove outfit');
+  await femalePage.waitForFunction(()=>document.querySelector('#store-hero').dataset.outfit==='little-black-dress');
+  assert.deepEqual(femaleErrors,[]);await femaleContext.close();
+  report.checks.push('Male costume carousel has 17 eligible outfits; female carousel has all 28 and can purchase, preview and equip a female-only outfit');
   // Exercise the real account launcher and iframe on a phone-sized viewport.
   // Only the cloud transport is mocked; creation, gameplay and saving use the shipped UI.
   const cloudContext=await browser.newContext({viewport:{width:390,height:844}});

@@ -1,3 +1,4 @@
+import {canWearOutfit} from '../../royale/cosmetics/eligibility.mjs';
 import {drawOutfitPreview as originalPreview} from '../../royale/cosmetics/preview.mjs?costume-base=1';
 import {costumeSprites} from './engine.mjs';
 import {ATTACKS} from '../../royale/core.mjs';
@@ -17,7 +18,9 @@ export function motionHero(motion='idle',time=0,direction=1){
  return h;
 }
 export function drawOutfitPreview(canvas,{look,layers=[],view='front',motion='idle',direction=1,time=0,scale}={}){
- const id=layers.find(layer=>layer.costumeId)?.costumeId;if(!id)return originalPreview(canvas,{look,layers,view,motion,direction,time,scale});
+ const id=layers.find(layer=>layer.costumeId)?.costumeId;
+ if(id&&!canWearOutfit(id,look))return originalPreview(canvas,{look,layers:[],view,motion,direction,time,scale});
+ if(!id)return originalPreview(canvas,{look,layers,view,motion,direction,time,scale});
  const c=canvas.getContext('2d');if(!c)return null;c.clearRect(0,0,canvas.width,canvas.height);const x=canvas.width/2,y=canvas.height-20;
  c.fillStyle='#a8c2df22';c.beginPath();c.ellipse(x,y,canvas.width*.17,7,0,0,Math.PI*2);c.fill();
  if(!owners.has(canvas))owners.set(canvas,{});
