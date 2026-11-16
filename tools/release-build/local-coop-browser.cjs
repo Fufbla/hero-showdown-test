@@ -291,10 +291,12 @@ function installVfxProbe(){
    await solo.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===18);
    assert.equal(await solo.locator('#costume-carousel [data-outfit="little-black-dress"]').count(),0,'Male carousel excludes female-only costumes');
    if(viewport.width===390){
-    const coins=Number(await solo.locator('#store-coins').textContent());
+    // The store formats balances with locale grouping (for example, 1,234).
+    const coins=Number((await solo.locator('#store-coins').textContent()).replace(/[^0-9]/g,''));
+    assert(Number.isSafeInteger(coins)&&coins>=700,'The isolated hero has enough coins for Robot');
     await solo.locator('#costume-carousel [data-outfit="robot-costume"] .costume-action').click();
     await solo.locator('#purchase-buy').click();
-    await solo.waitForFunction(expected=>Number(document.querySelector('#store-coins').textContent)===expected,coins-700);
+    await solo.waitForFunction(expected=>Number(document.querySelector('#store-coins').textContent.replace(/[^0-9]/g,''))===expected,coins-700);
     await solo.locator('#preview-equip').click();
     await solo.waitForFunction(()=>document.querySelector('#preview-equip').textContent==='Remove outfit'&&document.querySelector('#store-hero').dataset.outfit==='robot-costume');
     await solo.screenshot({path:dir+'/robot-male.png',fullPage:true});
