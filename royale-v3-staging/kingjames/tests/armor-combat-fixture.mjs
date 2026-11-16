@@ -48,7 +48,8 @@ export function measure(g){
  ready(g);
  if(POWERS.flight.passive){
   g.powers.data.equipped=[null,null,null];g.hero.jumps=0;g.hero.jumpBuffer=0;
-  g.step(STEP,{jump:true});g.step(STEP,{jump:true});assert(g.powers.flying);
+  g.step(STEP,{jump:true});g.step(STEP,{jump:true});assert(!g.powers.flying);
+  g.step(STEP,{jump:true});assert(g.powers.flying);
  }else{g.powers.data.equipped=['flight',null,null];assert(g.powers.activateSlot(0));}
  let flightFrames=0;while(g.powers.flying&&flightFrames<3000){g.powers.step(STEP);flightFrames++;}
  ready(g);for(let i=0;i<120;i++)g.step(STEP,{move:1,run:true});
