@@ -282,11 +282,10 @@ export class Game {
     const support=input.jump&&input.vertical>.5&&h.grounded&&!this.powers.flying&&this.surfaces.find(s=>s.oneWay&&Math.abs(s.y-h.y)<.1&&h.x+h.w/2>s.x&&h.x-h.w/2<s.x+s.w);
     if(support){h.dropThrough={id:support.id,time:.24};h.y+=2;h.vy=60;h.grounded=false;h.jumps=1;h.coyote=0;h.jumpBuffer=0;}
     else if(input.jump&&this.powers.flying)this.powers.jumpInFlight?.();
-    else if (input.jump&&!this.powers.flying) h.jumpBuffer = .13;
+    else if(input.jump&&!this.powers.flying)h.jumpBuffer=h.jumps===2&&this.powers.startFlight?.()?0:.13;
     if (!this.powers.flying && h.jumpBuffer > 0 && h.jumps < 2 && h.stun <= 0) {
       h.vy = h.jumps === 0 ? -565 : -520; h.jumps++; h.jumpAge = 0; h.grounded = false; h.coyote = 0; h.jumpBuffer = 0;
       this.emit('jump', { x: h.x, y: h.y, double: h.jumps === 2 });
-      if(h.jumps===2)this.powers.startFlight?.();
     }
     const axis = clamp(Number(input.move) || 0, -1, 1);
     if (h.stun <= 0) {

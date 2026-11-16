@@ -19,7 +19,7 @@ export const POWERS = Object.freeze({
   strength: { name: 'Super Strength', icon: 'ϟ', cooldown: 8, offensive: true, summary: 'A heavy forward punch with an 86-unit force burst, beyond a normal punch. Only enemies in front can be struck.' },
   superKick: { name: 'Super Kick', icon: '⌁', cooldown: 6, after: true, offensive: true, summary: 'Two to six forward kicks with 105-unit motion trails, slightly beyond Super Strength. Each kick has its own impact.' },
   fireball: { name: 'Fireball', icon: '◉', cooldown: 5, offensive: true, summary: 'Straight shots. No homing, burning or ongoing damage.' },
-  flight: { name: 'Flight', icon: '↟', passive: true, cooldown: 10, after: true, summary: 'Double-jump to fly without using a power slot. Steer with the directional controls. Double-tap Jump again to cancel. Fireball and Animal Allies can attack.' },
+  flight: { name: 'Flight', icon: '↟', passive: true, cooldown: 10, after: true, summary: 'Press Jump three times to fly without using a power slot. Steer with the directional controls. Double-tap Jump again to cancel. Fireball and Animal Allies can attack.' },
   steel: { name: 'Steel Body', icon: '⬡', cooldown: 15, after: true, summary: 'Reduce all incoming damage. Ignore knockback without slowing down.' },
   roots: { name: 'Ground Roots', icon: '♧', cooldown: 10, after: true, offensive: true, summary: 'Trap grounded foes. Squeeze once per second. Bosses are slowed.' },
   speed: { name: 'Speed', icon: '»', passive: true, summary: 'Permanent running and attack speed. No damage bonus or active slot.' },

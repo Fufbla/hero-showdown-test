@@ -18,7 +18,7 @@ function game(rank=10){
   g.enemies=[];g.started=true;return g;
 }
 function frames(g,count,input={}){for(let i=0;i<count;i++)g.step(STEP,input);}
-function takeoff(g){g.step(STEP,{jump:true});frames(g,4);g.step(STEP,{jump:true});assert.equal(g.powers.flying,true);}
+function takeoff(g){g.step(STEP,{jump:true});frames(g,4);g.step(STEP,{jump:true});assert.equal(g.powers.flying,false);frames(g,4);g.step(STEP,{jump:true});assert.equal(g.powers.flying,true);}
 function input(){return Object.assign(Object.create(Input.prototype),{enabled:true,controls:normalizeControls(),keys:new Set(),pointers:new Map(),padHeld:new Set(),edges:new Set(),tapCounts:new Map(),axis:0,vertical:0,padX:0,padY:0});}
 
 test('Flight frees only its old slot, preserving levels, recovery, points and saved progress',()=>{
@@ -38,9 +38,10 @@ test('Flight frees only its old slot, preserving levels, recovery, points and sa
   assert.equal(resolveAbilitySlots(raw.powers)[1].id,null,'a stale loadout cannot expose an active Flight button');
 });
 
-test('first jump stays normal; second jump starts Flight with all four combat slots occupied',()=>{
+test('first and second jumps stay normal; third press starts Flight with all four combat slots occupied',()=>{
   const g=game(),equipped=[...g.powers.data.equipped];g.step(STEP,{jump:true});
   assert.equal(g.powers.flying,false);assert.equal(g.hero.jumps,1);assert.ok(g.hero.vy<0);
+  frames(g,4);g.step(STEP,{jump:true});assert.equal(g.powers.flying,false);assert.equal(g.hero.jumps,2);assert.ok(g.hero.vy<0);
   frames(g,4);g.step(STEP,{jump:true});assert.equal(g.powers.flying,true);
   assert.equal(g.hero.jumps,2);assert.deepEqual(g.powers.data.equipped,equipped);
   assert.equal(g.powers.activate('flight'),false,'Flight is no longer a slotted action');
@@ -63,6 +64,7 @@ test('unlearned, recovering, disrupted and stunned Flight keep the ordinary doub
     if(reason==='stun')g.hero.stun=.2;
     g.step(STEP,{jump:true});assert.equal(g.powers.flying,false,reason);
     if(reason!=='stun'){assert.equal(g.hero.jumps,2);assert.ok(g.hero.vy<0);}
+    g.step(STEP,{jump:true});assert.equal(g.powers.flying,false,reason+' blocks the third press');
   }
 });
 
@@ -108,14 +110,14 @@ test('pause, death and landing do not produce stale cancellation or extra air ju
 });
 
 test('a remaining basic attack cannot be cancelled by Flight and only allowed air powers fire',()=>{
-  const g=game();g.step(STEP,{jump:true});g.startAttack('punch');g.step(STEP,{jump:true});assert.equal(g.powers.flying,false);
+  const g=game();g.step(STEP,{jump:true});g.startAttack('punch');g.step(STEP,{jump:true});g.step(STEP,{jump:true});assert.equal(g.powers.flying,false);
   const flying=game();takeoff(flying);assert.equal(flying.powers.activate('fireball'),true);assert.equal(flying.powers.activate('animalAllies'),true);
   flying.step(STEP,{punch:true,kick:true});assert.equal(flying.hero.attack,null);
 });
 
 test('keyboard arrows, touch stick and queued touch taps produce the same flight controls',()=>{
   const controls=input(),g=game();
-  controls.tapCounts.set('jump',2);g.step(STEP,controls.sample());g.step(STEP,controls.sample());assert.equal(g.powers.flying,true);
+  controls.tapCounts.set('jump',3);g.step(STEP,controls.sample());g.step(STEP,controls.sample());assert.equal(g.powers.flying,false);g.step(STEP,controls.sample());assert.equal(g.powers.flying,true);
   assert.equal(controls.sample().jump,false,'holding the button cannot add jump edges');
   controls.keys.add('ArrowUp');controls.keys.add('ArrowRight');assert.equal(controls.sample().vertical,-1);assert.equal(controls.sample().move,1);
   controls.keys.clear();controls.keys.add('ArrowDown');controls.keys.add('ArrowLeft');assert.equal(controls.sample().vertical,1);assert.equal(controls.sample().move,-1);
@@ -137,7 +139,7 @@ for(const player of [0,1])test(`local co-op player ${player+1} flies and cancels
   const session=new LocalSession(profiles.map(profile=>({profile,slot:1})),{now});
   session.games.forEach(g=>{g.enemies=[];g.hero.invulnerable=60;});session.setPaused(false);
   const jump=()=>session.step([0,1].map(i=>({jump:i===player})));
-  jump();session.step([{},{}]);jump();assert.equal(session.games[player].powers.flying,true);assert.equal(session.games[1-player].powers.flying,false);
+  jump();session.step([{},{}]);jump();assert.equal(session.games[player].powers.flying,false);jump();assert.equal(session.games[player].powers.flying,true);assert.equal(session.games[1-player].powers.flying,false);
   jump();assert.equal(session.games[player].powers.flying,true);jump();assert.equal(session.games[player].powers.flying,false);
   assert.equal(session.games[1-player].powers.cooldowns.flight||0,0);
   assert.ok((await session.saveAll()).every(r=>r.ok));
