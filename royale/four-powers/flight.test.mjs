@@ -79,8 +79,11 @@ test('two new Jump presses cancel Flight; one tap, holding or a slow pair cannot
   const g=game();takeoff(g);g.step(STEP,{jump:true});assert.equal(g.powers.flying,true);
   frames(g,30);g.step(STEP,{jump:true});assert.equal(g.powers.flying,true,'the first tap expired');
   frames(g,3);g.step(STEP,{jump:true});assert.equal(g.powers.flying,false);
-  assert.equal(g.powers.cooldowns.flight,30);assert.equal(g.hero.jumps,2);assert.ok(g.hero.vy>0);
+  assert.equal(g.powers.cooldowns.flight,10);assert.equal(g.hero.jumps,2);assert.ok(g.hero.vy>0);
   g.step(STEP,{jump:true});assert.equal(g.powers.flying,false);assert.equal(g.hero.jumps,2);
+  frames(g,598);assert.ok(g.powers.cooldowns.flight>0,'Flight is still recovering before ten seconds');
+  frames(g,1);assert.ok(g.powers.cooldowns.flight<1e-8,'Flight recovers after ten seconds');
+  takeoff(g);
 });
 
 test('duration, armor bonus, expiry and recovery debt still use the learned Flight level',()=>{
@@ -88,9 +91,9 @@ test('duration, armor bonus, expiry and recovery debt still use the learned Flig
     const g=game(rank);g.equipment.flightLevels=3;takeoff(g);
     assert.equal(g.powers.active.flight.duration,powerStats('flight',rank,{equipment:{flightLevels:3}}).duration);
     const saved=captureProgress(g),restored=new Game({save:decodeSave(JSON.stringify(saved)),now});
-    assert.equal(restored.powers.flying,false);assert.ok(restored.powers.cooldowns.flight>30);
+    assert.equal(restored.powers.flying,false);assert.ok(restored.powers.cooldowns.flight>10);
     const duration=g.powers.active.flight.duration;frames(g,Math.ceil(duration/STEP));
-    assert.equal(g.powers.flying,false);assert.ok(g.powers.cooldowns.flight>29);
+    assert.equal(g.powers.flying,false);assert.ok(g.powers.cooldowns.flight>9);
   }
 });
 
