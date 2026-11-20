@@ -6,11 +6,12 @@ module.exports=function transform(file,s){
  s=s.replaceAll('.filter(e=>!isBoss(e)&&!e.summoned)', '.filter(e=>!isBoss(e)&&!e.summoned&&!e.fourPowerDummy)').replaceAll('.filter(e=>!e.boss&&!e.summoned)', '.filter(e=>!e.boss&&!e.summoned&&!e.fourPowerDummy)');
 
  if(file==='royale/app.mjs'){
-  s="import {installSolo,createTestSnapshot,requireTestAccount} from '../test-only/four-powers/review.mjs';\nrequireTestAccount();\n"+s;
+  s="import {installSolo,createTestSnapshot,requireTestAccount} from '../test-only/four-powers/review.mjs';\nimport {applyPuppyTestCoins} from '../test-only/four-powers/coin-grant.mjs';\nrequireTestAccount();\n"+s;
   s=replace(s,"const codePlay=['1','v3'].includes(params.get('codePlay'))&&window.parent!==window&&window.parent.location.origin===location.origin;",'const codePlay=false;');
   s=replace(s,"const storagePrefix=codePlay?(params.get('codePlay')==='v3'?'royale-v3-play:':'royale-code-play-v1:'):'';","const storagePrefix='royale-four-powers-0000000000-v1:';");
   // Only the new, separate test profile receives points; an existing hero is reused.
-  s=replace(s,"renderRoster();setScreen('roster');\nvoid prepareStyleCMaterials()",`if(!store.slot(0)&&store.writable){const r=store.writeSlot(0,createTestSnapshot(0),{expectedId:null,requireDurable:true});if(!r.ok)throw Error(r.error);}
+  s=replace(s,"renderRoster();setScreen('roster');\nvoid prepareStyleCMaterials()",`if(!store.data.slots.some(slot=>slot?.snapshot)&&store.writable){const r=store.writeSlot(0,createTestSnapshot(0),{expectedId:null,requireDurable:true});if(!r.ok)throw Error(r.error);}
+const puppyTestCoins=applyPuppyTestCoins(store,{storagePrefix});if(!puppyTestCoins.ok)throw Error(puppyTestCoins.error);
 renderRoster();setScreen('roster');
 installSolo({getGame:()=>game,getRenderer:()=>renderer,store,persist,renderRoster,selectSlot:continueHero,screen:()=>screen,setScreen,menu:powerMenu,updateHud,say});
 void prepareStyleCMaterials()`);
@@ -19,6 +20,9 @@ void prepareStyleCMaterials()`);
   // Level scrubbing is reversible only in the dedicated sandbox store. All other
   // stale progress, identity, wardrobe and revision guards remain in force.
   s=s.replace("||Object.keys(old.powers.levels).some(id=>state.powers.levels[id]<old.powers.levels[id])",'');
+  // Keep the one-time receipt in the same atomic envelope as the test wallet.
+  // Production parseProfiles is untouched; this transform is sandbox-only.
+  s=replace(s,'    return result;\n  }catch{return null;}',"    if(Object.hasOwn(data,'puppyCoinGrant'))result.puppyCoinGrant=copy(data.puppyCoinGrant);\n    return result;\n  }catch{return null;}");
  }
 
  if(file==='royale-v3-staging/gameplay/local-coop-app.mjs'){

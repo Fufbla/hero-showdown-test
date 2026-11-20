@@ -1,0 +1,11 @@
+import * as base from '../../../royale/fashion/outfit-policy.mjs?four-base=1';
+import {PUPPY_ID,PUPPY_PRICE} from './definitions.mjs';
+import {PUPPY_TEST_ENABLED} from './scope.mjs';
+export const {OUTFIT_PRICE,CLOTHING_SLOTS,LEGACY_CLOTHING_SLOTS,RETIRED_COSMETIC_IDS,isRetiredCosmeticId}=base;
+const piece=Object.freeze({id:PUPPY_ID+'.fullbody',category:'fullbody',coinPrice:PUPPY_PRICE,setId:PUPPY_ID});
+const parts=Object.freeze([piece]);
+const policy=Object.freeze({id:PUPPY_ID,name:'Golden Puppy',category:'set',coinPrice:PUPPY_PRICE,pieces:parts,historicalPieces:parts});
+export const OUTFIT_POLICY_VERSION=base.OUTFIT_POLICY_VERSION+(PUPPY_TEST_ENABLED?'-golden-puppy-test-v1':'');
+export const OUTFIT_POLICIES=PUPPY_TEST_ENABLED?Object.freeze({...base.OUTFIT_POLICIES,[PUPPY_ID]:policy}):base.OUTFIT_POLICIES;
+export const historicalPiece=id=>PUPPY_TEST_ENABLED&&id===piece.id?piece:base.historicalPiece(id);
+export const outfitForPiece=id=>PUPPY_TEST_ENABLED&&id===piece.id?policy:base.outfitForPiece(id);

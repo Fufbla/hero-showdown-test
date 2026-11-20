@@ -1,5 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import fs from 'node:fs';import {execFileSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
 import {Game,decodeSave,ATTACKS,STEP} from '../../royale/core.mjs';
 import {POWER_IDS,powerStats,normalizePowers} from './powers.mjs';
 import {createTestSnapshot,setReviewLevel,resetTestSkillPoints,arrangeTargets,TEST_PREFIX} from './review.mjs';
@@ -78,3 +79,13 @@ for(const id of ['strength','superKick','animalAllies','seismicSmash'])for(const
  assert.ok(Math.abs((before-boss.hp)-damageToEnemy(amount,99,boss))<1e-6);assert.equal(boss.x,x);
 });
 test('Original appearance and legacy power sources remain byte-identical to verified live commit',()=>{for(const file of ['royale/powers.mjs','royale/power-art.mjs','royale-v3-staging/gameplay/powers.mjs','royale-v3-staging/kingjames/head.mjs','royale/style-c-face.mjs','royale/style-c-hair.mjs'])assert.deepEqual(fs.readFileSync(file),execFileSync('git',['show','d8e0a9a:'+file]),file);});
+test('Golden Puppy release gate validates test-only purchases, all sprite poses and the one-time test wallet in isolated module scopes',()=>{
+ const root=fileURLToPath(new URL('../../',import.meta.url));
+ const env={...process.env};delete env.NODE_TEST_CONTEXT;
+ try{
+  const output=execFileSync(process.execPath,['--import',new URL('./register.mjs',import.meta.url).href,'--test','--test-reporter=tap',
+   fileURLToPath(new URL('../../royale-v3-staging/kingjames/puppy/tests/integration.test.mjs',import.meta.url)),
+   fileURLToPath(new URL('./coin-grant.test.mjs',import.meta.url))],{cwd:root,env,encoding:'utf8',timeout:120000,maxBuffer:2*1024*1024});
+  assert(Number(output.match(/^# tests (\d+)$/m)?.[1])>=15&&/^# fail 0$/m.test(output),'Golden Puppy checks did not actually execute:\n'+output);
+ }catch(error){assert.fail('Golden Puppy release checks failed:\n'+String(error.stdout||'')+String(error.stderr||error.message));}
+});

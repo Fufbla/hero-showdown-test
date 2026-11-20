@@ -2,7 +2,10 @@ import {resolve as baseResolve,load as baseLoad} from '../../tools/release-build
 import transform from './transform.cjs';
 import ui from '../../tools/staging-ui-transform.cjs';
 const root=new URL('../../',import.meta.url);
-const overrides={'royale-v3-staging/gameplay/powers.mjs':'test-only/four-powers/powers.mjs','royale/powers.mjs':'test-only/four-powers/powers.mjs','royale/power-art.mjs':'test-only/four-powers/art.mjs','royale/local-coop/cloud.mjs':'test-only/four-powers/profile.mjs'};
+const overrides={'royale-v3-staging/gameplay/powers.mjs':'test-only/four-powers/powers.mjs','royale/powers.mjs':'test-only/four-powers/powers.mjs','royale/power-art.mjs':'test-only/four-powers/art.mjs','royale/local-coop/cloud.mjs':'test-only/four-powers/profile.mjs',
+ 'royale/fashion/catalog.mjs':'royale-v3-staging/kingjames/puppy/catalog.mjs',
+ 'royale/fashion/engine.mjs':'royale-v3-staging/kingjames/puppy/engine.mjs',
+ 'royale/fashion/outfit-policy.mjs':'royale-v3-staging/kingjames/puppy/outfit-policy.mjs'};
 export async function resolve(specifier,context,next){
  if(specifier.includes('four-base=1'))return next(specifier,context);
  const r=await baseResolve(specifier,context,next),rel=r.url.slice(root.href.length).split('?')[0];
