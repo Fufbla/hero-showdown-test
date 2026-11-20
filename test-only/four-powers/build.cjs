@@ -32,7 +32,7 @@ function shell(file,base,entry,entryPath){
  s=s.replace(/Clothing Store · \d+ outfits/g,'Clothing Store');
  s=s.replace(/<a [^>]*href="tests\/[^>]*>[\s\S]*?<\/a>/g,'').replace(/<p[^>]*>⚠️[\s\S]*?<\/p>/g,'');
  s=s.replace('href="../index.html" aria-label="Return to Hero Showdown"','href="../four-powers-test/" aria-label="Return to Four Powers Test"');
- s=s.replace('</head>','<link rel="stylesheet" href="../four-powers-test/review.css"></head>');
+ s=s.replace('</head>',`<link rel="stylesheet" href="${entry==='coop'?'../':''}interface.css"><link rel="stylesheet" href="../four-powers-test/review.css"></head>`);
  if(entry==='coop')s=s.replace('../four-powers-test/review.css','../../four-powers-test/review.css');
  return s.replace('</body>',`<script type="module" src="${entry==='coop'?'../../':'../'}four-powers-test/${entryPath}"></script></body>`);
 }

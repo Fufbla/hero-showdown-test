@@ -40,7 +40,7 @@ test('Website packages the sandbox separately while production receives the appr
  assert.equal(fs.existsSync('_site/test-only'),false);
  for(const file of ['gameplay/index.html','local-coop/index.html','release/game.mjs','release/coop.mjs'])assert.ok(read('four-powers-test/'+file).length);
 });
-test('Sandbox HTML loads content-hashed entries and preserves compatible direct module URLs',()=>{
+test('Sandbox HTML loads content-hashed entries and shared interface styles with compatible direct module URLs',()=>{
  const read=p=>fs.readFileSync('_site/four-powers-test/'+p,'utf8');
  const {entries}=JSON.parse(read('release-manifest.json'));
  assert.deepEqual(Object.keys(entries).sort(),['coop','gallery','game']);
@@ -51,5 +51,10 @@ test('Sandbox HTML loads content-hashed entries and preserves compatible direct 
   const scripts=[...html.matchAll(/<script type="module" src="([^"]+)"><\/script>/g)].map(match=>new URL(match[1],base).href);
   assert.deepEqual(scripts,[new URL(entries[name],'https://example.test/hero-showdown-test/four-powers-test/').href],page);
   assert.equal(read(`release/${name}.mjs`),read(entries[name]),`${name}: direct URL stays compatible`);
+  if(name!=='gallery'){
+   const styles=[...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map(match=>new URL(match[1],base).href);
+   assert.equal(styles.filter(href=>href==='https://example.test/hero-showdown-test/royale/interface.css').length,1,`${page}: shared interface stylesheet`);
+   assert.ok(fs.statSync('_site/royale/interface.css').size>0,'shared interface stylesheet is published');
+  }
  }
 });
