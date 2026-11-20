@@ -1,0 +1,40 @@
+{
+  "source": "test-only/four-powers/vice-source/accessory-source.png",
+  "sourceSha256": "0dd46cb6d1f596d54088c774199b43a74a55e3fe930f901e1c023a8cb38d43f1",
+  "sourceSize": [
+    1024,
+    1536
+  ],
+  "assets": {
+    "cap": {
+      "rect": {
+        "left": 131,
+        "top": 76,
+        "width": 725,
+        "height": 514
+      },
+      "visiblePixels": 167783,
+      "sha256": "974c3899892d97b515041d0f578d8c50796ec19a5a43dc2a247a21a4bb5992dc"
+    },
+    "glasses": {
+      "rect": {
+        "left": 191,
+        "top": 775,
+        "width": 643,
+        "height": 189
+      },
+      "visiblePixels": 76050,
+      "sha256": "063b779fcbe932f3f18d88fe28c4b42b3e73dc88014cbdd2a6ee06f5b09cf2e0"
+    },
+    "lettering": {
+      "rect": {
+        "left": 282,
+        "top": 1130,
+        "width": 485,
+        "height": 376
+      },
+      "visiblePixels": 71482,
+      "sha256": "e8aa1d73ceb122a703a43a80cf0ced74302339b2ec71af60f08e194ead6e5c50"
+    }
+  }
+}

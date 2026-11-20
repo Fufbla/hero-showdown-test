@@ -89,3 +89,15 @@ test('Fancy Costume release gate validates shared purchases, all sprite poses an
   assert(Number(output.match(/^# tests (\d+)$/m)?.[1])>=15&&/^# fail 0$/m.test(output),'Fancy Costume checks did not actually execute:\n'+output);
  }catch(error){assert.fail('Fancy Costume release checks failed:\n'+String(error.stdout||'')+String(error.stderr||error.message));}
 });
+test('Vice Costume release gate verifies reserved scope, saved appearance, all actions and local purchases in isolated module scopes',()=>{
+ const root=fileURLToPath(new URL('../../',import.meta.url));
+ const env={...process.env};delete env.NODE_TEST_CONTEXT;
+ const directory=new URL('./vice/tests/',import.meta.url);
+ const files=fs.readdirSync(directory).filter(name=>name.endsWith('.test.mjs')).sort().map(name=>fileURLToPath(new URL(name,directory)));
+ assert.equal(files.length,4,'The complete Vice gate must include scope, wardrobe, head and rendering checks');
+ try{
+  const output=execFileSync(process.execPath,['--import',new URL('./register.mjs',import.meta.url).href,'--test','--test-reporter=tap','--test-concurrency=1',...files],
+   {cwd:root,env,encoding:'utf8',timeout:120000,maxBuffer:2*1024*1024});
+  assert(Number(output.match(/^# tests (\d+)$/m)?.[1])>=22&&/^# fail 0$/m.test(output),'Vice Costume checks did not actually execute:\n'+output);
+ }catch(error){assert.fail('Vice Costume release checks failed:\n'+String(error.stdout||'')+String(error.stderr||error.message));}
+});

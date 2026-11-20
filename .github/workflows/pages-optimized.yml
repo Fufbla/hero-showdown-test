@@ -63,6 +63,7 @@ jobs:
           ln -s "$PWD/_site" /tmp/coop-site/hero-showdown-test
           python3 -m http.server 8174 --directory /tmp/coop-site >/tmp/coop-server.log 2>&1 &
           node tools/release-build/local-coop-browser.cjs
+          node --import ./test-only/four-powers/register.mjs tools/release-build/vice-browser.cjs
           ROYALE_MEDIA_CHROMIUM_ONLY=1 node tools/release-build/media-browser.cjs
       - name: Upload optimized Pages artifact
         uses: actions/upload-pages-artifact@v4

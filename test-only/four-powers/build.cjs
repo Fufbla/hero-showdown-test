@@ -5,7 +5,10 @@ const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const imports=JSON.parse(read('royale-v3-staging/kingjames/index.html').match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports;
 const map=new Map(Object.entries(imports).filter(([key])=>!key.includes('?')).map(([a,b])=>[new URL(a,'https://build/royale/').pathname.slice(1),new URL(b,'https://build/royale/').pathname.slice(1)]));
 map.delete('royale/app.mjs');map.set('royale/renderer.mjs','royale-v3-staging/kingjames/renderer.mjs');map.set('royale/hero-art.mjs','royale/release-src/presentation.mjs');
-const overrides={'royale-v3-staging/gameplay/powers.mjs':'test-only/four-powers/powers.mjs','royale/powers.mjs':'test-only/four-powers/powers.mjs','royale/power-art.mjs':'test-only/four-powers/art.mjs','royale/local-coop/cloud.mjs':'test-only/four-powers/profile.mjs'};
+const overrides={'royale-v3-staging/gameplay/powers.mjs':'test-only/four-powers/powers.mjs','royale/powers.mjs':'test-only/four-powers/powers.mjs','royale/power-art.mjs':'test-only/four-powers/art.mjs','royale/local-coop/cloud.mjs':'test-only/four-powers/profile.mjs',
+ 'royale/fashion/catalog.mjs':'test-only/four-powers/vice/catalog.mjs',
+ 'royale/fashion/engine.mjs':'test-only/four-powers/vice/engine.mjs',
+ 'royale/fashion/outfit-policy.mjs':'test-only/four-powers/vice/outfit-policy.mjs'};
 const plugin={name:'four-powers-isolated',setup(build){
  build.onResolve({filter:/^[./]/},args=>{
   let rel=path.relative(root,path.resolve(args.resolveDir||root,args.path.split('?')[0])).replaceAll(path.sep,'/');
@@ -53,6 +56,8 @@ function shell(file,base,entry,entryPath){
  fs.cpSync(path.join(__dirname,'assets'),path.join(out,'assets'),{recursive:true});
  fs.mkdirSync(path.join(out,'puppy/assets'),{recursive:true});
  for(const file of ['body.webp','manifest.json','preview.png'])fs.copyFileSync(path.join(root,'royale-v3-staging/kingjames/puppy/assets',file),path.join(out,'puppy/assets',file));
+ // Vice and its cap, glasses and lettering belong only to this isolated build.
+ fs.cpSync(path.join(__dirname,'vice/assets'),path.join(out,'vice/assets'),{recursive:true});
  for(const [name,html]of [['gameplay',shell('royale-v3-staging/gameplay/index.html','../../royale/','game',entries.game)],['local-coop',shell('royale-v3-staging/local-coop/index.html','../../royale/local-coop/','coop',entries.coop)]]){fs.mkdirSync(path.join(out,name),{recursive:true});fs.writeFileSync(path.join(out,name,'index.html'),html);}
  fs.writeFileSync(path.join(out,'release-manifest.json'),JSON.stringify({sourceCommit:cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),testAccount:'0000000000',production:false,cloudWrites:false,storagePrefix:'royale-four-powers-0000000000-v1:',entries,modules:Object.keys(result.metafile.inputs)},null,2));
  console.log(JSON.stringify({out,modules:Object.keys(result.metafile.inputs).length}));
