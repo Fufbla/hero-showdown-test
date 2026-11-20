@@ -20,9 +20,13 @@ async function select(page,outfit){
  assert.equal(await page.locator('#store-preview-name').innerText(),outfit.name);
 }
 async function gameplayPose(page,{id,vx,state}){
- const result=await page.evaluate(({id,vx})=>{
+ const result=await page.evaluate(async({id,vx})=>{
   const api=globalThis.fourPowerReview,g=api.getGame(),renderer=api.getRenderer();
   api.setScreen('play');g.paused=true;
+  // Leaving the store restores the desktop header and resizes the opaque
+  // game canvas. Let layout and ResizeObserver settle before drawing evidence.
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  renderer.resize();
   // Fix the test hero on its current platform, and sample movement through the
   // same renderer used during normal gameplay. No changes are persisted.
   Object.assign(g.hero,{dead:false,stun:0,attack:null,powerPose:null,steel:false,flying:false,grounded:true,
