@@ -9,8 +9,8 @@ const output='docs/vice-costume-test';fs.mkdirSync(output,{recursive:true});
 const report={url,production:false,checks:[],cloudRequests:[],errors:[]};
 const prefix='royale-four-powers-0000000000-v1:';
 async function enter(page){
- await page.locator('#intro-skip').click();
- await page.locator('#royale-intro').waitFor({state:'detached'});
+ // The reserved test entry prepares art and opens the roster directly. It
+ // deliberately has no production intro overlay or Skip Intro button.
  await page.getByRole('button',{name:'Continue →',exact:true}).click();
  await page.locator('#pause').click();
  await page.locator('#open-clothing-store').click();
