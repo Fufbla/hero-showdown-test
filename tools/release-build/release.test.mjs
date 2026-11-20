@@ -74,7 +74,11 @@ test('Vice ships once in the production catalog with the canonical renderer and 
  for(const file of ['royale/fashion/vice/engine.mjs','royale/fashion/vice/head.mjs'])assert(manifest.sourceHashes[file],file);
  assert(!Object.keys(manifest.sourceHashes).some(file=>file.startsWith('test-only/')),'Production must not import the reserved profile or wallet code');
  const sandbox=JSON.parse(read('four-powers-test/release-manifest.json'));
- for(const file of ['royale/fashion/catalog.mjs','royale/fashion/engine.mjs','royale/fashion/vice/engine.mjs','royale/fashion/vice/head.mjs'])assert(sandbox.modules.includes(file),file);
+ // Reserved additions extend the canonical catalog/engine through an explicit
+ // base import; the suffix prevents recursive overrides without copying Vice.
+ for(const file of ['royale/fashion/catalog.mjs','royale/fashion/engine.mjs'])
+  assert(sandbox.modules.includes(file)||sandbox.modules.includes(file+'?four-base=1'),file);
+ for(const file of ['royale/fashion/vice/engine.mjs','royale/fashion/vice/head.mjs'])assert(sandbox.modules.includes(file),file);
  assert(!sandbox.modules.some(file=>file.startsWith('test-only/four-powers/vice/')),'Reserved gameplay uses the same production costume implementation');
  for(const name of ['body.webp','manifest.json','preview.png','cap.png','glasses.png','lettering.png']){
   const canonical='royale/fashion/vice/assets/'+name;

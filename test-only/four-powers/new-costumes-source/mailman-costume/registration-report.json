@@ -1,0 +1,2201 @@
+{
+  "version": 1,
+  "id": "mailman-costume",
+  "source": "test-only/four-powers/new-costumes-source/mailman-costume/action-source.png",
+  "sourceSha256": "3809b3f392508e64e49b5b97ca4e4474c2a4ad6fc25dcafc72c58d3ade25a922",
+  "sourceSize": [
+    1448,
+    1086
+  ],
+  "spriteCount": 48,
+  "clipCount": 21,
+  "uniformNominalScale": 0.855072463768116,
+  "minimumClearance": 21,
+  "allFramesDistinct": true,
+  "magentaPixels": 0,
+  "inferredHandFrames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "headgear": {
+    "source": "test-only/four-powers/new-costumes-source/mailman-costume/headgear-source.png",
+    "sourceSha256": "a7276ebcfe08ad56482e961031f0f549e9c1dcb5190af4445d908f38bdaa60a1",
+    "sourceBounds": [
+      165,
+      148,
+      1372,
+      845
+    ],
+    "outputSize": [
+      768,
+      443
+    ],
+    "scale": 0.6362883181441591,
+    "outputSha256": "c522a0edeb616fd7b008be3080942ff758d322305a1f81c1e74c4e236011512e"
+  },
+  "contactFrameIndices": {
+    "punch": 28,
+    "kick": 32,
+    "fireball": 42
+  },
+  "frames": [
+    {
+      "frame": 0,
+      "pose": "idle A",
+      "sourceBounds": [
+        34,
+        20,
+        152,
+        168
+      ],
+      "sourceMarker": [
+        97.7,
+        25.44
+      ],
+      "sourceHead": [
+        98,
+        30
+      ],
+      "sourceHand": [
+        151,
+        97
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.26,
+        112.26,
+        0
+      ],
+      "hand": [
+        178.44,
+        169.57
+      ],
+      "inkBounds": [
+        79,
+        104,
+        179,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 149,
+      "magentaPixels": 0,
+      "opaquePixels": 8432,
+      "hash": "e72654b69fc318aed62010df1a221cab85170547bf49e2c50a0b1e21d13eb8f6"
+    },
+    {
+      "frame": 1,
+      "pose": "idle B",
+      "sourceBounds": [
+        219,
+        14,
+        333,
+        167
+      ],
+      "sourceMarker": [
+        278.58,
+        17.91
+      ],
+      "sourceHead": [
+        279,
+        23
+      ],
+      "sourceHand": [
+        332,
+        92
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.07,
+        106.39,
+        0
+      ],
+      "hand": [
+        178.43,
+        165.28
+      ],
+      "inkBounds": [
+        82,
+        99,
+        180,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 163,
+      "magentaPixels": 0,
+      "opaquePixels": 8432,
+      "hash": "54db915e058b64f1f03b2f4cc0f821b0518919cbf05b4b323d962c90eff3c090"
+    },
+    {
+      "frame": 2,
+      "pose": "start crouch",
+      "sourceBounds": [
+        390,
+        31,
+        508,
+        167
+      ],
+      "sourceMarker": [
+        466.87,
+        36.02
+      ],
+      "sourceHead": [
+        464,
+        40
+      ],
+      "sourceHand": [
+        501,
+        91
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.79,
+        121.43,
+        0
+      ],
+      "hand": [
+        164.33,
+        165.14
+      ],
+      "inkBounds": [
+        70,
+        114,
+        171,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 154,
+      "magentaPixels": 0,
+      "opaquePixels": 7734,
+      "hash": "516239eaff4a224387ae1ddb55746f0f5aa6f0f022a62709ddf2e8c32b5cfca2"
+    },
+    {
+      "frame": 3,
+      "pose": "start lean",
+      "sourceBounds": [
+        575,
+        27,
+        699,
+        165
+      ],
+      "sourceMarker": [
+        657.51,
+        32.12
+      ],
+      "sourceHead": [
+        655,
+        36
+      ],
+      "sourceHand": [
+        698,
+        84
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.83,
+        119.37,
+        0
+      ],
+      "hand": [
+        169.45,
+        160.27
+      ],
+      "inkBounds": [
+        65,
+        111,
+        170,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 145,
+      "magentaPixels": 0,
+      "opaquePixels": 7998,
+      "hash": "eb2fc05bc0208f00a69b15ecf5928b06c996dce512f88e6677c980d17d9bd649"
+    },
+    {
+      "frame": 4,
+      "pose": "stop lean",
+      "sourceBounds": [
+        744,
+        39,
+        895,
+        166
+      ],
+      "sourceMarker": [
+        841.38,
+        44.62
+      ],
+      "sourceHead": [
+        840,
+        49
+      ],
+      "sourceHand": [
+        885,
+        71
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.09,
+        130.26,
+        0
+      ],
+      "hand": [
+        171.7,
+        149.07
+      ],
+      "inkBounds": [
+        51,
+        121,
+        180,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 155,
+      "magentaPixels": 0,
+      "opaquePixels": 8316,
+      "hash": "79edc3f9ed4a7811454f410875c0f4ef2121e090ea60588322a6ca93441499ff"
+    },
+    {
+      "frame": 5,
+      "pose": "stop settle",
+      "sourceBounds": [
+        935,
+        22,
+        1063,
+        166
+      ],
+      "sourceMarker": [
+        1001.56,
+        26.7
+      ],
+      "sourceHead": [
+        1002,
+        31
+      ],
+      "sourceHand": [
+        1054,
+        64
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.07,
+        114.44,
+        0
+      ],
+      "hand": [
+        177.58,
+        142.76
+      ],
+      "inkBounds": [
+        76,
+        107,
+        185,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 162,
+      "magentaPixels": 0,
+      "opaquePixels": 8135,
+      "hash": "3b9ad2b49d6723969e39303549830bb19c2491083305d4dd027c3873ba50c936"
+    },
+    {
+      "frame": 6,
+      "pose": "run contact A",
+      "sourceBounds": [
+        1113,
+        23,
+        1240,
+        164
+      ],
+      "sourceMarker": [
+        1187.59,
+        28.35
+      ],
+      "sourceHead": [
+        1185,
+        32
+      ],
+      "sourceHand": [
+        1233,
+        77
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.27,
+        116.41,
+        0
+      ],
+      "hand": [
+        174.31,
+        154.89
+      ],
+      "inkBounds": [
+        71,
+        109,
+        181,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 147,
+      "magentaPixels": 0,
+      "opaquePixels": 7516,
+      "hash": "92a67afe42b8e1b990a5d1604dbba14292ab8aa5b0c159151667a0e020d0310a"
+    },
+    {
+      "frame": 7,
+      "pose": "run down A",
+      "sourceBounds": [
+        1302,
+        33,
+        1417,
+        166
+      ],
+      "sourceMarker": [
+        1375.86,
+        38.73
+      ],
+      "sourceHead": [
+        1376,
+        43
+      ],
+      "sourceHand": [
+        1416,
+        93
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.14,
+        124.25,
+        0
+      ],
+      "hand": [
+        167.43,
+        166.95
+      ],
+      "inkBounds": [
+        69,
+        116,
+        168,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 151,
+      "magentaPixels": 0,
+      "opaquePixels": 6765,
+      "hash": "760078ecfb9cb994436c5a29acde29b810880839a482e1c13c4a876572e151d6"
+    },
+    {
+      "frame": 8,
+      "pose": "run passing A",
+      "sourceBounds": [
+        47,
+        206,
+        150,
+        347
+      ],
+      "sourceMarker": [
+        111.82,
+        210.87
+      ],
+      "sourceHead": [
+        110,
+        215
+      ],
+      "sourceHand": [
+        149,
+        263
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.28,
+        117.41,
+        0
+      ],
+      "hand": [
+        166.45,
+        158.46
+      ],
+      "inkBounds": [
+        79,
+        110,
+        168,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 160,
+      "magentaPixels": 0,
+      "opaquePixels": 6313,
+      "hash": "195e7847240365f620929b81f61dfea0f8f8a55f0731d338df067782e04142c0"
+    },
+    {
+      "frame": 9,
+      "pose": "run contact B",
+      "sourceBounds": [
+        210,
+        209,
+        336,
+        345
+      ],
+      "sourceMarker": [
+        285.45,
+        213.55
+      ],
+      "sourceHead": [
+        285,
+        218
+      ],
+      "sourceHand": [
+        335,
+        254
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.75,
+        121.43,
+        0
+      ],
+      "hand": [
+        175.44,
+        152.29
+      ],
+      "inkBounds": [
+        69,
+        114,
+        177,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 148,
+      "magentaPixels": 0,
+      "opaquePixels": 6783,
+      "hash": "d04ff328721f82ee2b98595df6bb508d70f15890c81cd3e4e3d225c4d9511a11"
+    },
+    {
+      "frame": 10,
+      "pose": "run down B",
+      "sourceBounds": [
+        404,
+        219,
+        503,
+        347
+      ],
+      "sourceMarker": [
+        471.12,
+        223.64
+      ],
+      "sourceHead": [
+        470,
+        219
+      ],
+      "sourceHand": [
+        497,
+        277
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.1,
+        119.71,
+        0
+      ],
+      "hand": [
+        156.17,
+        169.36
+      ],
+      "inkBounds": [
+        77,
+        119,
+        161,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 147,
+      "magentaPixels": 0,
+      "opaquePixels": 5962,
+      "hash": "86841cfd7bd3d91fec409c4c06945764562473b8748df5f7c99248f42761697b"
+    },
+    {
+      "frame": 11,
+      "pose": "run passing B",
+      "sourceBounds": [
+        584,
+        204,
+        699,
+        353
+      ],
+      "sourceMarker": [
+        646.43,
+        209.03
+      ],
+      "sourceHead": [
+        646,
+        213
+      ],
+      "sourceHand": [
+        698,
+        251
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.86,
+        110.42,
+        0
+      ],
+      "hand": [
+        177.43,
+        142.95
+      ],
+      "inkBounds": [
+        79,
+        103,
+        178,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 138,
+      "magentaPixels": 0,
+      "opaquePixels": 7004,
+      "hash": "6256dbca11aa7caf8bf8c03849d670e7cd4c36693a6148d2ee531f9da161e372"
+    },
+    {
+      "frame": 12,
+      "pose": "run up A",
+      "sourceBounds": [
+        737,
+        200,
+        890,
+        323
+      ],
+      "sourceMarker": [
+        829.17,
+        205.92
+      ],
+      "sourceHead": [
+        829,
+        210
+      ],
+      "sourceHand": [
+        878,
+        241
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.23,
+        132.3,
+        0
+      ],
+      "hand": [
+        175.05,
+        158.91
+      ],
+      "inkBounds": [
+        55,
+        124,
+        185,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 137,
+      "magentaPixels": 0,
+      "opaquePixels": 7281,
+      "hash": "63833c4a0f790045e387df021db482170d4a2127a0d3d05f6c20da00bb3e835e"
+    },
+    {
+      "frame": 13,
+      "pose": "run up B",
+      "sourceBounds": [
+        928,
+        203,
+        1075,
+        315
+      ],
+      "sourceMarker": [
+        1009.47,
+        207.65
+      ],
+      "sourceHead": [
+        1007,
+        211
+      ],
+      "sourceHand": [
+        1053,
+        240
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.2,
+        141.53,
+        0
+      ],
+      "hand": [
+        172.5,
+        166.28
+      ],
+      "inkBounds": [
+        66,
+        135,
+        191,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 128,
+      "magentaPixels": 0,
+      "opaquePixels": 6664,
+      "hash": "ea471edc60aae7fd704942bba78b94b7a2de101f460a9071beb20e1efee46750"
+    },
+    {
+      "frame": 14,
+      "pose": "jump takeoff",
+      "sourceBounds": [
+        1117,
+        212,
+        1237,
+        355
+      ],
+      "sourceMarker": [
+        1188.45,
+        217.37
+      ],
+      "sourceHead": [
+        1188,
+        222
+      ],
+      "sourceHand": [
+        1236,
+        250
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.4,
+        116.29,
+        0
+      ],
+      "hand": [
+        174.44,
+        140.29
+      ],
+      "inkBounds": [
+        72,
+        108,
+        176,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 147,
+      "magentaPixels": 0,
+      "opaquePixels": 6992,
+      "hash": "55306cc6a390964cba22e166c0a07ce4c965d2fe4b5826d8e080c9b45ba71f94"
+    },
+    {
+      "frame": 15,
+      "pose": "jump rise",
+      "sourceBounds": [
+        1296,
+        191,
+        1419,
+        329
+      ],
+      "sourceMarker": [
+        1363.78,
+        195.88
+      ],
+      "sourceHead": [
+        1362,
+        200
+      ],
+      "sourceHand": [
+        1411,
+        221
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.36,
+        120.37,
+        0
+      ],
+      "hand": [
+        175.42,
+        138.27
+      ],
+      "inkBounds": [
+        77,
+        113,
+        182,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 142,
+      "magentaPixels": 0,
+      "opaquePixels": 6948,
+      "hash": "26b69bd9260961b98792c9c2cc9084372391d6589b9885c9d2ba8674dd34a341"
+    },
+    {
+      "frame": 16,
+      "pose": "jump air",
+      "sourceBounds": [
+        34,
+        376,
+        150,
+        513
+      ],
+      "sourceMarker": [
+        97.67,
+        380.58
+      ],
+      "sourceHead": [
+        98,
+        385
+      ],
+      "sourceHand": [
+        143,
+        407
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.65,
+        120.44,
+        0
+      ],
+      "hand": [
+        171.27,
+        139.32
+      ],
+      "inkBounds": [
+        78,
+        112,
+        178,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 141,
+      "magentaPixels": 0,
+      "opaquePixels": 6867,
+      "hash": "1934e9e0dee9a813880c704a04c31bb9305ab5862d5dedb464b2040364a3bafc"
+    },
+    {
+      "frame": 17,
+      "pose": "jump apex",
+      "sourceBounds": [
+        218,
+        374,
+        330,
+        493
+      ],
+      "sourceMarker": [
+        279.9,
+        379.46
+      ],
+      "sourceHead": [
+        280,
+        384
+      ],
+      "sourceHand": [
+        322,
+        408
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.62,
+        137.24,
+        0
+      ],
+      "hand": [
+        168.47,
+        157.73
+      ],
+      "inkBounds": [
+        80,
+        129,
+        176,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 134,
+      "magentaPixels": 0,
+      "opaquePixels": 5916,
+      "hash": "0363d9858eea4627cacc979a55bcd1a67129ab9958a044d317d3fb1f96b5e77f"
+    },
+    {
+      "frame": 18,
+      "pose": "double jump tuck",
+      "sourceBounds": [
+        404,
+        391,
+        517,
+        523
+      ],
+      "sourceMarker": [
+        466.91,
+        396.34
+      ],
+      "sourceHead": [
+        467,
+        401
+      ],
+      "sourceHand": [
+        510,
+        436
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.56,
+        126.24,
+        0
+      ],
+      "hand": [
+        169.31,
+        156.09
+      ],
+      "inkBounds": [
+        79,
+        118,
+        175,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 155,
+      "magentaPixels": 0,
+      "opaquePixels": 6705,
+      "hash": "521fba999d7d08f54b0dc7c3bf0043bba95fa5c6c37d06735c370a9595f12ea4"
+    },
+    {
+      "frame": 19,
+      "pose": "double jump tight",
+      "sourceBounds": [
+        579,
+        389,
+        689,
+        492
+      ],
+      "sourceMarker": [
+        644.73,
+        394.49
+      ],
+      "sourceHead": [
+        645,
+        400
+      ],
+      "sourceHand": [
+        682,
+        435
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.86,
+        151.06,
+        0
+      ],
+      "hand": [
+        164.34,
+        180.82
+      ],
+      "inkBounds": [
+        77,
+        141,
+        170,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 177,
+      "magentaPixels": 0,
+      "opaquePixels": 5782,
+      "hash": "cf655e7dfae1ecaf3a3454356a826b487b30f28fa9c61155f0e3b2be52937d39"
+    },
+    {
+      "frame": 20,
+      "pose": "double jump extend",
+      "sourceBounds": [
+        742,
+        375,
+        887,
+        496
+      ],
+      "sourceMarker": [
+        826.18,
+        380.55
+      ],
+      "sourceHead": [
+        826,
+        385
+      ],
+      "sourceHand": [
+        877,
+        461
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.3,
+        135.27,
+        0
+      ],
+      "hand": [
+        176.77,
+        200.33
+      ],
+      "inkBounds": [
+        62,
+        126,
+        185,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 138,
+      "magentaPixels": 0,
+      "opaquePixels": 7098,
+      "hash": "13b321a9a04a044619c94740ddf1d5c7b5a4fb4a324b46ffc9dc480a00b31d16"
+    },
+    {
+      "frame": 21,
+      "pose": "double jump recover",
+      "sourceBounds": [
+        939,
+        381,
+        1062,
+        507
+      ],
+      "sourceMarker": [
+        1003.22,
+        385.39
+      ],
+      "sourceHead": [
+        1003,
+        381
+      ],
+      "sourceHand": [
+        1060,
+        431
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.65,
+        122.71,
+        0
+      ],
+      "hand": [
+        181.57,
+        165.4
+      ],
+      "inkBounds": [
+        77,
+        122,
+        183,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 142,
+      "magentaPixels": 0,
+      "opaquePixels": 6981,
+      "hash": "f57b8611e9d7c9a202f1b3156b672a21b8353d445b218c6e97408063a1496c9a"
+    },
+    {
+      "frame": 22,
+      "pose": "fall A",
+      "sourceBounds": [
+        1112,
+        392,
+        1244,
+        533
+      ],
+      "sourceMarker": [
+        1183.52,
+        399.09
+      ],
+      "sourceHead": [
+        1184,
+        404
+      ],
+      "sourceHand": [
+        1243,
+        443
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.12,
+        119.97,
+        0
+      ],
+      "hand": [
+        183.44,
+        153.32
+      ],
+      "inkBounds": [
+        72,
+        110,
+        184,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 167,
+      "magentaPixels": 0,
+      "opaquePixels": 7403,
+      "hash": "36d9cd0e703f07ad504717f62561c82e9f7ab98c16177552f121a8e10a3707b1"
+    },
+    {
+      "frame": 23,
+      "pose": "fall B",
+      "sourceBounds": [
+        1278,
+        410,
+        1420,
+        529
+      ],
+      "sourceMarker": [
+        1365.87,
+        415.37
+      ],
+      "sourceHead": [
+        1366,
+        420
+      ],
+      "sourceHand": [
+        1412,
+        456
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.05,
+        136.24,
+        0
+      ],
+      "hand": [
+        172.44,
+        166.98
+      ],
+      "inkBounds": [
+        58,
+        128,
+        180,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 170,
+      "magentaPixels": 0,
+      "opaquePixels": 7108,
+      "hash": "2afbd3a14c6e4369a0f5fd4bc0fff9ec6d5c8a4ba8e9ae0ff756ce3eace4d35b"
+    },
+    {
+      "frame": 24,
+      "pose": "land crouch",
+      "sourceBounds": [
+        19,
+        588,
+        160,
+        710
+      ],
+      "sourceMarker": [
+        102.55,
+        594.93
+      ],
+      "sourceHead": [
+        103,
+        600
+      ],
+      "sourceHand": [
+        159,
+        666
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.54,
+        135,
+        0
+      ],
+      "hand": [
+        180.43,
+        191.57
+      ],
+      "inkBounds": [
+        61,
+        125,
+        182,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 176,
+      "magentaPixels": 0,
+      "opaquePixels": 7996,
+      "hash": "e9565d06019214a8778fe72bc663254bc844b9916a86c73b96ad3c66bf6b7af9"
+    },
+    {
+      "frame": 25,
+      "pose": "land recover",
+      "sourceBounds": [
+        210,
+        575,
+        335,
+        710
+      ],
+      "sourceMarker": [
+        280.9,
+        580.46
+      ],
+      "sourceHead": [
+        281,
+        585
+      ],
+      "sourceHand": [
+        334,
+        630
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.25,
+        122.27,
+        0
+      ],
+      "hand": [
+        178.44,
+        160.8
+      ],
+      "inkBounds": [
+        72,
+        114,
+        180,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 161,
+      "magentaPixels": 0,
+      "opaquePixels": 7902,
+      "hash": "1b7292df69c331782231334ec5159b8b0b6bbc85823bfcbda5f3af6de456f6fa"
+    },
+    {
+      "frame": 26,
+      "pose": "punch guard",
+      "sourceBounds": [
+        394,
+        564,
+        511,
+        711
+      ],
+      "sourceMarker": [
+        454.9,
+        568.66
+      ],
+      "sourceHead": [
+        455,
+        573
+      ],
+      "sourceHand": [
+        506,
+        607
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.63,
+        112.4,
+        0
+      ],
+      "hand": [
+        176.04,
+        141.44
+      ],
+      "inkBounds": [
+        81,
+        105,
+        181,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 167,
+      "magentaPixels": 0,
+      "opaquePixels": 7935,
+      "hash": "b6858b992f3a5595fb2b27fe4a0b47d80796d007094c916ce509b9df6bc76ced"
+    },
+    {
+      "frame": 27,
+      "pose": "punch windup",
+      "sourceBounds": [
+        572,
+        566,
+        698,
+        711
+      ],
+      "sourceMarker": [
+        644.25,
+        571.2
+      ],
+      "sourceHead": [
+        644,
+        576
+      ],
+      "sourceHand": [
+        697,
+        613
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.18,
+        115.23,
+        0
+      ],
+      "hand": [
+        178.44,
+        146.77
+      ],
+      "inkBounds": [
+        72,
+        107,
+        179,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 164,
+      "magentaPixels": 0,
+      "opaquePixels": 8375,
+      "hash": "c497a0ff473cfa2ba94882f627fc3460daf0cd6272af017b9bb4dd940d253ae9"
+    },
+    {
+      "frame": 28,
+      "pose": "punch contact",
+      "sourceBounds": [
+        733,
+        566,
+        900,
+        711
+      ],
+      "sourceMarker": [
+        819.99,
+        570.43
+      ],
+      "sourceHead": [
+        819,
+        575
+      ],
+      "sourceHand": [
+        899,
+        590
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.13,
+        114.38,
+        0
+      ],
+      "hand": [
+        201.44,
+        127.16
+      ],
+      "inkBounds": [
+        59,
+        106,
+        203,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 170,
+      "magentaPixels": 0,
+      "opaquePixels": 8896,
+      "hash": "7dffe341e9d0bddede183028e7bcf3234f1466c28f3fd33272b63e3aa61e3dd7"
+    },
+    {
+      "frame": 29,
+      "pose": "punch retract",
+      "sourceBounds": [
+        936,
+        564,
+        1056,
+        711
+      ],
+      "sourceMarker": [
+        1002.09,
+        569.28
+      ],
+      "sourceHead": [
+        1002,
+        574
+      ],
+      "sourceHand": [
+        1047,
+        614
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.13,
+        113.25,
+        0
+      ],
+      "hand": [
+        171.6,
+        147.42
+      ],
+      "inkBounds": [
+        76,
+        107,
+        180,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 162,
+      "magentaPixels": 0,
+      "opaquePixels": 8292,
+      "hash": "fe5fb5708350953dc4c818cc986aeba7cd9ae1837fd1d8c88ae7289e67c1e40b"
+    },
+    {
+      "frame": 30,
+      "pose": "kick windup",
+      "sourceBounds": [
+        1112,
+        562,
+        1232,
+        711
+      ],
+      "sourceMarker": [
+        1176.65,
+        567.67
+      ],
+      "sourceHead": [
+        1175,
+        572
+      ],
+      "sourceHand": [
+        1230,
+        606
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.56,
+        111.27,
+        0
+      ],
+      "hand": [
+        179.58,
+        140.39
+      ],
+      "inkBounds": [
+        78,
+        103,
+        181,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 156,
+      "magentaPixels": 0,
+      "opaquePixels": 7812,
+      "hash": "fdab64d86681a5e613285c1e44756360c11ae612ee420a4697e9f703adfdc4ab"
+    },
+    {
+      "frame": 31,
+      "pose": "kick extend",
+      "sourceBounds": [
+        1290,
+        562,
+        1427,
+        710
+      ],
+      "sourceMarker": [
+        1344.68,
+        566.82
+      ],
+      "sourceHead": [
+        1342,
+        571
+      ],
+      "sourceHand": [
+        1399,
+        600
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.34,
+        110.41,
+        0
+      ],
+      "hand": [
+        182.26,
+        135.21
+      ],
+      "inkBounds": [
+        89,
+        104,
+        206,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 162,
+      "magentaPixels": 0,
+      "opaquePixels": 7975,
+      "hash": "df75065c71a9711450bd34bcecc08d1caded08b3cadc151b2d61a9592b59ab1a"
+    },
+    {
+      "frame": 32,
+      "pose": "kick contact",
+      "sourceBounds": [
+        25,
+        746,
+        168,
+        894
+      ],
+      "sourceMarker": [
+        84.56,
+        751.41
+      ],
+      "sourceHead": [
+        85,
+        756
+      ],
+      "sourceHand": [
+        141,
+        796
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.14,
+        112.26,
+        0
+      ],
+      "hand": [
+        181.14,
+        146.47
+      ],
+      "inkBounds": [
+        81,
+        104,
+        205,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 159,
+      "magentaPixels": 0,
+      "opaquePixels": 7698,
+      "hash": "856edf1b351100fc5528a881880892470a108bd890ccc9411481b83ba1c12094"
+    },
+    {
+      "frame": 33,
+      "pose": "kick retract",
+      "sourceBounds": [
+        215,
+        746,
+        328,
+        894
+      ],
+      "sourceMarker": [
+        279.43,
+        751.74
+      ],
+      "sourceHead": [
+        278,
+        756
+      ],
+      "sourceHand": [
+        321,
+        788
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.56,
+        112.26,
+        0
+      ],
+      "hand": [
+        169.31,
+        139.63
+      ],
+      "inkBounds": [
+        79,
+        104,
+        176,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 155,
+      "magentaPixels": 0,
+      "opaquePixels": 7393,
+      "hash": "d2a74f984551d5d7ad3c333617f1b59af4f3521ba253129388ed9f1893843e57"
+    },
+    {
+      "frame": 34,
+      "pose": "hurt recoil",
+      "sourceBounds": [
+        373,
+        752,
+        529,
+        889
+      ],
+      "sourceMarker": [
+        408.51,
+        756.67
+      ],
+      "sourceHead": [
+        409,
+        761
+      ],
+      "sourceHand": [
+        489,
+        779
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.54,
+        120.44,
+        0
+      ],
+      "hand": [
+        201.04,
+        135.89
+      ],
+      "inkBounds": [
+        101,
+        112,
+        235,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 21,
+      "removedMarkerPixels": 134,
+      "magentaPixels": 0,
+      "opaquePixels": 8560,
+      "hash": "87a5f2cc6b18b18886e2ab657978fa368f74f2f971ffc5dd86b7341ae3a13cf7"
+    },
+    {
+      "frame": 35,
+      "pose": "hurt recover",
+      "sourceBounds": [
+        577,
+        755,
+        689,
+        891
+      ],
+      "sourceMarker": [
+        654.32,
+        761.18
+      ],
+      "sourceHead": [
+        654,
+        766
+      ],
+      "sourceHand": [
+        688,
+        810
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.42,
+        123.14,
+        0
+      ],
+      "hand": [
+        162.44,
+        160.86
+      ],
+      "inkBounds": [
+        68,
+        114,
+        164,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 164,
+      "magentaPixels": 0,
+      "opaquePixels": 7698,
+      "hash": "e5eac786f1f2cab1f5dbdc0f159120c8761246bebefb91e9e6d5912326adebfa"
+    },
+    {
+      "frame": 36,
+      "pose": "defeat kneel",
+      "sourceBounds": [
+        741,
+        773,
+        866,
+        890
+      ],
+      "sourceMarker": [
+        825.47,
+        778.03
+      ],
+      "sourceHead": [
+        825,
+        783
+      ],
+      "sourceHand": [
+        865,
+        855
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.33,
+        139.21,
+        0
+      ],
+      "hand": [
+        167.44,
+        200.5
+      ],
+      "inkBounds": [
+        62,
+        130,
+        169,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 165,
+      "magentaPixels": 0,
+      "opaquePixels": 7172,
+      "hash": "7ef963434241d7b85476bf7f5d614aa1d3cab2fda14b676d9ac37c2f200e71e3"
+    },
+    {
+      "frame": 37,
+      "pose": "defeat down",
+      "sourceBounds": [
+        904,
+        817,
+        1084,
+        883
+      ],
+      "sourceMarker": [
+        1036.53,
+        830.81
+      ],
+      "sourceHead": [
+        1034,
+        836
+      ],
+      "sourceHand": [
+        1083,
+        868
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.63,
+        190,
+        0
+      ],
+      "hand": [
+        174.44,
+        217.43
+      ],
+      "inkBounds": [
+        21,
+        174,
+        175,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 21,
+      "removedMarkerPixels": 190,
+      "magentaPixels": 0,
+      "opaquePixels": 5827,
+      "hash": "b31b85d4717f4858c450ece941f07dc360e143df4d0d4d001540c09ee0282610"
+    },
+    {
+      "frame": 38,
+      "pose": "recovery crouch",
+      "sourceBounds": [
+        1100,
+        779,
+        1258,
+        882
+      ],
+      "sourceMarker": [
+        1204.47,
+        784.62
+      ],
+      "sourceHead": [
+        1204,
+        790
+      ],
+      "sourceHand": [
+        1250,
+        867
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.95,
+        152.06,
+        0
+      ],
+      "hand": [
+        172.42,
+        217.54
+      ],
+      "inkBounds": [
+        43,
+        142,
+        180,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 185,
+      "magentaPixels": 0,
+      "opaquePixels": 7187,
+      "hash": "3e638eba16b55d4771edfcf1089d5acc589b1fb7ed249a59f94526496d3517fa"
+    },
+    {
+      "frame": 39,
+      "pose": "recovery stand",
+      "sourceBounds": [
+        1304,
+        739,
+        1421,
+        889
+      ],
+      "sourceMarker": [
+        1363.51,
+        743.91
+      ],
+      "sourceHead": [
+        1361,
+        748
+      ],
+      "sourceHand": [
+        1420,
+        810
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.22,
+        109.43,
+        0
+      ],
+      "hand": [
+        183.45,
+        162.57
+      ],
+      "inkBounds": [
+        85,
+        102,
+        184,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 156,
+      "magentaPixels": 0,
+      "opaquePixels": 8157,
+      "hash": "4183924757ee9f1c9025be742d6d58b0b17fc3a60f1871d7599ee7979842b31b"
+    },
+    {
+      "frame": 40,
+      "pose": "cast charge",
+      "sourceBounds": [
+        31,
+        928,
+        147,
+        1073
+      ],
+      "sourceMarker": [
+        97.33,
+        933.33
+      ],
+      "sourceHead": [
+        97,
+        938
+      ],
+      "sourceHand": [
+        146,
+        977
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.37,
+        114.23,
+        0
+      ],
+      "hand": [
+        175.43,
+        147.47
+      ],
+      "inkBounds": [
+        76,
+        105,
+        177,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 152,
+      "magentaPixels": 0,
+      "opaquePixels": 8065,
+      "hash": "5785c2c9ec496bd20da408d28a0a81a5b50320176629662f09ad8b32be9020ea"
+    },
+    {
+      "frame": 41,
+      "pose": "cast prepare",
+      "sourceBounds": [
+        209,
+        926,
+        346,
+        1073
+      ],
+      "sourceMarker": [
+        269.58,
+        931.36
+      ],
+      "sourceHead": [
+        270,
+        936
+      ],
+      "sourceHand": [
+        345,
+        965
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        133.06,
+        112.25,
+        0
+      ],
+      "hand": [
+        197.43,
+        137.03
+      ],
+      "inkBounds": [
+        80,
+        104,
+        199,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 151,
+      "magentaPixels": 0,
+      "opaquePixels": 8703,
+      "hash": "c9e661acf1d2733e9d4a981a233d658158c75cd6890c740f7fdff41a601c9a23"
+    },
+    {
+      "frame": 42,
+      "pose": "cast release",
+      "sourceBounds": [
+        390,
+        932,
+        533,
+        1073
+      ],
+      "sourceMarker": [
+        451.91,
+        936.45
+      ],
+      "sourceHead": [
+        452,
+        941
+      ],
+      "sourceHand": [
+        523,
+        954
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.86,
+        116.41,
+        0
+      ],
+      "hand": [
+        193.71,
+        127.52
+      ],
+      "inkBounds": [
+        80,
+        108,
+        203,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 140,
+      "magentaPixels": 0,
+      "opaquePixels": 8171,
+      "hash": "4add9e0902e1e5b5ad30345753a6afcae5b2a93a76acd224b4f8610a9cf3a0a1"
+    },
+    {
+      "frame": 43,
+      "pose": "cast recover",
+      "sourceBounds": [
+        579,
+        930,
+        697,
+        1073
+      ],
+      "sourceMarker": [
+        640.41,
+        935.43
+      ],
+      "sourceHead": [
+        640,
+        940
+      ],
+      "sourceHand": [
+        696,
+        970
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.7,
+        115.29,
+        0
+      ],
+      "hand": [
+        180.44,
+        141
+      ],
+      "inkBounds": [
+        80,
+        107,
+        181,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 146,
+      "magentaPixels": 0,
+      "opaquePixels": 8004,
+      "hash": "fc02ee70cf4eb3ae360405e89a7369f2c04c2849064cac44b13f16683ab2c71d"
+    },
+    {
+      "frame": 44,
+      "pose": "flight launch",
+      "sourceBounds": [
+        754,
+        915,
+        878,
+        1064
+      ],
+      "sourceMarker": [
+        829.77,
+        920.23
+      ],
+      "sourceHead": [
+        828,
+        924
+      ],
+      "sourceHand": [
+        877,
+        937
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        132.72,
+        110.42,
+        0
+      ],
+      "hand": [
+        174.45,
+        121.55
+      ],
+      "inkBounds": [
+        70,
+        102,
+        175,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 136,
+      "magentaPixels": 0,
+      "opaquePixels": 7258,
+      "hash": "05875d66fac6f9dab36bff4c2771f52cac801c556c2ba69dd333a9a9c28ee7a3"
+    },
+    {
+      "frame": 45,
+      "pose": "flight lean",
+      "sourceBounds": [
+        924,
+        936,
+        1065,
+        1045
+      ],
+      "sourceMarker": [
+        1033.08,
+        942.75
+      ],
+      "sourceHead": [
+        1029,
+        946
+      ],
+      "sourceHand": [
+        1057,
+        972
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        149.5,
+        145.3,
+        0
+      ],
+      "hand": [
+        173.45,
+        167.62
+      ],
+      "inkBounds": [
+        60,
+        137,
+        180,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 141,
+      "magentaPixels": 0,
+      "opaquePixels": 5962,
+      "hash": "86085e5971388039cf567e560c67e69313a8017e2b6ca84e1ce8896153198870"
+    },
+    {
+      "frame": 46,
+      "pose": "flight horizontal A",
+      "sourceBounds": [
+        1093,
+        950,
+        1255,
+        1016
+      ],
+      "sourceMarker": [
+        1206.77,
+        955.12
+      ],
+      "sourceHead": [
+        1204,
+        959
+      ],
+      "sourceHand": [
+        1247,
+        981
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        175.66,
+        150.43,
+        0
+      ],
+      "hand": [
+        212.45,
+        169.29
+      ],
+      "inkBounds": [
+        81,
+        142,
+        220,
+        200
+      ],
+      "footHeight": 200,
+      "clearance": 36,
+      "removedMarkerPixels": 143,
+      "magentaPixels": 0,
+      "opaquePixels": 4304,
+      "hash": "e6ef5ccd94c04778a5abccffa0865ca999aa99f71ef2609ad7ca4d28ce6bb6bd"
+    },
+    {
+      "frame": 47,
+      "pose": "flight horizontal B",
+      "sourceBounds": [
+        1274,
+        952,
+        1438,
+        1016
+      ],
+      "sourceMarker": [
+        1393.02,
+        957.06
+      ],
+      "sourceHead": [
+        1391,
+        961
+      ],
+      "sourceHand": [
+        1429,
+        981
+      ],
+      "handMethod": "rightmost non-neck upper cyan region",
+      "head": [
+        176,
+        150.38,
+        0
+      ],
+      "hand": [
+        208.57,
+        167.44
+      ],
+      "inkBounds": [
+        76,
+        142,
+        217,
+        198
+      ],
+      "footHeight": 198,
+      "clearance": 39,
+      "removedMarkerPixels": 135,
+      "magentaPixels": 0,
+      "opaquePixels": 4183,
+      "hash": "772bb050e9225e0e4ffd1c0402f92b94fa5c1f98d63156c1d10c16f646f6427d"
+    }
+  ]
+}

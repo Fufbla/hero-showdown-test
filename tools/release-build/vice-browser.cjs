@@ -17,8 +17,9 @@ async function enter(page){
 }
 (async()=>{
  globalThis.location={pathname:new URL(url).pathname,search:'?testAccount=0000000000'};
- const [{Game},{LocalHeroStore,PROFILE_KEY},{createTestSnapshot}]=await Promise.all([
-  import('../../royale/core.mjs'),import('../../royale/saves.mjs'),import('../../test-only/four-powers/review.mjs')
+ const [{Game},{LocalHeroStore,PROFILE_KEY},{createTestSnapshot},{COLLECTION},{canWearOutfit}]=await Promise.all([
+  import('../../royale/core.mjs'),import('../../royale/saves.mjs'),import('../../test-only/four-powers/review.mjs'),
+  import('../../test-only/four-powers/new-costumes/catalog.mjs'),import('../../royale/cosmetics/eligibility.mjs')
  ]);
  const browser=await chromium.launch({headless:true});
  try{
@@ -40,7 +41,7 @@ async function enter(page){
     const page=await context.newPage();page.on('pageerror',error=>report.errors.push(presentation+': '+error.message));
     await page.goto(url,{waitUntil:'domcontentloaded',timeout:120000});
     await enter(page);
-    await page.waitForFunction(count=>document.querySelectorAll('#costume-carousel .costume-card').length===count,presentation==='male'?20:31);
+    await page.waitForFunction(count=>document.querySelectorAll('#costume-carousel .costume-card').length===count,COLLECTION.filter(outfit=>canWearOutfit(outfit,hero.look)).length);
     assert.equal(Number((await page.locator('#store-coins').innerText()).replace(/\D/g,'')),10000,'The existing one-time test grant funds the fresh fixture');
     await page.getByRole('button',{name:'Preview Vice Costume',exact:true}).click();
     await page.waitForFunction(()=>document.querySelector('#store-hero').dataset.outfit==='vice-costume'&&document.querySelector('#store-hero').dataset.animating==='true');

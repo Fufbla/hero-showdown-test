@@ -1,0 +1,2378 @@
+{
+  "version": 1,
+  "id": "wolf-transformation",
+  "source": "test-only/four-powers/new-costumes-source/wolf-transformation/action-source.png",
+  "sourceSha256": "c34110bb2cfb7e3d6e6199f8cad85987ddc1b105a9e8a87a01f975a6abfeb232",
+  "sourceSize": [
+    1341,
+    1173
+  ],
+  "spriteCount": 56,
+  "clipCount": 26,
+  "uniformNominalScale": 1.1788079470198676,
+  "minimumClearance": 26,
+  "allFramesDistinct": true,
+  "magentaPixels": 0,
+  "inferredHandFrames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55
+  ],
+  "headgear": null,
+  "contactFrameIndices": {
+    "punch": 28,
+    "kick": 32,
+    "fireball": 42
+  },
+  "frames": [
+    {
+      "frame": 0,
+      "pose": "idle A",
+      "sourceBounds": [
+        40,
+        12,
+        137,
+        163
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        102.08,
+        57.3
+      ],
+      "sourceHand": [
+        121,
+        103
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        143.5,
+        104.84,
+        0
+      ],
+      "hand": [
+        165.79,
+        158.8
+      ],
+      "inkBounds": [
+        71,
+        52,
+        185,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13229,
+      "hash": "2473ce7aa4df81e65681d04e7ce5a25636d0c7a0a9caf9d432dff0778d9097f0"
+    },
+    {
+      "frame": 1,
+      "pose": "idle B",
+      "sourceBounds": [
+        208,
+        11,
+        301,
+        163
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        267.52,
+        56.6
+      ],
+      "sourceHand": [
+        285,
+        102
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        143.3,
+        104.14,
+        0
+      ],
+      "hand": [
+        163.85,
+        157.69
+      ],
+      "inkBounds": [
+        73,
+        50,
+        183,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13153,
+      "hash": "a3907e4040fddb0bc5ea40e32bb70fcffd779c159d21eeb5afcfa178cbb0add1"
+    },
+    {
+      "frame": 2,
+      "pose": "start crouch",
+      "sourceBounds": [
+        362,
+        31,
+        473,
+        162
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        433.04,
+        70.3
+      ],
+      "sourceHand": [
+        452,
+        111
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        146.38,
+        120.64,
+        0
+      ],
+      "hand": [
+        168.8,
+        168.58
+      ],
+      "inkBounds": [
+        63,
+        75,
+        194,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12636,
+      "hash": "803c5c10e0775aff31b75f7f59fc10b09867ad75295b7206b86ec6d2d0c3f30a"
+    },
+    {
+      "frame": 3,
+      "pose": "start lean",
+      "sourceBounds": [
+        515,
+        39,
+        654,
+        162
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        603.96,
+        75.9
+      ],
+      "sourceHand": [
+        630,
+        113
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        150.5,
+        127.94,
+        0
+      ],
+      "hand": [
+        181.27,
+        171.76
+      ],
+      "inkBounds": [
+        46,
+        85,
+        210,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13664,
+      "hash": "4f07a57fc4368260b92870a82a4039c22fd8ce6462611d4da9d5f2cf5a0f41fd"
+    },
+    {
+      "frame": 4,
+      "pose": "stop lean",
+      "sourceBounds": [
+        686,
+        52,
+        828,
+        162
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        776.88,
+        85
+      ],
+      "sourceHand": [
+        804,
+        118
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        151.42,
+        139.14,
+        0
+      ],
+      "hand": [
+        183.37,
+        177.93
+      ],
+      "inkBounds": [
+        44,
+        101,
+        213,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12900,
+      "hash": "d469d14d8ab625d60b3fed2e27143c96ac01e3287132cb697c1c6cc7b038077b"
+    },
+    {
+      "frame": 5,
+      "pose": "stop settle",
+      "sourceBounds": [
+        852,
+        73,
+        996,
+        161
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        944.16,
+        99.4
+      ],
+      "sourceHand": [
+        972,
+        126
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        151.7,
+        157.34,
+        0
+      ],
+      "hand": [
+        184.43,
+        188.57
+      ],
+      "inkBounds": [
+        44,
+        127,
+        213,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 11671,
+      "hash": "8129228a82acb3075c76645a9ad69282e9adfc2204416213077167dc5d1d85cc"
+    },
+    {
+      "frame": 6,
+      "pose": "run contact A",
+      "sourceBounds": [
+        1012,
+        68,
+        1172,
+        161
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1114.4,
+        95.9
+      ],
+      "sourceHand": [
+        1148,
+        129
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        154.86,
+        153.14,
+        0
+      ],
+      "hand": [
+        194.4,
+        192.04
+      ],
+      "inkBounds": [
+        34,
+        121,
+        223,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10501,
+      "hash": "bdf3119ab949e50728556abb4de98fb045f44ba52cdfa23e630f00027df7fbe7"
+    },
+    {
+      "frame": 7,
+      "pose": "run down A",
+      "sourceBounds": [
+        1185,
+        69,
+        1334,
+        156
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1280.36,
+        95.1
+      ],
+      "sourceHand": [
+        1309,
+        127
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        151.54,
+        158.04,
+        0
+      ],
+      "hand": [
+        185.24,
+        195.55
+      ],
+      "inkBounds": [
+        40,
+        128,
+        216,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 9736,
+      "hash": "c6849c4b89b9372185d3d519b7a6c0e30feb679984cecc8f1bbfde5e2e67d547"
+    },
+    {
+      "frame": 8,
+      "pose": "run passing A",
+      "sourceBounds": [
+        8,
+        219,
+        170,
+        314
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        111.68,
+        247.5
+      ],
+      "sourceHand": [
+        142,
+        288
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        154.78,
+        150.05,
+        0
+      ],
+      "hand": [
+        190.58,
+        197.91
+      ],
+      "inkBounds": [
+        32,
+        117,
+        225,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 11628,
+      "hash": "7fe9cfec5fbf15e30bef297f7b7ae83dc7e2ee17d2b7018c1363d550319d83a6"
+    },
+    {
+      "frame": 9,
+      "pose": "run contact B",
+      "sourceBounds": [
+        184,
+        225,
+        331,
+        316
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        278.08,
+        252.3
+      ],
+      "sourceHand": [
+        308,
+        287
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        151.26,
+        154.54,
+        0
+      ],
+      "hand": [
+        186.53,
+        195.45
+      ],
+      "inkBounds": [
+        41,
+        122,
+        215,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10747,
+      "hash": "8a982dae8c45c7fc14a8b62c0e18b0345c95f374dd825a478f6feaae80d319af"
+    },
+    {
+      "frame": 10,
+      "pose": "run down B",
+      "sourceBounds": [
+        347,
+        227,
+        494,
+        316
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        441.08,
+        253.7
+      ],
+      "sourceHand": [
+        471,
+        287
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        152.26,
+        155.95,
+        0
+      ],
+      "hand": [
+        187.53,
+        195.33
+      ],
+      "inkBounds": [
+        41,
+        124,
+        215,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10151,
+      "hash": "24240b12fe93586518443af5bc78c5b66d5ab21d28d1d170c6eecb7e9a124563"
+    },
+    {
+      "frame": 11,
+      "pose": "run passing B",
+      "sourceBounds": [
+        510,
+        218,
+        667,
+        303
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        610.48,
+        243.5
+      ],
+      "sourceHand": [
+        640,
+        280
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        152.94,
+        158.44,
+        0
+      ],
+      "hand": [
+        187.78,
+        201.51
+      ],
+      "inkBounds": [
+        35,
+        129,
+        221,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10661,
+      "hash": "f3a5d9c1009a266a9b77802bbae42d999c70849e1b7c85fa2cbce32e7ec68030"
+    },
+    {
+      "frame": 12,
+      "pose": "run up A",
+      "sourceBounds": [
+        676,
+        215,
+        835,
+        295
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        777.76,
+        239
+      ],
+      "sourceHand": [
+        808,
+        274
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        153.22,
+        163.64,
+        0
+      ],
+      "hand": [
+        188.84,
+        204.89
+      ],
+      "inkBounds": [
+        34,
+        135,
+        222,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10199,
+      "hash": "f15723d2eee7aa92528a3c242bc542c9d23b8749086b702b29dfedc585d9586c"
+    },
+    {
+      "frame": 13,
+      "pose": "run up B",
+      "sourceBounds": [
+        846,
+        215,
+        999,
+        295
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        943.92,
+        239
+      ],
+      "sourceHand": [
+        973,
+        273
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        152.74,
+        163.64,
+        0
+      ],
+      "hand": [
+        187.01,
+        203.71
+      ],
+      "inkBounds": [
+        38,
+        135,
+        218,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10710,
+      "hash": "41c8f6b3d83b2c23a20be79d0a0d8a6c5c7af4d8550f46482cea5645f061e160"
+    },
+    {
+      "frame": 14,
+      "pose": "jump takeoff",
+      "sourceBounds": [
+        1028,
+        193,
+        1161,
+        319
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1113.12,
+        230.8
+      ],
+      "sourceHand": [
+        1138,
+        269
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        149.38,
+        125.84,
+        0
+      ],
+      "hand": [
+        178.62,
+        170.8
+      ],
+      "inkBounds": [
+        50,
+        82,
+        207,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10468,
+      "hash": "d4e6165b1d7be2656b3ae4ac538029971ecd09b08c425b33e76914f5b97bb772"
+    },
+    {
+      "frame": 15,
+      "pose": "jump rise",
+      "sourceBounds": [
+        1201,
+        178,
+        1315,
+        305
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1273.96,
+        216.1
+      ],
+      "sourceHand": [
+        1296,
+        254
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        146.3,
+        124.14,
+        0
+      ],
+      "hand": [
+        172.26,
+        168.69
+      ],
+      "inkBounds": [
+        61,
+        80,
+        195,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10179,
+      "hash": "6457376bfc0024d6ebac24d748c6b53c7ad95bf1e502c7b9529a0f4f1c80322f"
+    },
+    {
+      "frame": 16,
+      "pose": "jump air",
+      "sourceBounds": [
+        32,
+        335,
+        142,
+        472
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        102.4,
+        376.1
+      ],
+      "sourceHand": [
+        123,
+        417
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        146.1,
+        116.74,
+        0
+      ],
+      "hand": [
+        170.32,
+        164.89
+      ],
+      "inkBounds": [
+        64,
+        69,
+        193,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10987,
+      "hash": "83ed996879e96e631039a4cdd054a0c267c2242c5cb1ef38924c26d30d535390"
+    },
+    {
+      "frame": 17,
+      "pose": "jump apex",
+      "sourceBounds": [
+        203,
+        331,
+        312,
+        460
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        272.76,
+        369.7
+      ],
+      "sourceHand": [
+        293,
+        408
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        145.46,
+        122.04,
+        0
+      ],
+      "hand": [
+        169.28,
+        167.26
+      ],
+      "inkBounds": [
+        64,
+        77,
+        192,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10389,
+      "hash": "82e8fa8a9047a5c80fea1043b2a41f11752a9ec20429d37763e61670d8292564"
+    },
+    {
+      "frame": 18,
+      "pose": "double jump tuck",
+      "sourceBounds": [
+        364,
+        344,
+        480,
+        466
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        438.24,
+        380.6
+      ],
+      "sourceHand": [
+        459,
+        419
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        146.58,
+        127.65,
+        0
+      ],
+      "hand": [
+        170.98,
+        173.06
+      ],
+      "inkBounds": [
+        60,
+        85,
+        196,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10558,
+      "hash": "985fe1e7bf81ef4d6b2bf4023c06930c6211cce0c10e72f536a84a636b8b3416"
+    },
+    {
+      "frame": 19,
+      "pose": "double jump tight",
+      "sourceBounds": [
+        534,
+        357,
+        647,
+        467
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        606.32,
+        390
+      ],
+      "sourceHand": [
+        628,
+        423
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        145.66,
+        139.14,
+        0
+      ],
+      "hand": [
+        171.23,
+        177.93
+      ],
+      "inkBounds": [
+        61,
+        101,
+        195,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 9869,
+      "hash": "bee4230286911f84c811958247d7c761f4702709381fe5a894c9d5f4df3b1863"
+    },
+    {
+      "frame": 20,
+      "pose": "double jump extend",
+      "sourceBounds": [
+        693,
+        341,
+        824,
+        473
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        776.84,
+        380.6
+      ],
+      "sourceHand": [
+        802,
+        420
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        149.1,
+        119.94,
+        0
+      ],
+      "hand": [
+        178.73,
+        166.29
+      ],
+      "inkBounds": [
+        51,
+        74,
+        205,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 11727,
+      "hash": "9ea71b275a2323f8ad97b4de070bfb79afe7784c12b311be5ce611dde08aa6b9"
+    },
+    {
+      "frame": 21,
+      "pose": "double jump recover",
+      "sourceBounds": [
+        855,
+        353,
+        983,
+        480
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        936.92,
+        391.1
+      ],
+      "sourceHand": [
+        961,
+        429
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        149.18,
+        124.14,
+        0
+      ],
+      "hand": [
+        177.64,
+        168.69
+      ],
+      "inkBounds": [
+        53,
+        80,
+        204,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 11286,
+      "hash": "5952310ae860ca40987f29005674f16df4a2f1971aab9c5c8b2d5637de77ebe9"
+    },
+    {
+      "frame": 22,
+      "pose": "fall A",
+      "sourceBounds": [
+        1014,
+        357,
+        1144,
+        491
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1097.2,
+        397.2
+      ],
+      "sourceHand": [
+        1122,
+        437
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        149.46,
+        118.84,
+        0
+      ],
+      "hand": [
+        178.7,
+        165.86
+      ],
+      "inkBounds": [
+        52,
+        72,
+        205,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 11449,
+      "hash": "014ceaa15e4a7fe616da34da42d7d60c143d611d00f7a032bf26d4f4ca5fe758"
+    },
+    {
+      "frame": 23,
+      "pose": "fall B",
+      "sourceBounds": [
+        1185,
+        381,
+        1305,
+        491
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1261.8,
+        414
+      ],
+      "sourceHand": [
+        1285,
+        447
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        147.78,
+        139.14,
+        0
+      ],
+      "hand": [
+        175.1,
+        177.93
+      ],
+      "inkBounds": [
+        58,
+        100,
+        199,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10701,
+      "hash": "4039f7ec85fe5ff1671d04992fe8d1e4921b59b8916d5285174858af8a2be5dd"
+    },
+    {
+      "frame": 24,
+      "pose": "land crouch",
+      "sourceBounds": [
+        23,
+        552,
+        139,
+        656
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        97.24,
+        583.2
+      ],
+      "sourceHand": [
+        119,
+        614
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        146.58,
+        143.04,
+        0
+      ],
+      "hand": [
+        172.15,
+        179.26
+      ],
+      "inkBounds": [
+        59,
+        107,
+        197,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10986,
+      "hash": "fad99446421e0a22c62732f2c072929a959ca2719538c7709e268f449b341362"
+    },
+    {
+      "frame": 25,
+      "pose": "land recover",
+      "sourceBounds": [
+        200,
+        530,
+        304,
+        660
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        266.56,
+        569
+      ],
+      "sourceHand": [
+        286,
+        608
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        144.62,
+        122.34,
+        0
+      ],
+      "hand": [
+        167.48,
+        168.33
+      ],
+      "inkBounds": [
+        67,
+        77,
+        189,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12197,
+      "hash": "43ff7682836454de70fbe653ea77c0c06ac5ff3367130a0b039d635b8552c401"
+    },
+    {
+      "frame": 26,
+      "pose": "punch guard",
+      "sourceBounds": [
+        364,
+        515,
+        468,
+        661
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        430.56,
+        558.8
+      ],
+      "sourceHand": [
+        450,
+        603
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        144.62,
+        109.04,
+        0
+      ],
+      "hand": [
+        167.48,
+        161.2
+      ],
+      "inkBounds": [
+        67,
+        58,
+        189,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12769,
+      "hash": "1e2651bc7523881a54e4ee884b14757e09131835db8a3d5fa0b68e6299973dbc"
+    },
+    {
+      "frame": 27,
+      "pose": "punch windup",
+      "sourceBounds": [
+        528,
+        515,
+        634,
+        661
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        595.84,
+        558.8
+      ],
+      "sourceHand": [
+        616,
+        603
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        145.54,
+        109.04,
+        0
+      ],
+      "hand": [
+        169.36,
+        161.2
+      ],
+      "inkBounds": [
+        66,
+        58,
+        191,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13444,
+      "hash": "8cceecbbe66dacdf2f8fd783c5015cd564c9abeec34db055ec3ede98eea62a9f"
+    },
+    {
+      "frame": 28,
+      "pose": "punch contact",
+      "sourceBounds": [
+        693,
+        517,
+        825,
+        661
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        777.48,
+        560.2
+      ],
+      "sourceHand": [
+        803,
+        595
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        148.74,
+        111.14,
+        0
+      ],
+      "hand": [
+        178.76,
+        152.05
+      ],
+      "inkBounds": [
+        50,
+        60,
+        206,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13197,
+      "hash": "7d944952187912ad1fccc6d2f0c951230b7a7b724d1e76fd9fac6ef8f0bf7c2b"
+    },
+    {
+      "frame": 29,
+      "pose": "punch retract",
+      "sourceBounds": [
+        864,
+        518,
+        967,
+        660
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        929.92,
+        560.6
+      ],
+      "sourceHand": [
+        949,
+        603
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        144.98,
+        112.54,
+        0
+      ],
+      "hand": [
+        167.45,
+        162.49
+      ],
+      "inkBounds": [
+        68,
+        63,
+        189,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13023,
+      "hash": "da2809dc709f27d608bceae92bb824dc17c14bfb96df9585c3d4a4a6549b7f26"
+    },
+    {
+      "frame": 30,
+      "pose": "kick windup",
+      "sourceBounds": [
+        1029,
+        508,
+        1138,
+        660
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1098.76,
+        553.6
+      ],
+      "sourceHand": [
+        1119,
+        599
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        145.46,
+        104.14,
+        0
+      ],
+      "hand": [
+        169.28,
+        157.69
+      ],
+      "inkBounds": [
+        64,
+        51,
+        193,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13371,
+      "hash": "8d42778191a1391dd0fe33035dcad6f136809a28a518604b0dff7bd443f44b85"
+    },
+    {
+      "frame": 31,
+      "pose": "kick extend",
+      "sourceBounds": [
+        1195,
+        509,
+        1323,
+        660
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1276.92,
+        554.3
+      ],
+      "sourceHand": [
+        1301,
+        600
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        148.18,
+        104.84,
+        0
+      ],
+      "hand": [
+        176.64,
+        158.8
+      ],
+      "inkBounds": [
+        52,
+        52,
+        204,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13809,
+      "hash": "276916bc8d529342aa2d3c148ab730ee5426ad79d3d2a6bbc99336cd16eb0827"
+    },
+    {
+      "frame": 32,
+      "pose": "kick contact",
+      "sourceBounds": [
+        26,
+        674,
+        152,
+        826
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        106.64,
+        719.6
+      ],
+      "sourceHand": [
+        131,
+        765
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        148.26,
+        103.14,
+        0
+      ],
+      "hand": [
+        176.93,
+        156.69
+      ],
+      "inkBounds": [
+        54,
+        50,
+        202,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13345,
+      "hash": "6c4e6f705833132ee6a70df0a7b3136ad4bdbeac64005c3435c2a851551aa663"
+    },
+    {
+      "frame": 33,
+      "pose": "kick retract",
+      "sourceBounds": [
+        194,
+        676,
+        294,
+        826
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        258,
+        721
+      ],
+      "sourceHand": [
+        277,
+        766
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        144.06,
+        105.55,
+        0
+      ],
+      "hand": [
+        166.53,
+        158.73
+      ],
+      "inkBounds": [
+        69,
+        53,
+        188,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12781,
+      "hash": "90ca76022a4905253101d7e49322a158516c3254bfd735e91b4f5b4e11dfdf51"
+    },
+    {
+      "frame": 34,
+      "pose": "hurt recoil",
+      "sourceBounds": [
+        355,
+        696,
+        474,
+        827
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        431.16,
+        735.3
+      ],
+      "sourceHand": [
+        452,
+        776
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        148.14,
+        121.64,
+        0
+      ],
+      "hand": [
+        172.71,
+        169.58
+      ],
+      "inkBounds": [
+        58,
+        76,
+        199,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13617,
+      "hash": "46965d38838b39332f75817b067912c160e95cc90a2e6f0698610d4bb4ae759e"
+    },
+    {
+      "frame": 35,
+      "pose": "hurt recover",
+      "sourceBounds": [
+        520,
+        708,
+        631,
+        827
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        591.04,
+        743.7
+      ],
+      "sourceHand": [
+        612,
+        779
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        146.38,
+        131.44,
+        0
+      ],
+      "hand": [
+        171.17,
+        173.06
+      ],
+      "inkBounds": [
+        63,
+        90,
+        194,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12074,
+      "hash": "204ed870194c8cbb9358fe65e2b60f4573186b438924daa55a9fdef0fd731c59"
+    },
+    {
+      "frame": 36,
+      "pose": "defeat kneel",
+      "sourceBounds": [
+        684,
+        736,
+        807,
+        830
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        762.72,
+        764.2
+      ],
+      "sourceHand": [
+        786,
+        792
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        148.34,
+        151.75,
+        0
+      ],
+      "hand": [
+        175.83,
+        184.65
+      ],
+      "inkBounds": [
+        56,
+        119,
+        201,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10805,
+      "hash": "b6325097203a9ba11d4ed1f3ece3852096f0c6645dbc8fe03faa8809b47af030"
+    },
+    {
+      "frame": 37,
+      "pose": "defeat down",
+      "sourceBounds": [
+        834,
+        765,
+        1001,
+        830
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        940.88,
+        784.5
+      ],
+      "sourceHand": [
+        973,
+        804
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        155.62,
+        176.24,
+        0
+      ],
+      "hand": [
+        193.56,
+        199.13
+      ],
+      "inkBounds": [
+        29,
+        154,
+        227,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 9568,
+      "hash": "70feafec097f62e190b48540dba67d309c1e59a788f94952587f16c3546cfbda"
+    },
+    {
+      "frame": 38,
+      "pose": "recovery crouch",
+      "sourceBounds": [
+        1026,
+        732,
+        1156,
+        827
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1109.2,
+        760.5
+      ],
+      "sourceHand": [
+        1134,
+        789
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        149.46,
+        150.05,
+        0
+      ],
+      "hand": [
+        178.7,
+        183.73
+      ],
+      "inkBounds": [
+        52,
+        117,
+        205,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10978,
+      "hash": "2b5951a71bd798fde3dba3cbeb2a44ecfa42f16b762f345c269a548b59f4d821"
+    },
+    {
+      "frame": 39,
+      "pose": "recovery stand",
+      "sourceBounds": [
+        1204,
+        681,
+        1303,
+        827
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1267.36,
+        724.8
+      ],
+      "sourceHand": [
+        1286,
+        769
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        143.78,
+        109.04,
+        0
+      ],
+      "hand": [
+        165.68,
+        161.2
+      ],
+      "inkBounds": [
+        70,
+        58,
+        187,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13201,
+      "hash": "d2fea68422961fc03954a57a48d911bafc55391fbaa680ac395cce20281f69cb"
+    },
+    {
+      "frame": 40,
+      "pose": "cast charge",
+      "sourceBounds": [
+        35,
+        842,
+        126,
+        989
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        93.24,
+        886.1
+      ],
+      "sourceHand": [
+        111,
+        930
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        143.02,
+        107.34,
+        0
+      ],
+      "hand": [
+        163.96,
+        159.09
+      ],
+      "inkBounds": [
+        75,
+        56,
+        182,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12074,
+      "hash": "157982484120e57e9d88d68ac225fb298aff6f59ed8a37d459023ec6be17bfa3"
+    },
+    {
+      "frame": 41,
+      "pose": "cast prepare",
+      "sourceBounds": [
+        202,
+        843,
+        313,
+        988
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        273.04,
+        886.5
+      ],
+      "sourceHand": [
+        294,
+        930
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        146.38,
+        108.74,
+        0
+      ],
+      "hand": [
+        171.17,
+        160.13
+      ],
+      "inkBounds": [
+        63,
+        58,
+        194,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12396,
+      "hash": "b61d535e071200ff7f6fa6f1f8688c2405610e49ef82266f48d9fc759e89fcce"
+    },
+    {
+      "frame": 42,
+      "pose": "cast release",
+      "sourceBounds": [
+        361,
+        844,
+        490,
+        989
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        443.56,
+        887.5
+      ],
+      "sourceHand": [
+        468,
+        922
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        148.82,
+        109.74,
+        0
+      ],
+      "hand": [
+        177.67,
+        150.5
+      ],
+      "inkBounds": [
+        52,
+        59,
+        204,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 13366,
+      "hash": "c995e1d6e7a9d8a731ea3e9deacfee780d2b011c7f65549f848961a958e6decb"
+    },
+    {
+      "frame": 43,
+      "pose": "cast recover",
+      "sourceBounds": [
+        534,
+        844,
+        641,
+        988
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        602.48,
+        887.2
+      ],
+      "sourceHand": [
+        623,
+        930
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        145.18,
+        110.14,
+        0
+      ],
+      "hand": [
+        169.4,
+        160.46
+      ],
+      "inkBounds": [
+        65,
+        60,
+        191,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12012,
+      "hash": "c9b1e904ea8a279cd457baefbb04e7d81c25c68f24f4aad03634dd07f459bba1"
+    },
+    {
+      "frame": 44,
+      "pose": "flight launch",
+      "sourceBounds": [
+        681,
+        867,
+        817,
+        984
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        768.04,
+        902.1
+      ],
+      "sourceHand": [
+        781,
+        944
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        149.94,
+        132.85,
+        0
+      ],
+      "hand": [
+        165.21,
+        182.36
+      ],
+      "inkBounds": [
+        48,
+        92,
+        209,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10246,
+      "hash": "683c3f6f25b5e9549f1859de153b399c0e794119e7e20a1757aa093f12dd89f4"
+    },
+    {
+      "frame": 45,
+      "pose": "flight lean",
+      "sourceBounds": [
+        845,
+        879,
+        996,
+        967
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        941.64,
+        905.4
+      ],
+      "sourceHand": [
+        970,
+        943
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        152.46,
+        157.34,
+        0
+      ],
+      "hand": [
+        185.94,
+        201.48
+      ],
+      "inkBounds": [
+        39,
+        127,
+        217,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 9548,
+      "hash": "43a5788b108fb3d5c430cdb6b659f7f330ac1daba9efbf0bbe8e2eb7e099fad1"
+    },
+    {
+      "frame": 46,
+      "pose": "flight horizontal A",
+      "sourceBounds": [
+        1010,
+        880,
+        1171,
+        953
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1113.04,
+        901.9
+      ],
+      "sourceHand": [
+        1144,
+        933
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        154.14,
+        133.25,
+        0
+      ],
+      "hand": [
+        190.73,
+        170
+      ],
+      "inkBounds": [
+        33,
+        107,
+        223,
+        194
+      ],
+      "footHeight": 194,
+      "clearance": 33,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 9283,
+      "hash": "ea58cabfa492e42314e4fee8eb599f72ccb32c07c95cdbb6be97a8c3bafb785d"
+    },
+    {
+      "frame": 47,
+      "pose": "flight horizontal B",
+      "sourceBounds": [
+        1180,
+        882,
+        1337,
+        953
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1280.48,
+        903.3
+      ],
+      "sourceHand": [
+        1310,
+        934
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        152.94,
+        133.34,
+        0
+      ],
+      "hand": [
+        187.78,
+        169.36
+      ],
+      "inkBounds": [
+        35,
+        109,
+        221,
+        192
+      ],
+      "footHeight": 192,
+      "clearance": 35,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 9313,
+      "hash": "bf67279329047f02467d0763fcb857e977837b652a91e9c1a812a84c117d29db"
+    },
+    {
+      "frame": 48,
+      "pose": "walk contact A",
+      "sourceBounds": [
+        35,
+        1011,
+        134,
+        1156
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        98.36,
+        1054.5
+      ],
+      "sourceHand": [
+        117,
+        1098
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        143.78,
+        109.74,
+        0
+      ],
+      "hand": [
+        165.68,
+        161.13
+      ],
+      "inkBounds": [
+        70,
+        58,
+        186,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12552,
+      "hash": "129ea80d728d74efc2831a192d27e0c68442e2a22914ccb2162838c9c4eca5f1"
+    },
+    {
+      "frame": 49,
+      "pose": "walk passing A",
+      "sourceBounds": [
+        208,
+        1007,
+        299,
+        1156
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        266.24,
+        1051.7
+      ],
+      "sourceHand": [
+        284,
+        1096
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        143.02,
+        105.94,
+        0
+      ],
+      "hand": [
+        163.96,
+        158.06
+      ],
+      "inkBounds": [
+        74,
+        54,
+        182,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10887,
+      "hash": "331a3d70c2e455fe0ec6530ab37352519f8614dc12b99aab94d6c9a060e6b6b2"
+    },
+    {
+      "frame": 50,
+      "pose": "walk contact B",
+      "sourceBounds": [
+        367,
+        1008,
+        463,
+        1156
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        428.44,
+        1052.4
+      ],
+      "sourceHand": [
+        447,
+        1097
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        143.86,
+        107.64,
+        0
+      ],
+      "hand": [
+        165.76,
+        160.16
+      ],
+      "inkBounds": [
+        72,
+        56,
+        185,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 11807,
+      "hash": "7299899cb39f9d457e9e05c1b9e2240c432756b08aa6492abb1fa925bf1822b8"
+    },
+    {
+      "frame": 51,
+      "pose": "walk passing B",
+      "sourceBounds": [
+        535,
+        1009,
+        625,
+        1156
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        592.6,
+        1053.1
+      ],
+      "sourceHand": [
+        606,
+        1100
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        142.38,
+        107.34,
+        0
+      ],
+      "hand": [
+        158.2,
+        162.63
+      ],
+      "inkBounds": [
+        75,
+        56,
+        182,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 10933,
+      "hash": "9cc51a17a20312df379c691aaa76c46a9a0346dd1acdff75febfb76930fab4ec"
+    },
+    {
+      "frame": 52,
+      "pose": "lower torso",
+      "sourceBounds": [
+        688,
+        1032,
+        807,
+        1156
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        764.16,
+        1069.2
+      ],
+      "sourceHand": [
+        787,
+        1103
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        147.14,
+        126.24,
+        0
+      ],
+      "hand": [
+        174.07,
+        166.12
+      ],
+      "inkBounds": [
+        58,
+        83,
+        198,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12302,
+      "hash": "9ee6d9348ae1b61f8a9b57c9b64bb79171985dfd30f6175e5263b2ad31442a29"
+    },
+    {
+      "frame": 53,
+      "pose": "forepaws down",
+      "sourceBounds": [
+        850,
+        1055,
+        981,
+        1155
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        933.84,
+        1085
+      ],
+      "sourceHand": [
+        959,
+        1115
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        149.1,
+        146.85,
+        0
+      ],
+      "hand": [
+        178.73,
+        182.33
+      ],
+      "inkBounds": [
+        51,
+        112,
+        205,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 11624,
+      "hash": "4b8c64d081c093efeae46524e1e1c4cea54606d59306593decfa0af9c7a101cb"
+    },
+    {
+      "frame": 54,
+      "pose": "raise chest",
+      "sourceBounds": [
+        1012,
+        1053,
+        1165,
+        1152
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1109.92,
+        1082.7
+      ],
+      "sourceHand": [
+        1139,
+        1112
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        152.74,
+        148.24,
+        0
+      ],
+      "hand": [
+        187.01,
+        182.66
+      ],
+      "inkBounds": [
+        38,
+        114,
+        218,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 11387,
+      "hash": "4196c625e86061104c931bd003e18a33a8f8a5aa206d5db157adce32a9091efb"
+    },
+    {
+      "frame": 55,
+      "pose": "rise upright",
+      "sourceBounds": [
+        1193,
+        1025,
+        1325,
+        1155
+      ],
+      "sourceMarker": null,
+      "sourceHead": [
+        1277.48,
+        1064
+      ],
+      "sourceHand": [
+        1294,
+        1106
+      ],
+      "handMethod": "nearest authored paw/hand region (review required)",
+      "head": [
+        149.74,
+        122.34,
+        0
+      ],
+      "hand": [
+        169.18,
+        171.87
+      ],
+      "inkBounds": [
+        50,
+        77,
+        206,
+        230
+      ],
+      "footHeight": 230,
+      "clearance": 26,
+      "removedMarkerPixels": 0,
+      "magentaPixels": 0,
+      "opaquePixels": 12233,
+      "hash": "cc64c7209889a2622edf646764647759293d7bb4e76afa3551afdc0481cc2afd"
+    }
+  ]
+}

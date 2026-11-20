@@ -52,6 +52,8 @@ jobs:
         run: node --test royale-v3-staging/starter-suit/tests/starter-suit.test.mjs
       - name: Verify reserved test code and four powers
         run: node --import ./test-only/four-powers/register.mjs --test test-only/four-powers/tests.test.mjs test-only/four-powers/visual.test.mjs test-only/four-powers/site-entry.test.mjs
+      - name: Verify reserved costume animation and save isolation
+        run: node --import ./test-only/four-powers/register.mjs --test --test-concurrency=1 test-only/four-powers/new-costumes/tests/*.test.mjs
       - name: Install browser for local co-op regression
         timeout-minutes: 5
         run: npx playwright install --with-deps chromium
@@ -65,7 +67,15 @@ jobs:
           node tools/release-build/local-coop-browser.cjs
           node tools/release-build/vice-production-browser.cjs
           node --import ./test-only/four-powers/register.mjs tools/release-build/vice-browser.cjs
+          node --import ./test-only/four-powers/register.mjs tools/release-build/new-costumes-browser.cjs
           ROYALE_MEDIA_CHROMIUM_ONLY=1 node tools/release-build/media-browser.cjs
+      - name: Save reserved costume browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reserved-costume-browser
+          path: docs/new-costumes-test/
+          if-no-files-found: ignore
       - name: Upload optimized Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:

@@ -11,3 +11,5 @@
 /tools/release-build/node_modules/
 /.openai/
 /dist
+# Reproducible diagnostic sheets; source art and registration reports are tracked.
+/test-only/four-powers/new-costumes-source/*/registration-contact-sheet.png

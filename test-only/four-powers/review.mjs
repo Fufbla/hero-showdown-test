@@ -3,6 +3,7 @@ import {styleCDefault} from '../../royale/style-c-defaults.mjs';
 import {POWER_IDS,POWERS,powerStats,normalizePowers} from './powers.mjs';
 import {drawHero} from '../../royale/release-src/presentation.mjs';
 import {drawFourWorld,drawPowerHero,drawSlamHero} from './art.mjs';
+import {costumeSprites} from './new-costumes/engine.mjs';
 export const TEST_CODE='0000000000';
 export const TEST_PREFIX='royale-four-powers-0000000000-v1:';
 export const REVIEW_POWERS=['strength','superKick','animalAllies','seismicSmash'];
@@ -65,7 +66,8 @@ export function installSolo(api){
  const old=document.getElementById('roster-title');if(old)old.innerHTML='My <em>Test Heroes.</em>';
  const note=el('p','This separate test hero saves on this browser. Your live heroes and cloud progress are untouched.');note.className='four-test-note';old?.after(note);
  // Review bridge is only compiled into the isolated test bundle.
- globalThis.fourPowerReview={...api,arrange:()=>arrangeTargets(api.getGame()),set:(id,level,slot=0)=>setReviewLevel(api.getGame(),id,level,slot)};
+ globalThis.fourPowerReview={...api,arrange:()=>arrangeTargets(api.getGame()),set:(id,level,slot=0)=>setReviewLevel(api.getGame(),id,level,slot),
+  getCostumeFrame:()=>structuredClone(costumeSprites.lastFrame)};
 }
 export function installCoop(api){
  const label=el('p','Power test · both players use 0000000000. Each receives a separate local test hero.');document.getElementById('setup').prepend(label);
