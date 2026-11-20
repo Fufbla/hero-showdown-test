@@ -1,6 +1,6 @@
 // Production collection gate extends the unchanged original 22-outfit tests.
 import test from 'node:test';
-import {FASHION_OUTFITS,ROBOT_OUTFIT} from '../definitions.mjs';
+import {FASHION_OUTFITS,ROBOT_OUTFIT,PUPPY_OUTFIT} from '../definitions.mjs';
 import assert from 'node:assert/strict';
 import {readFile,access} from 'node:fs/promises';
 import {createRequire} from 'node:module';
@@ -19,13 +19,13 @@ const engine=new CostumeEngine({canvasFactory:createCanvas,imageLoader:u=>loadIm
 const {data,index}=await new ClothingRuntime({readJSON:()=>{throw Error('Old catalog must not be loaded');}}).catalog();
 const transaction=(g,type,id)=>cosmeticTransaction({state:g.cosmetics,look:g.look,coins:g.hero.coins,index,operation:{type,id,confirmed:true,revision:g.cosmetics.revision},safe:true,atWardrobe:true});
 
-test('one catalog provides exactly the 29 approved shop and free-trial outfits',async()=>{
- assert.equal(COLLECTION.length,29);assert.equal(COSTUMES.length,10);
+test('one catalog provides exactly the 30 approved shop and free-trial outfits',async()=>{
+ assert.equal(COLLECTION.length,30);assert.equal(COSTUMES.length,11);
  assert.strictEqual(data.sets,COLLECTION);assert.strictEqual(trialOutfits(),COLLECTION);
  assert.deepEqual(COLLECTION.filter(o=>o.renderer==='approved').map(o=>o.id),APPROVED_OUTFITS.map(o=>o.id));
  for(const o of COLLECTION){assert.equal(o.collection,'Mascots & Formal');assert.equal(o.coinPrice,o.id==='robot-costume'?0:700);assert.equal(o.pieces.length,1);await access(new URL(o.thumbnail,new URL('../../../royale-v3-staging/costumes/',import.meta.url)));}
  const source=JSON.parse(await readFile(new URL('../../../royale-v3-staging/costumes/collection.json',import.meta.url)));
- assert.equal(source.length,22);assert.deepEqual([...source,...FASHION_OUTFITS,ROBOT_OUTFIT].map(o=>o.id),trialOutfits().map(o=>o.id));
+ assert.equal(source.length,22);assert.deepEqual([...source,...FASHION_OUTFITS,ROBOT_OUTFIT,PUPPY_OUTFIT].map(o=>o.id),trialOutfits().map(o=>o.id));
 });
 test('every old outfit is absent, cannot be bought or equipped, and migrates without deleting ownership',async()=>{
  const legacy=JSON.parse(await readFile(new URL('../../cosmetics/catalog.json',import.meta.url)));
@@ -43,7 +43,7 @@ test('every old outfit is absent, cannot be bought or equipped, and migrates wit
  }
  assert.throws(()=>catalogIndex(legacy));
 });
-test('all 29 outfits can be purchased once, worn, saved, restored, and removed under the same cloud policy',()=>{
+test('all 30 outfits can be purchased once, worn, saved, restored, and removed under the same cloud policy',()=>{
  for(const o of COLLECTION){
   const g=new Game({look:{presentation:'female'}});g.hero.coins=700;const before=JSON.parse(g.save());
   const bought=transaction(g,'purchase',o.id);assert(bought.ok,o.id);assert.equal(bought.coins,o.id==='robot-costume'?700:0);g.cosmetics=bought.state;g.hero.coins=bought.coins;

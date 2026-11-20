@@ -5,12 +5,12 @@ import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 
-// Exercise the same isolated module graph as the published test-code page.
-globalThis.location={pathname:'/hero-showdown-test/four-powers-test/gameplay/',search:'?testAccount=0000000000'};
-const [{COLLECTION,catalogForContext,costumeForState},{COLLECTION:PRODUCTION},{PUPPY_ID,PUPPY_STATES},{isPuppyTestContext},{CostumeEngine,validatePuppyManifest},{Game,decodeSave,ATTACKS},{catalogIndex,cosmeticTransaction},{styleCDefault}]=await Promise.all([
- import('../catalog.mjs'),import('../../../../royale/fashion/catalog.mjs?four-base=1'),import('../definitions.mjs'),import('../scope.mjs'),import('../engine.mjs'),
- import('../../../../royale/core.mjs'),import('../../../../royale/cosmetics/state.mjs'),import('../../../../royale/style-c-defaults.mjs')
+// Run unchanged under either the production or isolated test module graph.
+const [{COLLECTION,costumeForState},{COLLECTION:ORIGINAL},{FASHION_OUTFITS,ROBOT_OUTFIT,PUPPY_OUTFIT},{PUPPY_STATES,validatePuppyManifest},{CostumeEngine},{Game,decodeSave,ATTACKS},{catalogIndex,cosmeticTransaction},{styleCDefault},{COLLECTION:COMPATIBILITY}]=await Promise.all([
+ import('../../../../royale/fashion/catalog.mjs'),import('../../../costumes/catalog.mjs?fashion-base=1'),import('../../../../royale/fashion/definitions.mjs'),import('../../../../royale/fashion/puppy.mjs'),import('../../../../royale/fashion/engine.mjs'),
+ import('../../../../royale/core.mjs'),import('../../../../royale/cosmetics/state.mjs'),import('../../../../royale/style-c-defaults.mjs'),import('../catalog.mjs')
 ]);
+const PUPPY_ID=PUPPY_OUTFIT.id;
 const {createCanvas,loadImage}=createRequire(import.meta.url)('@napi-rs/canvas');
 const options={canvasFactory:createCanvas,imageLoader:u=>loadImage(fileURLToPath(u)),jsonLoader:async u=>JSON.parse(await readFile(u))};
 const index=catalogIndex({sets:COLLECTION}),puppy=COLLECTION.find(o=>o.id===PUPPY_ID);
@@ -21,21 +21,17 @@ function transact(game,type){
 }
 const baseHero=()=>({face:1,grounded:true,vx:0,vy:0,dead:false,respawnAge:100,stun:0,castAge:100,jumpAge:100,jumps:0,landing:0,invulnerable:0});
 
-test('the puppy is exposed only by the exact test-code route; every production outfit is preserved',()=>{
- assert.equal(puppy.name,'Golden Puppy');assert.equal(puppy.coinPrice,700);assert.equal(puppy.unisex,true);assert.equal(puppy.hideHair,true);
- assert.equal(COLLECTION.length,PRODUCTION.length+1);assert.deepEqual(COLLECTION.slice(0,-1),PRODUCTION);assert(!PRODUCTION.some(o=>o.id===PUPPY_ID));
- for(const page of ['gameplay/','local-coop/','gameplay/index.html']){
-  const context={pathname:'/hero-showdown-test/four-powers-test/'+page,search:'?testAccount=0000000000'};
-  assert(isPuppyTestContext(context));assert(catalogForContext(context).some(o=>o.id===PUPPY_ID));
- }
- for(const context of [{},{pathname:'/royale/',search:'?testAccount=0000000000'},{pathname:'/four-powers-test/gameplay/',search:''},{pathname:'/four-powers-test/gameplay/',search:'?testAccount=1234567890'},{pathname:'/four-powers-test/gameplay/',search:'?testAccount=00000000000'},{pathname:'/four-powers-test/gallery.html',search:'?testAccount=0000000000'}]){
-  assert.equal(isPuppyTestContext(context),false);assert.deepEqual(catalogForContext(context),PRODUCTION);
- }
+test('Fancy Costume is shared by production and test without duplicating or changing the previous 29 outfits',()=>{
+ assert.equal(puppy.id,'golden-puppy-costume');assert.equal(puppy.name,'Fancy Costume');assert.equal(puppy.coinPrice,700);assert.equal(puppy.unisex,true);assert.equal(puppy.hideHair,true);
+ assert.equal(COLLECTION.length,30);assert.equal(new Set(COLLECTION.map(o=>o.id)).size,30);assert.strictEqual(COMPATIBILITY,COLLECTION);
+ assert.equal(ORIGINAL.length,22);assert.deepEqual(COLLECTION.slice(0,22),ORIGINAL);
+ assert.deepEqual(COLLECTION.slice(0,29).map(o=>o.id),[...ORIGINAL,...FASHION_OUTFITS,ROBOT_OUTFIT].map(o=>o.id));
+ assert.equal(COLLECTION.find(o=>o.id===ROBOT_OUTFIT.id).coinPrice,0);
 });
 
 for(const presentation of ['male','female'])test(presentation+' hero buys for 700, keeps existing clothing, equips, reloads and removes without changing appearance or progress',()=>{
  const game=new Game({look:styleCDefault(presentation)});game.hero.coins=10000;
- const old=PRODUCTION.find(o=>o.id==='stuffed-animal-costume');
+ const old=ORIGINAL.find(o=>o.id==='stuffed-animal-costume');
  game.cosmetics={version:1,revision:7,owned:[old.pieces[0].id],equipped:{fullbody:old.pieces[0].id},visible:true};
  const before=JSON.parse(game.save());
  let result=transact(game,'purchase');assert(result.ok,result.error);assert.equal(game.hero.coins,9300);
@@ -47,6 +43,17 @@ for(const presentation of ['male','female'])test(presentation+' hero buys for 70
  for(const key of ['look','level','xp','inventory','powers','economy','world'])assert.deepEqual(after[key],before[key],key+' changed');
  const unchanged=restored.save();result=transact(restored,'purchase');assert.equal(result.ok,false);assert.match(result.error,/Already owned/);assert.equal(restored.save(),unchanged);
  result=transact(restored,'unequip');assert(result.ok,result.error);assert.equal(restored.hero.coins,9300);assert.deepEqual(restored.cosmetics.owned,game.cosmetics.owned);assert.deepEqual(restored.cosmetics.equipped,{});
+});
+
+test('previous Golden Puppy owners retain Fancy Costume, their selected outfit and their exact balance after promotion',()=>{
+ for(const presentation of ['male','female']){
+  const game=new Game({look:styleCDefault(presentation)});game.hero.coins=123;
+  game.cosmetics={version:1,revision:9,owned:['stuffed-animal-costume.fullbody',PUPPY_ID+'.fullbody'],equipped:{fullbody:PUPPY_ID+'.fullbody'},visible:true};
+  const saved=game.save(),restored=new Game({save:decodeSave(saved)});
+  assert.equal(restored.save(),saved);assert.equal(costumeForState(restored.cosmetics,restored.look)?.name,'Fancy Costume');
+  assert.equal(transact(restored,'purchase').ok,false);assert.equal(restored.hero.coins,123);
+  assert(transact(restored,'unequip').ok);assert(transact(restored,'equip').ok);assert.equal(restored.hero.coins,123);
+ }
 });
 
 test('insufficient funds and stale wardrobe revision never debit or change ownership',()=>{
@@ -61,6 +68,7 @@ test('insufficient funds and stale wardrobe revision never debit or change owner
 test('all authored frames render inside the shared body cell and remove the magenta placeholder while keeping customized faces',async()=>{
  const engine=new CostumeEngine(options);assert(await engine.preload(PUPPY_ID),engine.error);
  const {manifest:m,atlas}=engine.outfits.get(PUPPY_ID);validatePuppyManifest(m,atlas);
+ assert.equal(m.label,'Fancy Costume');assert.equal(m.frames.length,48);
  assert.equal(m.flightPose,'authored-horizontal');assert(new Set(m.animations.run.frames).size>=8);
  const looks=[{...styleCDefault('male'),skin:'#7a4d30',hair:'none'},{...styleCDefault('female'),skin:'#f0bd92',hairColor:'#37251c'}];
  let changedFaces=0;const hashes=[];

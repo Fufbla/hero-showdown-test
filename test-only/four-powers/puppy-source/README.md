@@ -1,8 +1,11 @@
-# Golden Puppy source artwork
+# Fancy Costume source artwork
 
 The user approved the golden doodle puppy costume shown in
-`approved-preview.png` on November 20, 2026. They authorized this costume only
-for the existing `0000000000` test profile after checking all normal actions.
+`approved-preview.png` on November 20, 2026. They initially authorized this
+costume for the existing `0000000000` test profile after checking all normal
+actions. They subsequently approved promoting the same artwork to the live
+game with the display name **Fancy Costume** and a price of **700 coins**.
+The permanent internal ID remains `golden-puppy-costume` to preserve ownership.
 The separate test-profile migration provides 10,000 coins once so the user can
 purchase and try the costume without changing ordinary player accounts.
 
@@ -62,10 +65,12 @@ The packer initially writes an exact crop of the approved design as
 actual composed first frame using the game's own character-head renderer.
 The final rendered action review should be used to assess face and hair fit.
 
-## Test-only boundary
+## Release routing
 
-Runtime assets live under `royale-v3-staging/kingjames/puppy/assets/` and are
-copied into the isolated `four-powers-test` build. The test build alone maps
-the puppy catalog and renderer. No production catalog receives this costume.
-The puppy is unisex, costs 700 test coins, and is not automatically purchased
-or equipped.
+Runtime assets remain under `royale-v3-staging/kingjames/puppy/assets/` and are
+copied into the isolated `four-powers-test` build. The original test release
+mapped the puppy catalog and renderer only in that build. The approved live
+promotion adds production catalog routing without changing these source paths,
+the internal costume ID, or the approved artwork. Fancy Costume is unisex,
+costs 700 coins, and is not automatically purchased or equipped. The separate
+10,000-coin grant remains confined to the `0000000000` test profile.

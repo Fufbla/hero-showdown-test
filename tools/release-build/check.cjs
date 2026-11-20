@@ -1,4 +1,4 @@
-// Run the existing release gates plus the production 28-costume collection
+// Run the existing release gates plus the production costume collection
 // suite. The unchanged staging collection suite intentionally still expects 22.
 const {readdirSync}=require('node:fs');
 const {spawnSync}=require('node:child_process');
@@ -10,7 +10,8 @@ const tests=['tools/release-build/flight-pose.test.mjs','royale/four-powers/slot
  'royale/local-coop/tests/local-coop.test.mjs','royale/local-coop/tests/setup-controller.test.mjs',
  'royale/local-coop/tests/render-view.test.mjs',
  'royale/local-coop/tests/presentation.test.mjs',
- 'royale/local-coop/tests/asset-cache.test.mjs'];
+ 'royale/local-coop/tests/asset-cache.test.mjs',
+ 'royale-v3-staging/kingjames/puppy/tests/integration.test.mjs'];
 const result=spawnSync(process.execPath,['--expose-gc','--import','./tools/release-build/register.mjs',
  '--test','--test-concurrency=1',...tests],{stdio:'inherit'});
 process.exitCode=result.status??1;

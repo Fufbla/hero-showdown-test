@@ -22,11 +22,11 @@ function transact(g,type,id){
  return cosmeticTransaction({state:g.cosmetics,look:g.look,coins:g.hero.coins,index,operation:{type,id,confirmed:true,revision:g.cosmetics.revision},safe:true,atWardrobe:true});
 }
 
-test('all 29 outfits have the requested eligibility: 18 male/unisex and 11 female-only',()=>{
- assert.equal(COLLECTION.length,29);assert.equal(FEMALE_OUTFIT_IDS.length,11);
+test('all 30 outfits have the requested eligibility: 19 male/unisex and 11 female-only',()=>{
+ assert.equal(COLLECTION.length,30);assert.equal(FEMALE_OUTFIT_IDS.length,11);
  assert(FEMALE_OUTFIT_IDS.every(id=>index.has(id)));
- assert.equal(COLLECTION.filter(o=>canWearOutfit(o,male)).length,18);
- assert.equal(COLLECTION.filter(o=>canWearOutfit(o,female)).length,29);
+ assert.equal(COLLECTION.filter(o=>canWearOutfit(o,male)).length,19);
+ assert.equal(COLLECTION.filter(o=>canWearOutfit(o,female)).length,30);
  for(const id of ['black-business-suit','white-business-suit','pink-shark-costume','snowflake-knit'])assert(canWearOutfit(id,male));
  for(const id of FEMALE_OUTFIT_IDS)for(const look of [male,{},undefined,{presentation:'invalid'}])assert.equal(canWearOutfit(id,look),false);
 });
@@ -42,7 +42,7 @@ test('male heroes cannot purchase or equip any female-only outfit; failed action
  }
 });
 
-for(const [name,look,expected] of [['male',male,18],['female',female,29]])test(name+' heroes can purchase, wear, save and reload every eligible outfit',()=>{
+for(const [name,look,expected] of [['male',male,19],['female',female,30]])test(name+' heroes can purchase, wear, save and reload every eligible outfit',()=>{
  let count=0;
  for(const o of COLLECTION.filter(o=>canWearOutfit(o,look))){
   const g=hero(look),before=captureProgress(g);

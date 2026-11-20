@@ -133,7 +133,7 @@ animations.hover={frames:[46,47],duration:.7,loop:true};
 animations.fly={frames:[46,47],duration:.6,loop:true};
 // Distinct crouch / airborne windup / deep impact / standing recovery phases.
 animations.seismicSmash={frames:[24,18,36,25],duration:.6};
-const manifest={version:1,id:'golden-puppy-costume',label:'Golden Puppy',rig:'action-chibi-v1',atlas:'body.webp',cell:[CELL,CELL],foot:[128,230],worldScale:.62,strideDistance:164,head:{scale:.62,mode:'face-only'},materialKeys:{face:'#ff00ff',skin:'#00ffff'},directions:{right:{mirror:false},left:{mirror:true}},flightPose:'authored-horizontal',frames,animations};
+const manifest={version:1,id:'golden-puppy-costume',label:'Fancy Costume',rig:'action-chibi-v1',atlas:'body.webp',cell:[CELL,CELL],foot:[128,230],worldScale:.62,strideDistance:164,head:{scale:.62,mode:'face-only'},materialKeys:{face:'#ff00ff',skin:'#00ffff'},directions:{right:{mirror:false},left:{mirror:true}},flightPose:'authored-horizontal',frames,animations};
 const atlas=sharp({create:{width:8*CELL,height:6*CELL,channels:4,background:{r:0,g:0,b:0,alpha:0}}}).composite(images);
 await atlas.clone().webp({lossless:true,effort:6}).toFile(path.join(outputDir,'body.webp'));
 await writeFile(path.join(outputDir,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');

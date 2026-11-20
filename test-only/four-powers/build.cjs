@@ -5,10 +5,7 @@ const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const imports=JSON.parse(read('royale-v3-staging/kingjames/index.html').match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports;
 const map=new Map(Object.entries(imports).filter(([key])=>!key.includes('?')).map(([a,b])=>[new URL(a,'https://build/royale/').pathname.slice(1),new URL(b,'https://build/royale/').pathname.slice(1)]));
 map.delete('royale/app.mjs');map.set('royale/renderer.mjs','royale-v3-staging/kingjames/renderer.mjs');map.set('royale/hero-art.mjs','royale/release-src/presentation.mjs');
-const overrides={'royale-v3-staging/gameplay/powers.mjs':'test-only/four-powers/powers.mjs','royale/powers.mjs':'test-only/four-powers/powers.mjs','royale/power-art.mjs':'test-only/four-powers/art.mjs','royale/local-coop/cloud.mjs':'test-only/four-powers/profile.mjs',
- 'royale/fashion/catalog.mjs':'royale-v3-staging/kingjames/puppy/catalog.mjs',
- 'royale/fashion/engine.mjs':'royale-v3-staging/kingjames/puppy/engine.mjs',
- 'royale/fashion/outfit-policy.mjs':'royale-v3-staging/kingjames/puppy/outfit-policy.mjs'};
+const overrides={'royale-v3-staging/gameplay/powers.mjs':'test-only/four-powers/powers.mjs','royale/powers.mjs':'test-only/four-powers/powers.mjs','royale/power-art.mjs':'test-only/four-powers/art.mjs','royale/local-coop/cloud.mjs':'test-only/four-powers/profile.mjs'};
 const plugin={name:'four-powers-isolated',setup(build){
  build.onResolve({filter:/^[./]/},args=>{
   let rel=path.relative(root,path.resolve(args.resolveDir||root,args.path.split('?')[0])).replaceAll(path.sep,'/');

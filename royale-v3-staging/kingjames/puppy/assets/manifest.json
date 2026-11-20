@@ -1,7 +1,7 @@
 {
   "version": 1,
   "id": "golden-puppy-costume",
-  "label": "Golden Puppy",
+  "label": "Fancy Costume",
   "rig": "action-chibi-v1",
   "atlas": "body.webp",
   "cell": [

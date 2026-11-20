@@ -63,7 +63,7 @@ test('all 49 female hairstyles fit without being cut off by the portrait plate',
  }
 });
 
-test('all 29 costumes retain neck contact or their exact hood opening in every authored frame',async()=>{
+test('all 30 costumes retain neck contact or their exact hood opening in every authored frame',async()=>{
  const engine=new CostumeEngine(options),hc=createCanvas(256,256).getContext('2d');
  let frames=0,covered=0,attached=0;const misses=[];
  for(const costume of COLLECTION){
@@ -94,8 +94,8 @@ test('all 29 costumes retain neck contact or their exact hood opening in every a
   }
   engine.outfits.delete(id);engine.approved.outfits.delete(id);engine.composites.clear();engine.fashionFrames.clear();
  }
- assert.equal(COLLECTION.length,29);assert.deepEqual(misses,[]);
- console.log(JSON.stringify({costumes:29,frames,covered,attached}));
+ assert.equal(COLLECTION.length,30);assert.deepEqual(misses,[]);
+ console.log(JSON.stringify({costumes:COLLECTION.length,frames,covered,attached}));
 });
 
 test('rendering existing female saves retains every appearance and progression field',()=>{

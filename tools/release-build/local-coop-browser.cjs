@@ -288,7 +288,7 @@ function installVfxProbe(){
    await solo.locator('#open-controls').click();await returnBar();
    await solo.locator('#menu-exit-actions').getByRole('button',{name:'‹ Back',exact:true}).click();
    await solo.locator('#open-clothing-store').click();assert(await solo.locator('#store-back').isVisible());
-   await solo.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===18);
+   await solo.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===19);
    assert.equal(await solo.locator('#costume-carousel [data-outfit="little-black-dress"]').count(),0,'Male carousel excludes female-only costumes');
    if(viewport.width===390){
     // The store formats balances with locale grouping (for example, 1,234).
@@ -302,6 +302,19 @@ function installVfxProbe(){
     await solo.locator('#preview-equip').click();
     await solo.waitForFunction(()=>document.querySelector('#preview-equip').textContent==='Remove outfit'&&document.querySelector('#store-hero').dataset.outfit==='robot-costume');
     await solo.screenshot({path:dir+'/robot-male.png',fullPage:true});
+    assert(coins>=700,'The isolated male fixture can afford Fancy Costume');
+    await solo.locator('#costume-carousel [data-outfit="golden-puppy-costume"] .costume-action').click();
+    assert.equal(await solo.locator('#purchase-title').innerText(),'Buy Fancy Costume for 700 coins?');
+    await solo.locator('#purchase-buy').click();
+    await solo.locator('#costume-confirm').waitFor({state:'hidden'});
+    assert.equal(Number((await solo.locator('#store-coins').textContent()).replace(/[^0-9]/g,'')),coins-700,'Fancy Costume deducts exactly 700 coins');
+    await solo.locator('#preview-equip').click();
+    await solo.waitForFunction(()=>document.querySelector('#preview-equip').textContent==='Remove outfit'&&document.querySelector('#store-hero').dataset.outfit==='golden-puppy-costume'&&document.querySelector('#store-hero').dataset.animating==='true');
+    await solo.locator('#preview-left').click();
+    await solo.waitForFunction(()=>document.querySelector('#store-hero').dataset.direction==='-1');
+    await solo.locator('#preview-right').click();
+    await solo.waitForFunction(()=>document.querySelector('#store-hero').dataset.direction==='1');
+    await solo.screenshot({path:dir+'/fancy-male.png',fullPage:true});
    }
    await solo.locator('#store-back').click();await solo.locator('#tree-from-pause').click();
    await solo.screenshot({path:dir+`/tree-${viewport.width}.png`,fullPage:true});
@@ -321,21 +334,29 @@ function installVfxProbe(){
   // Female heroes keep the full live catalog, including men's suits.
   const femaleContext=await browser.newContext({viewport:{width:390,height:844}});
   const femaleMemory=new Map(),femaleStore=new LocalHeroStore({getItem:k=>femaleMemory.get(k)??null,setItem:(k,v)=>femaleMemory.set(k,v)});
-  const femaleHero=new Game({look:{...styleCDefault('female'),name:'Wardrobe QA Nova'}});femaleHero.hero.coins=700;
+  const femaleHero=new Game({look:{...styleCDefault('female'),name:'Wardrobe QA Nova'}});femaleHero.hero.coins=1400;
   femaleStore.writeSlot(0,femaleHero.save());
   await femaleContext.addInitScript(({key,value})=>{if(!localStorage.getItem(key))localStorage.setItem(key,value);},{key:PROFILE_KEY,value:femaleMemory.get(PROFILE_KEY)});
   const femalePage=await femaleContext.newPage(),femaleErrors=[];femalePage.on('pageerror',e=>femaleErrors.push(e.message));
   await femalePage.goto(new URL('../gameplay/?wardrobe='+manifest.sourceCommit,url).href,{waitUntil:'domcontentloaded'});await skipIntro(femalePage);
   await femalePage.getByRole('button',{name:'Continue →',exact:true}).click();await femalePage.locator('#pause').click();
   await femalePage.locator('#open-clothing-store').click();
-  await femalePage.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===29);
+  await femalePage.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===30);
   assert.equal(await femalePage.locator('#costume-carousel [data-outfit="black-business-suit"]').count(),1);
   const dress=femalePage.locator('#costume-carousel [data-outfit="little-black-dress"]');
   await dress.locator('.costume-action').click();await femalePage.locator('#purchase-buy').click();
-  await femalePage.waitForFunction(()=>document.querySelector('#store-coins').textContent==='0');
+  await femalePage.waitForFunction(()=>document.querySelector('#store-coins').textContent==='700');
   await femalePage.locator('#preview-equip').click();
   await femalePage.waitForFunction(()=>document.querySelector('#preview-equip').textContent==='Remove outfit');
   await femalePage.waitForFunction(()=>document.querySelector('#store-hero').dataset.outfit==='little-black-dress');
+  await femalePage.locator('#costume-carousel [data-outfit="golden-puppy-costume"] .costume-action').click();
+  assert.equal(await femalePage.locator('#purchase-title').innerText(),'Buy Fancy Costume for 700 coins?');
+  await femalePage.locator('#purchase-buy').click();
+  await femalePage.locator('#costume-confirm').waitFor({state:'hidden'});
+  await femalePage.waitForFunction(()=>document.querySelector('#store-coins').textContent==='0');
+  await femalePage.locator('#preview-equip').click();
+  await femalePage.waitForFunction(()=>document.querySelector('#preview-equip').textContent==='Remove outfit'&&document.querySelector('#store-hero').dataset.outfit==='golden-puppy-costume'&&document.querySelector('#store-hero').dataset.animating==='true');
+  await femalePage.screenshot({path:dir+'/fancy-female.png',fullPage:true});
   await femalePage.locator('#costume-carousel [data-outfit="robot-costume"] .costume-action').click();
   assert.equal(await femalePage.locator('#purchase-title').innerText(),'Buy Flex Bot for 0 coins?');
   await femalePage.locator('#purchase-buy').click();
@@ -345,8 +366,9 @@ function installVfxProbe(){
   await femalePage.waitForFunction(()=>document.querySelector('#preview-equip').textContent==='Remove outfit'&&document.querySelector('#store-hero').dataset.outfit==='robot-costume');
   await femalePage.screenshot({path:dir+'/robot-female.png',fullPage:true});
   assert.deepEqual(femaleErrors,[]);await femaleContext.close();
-  report.checks.push('Male costume carousel has 18 eligible outfits; female carousel has all 29 and can purchase, preview and equip a female-only outfit');
+  report.checks.push('Male costume carousel has 19 eligible outfits; female carousel has all 30 and can purchase, preview and equip a female-only outfit');
   report.checks.push('Male and female heroes claim and equip Flex Bot for 0 coins; a zero-coin hero succeeds and other costume prices stay unchanged');
+  report.checks.push('Male and female heroes purchase Fancy Costume for exactly 700 coins, equip it and render its running preview; both preview directions work');
   // Exercise the real account launcher and iframe on a phone-sized viewport.
   // Only the cloud transport is mocked; creation, gameplay and saving use the shipped UI.
   const cloudContext=await browser.newContext({viewport:{width:390,height:844}});

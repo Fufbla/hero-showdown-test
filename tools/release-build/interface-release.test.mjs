@@ -20,3 +20,20 @@ test('the shipped costume carousel and transaction controller include hero eligi
  for(const source of ['royale/cosmetics/eligibility.mjs','royale-v3-staging/interface/interface.mjs','royale-v3-staging/interface/store-controller.mjs'])assert(manifest.sourceHashes[source],source);
  assert.match(runtime,/available\(catalog\)/);assert.match(runtime,/controller\.eligible\(set\)/);
 });
+
+test('published Fancy Costume includes the approved art and price without the test wallet grant',()=>{
+ const manifest=JSON.parse(fs.readFileSync('_site/royale/release-manifest.json','utf8'));
+ assert.equal(manifest.costumes.count,30);
+ assert.equal(manifest.costumes.ids.filter(id=>id==='golden-puppy-costume').length,1);
+ assert.equal(manifest.costumes.prices['golden-puppy-costume'],700);
+ assert.equal(manifest.costumes.prices['robot-costume'],0);
+ assert(manifest.sourceHashes['royale/fashion/puppy.mjs']);
+ assert(!Object.keys(manifest.sourceHashes).some(name=>name.startsWith('test-only/')||name.endsWith('/puppy/scope.mjs')));
+ assert.match(runtime,/Fancy Costume/);
+ assert.doesNotMatch(runtime,/puppyCoinGrant|applyPuppyTestCoins|PUPPY_TEST_BALANCE/);
+ const assets='royale-v3-staging/kingjames/puppy/assets/';
+ for(const name of ['body.webp','manifest.json','preview.png'])assert.deepEqual(fs.readFileSync('_site/'+assets+name),fs.readFileSync(assets+name),name);
+ const sprite=JSON.parse(fs.readFileSync('_site/'+assets+'manifest.json','utf8'));
+ assert.equal(sprite.id,'golden-puppy-costume');assert.equal(sprite.label,'Fancy Costume');
+ assert.equal(sprite.frames.length,48);assert.equal(Object.keys(sprite.animations).length,21);
+});

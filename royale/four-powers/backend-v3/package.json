@@ -1,0 +1,49 @@
+{
+  "projectId": "adakwbhxiuatjvphutgo",
+  "functionName": "royale-v3-staging",
+  "baselineVersion": 17,
+  "baselineSourceCommit": "2c14ceb7b6060fb14191fd31e93116b19028d054",
+  "entrypoint": "cloud/backend-v3/index.ts",
+  "verifyJWT": false,
+  "databaseMigration": false,
+  "accountWrites": false,
+  "changedFiles": [
+    "fashion/definitions.mjs",
+    "fashion/extend-policy.mjs"
+  ],
+  "baselineFiles": {
+    "cloud/backend-v3/index.ts": "0dbfe0caec35c892d6d7bec6fbace2b1ce0ddc16498206f4fd193ae706129709",
+    "power-policy.mjs": "6b9e01d78683d4bfaa058dce9bb251871d01ef02bc9f2cf92fe38cf7e6109696",
+    "power-reset.mjs": "b9718e0257c709b546a700f6e3564618d4cc8f6f1b713ded8372e45a034cbeb9",
+    "gameplay/economy-save-guard.mjs": "6a906febfd73aeea9665aeae5c572d1a9808f7102dee226dda141b4daea6200d",
+    "gameplay/economy.mjs": "d9ea83617638033a512d0bc263d76367b464d8202fb9601c5e72e574cb9aa6d6",
+    "cloud/cosmetics/save-guard.mjs": "7571ab711868c71f0f85ff38109d2e00d3e1a78b23695939cc8a8d91865d4f8a",
+    "cloud/cosmetics/eligibility.mjs": "86eb0e804592013d7aea798327c6c31b373ba26b0631123c1cc4487696a603de",
+    "cloud/cosmetics/state.mjs": "d797cfb5b14385efae7894a549dda835634e20520121d8115f9da26dbc18eeca",
+    "cloud/cosmetics/outfit-policy.mjs": "ca630483f2957fc2a7cb66be34fb2c1cb9e611bc35834f8010135900541c7932",
+    "cloud/cosmetics/outfit-policy-base.mjs": "b77c356be41799319f08b58f85506e114410df92df393a6d42acaa4a265f0e9d",
+    "fashion/extend-policy.mjs": "cbb6d10e394945ede03484ec3be58f6ab3f0365d64136b6cdf379d3d85de5cc0",
+    "fashion/definitions.mjs": "7d153f433c2dd2a1b2f301d01299aef8cf04fd0fb43f4319c5053112b74548f9",
+    "customization/migration.mjs": "c33f509707f02849c89318cc56eed659c7386735952074a94f5435deda2ecda4",
+    "customization/catalog.mjs": "d8408b7c2570548bdf750bda215acff76c184fbe22534843412d22bc8eefe60c"
+  },
+  "files": {
+    "cloud/backend-v3/index.ts": "0dbfe0caec35c892d6d7bec6fbace2b1ce0ddc16498206f4fd193ae706129709",
+    "power-policy.mjs": "6b9e01d78683d4bfaa058dce9bb251871d01ef02bc9f2cf92fe38cf7e6109696",
+    "power-reset.mjs": "b9718e0257c709b546a700f6e3564618d4cc8f6f1b713ded8372e45a034cbeb9",
+    "gameplay/economy-save-guard.mjs": "6a906febfd73aeea9665aeae5c572d1a9808f7102dee226dda141b4daea6200d",
+    "gameplay/economy.mjs": "d9ea83617638033a512d0bc263d76367b464d8202fb9601c5e72e574cb9aa6d6",
+    "cloud/cosmetics/save-guard.mjs": "7571ab711868c71f0f85ff38109d2e00d3e1a78b23695939cc8a8d91865d4f8a",
+    "cloud/cosmetics/eligibility.mjs": "86eb0e804592013d7aea798327c6c31b373ba26b0631123c1cc4487696a603de",
+    "cloud/cosmetics/state.mjs": "d797cfb5b14385efae7894a549dda835634e20520121d8115f9da26dbc18eeca",
+    "cloud/cosmetics/outfit-policy.mjs": "ca630483f2957fc2a7cb66be34fb2c1cb9e611bc35834f8010135900541c7932",
+    "cloud/cosmetics/outfit-policy-base.mjs": "b77c356be41799319f08b58f85506e114410df92df393a6d42acaa4a265f0e9d",
+    "fashion/extend-policy.mjs": "e06a40bab6c2c4213f2df818e4201cf36e1b8688688fd857bf6d896dec4a0980",
+    "fashion/definitions.mjs": "5a4289c9d5b54c45d720d45340edbea8ada5360a481721bdd39742549b8b602d",
+    "customization/migration.mjs": "c33f509707f02849c89318cc56eed659c7386735952074a94f5435deda2ecda4",
+    "customization/catalog.mjs": "d8408b7c2570548bdf750bda215acff76c184fbe22534843412d22bc8eefe60c"
+  },
+  "deployedVersion": 18,
+  "deployedAt": "2026-11-20T17:27:57.585000+00:00",
+  "deploymentBundleSha256": "15eb92eec7f2cc2d2b350af8d302f00d0a65f6da9303fa5041b823639ad559b2"
+}

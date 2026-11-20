@@ -27,3 +27,5 @@ export const FASHION_OUTFITS=Object.freeze([
 ].map(Object.freeze));
 // A complete enclosed mascot; the same design is worn by both presentations.
 export const ROBOT_OUTFIT=Object.freeze({id:'robot-costume',name:'Flex Bot',unisex:true,coinPrice:0});
+// The approved puppy keeps its permanent ID and all existing test ownership.
+export const PUPPY_OUTFIT=Object.freeze({id:'golden-puppy-costume',name:'Fancy Costume',unisex:true,coinPrice:700});

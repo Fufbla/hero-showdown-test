@@ -30,8 +30,8 @@ test('failed cloud acknowledgement retains balance and allows cancel',async()=>{
 test('owned outfit cannot be purchased again; Equip is a separate saved operation',async()=>{
  const f=fixture();f.controller.request(outfit);await f.controller.buy();assert.equal(f.controller.request(outfit),false);assert.equal(f.calls(),1);assert.equal((await f.controller.equip(outfit)).ok,true);assert.equal(f.status().coins,700);assert.equal(f.status().cosmetics.equipped.fullbody,outfit.pieces[0].id);
 });
-test('all 29 catalog prices come from existing quotes and preserve outfit identities',()=>{
- const f=fixture({presentation:'female'});for(const set of COLLECTION){assert(f.controller.request(set));assert.equal(f.controller.confirming.price,quoteOutfit(f.status().cosmetics,set).debit);assert.equal(set.coinPrice,set.id==='robot-costume'?0:700);f.controller.cancel();}assert.equal(COLLECTION.length,29);assert.equal(f.calls(),0);
+test('all 30 catalog prices come from existing quotes and preserve outfit identities',()=>{
+ const f=fixture({presentation:'female'});for(const set of COLLECTION){assert(f.controller.request(set));assert.equal(f.controller.confirming.price,quoteOutfit(f.status().cosmetics,set).debit);assert.equal(set.coinPrice,set.id==='robot-costume'?0:700);f.controller.cancel();}assert.equal(COLLECTION.length,30);assert.equal(f.calls(),0);
 });
 test('purchase and equipment survive real local serialization while armor, XP, powers and position remain unchanged',()=>{
  const memory=new Map(),storage={getItem:k=>memory.get(k)||null,setItem:(k,v)=>memory.set(k,v)},store=new LocalHeroStore(storage),game=new Game();
@@ -46,7 +46,7 @@ test('purchase and equipment survive real local serialization while armor, XP, p
 
 for(const presentation of ['male','female'])test(presentation+' carousel and actions follow the current hero eligibility',async()=>{
  const f=fixture({presentation}),women=COLLECTION.filter(s=>['holiday-velvet','blossom-kimono','plum-gold-kimono','emerald-gala','sapphire-starlight','summer-chic','tropical-beauty','sunset-elegance','little-black-dress','red-carpet-romance','midnight-glamour'].includes(s.id));
- assert.equal(f.controller.available(COLLECTION).length,presentation==='female'?29:18);
+ assert.equal(f.controller.available(COLLECTION).length,presentation==='female'?30:19);
  for(const set of women){assert.equal(f.controller.select(set),presentation==='female');assert.equal(f.controller.request(set),presentation==='female');if(presentation==='male')assert.equal((await f.controller.equip(set)).ok,false);else f.controller.cancel();}
  assert.equal(f.calls(),0);
 });

@@ -4,8 +4,9 @@ import {STEEL_ID} from '../../royale-v3-staging/kingjames/outfit-engine.mjs';
 import {sanitizeLook} from '../appearance.mjs';
 import {FASHION_OUTFITS} from './definitions.mjs';
 import {flightPose} from '../flight-pose.mjs';
-import {ROBOT_OUTFIT} from './definitions.mjs';
+import {ROBOT_OUTFIT,PUPPY_OUTFIT} from './definitions.mjs';
 import {preloadRobot,drawRobot} from './robot.mjs';
+import {preloadPuppy,drawPuppy} from './puppy.mjs';
 
 export const FASHION_CACHE_LIMIT=128;
 const ids=new Set(FASHION_OUTFITS.map(o=>o.id));
@@ -41,6 +42,7 @@ export class CostumeEngine extends ExistingCostumeEngine{
  constructor(options={}){super(options);this.fashionFrames=new Map();}
  async preload(id){
   if(id===ROBOT_OUTFIT.id)return preloadRobot(this);
+  if(id===PUPPY_OUTFIT.id)return preloadPuppy(this);
   if(!ids.has(id))return super.preload(id);
   if(this.outfits.has(id))return true;
   if(this.pending.has(id))return this.pending.get(id);
@@ -111,6 +113,7 @@ export class CostumeEngine extends ExistingCostumeEngine{
  }
  draw(c,x,y,raw,hero,time,{id,owner=hero,scale=1}={}){
   if(id===ROBOT_OUTFIT.id&&!hero.steel)return drawRobot(this,c,x,y,hero,time,{owner,scale});
+  if(id===PUPPY_OUTFIT.id&&!hero.steel)return drawPuppy(this,c,x,y,raw,hero,time,{owner,scale});
   const loaded=this.outfits.get(id);
   if(!loaded?.fashion||hero.steel)return super.draw(c,x,y,raw,hero,time,{id,owner,scale});
   const look=sanitizeLook(raw),m=loaded.manifest;
