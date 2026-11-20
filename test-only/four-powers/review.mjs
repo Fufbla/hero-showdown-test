@@ -9,7 +9,12 @@ export const TEST_PREFIX='royale-four-powers-0000000000-v1:';
 export const REVIEW_POWERS=['strength','superKick','animalAllies','seismicSmash'];
 export function requireTestAccount(){
  if(typeof location==='undefined')return;
- if(new URLSearchParams(location.search).get('testAccount')!==TEST_CODE){location.replace('../?blocked=1');throw Error('Enter the isolated test code to continue.');}
+ if(new URLSearchParams(location.search).get('testAccount')!==TEST_CODE){
+  // The game shell has a production asset <base>; resolve navigation from
+  // the actual reserved page so a rejected code returns to its own entry.
+  location.replace(new URL('../?blocked=1',location.href).href);
+  throw Error('Enter the isolated test code to continue.');
+ }
 }
 export function createTestSnapshot(player=0){
  const game=new Game({look:{...styleCDefault(player?'female':'male'),name:player?'Power Test Two':'Power Test Hero'}});

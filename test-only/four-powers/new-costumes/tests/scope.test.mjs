@@ -8,8 +8,25 @@ import {OUTFIT_POLICIES,policyForContext} from '../outfit-policy.mjs';
 import * as productionCatalog from '../../../../royale/fashion/catalog.mjs?four-base=1';
 import * as productionPolicy from '../../../../royale/fashion/outfit-policy.mjs?four-base=1';
 import {CostumeEngine} from '../engine.mjs';
+import {requireTestAccount} from '../../review.mjs';
 
 const allowed={pathname:'/hero-showdown-test/four-powers-test/gameplay/',search:'?testAccount=0000000000'};
+test('Rejected codes return to the reserved entry using the page URL instead of the production asset base',()=>{
+ const previous=globalThis.location;
+ try{
+  for(const suffix of ['gameplay/','gameplay/index.html','local-coop/','local-coop/index.html']){
+   const redirects=[];
+   globalThis.location={href:'https://fufbla.github.io/hero-showdown-test/four-powers-test/'+suffix+'?testAccount=0000000001',
+    search:'?testAccount=0000000001',replace:url=>redirects.push(url)};
+   assert.throws(()=>requireTestAccount(),/Enter the isolated test code/);
+   assert.deepEqual(redirects,['https://fufbla.github.io/hero-showdown-test/four-powers-test/?blocked=1']);
+  }
+  const redirects=[];
+  globalThis.location={href:'https://fufbla.github.io/hero-showdown-test/four-powers-test/gameplay/?testAccount=0000000000',
+   search:'?testAccount=0000000000',replace:url=>redirects.push(url)};
+  assert.doesNotThrow(()=>requireTestAccount());assert.deepEqual(redirects,[]);
+ }finally{if(previous===undefined)delete globalThis.location;else globalThis.location=previous;}
+});
 test('Four new looks require the exact reserved code on a separate solo or co-op route',()=>{
  for(const suffix of ['gameplay/','gameplay/index.html','local-coop/','local-coop/index.html'])
   assert.equal(isNewCostumesTestContext({...allowed,pathname:'/hero-showdown-test/four-powers-test/'+suffix}),true);
