@@ -63,7 +63,7 @@ test('all 49 female hairstyles fit without being cut off by the portrait plate',
  }
 });
 
-test('all 30 costumes retain neck contact or their exact hood opening in every authored frame',async()=>{
+test('all 31 costumes retain neck contact or their exact hood opening in every authored frame',async()=>{
  const engine=new CostumeEngine(options),hc=createCanvas(256,256).getContext('2d');
  let frames=0,covered=0,attached=0;const misses=[];
  for(const costume of COLLECTION){
@@ -80,11 +80,12 @@ test('all 30 costumes retain neck contact or their exact hood opening in every a
     covered++;continue;
    }
    let body;
-   if(loaded.fashion)body=engine.frame(id,index,female);
+   if(loaded.vice)body=engine.viceBody(index,female);
+   else if(loaded.fashion)body=engine.frame(id,index,female);
    else if(loaded.approved){body=createCanvas(...m.cell);body.getContext('2d').drawImage(loaded.atlases[f.atlas||'default'],...f.rect,0,0,...m.cell);}
    else body=engine.masks(id,index).body;
-   const b=pixels(body),anchor=f.faceAnchor||f.head,scale=loaded.fashion||loaded.approved?m.head.scale:.35;
-   hc.clearRect(0,0,256,256);head.draw(hc,{...female,hair:'none'},anchor,scale);
+   const b=pixels(body),anchor=f.faceAnchor||f.head,scale=loaded.vice||loaded.fashion||loaded.approved?m.head.scale:.35;
+   hc.clearRect(0,0,256,256);(loaded.vice?engine.viceHead:head).draw(hc,{...female,hair:'none'},anchor,scale);
    const h=hc.getImageData(0,0,256,256).data;let touching=0;
    for(let y=Math.max(0,Math.floor(anchor[1]-12));y<=Math.min(255,Math.ceil(anchor[1]+12));y++)for(let x=Math.max(0,Math.floor(anchor[0]-12));x<=Math.min(255,Math.ceil(anchor[0]+12));x++){
     const i=(y*256+x)*4;if(b[i+3]>=128&&h[i+3]>=128)touching++;
@@ -94,7 +95,7 @@ test('all 30 costumes retain neck contact or their exact hood opening in every a
   }
   engine.outfits.delete(id);engine.approved.outfits.delete(id);engine.composites.clear();engine.fashionFrames.clear();
  }
- assert.equal(COLLECTION.length,30);assert.deepEqual(misses,[]);
+ assert.equal(COLLECTION.length,31);assert.deepEqual(misses,[]);
  console.log(JSON.stringify({costumes:COLLECTION.length,frames,covered,attached}));
 });
 

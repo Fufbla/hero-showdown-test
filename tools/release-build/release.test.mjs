@@ -68,6 +68,23 @@ test('artifact preserves cloud save contract and does not ship backend migration
  const home=read('royale/index.html');assert(!home.includes('Test Account'));assert(home.includes('id="browser-heroes"'));assert(home.includes('MY HEROES'));assert(home.includes('id="local-coop"'));
 });
 
+test('Vice ships once in the production catalog with the canonical renderer and all six approved assets',()=>{
+ assert.equal(manifest.costumes.ids.filter(id=>id==='vice-costume').length,1);
+ assert.equal(manifest.costumes.prices['vice-costume'],700);
+ for(const file of ['royale/fashion/vice/engine.mjs','royale/fashion/vice/head.mjs'])assert(manifest.sourceHashes[file],file);
+ assert(!Object.keys(manifest.sourceHashes).some(file=>file.startsWith('test-only/')),'Production must not import the reserved profile or wallet code');
+ const sandbox=JSON.parse(read('four-powers-test/release-manifest.json'));
+ for(const file of ['royale/fashion/catalog.mjs','royale/fashion/engine.mjs','royale/fashion/vice/engine.mjs','royale/fashion/vice/head.mjs'])assert(sandbox.modules.includes(file),file);
+ assert(!sandbox.modules.some(file=>file.startsWith('test-only/four-powers/vice/')),'Reserved gameplay uses the same production costume implementation');
+ for(const name of ['body.webp','manifest.json','preview.png','cap.png','glasses.png','lettering.png']){
+  const canonical='royale/fashion/vice/assets/'+name;
+  const source=fs.readFileSync(path.join(root,canonical));
+  assert(source.length>0,name);
+  assert.deepEqual(fs.readFileSync(path.join(out,canonical)),source,canonical);
+  assert.deepEqual(fs.readFileSync(path.join(out,'four-powers-test/vice/assets',name)),source,'Compatible reserved asset URL: '+name);
+ }
+});
+
 test('published gameplay exposes four regular power controls and a separate Merge bonus',()=>{
  const html=read('royale/gameplay/index.html');
  for(let slot=0;slot<4;slot++)assert.match(html,new RegExp('<button[^>]*data-control="power'+slot+'"[^>]*>'),'regular slot '+(slot+1));

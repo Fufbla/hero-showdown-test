@@ -11,7 +11,7 @@ const index=catalogIndex({sets:COSTUMES});
 function transact(state,coins,type,id){return cosmeticTransaction({state,coins,index,operation:{type,id,confirmed:true,revision:state.revision},safe:true,atWardrobe:true});}
 function costumeState(id){const purchase=transact(emptyCosmetics(),10000,'purchase',id);return transact(purchase.state,purchase.coins,'equip',id).state;}
 const render=(id,h,who=look,owner={})=>{const c=createCanvas(400,400);assert(e.draw(c.getContext('2d'),200,360,who,h,1,{id,owner,scale:2}));return digest(c);};
-test('all ten complete costumes have 480 distinct padded poses and all renderer states',()=>{
+test('all complete costumes have 48 distinct padded poses and all renderer states',()=>{
  let frames=0;for(const o of COSTUMES){const m=e.outfits.get(o.id).manifest;assert.equal(m.frames.length,48);assert.deepEqual(m.cell,[256,256]);assert.deepEqual(m.foot,[128,230]);
  const hashes=new Set();for(let n=0;n<48;n++){const canvas=e.compose(o.id,n,look);hashes.add(digest(canvas));const d=canvas.getContext('2d').getImageData(0,0,256,256).data;let pixels=0,edge=0;for(let y=0;y<256;y++)for(let x=0;x<256;x++)if(d[(y*256+x)*4+3]>96){pixels++;if(x===0||y===0||x===255||y===255)edge++;}assert(pixels>4000,o.id+' empty '+n);assert.equal(edge,0,o.id+' clipped '+n);frames++;}
  assert.equal(hashes.size,48,o.id);for(const state of [...REQUIRED_STATES,'strength','superKick','fireball','flightStart','hover','fly'])assert(m.animations[state]?.frames.length>=2);}
@@ -45,17 +45,24 @@ test('uncovered costumes retain hair; all costumes retain skin, eyes, face and f
  for(const o of COSTUMES){const baseline=digest(e.compose(o.id,0,look));for(const changed of [{skin:'#e5c5a0'},{eyes:'#3399dd',eyeShape:'round'},{nose:'wide',mouth:'smile'},{facialHair:'none'},{presentation:'female'}])assert.notEqual(digest(e.compose(o.id,0,{...look,...changed})),baseline,o.id+' '+JSON.stringify(changed));
  if(!o.hideHair)assert.notEqual(digest(e.compose(o.id,0,{...look,hair:'none'})),baseline,o.id+' lost hair');}
 });
-test('uncovered formal and zombie heads touch the body in all 48 poses',()=>{
+test('uncovered costume heads touch the body in all 48 poses',()=>{
  const canvas=createCanvas(256,256),c=canvas.getContext('2d');let checked=0;
- for(const o of COSTUMES.filter(o=>!o.hideHair))for(const [frame,f]of e.outfits.get(o.id).manifest.frames.entries()){
-  const b=e.masks(o.id,frame).body.getContext('2d').getImageData(0,0,256,256).data;
-  for(const sex of ['male','female']){
-   c.clearRect(0,0,256,256);e.face.draw(c,{...styleCDefault(sex),hair:'none',facialHair:'none'},f,{hideHair:false});
-   const h=c.getImageData(0,0,256,256).data;let touching=0;
-   for(let y=Math.floor(f.head[1]-8);y<=Math.ceil(f.head[1]+12);y++)for(let x=Math.floor(f.head[0]-12);x<=Math.ceil(f.head[0]+12);x++){
-    const i=(y*256+x)*4;if(b[i+3]>=128&&h[i+3]>=128)touching++;
+ for(const o of COSTUMES.filter(o=>!o.hideHair)){
+  const loaded=e.outfits.get(o.id),m=loaded.manifest;
+  for(const [frame,f]of m.frames.entries()){
+   const body=loaded.vice?e.viceBody(frame,look):e.masks(o.id,frame).body;
+   const b=body.getContext('2d').getImageData(0,0,256,256).data;
+   for(const sex of ['male','female']){
+    const headLook={...styleCDefault(sex),hair:'none',facialHair:'none'};
+    c.clearRect(0,0,256,256);
+    if(loaded.vice)e.viceHead.draw(c,headLook,f.head,m.head.scale);
+    else e.face.draw(c,headLook,f,{hideHair:false});
+    const h=c.getImageData(0,0,256,256).data;let touching=0;
+    for(let y=Math.floor(f.head[1]-8);y<=Math.ceil(f.head[1]+12);y++)for(let x=Math.floor(f.head[0]-12);x<=Math.ceil(f.head[0]+12);x++){
+     const i=(y*256+x)*4;if(b[i+3]>=128&&h[i+3]>=128)touching++;
+    }
+    assert(touching>=2,`${o.id} frame ${frame}: detached ${sex} chin`);checked++;
    }
-   assert(touching>=2,`${o.id} frame ${frame}: detached ${sex} chin`);checked++;
   }
  }
  console.log(checked+' uncovered costume/pose/face combinations have opaque neck contact');

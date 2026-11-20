@@ -1,5 +1,5 @@
-// Reserved public test code, never a cloud-account credential. Both the
-// isolated route and its code must match before this costume becomes active.
+// Reserved public test profile detection, never a cloud-account credential.
+// Vice is now released for all heroes; this helper does not gate the costume.
 export const VICE_TEST_CODE='0000000000';
 export function isViceTestContext({pathname='',search=''}={}){
  return /\/four-powers-test\/(?:gameplay|local-coop)\/(?:index\.html)?$/.test(pathname)&&

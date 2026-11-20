@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 
 // Run unchanged under either the production or isolated test module graph.
-const [{COLLECTION,costumeForState},{COLLECTION:ORIGINAL},{FASHION_OUTFITS,ROBOT_OUTFIT,PUPPY_OUTFIT},{PUPPY_STATES,validatePuppyManifest},{CostumeEngine},{Game,decodeSave,ATTACKS},{catalogIndex,cosmeticTransaction},{styleCDefault},{COLLECTION:COMPATIBILITY}]=await Promise.all([
+const [{COLLECTION,costumeForState},{COLLECTION:ORIGINAL},{FASHION_OUTFITS,ROBOT_OUTFIT,PUPPY_OUTFIT,VICE_OUTFIT},{PUPPY_STATES,validatePuppyManifest},{CostumeEngine},{Game,decodeSave,ATTACKS},{catalogIndex,cosmeticTransaction},{styleCDefault},{COLLECTION:COMPATIBILITY}]=await Promise.all([
  import('../../../../royale/fashion/catalog.mjs'),import('../../../costumes/catalog.mjs?fashion-base=1'),import('../../../../royale/fashion/definitions.mjs'),import('../../../../royale/fashion/puppy.mjs'),import('../../../../royale/fashion/engine.mjs'),
  import('../../../../royale/core.mjs'),import('../../../../royale/cosmetics/state.mjs'),import('../../../../royale/style-c-defaults.mjs'),import('../catalog.mjs')
 ]);
@@ -21,11 +21,13 @@ function transact(game,type){
 }
 const baseHero=()=>({face:1,grounded:true,vx:0,vy:0,dead:false,respawnAge:100,stun:0,castAge:100,jumpAge:100,jumps:0,landing:0,invulnerable:0});
 
-test('Fancy Costume is shared by production and test without duplicating or changing the previous 29 outfits',()=>{
+test('Fancy Costume is shared by production and test alongside Vice without duplicating or changing the previous 29 outfits',()=>{
  assert.equal(puppy.id,'golden-puppy-costume');assert.equal(puppy.name,'Fancy Costume');assert.equal(puppy.coinPrice,700);assert.equal(puppy.unisex,true);assert.equal(puppy.hideHair,true);
- assert.equal(COLLECTION.length,30);assert.equal(new Set(COLLECTION.map(o=>o.id)).size,30);assert.strictEqual(COMPATIBILITY,COLLECTION);
+ assert.equal(COLLECTION.length,31);assert.equal(new Set(COLLECTION.map(o=>o.id)).size,31);assert.strictEqual(COMPATIBILITY,COLLECTION);
  assert.equal(ORIGINAL.length,22);assert.deepEqual(COLLECTION.slice(0,22),ORIGINAL);
- assert.deepEqual(COLLECTION.slice(0,29).map(o=>o.id),[...ORIGINAL,...FASHION_OUTFITS,ROBOT_OUTFIT].map(o=>o.id));
+ const previous=COLLECTION.filter(o=>o.id!==PUPPY_ID&&o.id!==VICE_OUTFIT.id);
+ assert.deepEqual(previous.map(o=>o.id),[...ORIGINAL,...FASHION_OUTFITS,ROBOT_OUTFIT].map(o=>o.id));
+ assert.deepEqual(COLLECTION.slice(29).map(o=>o.id),[PUPPY_ID,VICE_OUTFIT.id]);
  assert.equal(COLLECTION.find(o=>o.id===ROBOT_OUTFIT.id).coinPrice,0);
 });
 

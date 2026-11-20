@@ -7,6 +7,7 @@ import {flightPose} from '../flight-pose.mjs';
 import {ROBOT_OUTFIT,PUPPY_OUTFIT} from './definitions.mjs';
 import {preloadRobot,drawRobot} from './robot.mjs';
 import {preloadPuppy,drawPuppy} from './puppy.mjs';
+import {withViceCostume} from './vice/engine.mjs';
 
 export const FASHION_CACHE_LIMIT=128;
 const ids=new Set(FASHION_OUTFITS.map(o=>o.id));
@@ -38,7 +39,7 @@ function bodyMask(data,w,h){
  return mask;
 }
 
-export class CostumeEngine extends ExistingCostumeEngine{
+class FashionCostumeEngine extends ExistingCostumeEngine{
  constructor(options={}){super(options);this.fashionFrames=new Map();}
  async preload(id){
   if(id===ROBOT_OUTFIT.id)return preloadRobot(this);
@@ -131,4 +132,5 @@ export class CostumeEngine extends ExistingCostumeEngine{
   return {artSource:'full-body-costume',clip:sample.state,head:neck,faceCenter:neck,shoulder:neck,hip:[0,-35],arms:[[neck,elbow,hand],[neck,elbow,hand]],legs:[],opacity:1};
  }
 }
+export class CostumeEngine extends withViceCostume(FashionCostumeEngine){}
 export const costumeSprites=new CostumeEngine();

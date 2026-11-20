@@ -6,10 +6,9 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {VICE_ACTIONS,baseHero,drawAction} from './actions.mjs';
 
-globalThis.location={pathname:'/hero-showdown-test/four-powers-test/gameplay/',search:'?testAccount=0000000000'};
-const [{CostumeEngine,VICE_STATES,VICE_CACHE_LIMIT,validateViceManifest},{VICE_ID},{styleCDefault},{ATTACKS,Game},
+const [{CostumeEngine},{VICE_STATES,VICE_CACHE_LIMIT,validateViceManifest},{VICE_ID},{styleCDefault},{ATTACKS,Game},
  {COLLECTION},{catalogIndex,cosmeticTransaction},{HAIR_STYLES}]=await Promise.all([
- import('../engine.mjs'),import('../definitions.mjs'),import('../../../../royale/style-c-defaults.mjs'),
+ import('../../../../royale/fashion/engine.mjs'),import('../../../../royale/fashion/vice/engine.mjs'),import('../definitions.mjs'),import('../../../../royale/style-c-defaults.mjs'),
  import('../../../../royale/core.mjs'),import('../catalog.mjs'),import('../../../../royale/cosmetics/state.mjs'),
  import('../../../../royale/appearance.mjs')
 ]);

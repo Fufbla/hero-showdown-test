@@ -89,7 +89,7 @@ test('Fancy Costume release gate validates shared purchases, all sprite poses an
   assert(Number(output.match(/^# tests (\d+)$/m)?.[1])>=15&&/^# fail 0$/m.test(output),'Fancy Costume checks did not actually execute:\n'+output);
  }catch(error){assert.fail('Fancy Costume release checks failed:\n'+String(error.stdout||'')+String(error.stderr||error.message));}
 });
-test('Vice Costume release gate verifies reserved scope, saved appearance, all actions and local purchases in isolated module scopes',()=>{
+test('Vice Costume release gate verifies the shared production catalog, saved appearance, all actions and isolated test purchases',()=>{
  const root=fileURLToPath(new URL('../../',import.meta.url));
  const env={...process.env};delete env.NODE_TEST_CONTEXT;
  const directory=new URL('./vice/tests/',import.meta.url);

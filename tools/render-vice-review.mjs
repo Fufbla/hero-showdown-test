@@ -6,7 +6,7 @@ import path from 'node:path';
 
 globalThis.location={pathname:'/hero-showdown-test/four-powers-test/gameplay/',search:'?testAccount=0000000000'};
 const [{ViceHead},{styleCDefault}]=await Promise.all([
- import('../test-only/four-powers/vice/head.mjs'),import('../royale/style-c-defaults.mjs')
+ import('../royale/fashion/vice/head.mjs'),import('../royale/style-c-defaults.mjs')
 ]);
 
 const {createCanvas,loadImage}=createRequire(import.meta.url)('@napi-rs/canvas');
@@ -33,14 +33,14 @@ await writeFile(path.join(output,'vice-head-fit.json'),JSON.stringify(metrics,nu
 console.log(JSON.stringify({headReview:path.join(output,'vice-head-fit.png'),examples:metrics.length}));
 
 const [{CostumeEngine},{motionHero}]=await Promise.all([
- import('../test-only/four-powers/vice/engine.mjs'),import('../royale-v3-staging/costumes/preview.mjs')
+ import('../royale/fashion/engine.mjs'),import('../royale-v3-staging/costumes/preview.mjs')
 ]);
 const engine=new CostumeEngine(options),id='vice-costume';
 if(!await engine.preload(id))throw Error(engine.error);
 const male={...styleCDefault('male'),hair:'short-locs'},female={...styleCDefault('female'),hair:'box-braids',hairColor:'#753c26'};
 const thumbnail=createCanvas(256,256);
 engine.draw(thumbnail.getContext('2d'),128,238,male,motionHero('idle',0,1),0,{id,scale:1.65});
-await writeFile(path.join(root,'test-only/four-powers/vice/assets/preview.png'),thumbnail.toBuffer('image/png'));
+await writeFile(path.join(root,'royale/fashion/vice/assets/preview.png'),thumbnail.toBuffer('image/png'));
 const frames=engine.outfits.get(id).manifest.frames;
 const all=createCanvas(2048,1728),ac=all.getContext('2d');ac.fillStyle='#edf3f8';ac.fillRect(0,0,all.width,all.height);
 for(let i=0;i<frames.length;i++){
@@ -58,4 +58,4 @@ for(let i=0;i<16;i++){
  rc.fillStyle='#172a42';rc.font='17px sans-serif';rc.textAlign='center';rc.fillText(presentation+' · '+motion+' · '+(direction>0?'right':'left'),x,y+30);
 }
 await writeFile(path.join(output,'vice-action-fit.png'),review.toBuffer('image/png'));
-console.log(JSON.stringify({thumbnail:'test-only/four-powers/vice/assets/preview.png',poses:path.join(output,'vice-all-poses.png'),actions:path.join(output,'vice-action-fit.png')}));
+console.log(JSON.stringify({thumbnail:'royale/fashion/vice/assets/preview.png',poses:path.join(output,'vice-all-poses.png'),actions:path.join(output,'vice-action-fit.png')}));

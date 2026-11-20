@@ -1,3 +1,2 @@
-// Permanent test ownership ID. Promotion, if approved later, must retain it.
-export const VICE_ID='vice-costume';
-export const VICE_OUTFIT=Object.freeze({id:VICE_ID,name:'Vice Costume',unisex:true,coinPrice:700});
+// The approved live release keeps every existing test ownership reference.
+export {VICE_ID,VICE_OUTFIT} from '../../../royale/fashion/definitions.mjs';

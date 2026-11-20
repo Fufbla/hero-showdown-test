@@ -10,7 +10,7 @@ const require=createRequire(import.meta.url);
 let sharp;
 try{sharp=require('sharp');}catch{sharp=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES||'','sharp'));}
 const source=path.join(root,'test-only/four-powers/vice-source/accessory-source.png');
-const out=path.join(root,'test-only/four-powers/vice/assets');
+const out=path.join(root,'royale/fashion/vice/assets');
 const {data,info}=await sharp(source).ensureAlpha().raw().toBuffer({resolveWithObject:true});
 await mkdir(out,{recursive:true});
 const report={source:path.relative(root,source),sourceSha256:createHash('sha256').update(await readFile(source)).digest('hex'),sourceSize:[info.width,info.height],assets:{}};

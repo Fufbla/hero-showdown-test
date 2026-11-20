@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 // Each test file runs in its own Node process. Establish the permitted route
-// before loading the same scoped modules used by the published test build.
+// before loading the released wardrobe modules used by the test build too.
 globalThis.location={pathname:'/hero-showdown-test/four-powers-test/gameplay/',search:'?testAccount=0000000000'};
 const [{COLLECTION,costumeForState},{VICE_ID},{Game,decodeSave},{catalogIndex,cosmeticTransaction},
  {LocalHeroStore,PROFILE_KEY},{createTestSnapshot,TEST_PREFIX},{CloudProfile},

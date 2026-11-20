@@ -4,6 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {engine,createCanvas,look,pixels,FASHION_OUTFITS} from './helpers.mjs';
 import {FASHION_CACHE_LIMIT} from '../engine.mjs';
+import {ROBOT_OUTFIT,PUPPY_OUTFIT,VICE_OUTFIT} from '../definitions.mjs';
 import {COLLECTION} from '../catalog.mjs';
 import {COLLECTION as original} from '../../../royale-v3-staging/costumes/catalog.mjs?fashion-base=1';
 import {Game,STEP,decodeSave} from '../../core.mjs';
@@ -19,17 +20,18 @@ const transact=(g,type,id)=>{
  assert(r.ok,r.error);g.cosmetics=r.state;g.hero.coins=r.coins;return r;
 };
 
-test('production appends six fashion IDs, Flex Bot and Fancy Costume while preserving every original collection entry',()=>{
- assert.equal(original.length,22);assert.equal(COLLECTION.length,30);
+test('production appends six fashion IDs, Flex Bot, Fancy Costume and Vice Costume while preserving every original collection entry',()=>{
+ assert.equal(original.length,22);assert.equal(COLLECTION.length,31);
  assert.deepEqual(COLLECTION.slice(0,22),original);
- assert.equal(new Set(COLLECTION.map(o=>o.id)).size,30);
+ assert.equal(new Set(COLLECTION.map(o=>o.id)).size,31);
  assert.deepEqual(COLLECTION.slice(22,28).map(o=>o.id),FASHION_OUTFITS.map(o=>o.id));
+ assert.deepEqual(COLLECTION.slice(28).map(o=>o.id),[ROBOT_OUTFIT,PUPPY_OUTFIT,VICE_OUTFIT].map(o=>o.id));
  for(const o of COLLECTION.slice(22,28)){assert.equal(o.coinPrice,700);assert.equal(o.hideHair,false);assert.equal(o.pieces[0].category,'fullbody');}
 });
 
 test('published manifest registers exactly the production catalog and contains no review/backend files',async()=>{
  const release=JSON.parse(await readFile(new URL('../../../_site/royale/release-manifest.json',import.meta.url)));
- assert.deepEqual(release.costumes,{count:30,ids:COLLECTION.map(o=>o.id),price:700,prices:Object.fromEntries(COLLECTION.map(o=>[o.id,o.coinPrice]))});
+ assert.deepEqual(release.costumes,{count:31,ids:COLLECTION.map(o=>o.id),price:700,prices:Object.fromEntries(COLLECTION.map(o=>[o.id,o.coinPrice]))});
  assert.equal(release.modes.onlineMultiplayer,false);
  assert(release.sourceHashes['royale/fashion/engine.mjs']);
  assert(release.sourceHashes['royale/fashion/catalog.mjs']);

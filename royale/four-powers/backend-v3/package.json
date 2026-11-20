@@ -1,8 +1,8 @@
 {
   "projectId": "adakwbhxiuatjvphutgo",
   "functionName": "royale-v3-staging",
-  "baselineVersion": 17,
-  "baselineSourceCommit": "2c14ceb7b6060fb14191fd31e93116b19028d054",
+  "baselineVersion": 18,
+  "baselineSourceCommit": "c82225e484ed810016c0e701232d2c65b3d1cf91",
   "entrypoint": "cloud/backend-v3/index.ts",
   "verifyJWT": false,
   "databaseMigration": false,
@@ -22,8 +22,8 @@
     "cloud/cosmetics/state.mjs": "d797cfb5b14385efae7894a549dda835634e20520121d8115f9da26dbc18eeca",
     "cloud/cosmetics/outfit-policy.mjs": "ca630483f2957fc2a7cb66be34fb2c1cb9e611bc35834f8010135900541c7932",
     "cloud/cosmetics/outfit-policy-base.mjs": "b77c356be41799319f08b58f85506e114410df92df393a6d42acaa4a265f0e9d",
-    "fashion/extend-policy.mjs": "cbb6d10e394945ede03484ec3be58f6ab3f0365d64136b6cdf379d3d85de5cc0",
-    "fashion/definitions.mjs": "7d153f433c2dd2a1b2f301d01299aef8cf04fd0fb43f4319c5053112b74548f9",
+    "fashion/extend-policy.mjs": "e06a40bab6c2c4213f2df818e4201cf36e1b8688688fd857bf6d896dec4a0980",
+    "fashion/definitions.mjs": "5a4289c9d5b54c45d720d45340edbea8ada5360a481721bdd39742549b8b602d",
     "customization/migration.mjs": "c33f509707f02849c89318cc56eed659c7386735952074a94f5435deda2ecda4",
     "customization/catalog.mjs": "d8408b7c2570548bdf750bda215acff76c184fbe22534843412d22bc8eefe60c"
   },
@@ -38,12 +38,12 @@
     "cloud/cosmetics/state.mjs": "d797cfb5b14385efae7894a549dda835634e20520121d8115f9da26dbc18eeca",
     "cloud/cosmetics/outfit-policy.mjs": "ca630483f2957fc2a7cb66be34fb2c1cb9e611bc35834f8010135900541c7932",
     "cloud/cosmetics/outfit-policy-base.mjs": "b77c356be41799319f08b58f85506e114410df92df393a6d42acaa4a265f0e9d",
-    "fashion/extend-policy.mjs": "e06a40bab6c2c4213f2df818e4201cf36e1b8688688fd857bf6d896dec4a0980",
-    "fashion/definitions.mjs": "5a4289c9d5b54c45d720d45340edbea8ada5360a481721bdd39742549b8b602d",
+    "fashion/extend-policy.mjs": "e0db279a48c46b0701b9476181482ef999ac1d03e814a5104658eb935476ae66",
+    "fashion/definitions.mjs": "b7a2c59c67c756dbc7ea72418e1adaaae114e70f5543cee4eb76a90e20512961",
     "customization/migration.mjs": "c33f509707f02849c89318cc56eed659c7386735952074a94f5435deda2ecda4",
     "customization/catalog.mjs": "d8408b7c2570548bdf750bda215acff76c184fbe22534843412d22bc8eefe60c"
   },
-  "deployedVersion": 18,
-  "deployedAt": "2026-11-20T17:27:57.585000+00:00",
-  "deploymentBundleSha256": "15eb92eec7f2cc2d2b350af8d302f00d0a65f6da9303fa5041b823639ad559b2"
+  "deployedVersion": 19,
+  "deployedAt": "2026-11-20T18:56:25.395000+00:00",
+  "deploymentBundleSha256": "b9c649f5712740ecaecb1cd0454d70ba121f2f4bcfb14ca8a148ffb36c5b47c8"
 }

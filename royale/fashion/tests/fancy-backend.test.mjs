@@ -62,10 +62,10 @@ function backend(initial){
  return {row,other,request,writes:()=>writes};
 }
 
-test('Fancy Costume cloud package changes only two policy files from live version 17',()=>{
+test('Vice Costume cloud package changes only two policy files from live version 18',()=>{
  const manifest=JSON.parse(fs.readFileSync('royale/four-powers/backend-v3/package.json','utf8'));
  assert.equal(manifest.projectId,'adakwbhxiuatjvphutgo');assert.equal(manifest.functionName,'royale-v3-staging');
- assert.equal(manifest.baselineVersion,17);assert.equal(manifest.verifyJWT,false);assert.equal(manifest.databaseMigration,false);
+ assert.equal(manifest.baselineVersion,18);assert.equal(manifest.verifyJWT,false);assert.equal(manifest.databaseMigration,false);assert.equal(manifest.accountWrites,false);
  assert.deepEqual([...manifest.changedFiles].sort(),['fashion/definitions.mjs','fashion/extend-policy.mjs']);
  assert.equal(Object.keys(manifest.files).length,14);assert.deepEqual(Object.keys(manifest.files).sort(),Object.keys(manifest.baselineFiles).sort());
  for(const [name,digest]of Object.entries(manifest.files)){
@@ -93,6 +93,32 @@ test('Actual cloud handler saves a 700-coin Fancy Costume purchase, equip and re
   const loaded=(await reload.json()).slots[0];
   assert.equal(loaded.revision,9);assert.equal(loaded.snapshot.coins,800);
   assert.deepEqual(loaded.snapshot.cosmetics.equipped,{fullbody:piece});
+  assert.ok(decodeSave(JSON.stringify(loaded.snapshot)));
+  for(const key of Object.keys(before).filter(key=>!['coins','cosmetics'].includes(key)))assert.deepEqual(loaded.snapshot[key],before[key],presentation+': '+key);
+  assert.deepEqual(service.other,other);assert.equal(service.writes(),2);
+ }
+});
+
+test('Actual cloud handler retains Fancy ownership while buying, equipping and reloading Vice for both presentations',async()=>{
+ for(const presentation of ['male','female']){
+  const game=hero(presentation);game.hero.coins=2200;
+  transact(game,'purchase');transact(game,'equip');
+  const before=migratePowerSnapshot(snapshot(game)),service=backend(before),other=clone(service.other);
+  assert.equal(before.coins,1500);assert.equal(before.cosmetics.equipped.fullbody,piece);
+  assert.equal(index.get('vice-costume').name,'Vice Costume');
+  assert.equal(transact(game,'purchase','vice-costume').debit,700);
+  const purchase=await service.request({action:'save',slot:1,revision:7,snapshot:snapshot(game)});
+  assert.equal(purchase.status,200,JSON.stringify(await purchase.json()));
+  assert.equal(service.row.snapshot.coins,800);
+  assert.equal(service.row.snapshot.cosmetics.equipped.fullbody,piece,'Buying does not replace the equipped Fancy Costume');
+  assert.equal(transact(game,'equip','vice-costume').debit,0);
+  const equip=await service.request({action:'save',slot:1,revision:8,snapshot:snapshot(game)});
+  assert.equal(equip.status,200,JSON.stringify(await equip.json()));
+  const reload=await service.request({action:'slots'});assert.equal(reload.status,200);
+  const loaded=(await reload.json()).slots[0];
+  assert.equal(loaded.revision,9);assert.equal(loaded.snapshot.coins,800);
+  assert.deepEqual(loaded.snapshot.cosmetics.equipped,{fullbody:'vice-costume.fullbody'});
+  for(const owned of ['robot-costume.fullbody',piece,'vice-costume.fullbody'])assert.ok(loaded.snapshot.cosmetics.owned.includes(owned),owned);
   assert.ok(decodeSave(JSON.stringify(loaded.snapshot)));
   for(const key of Object.keys(before).filter(key=>!['coins','cosmetics'].includes(key)))assert.deepEqual(loaded.snapshot[key],before[key],presentation+': '+key);
   assert.deepEqual(service.other,other);assert.equal(service.writes(),2);

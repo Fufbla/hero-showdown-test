@@ -29,3 +29,6 @@ export const FASHION_OUTFITS=Object.freeze([
 export const ROBOT_OUTFIT=Object.freeze({id:'robot-costume',name:'Flex Bot',unisex:true,coinPrice:0});
 // The approved puppy keeps its permanent ID and all existing test ownership.
 export const PUPPY_OUTFIT=Object.freeze({id:'golden-puppy-costume',name:'Fancy Costume',unisex:true,coinPrice:700});
+// Live approval retains the ownership ID used by the reserved test version.
+export const VICE_ID='vice-costume';
+export const VICE_OUTFIT=Object.freeze({id:VICE_ID,name:'Vice Costume',unisex:true,coinPrice:700});

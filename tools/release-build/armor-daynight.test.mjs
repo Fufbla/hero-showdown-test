@@ -29,7 +29,7 @@ for(const [level,price] of Object.entries(expected))test(`level ${level}: every 
   const poor=ready(Number(level));poor.hero.coins=price-1;assert.equal(poor.costumePreview(id).ok,false);assert.equal(poor.hero.coins,price-1);
  }
 });
-test('Flex Bot is free and the other 29 cosmetic outfits, including Fancy Costume, cost 700 coins',()=>{assert.equal(COLLECTION.length,30);for(const c of COLLECTION)assert.equal(c.coinPrice,c.id==='robot-costume'?0:700,c.id);const fancy=COLLECTION.find(c=>c.id==='golden-puppy-costume');assert.equal(fancy?.name,'Fancy Costume');assert.equal(fancy?.unisex,true);});
+test('Flex Bot is free and the other 30 cosmetic outfits, including Fancy and Vice Costume, cost 700 coins',()=>{assert.equal(COLLECTION.length,31);for(const c of COLLECTION)assert.equal(c.coinPrice,c.id==='robot-costume'?0:700,c.id);for(const [id,name]of [['golden-puppy-costume','Fancy Costume'],['vice-costume','Vice Costume']]){const outfit=COLLECTION.find(c=>c.id===id);assert.equal(outfit?.name,name);assert.equal(outfit?.unisex,true);}});
 for(let region=1;region<=7;region++)test(`region ${region}: existing 30/10 clock boundaries apply to every hero`,()=>{
  const ref=WORLD_CLOCK_REFERENCE,total=CLOCK.day+CLOCK.night;
  assert.equal(CLOCK.day,1800000);assert.equal(CLOCK.night,600000);

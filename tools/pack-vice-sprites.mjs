@@ -11,7 +11,7 @@ const require=createRequire(import.meta.url);
 let sharp;
 try{sharp=require('sharp');}catch{sharp=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES||'','sharp'));}
 const sourceDir=path.join(root,'test-only/four-powers/vice-source');
-const outputDir=path.join(root,'test-only/four-powers/vice/assets');
+const outputDir=path.join(root,'royale/fashion/vice/assets');
 const sourceFile=path.join(sourceDir,'action-source.png');
 await mkdir(sourceDir,{recursive:true});await mkdir(outputDir,{recursive:true});
 if(process.argv[2]&&path.resolve(process.argv[2])!==sourceFile)await copyFile(process.argv[2],sourceFile);

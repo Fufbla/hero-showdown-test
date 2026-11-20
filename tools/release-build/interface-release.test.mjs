@@ -23,7 +23,7 @@ test('the shipped costume carousel and transaction controller include hero eligi
 
 test('published Fancy Costume includes the approved art and price without the test wallet grant',()=>{
  const manifest=JSON.parse(fs.readFileSync('_site/royale/release-manifest.json','utf8'));
- assert.equal(manifest.costumes.count,30);
+ assert.equal(manifest.costumes.count,31);
  assert.equal(manifest.costumes.ids.filter(id=>id==='golden-puppy-costume').length,1);
  assert.equal(manifest.costumes.prices['golden-puppy-costume'],700);
  assert.equal(manifest.costumes.prices['robot-costume'],0);

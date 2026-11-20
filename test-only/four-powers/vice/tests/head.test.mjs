@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {fileURLToPath} from 'node:url';
 import {readFile} from 'node:fs/promises';
-import {ViceHead,VICE_HEAD_SIZE,VICE_HEAD_PADDING,VICE_HEAD_CACHE_LIMIT} from '../head.mjs';
+import {ViceHead,VICE_HEAD_SIZE,VICE_HEAD_PADDING,VICE_HEAD_CACHE_LIMIT} from '../../../../royale/fashion/vice/head.mjs';
 import {HAIR_STYLES} from '../../../../royale/appearance.mjs';
 import {styleCDefault} from '../../../../royale/style-c-defaults.mjs';
 
@@ -11,7 +11,7 @@ const {createCanvas,loadImage}=createRequire(import.meta.url)('@napi-rs/canvas')
 const options={canvasFactory:createCanvas,imageLoader:url=>loadImage(fileURLToPath(url))};
 const pixels=canvas=>canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
 const head=new ViceHead(options);
-const manifest=JSON.parse(await readFile(new URL('../assets/manifest.json',import.meta.url)));
+const manifest=JSON.parse(await readFile(new URL('../../../../royale/fashion/vice/assets/manifest.json',import.meta.url)));
 assert(await head.preload(manifest.headgear),head.error);
 
 test('The cap removes only crown hair and retains the lower portions of all 49 saved hair choices',()=>{
