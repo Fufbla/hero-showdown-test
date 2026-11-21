@@ -2827,4 +2827,14 @@ let last=0;
 Promise.all([atlas,dogAtlas,windFX,rockFX,dashSheet,pedestrianSheet,...animationSheets,...comboSheets,finishAtlas,backdrop,sonicAtlas,sonicFX,venomAtlas,venomHD,styroAtlas,styroMotionSheet,wasteAtlas,wasteMotionSheet,...venueImages,atomImage,atomDebris,atomSmoke,spreeSheet,dogMotionSheet,sonicMotionSheet,bearMotionSheet,trainerMotionSheet].map(im=>im.complete&&im.width?Promise.resolve():new Promise((resolve,reject)=>{im.onload=resolve;im.onerror=reject}))).then(()=>{loaded=true;showTitle();window.HealthiaIntro?.start()}).catch(()=>{window.HealthiaIntro?.dismiss();overlay.innerHTML='<div class="panel"><h2>Artwork could not load.</h2><p>Please reload.</p></div>'});
 showTitle();
 requestAnimationFrame(frame);
-</script></body></html>
+</script>
+<!-- Isolated competitive test entry; generated from the unchanged base game. -->
+<link rel="stylesheet" href="assets/competitive/versus.css">
+<script src="assets/competitive/roster.js"></script>
+<script src="assets/competitive/move-guide.js"></script>
+<script src="assets/competitive/combat.js"></script>
+<script src="assets/competitive/cpu.js"></script>
+<script src="assets/competitive/animation-state.js"></script>
+<script src="assets/competitive/animation-adapter.js"></script>
+<script src="assets/competitive/versus.js"></script>
+</body></html>
