@@ -23,11 +23,11 @@ test('Reserved profile detection still requires the exact code on the separate s
  assert.equal(isViceTestContext(),false);assert.equal(VICE_TEST_ENABLED,false);
 });
 
-test('Live and reserved catalogs share one Vice entry at 700 with all thirty earlier outfits',()=>{
- assert.strictEqual(COLLECTION,productionCatalog.COLLECTION);assert.equal(COLLECTION.length,31);
+test('Live and reserved catalogs share one Vice entry at 700 alongside all other released outfits',()=>{
+ assert.strictEqual(COLLECTION,productionCatalog.COLLECTION);assert.equal(COLLECTION.length,35);
  const entries=catalogForContext(allowed),vice=costumeById(VICE_ID);
- assert.strictEqual(entries,productionCatalog.COLLECTION);assert.equal(new Set(entries.map(row=>row.id)).size,31);
- assert.equal(entries.filter(row=>row.id!==VICE_ID).length,30);
+ assert.strictEqual(entries,productionCatalog.COLLECTION);assert.equal(new Set(entries.map(row=>row.id)).size,35);
+ assert.equal(entries.filter(row=>row.id!==VICE_ID).length,34);
  assert.equal(entries.filter(row=>row.id===VICE_ID).length,1);
  assert.equal(vice.id,'vice-costume');assert.equal(vice.name,'Vice Costume');assert.equal(vice.coinPrice,700);
  assert.equal(vice.unisex,true);assert.equal(vice.hideHair,false);assert.equal(vice.pieces[0].id,'vice-costume.fullbody');
@@ -64,7 +64,7 @@ test('The Vice renderer requests canonical production artwork without requiring 
 
 test('The built production artifact includes released Vice while excluding reserved profile and wallet code',()=>{
  const root=new URL('../../../../',import.meta.url),manifest=JSON.parse(fs.readFileSync(new URL('_site/royale/release-manifest.json',root)));
- assert.equal(manifest.costumes.count,31);assert.equal(manifest.costumes.ids.filter(id=>id===VICE_ID).length,1);
+ assert.equal(manifest.costumes.count,35);assert.equal(manifest.costumes.ids.filter(id=>id===VICE_ID).length,1);
  assert.equal(Object.keys(manifest.sourceHashes).some(path=>path.startsWith('test-only/')),false);
  assert.equal(Object.keys(manifest.sourceHashes).some(path=>path.startsWith('royale/fashion/vice/')),true);
  let includesVice=false;

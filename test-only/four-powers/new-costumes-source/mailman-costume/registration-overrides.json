@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "reason": "Lower only the customized head anchor in two poses to close the transparent registration-marker seam. The approved atlas, cap, preview, body placement, and hand anchors remain unchanged.",
+  "frames": {
+    "10": {
+      "headOffset": [0, 5]
+    },
+    "21": {
+      "headOffset": [0, 5]
+    }
+  }
+}

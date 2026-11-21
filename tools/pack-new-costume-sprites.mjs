@@ -4,6 +4,7 @@
 // Optional per-costume source/registration-overrides.json contains measured
 // sourceHand/sourceHead coordinates (absolute source pixels), headTarget,
 // footHeight, translate, uniformScale, targetBodyHeight, and/or hatFit.
+// headOffset adjusts only the final head anchor in cell pixels, never artwork.
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
@@ -114,7 +115,7 @@ async function packHat(sourceDir,outDir,outfit,overrides){
 }
 
 async function pack(outfit){
- const sourceDir=path.join(root,'test-only/four-powers/new-costumes-source',outfit.id),outDir=path.join(root,'test-only/four-powers/new-costumes/assets',outfit.id);
+ const sourceDir=path.join(root,'test-only/four-powers/new-costumes-source',outfit.id),outDir=path.join(root,'royale/fashion/new-costumes/assets',outfit.id);
  const sourceFile=path.join(sourceDir,'action-source.png'),source=await readFile(sourceFile),overrides=await optionalJSON(path.join(sourceDir,'registration-overrides.json'));
  const {data,info}=await sharp(source).ensureAlpha().raw().toBuffer({resolveWithObject:true});clearAlpha(data);
  const W=info.width,H=info.height,ROWS=outfit.id==='wolf-transformation'?7:6,N=COLS*ROWS,TW=W/COLS,TH=H/ROWS;
@@ -190,6 +191,10 @@ async function pack(outfit){
   const packed=await sharp({create:{width:CELL,height:CELL,channels:4,background:{r:0,g:0,b:0,alpha:0}}}).composite([{input:png,left:dx,top:dy}]).raw().toBuffer();
   clearAlpha(packed);
   const point=([x,y])=>[round(dx+x*sx),round(dy+y*sy)],head=[...point(p.neck),o.headTarget?.[2]||0],hand=point(p.hand.point);
+  if(o.headOffset!==undefined){
+   if(!Array.isArray(o.headOffset)||o.headOffset.length!==2||o.headOffset.some(n=>!Number.isFinite(n)||Math.abs(n)>16))throw Error(`${outfit.id}: invalid metadata-only head offset in pose ${i}`);
+   head[0]=round(head[0]+o.headOffset[0]);head[1]=round(head[1]+o.headOffset[1]);
+  }
   if([...head.slice(0,2),...hand].some(n=>n<0||n>CELL))throw Error(`${outfit.id}: attachment outside pose ${i}`);
   // Lanczos can amplify a subpixel registration fringe. Remove only keyed
   // residue near the former disk, leaving every unkeyed authored pixel alone.

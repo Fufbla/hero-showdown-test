@@ -89,6 +89,55 @@ test('Vice ships once in the production catalog with the canonical renderer and 
  }
 });
 
+test('the four approved costumes ship once in live and reserved builds with identical artwork and no test privileges',()=>{
+ const ids=['mailman-costume','firefighter-costume','ghost-transformation','wolf-transformation'];
+ const frames=[48,48,48,56],sandbox=JSON.parse(read('four-powers-test/release-manifest.json'));
+ assert.equal(manifest.costumes.count,35);
+ assert.equal(new Set(manifest.costumes.ids).size,35);
+ assert.deepEqual(manifest.costumes.ids.slice(-4),ids);
+ assert.equal(sandbox.production,false);assert.equal(sandbox.cloudWrites,false);
+ assert.equal(sandbox.testAccount,'0000000000');
+ assert.equal(sandbox.storagePrefix,'royale-four-powers-0000000000-v1:');
+ assert.deepEqual(sandbox.testCostumes,ids);
+ for(const file of ['engine.mjs','head.mjs','animation.mjs','definitions.mjs']){
+  const canonical='royale/fashion/new-costumes/'+file;
+  assert(manifest.sourceHashes[canonical],canonical);
+  assert(sandbox.modules.includes(canonical),canonical+' is shared with the reserved build');
+ }
+ assert(!Object.keys(manifest.sourceHashes).some(file=>file.startsWith('test-only/')));
+ const code=Object.keys(manifest.bundles).map(read).join('\n');
+ assert.doesNotMatch(code,/NEW_COSTUMES_TEST_ENABLED|NEW_COSTUMES_TEST_CODE|fourPowerReview|royale-four-powers-0000000000-v1:|puppyCoinGrant/);
+ let assets=0,unchangedAssets=0;
+ for(const [index,id]of ids.entries()){
+  assert.equal(manifest.costumes.ids.filter(value=>value===id).length,1,id);
+  assert.equal(manifest.costumes.prices[id],700,id);
+  const folder='royale/fashion/new-costumes/assets/'+id+'/',sprite=JSON.parse(read(folder+'manifest.json'));
+  assert.equal(sprite.id,id);assert.equal(sprite.frames.length,frames[index]);
+  for(const name of fs.readdirSync(path.join(root,folder))){
+   const source=fs.readFileSync(path.join(root,folder,name));assert(source.length>0,id+'/'+name);
+   assert.deepEqual(fs.readFileSync(path.join(out,folder,name)),source,'Live canonical asset: '+id+'/'+name);
+   assert.deepEqual(fs.readFileSync(path.join(out,'four-powers-test/new-costumes/assets',id,name)),source,'Compatible reserved asset: '+id+'/'+name);
+   const approved=fs.readFileSync(path.join(root,'test-only/four-powers/new-costumes/assets',id,name));
+   if(id==='mailman-costume'&&name==='manifest.json'){
+    // The bald-head fit review found a visible neck seam in two poses. Keep
+    // the historical review manifest intact and allow only these calibrations.
+    const expected=JSON.parse(approved);
+    assert.deepEqual(expected.frames[10].head,[133.1,119.71,0]);
+    assert.deepEqual(expected.frames[21].head,[132.65,122.71,0]);
+    expected.frames[10].head=[133.1,124.71,0];
+    expected.frames[21].head=[132.65,127.71,0];
+    assert.deepEqual(JSON.parse(source),expected,'Only the two approved mailman head anchors may change');
+   }else{
+    assert.deepEqual(source,approved,'Approved artwork is unchanged: '+id+'/'+name);
+    unchangedAssets++;
+   }
+   assets++;
+  }
+ }
+ assert.equal(assets,14);
+ assert.equal(unchangedAssets,13);
+});
+
 test('published gameplay exposes four regular power controls and a separate Merge bonus',()=>{
  const html=read('royale/gameplay/index.html');
  for(let slot=0;slot<4;slot++)assert.match(html,new RegExp('<button[^>]*data-control="power'+slot+'"[^>]*>'),'regular slot '+(slot+1));

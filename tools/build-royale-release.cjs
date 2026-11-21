@@ -35,7 +35,7 @@ const runtimePlugin={name:'approved-v3-release',setup(build){
     if(!/[?&](?:costume-base|fashion-base|bossFallback|four-base|media-base)=1/.test(args.path)){
       rel=mappings.get(rel)||rel;rel=fashionMap[rel]||rel;rel=powerMap[rel]||rel;
     }
-    if(/\/(?:tests?|qa|backend-v3)\//.test(rel)||/(?:practice|launcher|outfit-wardrobe|v2-test-hero|boss-qa|input-qa|vertical-qa|legendary-qa|phase10-qa)\.mjs$/.test(rel))throw Error('Developer module entered release: '+rel);
+    if(rel.startsWith('test-only/')||/\/(?:tests?|qa|backend-v3)\//.test(rel)||/(?:practice|launcher|outfit-wardrobe|v2-test-hero|boss-qa|input-qa|vertical-qa|legendary-qa|phase10-qa)\.mjs$/.test(rel))throw Error('Developer module entered release: '+rel);
     return {path:path.join(root,rel)};
   });
   build.onLoad({filter:/\.m?js$/},args=>{

@@ -82,7 +82,7 @@ async function openStore(page,code){
     });
     const page=await context.newPage();page.on('pageerror',error=>report.errors.push(presentation+': '+error.message));
     let game=await openStore(page,account.code);
-    assert.equal(await game.locator('#costume-carousel .costume-card').count(),presentation==='male'?20:31);
+    assert.equal(await game.locator('#costume-carousel .costume-card').count(),presentation==='male'?24:35);
     assert.equal(await wallet(game),2100,'Production receives no reserved test-wallet grant');
     await game.getByRole('button',{name:'Preview Vice Costume',exact:true}).click();
     await game.locator('#store-hero[data-outfit="vice-costume"][data-animating="true"]').waitFor();

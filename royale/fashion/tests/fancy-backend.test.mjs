@@ -8,6 +8,7 @@ import {createRequire} from 'node:module';
 import {Game,decodeSave} from '../../core.mjs';
 import {catalogIndex,cosmeticTransaction} from '../../cosmetics/state.mjs';
 import {COLLECTION} from '../catalog.mjs';
+import {NEW_OUTFITS} from '../definitions.mjs';
 import {migratePowerSnapshot} from '../../four-powers/backend-v3/deploy/power-policy.mjs';
 
 const deploy=process.env.FANCY_BACKEND_SOURCE_DIR?.replace(/\/?$/,'/')||'royale/four-powers/backend-v3/deploy/';
@@ -62,10 +63,10 @@ function backend(initial){
  return {row,other,request,writes:()=>writes};
 }
 
-test('Vice Costume cloud package changes only two policy files from live version 18',()=>{
+test('Approved four-costume cloud package changes only two policy files from live version 19',()=>{
  const manifest=JSON.parse(fs.readFileSync('royale/four-powers/backend-v3/package.json','utf8'));
  assert.equal(manifest.projectId,'adakwbhxiuatjvphutgo');assert.equal(manifest.functionName,'royale-v3-staging');
- assert.equal(manifest.baselineVersion,18);assert.equal(manifest.verifyJWT,false);assert.equal(manifest.databaseMigration,false);assert.equal(manifest.accountWrites,false);
+ assert.equal(manifest.baselineVersion,19);assert.equal(manifest.verifyJWT,false);assert.equal(manifest.databaseMigration,false);assert.equal(manifest.accountWrites,false);
  assert.deepEqual([...manifest.changedFiles].sort(),['fashion/definitions.mjs','fashion/extend-policy.mjs']);
  assert.equal(Object.keys(manifest.files).length,14);assert.deepEqual(Object.keys(manifest.files).sort(),Object.keys(manifest.baselineFiles).sort());
  for(const [name,digest]of Object.entries(manifest.files)){
@@ -122,6 +123,36 @@ test('Actual cloud handler retains Fancy ownership while buying, equipping and r
   assert.ok(decodeSave(JSON.stringify(loaded.snapshot)));
   for(const key of Object.keys(before).filter(key=>!['coins','cosmetics'].includes(key)))assert.deepEqual(loaded.snapshot[key],before[key],presentation+': '+key);
   assert.deepEqual(service.other,other);assert.equal(service.writes(),2);
+ }
+});
+
+test('Actual cloud handler preserves Fancy and Vice while buying, equipping and reloading all four released looks',async()=>{
+ for(const presentation of ['male','female']){
+  const game=hero(presentation);game.hero.coins=4900;
+  transact(game,'purchase');transact(game,'purchase','vice-costume');transact(game,'equip','vice-costume');
+  const before=migratePowerSnapshot(snapshot(game)),service=backend(before),other=clone(service.other);
+  assert.equal(before.coins,3500);let revision=7,coins=3500;
+  for(const outfit of NEW_OUTFITS){
+   const previous=clone(service.row.snapshot.cosmetics.equipped);
+   assert.equal(transact(game,'purchase',outfit.id).debit,700);coins-=700;
+   const purchase=await service.request({action:'save',slot:1,revision:revision++,snapshot:snapshot(game)});
+   assert.equal(purchase.status,200,JSON.stringify(await purchase.json()));
+   assert.equal(service.row.snapshot.coins,coins);assert.deepEqual(service.row.snapshot.cosmetics.equipped,previous);
+   assert.equal(transact(game,'equip',outfit.id).debit,0);
+   const equip=await service.request({action:'save',slot:1,revision:revision++,snapshot:snapshot(game)});
+   assert.equal(equip.status,200,JSON.stringify(await equip.json()));
+   const reload=await service.request({action:'slots'});assert.equal(reload.status,200);
+   const loaded=(await reload.json()).slots[0];
+   assert.equal(loaded.revision,revision);assert.equal(loaded.snapshot.coins,coins);
+   assert.equal(loaded.snapshot.cosmetics.equipped.fullbody,outfit.id+'.fullbody');
+   for(const owned of ['robot-costume.fullbody',piece,'vice-costume.fullbody',outfit.id+'.fullbody'])assert(loaded.snapshot.cosmetics.owned.includes(owned));
+   for(const key of Object.keys(before).filter(key=>!['coins','cosmetics'].includes(key)))assert.deepEqual(loaded.snapshot[key],before[key],presentation+': '+outfit.id+': '+key);
+   assert(decodeSave(JSON.stringify(loaded.snapshot)));
+  }
+  assert.equal(service.row.snapshot.coins,700);assert.equal(service.writes(),8);assert.deepEqual(service.other,other);
+  const unchanged=game.save();assert.equal(cosmeticTransaction({state:game.cosmetics,look:game.look,coins:game.hero.coins,index,
+   operation:{type:'purchase',id:NEW_OUTFITS[0].id,confirmed:true,revision:game.cosmetics.revision},safe:true,atWardrobe:true}).ok,false);
+  assert.equal(game.save(),unchanged);
  }
 });
 

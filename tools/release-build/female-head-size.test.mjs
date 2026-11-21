@@ -63,7 +63,7 @@ test('all 49 female hairstyles fit without being cut off by the portrait plate',
  }
 });
 
-test('all 31 costumes retain neck contact or their exact hood opening in every authored frame',async()=>{
+test('all 35 costumes retain neck contact, their exact hood opening, or the approved full transformation',async()=>{
  const engine=new CostumeEngine(options),hc=createCanvas(256,256).getContext('2d');
  let frames=0,covered=0,attached=0;const misses=[];
  for(const costume of COLLECTION){
@@ -74,18 +74,24 @@ test('all 31 costumes retain neck contact or their exact hood opening in every a
    if(loaded.robot){
     assert.equal(m.head.mode,'enclosed');assert.equal(costume.unisex,true);covered++;continue;
    }
+   if(loaded.fullTransform){
+    assert.equal(m.head.mode,'full-transform');assert.equal(m.head.scale,0);
+    assert.deepEqual(pixels(engine.compose(id,index,female)),pixels(engine.compose(id,index,{...female,presentation:'male'})));
+    covered++;continue;
+   }
    if(costume.hideHair){
     const a=pixels(engine.compose(id,index,female)),b=pixels(engine.compose(id,index,{...female,presentation:'male'})),mask=pixels(engine.masks(id,index).mask);
     for(let i=0;i<a.length;i+=4)if(mask[i+3]===0)for(let k=0;k<4;k++)assert.equal(a[i+k],b[i+k],id+' changed outside opening '+index);
     covered++;continue;
    }
    let body;
-   if(loaded.vice)body=engine.viceBody(index,female);
+   if(loaded.newCostume)body=engine.newCostumeBody(id,index,female);
+   else if(loaded.vice)body=engine.viceBody(index,female);
    else if(loaded.fashion)body=engine.frame(id,index,female);
    else if(loaded.approved){body=createCanvas(...m.cell);body.getContext('2d').drawImage(loaded.atlases[f.atlas||'default'],...f.rect,0,0,...m.cell);}
    else body=engine.masks(id,index).body;
-   const b=pixels(body),anchor=f.faceAnchor||f.head,scale=loaded.vice||loaded.fashion||loaded.approved?m.head.scale:.35;
-   hc.clearRect(0,0,256,256);(loaded.vice?engine.viceHead:head).draw(hc,{...female,hair:'none'},anchor,scale);
+   const b=pixels(body),anchor=f.faceAnchor||f.head,scale=loaded.newCostume||loaded.vice||loaded.fashion||loaded.approved?m.head.scale:.35;
+   hc.clearRect(0,0,256,256);(loaded.newCostume?loaded.hat:loaded.vice?engine.viceHead:head).draw(hc,{...female,hair:'none'},anchor,scale);
    const h=hc.getImageData(0,0,256,256).data;let touching=0;
    for(let y=Math.max(0,Math.floor(anchor[1]-12));y<=Math.min(255,Math.ceil(anchor[1]+12));y++)for(let x=Math.max(0,Math.floor(anchor[0]-12));x<=Math.min(255,Math.ceil(anchor[0]+12));x++){
     const i=(y*256+x)*4;if(b[i+3]>=128&&h[i+3]>=128)touching++;
@@ -93,9 +99,9 @@ test('all 31 costumes retain neck contact or their exact hood opening in every a
    if(touching<2)misses.push(id+' frame '+index+' ('+touching+' pixels)');
    attached++;
   }
-  engine.outfits.delete(id);engine.approved.outfits.delete(id);engine.composites.clear();engine.fashionFrames.clear();
+  engine.outfits.delete(id);engine.approved.outfits.delete(id);engine.composites.clear();engine.fashionFrames.clear();engine.newCostumeBodies.clear();engine.newCostumeComposites.clear();
  }
- assert.equal(COLLECTION.length,31);assert.deepEqual(misses,[]);
+ assert.equal(COLLECTION.length,35);assert.deepEqual(misses,[]);
  console.log(JSON.stringify({costumes:COLLECTION.length,frames,covered,attached}));
 });
 

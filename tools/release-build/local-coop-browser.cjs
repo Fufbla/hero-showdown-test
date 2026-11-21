@@ -288,7 +288,7 @@ function installVfxProbe(){
    await solo.locator('#open-controls').click();await returnBar();
    await solo.locator('#menu-exit-actions').getByRole('button',{name:'‹ Back',exact:true}).click();
    await solo.locator('#open-clothing-store').click();assert(await solo.locator('#store-back').isVisible());
-   await solo.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===20);
+   await solo.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===24);
    assert.equal(await solo.locator('#costume-carousel [data-outfit="little-black-dress"]').count(),0,'Male carousel excludes female-only costumes');
    if(viewport.width===390){
     // The store formats balances with locale grouping (for example, 1,234).
@@ -341,7 +341,7 @@ function installVfxProbe(){
   await femalePage.goto(new URL('../gameplay/?wardrobe='+manifest.sourceCommit,url).href,{waitUntil:'domcontentloaded'});await skipIntro(femalePage);
   await femalePage.getByRole('button',{name:'Continue →',exact:true}).click();await femalePage.locator('#pause').click();
   await femalePage.locator('#open-clothing-store').click();
-  await femalePage.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===31);
+  await femalePage.waitForFunction(()=>document.querySelectorAll('#costume-carousel .costume-card').length===35);
   assert.equal(await femalePage.locator('#costume-carousel [data-outfit="black-business-suit"]').count(),1);
   const dress=femalePage.locator('#costume-carousel [data-outfit="little-black-dress"]');
   await dress.locator('.costume-action').click();await femalePage.locator('#purchase-buy').click();

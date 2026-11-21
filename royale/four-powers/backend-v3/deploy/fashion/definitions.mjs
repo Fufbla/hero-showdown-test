@@ -32,3 +32,12 @@ export const PUPPY_OUTFIT=Object.freeze({id:'golden-puppy-costume',name:'Fancy C
 // Live approval retains the ownership ID used by the reserved test version.
 export const VICE_ID='vice-costume';
 export const VICE_OUTFIT=Object.freeze({id:VICE_ID,name:'Vice Costume',unisex:true,coinPrice:700});
+// Live approval retains the permanent ownership IDs and prices from the test.
+export const NEW_OUTFITS=Object.freeze([
+ {id:'mailman-costume',name:'Mailman Costume',fullTransform:false,headwear:'mail-cap'},
+ {id:'firefighter-costume',name:'Firefighter Costume',fullTransform:false,headwear:'fire-helmet'},
+ {id:'ghost-transformation',name:'Ghost Transformation',fullTransform:true,movement:'float'},
+ {id:'wolf-transformation',name:'Wolf Transformation',fullTransform:true,movement:'biped-walk-quadruped-run'}
+].map(outfit=>Object.freeze({...outfit,unisex:true,coinPrice:700})));
+export const NEW_COSTUME_IDS=Object.freeze(NEW_OUTFITS.map(outfit=>outfit.id));
+export const isNewCostumeId=id=>NEW_COSTUME_IDS.includes(id);

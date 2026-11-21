@@ -28,7 +28,7 @@ const plugin={name:'four-powers-isolated',setup(build){
 function shell(file,base,entry,entryPath){
  let s=read(file).replace(/<base href="[^"]*">/,`<base href="${base}">`).replace(/<script type="importmap">[\s\S]*?<\/script>/g,'').replace(/<script type="module" src="[^"]*"><\/script>/g,'');
  s=s.replace(/<aside id="qa-tools"[\s\S]*?<\/aside>/g,'').replace(/<span class="phase-label">[\s\S]*?<\/span>/g,'');
- // The live catalog count below the filter includes the test-only addition.
+ // The shared collection supplies its own visible count after eligibility.
  s=s.replace(/Clothing Store · \d+ outfits/g,'Clothing Store');
  s=s.replace(/<a [^>]*href="tests\/[^>]*>[\s\S]*?<\/a>/g,'').replace(/<p[^>]*>⚠️[\s\S]*?<\/p>/g,'');
  s=s.replace('href="../index.html" aria-label="Return to Hero Showdown"','href="../four-powers-test/" aria-label="Return to Four Powers Test"');
@@ -59,8 +59,9 @@ function shell(file,base,entry,entryPath){
  // Preserve prior sandbox asset URLs while both runtimes use the same approved
  // production artwork and renderer. This copy never introduces a second catalog.
  fs.cpSync(path.join(root,'royale/fashion/vice/assets'),path.join(out,'vice/assets'),{recursive:true});
- // These assets are published only beneath the account-gated test application.
- fs.cpSync(path.join(__dirname,'new-costumes/assets'),path.join(out,'new-costumes/assets'),{recursive:true});
+ // Keep already shared review URLs compatible with the approved live assets.
+ // Both applications now use the canonical production renderer and catalog.
+ fs.cpSync(path.join(root,'royale/fashion/new-costumes/assets'),path.join(out,'new-costumes/assets'),{recursive:true});
  for(const [name,html]of [['gameplay',shell('royale-v3-staging/gameplay/index.html','../../royale/','game',entries.game)],['local-coop',shell('royale-v3-staging/local-coop/index.html','../../royale/local-coop/','coop',entries.coop)]]){fs.mkdirSync(path.join(out,name),{recursive:true});fs.writeFileSync(path.join(out,name,'index.html'),html);}
  fs.writeFileSync(path.join(out,'release-manifest.json'),JSON.stringify({sourceCommit:cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),testAccount:'0000000000',production:false,cloudWrites:false,storagePrefix:'royale-four-powers-0000000000-v1:',testCostumes:['mailman-costume','firefighter-costume','ghost-transformation','wolf-transformation'],entries,modules:Object.keys(result.metafile.inputs)},null,2));
  console.log(JSON.stringify({out,modules:Object.keys(result.metafile.inputs).length}));

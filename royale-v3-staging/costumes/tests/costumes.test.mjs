@@ -11,17 +11,17 @@ const index=catalogIndex({sets:COSTUMES});
 function transact(state,coins,type,id){return cosmeticTransaction({state,coins,index,operation:{type,id,confirmed:true,revision:state.revision},safe:true,atWardrobe:true});}
 function costumeState(id){const purchase=transact(emptyCosmetics(),10000,'purchase',id);return transact(purchase.state,purchase.coins,'equip',id).state;}
 const render=(id,h,who=look,owner={})=>{const c=createCanvas(400,400);assert(e.draw(c.getContext('2d'),200,360,who,h,1,{id,owner,scale:2}));return digest(c);};
-test('all complete costumes have 48 distinct padded poses and all renderer states',()=>{
- let frames=0;for(const o of COSTUMES){const m=e.outfits.get(o.id).manifest;assert.equal(m.frames.length,48);assert.deepEqual(m.cell,[256,256]);assert.deepEqual(m.foot,[128,230]);
- const hashes=new Set();for(let n=0;n<48;n++){const canvas=e.compose(o.id,n,look);hashes.add(digest(canvas));const d=canvas.getContext('2d').getImageData(0,0,256,256).data;let pixels=0,edge=0;for(let y=0;y<256;y++)for(let x=0;x<256;x++)if(d[(y*256+x)*4+3]>96){pixels++;if(x===0||y===0||x===255||y===255)edge++;}assert(pixels>4000,o.id+' empty '+n);assert.equal(edge,0,o.id+' clipped '+n);frames++;}
- assert.equal(hashes.size,48,o.id);for(const state of [...REQUIRED_STATES,'strength','superKick','fireball','flightStart','hover','fly'])assert(m.animations[state]?.frames.length>=2);}
+test('complete costumes have 48 distinct padded poses, wolf has 56, and every renderer state is present',()=>{
+ let frames=0;for(const o of COSTUMES){const m=e.outfits.get(o.id).manifest,count=o.id==='wolf-transformation'?56:48;assert.equal(m.frames.length,count);assert.deepEqual(m.cell,[256,256]);assert.deepEqual(m.foot,[128,230]);
+ const hashes=new Set();for(let n=0;n<count;n++){const canvas=e.compose(o.id,n,look);hashes.add(digest(canvas));const d=canvas.getContext('2d').getImageData(0,0,256,256).data;let pixels=0,edge=0;for(let y=0;y<256;y++)for(let x=0;x<256;x++)if(d[(y*256+x)*4+3]>96){pixels++;if(x===0||y===0||x===255||y===255)edge++;}assert(pixels>4000,o.id+' empty '+n);assert.equal(edge,0,o.id+' clipped '+n);frames++;}
+ assert.equal(hashes.size,count,o.id);for(const state of [...REQUIRED_STATES,'strength','superKick','fireball','flightStart','hover','fly'])assert(m.animations[state]?.frames.length>=2);}
  console.log(frames+' composed poses verified');
 });
 test('every hood preserves all hairstyle choices and confines hair to its original opening in every pose',async()=>{
  let combinations=0,visible=0;
  // Reuse each customized head across frames; this also exercises eviction of
  // the bounded composite cache without creating hairstyle-specific assets.
- for(const o of COSTUMES.filter(o=>o.hideHair)){
+ for(const o of COSTUMES.filter(o=>o.hideHair&&!o.fullTransform)){
   const bare=Array.from({length:48},(_,frame)=>e.compose(o.id,frame,{...look,hair:'none'}).getContext('2d').getImageData(0,0,256,256).data);
   const masks=Array.from({length:48},(_,frame)=>e.masks(o.id,frame).mask.getContext('2d').getImageData(0,0,256,256).data);
   for(const hair of HAIR_STYLES){const l={...look,hair},before=JSON.stringify(l);
@@ -41,21 +41,31 @@ test('every hood preserves all hairstyle choices and confines hair to its origin
  }
  assert(visible>0);console.log(combinations+' hood/pose/hairstyle combinations preserve the costume exterior; '+visible+' visibly retain hair');
 });
-test('uncovered costumes retain hair; all costumes retain skin, eyes, face and facial hair',()=>{
- for(const o of COSTUMES){const baseline=digest(e.compose(o.id,0,look));for(const changed of [{skin:'#e5c5a0'},{eyes:'#3399dd',eyeShape:'round'},{nose:'wide',mouth:'smile'},{facialHair:'none'},{presentation:'female'}])assert.notEqual(digest(e.compose(o.id,0,{...look,...changed})),baseline,o.id+' '+JSON.stringify(changed));
- if(!o.hideHair)assert.notEqual(digest(e.compose(o.id,0,{...look,hair:'none'})),baseline,o.id+' lost hair');}
+test('clothing retains customized human features while full transformations preserve the authored creature and saved look',()=>{
+ for(const o of COSTUMES){
+  const baseline=digest(e.compose(o.id,0,look));
+  for(const changed of [{skin:'#e5c5a0'},{eyes:'#3399dd',eyeShape:'round'},{nose:'wide',mouth:'smile'},{facialHair:'none'},{presentation:'female'}]){
+   const custom={...look,...changed},saved=structuredClone(custom),actual=digest(e.compose(o.id,0,custom)),label=o.id+' '+JSON.stringify(changed);
+   if(o.fullTransform)assert.equal(actual,baseline,label+' leaked the human appearance');
+   else assert.notEqual(actual,baseline,label);
+   assert.deepEqual(custom,saved,label+' changed the saved look');
+  }
+  if(o.fullTransform)assert.equal(digest(e.compose(o.id,0,{...look,hair:'none'})),baseline,o.id+' leaked human hair');
+  else if(!o.hideHair)assert.notEqual(digest(e.compose(o.id,0,{...look,hair:'none'})),baseline,o.id+' lost hair');
+ }
 });
-test('uncovered costume heads touch the body in all 48 poses',()=>{
+test('uncovered costume heads touch the body in every authored pose',()=>{
  const canvas=createCanvas(256,256),c=canvas.getContext('2d');let checked=0;
  for(const o of COSTUMES.filter(o=>!o.hideHair)){
   const loaded=e.outfits.get(o.id),m=loaded.manifest;
   for(const [frame,f]of m.frames.entries()){
-   const body=loaded.vice?e.viceBody(frame,look):e.masks(o.id,frame).body;
+   const body=loaded.newCostume?e.newCostumeBody(o.id,frame,look):loaded.vice?e.viceBody(frame,look):e.masks(o.id,frame).body;
    const b=body.getContext('2d').getImageData(0,0,256,256).data;
    for(const sex of ['male','female']){
     const headLook={...styleCDefault(sex),hair:'none',facialHair:'none'};
     c.clearRect(0,0,256,256);
-    if(loaded.vice)e.viceHead.draw(c,headLook,f.head,m.head.scale);
+    if(loaded.newCostume)loaded.hat.draw(c,headLook,f.head,m.head.scale);
+    else if(loaded.vice)e.viceHead.draw(c,headLook,f.head,m.head.scale);
     else e.face.draw(c,headLook,f,{hideHair:false});
     const h=c.getImageData(0,0,256,256).data;let touching=0;
     for(let y=Math.floor(f.head[1]-8);y<=Math.ceil(f.head[1]+12);y++)for(let x=Math.floor(f.head[0]-12);x<=Math.ceil(f.head[0]+12);x++){
@@ -68,7 +78,7 @@ test('uncovered costume heads touch the body in all 48 poses',()=>{
  console.log(checked+' uncovered costume/pose/face combinations have opaque neck contact');
 });
 test('two co-op heroes wearing the same hood retain their own hair when rendered alternately',()=>{
- for(const o of COSTUMES.filter(o=>o.hideHair)){
+ for(const o of COSTUMES.filter(o=>o.hideHair&&!o.fullTransform)){
   const a={...look,hair:'braids'},b={...look,hair:'ponytail'},ownerA={},ownerB={},h=motionHero('idle',0);
   const first=render(o.id,h,a,ownerA),second=render(o.id,h,b,ownerB);assert.notEqual(first,second,o.id+' shared a bald/cached head');
   assert.equal(render(o.id,h,a,ownerA),first);assert.equal(render(o.id,h,b,ownerB),second);
@@ -91,8 +101,25 @@ test('actual attack timing, both directions, running strides, jump and power sta
  for(const kind of ['jump','doubleJump','fireball','flight','hurt'])assert(e.draw(createCanvas(300,300).getContext('2d'),150,275,look,motionHero(kind,.2,direction),3,{id:o.id,owner:{}}));
  }
 });
-test('Steel Body completely suppresses all costume, face and hair and restores selection',()=>{
- let metal;for(const o of COSTUMES){const state=costumeState(o.id),before=JSON.stringify(state),h=motionHero('steel',.4);const image=render(o.id,h,{...look,hair:'braids'});if(metal)assert.equal(image,metal);else metal=image;assert.equal(render(o.id,h,{...look,hair:'none',skin:'#fff1dc'}),image);assert.equal(e.lastFrame.outfit,'steel-universal');render(o.id,motionHero('idle',0));assert.equal(e.lastFrame.outfit,o.id);assert.equal(JSON.stringify(state),before);}
+test('Steel Body uses the universal human silhouette or the same metallic creature, then restores the selected outfit',()=>{
+ let metal;
+ for(const o of COSTUMES){
+  const state=costumeState(o.id),before=JSON.stringify(state),h=motionHero('steel',.4),normal=render(o.id,motionHero('idle',0));
+  const image=render(o.id,h,{...look,hair:'braids'});
+  assert.equal(render(o.id,h,{...look,hair:'none',skin:'#fff1dc'}),image,o.id+' leaked human appearance during Steel Body');
+  if(o.fullTransform){
+   assert.equal(e.lastFrame.outfit,o.id);assert.equal(e.lastFrame.steel,true);assert.equal(e.lastFrame.hairVisible,false);
+   const frame=e.lastFrame.frame,ordinary=e.compose(o.id,frame,look),silver=e.compose(o.id,frame,look,false,1,{steel:true});
+   assert.notEqual(digest(ordinary),digest(silver),o.id+' did not turn metallic');
+   const a=ordinary.getContext('2d').getImageData(0,0,256,256).data,b=silver.getContext('2d').getImageData(0,0,256,256).data;
+   for(let i=3;i<a.length;i+=4)assert.equal(a[i],b[i],o.id+' changed the creature silhouette');
+   assert.notEqual(image,metal,o.id+' became the universal human');
+  }else{
+   if(metal)assert.equal(image,metal);else metal=image;
+   assert.equal(e.lastFrame.outfit,'steel-universal');
+  }
+  assert.equal(render(o.id,motionHero('idle',0)),normal);assert.equal(e.lastFrame.outfit,o.id);assert.equal(JSON.stringify(state),before);
+ }
 });
 test('700-coin ownership, duplicate protection, equip and remove survive saved hero reloads',()=>{
  for(const o of COSTUMES){const g=new Game({look});g.hero.coins=10000;const original=structuredClone({look:g.look,inventory:g.inventory,powers:decodeSave(g.save()).powers,hp:g.hero.maxHp});

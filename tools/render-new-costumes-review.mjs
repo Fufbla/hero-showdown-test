@@ -8,9 +8,8 @@ import {createRequire} from 'node:module';
 import {readFile} from 'node:fs/promises';
 import {VICE_ACTIONS as ACTIONS,baseHero,actionHero} from '../test-only/four-powers/vice/tests/actions.mjs';
 
-globalThis.location={pathname:'/hero-showdown-test/four-powers-test/gameplay/',search:'?testAccount=0000000000'};
 const [{CostumeEngine},{NEW_OUTFITS},{styleCDefault},{ATTACKS}]=await Promise.all([
- import('../test-only/four-powers/new-costumes/engine.mjs'),import('../test-only/four-powers/new-costumes/definitions.mjs'),
+ import('../royale/fashion/engine.mjs'),import('../royale/fashion/new-costumes/definitions.mjs'),
  import('../royale/style-c-defaults.mjs'),import('../royale/core.mjs')
 ]);
 const {createCanvas,loadImage}=createRequire(import.meta.url)('@napi-rs/canvas');
@@ -22,7 +21,7 @@ const lookFor=presentation=>({...styleCDefault(presentation),skin:presentation==
  hair:presentation==='female'?'box-braids':'high-top',hairColor:presentation==='female'?'#753c26':'#24212a',eyes:'#5a48b0'});
 if(process.argv.includes('--write-previews'))for(const outfit of NEW_OUTFITS){
  const preview=engine.compose(outfit.id,0,{...styleCDefault('male'),hair:'buzz',skin:'#a96943',hairColor:'#3f2a23'});
- await writeFile(new URL('../test-only/four-powers/new-costumes/assets/'+outfit.id+'/preview.png',import.meta.url),preview.toBuffer('image/png'));
+ await writeFile(new URL('../royale/fashion/new-costumes/assets/'+outfit.id+'/preview.png',import.meta.url),preview.toBuffer('image/png'));
 }
 const labels={idle:'Idle / float',start:'Starting',stop:'Stopping',run:'Run',jump:'Jump',doubleJump:'Double jump',fall:'Falling',land:'Landing',
  punch:'Punch',kick:'Kick',strength:'Super Strength',superKick:'Super Kick',fireball:'Fireball',fireballAir:'Air fireball',

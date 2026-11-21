@@ -66,6 +66,7 @@ jobs:
           python3 -m http.server 8174 --directory /tmp/coop-site >/tmp/coop-server.log 2>&1 &
           node tools/release-build/local-coop-browser.cjs
           node tools/release-build/vice-production-browser.cjs
+          node tools/release-build/new-costumes-production-browser.cjs
           node --import ./test-only/four-powers/register.mjs tools/release-build/vice-browser.cjs
           node --import ./test-only/four-powers/register.mjs tools/release-build/new-costumes-browser.cjs
           ROYALE_MEDIA_CHROMIUM_ONLY=1 node tools/release-build/media-browser.cjs
@@ -75,6 +76,13 @@ jobs:
         with:
           name: reserved-costume-browser
           path: docs/new-costumes-test/
+          if-no-files-found: ignore
+      - name: Save live costume browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-costume-browser
+          path: docs/new-costumes-production/
           if-no-files-found: ignore
       - name: Upload optimized Pages artifact
         uses: actions/upload-pages-artifact@v4

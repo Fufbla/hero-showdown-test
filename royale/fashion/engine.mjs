@@ -8,6 +8,7 @@ import {ROBOT_OUTFIT,PUPPY_OUTFIT} from './definitions.mjs';
 import {preloadRobot,drawRobot} from './robot.mjs';
 import {preloadPuppy,drawPuppy} from './puppy.mjs';
 import {withViceCostume} from './vice/engine.mjs';
+import {withNewCostumes} from './new-costumes/engine.mjs';
 
 export const FASHION_CACHE_LIMIT=128;
 const ids=new Set(FASHION_OUTFITS.map(o=>o.id));
@@ -132,5 +133,5 @@ class FashionCostumeEngine extends ExistingCostumeEngine{
   return {artSource:'full-body-costume',clip:sample.state,head:neck,faceCenter:neck,shoulder:neck,hip:[0,-35],arms:[[neck,elbow,hand],[neck,elbow,hand]],legs:[],opacity:1};
  }
 }
-export class CostumeEngine extends withViceCostume(FashionCostumeEngine){}
+export class CostumeEngine extends withNewCostumes(withViceCostume(FashionCostumeEngine)){}
 export const costumeSprites=new CostumeEngine();

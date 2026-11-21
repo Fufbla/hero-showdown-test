@@ -1,5 +1,7 @@
 # Reserved sprite update — verification
 
+Historical verification for the reserved-only release completed at `62549a7d7d4f7dbc23efd27492da1bc097804a6c`. The production-preservation comparisons below describe that release, before the subsequent approval to add these four looks to the live Clothing Store.
+
 Baseline production commit: `a9ef00dbb2a1e2c3a821f8159d8eed3b93ec5445`.
 
 | Local build gate | Result |
