@@ -66,7 +66,7 @@ export function powerStats(id,level,{heroLevel=1,equipment={}}={}) {
       const targets=level>=20?5:level>=15?4:level>=10?3:level>=5?2:1;
       return {...base,radius,targets,damage:burstDamage()};
     }
-    case 'fireball': return {...base,projectiles:level>=20?3:level>=10?2:1,damage:offensiveDamage(id,24+5*(level-1),level,heroLevel)+eq.fireball,pierce:level>=20?2:1};
+    case 'fireball': return {...base,projectiles:level>=20?3:level>=10?2:1,damage:24+2*(heroLevel-1)+(Math.min(level,20)-1)/19*( (119+2*(heroLevel-1))*(1+2*(.35+.65*Math.min(1,Math.max(0,heroLevel-1)/98)))*2800/945-(24+2*(heroLevel-1)))+Math.max(0,level-20)*5+eq.fireball,pierce:level>=20?3:level>=10?2:1};
     case 'flight': return {...base,duration:level+2,bossHitChance:.5};
     case 'steel': return {...base,reduction:interpolate(level,[[1,.2],[5,.3],[10,.45],[15,.6],[20,.75],[29,.84]]),duration:interpolate(level,[[1,3],[5,4],[10,5],[15,6],[20,8],[29,10.25]])};
     case 'roots': return {...base,targets:n,duration:n+1,damage:offensiveDamage(id,6+2*(level-1),level,heroLevel)+eq.roots};
@@ -303,7 +303,7 @@ export class PowerSystem {
       contacts.sort((a,b)=>a.t-b.t||Number(b.wall)-Number(a.wall));
       for(const contact of contacts){
         if(contact.wall){p.life=0;break;}
-        g.damageEnemy(contact.e,p.damage*(p.hits.size? .5:1),{kind:'fireball',stagger:false});p.hits.add(contact.e.id);
+        g.damageEnemy(contact.e,p.damage*(p.hits.size?(p.pierce>=3?.75:.5):1),{kind:'fireball',stagger:false});p.hits.add(contact.e.id);
         if(p.hits.size>=p.pierce){p.life=0;break;}
       }
       p.x=nx;p.life-=dt;
