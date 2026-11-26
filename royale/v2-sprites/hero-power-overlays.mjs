@@ -29,7 +29,7 @@ export function prepareHeroPowerOverlays(loader=null){
        throw Error('Incorrect 3x2 sprite grid for '+id);
      loaded.set(id,image);return true;
    } catch(_error) {loaded.delete(id);return false;}
- })).then(result=>result.every(Boolean));
+ })).then(result=>{const ok=result.every(Boolean);if(!ok)pending=null;return ok;});
  return pending;
 }
 export const heroPowerOverlayStatus=()=>({
