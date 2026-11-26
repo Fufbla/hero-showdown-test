@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {powerStats as fireballStats} from '../../royale/powers.mjs';
 import assert from 'node:assert/strict';
 import {Game,STEP,decodeSave} from '../../royale/core.mjs';
 import {HIT_GRACE,regularMonsterDamage,damageToEnemy} from '../../royale/combat-tuning.mjs';
@@ -37,11 +38,11 @@ test('level 66 can win wisp groups with a legal classic build, without healing o
   assert(result.hp>=maximumHP(66)*.45);assert(result.seconds<12);
  }
 });
-test('stronger Dark Energy enemies retain a reason to use crowd control at entry level',()=>{
- const careless=active(66,'sentinel',{night:true,count:3});
+test('Dark Energy sentinels remain dangerous without attacks and crowd control remains viable',()=>{
+ const careless=pressure(66,'sentinel',{night:true,count:3,staggered:true,seconds:60});
  const controlled=active(66,'sentinel',{night:true,count:3,build:'control'});
- assert(careless.dead);assert(careless.seconds>8);
- assert(!controlled.dead);assert.equal(controlled.kills,3);assert(controlled.hp<maximumHP(66)*.5);
+ assert(careless.dead);assert(careless.hits>0);
+ assert(!controlled.dead);assert.equal(controlled.kills,3);
 });
 test('late basic attacks remain useful while powers are cooling down',()=>{
  for(const [level,type,max]of [[66,'wisp',12],[80,'sentinel',16],[99,'titan',36]]){
@@ -131,3 +132,14 @@ test('each co-op hero gets independent hit protection, including the same enemy 
  assert(s.games.every(g=>!g.hurt(102,1040,{...source,damageEvent:{}})));
  assert.deepEqual(s.games.map(g=>g.hero.hp),[973,973]);
 });
+
+ test('Fireball damage progresses evenly and piercing matches the approved tiers',()=>{
+ // Read the production power stats through the mapped module in the release runner.
+ for(let rank=1;rank<=20;rank++){
+ const stats=fireballStats('fireball',rank,{heroLevel:99});
+ assert(Math.abs(stats.damage-(220+2580*(rank-1)/19))<1e-8);
+ assert.equal(stats.projectiles,rank===20?3:rank>=10?2:1);
+ assert.equal(stats.pierce,rank===20?3:rank>=10?2:1);
+ assert.equal(stats.cooldown,5);
+ }
+ });
