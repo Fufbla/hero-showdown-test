@@ -11,8 +11,24 @@ import {prepareHeroPowerOverlays} from '../v2-sprites/hero-power-overlays.mjs';
 
 kingJamesSprites.selected=()=>kingJamesSprites.enabled?'kingjames-original':null;
 export async function prepareReleaseArt(){
-  const ready=await Promise.all([starterSuit.preload(),kingJamesSprites.preload(),kingJamesSprites.preload(STEEL_ID),kingJamesFX.preload(),kingJamesAttackFX.preload(),prepareHeroPowerOverlays()]);
-  if(!ready.every(Boolean))throw Error('Hero artwork could not load. Please reload the game.');
+  const groups=[
+    ['starter suit',()=>starterSuit.preload(),starterSuit],
+    ['original outfit',()=>kingJamesSprites.preload(),kingJamesSprites],
+    ['steel outfit',()=>kingJamesSprites.preload(STEEL_ID),kingJamesSprites],
+    ['motion effects',()=>kingJamesFX.preload(),kingJamesFX],
+    ['attack effects',()=>kingJamesAttackFX.preload(),kingJamesAttackFX],
+    ['power overlays',()=>prepareHeroPowerOverlays(),null]
+  ];
+  const failures=await Promise.all(groups.map(async ([name,load,engine])=>{
+    let reason='';
+    for(let attempt=0;attempt<3;attempt++){
+      try{if(await load())return null;reason=engine?.error||'asset unavailable';}
+      catch(error){reason=error?.message||String(error);}
+      if(attempt<2)await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));
+    }
+    return name+': '+reason;
+  }));
+  if(failures.some(Boolean))throw Error('Hero artwork could not load: '+failures.filter(Boolean).join('; ')+'. Please reload the game.');
   kingJamesSprites.enabled=true;
   kingJamesSprites.starter=starterSuit;
   setCosmeticPreviewRenderer((c,x,y,look,hero,time,scale,view)=>drawHero(c,x,y,look,hero,time,scale,{view}));
